@@ -1,11 +1,9 @@
 package com.hanhy06.betterchat;
 
 import com.hanhy06.betterchat.config.ConfigManager;
-import com.hanhy06.betterchat.mention.PlayerDataManager;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.PlayerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +26,6 @@ public class BetterChat implements DedicatedServerModInitializer {
 		ServerLifecycleEvents.SERVER_STARTED.register(BetterChat::handleServerStart);
 
 		ConfigManager.registerSaveAndLoad();
-		PlayerDataManager.setPlayerDataDirectoryPath();
 	}
 
 	private static void handleServerStart(MinecraftServer server) {

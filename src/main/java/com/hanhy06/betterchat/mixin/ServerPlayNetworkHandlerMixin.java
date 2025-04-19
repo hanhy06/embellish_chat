@@ -23,20 +23,16 @@ public class ServerPlayNetworkHandlerMixin {
 
     @ModifyVariable(method = "handleDecoratedMessage", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
     private SignedMessage modifyDecoratedMessage(SignedMessage original) {
-        String message = original.getContent().getString();
-        Text messagePrep = original.getContent();
+        String stringMessage = original.getContent().getString();
+        Text textMessage = original.getContent();
 
-        ConfigData configData = ConfigManager.getConfigData();
 
-        if (configData.textPreparationEnabled()){
-            messagePrep = PreparationText.prepText(message,player.getServer().getPlayerManager());
-        }
 
         return new SignedMessage(
                 MessageLink.of(new UUID(0L, 0L)),
                 null,
-                MessageBody.ofUnsigned(message),
-                messagePrep,
+                MessageBody.ofUnsigned(stringMessage),
+                textMessage,
                 FilterMask.PASS_THROUGH
         );
     }

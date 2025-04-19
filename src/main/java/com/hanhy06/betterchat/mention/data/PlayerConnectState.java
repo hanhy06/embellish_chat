@@ -1,4 +1,4 @@
-package com.hanhy06.betterchat.mention;
+package com.hanhy06.betterchat.mention.data;
 
 public enum PlayerConnectState{
     ONLINE,

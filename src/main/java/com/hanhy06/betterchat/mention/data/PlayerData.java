@@ -11,9 +11,10 @@ public class PlayerData {
     private boolean notificationsEnabled;
     private List<MentionData> mentionData;
 
-    public PlayerData(String name,UUID uuid){
+    public PlayerData(String name,UUID uuid,boolean notificationsEnabled){
         this.playerName = name;
         this.playerUUID = uuid;
+        this.notificationsEnabled = notificationsEnabled;
         this.mentionData = new ArrayList<>();
     }
 
@@ -25,8 +26,16 @@ public class PlayerData {
         return playerName;
     }
 
+    public boolean isNotificationsEnabled() {
+        return notificationsEnabled;
+    }
+
+    public void setNotificationsEnabled(boolean notificationsEnabled) {
+        this.notificationsEnabled = notificationsEnabled;
+    }
+
     public List<MentionData> getMentionData() {
-        return mentionData;
+        return List.copyOf(mentionData);
     }
 
     public void addMentionData(MentionData data){
@@ -39,8 +48,9 @@ public class PlayerData {
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlayerData that = (PlayerData) o;
-        return Objects.equals(playerName, that.playerName) && Objects.equals(playerUUID, that.playerUUID);
+        return Objects.equals(playerUUID, that.playerUUID);
     }
 }

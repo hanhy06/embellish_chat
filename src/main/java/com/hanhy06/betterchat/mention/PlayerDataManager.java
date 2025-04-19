@@ -5,11 +5,11 @@ import com.google.gson.GsonBuilder;
 import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.mention.data.PlayerData;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.PlayerManager;
 import net.minecraft.util.UserCache;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -18,57 +18,49 @@ import java.nio.file.StandardOpenOption;
 import java.util.UUID;
 
 public class PlayerDataManager {
-    private static final String PLAYER_DATAS_DIRECTOR_NAME = "player-datas";
-    private static Path playerDataDirectoryPath;
+    private UserCache userCache;
+    private Path modDirectoryPath;
 
-    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private final String PLAYER_DATA_DIRECTORY_NAME = "player_datas";
+    private final Path playerDataDirectoryPath;
 
-    public static void setPlayerDataDirectoryPath(){
-        playerDataDirectoryPath = BetterChat.getModDirectoryPath().resolve(PLAYER_DATAS_DIRECTOR_NAME);
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-        if (!Files.exists(playerDataDirectoryPath)){
+    public PlayerDataManager(UserCache userCache, Path modDirectoryPath) {
+        this.userCache = userCache;
+        this.modDirectoryPath = modDirectoryPath;
+
+        playerDataDirectoryPath = modDirectoryPath.resolve(PLAYER_DATA_DIRECTORY_NAME);
+        if(!Files.exists(playerDataDirectoryPath)) {
             try {
-                Files.createDirectory(playerDataDirectoryPath);
+                Files.createDirectories(playerDataDirectoryPath);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                BetterChat.LOGGER.error("Failed to create player data directory :{}",playerDataDirectoryPath);
             }
         }
     }
 
-    public static PlayerConnectState isPlayerConnection(String name){
-        MinecraftServer server = BetterChat.getServerInstance();
-        PlayerManager manager = server.getPlayerManager();
+    public void savePlayerData(PlayerData playerData){
+        Path playerDataSavePath = playerDataDirectoryPath.resolve(playerData.getPlayerUUID().toString());
 
-        UserCache userCache = server.getUserCache();
-
-        if (manager.getPlayer(name)!=null){
-            return PlayerConnectState.ONLINE;
-        } else if (!userCache.findByName(name).isPresent()) {
-            return PlayerConnectState.OFFLINE;
-        }else {
-            return PlayerConnectState.NEVER_CONNECTED;
-        }
-    }
-
-    public static void savePlayerData(PlayerData data){
-        Path path = playerDataDirectoryPath.resolve(data.getPlayerUUID().toString());
-        try(BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
-            gson.toJson(data,writer);
+        try (BufferedWriter writer = Files.newBufferedWriter(playerDataSavePath, StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
+            gson.toJson(playerData, writer);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            BetterChat.LOGGER.error("Failed to write player data file: {}", playerData, e);
         }
     }
 
-    public static PlayerData loadPlayerData(UUID uuid){
-        Path path = playerDataDirectoryPath.resolve(uuid.toString());
+    public PlayerData loadPlayerData(UUID uuid){
+        Path playerDataLoadPath = playerDataDirectoryPath.resolve(uuid.toString());
 
-        if (!Files.exists(path)){
-            return null;
+        if(!Files.exists(playerDataLoadPath)){
+            BetterChat.LOGGER.error("{} Player data file not found.",uuid);
+
         }
 
-        try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
-            PlayerData loaded = gson.fromJson(reader, PlayerData.class);
-            return loaded;
+        try(BufferedReader reader = Files.newBufferedReader(playerDataLoadPath,StandardCharsets.UTF_8)) {
+            return gson.fromJson(reader, PlayerData.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
