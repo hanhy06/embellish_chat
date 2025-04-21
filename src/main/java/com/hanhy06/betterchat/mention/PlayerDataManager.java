@@ -1,15 +1,14 @@
 package com.hanhy06.betterchat.mention;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.hanhy06.betterchat.BetterChat;
+import com.hanhy06.betterchat.mention.data.MentionData;
 import com.hanhy06.betterchat.mention.data.PlayerData;
-import net.minecraft.server.MinecraftServer;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.util.UserCache;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -24,7 +23,7 @@ public class PlayerDataManager {
     private final String PLAYER_DATA_DIRECTORY_NAME = "player_datas";
     private final Path playerDataDirectoryPath;
 
-    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private final Gson gson = new Gson();
 
     public PlayerDataManager(UserCache userCache, Path modDirectoryPath) {
         this.userCache = userCache;
@@ -41,7 +40,7 @@ public class PlayerDataManager {
     }
 
     public void savePlayerData(PlayerData playerData){
-        Path playerDataSavePath = playerDataDirectoryPath.resolve(playerData.getPlayerUUID().toString());
+        Path playerDataSavePath = playerDataDirectoryPath.resolve(playerData.getPlayerUUID().toString()+".json");
 
         try (BufferedWriter writer = Files.newBufferedWriter(playerDataSavePath, StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
@@ -52,11 +51,18 @@ public class PlayerDataManager {
     }
 
     public PlayerData loadPlayerData(UUID uuid){
-        Path playerDataLoadPath = playerDataDirectoryPath.resolve(uuid.toString());
+        Path playerDataLoadPath = playerDataDirectoryPath.resolve(uuid.toString()+".json");
 
         if(!Files.exists(playerDataLoadPath)){
-            BetterChat.LOGGER.error("{} Player data file not found.",uuid);
+            BetterChat.LOGGER.error("{} Player data file not found. create new file",uuid);
 
+            String name = userCache.getByUuid(uuid)
+                    .map(GameProfile::getName)
+                    .orElseThrow(() -> new IllegalStateException("Cannot find player name for UUID: " + uuid));
+            PlayerData playerData = new PlayerData(name,uuid,true);
+
+            savePlayerData(playerData);
+            return playerData;
         }
 
         try(BufferedReader reader = Files.newBufferedReader(playerDataLoadPath,StandardCharsets.UTF_8)) {
@@ -64,5 +70,11 @@ public class PlayerDataManager {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void addPlayerData(UUID uuid, MentionData mentionData){
+        PlayerData data = loadPlayerData(uuid);
+        data.addMentionData(mentionData);
+        savePlayerData(data);
     }
 }

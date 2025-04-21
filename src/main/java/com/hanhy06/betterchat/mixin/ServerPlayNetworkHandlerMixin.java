@@ -1,8 +1,5 @@
 package com.hanhy06.betterchat.mixin;
 
-import com.hanhy06.betterchat.config.ConfigData;
-import com.hanhy06.betterchat.config.ConfigManager;
-import com.hanhy06.betterchat.preparation.PreparationText;
 import net.minecraft.network.message.FilterMask;
 import net.minecraft.network.message.MessageBody;
 import net.minecraft.network.message.MessageLink;
