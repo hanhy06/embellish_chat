@@ -31,7 +31,6 @@ public class Mention {
         }
 
         int searchIndex = 0;
-        int messageLength = originalMessage.length();
 
         while (true) {
             int startIndex = originalMessage.indexOf('@', searchIndex);
@@ -39,49 +38,51 @@ public class Mention {
                 break;
             }
 
-            StringBuilder nameBuilder = new StringBuilder();
-            int currentIndex = startIndex + 1;
-            while (currentIndex < messageLength) {
-                char currentChar = originalMessage.charAt(currentIndex);
-                if (Character.isLetterOrDigit(currentChar) || currentChar == '_') {
-                    nameBuilder.append(currentChar);
-                    currentIndex++;
-                } else {
-                    break;
-                }
-            }
-
-            String potentialName = nameBuilder.toString();
+            String potentialName = extractPotentialName(originalMessage, startIndex);
 
             if (potentialName.isEmpty()) {
-
                 searchIndex = startIndex + 1;
                 continue;
             }
 
-            int nameEndIndex = startIndex + potentialName.length(); // 이름 마지막 문자 바로 다음 인덱스
+            int nameEndIndex = startIndex + 1 + potentialName.length();
 
-            boolean isExplicit = false;
-            if (messageLength > nameEndIndex + 1 && // 최소 \@ 두 글자 공간 확인
-                    originalMessage.charAt(nameEndIndex) == '\\' &&
-                    originalMessage.charAt(nameEndIndex + 1) == '@') {
-                isExplicit = true;
-            }
+            boolean isExplicit = checkExplicitMention(originalMessage, nameEndIndex);
 
             Optional<UUID> uuidOptional = resolvePlayerUuid(potentialName);
 
             if (uuidOptional.isPresent()) {
-                MentionData mentionData = new MentionData(uuidOptional.get(), Timestamp.timeStamp(), originalMessage);
-                playerDataManager.addPlayerData(uuidOptional.get(), mentionData);
-
+                recordMention(uuidOptional.get(), originalMessage);
                 mentionedPlayerNames.add(potentialName);
 
-                searchIndex = isExplicit ? nameEndIndex + 2 : nameEndIndex; // "@name\@ " 또는 "@name " 다음부터 검색
+                searchIndex = isExplicit ? nameEndIndex + 2 : nameEndIndex;
             } else {
                 searchIndex = startIndex + 1;
             }
         }
         return mentionedPlayerNames;
+    }
+
+    private String extractPotentialName(String message, int startIndex) {
+        StringBuilder nameBuilder = new StringBuilder();
+        int currentIndex = startIndex + 1;
+        int messageLength = message.length();
+
+        while (currentIndex < messageLength && isValidUsernameChar(message.charAt(currentIndex))) {
+            nameBuilder.append(message.charAt(currentIndex));
+            currentIndex++;
+        }
+        return nameBuilder.toString();
+    }
+
+    private boolean isValidUsernameChar(char c) {
+        return Character.isLetterOrDigit(c) || c == '_';
+    }
+
+    private boolean checkExplicitMention(String message, int nameEndIndex) {
+        return message.length() > nameEndIndex + 1 &&
+                message.charAt(nameEndIndex) == '\\' &&
+                message.charAt(nameEndIndex + 1) == '@';
     }
 
     private Optional<UUID> resolvePlayerUuid(String playerName) {
@@ -95,5 +96,10 @@ public class Mention {
         }
 
         return userCache.findByName(playerName).map(GameProfile::getId);
+    }
+
+    private void recordMention(UUID playerUuid, String originalMessage) {
+        MentionData mentionData = new MentionData(playerUuid, Timestamp.timeStamp(), originalMessage);
+        playerDataManager.addPlayerData(playerUuid, mentionData);
     }
 }

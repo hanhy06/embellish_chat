@@ -1,12 +1,12 @@
 package com.hanhy06.betterchat.util;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Timestamp {
-    public static String timeStamp(){
-       ZonedDateTime now = ZonedDateTime.now();
-       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
-        return now.format(formatter);
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    public static String timeStamp() {
+        return LocalDateTime.now().format(FORMATTER);
     }
 }
