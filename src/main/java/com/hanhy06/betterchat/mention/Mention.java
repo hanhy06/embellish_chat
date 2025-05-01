@@ -6,7 +6,6 @@ import com.hanhy06.betterchat.util.Timestamp;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.server.PlayerManager;
 import net.minecraft.util.UserCache;
 
 import java.util.ArrayList;
@@ -22,22 +21,18 @@ public class Mention {
 
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{3,16})(?=\\b|$)");
 
-    public Mention(UserCache userCache, PlayerManager playerManager1) {
+    public Mention(UserCache userCache) {
         this.userCache = userCache;
         this.playerDataManager = new PlayerDataManager(userCache, BetterChat.getModDirectoryPath());
     }
 
     public List<String> playerMention(String originalMessage, ItemStack item){
-        List<String> names = nameParser(originalMessage);
-        List<String> namesToRemove = new ArrayList<>();
+        List<String> names = new ArrayList<>();
 
-        for (String name : names){
+        for (String name : nameParser(originalMessage)){
             Optional<GameProfile> profile = userCache.findByName(name);
 
-            if(profile.isEmpty()) {
-                namesToRemove.add(name);
-                continue;
-            }
+            if(profile.isEmpty()) continue;
 
             UUID uuid = profile.get().getId();
             MentionData data = new MentionData(
@@ -48,9 +43,8 @@ public class Mention {
             );
 
             playerDataManager.addPlayerData(uuid,data);
+            names.add(name);
         }
-
-        names.removeAll(namesToRemove);
 
         return names;
     }
