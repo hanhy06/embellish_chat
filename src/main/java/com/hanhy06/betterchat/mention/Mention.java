@@ -4,102 +4,67 @@ import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.mention.data.MentionData;
 import com.hanhy06.betterchat.util.Timestamp;
 import com.mojang.authlib.GameProfile;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.PlayerManager;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.UserCache;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Mention {
     private final UserCache userCache;
-    private final PlayerManager playerManager;
     private final PlayerDataManager playerDataManager;
 
-    public Mention(UserCache userCache, PlayerManager playerManager) {
+    public Mention(UserCache userCache, PlayerManager playerManager1) {
         this.userCache = userCache;
-        this.playerManager = playerManager;
         this.playerDataManager = new PlayerDataManager(userCache, BetterChat.getModDirectoryPath());
     }
 
-    public List<String> mention(ServerPlayerEntity sender, String originalMessage) {
-        List<String> mentionedPlayerNames = new ArrayList<>();
-        if (originalMessage == null || !originalMessage.contains("@")) {
-            return mentionedPlayerNames;
-        }
+    public List<String> playerMention(String originalMessage, ItemStack item){
+        List<String> names = nameParser(originalMessage);
+        List<String> namesToRemove = new ArrayList<>();
 
-        int searchIndex = 0;
+        for (String name : names){
+            Optional<GameProfile> profile = userCache.findByName(name);
 
-        while (true) {
-            int startIndex = originalMessage.indexOf('@', searchIndex);
-            if (startIndex == -1) {
-                break;
-            }
-
-            String potentialName = extractPotentialName(originalMessage, startIndex);
-
-            if (potentialName.isEmpty()) {
-                searchIndex = startIndex + 1;
+            if(profile.isEmpty()) {
+                namesToRemove.add(name);
                 continue;
             }
 
-            int nameEndIndex = startIndex + 1 + potentialName.length();
+            UUID uuid = profile.get().getId();
+            MentionData data = new MentionData(
+                    uuid,
+                    Timestamp.timeStamp(),
+                    originalMessage,
+                    (item == null) ? null : ItemStack.CODEC.encodeStart(NbtOps.INSTANCE,item).toString()
+            );
 
-            boolean isExplicit = checkExplicitMention(originalMessage, nameEndIndex);
-
-            Optional<UUID> uuidOptional = resolvePlayerUuid(potentialName);
-
-            if (uuidOptional.isPresent()) {
-                recordMention(uuidOptional.get(), originalMessage);
-                mentionedPlayerNames.add(potentialName);
-
-                searchIndex = isExplicit ? nameEndIndex + 2 : nameEndIndex;
-            } else {
-                searchIndex = startIndex + 1;
-            }
-        }
-        return mentionedPlayerNames;
-    }
-
-    private String extractPotentialName(String message, int startIndex) {
-        StringBuilder nameBuilder = new StringBuilder();
-        int currentIndex = startIndex + 1;
-        int messageLength = message.length();
-
-        while (currentIndex < messageLength && isValidUsernameChar(message.charAt(currentIndex))) {
-            nameBuilder.append(message.charAt(currentIndex));
-            currentIndex++;
-        }
-        return nameBuilder.toString();
-    }
-
-    private boolean isValidUsernameChar(char c) {
-        return Character.isLetterOrDigit(c) || c == '_';
-    }
-
-    private boolean checkExplicitMention(String message, int nameEndIndex) {
-        return message.length() > nameEndIndex + 1 &&
-                message.charAt(nameEndIndex) == '\\' &&
-                message.charAt(nameEndIndex + 1) == '@';
-    }
-
-    private Optional<UUID> resolvePlayerUuid(String playerName) {
-        if (playerName == null || playerName.isEmpty()) {
-            return Optional.empty();
+            playerDataManager.addPlayerData(uuid,data);
         }
 
-        ServerPlayerEntity onlinePlayer = playerManager.getPlayer(playerName);
-        if (onlinePlayer != null) {
-            return Optional.of(onlinePlayer.getUuid());
-        }
+        names.removeAll(namesToRemove);
 
-        return userCache.findByName(playerName).map(GameProfile::getId);
+        return names;
     }
 
-    private void recordMention(UUID playerUuid, String originalMessage) {
-        MentionData mentionData = new MentionData(playerUuid, Timestamp.timeStamp(), originalMessage);
-        playerDataManager.addPlayerData(playerUuid, mentionData);
+    private List<String> nameParser(String originalMessage){
+        List<String> names = new ArrayList<>();
+        if(!originalMessage.contains("@")) return names;
+
+        String regex = "@([A-Za-z0-9_]{3,16})(?=\\b|$)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(originalMessage);
+
+        while (matcher.find()){
+            names.add(matcher.group(1));
+        }
+
+        return  names;
     }
 }

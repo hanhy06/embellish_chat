@@ -5,5 +5,6 @@ import java.util.UUID;
 public record MentionData(
         UUID sender,
         String timeStamp,
-        String originalText) {
+        String originalText,
+        String itemData) {
 }
