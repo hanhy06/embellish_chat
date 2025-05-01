@@ -20,6 +20,8 @@ public class Mention {
     private final UserCache userCache;
     private final PlayerDataManager playerDataManager;
 
+    private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{3,16})(?=\\b|$)");
+
     public Mention(UserCache userCache, PlayerManager playerManager1) {
         this.userCache = userCache;
         this.playerDataManager = new PlayerDataManager(userCache, BetterChat.getModDirectoryPath());
@@ -55,11 +57,9 @@ public class Mention {
 
     private List<String> nameParser(String originalMessage){
         List<String> names = new ArrayList<>();
-        if(!originalMessage.contains("@")) return names;
+        if(originalMessage == null || !originalMessage.contains("@")) return names;
 
-        String regex = "@([A-Za-z0-9_]{3,16})(?=\\b|$)";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(originalMessage);
+        Matcher matcher = MENTION_PATTERN.matcher(originalMessage);
 
         while (matcher.find()){
             names.add(matcher.group(1));
