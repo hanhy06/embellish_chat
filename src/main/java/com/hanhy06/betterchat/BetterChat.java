@@ -1,6 +1,7 @@
 package com.hanhy06.betterchat;
 
 import com.hanhy06.betterchat.config.ConfigManager;
+import com.hanhy06.betterchat.mention.Mention;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
@@ -19,6 +20,8 @@ public class BetterChat implements DedicatedServerModInitializer {
 	public static final String MOD_DIRECTORY_NAME = "better-chat";
 	private static Path modDirectoryPath = null;
 
+	private static Mention mention;
+
 	@Override
 	public void onInitializeServer() {
 		LOGGER.info("{} initializing...", MOD_ID);
@@ -26,6 +29,8 @@ public class BetterChat implements DedicatedServerModInitializer {
 		ServerLifecycleEvents.SERVER_STARTED.register(BetterChat::handleServerStart);
 
 		ConfigManager.registerSaveAndLoad();
+
+		mention = new Mention(serverInstance.getUserCache(),serverInstance.getPlayerManager());
 	}
 
 	private static void handleServerStart(MinecraftServer server) {
@@ -53,5 +58,9 @@ public class BetterChat implements DedicatedServerModInitializer {
 			throw new IllegalStateException("Mod directory path is not initialized yet.");
 		}
 		return modDirectoryPath;
+	}
+
+	public static Mention getMention(){
+		return mention;
 	}
 }

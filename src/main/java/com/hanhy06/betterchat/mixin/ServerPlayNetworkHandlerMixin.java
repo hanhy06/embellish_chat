@@ -1,5 +1,6 @@
 package com.hanhy06.betterchat.mixin;
 
+import com.hanhy06.betterchat.BetterChat;
 import net.minecraft.network.message.FilterMask;
 import net.minecraft.network.message.MessageBody;
 import net.minecraft.network.message.MessageLink;
@@ -12,6 +13,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
+import java.util.List;
 import java.util.UUID;
 
 @Mixin(ServerPlayNetworkHandler.class)
@@ -23,7 +25,7 @@ public class ServerPlayNetworkHandlerMixin {
         String stringMessage = original.getContent().getString();
         Text textMessage = original.getContent();
 
-
+        List<String> names = BetterChat.getMention().playerMention(player.getUuid(),stringMessage,null);
 
         return new SignedMessage(
                 MessageLink.of(new UUID(0L, 0L)),
