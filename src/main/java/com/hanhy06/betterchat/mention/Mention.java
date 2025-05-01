@@ -2,10 +2,17 @@ package com.hanhy06.betterchat.mention;
 
 import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.mention.data.MentionData;
+import com.hanhy06.betterchat.mention.data.PlayerData;
 import com.hanhy06.betterchat.util.Timestamp;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.PlayerManager;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.UserCache;
 
 import java.util.ArrayList;
@@ -17,32 +24,51 @@ import java.util.regex.Pattern;
 
 public class Mention {
     private final UserCache userCache;
+    private final PlayerManager manager;
     private final PlayerDataManager playerDataManager;
 
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{3,16})(?=\\b|$)");
 
-    public Mention(UserCache userCache) {
+    public Mention(UserCache userCache, PlayerManager manager) {
         this.userCache = userCache;
+        this.manager = manager;
         this.playerDataManager = new PlayerDataManager(userCache, BetterChat.getModDirectoryPath());
     }
 
-    public List<String> playerMention(String originalMessage, ItemStack item){
+    public List<String> playerMention(UUID sender,String originalMessage, ItemStack item){
         List<String> names = new ArrayList<>();
 
         for (String name : nameParser(originalMessage)){
-            Optional<GameProfile> profile = userCache.findByName(name);
+            UUID uuid;
+            PlayerData playerData;
 
-            if(profile.isEmpty()) continue;
+            ServerPlayerEntity player = manager.getPlayer(name);
 
-            UUID uuid = profile.get().getId();
+            if (player == null) {
+                Optional<GameProfile> optionalGameProfile = userCache.findByName(name);
+                if(optionalGameProfile.isEmpty()) continue;
+
+                uuid = optionalGameProfile.get().getId();;
+                playerData = playerDataManager.loadPlayerData(uuid);
+            }else{
+                uuid = player.getUuid();
+                playerData = playerDataManager.loadPlayerData(uuid);
+
+                if (playerData.isNotificationsEnabled()) player.networkHandler.sendPacket(new PlaySoundS2CPacket(RegistryEntry.of(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP), SoundCategory.MASTER,player.getX(),player.getY(),player.getZ(),1f,1.75f,1));
+            }
+
             MentionData data = new MentionData(
-                    uuid,
+                    sender,
                     Timestamp.timeStamp(),
                     originalMessage,
-                    (item == null) ? null : ItemStack.CODEC.encodeStart(NbtOps.INSTANCE,item).toString()
+                    (item == null) ? null : ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, item)
+                            .resultOrPartial(error -> BetterChat.LOGGER.error("Failed to encode ItemStack NBT: {}", error))
+                            .map(Object::toString)
+                            .orElse(null)
             );
+            playerData.addMentionData(data);
 
-            playerDataManager.addPlayerData(uuid,data);
+            playerDataManager.savePlayerData(playerData);
             names.add(name);
         }
 
