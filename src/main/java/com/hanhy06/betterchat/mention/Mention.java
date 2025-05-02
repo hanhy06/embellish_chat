@@ -1,8 +1,10 @@
 package com.hanhy06.betterchat.mention;
 
 import com.hanhy06.betterchat.BetterChat;
+import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.mention.data.MentionData;
-import com.hanhy06.betterchat.mention.data.PlayerData;
+import com.hanhy06.betterchat.mention.data.playerdata.PlayerData;
+import com.hanhy06.betterchat.mention.data.playerdata.PlayerDataManager;
 import com.hanhy06.betterchat.util.Timestamp;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
@@ -32,7 +34,7 @@ public class Mention {
     public Mention(UserCache userCache, PlayerManager manager) {
         this.userCache = userCache;
         this.manager = manager;
-        this.playerDataManager = new PlayerDataManager(userCache, BetterChat.getModDirectoryPath());
+        this.playerDataManager = new PlayerDataManager(userCache, BetterChat.getModDirPath());
     }
 
     public List<String> playerMention(UUID sender,String originalMessage, ItemStack item){
@@ -61,14 +63,15 @@ public class Mention {
                     sender,
                     Timestamp.timeStamp(),
                     originalMessage,
-                    (item == null) ? null : ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, item)
+                    (item == null) ? null : ItemStack.CODEC
+                            .encodeStart(NbtOps.INSTANCE, item)
                             .resultOrPartial(error -> BetterChat.LOGGER.error("Failed to encode ItemStack NBT: {}", error))
                             .map(Object::toString)
                             .orElse(null)
             );
             playerData.addMentionData(data);
 
-            playerDataManager.savePlayerData(playerData);
+            if (ConfigManager.getConfigData().saveMentionEnabled()) playerDataManager.savePlayerData(playerData);
             names.add(name);
         }
 

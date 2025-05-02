@@ -2,7 +2,9 @@ package com.hanhy06.betterchat;
 
 import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.mention.Mention;
+import com.hanhy06.betterchat.preparation.Filter;
 import net.fabricmc.api.DedicatedServerModInitializer;
+import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
 import org.slf4j.Logger;
@@ -12,39 +14,42 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class BetterChat implements DedicatedServerModInitializer {
+public class BetterChat implements ModInitializer {
 	public static final String MOD_ID = "betterchat";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	private static MinecraftServer serverInstance = null;
 	public static final String MOD_DIRECTORY_NAME = "better-chat";
-	private static Path modDirectoryPath = null;
+	private static Path modDirPath = null;
 
 	private static Mention mention;
+	private static Filter filter;
 
 	@Override
-	public void onInitializeServer() {
+	public void onInitialize() {
 		LOGGER.info("{} initializing...", MOD_ID);
-
-		ServerLifecycleEvents.SERVER_STARTED.register(BetterChat::handleServerStart);
 
 		ConfigManager.registerSaveAndLoad();
 
-		mention = new Mention(serverInstance.getUserCache(),serverInstance.getPlayerManager());
+		ServerLifecycleEvents.SERVER_STARTED.register(BetterChat::handleServerStart);
 	}
 
 	private static void handleServerStart(MinecraftServer server) {
 		serverInstance = server;
-		modDirectoryPath = server.getPath(MOD_DIRECTORY_NAME);
+		modDirPath = server.getPath(MOD_DIRECTORY_NAME);
 
-		if (!Files.exists(modDirectoryPath)) {
+		mention = new Mention(serverInstance.getUserCache(),serverInstance.getPlayerManager());
+		filter = new Filter(ConfigManager.getConfigData().textFilteringKeywordList());
+
+		if (!Files.exists(modDirPath)) {
 			try {
-				Files.createDirectories(modDirectoryPath);
+				Files.createDirectories(modDirPath);
 			} catch (IOException e) {
-				LOGGER.error("FATAL: Failed to create mod directory: {}. Mod may not function correctly.", modDirectoryPath, e);
-				throw new RuntimeException("Failed to create essential mod directory: " + modDirectoryPath, e);
+				LOGGER.error("FATAL: Failed to create mod directory: {}. Mod may not function correctly.", modDirPath, e);
+				throw new RuntimeException("Failed to create essential mod directory: " + modDirPath, e);
 			}
 		}
+
 		LOGGER.info("{} initialized successfully.", MOD_ID);
 	}
 
@@ -52,15 +57,19 @@ public class BetterChat implements DedicatedServerModInitializer {
 		return serverInstance;
 	}
 
-	public static Path getModDirectoryPath() {
-		if (modDirectoryPath == null) {
+	public static Path getModDirPath() {
+		if (modDirPath == null) {
 			LOGGER.error("FATAL: Mod directory path accessed before server started! This indicates a programming error.");
 			throw new IllegalStateException("Mod directory path is not initialized yet.");
 		}
-		return modDirectoryPath;
+		return modDirPath;
 	}
 
 	public static Mention getMention(){
 		return mention;
+	}
+
+	public static Filter getFilter(){
+		return filter;
 	}
 }

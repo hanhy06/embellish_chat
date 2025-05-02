@@ -3,7 +3,7 @@
 	"package": "com.hanhy06.betterchat.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-
+		"ServerPlayNetworkHandlerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

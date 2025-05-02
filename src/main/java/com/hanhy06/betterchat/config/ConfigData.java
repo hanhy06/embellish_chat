@@ -14,7 +14,7 @@ public record ConfigData(
         return new ConfigData(
                 true,
                 false,
-                Collections.emptyList(),
+                List.of("example","keyword"),
                 true,
                 true
         );

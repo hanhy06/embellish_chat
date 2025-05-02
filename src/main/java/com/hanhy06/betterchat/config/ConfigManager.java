@@ -33,7 +33,7 @@ public class ConfigManager {
     }
 
     private static void handleServerStart(MinecraftServer server) {
-        Path configDir = BetterChat.getModDirectoryPath();
+        Path configDir = BetterChat.getModDirPath();
         configFilePath = configDir.resolve(CONFIG_FILE_NAME);
         BetterChat.LOGGER.info("Loading BetterChat config from: {}", configFilePath);
         loadConfig();

@@ -1,4 +1,6 @@
-package com.hanhy06.betterchat.mention.data;
+package com.hanhy06.betterchat.mention.data.playerdata;
+
+import com.hanhy06.betterchat.mention.data.MentionData;
 
 import java.util.ArrayList;
 import java.util.List;
