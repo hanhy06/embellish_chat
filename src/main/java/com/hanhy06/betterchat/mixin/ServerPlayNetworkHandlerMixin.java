@@ -33,11 +33,15 @@ public class ServerPlayNetworkHandlerMixin {
             names = BetterChat.getMention().playerMention(player.getUuid(),stringMessage,null);
         }
 
+        if (ConfigManager.getConfigData().textFilteringEnabled()){
+            stringMessage = BetterChat.getFilter().wordBaseFiltering(stringMessage);
+        }
+
         return new SignedMessage(
                 MessageLink.of(new UUID(0L, 0L)),
                 null,
                 MessageBody.ofUnsigned(stringMessage),
-                MutableText.of(textMessage.getContent()),
+                Metadata.metadata(MutableText.of(textMessage.getContent())),
                 FilterMask.PASS_THROUGH
         );
     }

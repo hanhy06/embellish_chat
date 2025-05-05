@@ -9,10 +9,10 @@ public class Filter {
         this.words = words;
     }
 
-    public String messageFiltering(String originalMessage){
-        if (words == null || words.isEmpty()) return originalMessage;
+    public String wordBaseFiltering(String str){
+        if (words == null || words.isEmpty()) return str;
 
-        String message = originalMessage;
+        String message = str;
 
         for (String word : words){
             message = message.replace(word,"#".repeat(word.length()));

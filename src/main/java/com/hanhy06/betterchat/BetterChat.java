@@ -36,7 +36,7 @@ public class BetterChat implements ModInitializer {
 
 	private static void handleServerStart(MinecraftServer server) {
 		serverInstance = server;
-		modDirPath = server.getSavePath(WorldSavePath.ROOT).resolve(MOD_DIRECTORY_NAME);
+		modDirPath = server.getSavePath(WorldSavePath.ROOT).getParent().resolve(MOD_DIRECTORY_NAME);
 
 		ConfigManager.handleServerStart(modDirPath);
 
