@@ -17,6 +17,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.UserCache;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,10 +32,10 @@ public class Mention {
 
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{3,16})(?=\\b|$)");
 
-    public Mention(UserCache userCache, PlayerManager manager) {
+    public Mention(UserCache userCache, PlayerManager manager, Path modDirPath) {
         this.userCache = userCache;
         this.manager = manager;
-        this.playerDataManager = new PlayerDataManager(userCache, BetterChat.getModDirPath());
+        this.playerDataManager = new PlayerDataManager(userCache, modDirPath);
     }
 
     public List<String> playerMention(UUID sender,String originalMessage, ItemStack item){

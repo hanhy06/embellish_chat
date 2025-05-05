@@ -7,6 +7,7 @@ import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.WorldSavePath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,16 +30,17 @@ public class BetterChat implements ModInitializer {
 	public void onInitialize() {
 		LOGGER.info("{} initializing...", MOD_ID);
 
-		ConfigManager.registerSaveAndLoad();
-
 		ServerLifecycleEvents.SERVER_STARTED.register(BetterChat::handleServerStart);
+		ServerLifecycleEvents.SERVER_STOPPED.register(BetterChat::handleServerStop);
 	}
 
 	private static void handleServerStart(MinecraftServer server) {
 		serverInstance = server;
-		modDirPath = server.getPath(MOD_DIRECTORY_NAME);
+		modDirPath = server.getSavePath(WorldSavePath.ROOT).resolve(MOD_DIRECTORY_NAME);
 
-		mention = new Mention(serverInstance.getUserCache(),serverInstance.getPlayerManager());
+		ConfigManager.handleServerStart(modDirPath);
+
+		mention = new Mention(serverInstance.getUserCache(),serverInstance.getPlayerManager(),modDirPath);
 		filter = new Filter(ConfigManager.getConfigData().textFilteringKeywordList());
 
 		if (!Files.exists(modDirPath)) {
@@ -53,16 +55,12 @@ public class BetterChat implements ModInitializer {
 		LOGGER.info("{} initialized successfully.", MOD_ID);
 	}
 
-	public static MinecraftServer getServerInstance() {
-		return serverInstance;
+	private static void handleServerStop(MinecraftServer server){
+		ConfigManager.handleServerStop();
 	}
 
-	public static Path getModDirPath() {
-		if (modDirPath == null) {
-			LOGGER.error("FATAL: Mod directory path accessed before server started! This indicates a programming error.");
-			throw new IllegalStateException("Mod directory path is not initialized yet.");
-		}
-		return modDirPath;
+	public static MinecraftServer getServerInstance() {
+		return serverInstance;
 	}
 
 	public static Mention getMention(){

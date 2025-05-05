@@ -27,19 +27,13 @@ public class ConfigManager {
         return configData;
     }
 
-    public static void registerSaveAndLoad() {
-        ServerLifecycleEvents.SERVER_STARTED.register(ConfigManager::handleServerStart);
-        ServerLifecycleEvents.SERVER_STOPPED.register(ConfigManager::handleServerStop);
-    }
-
-    private static void handleServerStart(MinecraftServer server) {
-        Path configDir = BetterChat.getModDirPath();
-        configFilePath = configDir.resolve(CONFIG_FILE_NAME);
+    public static void handleServerStart(Path modDirPath) {
+        configFilePath = modDirPath.resolve(CONFIG_FILE_NAME);
         BetterChat.LOGGER.info("Loading BetterChat config from: {}", configFilePath);
         loadConfig();
     }
 
-    private static void handleServerStop(MinecraftServer server) {
+    public static void handleServerStop() {
         if (configFilePath != null) {
             BetterChat.LOGGER.info("Saving BetterChat config to: {}", configFilePath);
             saveConfig();
