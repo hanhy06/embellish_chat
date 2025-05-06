@@ -23,10 +23,10 @@ public class PlayerDataManager {
 
     private final Gson gson = new Gson();
 
-    public PlayerDataManager(UserCache userCache, Path modDirectoryPath) {
+    public PlayerDataManager(UserCache userCache, Path modDirPath) {
         this.userCache = userCache;
 
-        playerDataDirPath = modDirectoryPath.resolve(PLAYER_DATA_DIRECTORY_NAME);
+        playerDataDirPath = modDirPath.resolve(PLAYER_DATA_DIRECTORY_NAME);
         if(!Files.exists(playerDataDirPath)) {
             try {
                 Files.createDirectories(playerDataDirPath);

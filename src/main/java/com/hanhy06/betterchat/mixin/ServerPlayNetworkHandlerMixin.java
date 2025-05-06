@@ -26,7 +26,7 @@ public class ServerPlayNetworkHandlerMixin {
     @ModifyVariable(method = "handleDecoratedMessage", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
     private SignedMessage modifyDecoratedMessage(SignedMessage original) {
         String stringMessage = original.getContent().getString();
-        Text textMessage = original.getContent();
+        MutableText textMessage = MutableText.of(original.getContent().getContent());
 
         List<String> names;
         if (ConfigManager.getConfigData().mentionEnabled()) {
@@ -41,7 +41,7 @@ public class ServerPlayNetworkHandlerMixin {
                 MessageLink.of(new UUID(0L, 0L)),
                 null,
                 MessageBody.ofUnsigned(stringMessage),
-                Metadata.metadata(MutableText.of(textMessage.getContent())),
+                Metadata.metadata(textMessage),
                 FilterMask.PASS_THROUGH
         );
     }
