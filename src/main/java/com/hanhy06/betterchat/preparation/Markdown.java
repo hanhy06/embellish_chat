@@ -15,79 +15,47 @@ public class Markdown {
     private static Pattern UNDERLINE = Pattern.compile("(?<!\\\\)__(.+?)__");
     private static Pattern ITALIC = Pattern.compile("(?<!\\\\)_(.+)_");
     private static Pattern STRIKETHROUGH = Pattern.compile("(?<!\\\\)~~(.+?)~~");
-    private static Pattern COLOR = Pattern.compile("(?<!\\\\)#([0-9A-F]{6})(.+?)#");
+    private static Pattern COLOR = Pattern.compile("(?<!\\\\)#([0-9A-F]{6})(.*)");
 
 
     public static MutableText markdown(MutableText context){
-        if (context == null) return context;
+        if (context == null || context.getString().isEmpty()) return context;
 
         MutableText result = context;
 
-        List<MarkdownToken> tokens = markdownParser(context.getString());
-        for (MarkdownToken token : tokens){
-            MutableText temp = Text.empty();
-
-            temp.append(substring(result,0, token.beginIndex));
-            temp.append(substring(result,token.beginIndex, token.endIndex).fillStyle(token.style));
-            temp.append(substring(result, token.endIndex, result.getString().length()));
-
-            result = temp;
-        }
+        result = find(BOLD,result,Style.EMPTY.withBold(true));
+        result = find(UNDERLINE,result,Style.EMPTY.withUnderline(true));
+        result = find(ITALIC,result,Style.EMPTY.withItalic(true));
+        result = find(STRIKETHROUGH,result,Style.EMPTY.withStrikethrough(true));
+        result = findColor(COLOR,result);
 
         return result;
     }
 
-    private static List<MarkdownToken> markdownParser(String context){
-        List<MarkdownToken> result = new ArrayList<>();
+    private static MutableText find(Pattern pattern,MutableText context,Style style){
+        Matcher matcher = pattern.matcher(context.getString());
+        if (!matcher.find()) return context;
 
-        Matcher bold = BOLD.matcher(context);
-        while (bold.find()){
-            result.add(new MarkdownToken(
-                    Style.EMPTY.withBold(true),
-                    bold.start(1),
-                    bold.end(1)
-            ));
-        }
+        MutableText text = Text.empty();
+        text.append(substring(context,0,matcher.start(1)));
+        text.append(substring(context,matcher.start(1),matcher.end(1)+1).fillStyle(style));
+        text.append(substring(context,matcher.end(1)+2,context.getString().length()+1));
 
-        Matcher underline = UNDERLINE.matcher(context);
-        while (underline.find()){
-            result.add(new MarkdownToken(
-                    Style.EMPTY.withUnderline(true),
-                    underline.start(1),
-                    underline.end(1)
-            ));
-        }
+        return find(pattern,text,style);
+    }
 
-        Matcher italic = ITALIC.matcher(context);
-        while (italic.find()){
-            result.add(new MarkdownToken(
-                    Style.EMPTY.withItalic(true),
-                    italic.start(1),
-                    italic.end(1)
-            ));
-        }
+    private static MutableText findColor(Pattern pattern,MutableText context){
+        Matcher matcher = pattern.matcher(context.getString());
+        if (!matcher.find()) return context;
 
-        Matcher strikethrough = STRIKETHROUGH.matcher(context);
-        while (strikethrough.find()){
-            result.add(new MarkdownToken(
-                    Style.EMPTY.withStrikethrough(true),
-                    strikethrough.start(1),
-                    strikethrough.end(1)
-            ));
-        }
+        Color color = Color.getColor('#'+matcher.group(1));
 
-        Matcher color = COLOR.matcher(context);
-        while (color.find()){
-            Color color1 = Color.getColor(color.group(1));
+        MutableText text = Text.empty();
+        text.append(substring(context,0,matcher.start(2)));
+        text.append(substring(context,matcher.start(2),matcher.end(2)+1).fillStyle(Style.EMPTY.withColor(color.getRGB())));
+        text.append(substring(context,matcher.end(2)+2,context.getString().length()+1));
 
-            result.add(new MarkdownToken(
-                    Style.EMPTY.withColor(color1.getRGB()),
-                    color.start(2),
-                    color.end(2)
-            ));
-        }
-
-        return result;
+        return findColor(pattern,text);
     }
 
     private static MutableText substring(MutableText context, int beginIndex, int endIndex) {
@@ -132,10 +100,4 @@ public class Markdown {
 
         return result;
     }
-
-    private record MarkdownToken(
-            Style style,
-            int beginIndex,
-            int endIndex
-    ){}
 }
