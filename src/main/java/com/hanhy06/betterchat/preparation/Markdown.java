@@ -19,7 +19,7 @@ public final class Markdown {
     private static final Pattern UNDERLINE     = Pattern.compile("(?<!\\\\)__(.+?)__");
     private static final Pattern ITALIC        = Pattern.compile("(?<!\\\\)_(.+?)_");
     private static final Pattern STRIKETHROUGH = Pattern.compile("(?<!\\\\)~~(.+?)~~");
-    private static final Pattern COLOR         = Pattern.compile("(?<!\\\\)#([0-9A-Fa-f]{6})(.+)", Pattern.DOTALL);
+    private static final Pattern COLOR         = Pattern.compile("(?<!\\\\)#([0-9A-F]{6})(.+)", Pattern.DOTALL);
 
     private Markdown() {}
 
