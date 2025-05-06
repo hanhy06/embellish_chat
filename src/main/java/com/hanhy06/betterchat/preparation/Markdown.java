@@ -31,6 +31,8 @@ public class Markdown {
             temp.append(substring(result,0, token.beginIndex));
             temp.append(substring(result,token.beginIndex, token.endIndex).fillStyle(token.style));
             temp.append(substring(result, token.endIndex, result.getString().length()));
+
+            result = temp;
         }
 
         return result;
