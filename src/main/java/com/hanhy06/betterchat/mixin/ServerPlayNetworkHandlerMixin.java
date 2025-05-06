@@ -2,6 +2,7 @@ package com.hanhy06.betterchat.mixin;
 
 import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.config.ConfigManager;
+import com.hanhy06.betterchat.preparation.Markdown;
 import com.hanhy06.betterchat.util.Metadata;
 import net.minecraft.network.message.FilterMask;
 import net.minecraft.network.message.MessageBody;
@@ -36,6 +37,8 @@ public class ServerPlayNetworkHandlerMixin {
         if (ConfigManager.getConfigData().textFilteringEnabled()){
             stringMessage = BetterChat.getFilter().wordBaseFiltering(stringMessage);
         }
+
+        textMessage = Markdown.markdown(textMessage);
 
         return new SignedMessage(
                 MessageLink.of(new UUID(0L, 0L)),

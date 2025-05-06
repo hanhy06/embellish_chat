@@ -53,7 +53,7 @@ public class Markdown {
 
     private static final Pattern BOLD_DELIMITER = Pattern.compile("(?<!\\\\)(\\*\\*)");
     private static final Pattern UNDERLINE_DELIMITER = Pattern.compile("(?<!\\\\)(__)");
-    private static final Pattern ITALIC_DELIMITER = Pattern.compile("(?<!\\\\)(//)");
+    private static final Pattern ITALIC_DELIMITER = Pattern.compile("(?<!\\\\)(--)");
     private static final Pattern STRIKETHROUGH_DELIMITER = Pattern.compile("(?<!\\\\)(~~)");
     private static final Pattern COLOR_START_DELIMITER = Pattern.compile("(?<!\\\\)(#([0-9A-Fa-f]{6}))");
     private static final Pattern COLOR_END_DELIMITER = Pattern.compile("(?<!\\\\)(#)(?!([0-9A-Fa-f]{6}))");
