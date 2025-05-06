@@ -5,8 +5,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,45 +56,34 @@ public class Markdown {
         return applyStyledColor(text);
     }
 
-    private static MutableText substring(MutableText context, int beginIndex, int endIndex) {
-        if (beginIndex < 0 || beginIndex >= endIndex) {
+    private static MutableText substring(Text text, int beginIndex, int endIndex) {
+        if (beginIndex >= endIndex || text == null) {
             return Text.empty();
         }
 
         MutableText result = Text.empty();
+        final int[] currentCharacterOffset = {0};
 
-        List<Text> parts = new ArrayList<>();
-        parts.add(context);
-        parts.addAll(context.getSiblings());
+        text.visit(new Text.StyledVisitor<Void>() {
+            @Override
+            public Optional<Void> accept(Style style, String content) {
+                int contentStartOffset = currentCharacterOffset[0];
+                int contentEndOffset = contentStartOffset + content.length();
 
-        int currentPos = 0;
+                int effectiveStartIndexInFullText = Math.max(contentStartOffset, beginIndex);
+                int effectiveEndIndexInFullText = Math.min(contentEndOffset, endIndex);
 
-        for (Text part : parts) {
-            String partString = part.getString();
-            int partLen = partString.length();
-            int partStart = currentPos;
-            int partEnd = currentPos + partLen;
+                if (effectiveStartIndexInFullText < effectiveEndIndexInFullText) {
+                    int subStartIndexInContentPiece = effectiveStartIndexInFullText - contentStartOffset;
+                    int subEndIndexInContentPiece = effectiveEndIndexInFullText - contentStartOffset;
 
-            int overlapStart = Math.max(partStart, beginIndex);
-            int overlapEnd = Math.min(partEnd, endIndex);
-
-            if (overlapStart < overlapEnd) {
-                int subBeginInPart = overlapStart - partStart;
-                int subEndInPart = overlapEnd - partStart;
-
-                String subString = partString.substring(subBeginInPart, subEndInPart);
-
-                MutableText styledSubstring = Text.literal(subString).setStyle(part.getStyle());
-
-                result.append(styledSubstring);
+                    String subContent = content.substring(subStartIndexInContentPiece, subEndIndexInContentPiece);
+                    result.append(Text.literal(subContent).setStyle(style));
+                }
+                currentCharacterOffset[0] = contentEndOffset;
+                return Optional.empty();
             }
-
-            currentPos = partEnd;
-
-            if (currentPos >= endIndex) {
-                break;
-            }
-        }
+        }, Style.EMPTY);
 
         return result;
     }
