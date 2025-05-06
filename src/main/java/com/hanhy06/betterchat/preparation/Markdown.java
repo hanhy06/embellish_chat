@@ -3,92 +3,101 @@ package com.hanhy06.betterchat.preparation;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
 
 import java.awt.*;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class Markdown {
+public class Markdown {
+    private static Pattern BOLD = Pattern.compile("(?<!\\\\)\\*\\*(.+?)\\*\\*");
+    private static Pattern UNDERLINE = Pattern.compile("(?<!\\\\)__(.+?)__");
+    private static Pattern ITALIC = Pattern.compile("(?<!\\\\)_(.+)_");
+    private static Pattern STRIKETHROUGH = Pattern.compile("(?<!\\\\)~~(.+?)~~");
+    private static Pattern COLOR = Pattern.compile("(?<!\\\\)#([0-9A-F]{6})(.*)");
 
-    private static final Pattern BOLD          = Pattern.compile("(?<!\\\\)\\*\\*(.+?)\\*\\*");
-    private static final Pattern UNDERLINE     = Pattern.compile("(?<!\\\\)__(.+?)__");
-    private static final Pattern ITALIC        = Pattern.compile("(?<!\\\\)_(.+?)_");
-    private static final Pattern STRIKETHROUGH = Pattern.compile("(?<!\\\\)~~(.+?)~~");
-    private static final Pattern COLOR         = Pattern.compile("(?<!\\\\)#([0-9A-F]{6})(.+)", Pattern.DOTALL);
 
-    private Markdown() {}
+    public static MutableText markdown(MutableText context){
+        if (context == null || context.getString().isEmpty()) return context;
 
-    public static MutableText markdown(MutableText original) {
-        if (original == null || original.getString().isEmpty()) return original;
+        MutableText result = context;
 
-        MutableText out = original.copy();
-        out = applyInline(BOLD,          out, Style.EMPTY.withBold(true));
-        out = applyInline(UNDERLINE,     out, Style.EMPTY.withUnderline(true));
-        out = applyInline(ITALIC,        out, Style.EMPTY.withItalic(true));
-        out = applyInline(STRIKETHROUGH, out, Style.EMPTY.withStrikethrough(true));
-        out = applyColor(out);
-        return out;
+        result = find(BOLD,result,Style.EMPTY.withBold(true));
+        result = find(UNDERLINE,result,Style.EMPTY.withUnderline(true));
+        result = find(ITALIC,result,Style.EMPTY.withItalic(true));
+        result = find(STRIKETHROUGH,result,Style.EMPTY.withStrikethrough(true));
+        result = findColor(COLOR,result);
+
+        return result;
     }
 
-    private static MutableText applyInline(Pattern p, MutableText ctx, Style style) {
-        Matcher m = p.matcher(ctx.getString());
-        if (!m.find()) return ctx;
+    private static MutableText find(Pattern pattern,MutableText context,Style style){
+        Matcher matcher = pattern.matcher(context.getString());
+        if (!matcher.find()) return context;
 
-        MutableText rebuilt = Text.empty();
-        rebuilt.append(substring(ctx, 0, m.start()));
-        rebuilt.append(substring(ctx, m.start(1), m.end(1)).fillStyle(style));
-        rebuilt.append(substring(ctx, m.end(), ctx.getString().length()));
-        return applyInline(p, rebuilt, style);
+        MutableText text = Text.empty();
+        text.append(substring(context,0,matcher.start(1)));
+        text.append(substring(context,matcher.start(1),matcher.end(1)+1).fillStyle(style));
+        text.append(substring(context,matcher.end(1)+2,context.getString().length()+1));
+
+        return find(pattern,text,style);
     }
 
-    private static MutableText applyColor(MutableText ctx) {
-        Matcher m = COLOR.matcher(ctx.getString());
-        if (!m.find()) return ctx;
+    private static MutableText findColor(Pattern pattern,MutableText context){
+        Matcher matcher = pattern.matcher(context.getString());
+        if (!matcher.find()) return context;
 
-        MutableText rebuilt = Text.empty();
-        rebuilt.append(substring(ctx, 0, m.start()));
-        rebuilt.append(substring(ctx, m.start(2), m.end(2)).fillStyle(Style.EMPTY.withColor(Color.decode('#'+m.group(1)).getRGB())));
-        return applyColor(rebuilt);
+        Color color = Color.getColor('#'+matcher.group(1));
+
+        MutableText text = Text.empty();
+        text.append(substring(context,0,matcher.start(2)));
+        text.append(substring(context,matcher.start(2),matcher.end(2)+1).fillStyle(Style.EMPTY.withColor(color.getRGB())));
+        text.append(substring(context,matcher.end(2)+2,context.getString().length()+1));
+
+        return findColor(pattern,text);
     }
 
-    private static MutableText substring(Text src, int begin, int end) {
-        if (begin >= end) return Text.empty();
+    private static MutableText substring(MutableText context, int beginIndex, int endIndex) {
+        if (beginIndex < 0 || beginIndex >= endIndex) {
+            return Text.empty();
+        }
 
         MutableText result = Text.empty();
-        Deque<Text> queue = new ArrayDeque<>();
-        queue.add(src);
 
-        int cursor = 0;
+        List<Text> parts = new ArrayList<>();
+        parts.add(context);
+        parts.addAll(context.getSiblings());
 
-        while (!queue.isEmpty()) {
-            Text node = queue.removeFirst();
-            String own = node.copy().getString();
-            List<Text> children = new ArrayList<>(node.getSiblings());
+        int currentPos = 0;
 
-            int ownLen = own.length();
-            int nodeStart = cursor;
-            int nodeEnd   = cursor + ownLen;
+        for (Text part : parts) {
+            String partString = part.getString();
+            int partLen = partString.length();
+            int partStart = currentPos;
+            int partEnd = currentPos + partLen;
 
-            int clipStart = Math.max(nodeStart, begin);
-            int clipEnd   = Math.min(nodeEnd,   end);
+            int overlapStart = Math.max(partStart, beginIndex);
+            int overlapEnd = Math.min(partEnd, endIndex);
 
-            if (clipStart < clipEnd) {
-                int s = clipStart - nodeStart;
-                int e = clipEnd   - nodeStart;
-                String frag = own.substring(s, e);
-                result.append(Text.literal(frag).setStyle(node.getStyle()));
+            if (overlapStart < overlapEnd) {
+                int subBeginInPart = overlapStart - partStart;
+                int subEndInPart = overlapEnd - partStart;
+
+                String subString = partString.substring(subBeginInPart, subEndInPart);
+
+                MutableText styledSubstring = Text.literal(subString).setStyle(part.getStyle());
+
+                result.append(styledSubstring);
             }
 
-            cursor = nodeEnd;
-            queue.addAll(children);
+            currentPos = partEnd;
 
-            if (cursor >= end) break;
+            if (currentPos >= endIndex) {
+                break;
+            }
         }
+
         return result;
     }
 }
