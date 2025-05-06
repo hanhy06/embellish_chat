@@ -15,7 +15,7 @@ public class Markdown {
     private static Pattern UNDERLINE = Pattern.compile("(?<!\\\\)__(.+?)__");
     private static Pattern ITALIC = Pattern.compile("(?<!\\\\)_(.+)_");
     private static Pattern STRIKETHROUGH = Pattern.compile("(?<!\\\\)~~(.+?)~~");
-    private static Pattern COLOR = Pattern.compile("(?<!\\\\)#([0-9A-F]{6})(.*)");
+    private static Pattern COLOR = Pattern.compile("(?<!\\\\)(#[0-9A-Fa-f]{6})(.*)");
 
 
     public static MutableText markdown(MutableText context){
@@ -23,39 +23,38 @@ public class Markdown {
 
         MutableText result = context;
 
-        result = find(BOLD,result,Style.EMPTY.withBold(true));
-        result = find(UNDERLINE,result,Style.EMPTY.withUnderline(true));
-        result = find(ITALIC,result,Style.EMPTY.withItalic(true));
-        result = find(STRIKETHROUGH,result,Style.EMPTY.withStrikethrough(true));
-        result = findColor(COLOR,result);
+        result = applyStyledPattern(BOLD,result,Style.EMPTY.withBold(true));
+        result = applyStyledPattern(UNDERLINE,result,Style.EMPTY.withUnderline(true));
+        result = applyStyledPattern(ITALIC,result,Style.EMPTY.withItalic(true));
+        result = applyStyledPattern(STRIKETHROUGH,result,Style.EMPTY.withStrikethrough(true));
+        result = applyStyledColor(result);
 
         return result;
     }
 
-    private static MutableText find(Pattern pattern,MutableText context,Style style){
+    private static MutableText applyStyledPattern(Pattern pattern, MutableText context, Style style){
         Matcher matcher = pattern.matcher(context.getString());
         if (!matcher.find()) return context;
 
         MutableText text = Text.empty();
-        text.append(substring(context,0,matcher.start(1)));
-        text.append(substring(context,matcher.start(1),matcher.end(1)+1).fillStyle(style));
-        text.append(substring(context,matcher.end(1)+2,context.getString().length()+1));
+        text.append(substring(context,0,matcher.start()));
+        text.append(substring(context,matcher.start(1),matcher.end(1)).fillStyle(style));
+        text.append(substring(context,matcher.end(),context.getString().length()));
 
-        return find(pattern,text,style);
+        return applyStyledPattern(pattern,text,style);
     }
 
-    private static MutableText findColor(Pattern pattern,MutableText context){
-        Matcher matcher = pattern.matcher(context.getString());
+    private static MutableText applyStyledColor(MutableText context){
+        Matcher matcher = COLOR.matcher(context.getString());
         if (!matcher.find()) return context;
 
-        Color color = Color.getColor('#'+matcher.group(1));
+        Color color = Color.decode(matcher.group(1));
 
         MutableText text = Text.empty();
-        text.append(substring(context,0,matcher.start(2)));
-        text.append(substring(context,matcher.start(2),matcher.end(2)+1).fillStyle(Style.EMPTY.withColor(color.getRGB())));
-        text.append(substring(context,matcher.end(2)+2,context.getString().length()+1));
+        text.append(substring(context,0,matcher.start()));
+        text.append(substring(context,matcher.start(2),matcher.end(2)).fillStyle(Style.EMPTY.withColor(color.getRGB())));
 
-        return findColor(pattern,text);
+        return applyStyledColor(text);
     }
 
     private static MutableText substring(MutableText context, int beginIndex, int endIndex) {
