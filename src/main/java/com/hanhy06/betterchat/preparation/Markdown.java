@@ -5,6 +5,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 
+import java.awt.*;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -49,12 +50,9 @@ public final class Markdown {
         Matcher m = COLOR.matcher(ctx.getString());
         if (!m.find()) return ctx;
 
-        int rgb = Integer.parseInt(m.group(1), 16) & 0xFFFFFF;
-        Style color = Style.EMPTY.withColor(TextColor.fromRgb(rgb));
-
         MutableText rebuilt = Text.empty();
         rebuilt.append(substring(ctx, 0, m.start()));
-        rebuilt.append(substring(ctx, m.start(2), m.end(2)).fillStyle(color));
+        rebuilt.append(substring(ctx, m.start(2), m.end(2)).fillStyle(Style.EMPTY.withColor(Color.decode('#'+m.group(1)).getRGB())));
         return applyColor(rebuilt);
     }
 
