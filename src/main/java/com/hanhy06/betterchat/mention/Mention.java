@@ -30,7 +30,7 @@ public class Mention {
     private final PlayerManager manager;
     private final PlayerDataManager playerDataManager;
 
-    private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{3,16})(?=\\b|$)");
+    private static final Pattern MENTION_PATTERN = Pattern.compile("(@[A-Za-z0-9_]{3,16})(?=\\b|$)");
 
     public Mention(UserCache userCache, PlayerManager manager, Path modDirPath) {
         this.userCache = userCache;
@@ -38,17 +38,17 @@ public class Mention {
         this.playerDataManager = new PlayerDataManager(userCache, modDirPath);
     }
 
-    public List<String> playerMention(UUID sender,String originalMessage, ItemStack item){
-        List<String> names = new ArrayList<>();
+    public List<MentionToken> playerMention(UUID sender,String originalMessage, ItemStack item){
+        List<MentionToken> tokens = new ArrayList<>();
 
-        for (String name : nameParser(originalMessage)){
+        for (MentionToken token : mentionParser(originalMessage)){
             UUID uuid;
             PlayerData playerData;
 
-            ServerPlayerEntity player = manager.getPlayer(name);
+            ServerPlayerEntity player = manager.getPlayer(token.name);
 
             if (player == null) {
-                Optional<GameProfile> optionalGameProfile = userCache.findByName(name);
+                Optional<GameProfile> optionalGameProfile = userCache.findByName(token.name);
                 if(optionalGameProfile.isEmpty()) continue;
 
                 uuid = optionalGameProfile.get().getId();;
@@ -73,22 +73,31 @@ public class Mention {
             playerData.addMentionData(data);
 
             if (ConfigManager.getConfigData().saveMentionEnabled()) playerDataManager.savePlayerData(playerData);
-            names.add(name);
+            tokens.add(token);
         }
 
-        return names;
+        return tokens;
     }
 
-    private List<String> nameParser(String originalMessage){
-        List<String> names = new ArrayList<>();
-        if(originalMessage == null || !originalMessage.contains("@")) return names;
+    private List<MentionToken> mentionParser(String originalMessage){
+        List<MentionToken> names = new ArrayList<>();
+        if(originalMessage == null || !originalMessage.contains("@")) return null;
 
         Matcher matcher = MENTION_PATTERN.matcher(originalMessage);
 
         while (matcher.find()){
-            names.add(matcher.group(1));
+
+            names.add(new MentionToken(
+                    matcher.group(1),
+                    matcher.start(1),
+                    matcher.end(1)
+            ));
         }
 
         return  names;
     }
+
+    public record MentionToken(
+            String name,int begin,int end
+    ){}
 }

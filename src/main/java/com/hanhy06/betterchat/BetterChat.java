@@ -3,6 +3,7 @@ package com.hanhy06.betterchat;
 import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.mention.Mention;
 import com.hanhy06.betterchat.preparation.Filter;
+import com.hanhy06.betterchat.preparation.Markdown;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -25,6 +26,7 @@ public class BetterChat implements ModInitializer {
 
 	private static Mention mention;
 	private static Filter filter;
+	private static Markdown markdown;
 
 	@Override
 	public void onInitialize() {
@@ -42,6 +44,7 @@ public class BetterChat implements ModInitializer {
 
 		mention = new Mention(serverInstance.getUserCache(),serverInstance.getPlayerManager(),modDirPath);
 		filter = new Filter(ConfigManager.getConfigData().textFilteringKeywordList());
+		markdown = new Markdown(server.getPlayerManager());
 
 		if (!Files.exists(modDirPath)) {
 			try {
@@ -69,5 +72,9 @@ public class BetterChat implements ModInitializer {
 
 	public static Filter getFilter(){
 		return filter;
+	}
+
+	public static Markdown getMarkdown(){
+		return markdown;
 	}
 }

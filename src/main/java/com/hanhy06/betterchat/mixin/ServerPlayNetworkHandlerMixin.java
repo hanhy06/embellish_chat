@@ -2,6 +2,7 @@ package com.hanhy06.betterchat.mixin;
 
 import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.config.ConfigManager;
+import com.hanhy06.betterchat.mention.Mention;
 import com.hanhy06.betterchat.preparation.Markdown;
 import com.hanhy06.betterchat.util.Metadata;
 import net.minecraft.network.message.FilterMask;
@@ -17,6 +18,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,18 +29,18 @@ public class ServerPlayNetworkHandlerMixin {
     @ModifyVariable(method = "handleDecoratedMessage", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
     private SignedMessage modifyDecoratedMessage(SignedMessage original) {
         String stringMessage = original.getContent().getString();
-        MutableText textMessage = MutableText.of(original.getContent().getContent());
+        MutableText textMessage;
 
-        List<String> names;
+        List<Mention.MentionToken> tokens = new ArrayList<>();
         if (ConfigManager.getConfigData().mentionEnabled()) {
-            names = BetterChat.getMention().playerMention(player.getUuid(),stringMessage,null);
+            tokens = BetterChat.getMention().playerMention(player.getUuid(),stringMessage,null);
         }
 
         if (ConfigManager.getConfigData().textFilteringEnabled()){
             stringMessage = BetterChat.getFilter().wordBaseFiltering(stringMessage);
         }
 
-        textMessage = Markdown.markdown(textMessage);
+        textMessage = BetterChat.getMarkdown().markdown(Text.literal(stringMessage),tokens);
 
         return new SignedMessage(
                 MessageLink.of(new UUID(0L, 0L)),
