@@ -1,6 +1,7 @@
 package com.hanhy06.betterchat.mixin;
 
 import com.hanhy06.betterchat.BetterChat;
+import com.hanhy06.betterchat.config.ConfigData;
 import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.mention.Mention;
 import com.hanhy06.betterchat.preparation.Markdown;
@@ -29,18 +30,22 @@ public class ServerPlayNetworkHandlerMixin {
     @ModifyVariable(method = "handleDecoratedMessage", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
     private SignedMessage modifyDecoratedMessage(SignedMessage original) {
         String stringMessage = original.getContent().getString();
-        MutableText textMessage;
+        MutableText textMessage = MutableText.of(original.getContent().getContent());
+
+        ConfigData config = ConfigManager.getConfigData();
 
         List<Mention.MentionToken> tokens = new ArrayList<>();
-        if (ConfigManager.getConfigData().mentionEnabled()) {
+        if (config.mentionEnabled()) {
             tokens = BetterChat.getMention().playerMention(player.getUuid(),stringMessage,null);
         }
 
-        if (ConfigManager.getConfigData().textFilteringEnabled()){
+        if (config.textFilteringEnabled()){
             stringMessage = BetterChat.getFilter().wordBaseFiltering(stringMessage);
         }
 
-        textMessage = BetterChat.getMarkdown().markdown(Text.literal(stringMessage),tokens);
+        if (config.textPreparationEnabled()){
+            textMessage = BetterChat.getMarkdown().markdown(Text.literal(stringMessage),tokens);
+        }
 
         return new SignedMessage(
                 MessageLink.of(new UUID(0L, 0L)),

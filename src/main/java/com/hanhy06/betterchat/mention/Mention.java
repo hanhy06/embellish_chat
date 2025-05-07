@@ -68,7 +68,8 @@ public class Mention {
                             .encodeStart(NbtOps.INSTANCE, item)
                             .resultOrPartial(error -> BetterChat.LOGGER.error("Failed to encode ItemStack NBT: {}", error))
                             .map(Object::toString)
-                            .orElse(null)
+                            .orElse(null),
+                    false
             );
             playerData.addMentionData(data);
 

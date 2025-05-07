@@ -18,7 +18,7 @@ import java.util.UUID;
 public class PlayerDataManager {
     private final UserCache userCache;
 
-    private static final String PLAYER_DATA_DIRECTORY_NAME = "player_datas";
+    private static final String PLAYER_DATA_DIRECTORY_NAME = "playerdata";
     private final Path playerDataDirPath;
 
     private final Gson gson = new Gson();

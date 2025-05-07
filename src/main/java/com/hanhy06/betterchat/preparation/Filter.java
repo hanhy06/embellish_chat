@@ -10,14 +10,14 @@ public class Filter {
     }
 
     public String wordBaseFiltering(String str){
-        if (words == null || words.isEmpty()) return str;
+        if (words == null || words.isEmpty() || str == null || str.isBlank()) return str;
 
-        String message = str;
+        String result = str;
 
         for (String word : words){
-            message = message.replace(word,"#".repeat(word.length()));
+            result = result.replace(word,"#".repeat(word.length()));
         }
 
-        return message;
+        return result;
     }
 }

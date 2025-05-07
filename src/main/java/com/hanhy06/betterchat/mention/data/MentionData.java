@@ -6,5 +6,6 @@ public record MentionData(
         UUID sender,
         String timeStamp,
         String originalText,
-        String itemData) {
+        String itemData,
+        boolean isOpen) {
 }
