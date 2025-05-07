@@ -1,6 +1,5 @@
 package com.hanhy06.betterchat.config;
 
-import java.util.Collections;
 import java.util.List;
 
 public record ConfigData(

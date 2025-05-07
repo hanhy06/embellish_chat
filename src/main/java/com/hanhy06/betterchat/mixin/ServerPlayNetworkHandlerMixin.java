@@ -1,10 +1,8 @@
 package com.hanhy06.betterchat.mixin;
 
 import com.hanhy06.betterchat.BetterChat;
-import com.hanhy06.betterchat.config.ConfigData;
 import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.mention.Mention;
-import com.hanhy06.betterchat.preparation.Markdown;
 import com.hanhy06.betterchat.util.Metadata;
 import net.minecraft.network.message.FilterMask;
 import net.minecraft.network.message.MessageBody;
@@ -32,18 +30,16 @@ public class ServerPlayNetworkHandlerMixin {
         String stringMessage = original.getContent().getString();
         MutableText textMessage = MutableText.of(original.getContent().getContent());
 
-        ConfigData config = ConfigManager.getConfigData();
-
         List<Mention.MentionToken> tokens = new ArrayList<>();
-        if (config.mentionEnabled()) {
+        if (ConfigManager.getConfigData().mentionEnabled()) {
             tokens = BetterChat.getMention().playerMention(player.getUuid(),stringMessage,null);
         }
 
-        if (config.textFilteringEnabled()){
+        if (ConfigManager.getConfigData().textFilteringEnabled()){
             stringMessage = BetterChat.getFilter().wordBaseFiltering(stringMessage);
         }
 
-        if (config.textPreparationEnabled()){
+        if (ConfigManager.getConfigData().textPreparationEnabled()){
             textMessage = BetterChat.getMarkdown().markdown(Text.literal(stringMessage),tokens);
         }
 
