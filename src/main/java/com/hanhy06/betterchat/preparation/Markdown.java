@@ -1,11 +1,14 @@
 package com.hanhy06.betterchat.preparation;
 
 import com.hanhy06.betterchat.mention.Mention;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.server.PlayerManager;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
+import net.minecraft.util.Formatting;
 
 import java.awt.*;
 import java.util.List;
@@ -27,7 +30,7 @@ public class Markdown {
     }
 
     public MutableText markdown(MutableText context, List<Mention.MentionToken> tokens){
-        if (context == null || context.getString().isEmpty()) return context;
+        if (context == null || context.getString().isBlank()) return context;
 
         MutableText result = context;
 
@@ -67,18 +70,14 @@ public class Markdown {
     }
 
     private MutableText applyStyledMention(MutableText context, List<Mention.MentionToken> tokens){
-        if (context == null || context.getString().isEmpty()) return context;
-
         MutableText result = context;
 
         for (Mention.MentionToken token : tokens){
             MutableText temp = Text.empty();
 
-            TextColor textColor = getPlayerColor(token.name());
-
             temp.append(substring(result,0,token.begin()));
-            temp.append(substring(result,token.begin(), token.end()+1).fillStyle(Style.EMPTY
-                    .withColor((textColor != null) ? textColor : TextColor.fromRgb(Color.white.getRGB()))
+            temp.append(substring(result,token.begin(), token.end()).fillStyle(Style.EMPTY
+                    .withColor(getPlayerColor(token.name()))
                     .withBold(true)
             ));
             temp.append(substring(result,token.end(),result.getString().length()));
@@ -90,9 +89,19 @@ public class Markdown {
     }
 
     private TextColor getPlayerColor(String name) {
-        if (name == null || name.isEmpty()) return null;
+        ServerPlayerEntity player = manager.getPlayer(name);
 
-        return TextColor.fromFormatting(manager.getPlayer(name).getScoreboardTeam().getColor());
+        if (player != null) {
+            Team team = player.getScoreboardTeam();
+            if (team != null) {
+                Formatting formatting = team.getColor();
+                if (formatting != null && formatting.isColor() && formatting != Formatting.RESET) {
+                    return TextColor.fromFormatting(formatting);
+                }
+            }
+        }
+
+        return TextColor.fromFormatting(Formatting.YELLOW);
     }
 
     private MutableText substring(Text text, int beginIndex, int endIndex) {

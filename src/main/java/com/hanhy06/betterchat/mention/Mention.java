@@ -30,7 +30,7 @@ public class Mention {
     private final PlayerManager manager;
     private final PlayerDataManager playerDataManager;
 
-    private static final Pattern MENTION_PATTERN = Pattern.compile("(@[A-Za-z0-9_]{3,16})(?=\\b|$)");
+    private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{3,16})(?=\\b|$)");
 
     public Mention(UserCache userCache, PlayerManager manager, Path modDirPath) {
         this.userCache = userCache;
@@ -80,21 +80,20 @@ public class Mention {
     }
 
     private List<MentionToken> mentionParser(String originalMessage){
-        List<MentionToken> names = new ArrayList<>();
-        if(originalMessage == null || !originalMessage.contains("@")) return null;
+        List<MentionToken> tokens = new ArrayList<>();
+        if(originalMessage == null || !originalMessage.contains("@")) return tokens;
 
         Matcher matcher = MENTION_PATTERN.matcher(originalMessage);
 
         while (matcher.find()){
-
-            names.add(new MentionToken(
+            tokens.add(new MentionToken(
                     matcher.group(1),
-                    matcher.start(1),
+                    matcher.start(),
                     matcher.end(1)
             ));
         }
 
-        return  names;
+        return  tokens;
     }
 
     public record MentionToken(
