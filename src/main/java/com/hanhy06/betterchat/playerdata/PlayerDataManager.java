@@ -5,18 +5,16 @@ import net.minecraft.util.UserCache;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class PlayerDataManager {
-    private final Map<UUID,PlayerData> playerDataCache;
+    private final Map<UUID, PlayerData> playerDataCache;
     private final Map<UUID, List<MentionData>> mentionDataCache;
-    private final List<Unit> mentionDataBuffer;
+    private final ConcurrentLinkedQueue<Unit> mentionDataBuffer;
 
     private final PlayerDataIO playerDataIO;
 
@@ -25,44 +23,54 @@ public class PlayerDataManager {
     public PlayerDataManager(UserCache cache, Path modDirPath) {
         this.playerDataCache = new ConcurrentHashMap<>();
         this.mentionDataCache = new ConcurrentHashMap<>();
-        this.mentionDataBuffer = new ArrayList<>();
+        this.mentionDataBuffer = new ConcurrentLinkedQueue<>();
 
-        playerDataIO = new PlayerDataIO(cache,modDirPath);
-
-        scheduler = Executors.newScheduledThreadPool(1);
+        this.playerDataIO = new PlayerDataIO(cache, modDirPath);
+        this.scheduler = Executors.newScheduledThreadPool(1);
     }
 
-    public void startScheduler(){
+    public void startScheduler() {
         scheduler.scheduleAtFixedRate(this::bufferClearProcess, 0, 1, TimeUnit.MINUTES);
     }
 
-    public void bufferClearProcess(){
-        if(mentionDataBuffer.isEmpty()) return;
+    public void bufferClearProcess() {
+        List<Unit> unitsToProcess = new ArrayList<>();
+        Unit unit;
+        while ((unit = mentionDataBuffer.poll()) != null) {
+            unitsToProcess.add(unit);
+        }
 
-        List<Unit> buffer = new ArrayList<>(mentionDataBuffer);
-        mentionDataBuffer.clear();
+        if (unitsToProcess.isEmpty()) {
+            return;
+        }
 
-        for (Unit unit : buffer){
-            List<MentionData> list =  mentionDataCache.get(unit.uuid);
-            list.add(unit.mention);
+        for (Unit currentUnit : unitsToProcess) {
+            List<MentionData> mentionList = mentionDataCache.computeIfAbsent(
+                    currentUnit.uuid,
+                    k -> Collections.synchronizedList(new ArrayList<>())
+            );
 
-            PlayerData playerData = playerDataCache.get(unit.uuid);
+            mentionList.add(currentUnit.mention);
 
-            playerDataIO.saveMentionData(playerData,playerData.getLastPage(),list);
+            PlayerData playerData = playerDataCache.get(currentUnit.uuid);
 
-            if (list.size()==21){
-                playerData.setLastPage(playerData.getLastPage()+1);
-                playerDataIO.savePlayerData(playerData);
-                mentionDataCache.put(unit.uuid,new ArrayList<>());
+            if (playerData != null) {
+                playerDataIO.saveMentionData(playerData, playerData.getLastPage(), mentionList);
+
+                if (mentionList.size() >= 21) {
+                    playerData.setLastPage(playerData.getLastPage() + 1);
+                    playerDataIO.savePlayerData(playerData);
+                    mentionDataCache.put(currentUnit.uuid, Collections.synchronizedList(new ArrayList<>()));
+                }
             }
         }
     }
 
-    public void stopScheduler(){
-        if(scheduler !=null){
+    public void stopScheduler() {
+        if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdown();
             try {
-                if (!scheduler.awaitTermination(1, TimeUnit.MINUTES)){
+                if (!scheduler.awaitTermination(1, TimeUnit.MINUTES)) {
                     scheduler.shutdownNow();
                 }
             } catch (InterruptedException e) {
@@ -72,8 +80,8 @@ public class PlayerDataManager {
         }
     }
 
-    public void bufferWrite(UUID uuid,MentionData data){
-        mentionDataBuffer.add(new Unit(uuid,data));
+    public void bufferWrite(UUID uuid, MentionData data) {
+        mentionDataBuffer.add(new Unit(uuid, data));
     }
 
     public Map<UUID, PlayerData> getPlayerDataCache() {
@@ -85,6 +93,7 @@ public class PlayerDataManager {
     }
 
     private record Unit(
-            UUID uuid,MentionData mention
-    ){}
+            UUID uuid, MentionData mention
+    ) {
+    }
 }
