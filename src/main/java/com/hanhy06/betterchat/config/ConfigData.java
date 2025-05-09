@@ -3,7 +3,7 @@ package com.hanhy06.betterchat.config;
 import java.util.List;
 
 public record ConfigData(
-        boolean textPreparationEnabled,
+        boolean textMarkdownEnabled,
         boolean textFilteringEnabled,
         List<String> textFilteringKeywordList,
         boolean mentionEnabled,

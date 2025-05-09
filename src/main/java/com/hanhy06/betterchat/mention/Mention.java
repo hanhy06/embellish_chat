@@ -2,9 +2,8 @@ package com.hanhy06.betterchat.mention;
 
 import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.config.ConfigManager;
-import com.hanhy06.betterchat.mention.data.MentionData;
-import com.hanhy06.betterchat.mention.data.playerdata.PlayerData;
-import com.hanhy06.betterchat.mention.data.playerdata.PlayerDataManager;
+import com.hanhy06.betterchat.playerdata.PlayerData;
+import com.hanhy06.betterchat.playerdata.PlayerDataIO;
 import com.hanhy06.betterchat.util.Timestamp;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
@@ -28,14 +27,14 @@ import java.util.regex.Pattern;
 public class Mention {
     private final UserCache userCache;
     private final PlayerManager manager;
-    private final PlayerDataManager playerDataManager;
+    private final PlayerDataIO playerDataIO;
 
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{3,16})(?=\\b|$)");
 
     public Mention(UserCache userCache, PlayerManager manager, Path modDirPath) {
         this.userCache = userCache;
         this.manager = manager;
-        this.playerDataManager = new PlayerDataManager(userCache, modDirPath);
+        this.playerDataIO = new PlayerDataIO(userCache, modDirPath);
     }
 
     public List<MentionToken> playerMention(UUID sender,String originalMessage, ItemStack item){
@@ -52,10 +51,10 @@ public class Mention {
                 if(optionalGameProfile.isEmpty()) continue;
 
                 uuid = optionalGameProfile.get().getId();;
-                playerData = playerDataManager.loadPlayerData(uuid);
+                playerData = playerDataIO.loadPlayerData(uuid);
             }else{
                 uuid = player.getUuid();
-                playerData = playerDataManager.loadPlayerData(uuid);
+                playerData = playerDataIO.loadPlayerData(uuid);
 
                 if (playerData.isNotificationsEnabled()) player.networkHandler.sendPacket(new PlaySoundS2CPacket(RegistryEntry.of(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP), SoundCategory.MASTER,player.getX(),player.getY(),player.getZ(),1f,1.75f,1));
             }
@@ -71,9 +70,7 @@ public class Mention {
                             .orElse(null),
                     false
             );
-            playerData.addMentionData(data);
 
-            if (ConfigManager.getConfigData().saveMentionEnabled()) playerDataManager.savePlayerData(playerData);
             tokens.add(token);
         }
 

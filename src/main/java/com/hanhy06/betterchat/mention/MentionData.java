@@ -1,4 +1,4 @@
-package com.hanhy06.betterchat.mention.data;
+package com.hanhy06.betterchat.mention;
 
 import java.util.UUID;
 

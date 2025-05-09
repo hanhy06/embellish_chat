@@ -1,9 +1,7 @@
-package com.hanhy06.betterchat.mention.data.playerdata;
+package com.hanhy06.betterchat.playerdata;
 
-import com.hanhy06.betterchat.mention.data.MentionData;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -11,13 +9,15 @@ public class PlayerData {
     private final String playerName;
     private final UUID playerUUID;
     private boolean notificationsEnabled;
-    private List<MentionData> mentionData;
+    private int teamColor;
+    private int lastPage;
 
-    public PlayerData(String name,UUID uuid,boolean notificationsEnabled){
+    public PlayerData(String name, UUID uuid, boolean notificationsEnabled,int teamColor, int lastPage){
         this.playerName = name;
         this.playerUUID = uuid;
         this.notificationsEnabled = notificationsEnabled;
-        this.mentionData = new ArrayList<>();
+        this.teamColor = teamColor;
+        this.lastPage = lastPage;
     }
 
     public UUID getPlayerUUID() {
@@ -36,16 +36,20 @@ public class PlayerData {
         this.notificationsEnabled = notificationsEnabled;
     }
 
-    public List<MentionData> getMentionData() {
-        return List.copyOf(mentionData);
+    public int getTeamColor() {
+        return teamColor;
     }
 
-    public void addMentionData(MentionData data){
-        mentionData.add(data);
+    public void setTeamColor(int teamColor) {
+        this.teamColor = teamColor;
     }
 
-    public void removeMentionData(MentionData data){
-        mentionData.remove(data);
+    public int getLastPage() {
+        return lastPage;
+    }
+
+    public void setLastPage(int lastPage) {
+        this.lastPage = lastPage;
     }
 
     @Override

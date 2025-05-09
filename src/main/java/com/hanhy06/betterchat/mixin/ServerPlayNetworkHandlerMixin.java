@@ -39,7 +39,7 @@ public class ServerPlayNetworkHandlerMixin {
             stringMessage = BetterChat.getFilter().wordBaseFiltering(stringMessage);
         }
 
-        if (ConfigManager.getConfigData().textPreparationEnabled()){
+        if (ConfigManager.getConfigData().textMarkdownEnabled()){
             textMessage = BetterChat.getMarkdown().markdown(Text.literal(stringMessage),tokens);
         }
 
