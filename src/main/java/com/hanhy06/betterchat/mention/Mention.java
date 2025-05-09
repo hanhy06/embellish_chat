@@ -1,7 +1,6 @@
 package com.hanhy06.betterchat.mention;
 
 import com.hanhy06.betterchat.BetterChat;
-import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.playerdata.PlayerData;
 import com.hanhy06.betterchat.playerdata.PlayerDataIO;
 import com.hanhy06.betterchat.util.Timestamp;
@@ -37,10 +36,10 @@ public class Mention {
         this.playerDataIO = new PlayerDataIO(userCache, modDirPath);
     }
 
-    public List<MentionToken> playerMention(UUID sender,String originalMessage, ItemStack item){
-        List<MentionToken> tokens = new ArrayList<>();
+    public List<MentionUnit> playerMention(UUID sender, String originalMessage, ItemStack item){
+        List<MentionUnit> tokens = new ArrayList<>();
 
-        for (MentionToken token : mentionParser(originalMessage)){
+        for (MentionUnit token : mentionParser(originalMessage)){
             UUID uuid;
             PlayerData playerData;
 
@@ -77,14 +76,14 @@ public class Mention {
         return tokens;
     }
 
-    private List<MentionToken> mentionParser(String originalMessage){
-        List<MentionToken> tokens = new ArrayList<>();
+    private List<MentionUnit> mentionParser(String originalMessage){
+        List<MentionUnit> tokens = new ArrayList<>();
         if(originalMessage == null || !originalMessage.contains("@")) return tokens;
 
         Matcher matcher = MENTION_PATTERN.matcher(originalMessage);
 
         while (matcher.find()){
-            tokens.add(new MentionToken(
+            tokens.add(new MentionUnit(
                     matcher.group(1),
                     matcher.start(),
                     matcher.end(1)
@@ -94,7 +93,7 @@ public class Mention {
         return  tokens;
     }
 
-    public record MentionToken(
+    public record MentionUnit(
             String name,int begin,int end
     ){}
 }

@@ -30,7 +30,7 @@ public class ServerPlayNetworkHandlerMixin {
         String stringMessage = original.getContent().getString();
         MutableText textMessage = MutableText.of(original.getContent().getContent());
 
-        List<Mention.MentionToken> tokens = new ArrayList<>();
+        List<Mention.MentionUnit> tokens = new ArrayList<>();
         if (ConfigManager.getConfigData().mentionEnabled()) {
             tokens = BetterChat.getMention().playerMention(player.getUuid(),stringMessage,null);
         }

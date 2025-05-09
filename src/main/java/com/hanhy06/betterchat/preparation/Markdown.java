@@ -29,7 +29,7 @@ public class Markdown {
         this.manager = manager;
     }
 
-    public MutableText markdown(MutableText context, List<Mention.MentionToken> tokens){
+    public MutableText markdown(MutableText context, List<Mention.MentionUnit> tokens){
         if (context == null || context.getString().isBlank()) return context;
 
         MutableText result = context;
@@ -69,10 +69,10 @@ public class Markdown {
         return applyStyledColor(text);
     }
 
-    private MutableText applyStyledMention(MutableText context, List<Mention.MentionToken> tokens){
+    private MutableText applyStyledMention(MutableText context, List<Mention.MentionUnit> tokens){
         MutableText result = context;
 
-        for (Mention.MentionToken token : tokens){
+        for (Mention.MentionUnit token : tokens){
             MutableText temp = Text.empty();
 
             temp.append(substring(result,0,token.begin()));

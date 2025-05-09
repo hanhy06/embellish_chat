@@ -33,29 +33,29 @@ public class PlayerDataManager {
     }
 
     public void startScheduler(){
-        Runnable task = new Runnable() {
-            @Override
-            public void run() {
-                for (Unit unit : mentionDataBuffer){
-                    List<MentionData> list =  mentionDataCache.get(unit.uuid);
-                    list.add(unit.mention);
+        scheduler.scheduleAtFixedRate(this::bufferClearProcess, 0, 1, TimeUnit.MINUTES);
+    }
 
-                    PlayerData playerData = playerDataCache.get(unit.uuid);
+    public void bufferClearProcess(){
+        if(mentionDataBuffer.isEmpty()) return;
 
-                    playerDataIO.saveMentionData(playerData,playerData.getLastPage(),list);
+        List<Unit> buffer = new ArrayList<>(mentionDataBuffer);
+        mentionDataBuffer.clear();
 
-                    if (list.size()==21){
-                        playerData.setLastPage(playerData.getLastPage()+1);
-                        playerDataIO.savePlayerData(playerData);
-                        mentionDataCache.put(unit.uuid,new ArrayList<>());
-                    }
-                }
+        for (Unit unit : buffer){
+            List<MentionData> list =  mentionDataCache.get(unit.uuid);
+            list.add(unit.mention);
 
-                mentionDataBuffer.clear();
+            PlayerData playerData = playerDataCache.get(unit.uuid);
+
+            playerDataIO.saveMentionData(playerData,playerData.getLastPage(),list);
+
+            if (list.size()==21){
+                playerData.setLastPage(playerData.getLastPage()+1);
+                playerDataIO.savePlayerData(playerData);
+                mentionDataCache.put(unit.uuid,new ArrayList<>());
             }
-        };
-
-        scheduler.scheduleAtFixedRate(task,0 ,1,TimeUnit.MINUTES);
+        }
     }
 
     public void stopScheduler(){
