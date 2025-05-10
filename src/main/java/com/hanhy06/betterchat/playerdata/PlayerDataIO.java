@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.mention.MentionData;
 import com.mojang.authlib.GameProfile;
+import net.minecraft.text.TextColor;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.UserCache;
 
 import java.io.BufferedReader;
@@ -87,7 +89,7 @@ public class PlayerDataIO {
             String name = userCache.getByUuid(uuid)
                     .map(GameProfile::getName)
                     .orElseThrow(() -> new IllegalStateException("Cannot find player name for UUID: " + uuid));
-            PlayerData playerData = new PlayerData(name,uuid,true,0,0);
+            PlayerData playerData = new PlayerData(name,uuid,true, TextColor.fromFormatting(Formatting.YELLOW),0);
 
             savePlayerData(playerData);
             return playerData;

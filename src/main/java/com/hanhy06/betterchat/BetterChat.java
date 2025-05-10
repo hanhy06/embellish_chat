@@ -7,6 +7,7 @@ import com.hanhy06.betterchat.preparation.Filter;
 import com.hanhy06.betterchat.preparation.Markdown;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.WorldSavePath;
 import org.slf4j.Logger;
@@ -35,6 +36,9 @@ public class BetterChat implements ModInitializer {
 
 		ServerLifecycleEvents.SERVER_STARTED.register(BetterChat::handleServerStart);
 		ServerLifecycleEvents.SERVER_STOPPED.register(BetterChat::handleServerStop);
+
+		ServerPlayConnectionEvents.JOIN.register(playerDataManager::handlePlayerJoin);
+		ServerPlayConnectionEvents.DISCONNECT.register(playerDataManager::handlePlayerLeave);
 	}
 
 	private static void handleServerStart(MinecraftServer server) {

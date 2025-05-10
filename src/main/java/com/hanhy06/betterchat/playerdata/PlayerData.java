@@ -1,5 +1,8 @@
 package com.hanhy06.betterchat.playerdata;
 
+import net.minecraft.text.TextColor;
+
+import java.util.Formatter;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -7,10 +10,10 @@ public class PlayerData {
     private final String playerName;
     private final UUID playerUUID;
     private boolean notificationsEnabled;
-    private int teamColor;
+    private TextColor teamColor;
     private int lastPage;
 
-    public PlayerData(String name, UUID uuid, boolean notificationsEnabled,int teamColor, int lastPage){
+    public PlayerData(String name, UUID uuid, boolean notificationsEnabled,TextColor teamColor, int lastPage){
         this.playerName = name;
         this.playerUUID = uuid;
         this.notificationsEnabled = notificationsEnabled;
@@ -34,11 +37,11 @@ public class PlayerData {
         this.notificationsEnabled = notificationsEnabled;
     }
 
-    public int getTeamColor() {
+    public TextColor getTeamColor() {
         return teamColor;
     }
 
-    public void setTeamColor(int teamColor) {
+    public void setTeamColor(TextColor teamColor) {
         this.teamColor = teamColor;
     }
 
