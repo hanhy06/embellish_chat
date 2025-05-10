@@ -1,15 +1,10 @@
 package com.hanhy06.betterchat.preparation;
 
-import com.hanhy06.betterchat.mention.Mention;
 import com.hanhy06.betterchat.mention.MentionUnit;
-import net.minecraft.scoreboard.Team;
 import net.minecraft.server.PlayerManager;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
-import net.minecraft.util.Formatting;
 
 import java.awt.*;
 import java.util.List;

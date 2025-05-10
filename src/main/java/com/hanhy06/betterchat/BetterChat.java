@@ -8,7 +8,6 @@ import com.hanhy06.betterchat.preparation.Markdown;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.PlayerManager;
 import net.minecraft.util.WorldSavePath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +48,8 @@ public class BetterChat implements ModInitializer {
 		markdown = new Markdown(server.getPlayerManager());
 		playerDataManager = new PlayerDataManager(serverInstance.getUserCache(),modDirPath);
 
+		if(ConfigManager.getConfigData().saveMentionEnabled()) playerDataManager.startScheduler();
+
 		if (!Files.exists(modDirPath)) {
 			try {
 				Files.createDirectories(modDirPath);
@@ -63,6 +64,7 @@ public class BetterChat implements ModInitializer {
 
 	private static void handleServerStop(MinecraftServer server){
 		ConfigManager.handleServerStop();
+		playerDataManager.stopScheduler();
 	}
 
 	public static MinecraftServer getServerInstance() {

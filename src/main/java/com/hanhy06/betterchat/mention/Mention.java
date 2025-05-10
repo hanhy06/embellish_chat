@@ -3,7 +3,6 @@ package com.hanhy06.betterchat.mention;
 import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.playerdata.PlayerData;
 import com.hanhy06.betterchat.playerdata.PlayerDataIO;
-import com.hanhy06.betterchat.playerdata.PlayerDataManager;
 import com.hanhy06.betterchat.util.Timestamp;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;

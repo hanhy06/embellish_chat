@@ -1,7 +1,5 @@
 package com.hanhy06.betterchat.playerdata;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.Objects;
 import java.util.UUID;
 
