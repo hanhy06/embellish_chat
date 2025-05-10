@@ -1,6 +1,7 @@
 package com.hanhy06.betterchat.preparation;
 
 import com.hanhy06.betterchat.mention.Mention;
+import com.hanhy06.betterchat.mention.MentionUnit;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -29,7 +30,7 @@ public class Markdown {
         this.manager = manager;
     }
 
-    public MutableText markdown(MutableText context, List<Mention.MentionUnit> tokens){
+    public MutableText markdown(MutableText context, List<MentionUnit> units){
         if (context == null || context.getString().isBlank()) return context;
 
         MutableText result = context;
@@ -39,7 +40,7 @@ public class Markdown {
         result = applyStyledPattern(ITALIC,result,Style.EMPTY.withItalic(true));
         result = applyStyledPattern(STRIKETHROUGH,result,Style.EMPTY.withStrikethrough(true));
         result = applyStyledColor(result);
-        result = applyStyledMention(result,tokens);
+        result = applyStyledMention(result,units);
 
         return result;
     }
@@ -69,39 +70,23 @@ public class Markdown {
         return applyStyledColor(text);
     }
 
-    private MutableText applyStyledMention(MutableText context, List<Mention.MentionUnit> tokens){
+    private MutableText applyStyledMention(MutableText context, List<MentionUnit> units){
         MutableText result = context;
 
-        for (Mention.MentionUnit token : tokens){
+        for (MentionUnit unit: units){
             MutableText temp = Text.empty();
 
-            temp.append(substring(result,0,token.begin()));
-            temp.append(substring(result,token.begin(), token.end()).fillStyle(Style.EMPTY
-                    .withColor(getPlayerColor(token.name()))
+            temp.append(substring(result,0,unit.begin()));
+            temp.append(substring(result,unit.begin(), unit.end()).fillStyle(Style.EMPTY
+                    .withColor(unit.receiver().getTeamColor())
                     .withBold(true)
             ));
-            temp.append(substring(result,token.end(),result.getString().length()));
+            temp.append(substring(result,unit.end(),result.getString().length()));
 
             result = temp;
         }
 
         return result;
-    }
-
-    private TextColor getPlayerColor(String name) {
-        ServerPlayerEntity player = manager.getPlayer(name);
-
-        if (player != null) {
-            Team team = player.getScoreboardTeam();
-            if (team != null) {
-                Formatting formatting = team.getColor();
-                if (formatting != null && formatting.isColor() && formatting != Formatting.RESET) {
-                    return TextColor.fromFormatting(formatting);
-                }
-            }
-        }
-
-        return TextColor.fromFormatting(Formatting.YELLOW);
     }
 
     private MutableText substring(Text text, int beginIndex, int endIndex) {

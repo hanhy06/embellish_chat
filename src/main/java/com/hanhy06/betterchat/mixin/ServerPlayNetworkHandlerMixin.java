@@ -3,6 +3,7 @@ package com.hanhy06.betterchat.mixin;
 import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.mention.Mention;
+import com.hanhy06.betterchat.mention.MentionUnit;
 import com.hanhy06.betterchat.util.Metadata;
 import net.minecraft.network.message.FilterMask;
 import net.minecraft.network.message.MessageBody;
@@ -30,9 +31,9 @@ public class ServerPlayNetworkHandlerMixin {
         String stringMessage = original.getContent().getString();
         MutableText textMessage = MutableText.of(original.getContent().getContent());
 
-        List<Mention.MentionUnit> tokens = new ArrayList<>();
+        List<MentionUnit> units = new ArrayList<>();
         if (ConfigManager.getConfigData().mentionEnabled()) {
-            tokens = BetterChat.getMention().playerMention(player.getUuid(),stringMessage,null);
+            units = BetterChat.getMention().playerMention(player.getUuid(),stringMessage,null);
         }
 
         if (ConfigManager.getConfigData().textFilteringEnabled()){
@@ -40,7 +41,7 @@ public class ServerPlayNetworkHandlerMixin {
         }
 
         if (ConfigManager.getConfigData().textMarkdownEnabled()){
-            textMessage = BetterChat.getMarkdown().markdown(Text.literal(stringMessage),tokens);
+            textMessage = BetterChat.getMarkdown().markdown(Text.literal(stringMessage),units);
         }
 
         return new SignedMessage(
