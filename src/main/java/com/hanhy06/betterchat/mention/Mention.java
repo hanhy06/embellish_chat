@@ -28,7 +28,6 @@ public class Mention {
     private final PlayerDataManager playerDataManager;
     private final UserCache userCache;
     private final PlayerManager manager;
-    private final PlayerDataIO playerDataIO;
 
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{3,16})(?=\\b|$)");
 
@@ -36,7 +35,6 @@ public class Mention {
         this.playerDataManager = playerDataManager;
         this.userCache = userCache;
         this.manager = manager;
-        this.playerDataIO = new PlayerDataIO(userCache, modDirPath);
     }
 
     public List<MentionUnit> playerMention(UUID sender, String originalMessage, ItemStack item){

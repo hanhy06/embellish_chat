@@ -10,11 +10,6 @@ public class Metadata {
 
         ClickEvent clickEvent = new ClickEvent.CopyToClipboard(context.getString());
 
-        Style style = context.getStyle();
-        style = style
-                .withHoverEvent(hoverEvent)
-                .withClickEvent(clickEvent);
-
-        return context.fillStyle(style);
+        return context.styled(style ->  style.withHoverEvent(hoverEvent).withClickEvent(clickEvent));
     }
 }

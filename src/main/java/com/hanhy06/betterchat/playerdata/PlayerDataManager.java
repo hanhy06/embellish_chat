@@ -107,14 +107,6 @@ public class PlayerDataManager {
         else return playerDataIO.loadPlayerData(uuid);
     }
 
-    public Map<UUID, PlayerData> getPlayerDataCache() {
-        return playerDataCache;
-    }
-
-    public Map<UUID, List<MentionData>> getMentionDataCache() {
-        return mentionDataCache;
-    }
-
     private record Unit(
             UUID uuid, MentionData mention
     ) {
