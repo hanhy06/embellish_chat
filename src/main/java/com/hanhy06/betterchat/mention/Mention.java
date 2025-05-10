@@ -3,6 +3,7 @@ package com.hanhy06.betterchat.mention;
 import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.playerdata.PlayerData;
 import com.hanhy06.betterchat.playerdata.PlayerDataIO;
+import com.hanhy06.betterchat.playerdata.PlayerDataManager;
 import com.hanhy06.betterchat.util.Timestamp;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
@@ -24,13 +25,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Mention {
+    private final PlayerDataManager playerDataManager;
     private final UserCache userCache;
     private final PlayerManager manager;
     private final PlayerDataIO playerDataIO;
 
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{3,16})(?=\\b|$)");
 
-    public Mention(UserCache userCache, PlayerManager manager, Path modDirPath) {
+    public Mention(PlayerDataManager playerDataManager, UserCache userCache, PlayerManager manager, Path modDirPath) {
+        this.playerDataManager = playerDataManager;
         this.userCache = userCache;
         this.manager = manager;
         this.playerDataIO = new PlayerDataIO(userCache, modDirPath);
@@ -50,10 +53,10 @@ public class Mention {
                 if(optionalGameProfile.isEmpty()) continue;
 
                 uuid = optionalGameProfile.get().getId();;
-                playerData = playerDataIO.loadPlayerData(uuid);
+                playerData = playerDataManager.getPlayerData(uuid);
             }else{
                 uuid = player.getUuid();
-                playerData = playerDataIO.loadPlayerData(uuid);
+                playerData = playerDataManager.getPlayerData(uuid);
 
                 if (playerData.isNotificationsEnabled()) player.networkHandler.sendPacket(new PlaySoundS2CPacket(RegistryEntry.of(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP), SoundCategory.MASTER,player.getX(),player.getY(),player.getZ(),1f,1.75f,1));
             }

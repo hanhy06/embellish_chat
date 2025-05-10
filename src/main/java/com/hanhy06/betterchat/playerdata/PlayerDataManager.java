@@ -101,6 +101,12 @@ public class PlayerDataManager {
         playerDataCache.remove(uuid);
     }
 
+    public PlayerData getPlayerData(UUID uuid){
+        PlayerData result;
+        if ((result = playerDataCache.get(uuid))!=null) return  result;
+        else return playerDataIO.loadPlayerData(uuid);
+    }
+
     public Map<UUID, PlayerData> getPlayerDataCache() {
         return playerDataCache;
     }
