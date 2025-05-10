@@ -1,6 +1,7 @@
 package com.hanhy06.betterchat.mention;
 
 import com.hanhy06.betterchat.BetterChat;
+import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.playerdata.PlayerData;
 import com.hanhy06.betterchat.playerdata.PlayerDataIO;
 import com.hanhy06.betterchat.playerdata.PlayerDataManager;
@@ -59,18 +60,20 @@ public class Mention {
                 if (playerData.isNotificationsEnabled()) player.networkHandler.sendPacket(new PlaySoundS2CPacket(RegistryEntry.of(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP), SoundCategory.MASTER,player.getX(),player.getY(),player.getZ(),1f,1.75f,1));
             }
 
-            MentionData data = new MentionData(
-                    sender,
-                    Timestamp.timeStamp(),
-                    originalMessage,
-                    (item == null) ? null : ItemStack.CODEC
-                            .encodeStart(NbtOps.INSTANCE, item)
-                            .resultOrPartial(error -> BetterChat.LOGGER.error("Failed to encode ItemStack NBT: {}", error))
-                            .map(Object::toString)
-                            .orElse(null),
-                    false
-            );
-            BetterChat.getPlayerDataManager().bufferWrite(uuid,data);
+            if (ConfigManager.getConfigData().saveMentionEnabled()) {
+                MentionData data = new MentionData(
+                        sender,
+                        Timestamp.timeStamp(),
+                        originalMessage,
+                        (item == null) ? null : ItemStack.CODEC
+                                .encodeStart(NbtOps.INSTANCE, item)
+                                .resultOrPartial(error -> BetterChat.LOGGER.error("Failed to encode ItemStack NBT: {}", error))
+                                .map(Object::toString)
+                                .orElse(null),
+                        false
+                );
+                BetterChat.getPlayerDataManager().bufferWrite(uuid, data);
+            }
 
             units.add(new MentionUnit(playerData,unit.begin, unit.end));
         }
