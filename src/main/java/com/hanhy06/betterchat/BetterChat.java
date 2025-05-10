@@ -2,11 +2,13 @@ package com.hanhy06.betterchat;
 
 import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.mention.Mention;
+import com.hanhy06.betterchat.playerdata.PlayerDataManager;
 import com.hanhy06.betterchat.preparation.Filter;
 import com.hanhy06.betterchat.preparation.Markdown;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.PlayerManager;
 import net.minecraft.util.WorldSavePath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,10 +26,11 @@ public class BetterChat implements ModInitializer {
 	private static Path modDirPath = null;
 
 	private static Mention mention;
+	private static PlayerDataManager playerDataManager;
 	private static Filter filter;
 	private static Markdown markdown;
 
-	@Override
+    @Override
 	public void onInitialize() {
 		LOGGER.info("{} initializing...", MOD_ID);
 
@@ -44,6 +47,7 @@ public class BetterChat implements ModInitializer {
 		mention = new Mention(serverInstance.getUserCache(),serverInstance.getPlayerManager(),modDirPath);
 		filter = new Filter(ConfigManager.getConfigData().textFilteringKeywordList());
 		markdown = new Markdown(server.getPlayerManager());
+		playerDataManager = new PlayerDataManager(serverInstance.getUserCache(),modDirPath);
 
 		if (!Files.exists(modDirPath)) {
 			try {
@@ -67,6 +71,10 @@ public class BetterChat implements ModInitializer {
 
 	public static Mention getMention(){
 		return mention;
+	}
+
+	public static PlayerDataManager getPlayerDataManager() {
+		return playerDataManager;
 	}
 
 	public static Filter getFilter(){

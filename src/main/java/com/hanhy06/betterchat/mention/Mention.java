@@ -3,6 +3,7 @@ package com.hanhy06.betterchat.mention;
 import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.playerdata.PlayerData;
 import com.hanhy06.betterchat.playerdata.PlayerDataIO;
+import com.hanhy06.betterchat.playerdata.PlayerDataManager;
 import com.hanhy06.betterchat.util.Timestamp;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
@@ -37,16 +38,16 @@ public class Mention {
     }
 
     public List<MentionUnit> playerMention(UUID sender, String originalMessage, ItemStack item){
-        List<MentionUnit> tokens = new ArrayList<>();
+        List<MentionUnit> units = new ArrayList<>();
 
-        for (MentionUnit token : mentionParser(originalMessage)){
+        for (Unit unit : mentionParser(originalMessage)){
             UUID uuid;
             PlayerData playerData;
 
-            ServerPlayerEntity player = manager.getPlayer(token.name);
+            ServerPlayerEntity player = manager.getPlayer(unit.name);
 
             if (player == null) {
-                Optional<GameProfile> optionalGameProfile = userCache.findByName(token.name);
+                Optional<GameProfile> optionalGameProfile = userCache.findByName(unit.name);
                 if(optionalGameProfile.isEmpty()) continue;
 
                 uuid = optionalGameProfile.get().getId();;
@@ -69,31 +70,32 @@ public class Mention {
                             .orElse(null),
                     false
             );
+            BetterChat.getPlayerDataManager().bufferWrite(uuid,data);
 
-            tokens.add(token);
+            units.add(new MentionUnit(playerData,unit.begin, unit.end));
         }
 
-        return tokens;
+        return units;
     }
 
-    private List<MentionUnit> mentionParser(String originalMessage){
-        List<MentionUnit> tokens = new ArrayList<>();
-        if(originalMessage == null || !originalMessage.contains("@")) return tokens;
+    private List<Unit> mentionParser(String originalMessage){
+        List<Unit> unit = new ArrayList<>();
+        if(originalMessage == null || !originalMessage.contains("@")) return unit;
 
         Matcher matcher = MENTION_PATTERN.matcher(originalMessage);
 
         while (matcher.find()){
-            tokens.add(new MentionUnit(
+            unit.add(new Unit(
                     matcher.group(1),
                     matcher.start(),
                     matcher.end(1)
             ));
         }
 
-        return  tokens;
+        return  unit;
     }
 
-    public record MentionUnit(
+    private record Unit(
             String name,int begin,int end
     ){}
 }

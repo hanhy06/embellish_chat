@@ -34,34 +34,26 @@ public class PlayerDataManager {
     }
 
     public void bufferClearProcess() {
+        if (mentionDataBuffer.isEmpty()) return;
+
         List<Unit> unitsToProcess = new ArrayList<>();
         Unit unit;
         while ((unit = mentionDataBuffer.poll()) != null) {
             unitsToProcess.add(unit);
         }
 
-        if (unitsToProcess.isEmpty()) {
-            return;
-        }
-
         for (Unit currentUnit : unitsToProcess) {
-            List<MentionData> mentionList = mentionDataCache.computeIfAbsent(
-                    currentUnit.uuid,
-                    k -> Collections.synchronizedList(new ArrayList<>())
-            );
-
-            mentionList.add(currentUnit.mention);
+            List<MentionData> list =  mentionDataCache.get(currentUnit.uuid);
+            list.add(currentUnit.mention);
 
             PlayerData playerData = playerDataCache.get(currentUnit.uuid);
 
-            if (playerData != null) {
-                playerDataIO.saveMentionData(playerData, playerData.getLastPage(), mentionList);
+            playerDataIO.saveMentionData(playerData,playerData.getLastPage(),list);
 
-                if (mentionList.size() >= 21) {
-                    playerData.setLastPage(playerData.getLastPage() + 1);
-                    playerDataIO.savePlayerData(playerData);
-                    mentionDataCache.put(currentUnit.uuid, Collections.synchronizedList(new ArrayList<>()));
-                }
+            if (list.size()==21){
+                playerData.setLastPage(playerData.getLastPage()+1);
+                playerDataIO.savePlayerData(playerData);
+                mentionDataCache.put(currentUnit.uuid,new ArrayList<>());
             }
         }
     }
