@@ -1,6 +1,7 @@
 package com.hanhy06.betterchat;
 
 import com.hanhy06.betterchat.config.ConfigManager;
+import com.hanhy06.betterchat.gui.command.InboxCommand;
 import com.hanhy06.betterchat.mention.Mention;
 import com.hanhy06.betterchat.playerdata.PlayerDataManager;
 import com.hanhy06.betterchat.preparation.Filter;
@@ -37,13 +38,20 @@ public class BetterChat implements ModInitializer {
 		ServerLifecycleEvents.SERVER_STARTED.register(BetterChat::handleServerStart);
 		ServerLifecycleEvents.SERVER_STOPPED.register(BetterChat::handleServerStop);
 
-		ServerPlayConnectionEvents.JOIN.register(playerDataManager::handlePlayerJoin);
-		ServerPlayConnectionEvents.DISCONNECT.register(playerDataManager::handlePlayerLeave);
+		InboxCommand.registerInboxCommand();
 	}
 
 	private static void handleServerStart(MinecraftServer server) {
 		serverInstance = server;
 		modDirPath = server.getSavePath(WorldSavePath.ROOT).getParent().resolve(MOD_DIRECTORY_NAME);
+
+		if (!Files.exists(modDirPath)) {
+			try {
+				Files.createDirectories(modDirPath);
+			} catch (IOException e) {
+				LOGGER.error("Failed to create mod directory: {}. Mod may not function correctly.", modDirPath, e);
+			}
+		}
 
 		ConfigManager.handleServerStart(modDirPath);
 
@@ -52,16 +60,10 @@ public class BetterChat implements ModInitializer {
 		filter = new Filter(ConfigManager.getConfigData().textFilteringKeywordList());
 		markdown = new Markdown(server.getPlayerManager());
 
-		if(ConfigManager.getConfigData().saveMentionEnabled()) playerDataManager.startScheduler();
+		ServerPlayConnectionEvents.JOIN.register(playerDataManager::handlePlayerJoin);
+		ServerPlayConnectionEvents.DISCONNECT.register(playerDataManager::handlePlayerLeave);
 
-		if (!Files.exists(modDirPath)) {
-			try {
-				Files.createDirectories(modDirPath);
-			} catch (IOException e) {
-				LOGGER.error("FATAL: Failed to create mod directory: {}. Mod may not function correctly.", modDirPath, e);
-				throw new RuntimeException("Failed to create essential mod directory: " + modDirPath, e);
-			}
-		}
+		if(ConfigManager.getConfigData().saveMentionEnabled()) playerDataManager.startScheduler();
 
 		LOGGER.info("{} initialized successfully.", MOD_ID);
 	}

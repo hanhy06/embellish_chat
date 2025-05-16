@@ -11,6 +11,7 @@ import net.minecraft.util.UserCache;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
@@ -44,6 +45,15 @@ public class PlayerDataIO {
 
     public void saveMentionData(PlayerData playerData, int pageNumber, List<MentionData> mentionData){
         Path mentionDataSavePath = playerDataDirPath.resolve(playerData.getPlayerUUID().toString()).resolve("%s.json".formatted(pageNumber));
+
+        if (!Files.exists(mentionDataSavePath)){
+            try {
+                Files.createDirectories(mentionDataSavePath);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         try (BufferedWriter writer = Files.newBufferedWriter(mentionDataSavePath, StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
             gson.toJson(mentionData, writer);
@@ -71,6 +81,14 @@ public class PlayerDataIO {
 
     public void savePlayerData(PlayerData playerData){
         Path playerDataSavePath = playerDataDirPath.resolve(playerData.getPlayerUUID().toString()).resolve(playerData.getPlayerUUID().toString()+".json");
+
+        if (Files.exists(playerDataSavePath)){
+            try {
+                Files.createDirectories(playerDataSavePath);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         try (BufferedWriter writer = Files.newBufferedWriter(playerDataSavePath, StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {

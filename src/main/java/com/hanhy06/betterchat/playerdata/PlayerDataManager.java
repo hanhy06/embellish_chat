@@ -15,6 +15,7 @@ import java.util.UUID;
 import java.util.concurrent.*;
 
 public class PlayerDataManager {
+//    TODO: 나중에 구글 구아바 캐싱 기능 사용 미싱이 일어 날때 10분 로드
     private final Map<UUID, PlayerData> playerDataCache;
     private final Map<UUID, List<MentionData>> mentionDataCache;
     private final ConcurrentLinkedQueue<Unit> mentionDataBuffer;
@@ -46,10 +47,10 @@ public class PlayerDataManager {
         }
 
         for (Unit currentUnit : unitsToProcess) {
-            List<MentionData> list =  mentionDataCache.get(currentUnit.uuid);
+            List<MentionData> list =  getMentionData(currentUnit.uuid);
             list.add(currentUnit.mention);
 
-            PlayerData playerData = playerDataCache.get(currentUnit.uuid);
+            PlayerData playerData = getPlayerData(currentUnit.uuid);
 
             playerDataIO.saveMentionData(playerData,playerData.getLastPage(),list);
 
@@ -99,12 +100,19 @@ public class PlayerDataManager {
         playerDataIO.savePlayerData(playerData);
 
         playerDataCache.remove(uuid);
+        mentionDataCache.remove(uuid);
     }
 
     public PlayerData getPlayerData(UUID uuid){
         PlayerData result;
-        if ((result = playerDataCache.get(uuid))!=null) return  result;
+        if ((result = playerDataCache.get(uuid))!=null) return result;
         else return playerDataIO.loadPlayerData(uuid);
+    }
+
+    public List<MentionData> getMentionData(UUID uuid){
+        List<MentionData> result;
+        if ((result = mentionDataCache.get(uuid))!=null) return result;
+        else return playerDataIO.loadMentionData(uuid,getPlayerData(uuid).getLastPage());
     }
 
     private record Unit(
