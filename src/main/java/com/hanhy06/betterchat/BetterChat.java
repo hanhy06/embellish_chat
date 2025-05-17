@@ -1,6 +1,7 @@
 package com.hanhy06.betterchat;
 
 import com.hanhy06.betterchat.config.ConfigManager;
+import com.hanhy06.betterchat.gui.InboxGui;
 import com.hanhy06.betterchat.gui.command.InboxCommand;
 import com.hanhy06.betterchat.mention.Mention;
 import com.hanhy06.betterchat.playerdata.PlayerDataManager;
@@ -30,6 +31,7 @@ public class BetterChat implements ModInitializer {
 	private static PlayerDataManager playerDataManager;
 	private static Filter filter;
 	private static Markdown markdown;
+	private static InboxCommand inboxCommand;
 
     @Override
 	public void onInitialize() {
@@ -37,8 +39,6 @@ public class BetterChat implements ModInitializer {
 
 		ServerLifecycleEvents.SERVER_STARTED.register(BetterChat::handleServerStart);
 		ServerLifecycleEvents.SERVER_STOPPED.register(BetterChat::handleServerStop);
-
-		InboxCommand.registerInboxCommand();
 	}
 
 	private static void handleServerStart(MinecraftServer server) {
@@ -59,6 +59,8 @@ public class BetterChat implements ModInitializer {
 		mention = new Mention(playerDataManager,serverInstance.getUserCache(),serverInstance.getPlayerManager(),modDirPath);
 		filter = new Filter(ConfigManager.getConfigData().textFilteringKeywordList());
 		markdown = new Markdown(server.getPlayerManager());
+		inboxCommand = new InboxCommand(new InboxGui(playerDataManager,markdown));
+		inboxCommand.registerInboxCommand();
 
 		ServerPlayConnectionEvents.JOIN.register(playerDataManager::handlePlayerJoin);
 		ServerPlayConnectionEvents.DISCONNECT.register(playerDataManager::handlePlayerLeave);

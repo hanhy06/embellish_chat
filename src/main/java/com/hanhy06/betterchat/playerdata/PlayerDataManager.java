@@ -121,6 +121,10 @@ public class PlayerDataManager {
         else return playerDataIO.loadMentionData(uuid,getPlayerData(uuid).getLastPage());
     }
 
+    public List<MentionData> getMentionData(UUID uuid,int pageNumber){
+        return playerDataIO.loadMentionData(uuid,pageNumber);
+    }
+
     private record Unit(
             UUID uuid, MentionData mention
     ) {
