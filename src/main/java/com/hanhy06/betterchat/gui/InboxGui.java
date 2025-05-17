@@ -1,6 +1,7 @@
 package com.hanhy06.betterchat.gui;
 
 import com.hanhy06.betterchat.mention.MentionData;
+import com.hanhy06.betterchat.playerdata.PlayerData;
 import com.hanhy06.betterchat.playerdata.PlayerDataManager;
 import com.hanhy06.betterchat.preparation.Markdown;
 import com.mojang.authlib.GameProfile;
@@ -10,6 +11,7 @@ import net.minecraft.component.type.WrittenBookContentComponent;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.RawFilteredPair;
 import net.minecraft.text.Text;
 
@@ -31,24 +33,47 @@ public class InboxGui {
         List<MentionData> mentionData = manager.getMentionData(profile.getId(),pageNumber);
 
         inventory.setStack(4, createPlayerHead(profile));
-        for (int i = 0 ;i < 9;i++){
-            inventory.setStack(9+i,new ItemStack(Items.PURPLE_STAINED_GLASS_PANE));
-        }
-        for (int i = 1 ;i<=3 ;i++){
-            for(int j=1 ; j<=7 ; j++){
-                MentionData data = mentionData.get(i*j-1);
 
-                ItemStack stack = new ItemStack(Items.WRITTEN_BOOK);
-                WrittenBookContentComponent component = new WrittenBookContentComponent(
+        ItemStack glassPane = new ItemStack(Items.PURPLE_STAINED_GLASS_PANE);
+        glassPane.set(DataComponentTypes.CUSTOM_NAME, Text.literal(""));
+        for (int k = 0; k < 9; k++) {
+            inventory.setStack(9 + k, glassPane);
+        }
+
+        int bookDataIndex = 0;
+        for (int bookRow = 0; bookRow < 3; bookRow++) {
+            for (int bookCol = 0; bookCol < 7; bookCol++) {
+                if (bookDataIndex >= mentionData.size()) {
+                    continue;
+                }
+
+                MentionData data = mentionData.get(bookDataIndex);
+                PlayerData senderData = manager.getPlayerData(data.sender());
+                String playerName = (senderData != null) ? senderData.getPlayerName() : "Unknown Player";
+
+                MutableText markdownOriginalText = markdown.markdown(Text.literal(data.originalText()), new ArrayList<>());
+
+                List<RawFilteredPair<Text>> pages = List.of(
+                        RawFilteredPair.of(
+                                Text.literal(playerName + " : \n").append(markdownOriginalText)
+                        )
+                );
+
+                WrittenBookContentComponent bookContent = new WrittenBookContentComponent(
                         RawFilteredPair.of(""),
-                        manager.getPlayerData(data.sender()).getPlayerName(),
+                        playerName,
                         0,
-                        List.of(RawFilteredPair.of(markdown.markdown(Text.literal(data.originalText()),new ArrayList<>()))),
+                        pages,
                         true
                 );
 
-                stack.set(DataComponentTypes.WRITTEN_BOOK_CONTENT, component);
-                inventory.setStack(9*i+j,stack);
+                ItemStack bookStack = new ItemStack(Items.WRITTEN_BOOK);
+                bookStack.set(DataComponentTypes.WRITTEN_BOOK_CONTENT, bookContent);
+
+                int inventorySlot = (2 + bookRow) * 9 + bookCol;
+                inventory.setStack(inventorySlot, bookStack);
+
+                bookDataIndex++;
             }
         }
 
