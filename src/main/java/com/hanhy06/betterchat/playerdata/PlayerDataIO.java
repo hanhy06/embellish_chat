@@ -46,11 +46,11 @@ public class PlayerDataIO {
     public void saveMentionData(PlayerData playerData, int pageNumber, List<MentionData> mentionData){
         Path mentionDataSavePath = playerDataDirPath.resolve(playerData.getPlayerUUID().toString()).resolve("%s.json".formatted(pageNumber));
 
-        if (!Files.exists(mentionDataSavePath)){
+        if (!Files.exists(mentionDataSavePath.getParent())){
             try {
-                Files.createDirectories(mentionDataSavePath);
+                Files.createDirectories(mentionDataSavePath.getParent());
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                BetterChat.LOGGER.error("Failed to create new upper dir : {}",mentionDataSavePath);
             }
         }
 
@@ -66,7 +66,8 @@ public class PlayerDataIO {
         Path mentionDataLoadPath = playerDataDirPath.resolve(uuid.toString()).resolve("%s.json".formatted(pageNumber));
 
         if(!Files.exists(mentionDataLoadPath)){
-            BetterChat.LOGGER.error("{} mention data file not found.",mentionDataLoadPath);
+            BetterChat.LOGGER.error("{} mention data file not found. create new file",mentionDataLoadPath);
+            saveMentionData(BetterChat.getPlayerDataManager().getPlayerData(uuid),pageNumber, new ArrayList<>());
             return new ArrayList<>();
         }
 
@@ -82,9 +83,9 @@ public class PlayerDataIO {
     public void savePlayerData(PlayerData playerData){
         Path playerDataSavePath = playerDataDirPath.resolve(playerData.getPlayerUUID().toString()).resolve(playerData.getPlayerUUID().toString()+".json");
 
-        if (Files.exists(playerDataSavePath)){
+        if (!Files.exists(playerDataSavePath)){
             try {
-                Files.createDirectories(playerDataSavePath);
+                Files.createDirectories(playerDataSavePath.getParent());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

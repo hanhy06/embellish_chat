@@ -1,5 +1,6 @@
 package com.hanhy06.betterchat.playerdata;
 
+import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.mention.MentionData;
 import com.hanhy06.betterchat.util.Teamcolor;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -24,6 +25,8 @@ public class PlayerDataManager {
 
     private final ScheduledExecutorService scheduler;
 
+    private static final int INVENTORY_SIZE_7x3 = 21;
+
     public PlayerDataManager(UserCache cache, Path modDirPath) {
         this.playerDataCache = new ConcurrentHashMap<>();
         this.mentionDataCache = new ConcurrentHashMap<>();
@@ -40,6 +43,8 @@ public class PlayerDataManager {
     public void bufferClearProcess() {
         if (mentionDataBuffer.isEmpty()) return;
 
+        BetterChat.LOGGER.info("Executing buffer clear process");
+
         List<Unit> unitsToProcess = new ArrayList<>();
         Unit unit;
         while ((unit = mentionDataBuffer.poll()) != null) {
@@ -47,14 +52,14 @@ public class PlayerDataManager {
         }
 
         for (Unit currentUnit : unitsToProcess) {
-            List<MentionData> list =  getMentionData(currentUnit.uuid);
+            List<MentionData> list = getMentionData(currentUnit.uuid);
             list.add(currentUnit.mention);
 
             PlayerData playerData = getPlayerData(currentUnit.uuid);
 
             playerDataIO.saveMentionData(playerData,playerData.getLastPage(),list);
 
-            if (list.size()==21){
+            if (list.size()==INVENTORY_SIZE_7x3){
                 playerData.setLastPage(playerData.getLastPage()+1);
                 playerDataIO.savePlayerData(playerData);
                 mentionDataCache.put(currentUnit.uuid,new ArrayList<>());
@@ -84,6 +89,7 @@ public class PlayerDataManager {
         UUID uuid = handler.getPlayer().getUuid();
 
         playerDataCache.put(uuid,playerDataIO.loadPlayerData(uuid));
+        mentionDataCache.put(uuid,playerDataIO.loadMentionData(uuid,playerDataCache.get(uuid).getLastPage()));
     }
 
     public void handlePlayerLeave(ServerPlayNetworkHandler handler,MinecraftServer server){
