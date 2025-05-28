@@ -217,4 +217,35 @@ public class DatabaseManager {
 
         return mentionData;
     }
+
+    public MentionData readMentionData(int mentionId){
+        try {
+            if (connection ==null || connection.isClosed()) return null;
+        } catch (SQLException e) {
+            BetterChat.LOGGER.error("Failed to check if database connection is closed for mention id: {}.", mentionId, e);
+            return null;
+        }
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_MENTION_DATA_BY_MENTION_ID)){
+            preparedStatement.setInt(1,mentionId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()){
+                if (resultSet.next()){
+                    return new MentionData(
+                            mentionId,
+                            UUID.fromString(resultSet.getString("receiver_uuid")),
+                            UUID.fromString(resultSet.getString("sender_uuid")),
+                            resultSet.getString("time_stamp"),
+                            resultSet.getString("message"),
+                            resultSet.getString("item_data"),
+                            resultSet.getBoolean("is_open")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            BetterChat.LOGGER.error("Failed to select mention data for receiver mention id: {}", mentionId, e);
+        }
+
+        return null;
+    }
 }
