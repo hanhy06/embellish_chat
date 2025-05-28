@@ -3,10 +3,11 @@ package com.hanhy06.betterchat.data.model;
 import java.util.UUID;
 
 public record MentionData(
-        UUID sender,
+        int mention_id,
         UUID receiver,
+        UUID sender,
         String timeStamp,
-        String originalText,
+        String message,
         String itemData,
         boolean isOpen) {
 }

@@ -1,15 +1,21 @@
 package com.hanhy06.betterchat.data.storage;
 
+import com.google.gson.Gson;
 import com.hanhy06.betterchat.BetterChat;
+import com.hanhy06.betterchat.data.model.MentionData;
 import com.hanhy06.betterchat.data.model.PlayerData;
 
 import java.nio.file.Path;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class DatabaseManager {
     private final Path modDbPath;
     private static final String MOD_DB_FILE_NAME = "better-chat.db";
+
+    private static final Gson gson = new Gson();
 
     private static final String CREATE_PLAYER_DATA_TABLE = """
             CREATE TABLE IF NOT EXISTS player_data(
@@ -106,64 +112,109 @@ public class DatabaseManager {
 
     public PlayerData readPlayerData(String name){
         try {
-            if (connection == null || connection.isClosed() || name == null || name.isBlank()) return null;
+            if (name == null || name.isBlank() || connection == null || connection.isClosed()) return null;
+        } catch (SQLException e) {
+            BetterChat.LOGGER.error("Failed to check if database connection is closed for name: {}.", name, e);
+        }
 
-            try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_PLAYER_DATA_BY_NAME)){
-                preparedStatement.setString(1,name);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_PLAYER_DATA_BY_NAME)){
+            preparedStatement.setString(1,name);
 
-                try (ResultSet resultSet = preparedStatement.executeQuery()){
-                    if (resultSet.next()) return new PlayerData
-                            (
-                                    name,
-                                    UUID.fromString(resultSet.getString("player_uuid")),
-                                    resultSet.getBoolean("notifications_enabled"),
-                                    resultSet.getInt("team_color")
-                            );
-                }
+            try (ResultSet resultSet = preparedStatement.executeQuery()){
+                if (resultSet.next()) return new PlayerData
+                        (
+                                name,
+                                UUID.fromString(resultSet.getString("player_uuid")),
+                                resultSet.getBoolean("notifications_enabled"),
+                                resultSet.getInt("team_color")
+                        );
             }
         } catch (SQLException e) {
             BetterChat.LOGGER.error("Failed to select player data for player name: {}", name, e);
         }
+
         return null;
     }
 
     public PlayerData readPlayerData(UUID uuid){
         try {
-            if (connection == null || connection.isClosed() || uuid == null) return null;
+            if (uuid == null || connection == null || connection.isClosed()) return null;
+        } catch (SQLException e) {
+            BetterChat.LOGGER.error("Failed to check if database connection is closed for UUID: {}.", uuid, e);
+        }
 
-            try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_PLAYER_DATA_BY_UUID)){
-                preparedStatement.setString(1,uuid.toString());
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_PLAYER_DATA_BY_UUID)){
+            preparedStatement.setString(1,uuid.toString());
 
-                try (ResultSet resultSet = preparedStatement.executeQuery()){
-                    if (resultSet.next()) return new PlayerData
-                            (
-                                    resultSet.getString("player_name"),
-                                    uuid,
-                                    resultSet.getBoolean("notifications_enabled"),
-                                    resultSet.getInt("team_color")
-                            );
-                }
+            try (ResultSet resultSet = preparedStatement.executeQuery()){
+                if (resultSet.next()) return new PlayerData
+                        (
+                                resultSet.getString("player_name"),
+                                uuid,
+                                resultSet.getBoolean("notifications_enabled"),
+                                resultSet.getInt("team_color")
+                        );
             }
         } catch (SQLException e) {
             BetterChat.LOGGER.error("Failed to select player data for player uuid: {}", uuid, e);
         }
+
         return null;
     }
 
     public void savePlayerData(PlayerData playerData){
         try {
-            if (connection == null || connection.isClosed() || playerData == null) return;
+            if (playerData == null || connection == null || connection.isClosed()) return;
+        } catch (SQLException e) {
+            BetterChat.LOGGER.error("Failed to check if database connection is closed for UUID: {}.", playerData.getPlayerUUID(), e);
+        }
 
-            try (PreparedStatement preparedStatement = connection.prepareStatement(SAVE_PLAYER_DATA)){
-                preparedStatement.setString(1,playerData.getPlayerUUID().toString());
-                preparedStatement.setString(2,playerData.getPlayerName());
-                preparedStatement.setInt(3,playerData.isNotificationsEnabled() ? 1:0);
-                preparedStatement.setInt(4,playerData.getTeamColor());
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SAVE_PLAYER_DATA)){
+            preparedStatement.setString(1,playerData.getPlayerUUID().toString());
+            preparedStatement.setString(2,playerData.getPlayerName());
+            preparedStatement.setInt(3,playerData.isNotificationsEnabled() ? 1:0);
+            preparedStatement.setInt(4,playerData.getTeamColor());
 
-                preparedStatement.executeUpdate();
-            }
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BetterChat.LOGGER.error("Failed to save player data for player uuid: {}",playerData.getPlayerUUID(),e);
         }
+    }
+
+    public List<MentionData> readMentionData(UUID receiver_uuid, int start_index, int page_size){
+        List<MentionData> mentionData = new ArrayList<>();
+
+        try {
+            if (receiver_uuid == null || connection ==null || connection.isClosed()) return mentionData;
+        } catch (SQLException e) {
+            BetterChat.LOGGER.error("Failed to check if database connection is closed for UUID: {}.", receiver_uuid, e);
+            return mentionData;
+        }
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_MENTION_DATA_BY_RECEIVER_UUID)){
+            preparedStatement.setString(1,receiver_uuid.toString());
+            preparedStatement.setInt(2,page_size);
+            preparedStatement.setInt(3,start_index);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()){
+                while (resultSet.next()) {
+                    mentionData.add(
+                            new MentionData(
+                                    resultSet.getInt("mention_id"),
+                                    UUID.fromString(resultSet.getString("receiver_uuid")),
+                                    UUID.fromString(resultSet.getString("sender_uuid")),
+                                    resultSet.getString("time_stamp"),
+                                    resultSet.getString("message"),
+                                    resultSet.getString("item_data"),
+                                    resultSet.getBoolean("is_open")
+                            )
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            BetterChat.LOGGER.error("Failed to select mention data for receiver uuid: {}", receiver_uuid, e);
+        }
+
+        return mentionData;
     }
 }
