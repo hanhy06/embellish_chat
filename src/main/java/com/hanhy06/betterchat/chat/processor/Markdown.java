@@ -1,6 +1,6 @@
-package com.hanhy06.betterchat.preparation;
+package com.hanhy06.betterchat.chat.processor;
 
-import com.hanhy06.betterchat.mention.MentionUnit;
+import com.hanhy06.betterchat.data.model.MentionUnit;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;

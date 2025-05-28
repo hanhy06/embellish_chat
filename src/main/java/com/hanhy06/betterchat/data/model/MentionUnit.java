@@ -1,6 +1,4 @@
-package com.hanhy06.betterchat.mention;
-
-import com.hanhy06.betterchat.playerdata.PlayerData;
+package com.hanhy06.betterchat.data.model;
 
 public record MentionUnit(
         PlayerData receiver,

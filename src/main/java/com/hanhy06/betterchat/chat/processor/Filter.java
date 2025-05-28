@@ -1,4 +1,4 @@
-package com.hanhy06.betterchat.preparation;
+package com.hanhy06.betterchat.chat.processor;
 
 import java.util.List;
 

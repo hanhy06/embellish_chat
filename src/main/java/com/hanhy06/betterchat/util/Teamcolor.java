@@ -6,17 +6,17 @@ import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 
 public class Teamcolor {
-    public static TextColor getPlayerColor(ServerPlayerEntity player){
+    public static int getPlayerColor(ServerPlayerEntity player){
         if (player != null) {
             Team team = player.getScoreboardTeam();
             if (team != null) {
                 Formatting formatting = team.getColor();
                 if (formatting != null && formatting.isColor() && formatting != Formatting.RESET) {
-                    return TextColor.fromFormatting(formatting);
+                    return formatting.getColorIndex();
                 }
             }
         }
 
-        return TextColor.fromFormatting(Formatting.YELLOW);
+        return 16777045;
     }
 }

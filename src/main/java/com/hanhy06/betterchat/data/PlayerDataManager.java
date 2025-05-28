@@ -1,7 +1,10 @@
-package com.hanhy06.betterchat.playerdata;
+package com.hanhy06.betterchat.data;
 
 import com.hanhy06.betterchat.BetterChat;
-import com.hanhy06.betterchat.mention.MentionData;
+import com.hanhy06.betterchat.data.model.MentionData;
+import com.hanhy06.betterchat.data.model.PlayerData;
+import com.hanhy06.betterchat.data.storage.DatabaseManager;
+import com.hanhy06.betterchat.playerdata.PlayerDataIO;
 import com.hanhy06.betterchat.util.Teamcolor;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.server.MinecraftServer;
@@ -21,6 +24,7 @@ public class PlayerDataManager {
     private final Map<UUID, List<MentionData>> mentionDataCache;
     private final ConcurrentLinkedQueue<Unit> mentionDataBuffer;
 
+    private final DatabaseManager databaseManager;
     private final PlayerDataIO playerDataIO;
 
     private final ScheduledExecutorService scheduler;
@@ -32,12 +36,15 @@ public class PlayerDataManager {
         this.mentionDataCache = new ConcurrentHashMap<>();
         this.mentionDataBuffer = new ConcurrentLinkedQueue<>();
 
+        this.databaseManager = new DatabaseManager(modDirPath);
         this.playerDataIO = new PlayerDataIO(cache, modDirPath);
+
         this.scheduler = Executors.newScheduledThreadPool(1);
     }
 
-    public void startScheduler() {
+    public void handleServerStart() {
         scheduler.scheduleAtFixedRate(this::bufferClearProcess, 0, 1, TimeUnit.MINUTES);
+        databaseManager.connect();
     }
 
     public void bufferClearProcess() {
@@ -67,7 +74,7 @@ public class PlayerDataManager {
         }
     }
 
-    public void stopScheduler() {
+    public void handleServerStop() {
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdown();
             try {
@@ -79,6 +86,7 @@ public class PlayerDataManager {
                 Thread.currentThread().interrupt();
             }
         }
+        databaseManager.disconnect();
     }
 
     public void bufferWrite(UUID uuid, MentionData data) {
@@ -100,10 +108,9 @@ public class PlayerDataManager {
                 handler.getPlayer().getName().getString(),
                 cacheData.getPlayerUUID(),
                 cacheData.isNotificationsEnabled(),
-                Teamcolor.getPlayerColor(handler.getPlayer()),
-                cacheData.getLastPage()
+                Teamcolor.getPlayerColor(handler.getPlayer())
         );
-        playerDataIO.savePlayerData(playerData);
+        databaseManager.savePlayerData(playerData);
 
         playerDataCache.remove(uuid);
         mentionDataCache.remove(uuid);
@@ -112,7 +119,11 @@ public class PlayerDataManager {
     public PlayerData getPlayerData(UUID uuid){
         PlayerData result;
         if ((result = playerDataCache.get(uuid))!=null) return result;
-        else return playerDataIO.loadPlayerData(uuid);
+        else return databaseManager.readPlayerData(uuid);
+    }
+
+    public PlayerData getPlayerData(String name){
+        return databaseManager.readPlayerData(name);
     }
 
     public List<MentionData> getMentionData(UUID uuid){

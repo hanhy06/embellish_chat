@@ -3,7 +3,8 @@ package com.hanhy06.betterchat.playerdata;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.hanhy06.betterchat.BetterChat;
-import com.hanhy06.betterchat.mention.MentionData;
+import com.hanhy06.betterchat.data.model.PlayerData;
+import com.hanhy06.betterchat.data.model.MentionData;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
@@ -11,7 +12,6 @@ import net.minecraft.util.UserCache;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
@@ -108,7 +108,7 @@ public class PlayerDataIO {
             String name = userCache.getByUuid(uuid)
                     .map(GameProfile::getName)
                     .orElseThrow(() -> new IllegalStateException("Cannot find player name for UUID: " + uuid));
-            PlayerData playerData = new PlayerData(name,uuid,true, TextColor.fromFormatting(Formatting.YELLOW),0);
+            PlayerData playerData = new PlayerData(name,uuid,true, TextColor.fromFormatting(Formatting.YELLOW));
 
             savePlayerData(playerData);
             return playerData;

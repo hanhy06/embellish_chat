@@ -1,8 +1,7 @@
-package com.hanhy06.betterchat.playerdata;
+package com.hanhy06.betterchat.data.model;
 
 import net.minecraft.text.TextColor;
 
-import java.util.Formatter;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -10,15 +9,13 @@ public class PlayerData {
     private final String playerName;
     private final UUID playerUUID;
     private boolean notificationsEnabled;
-    private TextColor teamColor;
-    private int lastPage;
+    private int teamColor;
 
-    public PlayerData(String name, UUID uuid, boolean notificationsEnabled,TextColor teamColor, int lastPage){
+    public PlayerData(String name, UUID uuid, boolean notificationsEnabled,int teamColor){
         this.playerName = name;
         this.playerUUID = uuid;
         this.notificationsEnabled = notificationsEnabled;
         this.teamColor = teamColor;
-        this.lastPage = lastPage;
     }
 
     public UUID getPlayerUUID() {
@@ -37,20 +34,12 @@ public class PlayerData {
         this.notificationsEnabled = notificationsEnabled;
     }
 
-    public TextColor getTeamColor() {
+    public int getTeamColor() {
         return teamColor;
     }
 
-    public void setTeamColor(TextColor teamColor) {
+    public void setTeamColor(int teamColor) {
         this.teamColor = teamColor;
-    }
-
-    public int getLastPage() {
-        return lastPage;
-    }
-
-    public void setLastPage(int lastPage) {
-        this.lastPage = lastPage;
     }
 
     @Override

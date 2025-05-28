@@ -1,12 +1,10 @@
 package com.hanhy06.betterchat;
 
 import com.hanhy06.betterchat.config.ConfigManager;
-import com.hanhy06.betterchat.gui.InboxGui;
-import com.hanhy06.betterchat.gui.command.InboxCommand;
-import com.hanhy06.betterchat.mention.Mention;
-import com.hanhy06.betterchat.playerdata.PlayerDataManager;
-import com.hanhy06.betterchat.preparation.Filter;
-import com.hanhy06.betterchat.preparation.Markdown;
+import com.hanhy06.betterchat.chat.processor.Mention;
+import com.hanhy06.betterchat.data.PlayerDataManager;
+import com.hanhy06.betterchat.chat.processor.Filter;
+import com.hanhy06.betterchat.chat.processor.Markdown;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -31,7 +29,6 @@ public class BetterChat implements ModInitializer {
 	private static PlayerDataManager playerDataManager;
 	private static Filter filter;
 	private static Markdown markdown;
-	private static InboxCommand inboxCommand;
 
     @Override
 	public void onInitialize() {
@@ -56,23 +53,21 @@ public class BetterChat implements ModInitializer {
 		ConfigManager.handleServerStart(modDirPath);
 
 		playerDataManager = new PlayerDataManager(serverInstance.getUserCache(),modDirPath);
-		mention = new Mention(playerDataManager,serverInstance.getUserCache(),serverInstance.getPlayerManager(),modDirPath);
+		mention = new Mention(playerDataManager, server.getPlayerManager());
 		filter = new Filter(ConfigManager.getConfigData().textFilteringKeywordList());
 		markdown = new Markdown(server.getPlayerManager());
-		inboxCommand = new InboxCommand(new InboxGui(playerDataManager,markdown));
-		inboxCommand.registerInboxCommand();
 
 		ServerPlayConnectionEvents.JOIN.register(playerDataManager::handlePlayerJoin);
 		ServerPlayConnectionEvents.DISCONNECT.register(playerDataManager::handlePlayerLeave);
 
-		if(ConfigManager.getConfigData().saveMentionEnabled()) playerDataManager.startScheduler();
+		if(ConfigManager.getConfigData().saveMentionEnabled()) playerDataManager.handleServerStart();
 
 		LOGGER.info("{} initialized successfully.", MOD_ID);
 	}
 
 	private static void handleServerStop(MinecraftServer server){
 		ConfigManager.handleServerStop();
-		playerDataManager.stopScheduler();
+		playerDataManager.handleServerStop();
 	}
 
 	public static MinecraftServer getServerInstance() {
