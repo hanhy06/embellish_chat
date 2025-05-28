@@ -12,26 +12,26 @@ public class DatabaseManager {
     private static final String MOD_DB_FILE_NAME = "better-chat.db";
 
     private static final String CREATE_PLAYER_DATA_TABLE = """
-        CREATE TABLE IF NOT EXISTS player_data(
-            player_uuid TEXT PRIMARY KEY NOT NULL,
-            player_name TEXT NOT NULL,
-            notifications_enabled INTEGER NOT NULL DEFAULT 1,
-            team_color INTEGER NOT NULL DEFAULT 16777045
-        );
-        """;
+            CREATE TABLE IF NOT EXISTS player_data(
+                player_uuid TEXT PRIMARY KEY NOT NULL,
+                player_name TEXT NOT NULL,
+                notifications_enabled INTEGER NOT NULL DEFAULT 1,
+                team_color INTEGER NOT NULL DEFAULT 16777045
+            );
+            """;
 
     private static final String CREATE_MENTION_DATA_TABLE = """
-        CREATE TABLE IF NOT EXISTS mention_data(
-            mention_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            receiver_uuid TEXT NOT NULL,
-            sender_uuid TEXT NOT NULL,
-            time_stamp TEXT NOT NULL,
-            message TEXT NOT NULL,
-            item_data TEXT,
-            is_open INTEGER NOT NULL DEFAULT 0,
-            FOREIGN KEY (receiver_uuid) REFERENCES player_data (player_uuid)
-        );
-        """;
+                CREATE TABLE IF NOT EXISTS mention_data(
+                mention_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                receiver_uuid TEXT NOT NULL,
+                sender_uuid TEXT NOT NULL,
+                time_stamp TEXT NOT NULL,
+                message TEXT NOT NULL,
+                item_data TEXT,
+                is_open INTEGER NOT NULL DEFAULT 0,
+                FOREIGN KEY (receiver_uuid) REFERENCES player_data (player_uuid)
+            );
+            """;
 
     private static final String SELECT_PLAYER_DATA_BY_NAME = """
             SELECT * FROM player_data WHERE player_name = ?;
@@ -42,9 +42,33 @@ public class DatabaseManager {
             """;
 
     private static final String SAVE_PLAYER_DATA = """
-    INSERT OR REPLACE INTO player_data (player_uuid, player_name, notifications_enabled, team_color)
-    VALUES (?, ?, ?, ?);
-    """;
+            INSERT OR REPLACE INTO player_data (player_uuid, player_name, notifications_enabled, team_color)
+            VALUES (?, ?, ?, ?);
+            """;
+
+    private static final String SELECT_MENTION_DATA_BY_RECEIVER_UUID = """
+            SELECT * FROM mention_data
+            WHERE receiver_uuid = ?
+            ORDER BY mention_id DESC
+            LIMIT ? OFFSET ?;
+            """;
+
+    private static final String SELECT_MENTION_DATA_BY_MENTION_ID = """
+            SELECT * FROM mention_data
+            WHERE mention_id = ?
+            LIMIT 1;
+            """;
+
+    private static final String UPDATE_MENTION_DATA_IS_OPEN = """
+            UPDATE mention_data
+            SET is_open = 1
+            WHERE mention_id = ?;
+            """;
+
+    private static final String WRITE_MENTION_DATA = """
+            INSERT INTO mention_data (receiver_uuid, sender_uuid, time_stamp, message, item_data)
+            VALUES (?,?,?,?,?);
+            """;
 
     private Connection connection = null;
 
@@ -60,6 +84,7 @@ public class DatabaseManager {
             try (Statement statement = connection.createStatement()) {
                 statement.execute(CREATE_PLAYER_DATA_TABLE);
                 statement.execute(CREATE_MENTION_DATA_TABLE);
+                statement.execute("PRAGMA foreign_keys = ON;");
                 BetterChat.LOGGER.info("Database tables created or already exist.");
             }
 

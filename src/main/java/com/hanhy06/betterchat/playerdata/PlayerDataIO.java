@@ -108,7 +108,7 @@ public class PlayerDataIO {
             String name = userCache.getByUuid(uuid)
                     .map(GameProfile::getName)
                     .orElseThrow(() -> new IllegalStateException("Cannot find player name for UUID: " + uuid));
-            PlayerData playerData = new PlayerData(name,uuid,true, TextColor.fromFormatting(Formatting.YELLOW));
+            PlayerData playerData = new PlayerData(name,uuid,true, TextColor.fromFormatting(Formatting.YELLOW).getRgb());
 
             savePlayerData(playerData);
             return playerData;
