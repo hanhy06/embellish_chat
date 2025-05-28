@@ -38,10 +38,13 @@ public class Mention {
         List<MentionUnit> units = new ArrayList<>();
 
         for (Unit unit : nameParser(originalMessage)){
-            PlayerData playerData = null; playerData = playerDataManager.getPlayerData(unit.name);
+            PlayerData playerData = playerDataManager.getPlayerData(unit.name);
 
             if (playerData == null) continue;
-            if (playerData.isNotificationsEnabled()) Objects.requireNonNull(manager.getPlayer(unit.name)).networkHandler.sendPacket(new PlaySoundS2CPacket(RegistryEntry.of(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP), SoundCategory.MASTER,player.getX(),player.getY(),player.getZ(),1f,1.75f,1));
+            if (playerData.isNotificationsEnabled()) {
+                ServerPlayerEntity player = manager.getPlayer(unit.name);
+                if (player != null) player.networkHandler.sendPacket(new PlaySoundS2CPacket(RegistryEntry.of(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP), SoundCategory.MASTER,player.getX(),player.getY(),player.getZ(),1f,1.75f,1));
+            }
 
             units.add(new MentionUnit(playerData,unit.begin,unit.end));
         }

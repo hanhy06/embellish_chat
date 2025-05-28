@@ -1,6 +1,5 @@
 package com.hanhy06.betterchat.data.storage;
 
-import com.google.gson.Gson;
 import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.data.model.MentionData;
 import com.hanhy06.betterchat.data.model.PlayerData;
@@ -72,6 +71,12 @@ public class DatabaseManager {
     private static final String WRITE_MENTION_DATA = """
             INSERT INTO mention_data (receiver_uuid, sender_uuid, time_stamp, message, item_data)
             VALUES (?,?,?,?,?);
+            """;
+
+    private static final String SELECT_MENTION_DATA_COUNT_BY_RECEIVER_UUID = """
+            SELECT COUNT(*) AS mention_count
+            FROM mention_data
+            WHERE receiver_uuid = ?;
             """;
 
     private Connection connection = null;
@@ -282,5 +287,27 @@ public class DatabaseManager {
         } catch (SQLException e) {
             BetterChat.LOGGER.error("Failed to write mention data for receiver uuid: {}",mentionData.receiver(),e);
         }
+    }
+
+    public int countMentionData(UUID uuid){
+        try {
+            if (uuid == null || connection == null || connection.isClosed()) return -1;
+        } catch (SQLException e) {
+            BetterChat.LOGGER.error("Failed to check if database connection is closed for receiver uuid: {}.", uuid, e);
+        }
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_MENTION_DATA_COUNT_BY_RECEIVER_UUID)){
+            preparedStatement.setString(1,uuid.toString());
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()){
+                if (resultSet.next()){
+                    return resultSet.getInt("mention_count");
+                }
+            }
+        } catch (SQLException e) {
+            BetterChat.LOGGER.error("Failed to counting mention data for receiver uuid: {}",uuid,e);
+        }
+
+        return -1;
     }
 }

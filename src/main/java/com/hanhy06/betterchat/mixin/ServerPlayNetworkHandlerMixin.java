@@ -1,9 +1,12 @@
 package com.hanhy06.betterchat.mixin;
 
+import com.google.gson.Gson;
 import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.config.ConfigManager;
+import com.hanhy06.betterchat.data.model.MentionData;
 import com.hanhy06.betterchat.data.model.MentionUnit;
 import com.hanhy06.betterchat.util.Metadata;
+import com.hanhy06.betterchat.util.Timestamp;
 import net.minecraft.network.message.FilterMask;
 import net.minecraft.network.message.MessageBody;
 import net.minecraft.network.message.MessageLink;
@@ -23,10 +26,14 @@ import java.util.UUID;
 
 @Mixin(ServerPlayNetworkHandler.class)
 public class ServerPlayNetworkHandlerMixin {
+    private static Gson gson = new Gson();
+
     @Shadow public ServerPlayerEntity player;
 
     @ModifyVariable(method = "handleDecoratedMessage", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
     private SignedMessage modifyDecoratedMessage(SignedMessage original) {
+
+
         String stringMessage = original.getContent().getString();
         MutableText textMessage = MutableText.of(original.getContent().getContent());
 
@@ -41,6 +48,22 @@ public class ServerPlayNetworkHandlerMixin {
 
         if (ConfigManager.getConfigData().textMarkdownEnabled()){
             textMessage = BetterChat.getMarkdown().markdown(Text.literal(stringMessage),units);
+        }
+
+        if (ConfigManager.getConfigData().saveMentionEnabled()){
+            for (MentionUnit unit : units){
+                BetterChat.getDatabaseManager().writeMentionData(
+                        new MentionData(
+                                0,
+                                unit.receiver().getPlayerUUID(),
+                                player.getUuid(),
+                                Timestamp.timeStamp(),
+                                gson.toJson(textMessage),
+                                null,
+                                false
+                        )
+                );
+            }
         }
 
         return new SignedMessage(

@@ -5,6 +5,7 @@ import com.hanhy06.betterchat.chat.processor.Mention;
 import com.hanhy06.betterchat.data.PlayerDataManager;
 import com.hanhy06.betterchat.chat.processor.Filter;
 import com.hanhy06.betterchat.chat.processor.Markdown;
+import com.hanhy06.betterchat.data.storage.DatabaseManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -25,6 +26,7 @@ public class BetterChat implements ModInitializer {
 	public static final String MOD_DIRECTORY_NAME = "better-chat";
 	private static Path modDirPath = null;
 
+	private static DatabaseManager databaseManager;
 	private static Mention mention;
 	private static PlayerDataManager playerDataManager;
 	private static Filter filter;
@@ -52,10 +54,13 @@ public class BetterChat implements ModInitializer {
 
 		ConfigManager.handleServerStart(modDirPath);
 
-		playerDataManager = new PlayerDataManager(serverInstance.getUserCache(),modDirPath);
+		databaseManager = new DatabaseManager(modDirPath);
+		playerDataManager = new PlayerDataManager(databaseManager);
 		mention = new Mention(playerDataManager, server.getPlayerManager());
 		filter = new Filter(ConfigManager.getConfigData().textFilteringKeywordList());
 		markdown = new Markdown(server.getPlayerManager());
+
+		databaseManager.connect();
 
 		ServerPlayConnectionEvents.JOIN.register(playerDataManager::handlePlayerJoin);
 		ServerPlayConnectionEvents.DISCONNECT.register(playerDataManager::handlePlayerLeave);
@@ -68,11 +73,14 @@ public class BetterChat implements ModInitializer {
 	private static void handleServerStop(MinecraftServer server){
 		ConfigManager.handleServerStop();
 		playerDataManager.handleServerStop();
+		databaseManager.disconnect();
 	}
 
 	public static MinecraftServer getServerInstance() {
 		return serverInstance;
 	}
+
+	public static DatabaseManager getDatabaseManager() {return databaseManager;}
 
 	public static Mention getMention(){
 		return mention;

@@ -4,14 +4,11 @@ import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.data.model.MentionData;
 import com.hanhy06.betterchat.data.model.PlayerData;
 import com.hanhy06.betterchat.data.storage.DatabaseManager;
-import com.hanhy06.betterchat.playerdata.PlayerDataIO;
 import com.hanhy06.betterchat.util.Teamcolor;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
-import net.minecraft.util.UserCache;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,26 +22,23 @@ public class PlayerDataManager {
     private final ConcurrentLinkedQueue<Unit> mentionDataBuffer;
 
     private final DatabaseManager databaseManager;
-    private final PlayerDataIO playerDataIO;
 
     private final ScheduledExecutorService scheduler;
 
     private static final int INVENTORY_SIZE_7x3 = 21;
 
-    public PlayerDataManager(UserCache cache, Path modDirPath) {
+    public PlayerDataManager(DatabaseManager databaseManager) {
         this.playerDataCache = new ConcurrentHashMap<>();
         this.mentionDataCache = new ConcurrentHashMap<>();
         this.mentionDataBuffer = new ConcurrentLinkedQueue<>();
 
-        this.databaseManager = new DatabaseManager(modDirPath);
-        this.playerDataIO = new PlayerDataIO(cache, modDirPath);
+        this.databaseManager = databaseManager;
 
         this.scheduler = Executors.newScheduledThreadPool(1);
     }
 
     public void handleServerStart() {
         scheduler.scheduleAtFixedRate(this::bufferClearProcess, 0, 1, TimeUnit.MINUTES);
-        databaseManager.connect();
     }
 
     public void bufferClearProcess() {
@@ -59,18 +53,7 @@ public class PlayerDataManager {
         }
 
         for (Unit currentUnit : unitsToProcess) {
-            List<MentionData> list = getMentionData(currentUnit.uuid);
-            list.add(currentUnit.mention);
-
-            PlayerData playerData = getPlayerData(currentUnit.uuid);
-
-            playerDataIO.saveMentionData(playerData,playerData.getLastPage(),list);
-
-            if (list.size()==INVENTORY_SIZE_7x3){
-                playerData.setLastPage(playerData.getLastPage()+1);
-                playerDataIO.savePlayerData(playerData);
-                mentionDataCache.put(currentUnit.uuid,new ArrayList<>());
-            }
+            databaseManager.writeMentionData(currentUnit.mention);
         }
     }
 
@@ -86,7 +69,6 @@ public class PlayerDataManager {
                 Thread.currentThread().interrupt();
             }
         }
-        databaseManager.disconnect();
     }
 
     public void bufferWrite(UUID uuid, MentionData data) {
@@ -95,9 +77,10 @@ public class PlayerDataManager {
 
     public void handlePlayerJoin(ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server){
         UUID uuid = handler.getPlayer().getUuid();
+        int mention_count = databaseManager.countMentionData(uuid);
 
-        playerDataCache.put(uuid,playerDataIO.loadPlayerData(uuid));
-        mentionDataCache.put(uuid,playerDataIO.loadMentionData(uuid,playerDataCache.get(uuid).getLastPage()));
+        playerDataCache.put(uuid,databaseManager.readPlayerData(uuid));
+        mentionDataCache.put(uuid,databaseManager.readMentionData(uuid,mention_count-INVENTORY_SIZE_7x3,mention_count));
     }
 
     public void handlePlayerLeave(ServerPlayNetworkHandler handler,MinecraftServer server){
@@ -129,11 +112,15 @@ public class PlayerDataManager {
     public List<MentionData> getMentionData(UUID uuid){
         List<MentionData> result;
         if ((result = mentionDataCache.get(uuid))!=null) return result;
-        else return playerDataIO.loadMentionData(uuid,getPlayerData(uuid).getLastPage());
+        else{
+            int mention_count = databaseManager.countMentionData(uuid);
+            return databaseManager.readMentionData(uuid,mention_count-INVENTORY_SIZE_7x3,mention_count);
+        }
     }
 
     public List<MentionData> getMentionData(UUID uuid,int pageNumber){
-        return playerDataIO.loadMentionData(uuid,pageNumber);
+        int mention_page = (databaseManager.countMentionData(uuid)/INVENTORY_SIZE_7x3)*pageNumber;
+        return databaseManager.readMentionData(uuid,mention_page-INVENTORY_SIZE_7x3,mention_page);
     }
 
     private record Unit(
