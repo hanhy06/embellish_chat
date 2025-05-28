@@ -15,8 +15,6 @@ public class DatabaseManager {
     private final Path modDbPath;
     private static final String MOD_DB_FILE_NAME = "better-chat.db";
 
-    private static final Gson gson = new Gson();
-
     private static final String CREATE_PLAYER_DATA_TABLE = """
             CREATE TABLE IF NOT EXISTS player_data(
                 player_uuid TEXT PRIMARY KEY NOT NULL,
@@ -125,7 +123,7 @@ public class DatabaseManager {
                         (
                                 name,
                                 UUID.fromString(resultSet.getString("player_uuid")),
-                                resultSet.getBoolean("notifications_enabled"),
+                                resultSet.getInt("notifications_enabled") == 1,
                                 resultSet.getInt("team_color")
                         );
             }
@@ -151,7 +149,7 @@ public class DatabaseManager {
                         (
                                 resultSet.getString("player_name"),
                                 uuid,
-                                resultSet.getBoolean("notifications_enabled"),
+                                resultSet.getInt("notifications_enabled") == 1,
                                 resultSet.getInt("team_color")
                         );
             }
