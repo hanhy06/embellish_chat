@@ -248,4 +248,41 @@ public class DatabaseManager {
 
         return null;
     }
+
+    public void updateMentionData(int mentionId){
+        try {
+            if (connection ==null || connection.isClosed()) return;
+        } catch (SQLException e) {
+            BetterChat.LOGGER.error("Failed to check if database connection is closed for mention id: {}.", mentionId, e);
+            return;
+        }
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_MENTION_DATA_IS_OPEN)){
+            preparedStatement.setInt(1,mentionId);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            BetterChat.LOGGER.error("Failed to update mention data for mention id: {}",mentionId,e);
+        }
+    }
+
+    public void writeMentionData(MentionData mentionData){
+        try {
+            if (mentionData == null || connection == null || connection.isClosed()) return;
+        } catch (SQLException e) {
+            BetterChat.LOGGER.error("Failed to check if database connection is closed for receiver uuid: {}.", mentionData.receiver(), e);
+        }
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(WRITE_MENTION_DATA)){
+            preparedStatement.setString(1,mentionData.receiver().toString());
+            preparedStatement.setString(2,mentionData.sender().toString());
+            preparedStatement.setString(3,mentionData.timeStamp());
+            preparedStatement.setString(4,mentionData.message());
+            preparedStatement.setString(5,mentionData.itemData());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            BetterChat.LOGGER.error("Failed to write mention data for receiver uuid: {}",mentionData.receiver(),e);
+        }
+    }
 }
