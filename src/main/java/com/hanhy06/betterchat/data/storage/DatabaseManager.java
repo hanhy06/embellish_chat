@@ -68,6 +68,12 @@ public class DatabaseManager {
             WHERE mention_id = ?;
             """;
 
+    private static final String UPDATE_MENTION_DATA_ITEM_DATA = """
+            UPDATE mention_data
+            SET item_data = ?
+            WHERE mention_id = ?;
+            """;
+
     private static final String WRITE_MENTION_DATA = """
             INSERT INTO mention_data (receiver_uuid, sender_uuid, time_stamp, message, item_data)
             VALUES (?,?,?,?,?);
@@ -252,11 +258,11 @@ public class DatabaseManager {
         return null;
     }
 
-    public void updateMentionData(int mentionId){
+    public void updateMentionDataIsOpen(int mentionId){
         try {
             if (connection ==null || connection.isClosed()) return;
         } catch (SQLException e) {
-            BetterChat.LOGGER.error("Failed to check if database connection is closed for mention id: {}.", mentionId, e);
+            BetterChat.LOGGER.error("Failed to check if database connection is closed for updating is_open for mention id: {}.", mentionId, e);
             return;
         }
 
@@ -265,7 +271,32 @@ public class DatabaseManager {
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            BetterChat.LOGGER.error("Failed to update mention data for mention id: {}",mentionId,e);
+            BetterChat.LOGGER.error("Failed to update is_open in mention_data for mention id: {}",mentionId,e);
+        }
+    }
+
+    public void updateMentionItemData(int mentionId, String itemData) {
+        try {
+            if (connection == null || connection.isClosed()) return;
+        } catch (SQLException e) {
+            BetterChat.LOGGER.error("Failed to check if database connection is closed for updating item_data for mentionId: {}.", mentionId, e);
+            return;
+        }
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_MENTION_DATA_ITEM_DATA)) {
+            preparedStatement.setString(1, itemData);
+            preparedStatement.setInt(2, mentionId);
+
+            int affectedRows = preparedStatement.executeUpdate();
+
+            if (affectedRows > 0) {
+                BetterChat.LOGGER.debug("Successfully updated item_data for mention_id: {}.", mentionId);
+            } else {
+                BetterChat.LOGGER.warn("No mention found with mention_id: {} to update item_data, or item_data was the same.", mentionId);
+            }
+
+        } catch (SQLException e) {
+            BetterChat.LOGGER.error("Failed to update item_data in mention_data for mention_id: {}", mentionId, e);
         }
     }
 

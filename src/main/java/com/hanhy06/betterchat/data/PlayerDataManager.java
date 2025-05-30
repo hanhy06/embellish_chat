@@ -18,8 +18,7 @@ import java.util.concurrent.*;
 public class PlayerDataManager {
 //    TODO: 나중에 구글 구아바 캐싱 기능 사용 미싱이 일어 날때 10분 로드
     private final Map<UUID, PlayerData> playerDataCache;
-    private final Map<UUID, List<MentionData>> mentionDataCache;
-    private final ConcurrentLinkedQueue<Unit> mentionDataBuffer;
+    private final ConcurrentLinkedQueue<MentionData> mentionDataBuffer;
 
     private final DatabaseManager databaseManager;
 
@@ -29,7 +28,6 @@ public class PlayerDataManager {
 
     public PlayerDataManager(DatabaseManager databaseManager) {
         this.playerDataCache = new ConcurrentHashMap<>();
-        this.mentionDataCache = new ConcurrentHashMap<>();
         this.mentionDataBuffer = new ConcurrentLinkedQueue<>();
 
         this.databaseManager = databaseManager;
@@ -46,15 +44,17 @@ public class PlayerDataManager {
 
         BetterChat.LOGGER.info("Executing buffer clear process");
 
-        List<Unit> unitsToProcess = new ArrayList<>();
-        Unit unit;
-        while ((unit = mentionDataBuffer.poll()) != null) {
-            unitsToProcess.add(unit);
+        List<MentionData> mentionDatas = new ArrayList<>();
+        MentionData mentionData;
+        while ((mentionData = mentionDataBuffer.poll()) != null) {
+            mentionDatas.add(mentionData);
         }
 
-        for (Unit currentUnit : unitsToProcess) {
-            databaseManager.writeMentionData(currentUnit.mention);
+        for (MentionData data : mentionDatas) {
+            databaseManager.writeMentionData(data);
         }
+
+        BetterChat.LOGGER.info("Successfully cleared buffer and recorded {} mention data entries to the database.", mentionDatas.size());
     }
 
     public void handleServerStop() {
@@ -71,8 +71,8 @@ public class PlayerDataManager {
         }
     }
 
-    public void bufferWrite(UUID uuid, MentionData data) {
-        mentionDataBuffer.add(new Unit(uuid, data));
+    public void bufferWrite(MentionData data) {
+        mentionDataBuffer.add(data);
     }
 
     public void handlePlayerJoin(ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server){
@@ -80,7 +80,6 @@ public class PlayerDataManager {
         int mention_count = databaseManager.countMentionData(uuid);
 
         playerDataCache.put(uuid,databaseManager.readPlayerData(uuid));
-        mentionDataCache.put(uuid,databaseManager.readMentionData(uuid,mention_count-INVENTORY_SIZE_7x3,mention_count));
     }
 
     public void handlePlayerLeave(ServerPlayNetworkHandler handler,MinecraftServer server){
@@ -96,7 +95,6 @@ public class PlayerDataManager {
         databaseManager.savePlayerData(playerData);
 
         playerDataCache.remove(uuid);
-        mentionDataCache.remove(uuid);
     }
 
     public PlayerData getPlayerData(UUID uuid){
@@ -109,22 +107,8 @@ public class PlayerDataManager {
         return databaseManager.readPlayerData(name);
     }
 
-    public List<MentionData> getMentionData(UUID uuid){
-        List<MentionData> result;
-        if ((result = mentionDataCache.get(uuid))!=null) return result;
-        else{
-            int mention_count = databaseManager.countMentionData(uuid);
-            return databaseManager.readMentionData(uuid,mention_count-INVENTORY_SIZE_7x3,mention_count);
-        }
-    }
-
     public List<MentionData> getMentionData(UUID uuid,int pageNumber){
         int mention_page = (databaseManager.countMentionData(uuid)/INVENTORY_SIZE_7x3)*pageNumber;
         return databaseManager.readMentionData(uuid,mention_page-INVENTORY_SIZE_7x3,mention_page);
-    }
-
-    private record Unit(
-            UUID uuid, MentionData mention
-    ) {
     }
 }
