@@ -36,6 +36,11 @@ public class DatabaseManager {
             );
             """;
 
+    private static final String CREATE_INDEX_BY_MENTION_RECEIVER = """
+            CREATE INDEX IF NOT EXISTS idx_mention_receiver
+            ON mention_data(receiver_uuid);
+            """;
+
     private static final String SELECT_PLAYER_DATA_BY_NAME = """
             SELECT * FROM player_data WHERE player_name = ?;
             """;
@@ -99,6 +104,7 @@ public class DatabaseManager {
             try (Statement statement = connection.createStatement()) {
                 statement.execute(CREATE_PLAYER_DATA_TABLE);
                 statement.execute(CREATE_MENTION_DATA_TABLE);
+                statement.execute(CREATE_INDEX_BY_MENTION_RECEIVER);
                 statement.execute("PRAGMA foreign_keys = ON;");
                 BetterChat.LOGGER.info("Database tables created or already exist.");
             }

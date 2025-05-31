@@ -1,5 +1,8 @@
 package com.hanhy06.betterchat.data;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.data.model.MentionData;
 import com.hanhy06.betterchat.data.model.PlayerData;
@@ -8,29 +11,37 @@ import com.hanhy06.betterchat.util.Teamcolor;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.*;
 
 public class PlayerDataManager {
-//    TODO: 나중에 구글 구아바 캐싱 기능 사용 미싱이 일어 날때 10분 로드
-    private final Map<UUID, PlayerData> playerDataCache;
-    private final ConcurrentLinkedQueue<MentionData> mentionDataBuffer;
-
     private final DatabaseManager databaseManager;
+
+    private final LoadingCache<UUID, PlayerData> playerDataCache;
+    private final ConcurrentLinkedQueue<MentionData> mentionDataBuffer;
 
     private final ScheduledExecutorService scheduler;
 
     private static final int INVENTORY_SIZE_7x3 = 21;
 
     public PlayerDataManager(DatabaseManager databaseManager) {
-        this.playerDataCache = new ConcurrentHashMap<>();
-        this.mentionDataBuffer = new ConcurrentLinkedQueue<>();
-
         this.databaseManager = databaseManager;
+
+        playerDataCache = CacheBuilder.newBuilder()
+                .maximumSize(1000)
+                .expireAfterWrite(10, TimeUnit.MINUTES)
+                .build(new CacheLoader<UUID, PlayerData>() {
+                    @Override
+                    public @NotNull PlayerData load(@NotNull UUID key) throws Exception {
+                        return databaseManager.readPlayerData(key);
+                    }
+                });
+
+        this.mentionDataBuffer = new ConcurrentLinkedQueue<>();
 
         this.scheduler = Executors.newScheduledThreadPool(1);
     }
@@ -77,30 +88,50 @@ public class PlayerDataManager {
 
     public void handlePlayerJoin(ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server){
         UUID uuid = handler.getPlayer().getUuid();
-        int mention_count = databaseManager.countMentionData(uuid);
 
-        playerDataCache.put(uuid,databaseManager.readPlayerData(uuid));
+        PlayerData playerData;
+        if ((playerData = databaseManager.readPlayerData(uuid)) == null){
+            playerData = new PlayerData(
+                    handler.getPlayer().getName().getString(),
+                    uuid,
+                    true,
+                    Teamcolor.getPlayerColor(handler.getPlayer())
+            );
+            databaseManager.savePlayerData(playerData);
+        }
     }
 
     public void handlePlayerLeave(ServerPlayNetworkHandler handler,MinecraftServer server){
         UUID uuid = handler.getPlayer().getUuid();
 
-        PlayerData cacheData = playerDataCache.get(uuid);
-        PlayerData playerData = new PlayerData(
-                handler.getPlayer().getName().getString(),
-                cacheData.getPlayerUUID(),
-                cacheData.isNotificationsEnabled(),
-                Teamcolor.getPlayerColor(handler.getPlayer())
-        );
-        databaseManager.savePlayerData(playerData);
+        PlayerData cacheData;
+        try {
+            cacheData = playerDataCache.get(uuid);
 
-        playerDataCache.remove(uuid);
+            if(cacheData == null) return;
+
+            PlayerData playerData = new PlayerData(
+                    handler.getPlayer().getName().getString(),
+                    cacheData.getPlayerUUID(),
+                    cacheData.isNotificationsEnabled(),
+                    Teamcolor.getPlayerColor(handler.getPlayer())
+            );
+            databaseManager.savePlayerData(playerData);
+        } catch (ExecutionException e) {
+            BetterChat.LOGGER.error("Failed to update player data for player uuid: {}",uuid);
+        }finally {
+            playerDataCache.invalidate(uuid);
+        }
     }
 
     public PlayerData getPlayerData(UUID uuid){
-        PlayerData result;
-        if ((result = playerDataCache.get(uuid))!=null) return result;
-        else return databaseManager.readPlayerData(uuid);
+        PlayerData result = null;
+        try {
+            if ((result = playerDataCache.get(uuid))!=null) return result;
+        } catch (ExecutionException e) {
+            BetterChat.LOGGER.error("Failed to get player data for player uuid: {}",uuid);
+        }
+        return result;
     }
 
     public PlayerData getPlayerData(String name){

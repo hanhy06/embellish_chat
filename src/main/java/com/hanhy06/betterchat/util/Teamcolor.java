@@ -2,7 +2,6 @@ package com.hanhy06.betterchat.util;
 
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 
 public class Teamcolor {

@@ -1,7 +1,5 @@
 package com.hanhy06.betterchat.data.model;
 
-import net.minecraft.text.TextColor;
-
 import java.util.Objects;
 import java.util.UUID;
 
