@@ -1,16 +1,20 @@
 package com.hanhy06.betterchat.chat.processor;
 
+import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.data.model.MentionUnit;
 import com.hanhy06.betterchat.data.model.PlayerData;
 import com.hanhy06.betterchat.data.PlayerDataManager;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.UserCache;
 
 import java.util.*;
@@ -22,12 +26,16 @@ public class Mention {
     private final PlayerManager manager;
     private final UserCache userCache;
 
+    private final RegistryEntry<SoundEvent> mentionNotificationSound;
+
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{1,16})(?=\\b|$)");
 
-    public Mention(PlayerDataManager playerDataManager, PlayerManager manager, UserCache userCache) {
+    public Mention(PlayerDataManager playerDataManager, PlayerManager manager, UserCache userCache,String sound) {
         this.playerDataManager = playerDataManager;
         this.manager = manager;
         this.userCache = userCache;
+
+        this.mentionNotificationSound = RegistryEntry.of(Registries.SOUND_EVENT.get(Identifier.of(sound)));
     }
 
     public List<MentionUnit> mentionParser(String originalMessage, String senderName){
@@ -45,7 +53,7 @@ public class Mention {
                         gameProfile.get().getName(),
                         uuid,
                         true,
-                        16777045
+                        ConfigManager.getConfigData().defaultMentionColor()
                 );
 
                 playerDataManager.addPlayerData(playerData);
@@ -55,7 +63,7 @@ public class Mention {
                 ServerPlayerEntity player = manager.getPlayer(uuid);
                 if (player != null) {
                     player.networkHandler.sendPacket(new PlaySoundS2CPacket(RegistryEntry.of(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP), SoundCategory.MASTER,player.getX(),player.getY(),player.getZ(),1f,1.75f,1));
-                    player.sendMessage(Text.of(senderName+"mention you"));
+                    player.sendMessage(Text.of(senderName+" mention to you"));
                 }
             }
 

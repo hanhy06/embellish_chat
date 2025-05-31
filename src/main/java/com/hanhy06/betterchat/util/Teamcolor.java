@@ -1,5 +1,6 @@
 package com.hanhy06.betterchat.util;
 
+import com.hanhy06.betterchat.config.ConfigManager;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Formatting;
@@ -16,6 +17,6 @@ public class Teamcolor {
             }
         }
 
-        return 16777045;
+        return ConfigManager.getConfigData().defaultMentionColor();
     }
 }

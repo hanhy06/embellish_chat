@@ -1,5 +1,8 @@
 package com.hanhy06.betterchat.config;
 
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.sound.SoundEvents;
+
 import java.util.List;
 
 public record ConfigData(
@@ -7,7 +10,9 @@ public record ConfigData(
         boolean textFilteringEnabled,
         List<String> textFilteringKeywordList,
         boolean mentionEnabled,
-        boolean saveMentionEnabled)
+        boolean saveMentionEnabled,
+        int defaultMentionColor,
+        String defaultMentionNotificationSound)
 {
     public static ConfigData createDefault(){
         return new ConfigData(
@@ -15,7 +20,9 @@ public record ConfigData(
                 false,
                 List.of("example","keyword"),
                 true,
-                true
+                true,
+                16777045,
+                "minecraft:entity.experience_orb.pickup"
         );
     }
 }
