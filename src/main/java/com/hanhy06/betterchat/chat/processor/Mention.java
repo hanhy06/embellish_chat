@@ -4,8 +4,11 @@ import com.hanhy06.betterchat.data.model.MentionUnit;
 import com.hanhy06.betterchat.data.model.PlayerData;
 import com.hanhy06.betterchat.data.PlayerDataManager;
 import com.mojang.authlib.GameProfile;
+import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.UserCache;
@@ -27,7 +30,7 @@ public class Mention {
         this.userCache = userCache;
     }
 
-    public List<MentionUnit> mentionParser(String originalMessage, Text senderName){
+    public List<MentionUnit> mentionParser(String originalMessage, String senderName){
         List<MentionUnit> units = new ArrayList<>();
 
         for (Unit unit : nameParser(originalMessage)){
@@ -37,14 +40,22 @@ public class Mention {
             UUID uuid = gameProfile.get().getId();
 
             PlayerData playerData = playerDataManager.getPlayerData(uuid);
-            if (playerData == null) continue;
+            if (playerData == null) {
+                playerData = new PlayerData(
+                        gameProfile.get().getName(),
+                        uuid,
+                        true,
+                        16777045
+                );
+
+                playerDataManager.addPlayerData(playerData);
+            }
 
             if (playerData.isNotificationsEnabled()) {
                 ServerPlayerEntity player = manager.getPlayer(uuid);
                 if (player != null) {
-//                    player.networkHandler.sendPacket(new PlaySoundS2CPacket(RegistryEntry.of(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP), SoundCategory.MASTER,player.getX(),player.getY(),player.getZ(),1f,1.75f,1));
+                    player.networkHandler.sendPacket(new PlaySoundS2CPacket(RegistryEntry.of(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP), SoundCategory.MASTER,player.getX(),player.getY(),player.getZ(),1f,1.75f,1));
                     player.sendMessage(Text.of(senderName+"mention you"));
-                    player.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP,1, 1.75F);
                 }
             }
 

@@ -40,7 +40,7 @@ public class ServerPlayNetworkHandlerMixin {
 
         List<MentionUnit> units = new ArrayList<>();
         if (ConfigManager.getConfigData().mentionEnabled()) {
-            units = BetterChat.getMention().mentionParser(stringMessage,player.getName());
+            units = BetterChat.getMention().mentionParser(stringMessage,player.getName().getString());
         }
 
         if (ConfigManager.getConfigData().textFilteringEnabled()){

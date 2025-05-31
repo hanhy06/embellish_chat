@@ -134,6 +134,10 @@ public class PlayerDataManager {
         return result;
     }
 
+    public void addPlayerData(PlayerData playerData){
+        databaseManager.savePlayerData(playerData);
+    }
+
     public PlayerData getPlayerData(String name){
         return databaseManager.readPlayerData(name);
     }
