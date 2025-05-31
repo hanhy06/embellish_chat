@@ -108,8 +108,6 @@ public class PlayerDataManager {
         try {
             cacheData = playerDataCache.get(uuid);
 
-            if(cacheData == null) return;
-
             PlayerData playerData = new PlayerData(
                     handler.getPlayer().getName().getString(),
                     cacheData.getPlayerUUID(),
@@ -126,11 +124,15 @@ public class PlayerDataManager {
 
     public PlayerData getPlayerData(UUID uuid){
         PlayerData result = null;
-        try {
-            if ((result = playerDataCache.get(uuid))!=null) return result;
-        } catch (ExecutionException e) {
-            BetterChat.LOGGER.error("Failed to get player data for player uuid: {}",uuid);
+
+        if ((result = playerDataCache.getIfPresent(uuid))!=null){
+            return result;
         }
+        else if((result = databaseManager.readPlayerData(uuid))!=null) {
+            playerDataCache.put(uuid,result);
+            return result;
+        };
+
         return result;
     }
 
