@@ -216,7 +216,7 @@ public class DatabaseManager {
                     mentionData.add(
                             new MentionData(
                                     resultSet.getInt("mention_id"),
-                                    UUID.fromString(resultSet.getString("receiver_uuid")),
+                                    receiver_uuid,
                                     UUID.fromString(resultSet.getString("sender_uuid")),
                                     resultSet.getString("time_stamp"),
                                     resultSet.getString("message"),

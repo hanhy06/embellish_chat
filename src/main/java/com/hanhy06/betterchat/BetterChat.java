@@ -58,7 +58,7 @@ public class BetterChat implements ModInitializer {
 		playerDataManager = new PlayerDataManager(databaseManager);
 		mention = new Mention(playerDataManager, server.getPlayerManager(),server.getUserCache());
 		filter = new Filter(ConfigManager.getConfigData().textFilteringKeywordList());
-		markdown = new Markdown(server.getPlayerManager());
+		markdown = new Markdown();
 
 		databaseManager.connect();
 

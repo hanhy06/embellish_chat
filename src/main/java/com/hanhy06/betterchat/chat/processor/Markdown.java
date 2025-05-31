@@ -19,10 +19,8 @@ public class Markdown {
     private final Pattern STRIKETHROUGH = Pattern.compile("(?<!\\\\)~~(.+?)~~");
     private final Pattern COLOR = Pattern.compile("(?<!\\\\)(#[0-9A-Fa-f]{6})(.*)");
 
-    private final PlayerManager manager;
+    public Markdown(){
 
-    public Markdown(PlayerManager manager){
-        this.manager = manager;
     }
 
     public MutableText markdown(MutableText context, List<MentionUnit> units){
