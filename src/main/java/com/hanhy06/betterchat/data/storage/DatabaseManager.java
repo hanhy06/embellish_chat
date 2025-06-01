@@ -90,6 +90,12 @@ public class DatabaseManager {
             WHERE receiver_uuid = ?;
             """;
 
+    private static final String SELECT_NOT_OPEN_MENTION_DATA_COUNT_BY_RECEIVER_UUID = """
+            SELECT COUNT(*) AS mention_count
+            FROM mention_data
+            WHERE receiver_uuid = ? AND is_open = 0;
+            """;
+
     private Connection connection = null;
 
     public DatabaseManager(Path modDirPath) {
@@ -334,6 +340,28 @@ public class DatabaseManager {
         }
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_MENTION_DATA_COUNT_BY_RECEIVER_UUID)){
+            preparedStatement.setString(1,uuid.toString());
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()){
+                if (resultSet.next()){
+                    return resultSet.getInt("mention_count");
+                }
+            }
+        } catch (SQLException e) {
+            BetterChat.LOGGER.error("Failed to counting mention data for receiver uuid: {}",uuid,e);
+        }
+
+        return -1;
+    }
+
+    public int countNotOpenMentionData(UUID uuid){
+        try {
+            if (uuid == null || connection == null || connection.isClosed()) return -1;
+        } catch (SQLException e) {
+            BetterChat.LOGGER.error("Failed to check if database connection is closed for receiver uuid: {}.", uuid, e);
+        }
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_NOT_OPEN_MENTION_DATA_COUNT_BY_RECEIVER_UUID)){
             preparedStatement.setString(1,uuid.toString());
 
             try (ResultSet resultSet = preparedStatement.executeQuery()){

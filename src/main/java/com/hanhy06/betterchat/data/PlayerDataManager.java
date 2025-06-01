@@ -11,6 +11,7 @@ import com.hanhy06.betterchat.util.Teamcolor;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
+import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -70,6 +71,8 @@ public class PlayerDataManager {
     }
 
     public void handleServerStop() {
+        bufferClearProcess();
+
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdown();
             try {
@@ -90,8 +93,8 @@ public class PlayerDataManager {
     public void handlePlayerJoin(ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server){
         UUID uuid = handler.getPlayer().getUuid();
 
-        PlayerData playerData;
-        if ((playerData = databaseManager.readPlayerData(uuid)) == null){
+        PlayerData playerData = databaseManager.readPlayerData(uuid);
+        if (playerData == null){
             playerData = new PlayerData(
                     handler.getPlayer().getName().getString(),
                     uuid,
@@ -99,6 +102,8 @@ public class PlayerDataManager {
                     Teamcolor.getPlayerColor(handler.getPlayer())
             );
             databaseManager.savePlayerData(playerData);
+        }else {
+            handler.getPlayer().sendMessage(Text.of(String.format("You have %d messages you haven't read yet.",databaseManager.countNotOpenMentionData(uuid))));
         }
     }
 
