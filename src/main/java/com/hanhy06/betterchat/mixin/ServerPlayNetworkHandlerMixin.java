@@ -26,9 +26,6 @@ import java.util.*;
 
 @Mixin(ServerPlayNetworkHandler.class)
 public class ServerPlayNetworkHandlerMixin {
-    @Unique
-    private static final Gson gson = new Gson();
-
     @Shadow public ServerPlayerEntity player;
 
     @ModifyVariable(method = "handleDecoratedMessage", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
@@ -54,14 +51,16 @@ public class ServerPlayNetworkHandlerMixin {
             UUID uuid = player.getUuid();
 
             Set<MentionUnit> set = new HashSet<>(units);
+            String jsonText = Text.Serialization.toJsonString(textMessage,BetterChat.getServerInstance().getRegistryManager());
+            String timeStamp = Timestamp.timeStamp();
 
             for (MentionUnit unit : set){
                 playerDataManager.bufferWrite(new MentionData(
                         0,
                         unit.receiver().getPlayerUUID(),
                         uuid,
-                        Timestamp.timeStamp(),
-                        gson.toJson(textMessage),
+                        timeStamp,
+                        jsonText,
                         null,
                         false
                 ));
