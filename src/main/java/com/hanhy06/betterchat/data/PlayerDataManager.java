@@ -37,7 +37,8 @@ public class PlayerDataManager {
                 .build(new CacheLoader<UUID, PlayerData>() {
                     @Override
                     public @NotNull PlayerData load(@NotNull UUID key) throws Exception {
-                        return databaseManager.readPlayerData(key);
+                        PlayerData playerData = databaseManager.readPlayerData(key);
+                        return (playerData==null) ? PlayerData.createDefaultPlayerData(key) : playerData;
                     }
                 });
 

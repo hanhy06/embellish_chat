@@ -1,5 +1,7 @@
 package com.hanhy06.betterchat.data.model;
 
+import com.hanhy06.betterchat.config.ConfigManager;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -40,6 +42,15 @@ public class PlayerData {
         this.teamColor = teamColor;
     }
 
+    public static PlayerData createDefaultPlayerData(UUID uuid){
+        return new PlayerData(
+                null,
+                uuid,
+                true,
+                ConfigManager.getConfigData().defaultMentionColor()
+        );
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -47,4 +58,10 @@ public class PlayerData {
         PlayerData that = (PlayerData) o;
         return Objects.equals(playerUUID, that.playerUUID);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(playerUUID);
+    }
+
 }

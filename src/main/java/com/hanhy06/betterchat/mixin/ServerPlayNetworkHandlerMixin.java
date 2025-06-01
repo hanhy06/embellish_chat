@@ -22,9 +22,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Mixin(ServerPlayNetworkHandler.class)
 public class ServerPlayNetworkHandlerMixin {
@@ -54,7 +52,10 @@ public class ServerPlayNetworkHandlerMixin {
         if (ConfigManager.getConfigData().saveMentionEnabled()){
             PlayerDataManager playerDataManager = BetterChat.getPlayerDataManager();
             UUID uuid = player.getUuid();
-            for (MentionUnit unit : units){
+
+            Set<MentionUnit> set = new HashSet<>(units);
+
+            for (MentionUnit unit : set){
                 playerDataManager.bufferWrite(new MentionData(
                         0,
                         unit.receiver().getPlayerUUID(),

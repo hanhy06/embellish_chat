@@ -48,7 +48,7 @@ public class Mention {
             UUID uuid = gameProfile.get().getId();
 
             PlayerData playerData = playerDataManager.getPlayerData(uuid);
-            if (playerData == null) {
+            if (playerData.getPlayerName() == null) {
                 playerData = new PlayerData(
                         gameProfile.get().getName(),
                         uuid,
@@ -63,7 +63,7 @@ public class Mention {
                 ServerPlayerEntity player = manager.getPlayer(uuid);
                 if (player != null) {
                     player.networkHandler.sendPacket(new PlaySoundS2CPacket(mentionNotificationSound, SoundCategory.MASTER,player.getX(),player.getY(),player.getZ(),1f,1.75f,1));
-                    player.sendMessage(Text.of(senderName+" mention to you"));
+                    player.sendMessage(Text.of(senderName+" mentioned you"));
                 }
             }
 
