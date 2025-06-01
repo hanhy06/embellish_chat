@@ -62,7 +62,7 @@ public class Mention {
             if (playerData.isNotificationsEnabled()) {
                 ServerPlayerEntity player = manager.getPlayer(uuid);
                 if (player != null) {
-                    player.networkHandler.sendPacket(new PlaySoundS2CPacket(RegistryEntry.of(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP), SoundCategory.MASTER,player.getX(),player.getY(),player.getZ(),1f,1.75f,1));
+                    player.networkHandler.sendPacket(new PlaySoundS2CPacket(mentionNotificationSound, SoundCategory.MASTER,player.getX(),player.getY(),player.getZ(),1f,1.75f,1));
                     player.sendMessage(Text.of(senderName+" mention to you"));
                 }
             }

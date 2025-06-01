@@ -12,7 +12,7 @@ public class Teamcolor {
             if (team != null) {
                 Formatting formatting = team.getColor();
                 if (formatting != null && formatting.isColor() && formatting != Formatting.RESET) {
-                    return formatting.getColorIndex();
+                    return formatting.getColorValue().intValue();
                 }
             }
         }

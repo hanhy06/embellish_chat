@@ -1,8 +1,5 @@
 package com.hanhy06.betterchat.config;
 
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.sound.SoundEvents;
-
 import java.util.List;
 
 public record ConfigData(
