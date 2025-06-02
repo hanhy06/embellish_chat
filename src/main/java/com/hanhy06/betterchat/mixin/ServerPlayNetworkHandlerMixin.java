@@ -50,11 +50,10 @@ public class ServerPlayNetworkHandlerMixin {
             PlayerDataManager playerDataManager = BetterChat.getPlayerDataManager();
             UUID uuid = player.getUuid();
 
-            Set<MentionUnit> set = new HashSet<>(units);
             String jsonText = Text.Serialization.toJsonString(textMessage,BetterChat.getServerInstance().getRegistryManager());
             String timeStamp = Timestamp.timeStamp();
 
-            for (MentionUnit unit : set){
+            for (MentionUnit unit : new HashSet<>(units)){
                 playerDataManager.bufferWrite(new MentionData(
                         0,
                         unit.receiver().getPlayerUUID(),
