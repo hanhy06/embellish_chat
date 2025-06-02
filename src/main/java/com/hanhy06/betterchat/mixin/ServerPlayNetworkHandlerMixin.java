@@ -2,6 +2,7 @@ package com.hanhy06.betterchat.mixin;
 
 import com.google.gson.Gson;
 import com.hanhy06.betterchat.BetterChat;
+import com.hanhy06.betterchat.chat.processor.Mention;
 import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.data.PlayerDataManager;
 import com.hanhy06.betterchat.data.model.MentionData;
@@ -33,9 +34,11 @@ public class ServerPlayNetworkHandlerMixin {
         String stringMessage = original.getContent().getString();
         MutableText textMessage = MutableText.of(original.getContent().getContent());
 
+        Mention mention = BetterChat.getMention();
+
         List<MentionUnit> units = new ArrayList<>();
         if (ConfigManager.getConfigData().mentionEnabled()) {
-            units = BetterChat.getMention().mentionParser(stringMessage,player.getName().getString());
+            units = mention.mentionParser(stringMessage);
         }
 
         if (ConfigManager.getConfigData().textFilteringEnabled()){
@@ -47,23 +50,7 @@ public class ServerPlayNetworkHandlerMixin {
         }
 
         if (ConfigManager.getConfigData().saveMentionEnabled()){
-            PlayerDataManager playerDataManager = BetterChat.getPlayerDataManager();
-            UUID uuid = player.getUuid();
-
-            String jsonText = Text.Serialization.toJsonString(textMessage,BetterChat.getServerInstance().getRegistryManager());
-            String timeStamp = Timestamp.timeStamp();
-
-            for (MentionUnit unit : new HashSet<>(units)){
-                playerDataManager.bufferWrite(new MentionData(
-                        0,
-                        unit.receiver().getPlayerUUID(),
-                        uuid,
-                        timeStamp,
-                        jsonText,
-                        null,
-                        false
-                ));
-            }
+            mention.mentionBroadcast(units,textMessage,player.getName().getString());
         }
 
         return new SignedMessage(

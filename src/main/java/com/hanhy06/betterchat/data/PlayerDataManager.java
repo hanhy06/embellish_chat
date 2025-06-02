@@ -94,6 +94,8 @@ public class PlayerDataManager {
         UUID uuid = handler.getPlayer().getUuid();
 
         PlayerData playerData = databaseManager.readPlayerData(uuid);
+        int mentionCount = databaseManager.countNotOpenMentionData(uuid);
+
         if (playerData == null){
             playerData = new PlayerData(
                     handler.getPlayer().getName().getString(),
@@ -102,8 +104,8 @@ public class PlayerDataManager {
                     Teamcolor.getPlayerColor(handler.getPlayer())
             );
             databaseManager.savePlayerData(playerData);
-        }else {
-            handler.getPlayer().sendMessage(Text.of(String.format("You have %d messages you haven't read yet.",databaseManager.countNotOpenMentionData(uuid))));
+        }else if(mentionCount > 0) {
+            handler.getPlayer().sendMessage(Text.of(String.format("You have %d messages you haven't read yet.",mentionCount)));
         }
     }
 
@@ -142,7 +144,7 @@ public class PlayerDataManager {
         return result;
     }
 
-    public void addPlayerData(PlayerData playerData){
+    public void savePlayerData(PlayerData playerData){
         databaseManager.savePlayerData(playerData);
     }
 

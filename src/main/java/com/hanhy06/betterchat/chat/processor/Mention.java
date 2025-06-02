@@ -1,9 +1,12 @@
 package com.hanhy06.betterchat.chat.processor;
 
+import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.config.ConfigManager;
+import com.hanhy06.betterchat.data.model.MentionData;
 import com.hanhy06.betterchat.data.model.MentionUnit;
 import com.hanhy06.betterchat.data.model.PlayerData;
 import com.hanhy06.betterchat.data.PlayerDataManager;
+import com.hanhy06.betterchat.util.Timestamp;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.registry.Registries;
@@ -37,7 +40,34 @@ public class Mention {
         this.mentionNotificationSound = RegistryEntry.of(Registries.SOUND_EVENT.get(Identifier.of(sound)));
     }
 
-    public List<MentionUnit> mentionParser(String originalMessage, String senderName){
+    public void mentionBroadcast(List<MentionUnit> units,Text textMessage,String senderName){
+        String jsonText = Text.Serialization.toJsonString(textMessage, BetterChat.getServerInstance().getRegistryManager());
+        String timeStamp = Timestamp.timeStamp();
+
+        for (MentionUnit unit : new HashSet<>(units)){
+            UUID uuid = unit.receiver().getPlayerUUID();
+
+            if(unit.receiver().isNotificationsEnabled()){
+                ServerPlayerEntity player = manager.getPlayer(uuid);
+                if (player != null) {
+                    player.networkHandler.sendPacket(new PlaySoundS2CPacket(mentionNotificationSound, SoundCategory.MASTER,player.getX(),player.getY(),player.getZ(),1f,1.75f,1));
+                    player.sendMessage(Text.of(senderName+" mentioned you"));
+                }
+            }
+
+            playerDataManager.bufferWrite(new MentionData(
+                    0,
+                    unit.receiver().getPlayerUUID(),
+                    uuid,
+                    timeStamp,
+                    jsonText,
+                    null,
+                    false
+            ));
+        }
+    }
+
+    public List<MentionUnit> mentionParser(String originalMessage){
         List<MentionUnit> units = new ArrayList<>();
 
         for (Unit unit : nameParser(originalMessage)){
@@ -55,15 +85,7 @@ public class Mention {
                         ConfigManager.getConfigData().defaultMentionColor()
                 );
 
-                playerDataManager.addPlayerData(playerData);
-            }
-
-            if (playerData.isNotificationsEnabled()) {
-                ServerPlayerEntity player = manager.getPlayer(uuid);
-                if (player != null) {
-                    player.networkHandler.sendPacket(new PlaySoundS2CPacket(mentionNotificationSound, SoundCategory.MASTER,player.getX(),player.getY(),player.getZ(),1f,1.75f,1));
-                    player.sendMessage(Text.of(senderName+" mentioned you"));
-                }
+                playerDataManager.savePlayerData(playerData);
             }
 
             units.add(new MentionUnit(playerData,unit.begin,unit.end));
