@@ -39,15 +39,26 @@ public class Markdown {
     }
 
     private MutableText applyStyledPattern(Pattern pattern, MutableText context, Style style){
-        Matcher matcher = pattern.matcher(context.getString());
-        if (!matcher.find()) return context;
+        String str = context.getString();
+        Matcher matcher = pattern.matcher(str);
 
-        MutableText text = Text.empty();
-        text.append(substring(context,0,matcher.start()));
-        text.append(substring(context,matcher.start(1),matcher.end(1)).fillStyle(style));
-        text.append(substring(context,matcher.end(),context.getString().length()));
+        if (!matcher.find()) {return context;}
 
-        return applyStyledPattern(pattern,text,style);
+        MutableText result = Text.empty();
+        int lastEnd = 0;
+
+        matcher.reset();
+        while (matcher.find()) {
+            result.append(substring(context, lastEnd, matcher.start()));
+            result.append(
+                    substring(context, matcher.start(1), matcher.end(1)).fillStyle(style)
+            );
+            lastEnd = matcher.end();
+        }
+
+        result.append(substring(context, lastEnd, str.length()));
+
+        return result;
     }
 
     private MutableText applyStyledColor(MutableText context){

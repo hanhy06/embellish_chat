@@ -40,7 +40,7 @@ public class Mention {
         this.mentionNotificationSound = RegistryEntry.of(Registries.SOUND_EVENT.get(Identifier.of(sound)));
     }
 
-    public void mentionBroadcast(List<MentionUnit> units,Text textMessage,String senderName){
+    public void mentionBroadcast(List<MentionUnit> units,Text textMessage,String senderName,UUID senderUUID){
         String jsonText = Text.Serialization.toJsonString(textMessage, BetterChat.getServerInstance().getRegistryManager());
         String timeStamp = Timestamp.timeStamp();
 
@@ -57,8 +57,8 @@ public class Mention {
 
             playerDataManager.bufferWrite(new MentionData(
                     0,
-                    unit.receiver().getPlayerUUID(),
                     uuid,
+                    senderUUID,
                     timeStamp,
                     jsonText,
                     null,

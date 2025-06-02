@@ -50,7 +50,7 @@ public class ServerPlayNetworkHandlerMixin {
         }
 
         if (ConfigManager.getConfigData().saveMentionEnabled()){
-            mention.mentionBroadcast(units,textMessage,player.getName().getString());
+            mention.mentionBroadcast(units,textMessage,player.getName().getString(),player.getUuid());
         }
 
         return new SignedMessage(
