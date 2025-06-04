@@ -76,11 +76,5 @@ public class BetterChat implements ModInitializer {
 		return serverInstance;
 	}
 
-	public static DatabaseManager getDatabaseManager() {return databaseManager;}
-
-	public static PlayerDataManager getPlayerDataManager() {
-		return playerDataManager;
-	}
-
 	public static ChatHandler getChatHandler() {return chatHandler;}
 }
