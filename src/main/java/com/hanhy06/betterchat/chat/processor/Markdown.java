@@ -35,7 +35,7 @@ public class Markdown {
         result = applyStyledColor(result);
         result = applyStyledMention(result,units);
 
-        return result;
+        return removeEscapeSlashes(result);
     }
 
     private MutableText applyStyledPattern(Pattern pattern, MutableText context, Style style){
@@ -74,7 +74,7 @@ public class Markdown {
         while (matcher.find()) {
             Color color = Color.decode(matcher.group(1));
 
-            result.append(substring(context, lastEnd, matcher.start(2)));
+            result.append(substring(context, lastEnd, matcher.start()));
             result.append(
                     substring(context, matcher.start(2), matcher.end(2)).fillStyle(Style.EMPTY.withColor(color.getRGB()))
             );
@@ -87,6 +87,8 @@ public class Markdown {
     }
 
     private MutableText applyStyledMention(MutableText context, List<MentionUnit> units){
+        if(units == null || units.isEmpty()) return  context;
+
         MutableText result = Text.empty();
         int lastEnd = 0;
 
@@ -104,6 +106,28 @@ public class Markdown {
 
         return result;
     }
+
+    private MutableText removeEscapeSlashes(MutableText context) {
+        String str = context.getString();
+        String unescaped = str.replaceAll("\\\\([*_~#\\\\])", "$1");
+
+        MutableText result = Text.empty();
+        final int[] offset = { 0 };
+
+        context.visit(new Text.StyledVisitor<Void>() {
+            @Override
+            public Optional<Void> accept(Style style, String content) {
+                String replaced = content.replaceAll("\\\\([*_~#\\\\])", "$1");
+                result.append(Text.literal(replaced).setStyle(style));
+
+                offset[0] += content.length();
+                return Optional.empty();
+            }
+        }, Style.EMPTY);
+
+        return result;
+    }
+
 
     private MutableText substring(Text text, int beginIndex, int endIndex) {
         if (beginIndex >= endIndex || text == null) {
