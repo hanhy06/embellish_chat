@@ -2,6 +2,7 @@ package com.hanhy06.betterchat.mixin;
 
 import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.chat.processor.Mention;
+import com.hanhy06.betterchat.chat.processor.StyledTextProcessor;
 import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.data.model.MentionUnit;
 import com.hanhy06.betterchat.util.Metadata;
@@ -41,7 +42,7 @@ public class ServerPlayNetworkHandlerMixin {
         }
 
         if (ConfigManager.getConfigData().textMarkdownEnabled()){
-            textMessage = BetterChat.getMarkdown().applyStyles(Text.literal(stringMessage),units);
+            textMessage = StyledTextProcessor.applyStyles(Text.literal(stringMessage),units);
         }
 
         if (ConfigManager.getConfigData().saveMentionEnabled()){

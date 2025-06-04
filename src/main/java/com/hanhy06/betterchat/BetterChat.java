@@ -24,13 +24,11 @@ public class BetterChat implements ModInitializer {
 
 	private static MinecraftServer serverInstance = null;
 	public static final String MOD_DIRECTORY_NAME = "better-chat";
-	private static Path modDirPath = null;
 
-	private static DatabaseManager databaseManager;
+    private static DatabaseManager databaseManager;
 	private static Mention mention;
 	private static PlayerDataManager playerDataManager;
 	private static Filter filter;
-	private static StyledTextProcessor markdown;
 
     @Override
 	public void onInitialize() {
@@ -42,7 +40,7 @@ public class BetterChat implements ModInitializer {
 
 	private static void handleServerStart(MinecraftServer server) {
 		serverInstance = server;
-		modDirPath = server.getSavePath(WorldSavePath.ROOT).getParent().resolve(MOD_DIRECTORY_NAME);
+        Path modDirPath = server.getSavePath(WorldSavePath.ROOT).getParent().resolve(MOD_DIRECTORY_NAME);
 
 		if (!Files.exists(modDirPath)) {
 			try {
@@ -58,7 +56,6 @@ public class BetterChat implements ModInitializer {
 		playerDataManager = new PlayerDataManager(databaseManager);
 		mention = new Mention(playerDataManager, server.getPlayerManager(),server.getUserCache(),ConfigManager.getConfigData().defaultMentionNotificationSound());
 		filter = new Filter(ConfigManager.getConfigData().textFilteringKeywordList());
-		markdown = new StyledTextProcessor();
 
 		databaseManager.connect();
 
@@ -92,9 +89,5 @@ public class BetterChat implements ModInitializer {
 
 	public static Filter getFilter(){
 		return filter;
-	}
-
-	public static StyledTextProcessor getMarkdown(){
-		return markdown;
 	}
 }
