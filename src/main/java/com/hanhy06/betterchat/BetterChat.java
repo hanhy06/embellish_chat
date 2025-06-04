@@ -1,10 +1,9 @@
 package com.hanhy06.betterchat;
 
+import com.hanhy06.betterchat.chat.ChatHandler;
 import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.chat.processor.Mention;
 import com.hanhy06.betterchat.data.PlayerDataManager;
-import com.hanhy06.betterchat.chat.processor.Filter;
-import com.hanhy06.betterchat.chat.processor.StyledTextProcessor;
 import com.hanhy06.betterchat.data.storage.DatabaseManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -26,9 +25,9 @@ public class BetterChat implements ModInitializer {
 	public static final String MOD_DIRECTORY_NAME = "better-chat";
 
     private static DatabaseManager databaseManager;
-	private static Mention mention;
 	private static PlayerDataManager playerDataManager;
-	private static Filter filter;
+	private static Mention mention;
+	private static ChatHandler chatHandler;
 
     @Override
 	public void onInitialize() {
@@ -50,12 +49,12 @@ public class BetterChat implements ModInitializer {
 			}
 		}
 
-		ConfigManager.handleServerStart(modDirPath);
+		 ConfigManager.handleServerStart(modDirPath);
 
 		databaseManager = new DatabaseManager(modDirPath);
 		playerDataManager = new PlayerDataManager(databaseManager);
 		mention = new Mention(playerDataManager, server.getPlayerManager(),server.getUserCache(),ConfigManager.getConfigData().defaultMentionNotificationSound());
-		filter = new Filter(ConfigManager.getConfigData().textFilteringKeywordList());
+		chatHandler = new ChatHandler(ConfigManager.getConfigData(),mention);
 
 		databaseManager.connect();
 
@@ -79,15 +78,9 @@ public class BetterChat implements ModInitializer {
 
 	public static DatabaseManager getDatabaseManager() {return databaseManager;}
 
-	public static Mention getMention(){
-		return mention;
-	}
-
 	public static PlayerDataManager getPlayerDataManager() {
 		return playerDataManager;
 	}
 
-	public static Filter getFilter(){
-		return filter;
-	}
+	public static ChatHandler getChatHandler() {return chatHandler;}
 }

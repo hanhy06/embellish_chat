@@ -1,25 +1,13 @@
 package com.hanhy06.betterchat.mixin;
 
 import com.hanhy06.betterchat.BetterChat;
-import com.hanhy06.betterchat.chat.processor.Mention;
-import com.hanhy06.betterchat.chat.processor.StyledTextProcessor;
-import com.hanhy06.betterchat.config.ConfigManager;
-import com.hanhy06.betterchat.data.model.MentionUnit;
-import com.hanhy06.betterchat.util.Metadata;
-import net.minecraft.network.message.FilterMask;
-import net.minecraft.network.message.MessageBody;
-import net.minecraft.network.message.MessageLink;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-
-import java.util.*;
 
 @Mixin(ServerPlayNetworkHandler.class)
 public class ServerPlayNetworkHandlerMixin {
@@ -27,34 +15,6 @@ public class ServerPlayNetworkHandlerMixin {
 
     @ModifyVariable(method = "handleDecoratedMessage", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
     private SignedMessage modifyDecoratedMessage(SignedMessage original) {
-        String stringMessage = original.getContent().getString();
-        MutableText textMessage = MutableText.of(original.getContent().getContent());
-
-        Mention mention = BetterChat.getMention();
-
-        List<MentionUnit> units = new ArrayList<>();
-        if (ConfigManager.getConfigData().mentionEnabled()) {
-            units = mention.mentionParser(stringMessage);
-        }
-
-        if (ConfigManager.getConfigData().textFilteringEnabled()){
-            stringMessage = BetterChat.getFilter().wordBaseFiltering(stringMessage);
-        }
-
-        if (ConfigManager.getConfigData().textMarkdownEnabled()){
-            textMessage = StyledTextProcessor.applyStyles(Text.literal(stringMessage),units);
-        }
-
-        if (ConfigManager.getConfigData().saveMentionEnabled()){
-            mention.mentionBroadcast(units,textMessage,player.getName().getString(),player.getUuid());
-        }
-
-        return new SignedMessage(
-                MessageLink.of(new UUID(0L, 0L)),
-                null,
-                MessageBody.ofUnsigned(stringMessage),
-                Metadata.metadata(textMessage),
-                FilterMask.PASS_THROUGH
-        );
+        return BetterChat.getChatHandler().handleChatMessage(player,original);
     }
 }
