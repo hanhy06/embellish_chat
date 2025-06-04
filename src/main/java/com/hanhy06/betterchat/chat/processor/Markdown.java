@@ -108,9 +108,6 @@ public class Markdown {
     }
 
     private MutableText removeEscapeSlashes(MutableText context) {
-        String str = context.getString();
-        String unescaped = str.replaceAll("\\\\([*_~#\\\\])", "$1");
-
         MutableText result = Text.empty();
         final int[] offset = { 0 };
 
