@@ -17,7 +17,7 @@ public class Markdown {
     private final Pattern UNDERLINE = Pattern.compile("(?<!\\\\)__(.+?)__");
     private final Pattern ITALIC = Pattern.compile("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)");
     private final Pattern STRIKETHROUGH = Pattern.compile("(?<!\\\\)~~(.+?)~~");
-    private final Pattern COLOR = Pattern.compile("(?<!\\\\)(#[0-9A-Fa-f]{6})(.*)");
+    private final Pattern COLOR = Pattern.compile("(?<!\\\\)(#[0-9A-Fa-f]{6})(.+?)#");
 
     public Markdown(){
 
@@ -42,7 +42,7 @@ public class Markdown {
         String str = context.getString();
         Matcher matcher = pattern.matcher(str);
 
-        if (!matcher.find()) {return context;}
+        if (!matcher.find()) return context;
 
         MutableText result = Text.empty();
         int lastEnd = 0;
@@ -62,33 +62,45 @@ public class Markdown {
     }
 
     private MutableText applyStyledColor(MutableText context){
-        Matcher matcher = COLOR.matcher(context.getString());
+        String str = context.getString();
+        Matcher matcher = COLOR.matcher(str);
+
         if (!matcher.find()) return context;
 
-        Color color = Color.decode(matcher.group(1));
+        MutableText result = Text.empty();
+        int lastEnd = 0;
 
-        MutableText text = Text.empty();
-        text.append(substring(context,0,matcher.start()));
-        text.append(substring(context,matcher.start(2),matcher.end(2)).fillStyle(Style.EMPTY.withColor(color.getRGB())));
+        matcher.reset();
+        while (matcher.find()) {
+            Color color = Color.decode(matcher.group(1));
 
-        return applyStyledColor(text);
+            result.append(substring(context, lastEnd, matcher.start(2)));
+            result.append(
+                    substring(context, matcher.start(2), matcher.end(2)).fillStyle(Style.EMPTY.withColor(color.getRGB()))
+            );
+            lastEnd = matcher.end();
+        }
+
+        result.append(substring(context, lastEnd, str.length()));
+
+        return result;
     }
 
     private MutableText applyStyledMention(MutableText context, List<MentionUnit> units){
-        MutableText result = context;
+        MutableText result = Text.empty();
+        int lastEnd = 0;
 
         for (MentionUnit unit: units){
-            MutableText temp = Text.empty();
-
-            temp.append(substring(result,0,unit.begin()));
-            temp.append(substring(result,unit.begin(), unit.end()).fillStyle(Style.EMPTY
-                    .withColor(unit.receiver().getTeamColor())
-                    .withBold(true)
-            ));
-            temp.append(substring(result,unit.end(),result.getString().length()));
-
-            result = temp;
+            result.append(substring(context,lastEnd, unit.begin()));
+            result.append(substring(context,unit.begin(),unit.end())).fillStyle(
+                    Style.EMPTY
+                            .withColor(unit.receiver().getTeamColor())
+                            .withBold(true)
+            );
+            lastEnd = unit.end();
         }
+
+        result.append(substring(context, lastEnd, context.getString().length()));
 
         return result;
     }
