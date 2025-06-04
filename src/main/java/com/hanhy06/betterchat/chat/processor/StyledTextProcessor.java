@@ -12,17 +12,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StyledTextProcessor {
-    private final Pattern BOLD = Pattern.compile("(?<!\\\\)\\*\\*(.+?)\\*\\*");
-    private final Pattern UNDERLINE = Pattern.compile("(?<!\\\\)__(.+?)__");
-    private final Pattern ITALIC = Pattern.compile("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)");
-    private final Pattern STRIKETHROUGH = Pattern.compile("(?<!\\\\)~~(.+?)~~");
-    private final Pattern COLOR = Pattern.compile("(?<!\\\\)(#[0-9A-Fa-f]{6})(.+?)#");
+    private static final Pattern BOLD = Pattern.compile("(?<!\\\\)\\*\\*(.+?)\\*\\*");
+    private static final Pattern UNDERLINE = Pattern.compile("(?<!\\\\)__(.+?)__");
+    private static final Pattern ITALIC = Pattern.compile("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)");
+    private static final Pattern STRIKETHROUGH = Pattern.compile("(?<!\\\\)~~(.+?)~~");
+    private static final Pattern COLOR = Pattern.compile("(?<!\\\\)(#[0-9A-Fa-f]{6})(.+?)#");
 
-    public StyledTextProcessor(){
-
-    }
-
-    public MutableText applyStyles(MutableText context, List<MentionUnit> units){
+    public static MutableText applyStyles(MutableText context, List<MentionUnit> units){
         if (context == null || context.getString().isBlank()) return context;
 
         MutableText result = context;
@@ -37,7 +33,7 @@ public class StyledTextProcessor {
         return removeEscapeSlashes(result);
     }
 
-    private MutableText applyStyledPattern(Pattern pattern, MutableText context, Style style){
+    private static MutableText applyStyledPattern(Pattern pattern, MutableText context, Style style){
         String str = context.getString();
         Matcher matcher = pattern.matcher(str);
 
@@ -60,7 +56,7 @@ public class StyledTextProcessor {
         return result;
     }
 
-    private MutableText applyStyledColor(MutableText context){
+    private static MutableText applyStyledColor(MutableText context){
         String str = context.getString();
         Matcher matcher = COLOR.matcher(str);
 
@@ -85,7 +81,7 @@ public class StyledTextProcessor {
         return result;
     }
 
-    private MutableText applyStyledMention(MutableText context, List<MentionUnit> units){
+    private static MutableText applyStyledMention(MutableText context, List<MentionUnit> units){
         if(units == null || units.isEmpty()) return  context;
 
         MutableText result = Text.empty();
@@ -106,7 +102,7 @@ public class StyledTextProcessor {
         return result;
     }
 
-    private MutableText removeEscapeSlashes(MutableText context) {
+    private static MutableText removeEscapeSlashes(MutableText context) {
         MutableText result = Text.empty();
         final int[] offset = { 0 };
 
@@ -125,7 +121,7 @@ public class StyledTextProcessor {
     }
 
 
-    private MutableText substring(Text text, int beginIndex, int endIndex) {
+    private static MutableText substring(Text text, int beginIndex, int endIndex) {
         if (beginIndex >= endIndex || text == null) {
             return Text.empty();
         }
