@@ -4,7 +4,7 @@ import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.chat.processor.Mention;
 import com.hanhy06.betterchat.data.PlayerDataManager;
 import com.hanhy06.betterchat.chat.processor.Filter;
-import com.hanhy06.betterchat.chat.processor.Markdown;
+import com.hanhy06.betterchat.chat.processor.StyledTextProcessor;
 import com.hanhy06.betterchat.data.storage.DatabaseManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -30,7 +30,7 @@ public class BetterChat implements ModInitializer {
 	private static Mention mention;
 	private static PlayerDataManager playerDataManager;
 	private static Filter filter;
-	private static Markdown markdown;
+	private static StyledTextProcessor markdown;
 
     @Override
 	public void onInitialize() {
@@ -58,7 +58,7 @@ public class BetterChat implements ModInitializer {
 		playerDataManager = new PlayerDataManager(databaseManager);
 		mention = new Mention(playerDataManager, server.getPlayerManager(),server.getUserCache(),ConfigManager.getConfigData().defaultMentionNotificationSound());
 		filter = new Filter(ConfigManager.getConfigData().textFilteringKeywordList());
-		markdown = new Markdown();
+		markdown = new StyledTextProcessor();
 
 		databaseManager.connect();
 
@@ -94,7 +94,7 @@ public class BetterChat implements ModInitializer {
 		return filter;
 	}
 
-	public static Markdown getMarkdown(){
+	public static StyledTextProcessor getMarkdown(){
 		return markdown;
 	}
 }

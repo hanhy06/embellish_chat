@@ -1,14 +1,10 @@
 package com.hanhy06.betterchat.mixin;
 
-import com.google.gson.Gson;
 import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.chat.processor.Mention;
 import com.hanhy06.betterchat.config.ConfigManager;
-import com.hanhy06.betterchat.data.PlayerDataManager;
-import com.hanhy06.betterchat.data.model.MentionData;
 import com.hanhy06.betterchat.data.model.MentionUnit;
 import com.hanhy06.betterchat.util.Metadata;
-import com.hanhy06.betterchat.util.Timestamp;
 import net.minecraft.network.message.FilterMask;
 import net.minecraft.network.message.MessageBody;
 import net.minecraft.network.message.MessageLink;
@@ -19,7 +15,6 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
@@ -46,7 +41,7 @@ public class ServerPlayNetworkHandlerMixin {
         }
 
         if (ConfigManager.getConfigData().textMarkdownEnabled()){
-            textMessage = BetterChat.getMarkdown().markdown(Text.literal(stringMessage),units);
+            textMessage = BetterChat.getMarkdown().applyStyles(Text.literal(stringMessage),units);
         }
 
         if (ConfigManager.getConfigData().saveMentionEnabled()){

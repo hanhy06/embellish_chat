@@ -1,7 +1,6 @@
 package com.hanhy06.betterchat.chat.processor;
 
 import com.hanhy06.betterchat.data.model.MentionUnit;
-import net.minecraft.server.PlayerManager;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -12,18 +11,18 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Markdown {
+public class StyledTextProcessor {
     private final Pattern BOLD = Pattern.compile("(?<!\\\\)\\*\\*(.+?)\\*\\*");
     private final Pattern UNDERLINE = Pattern.compile("(?<!\\\\)__(.+?)__");
     private final Pattern ITALIC = Pattern.compile("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)");
     private final Pattern STRIKETHROUGH = Pattern.compile("(?<!\\\\)~~(.+?)~~");
     private final Pattern COLOR = Pattern.compile("(?<!\\\\)(#[0-9A-Fa-f]{6})(.+?)#");
 
-    public Markdown(){
+    public StyledTextProcessor(){
 
     }
 
-    public MutableText markdown(MutableText context, List<MentionUnit> units){
+    public MutableText applyStyles(MutableText context, List<MentionUnit> units){
         if (context == null || context.getString().isBlank()) return context;
 
         MutableText result = context;
