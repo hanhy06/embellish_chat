@@ -74,6 +74,8 @@ public class BetterChat implements ModInitializer {
 		chatHandler = new ChatHandler(configData,mention);
 
 		ServerPlayConnectionEvents.JOIN.register(playerDataService::handlePlayerJoin);
+		ServerPlayConnectionEvents.JOIN.register(mentionDataService::handlePlayerJoin);
+
 		ServerPlayConnectionEvents.DISCONNECT.register(playerDataService::handlePlayerLeave);
 
 		if(ConfigManager.getConfigData().saveMentionEnabled()) mentionDataService.handleServerStart(configData);

@@ -4,6 +4,11 @@ import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.config.ConfigData;
 import com.hanhy06.betterchat.data.model.MentionData;
 import com.hanhy06.betterchat.data.repository.MentionDataRepository;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayNetworkHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +39,20 @@ public class MentionDataService {
         scheduler.scheduleAtFixedRate(this::bufferClearProcess, 0, configData.mentionBufferClearIntervalMinutes(), TimeUnit.MINUTES);
     }
 
-    public int getPendingMentionCount(){
-        return mentionDataBuffer.size();
+    public void handleServerStop() {
+        bufferClearProcess();
+
+        if (scheduler != null && !scheduler.isShutdown()) {
+            scheduler.shutdown();
+            try {
+                if (!scheduler.awaitTermination(1, TimeUnit.MINUTES)) {
+                    scheduler.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                scheduler.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
     public void bufferClearProcess() {
@@ -56,20 +73,8 @@ public class MentionDataService {
         BetterChat.LOGGER.info("Successfully cleared buffer and recorded {} mention data entries to the database.", mentionDatas.size());
     }
 
-    public void handleServerStop() {
-        bufferClearProcess();
-
-        if (scheduler != null && !scheduler.isShutdown()) {
-            scheduler.shutdown();
-            try {
-                if (!scheduler.awaitTermination(1, TimeUnit.MINUTES)) {
-                    scheduler.shutdownNow();
-                }
-            } catch (InterruptedException e) {
-                scheduler.shutdownNow();
-                Thread.currentThread().interrupt();
-            }
-        }
+    public int getPendingMentionCount(){
+        return mentionDataBuffer.size();
     }
 
     public void bufferWrite(MentionData data) {
@@ -78,6 +83,13 @@ public class MentionDataService {
 
     public void writeMentionData(MentionData mentionData){
         mentionDataRepository.writeMentionData(mentionData);
+    }
+
+    public void handlePlayerJoin(ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server){
+        ServerPlayerEntity player = handler.getPlayer();
+        int mentionCount = mentionDataRepository.countNotOpenMentionData(player.getUuid());
+
+        if (mentionCount > 0) player.sendMessage(Text.of(String.format("You have %d unread messages.",mentionCount)));
     }
 
     public List<MentionData> getMentionData(UUID uuid, int pageNumber){
