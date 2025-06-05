@@ -1,12 +1,15 @@
 package com.hanhy06.betterchat.config;
 
+import com.google.gson.annotations.JsonAdapter;
+import com.hanhy06.betterchat.util.HexIntegerTypeAdapter;
+
 public record ConfigData(
         boolean textPostProcessingEnabled,
         boolean mentionEnabled,
         boolean saveMentionEnabled,
         int maxMentionBufferSize,
         int mentionBufferClearIntervalMinutes,
-        int defaultMentionColor,
+        @JsonAdapter(HexIntegerTypeAdapter.class) int defaultMentionColor,
         String defaultMentionNotificationSound)
 {
     public static ConfigData createDefault(){
