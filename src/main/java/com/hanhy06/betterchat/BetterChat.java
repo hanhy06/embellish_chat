@@ -4,8 +4,11 @@ import com.hanhy06.betterchat.chat.ChatHandler;
 import com.hanhy06.betterchat.config.ConfigData;
 import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.chat.processor.Mention;
-import com.hanhy06.betterchat.data.PlayerDataManager;
-import com.hanhy06.betterchat.data.storage.DatabaseManager;
+import com.hanhy06.betterchat.data.DatabaseConnector;
+import com.hanhy06.betterchat.data.repository.MentionDataRepository;
+import com.hanhy06.betterchat.data.repository.PlayerDataRepository;
+import com.hanhy06.betterchat.data.service.MentionDataService;
+import com.hanhy06.betterchat.data.service.PlayerDataService;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -17,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Connection;
 
 public class BetterChat implements ModInitializer {
 	public static final String MOD_ID = "betterchat";
@@ -25,8 +29,14 @@ public class BetterChat implements ModInitializer {
 	private static MinecraftServer serverInstance = null;
 	public static final String MOD_DIRECTORY_NAME = "better-chat";
 
-    private static DatabaseManager databaseManager;
-	private static PlayerDataManager playerDataManager;
+	private static Connection connection;
+
+	private static PlayerDataRepository playerDataRepository;
+	private static PlayerDataService playerDataService;
+
+	private static MentionDataRepository mentionDataRepository;
+	private static MentionDataService mentionDataService;
+
 	private static Mention mention;
 	private static ChatHandler chatHandler;
 
@@ -50,27 +60,31 @@ public class BetterChat implements ModInitializer {
 			}
 		}
 
-		 ConfigData configData = ConfigManager.handleServerStart(modDirPath);
+		ConfigData configData = ConfigManager.handleServerStart(modDirPath);
 
-		databaseManager = new DatabaseManager(modDirPath);
-		playerDataManager = new PlayerDataManager(configData, databaseManager);
-		mention = new Mention(configData, playerDataManager, server.getPlayerManager(),server.getUserCache());
+		connection = DatabaseConnector.connect(modDirPath);
+
+		playerDataRepository = new PlayerDataRepository(connection);
+		playerDataService = new PlayerDataService(configData,playerDataRepository);
+
+		mentionDataRepository = new MentionDataRepository(connection);
+		mentionDataService = new MentionDataService(configData,mentionDataRepository);
+
+		mention = new Mention(configData, playerDataService, mentionDataService, server.getPlayerManager(),server.getUserCache());
 		chatHandler = new ChatHandler(configData,mention);
 
-		databaseManager.connect();
+		ServerPlayConnectionEvents.JOIN.register(playerDataService::handlePlayerJoin);
+		ServerPlayConnectionEvents.DISCONNECT.register(playerDataService::handlePlayerLeave);
 
-		ServerPlayConnectionEvents.JOIN.register(playerDataManager::handlePlayerJoin);
-		ServerPlayConnectionEvents.DISCONNECT.register(playerDataManager::handlePlayerLeave);
-
-		if(ConfigManager.getConfigData().saveMentionEnabled()) playerDataManager.handleServerStart();
+		if(ConfigManager.getConfigData().saveMentionEnabled()) mentionDataService.handleServerStart(configData);
 
 		LOGGER.info("{} initialized successfully.", MOD_ID);
 	}
 
 	private static void handleServerStop(MinecraftServer server){
 		ConfigManager.handleServerStop();
-		playerDataManager.handleServerStop();
-		databaseManager.disconnect();
+
+
 	}
 
 	public static MinecraftServer getServerInstance() {

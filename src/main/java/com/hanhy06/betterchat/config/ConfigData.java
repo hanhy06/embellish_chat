@@ -10,7 +10,9 @@ public record ConfigData(
         int maxMentionBufferSize,
         int mentionBufferClearIntervalMinutes,
         @JsonAdapter(HexIntegerTypeAdapter.class) int defaultMentionColor,
-        String defaultMentionNotificationSound)
+        String defaultMentionNotificationSound,
+        int maxPlayerDataCacheSize,
+        int playerDataCacheTTLMinutes)
 {
     public static ConfigData createDefault(){
         return new ConfigData(
@@ -18,9 +20,12 @@ public record ConfigData(
                 true,
                 true,
                 1000,
-                1,
+                10,
                 0xFFFF55,
-                "minecraft:entity.experience_orb.pickup"
+                "minecraft:entity.experience_orb.pickup",
+                1000,
+                3
+
         );
     }
 }
