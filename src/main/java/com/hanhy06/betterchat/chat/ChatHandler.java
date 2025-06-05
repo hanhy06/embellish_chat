@@ -1,10 +1,8 @@
 package com.hanhy06.betterchat.chat;
 
-import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.chat.processor.Mention;
 import com.hanhy06.betterchat.chat.processor.StyledTextProcessor;
 import com.hanhy06.betterchat.config.ConfigData;
-import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.data.model.MentionUnit;
 import com.hanhy06.betterchat.util.Metadata;
 import net.minecraft.network.message.FilterMask;

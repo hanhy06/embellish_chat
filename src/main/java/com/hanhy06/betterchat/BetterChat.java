@@ -83,8 +83,8 @@ public class BetterChat implements ModInitializer {
 
 	private static void handleServerStop(MinecraftServer server){
 		ConfigManager.handleServerStop();
-
-
+		mentionDataService.handleServerStop();
+		DatabaseConnector.disconnect(connection);
 	}
 
 	public static MinecraftServer getServerInstance() {
