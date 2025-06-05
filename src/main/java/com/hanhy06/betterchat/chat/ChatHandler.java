@@ -36,7 +36,7 @@ public class ChatHandler {
             units = mention.mentionParser(stringMessage);
         }
 
-        if (configData.textMarkdownEnabled()){
+        if (configData.textPostProcessingEnabled()){
             textMessage = StyledTextProcessor.applyStyles(textMessage,units);
         }
 

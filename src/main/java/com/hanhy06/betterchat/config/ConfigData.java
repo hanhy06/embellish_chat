@@ -1,9 +1,11 @@
 package com.hanhy06.betterchat.config;
 
 public record ConfigData(
-        boolean textMarkdownEnabled,
+        boolean textPostProcessingEnabled,
         boolean mentionEnabled,
         boolean saveMentionEnabled,
+        int maxMentionBufferSize,
+        int mentionBufferClearIntervalMinutes,
         int defaultMentionColor,
         String defaultMentionNotificationSound)
 {
@@ -12,7 +14,9 @@ public record ConfigData(
                 true,
                 true,
                 true,
-                16777045,
+                1000,
+                1,
+                0xFFFF55,
                 "minecraft:entity.experience_orb.pickup"
         );
     }

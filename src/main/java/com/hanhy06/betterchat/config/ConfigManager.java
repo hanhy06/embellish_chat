@@ -25,10 +25,11 @@ public class ConfigManager {
         return configData;
     }
 
-    public static void handleServerStart(Path modDirPath) {
+    public static ConfigData handleServerStart(Path modDirPath) {
         configFilePath = modDirPath.resolve(CONFIG_FILE_NAME);
         BetterChat.LOGGER.info("Loading BetterChat config from: {}", configFilePath);
         loadConfig();
+        return configData;
     }
 
     public static void handleServerStop() {

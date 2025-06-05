@@ -202,7 +202,7 @@ public class DatabaseManager {
         }
     }
 
-    public List<MentionData> readMentionData(UUID receiver_uuid, int start_index, int page_size){
+    public List<MentionData> readMentionData(UUID receiver_uuid, int itemCount, int startIndex){
         List<MentionData> mentionData = new ArrayList<>();
 
         try {
@@ -214,8 +214,8 @@ public class DatabaseManager {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_MENTION_DATA_BY_RECEIVER_UUID)){
             preparedStatement.setString(1,receiver_uuid.toString());
-            preparedStatement.setInt(2,page_size);
-            preparedStatement.setInt(3,start_index);
+            preparedStatement.setInt(2,itemCount);
+            preparedStatement.setInt(3,startIndex);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()){
                 while (resultSet.next()) {

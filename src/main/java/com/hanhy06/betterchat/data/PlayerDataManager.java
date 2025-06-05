@@ -4,6 +4,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.hanhy06.betterchat.BetterChat;
+import com.hanhy06.betterchat.config.ConfigData;
 import com.hanhy06.betterchat.data.model.MentionData;
 import com.hanhy06.betterchat.data.model.PlayerData;
 import com.hanhy06.betterchat.data.storage.DatabaseManager;
@@ -27,14 +28,14 @@ public class PlayerDataManager {
 
     private final ScheduledExecutorService scheduler;
 
-    private static final int INVENTORY_SIZE_7x3 = 21;
+    private static final int ITEMS_PER_PAGE = 20;
 
-    public PlayerDataManager(DatabaseManager databaseManager) {
+    public PlayerDataManager(ConfigData configData, DatabaseManager databaseManager) {
         this.databaseManager = databaseManager;
 
         playerDataCache = CacheBuilder.newBuilder()
-                .maximumSize(1000)
-                .expireAfterWrite(10, TimeUnit.MINUTES)
+                .maximumSize(configData.maxMentionBufferSize())
+                .expireAfterWrite(configData.mentionBufferClearIntervalMinutes(), TimeUnit.MINUTES)
                 .build(new CacheLoader<UUID, PlayerData>() {
                     @Override
                     public @NotNull PlayerData load(@NotNull UUID key) throws Exception {
@@ -152,8 +153,13 @@ public class PlayerDataManager {
         return databaseManager.readPlayerData(name);
     }
 
+    public void writeMentionData(MentionData mentionData){
+        databaseManager.writeMentionData(mentionData);
+    }
+
     public List<MentionData> getMentionData(UUID uuid,int pageNumber){
-        int mention_page = (databaseManager.countMentionData(uuid)/INVENTORY_SIZE_7x3)*pageNumber;
-        return databaseManager.readMentionData(uuid,mention_page-INVENTORY_SIZE_7x3,mention_page);
+        int mentionCount = databaseManager.countMentionData(uuid);
+        if (mentionCount < 1) return new ArrayList<>();
+        return databaseManager.readMentionData(uuid,ITEMS_PER_PAGE,ITEMS_PER_PAGE*pageNumber);
     }
 }

@@ -1,6 +1,7 @@
 package com.hanhy06.betterchat;
 
 import com.hanhy06.betterchat.chat.ChatHandler;
+import com.hanhy06.betterchat.config.ConfigData;
 import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.chat.processor.Mention;
 import com.hanhy06.betterchat.data.PlayerDataManager;
@@ -49,12 +50,12 @@ public class BetterChat implements ModInitializer {
 			}
 		}
 
-		 ConfigManager.handleServerStart(modDirPath);
+		 ConfigData configData = ConfigManager.handleServerStart(modDirPath);
 
 		databaseManager = new DatabaseManager(modDirPath);
-		playerDataManager = new PlayerDataManager(databaseManager);
-		mention = new Mention(playerDataManager, server.getPlayerManager(),server.getUserCache(),ConfigManager.getConfigData().defaultMentionNotificationSound());
-		chatHandler = new ChatHandler(ConfigManager.getConfigData(),mention);
+		playerDataManager = new PlayerDataManager(configData, databaseManager);
+		mention = new Mention(configData, playerDataManager, server.getPlayerManager(),server.getUserCache());
+		chatHandler = new ChatHandler(configData,mention);
 
 		databaseManager.connect();
 
