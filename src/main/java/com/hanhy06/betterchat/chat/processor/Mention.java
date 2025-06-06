@@ -26,6 +26,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Mention {
+    private final boolean saveMentionEnabled;
+
     private final PlayerDataService playerDataService;
     private final MentionDataService mentionDataService;
 
@@ -38,6 +40,8 @@ public class Mention {
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{1,16})(?=\\b|$)");
 
     public Mention(ConfigData configData, PlayerDataService playerDataService, MentionDataService mentionDataService, PlayerManager manager, UserCache userCache) {
+        this.saveMentionEnabled = configData.saveMentionEnabled();
+
         this.playerDataService = playerDataService;
         this.mentionDataService = mentionDataService;
 
@@ -58,22 +62,7 @@ public class Mention {
             UUID uuid = unit.receiver().getPlayerUUID();
             ServerPlayerEntity player = manager.getPlayer(uuid);
 
-            if(player != null && unit.receiver().isNotificationsEnabled()){
-                player.networkHandler.sendPacket(new PlaySoundS2CPacket(mentionNotificationSound, SoundCategory.MASTER,player.getX(),player.getY(),player.getZ(),1f,1.75f,1));
-                player.sendMessage(Text.of(senderName+" mentioned you"));
-                mentionDataService.writeMentionData(new MentionData(
-                        0,
-                        uuid,
-                        senderUUID,
-                        timeStamp,
-                        jsonText,
-                        null,
-                        false
-                ));
-                continue;
-            }
-
-            mentionDataService.bufferWrite(new MentionData(
+            MentionData mentionData = new MentionData(
                     0,
                     uuid,
                     senderUUID,
@@ -81,7 +70,16 @@ public class Mention {
                     jsonText,
                     null,
                     false
-            ));
+            );
+
+            if(player != null && unit.receiver().isNotificationsEnabled()){
+                player.networkHandler.sendPacket(new PlaySoundS2CPacket(mentionNotificationSound, SoundCategory.MASTER,player.getX(),player.getY(),player.getZ(),1f,1.75f,1));
+                player.sendMessage(Text.of(senderName+" mentioned you"));
+                if (saveMentionEnabled) mentionDataService.writeMentionData(mentionData);
+                continue;
+            }
+
+            if (saveMentionEnabled) mentionDataService.bufferWrite(mentionData);
         }
     }
 
