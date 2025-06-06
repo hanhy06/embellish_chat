@@ -51,6 +51,7 @@ public class MentionDataService {
             } catch (InterruptedException e) {
                 scheduler.shutdownNow();
                 Thread.currentThread().interrupt();
+                BetterChat.LOGGER.error("Failed to shutdown mention buffer scheduler: {}",e.getMessage());
             }
         }
     }
