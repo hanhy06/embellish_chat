@@ -25,7 +25,6 @@ public record ConfigData(
                 "minecraft:entity.experience_orb.pickup",
                 1000,
                 3
-
         );
     }
 }
