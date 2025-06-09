@@ -91,7 +91,7 @@ public class PlayerDataService implements ConfigLoadedListener {
                     @Override
                     public @NotNull PlayerData load(@NotNull UUID key) {
                         PlayerData playerData = playerDataRepository.readPlayerData(key);
-                        return (playerData==null) ? PlayerData.createDefaultPlayerData(key) : playerData;
+                        return (playerData!=null) ? playerData : PlayerData.createDefaultPlayerData(key);
                     }
                 });
     }
