@@ -44,7 +44,7 @@ public class ConfigManager {
         }
     }
 
-    private static synchronized void loadConfig() {
+    public static synchronized void loadConfig() {
         if (configFilePath == null) {
             BetterChat.LOGGER.error("Cannot load config: configFilePath is null.");
             configData = ConfigData.createDefault();

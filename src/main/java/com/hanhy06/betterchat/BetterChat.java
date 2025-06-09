@@ -1,6 +1,7 @@
 package com.hanhy06.betterchat;
 
 import com.hanhy06.betterchat.chat.ChatHandler;
+import com.hanhy06.betterchat.command.BetterChatCommand;
 import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.chat.processor.Mention;
 import com.hanhy06.betterchat.data.DatabaseConnector;
@@ -74,11 +75,14 @@ public class BetterChat implements ModInitializer {
 
 		ServerPlayConnectionEvents.DISCONNECT.register(playerDataService::handlePlayerLeave);
 
-		ConfigManager.handleServerStart(modDirPath);
 		ConfigManager.configDataLoadedEvents(playerDataService);
 		ConfigManager.configDataLoadedEvents(mentionDataService);
 		ConfigManager.configDataLoadedEvents(mention);
 		ConfigManager.configDataLoadedEvents(chatHandler);
+
+        ConfigManager.handleServerStart(modDirPath);
+
+		BetterChatCommand.registerBetterChatCommand();
 
 		LOGGER.info("{} initialized successfully.", MOD_ID);
 	}

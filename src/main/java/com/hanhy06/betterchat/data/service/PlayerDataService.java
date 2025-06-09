@@ -65,17 +65,12 @@ public class PlayerDataService implements ConfigLoadedListener {
     }
 
     public PlayerData getPlayerData(UUID uuid){
-        PlayerData result = null;
-
-        if ((result = playerDataCache.getIfPresent(uuid)) != null){
-            return result;
+        try {
+            return playerDataCache.get(uuid);
+        } catch (ExecutionException e) {
+            BetterChat.LOGGER.error("Failed get player data uuid: {}",uuid);
         }
-        else if((result = playerDataRepository.readPlayerData(uuid)) != null) {
-            playerDataCache.put(uuid,result);
-            return result;
-        };
-
-        return result;
+        return null;
     }
 
     public void savePlayerData(PlayerData playerData){
