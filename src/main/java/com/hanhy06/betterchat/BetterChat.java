@@ -1,7 +1,6 @@
 package com.hanhy06.betterchat;
 
 import com.hanhy06.betterchat.chat.ChatHandler;
-import com.hanhy06.betterchat.config.ConfigData;
 import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.chat.processor.Mention;
 import com.hanhy06.betterchat.data.DatabaseConnector;

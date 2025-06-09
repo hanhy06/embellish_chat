@@ -89,7 +89,7 @@ public class PlayerDataService implements ConfigLoadedListener {
                 .expireAfterWrite(newConfigData.playerDataCacheTTLMinutes(), TimeUnit.MINUTES)
                 .build(new CacheLoader<UUID, PlayerData>() {
                     @Override
-                    public @NotNull PlayerData load(@NotNull UUID key) throws Exception {
+                    public @NotNull PlayerData load(@NotNull UUID key) {
                         PlayerData playerData = playerDataRepository.readPlayerData(key);
                         return (playerData==null) ? PlayerData.createDefaultPlayerData(key) : playerData;
                     }

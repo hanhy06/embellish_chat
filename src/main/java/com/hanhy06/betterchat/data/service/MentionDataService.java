@@ -98,6 +98,6 @@ public class MentionDataService implements ConfigLoadedListener {
 
     @Override
     public void onConfigLoaded(ConfigData newConfigData) {
-        scheduler.scheduleAtFixedRate(this::bufferClearProcess, 0, newConfigData.mentionBufferClearIntervalMinutes(), TimeUnit.MINUTES);
+        if (newConfigData.saveMentionEnabled()) scheduler.scheduleAtFixedRate(this::bufferClearProcess, 0, newConfigData.mentionBufferClearIntervalMinutes(), TimeUnit.MINUTES);
     }
 }
