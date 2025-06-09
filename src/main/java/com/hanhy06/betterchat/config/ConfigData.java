@@ -2,6 +2,10 @@ package com.hanhy06.betterchat.config;
 
 import com.google.gson.annotations.JsonAdapter;
 import com.hanhy06.betterchat.util.HexIntegerTypeAdapter;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Identifier;
 
 public record ConfigData(
         boolean textPostProcessingEnabled,

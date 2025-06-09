@@ -60,25 +60,26 @@ public class BetterChat implements ModInitializer {
 			}
 		}
 
-		ConfigData configData = ConfigManager.handleServerStart(modDirPath);
-
 		connection = DatabaseConnector.connect(modDirPath);
 
 		playerDataRepository = new PlayerDataRepository(connection);
-		playerDataService = new PlayerDataService(configData,playerDataRepository);
-
+		playerDataService = new PlayerDataService(playerDataRepository);
 		mentionDataRepository = new MentionDataRepository(connection);
-		mentionDataService = new MentionDataService(configData,mentionDataRepository);
+		mentionDataService = new MentionDataService(mentionDataRepository);
 
-		mention = new Mention(configData, playerDataService, mentionDataService, server.getPlayerManager(),server.getUserCache());
-		chatHandler = new ChatHandler(configData,mention);
+		mention = new Mention(playerDataService, mentionDataService, server.getPlayerManager(),server.getUserCache());
+		chatHandler = new ChatHandler(mention);
 
 		ServerPlayConnectionEvents.JOIN.register(playerDataService::handlePlayerJoin);
 		ServerPlayConnectionEvents.JOIN.register(mentionDataService::handlePlayerJoin);
 
 		ServerPlayConnectionEvents.DISCONNECT.register(playerDataService::handlePlayerLeave);
 
-		if(ConfigManager.getConfigData().saveMentionEnabled()) mentionDataService.handleServerStart(configData);
+		ConfigManager.handleServerStart(modDirPath);
+		ConfigManager.configDataLoadedEvents(playerDataService);
+		ConfigManager.configDataLoadedEvents(mentionDataService);
+		ConfigManager.configDataLoadedEvents(mention);
+		ConfigManager.configDataLoadedEvents(chatHandler);
 
 		LOGGER.info("{} initialized successfully.", MOD_ID);
 	}

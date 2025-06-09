@@ -12,6 +12,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConfigManager {
     private static final String CONFIG_FILE_NAME = "config.json";
@@ -21,15 +23,16 @@ public class ConfigManager {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static Path configFilePath = null;
 
+    private static final List<ConfigLoadedListener> listeners = new ArrayList<>();
+
     public static ConfigData getConfigData() {
         return configData;
     }
 
-    public static ConfigData handleServerStart(Path modDirPath) {
+    public static void handleServerStart(Path modDirPath) {
         configFilePath = modDirPath.resolve(CONFIG_FILE_NAME);
         BetterChat.LOGGER.info("Loading BetterChat config from: {}", configFilePath);
         loadConfig();
-        return configData;
     }
 
     public static void handleServerStop() {
@@ -59,6 +62,7 @@ public class ConfigManager {
             ConfigData loaded = gson.fromJson(reader, ConfigData.class);
             if (loaded != null) {
                 configData = loaded;
+                configDataBroadcast();
                 BetterChat.LOGGER.debug("Config loaded successfully.");
             } else {
                 BetterChat.LOGGER.warn("Config file is empty or invalid. Using default values.");
@@ -94,6 +98,16 @@ public class ConfigManager {
             BetterChat.LOGGER.error("Failed to write config file: {}", configFilePath, e);
         } catch (Exception e) {
             BetterChat.LOGGER.error("Unexpected error saving config file: {}", configFilePath, e);
+        }
+    }
+
+    public static void configDataLoadedEvents(ConfigLoadedListener listener){
+        listeners.add(listener);
+    }
+
+    private static void configDataBroadcast(){
+        for (ConfigLoadedListener listener : listeners){
+            listener.onConfigLoaded(configData);
         }
     }
 }

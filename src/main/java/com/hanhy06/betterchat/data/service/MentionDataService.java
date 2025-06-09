@@ -2,6 +2,7 @@ package com.hanhy06.betterchat.data.service;
 
 import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.config.ConfigData;
+import com.hanhy06.betterchat.config.ConfigLoadedListener;
 import com.hanhy06.betterchat.data.model.MentionData;
 import com.hanhy06.betterchat.data.repository.MentionDataRepository;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -18,7 +19,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class MentionDataService {
+public class MentionDataService implements ConfigLoadedListener {
     private final MentionDataRepository mentionDataRepository;
 
     private final ConcurrentLinkedQueue<MentionData> mentionDataBuffer;
@@ -27,16 +28,12 @@ public class MentionDataService {
 
     private static final int ITEMS_PER_PAGE = 20;
 
-    public MentionDataService(ConfigData configData, MentionDataRepository mentionDataRepository) {
+    public MentionDataService(MentionDataRepository mentionDataRepository) {
         this.mentionDataRepository = mentionDataRepository;
 
         this.mentionDataBuffer = new ConcurrentLinkedQueue<>();
 
         this.scheduler = Executors.newScheduledThreadPool(1);
-    }
-
-    public void handleServerStart(ConfigData configData){
-        scheduler.scheduleAtFixedRate(this::bufferClearProcess, 0, configData.mentionBufferClearIntervalMinutes(), TimeUnit.MINUTES);
     }
 
     public void handleServerStop() {
@@ -97,5 +94,10 @@ public class MentionDataService {
         int mentionCount = mentionDataRepository.countMentionData(uuid);
         if (mentionCount < 1) return new ArrayList<>();
         return mentionDataRepository.readMentionData(uuid,ITEMS_PER_PAGE,ITEMS_PER_PAGE*pageNumber);
+    }
+
+    @Override
+    public void onConfigLoaded(ConfigData newConfigData) {
+        scheduler.scheduleAtFixedRate(this::bufferClearProcess, 0, newConfigData.mentionBufferClearIntervalMinutes(), TimeUnit.MINUTES);
     }
 }

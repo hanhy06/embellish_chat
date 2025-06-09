@@ -3,6 +3,7 @@ package com.hanhy06.betterchat.chat;
 import com.hanhy06.betterchat.chat.processor.Mention;
 import com.hanhy06.betterchat.chat.processor.StyledTextProcessor;
 import com.hanhy06.betterchat.config.ConfigData;
+import com.hanhy06.betterchat.config.ConfigLoadedListener;
 import com.hanhy06.betterchat.data.model.MentionUnit;
 import com.hanhy06.betterchat.util.Metadata;
 import net.minecraft.network.message.FilterMask;
@@ -16,12 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class ChatHandler {
-    private final ConfigData configData;
+public class ChatHandler implements ConfigLoadedListener {
+    private ConfigData configData;
     private final Mention mention;
 
-    public ChatHandler(ConfigData configData, Mention mention) {
-        this.configData = configData;
+    public ChatHandler(Mention mention) {
         this.mention = mention;
     }
 
@@ -49,5 +49,10 @@ public class ChatHandler {
                 Metadata.metadata(textMessage),
                 FilterMask.PASS_THROUGH
         );
+    }
+
+    @Override
+    public void onConfigLoaded(ConfigData newConfigData) {
+        configData = newConfigData;
     }
 }

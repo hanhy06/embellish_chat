@@ -2,6 +2,7 @@ package com.hanhy06.betterchat.chat.processor;
 
 import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.config.ConfigData;
+import com.hanhy06.betterchat.config.ConfigLoadedListener;
 import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.data.model.MentionData;
 import com.hanhy06.betterchat.data.model.MentionUnit;
@@ -25,8 +26,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Mention {
-    private final boolean saveMentionEnabled;
+public class Mention implements ConfigLoadedListener {
+    private boolean saveMentionEnabled;
 
     private final PlayerDataService playerDataService;
     private final MentionDataService mentionDataService;
@@ -34,22 +35,17 @@ public class Mention {
     private final PlayerManager manager;
     private final UserCache userCache;
 
-    private final int maxMentionBufferSize;
-    private final RegistryEntry<SoundEvent> mentionNotificationSound;
+    private int maxMentionBufferSize;
+    private RegistryEntry<SoundEvent> mentionNotificationSound;
 
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{1,16})(?=\\b|$)");
 
-    public Mention(ConfigData configData, PlayerDataService playerDataService, MentionDataService mentionDataService, PlayerManager manager, UserCache userCache) {
-        this.saveMentionEnabled = configData.saveMentionEnabled();
-
+    public Mention(PlayerDataService playerDataService, MentionDataService mentionDataService, PlayerManager manager, UserCache userCache) {
         this.playerDataService = playerDataService;
         this.mentionDataService = mentionDataService;
 
         this.manager = manager;
         this.userCache = userCache;
-
-        this.maxMentionBufferSize = configData.maxMentionBufferSize();
-        this.mentionNotificationSound = RegistryEntry.of(Registries.SOUND_EVENT.get(Identifier.of(configData.defaultMentionNotificationSound())));
     }
 
     public void mentionBroadcast(List<MentionUnit> units,Text textMessage,String senderName,UUID senderUUID){
@@ -125,6 +121,14 @@ public class Mention {
         }
 
         return  unit;
+    }
+
+    @Override
+    public void onConfigLoaded(ConfigData newConfigData) {
+        saveMentionEnabled = newConfigData.saveMentionEnabled();
+
+        maxMentionBufferSize = newConfigData.maxMentionBufferSize();
+        mentionNotificationSound = RegistryEntry.of(Registries.SOUND_EVENT.get(Identifier.of(newConfigData.defaultMentionNotificationSound())));
     }
 
     private record Unit(
