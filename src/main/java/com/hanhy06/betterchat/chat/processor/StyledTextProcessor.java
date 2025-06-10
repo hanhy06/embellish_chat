@@ -71,8 +71,10 @@ public class StyledTextProcessor {
 
             result.append(substring(context, lastEnd, matcher.start()));
             result.append(
-                    substring(context, matcher.start(2), matcher.end(2)).fillStyle(Style.EMPTY
-                            .withColor(color.getRGB())
+                    substring(context, matcher.start(2), matcher.end(2))
+                            .fillStyle(
+                                    Style.EMPTY.withColor(color.getRGB()
+                                    )
                     )
             );
             lastEnd = matcher.end();
@@ -94,7 +96,7 @@ public class StyledTextProcessor {
             result.append(
                     substring(context, unit.begin(), unit.end())
                             .fillStyle(
-                                    Style.EMPTY.withColor(unit.receiver().getTeamColor())
+                                    Style.EMPTY.withColor(unit.receiver().getTeamColor()).withBold(true)
                             )
             );
             lastEnd = unit.end();
