@@ -39,15 +39,15 @@ BetterChat is a Fabric mod designed to enhance the chat experience on Minecraft 
 
 Use the following formats in the chat window to apply various styles to your messages.
 
-| Feature           | Syntax              | Example                         |
-| ----------------- | ------------------- | ------------------------------- |
-| **Bold**          | `**Text**`          | `**Important Message**`         |
-| *Italic*          | `_Text_`            | `_A point I want to emphasize_` |
-| **Underline**     | `__Text__`          | `__This looks like a link__`    |
-| ~~Strike~~        | `~~Text~~`          | `~~This content is outdated~~`  |
-| Color             | `#HexCodeText#`     | `#FF5555Hello World#`           |
-| Mention           | `@PlayerName`       | `Hello, @Player492!`            |
-| Escape Formatting | Use a backslash `\` | `This is not \**bold**.`     |
+| Feature           | Syntax              | Example                         | Result                                                     |
+| ----------------- | ------------------- |---------------------------------|------------------------------------------------------------|
+| **Bold**          | `**Text**`          | `**Important Message**`         | **Important Message**                                      |
+| *Italic*          | `_Text_`            | `_A point I want to emphasize_` | _A point I want to emphasize_                              |
+| **Underline**     | `__Text__`          | `__This looks like a link__`    | __This looks like a link__                                 |
+| ~~Strike~~        | `~~Text~~`          | `~~This content is outdated~~`  | ~~This content is outdated~~                               |
+| Color             | `#HexCodeText#`     | `#FF5555Hello World#`           | <span style="color:#FFFF55;">Hello World</span>            |
+| Mention           | `@PlayerName`       | `Hello, @Player492!`            | Hello, <span style="color:#FFFF55;">**@Player492**</span>! |
+| Escape Formatting | Use a backslash `\` | `This is not \**bold**.`        | This is not \*\*bold**.                                    |
 
 ⚙️ Configuration
 
@@ -127,3 +127,11 @@ While the license does not legally require it, please do not redistribute this m
 \[Your Website/Mod Page URL]
 
 If you plan to use this mod on a large-scale server, I would appreciate it if you could let me know! This is not a requirement, but I’m curious how and where my work is used.
+
+
+---
+
+여기서부턴 귀찮아서 한국어로 적음 
+이제 개발 할껀 
+1. /inbox 명령어랑 /betterchat setting 명령어 도입 이건 1.21.6에서 dialog 쓸 예정 그레서 지금 당장은 개발 못함
+2. 이미지 로딩 뭐 [IMAGE 사이트 주소] 하면 이미지를 채팅창에서 로딩 할 예정 뭐 [{"text":"■","color":"색"}] 이런걸로 하겠지

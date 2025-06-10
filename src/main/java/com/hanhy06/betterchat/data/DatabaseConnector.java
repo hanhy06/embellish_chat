@@ -16,7 +16,7 @@ public class DatabaseConnector {
                 player_uuid TEXT PRIMARY KEY NOT NULL,
                 player_name TEXT NOT NULL,
                 notifications_enabled INTEGER NOT NULL DEFAULT 1,
-                team_color INTEGER NOT NULL DEFAULT 16777045
+                team_color INTEGER NOT NULL DEFAULT 0xFFFF55
             );
             """;
 

@@ -46,6 +46,8 @@ public class BetterChat implements ModInitializer {
 
 		ServerLifecycleEvents.SERVER_STARTED.register(BetterChat::handleServerStart);
 		ServerLifecycleEvents.SERVER_STOPPED.register(BetterChat::handleServerStop);
+
+		BetterChatCommand.registerBetterChatCommand();
 	}
 
 	private static void handleServerStart(MinecraftServer server) {
@@ -61,10 +63,10 @@ public class BetterChat implements ModInitializer {
 		}
 
 		connection = DatabaseConnector.connect(modDirPath);
-
 		playerDataRepository = new PlayerDataRepository(connection);
-		playerDataService = new PlayerDataService(playerDataRepository);
 		mentionDataRepository = new MentionDataRepository(connection);
+
+		playerDataService = new PlayerDataService(playerDataRepository);
 		mentionDataService = new MentionDataService(mentionDataRepository);
 
 		mention = new Mention(playerDataService, mentionDataService, server.getPlayerManager(),server.getUserCache());
@@ -81,8 +83,6 @@ public class BetterChat implements ModInitializer {
 		ConfigManager.configDataLoadedEvents(mention);
 		ConfigManager.configDataLoadedEvents(chatHandler);
         ConfigManager.handleServerStart(modDirPath);
-
-		BetterChatCommand.registerBetterChatCommand();
 
 		LOGGER.info("{} initialized successfully.", MOD_ID);
 	}
