@@ -32,6 +32,7 @@ public class ConfigManager {
     public static void handleServerStart(Path modDirPath) {
         configFilePath = modDirPath.resolve(CONFIG_FILE_NAME);
         BetterChat.LOGGER.info("Loading BetterChat config from: {}", configFilePath);
+        listeners.clear();
         loadConfig();
     }
 
