@@ -23,12 +23,12 @@ public class StyledTextProcessor {
 
         MutableText result = context;
 
+        result = applyStyledMention(result,units);
+        result = applyStyledColor(result);
         result = applyStyledPattern(BOLD,result,Style.EMPTY.withBold(true));
         result = applyStyledPattern(UNDERLINE,result,Style.EMPTY.withUnderline(true));
         result = applyStyledPattern(ITALIC,result,Style.EMPTY.withItalic(true));
         result = applyStyledPattern(STRIKETHROUGH,result,Style.EMPTY.withStrikethrough(true));
-        result = applyStyledColor(result);
-        result = applyStyledMention(result,units);
 
         return removeEscapeSlashes(result);
     }

@@ -45,9 +45,11 @@ Use the following formats in the chat window to apply various styles to your mes
 | *Italic*          | `_Text_`            | `_A point I want to emphasize_` | _A point I want to emphasize_                              |
 | **Underline**     | `__Text__`          | `__This looks like a link__`    | __This looks like a link__                                 |
 | ~~Strike~~        | `~~Text~~`          | `~~This content is outdated~~`  | ~~This content is outdated~~                               |
-| Color             | `#HexCodeText#`     | `#FF5555Hello World#`           | <span style="color:#FFFF55;">Hello World</span>            |
+| Color             | `#HexCodeText#`     | `#FF5555Hello World#`           | <span style="color:#FF5555;">Hello World</span>            |
 | Mention           | `@PlayerName`       | `Hello, @Player492!`            | Hello, <span style="color:#FFFF55;">**@Player492**</span>! |
 | Escape Formatting | Use a backslash `\` | `This is not \**bold**.`        | This is not \*\*bold**.                                    |
+
+![text rendering preview](./images/preview1.gif)
 
 ⚙️ Configuration
 
@@ -131,7 +133,11 @@ If you plan to use this mod on a large-scale server, I would appreciate it if yo
 
 ---
 
-여기서부턴 귀찮아서 한국어로 적음 
-이제 개발 할껀 
-1. /inbox 명령어랑 /betterchat setting 명령어 도입 이건 1.21.6에서 dialog 쓸 예정 그레서 지금 당장은 개발 못함
-2. 이미지 로딩 뭐 [IMAGE 사이트 주소] 하면 이미지를 채팅창에서 로딩 할 예정 뭐 [{"text":"■","color":"색"}] 이런걸로 하겠지
+🚀 Roadmap & Future Plans
+Here are some of the exciting features currently in development or planned for future releases:
+* New Commands & UI:
+  * Introduction of /inbox and /betterchat setting commands.
+  * These features are planned to utilize the new dialog functionality coming in Minecraft 1.21.6. Consequently, development on this is currently awaiting that game update.
+* In-Chat Image Rendering:
+  * A feature to display images directly within the chat window using a syntax like [IMAGE URL].
+  * This will likely be achieved by rendering the image pixel-by-pixel using a series of JSON text components, similar to [{"text":"■","color":"#RRGGBB"}].
