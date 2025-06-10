@@ -127,7 +127,7 @@ This project is licensed under the **CC BY 4.0**.
 
 To ensure everyone gets the latest and safest version, please download the mod from the official sources below. I would appreciate it if you link to these pages rather than re-hosting the files.
 
-Official Download on Modrinth: [https://modrinth.com/project/better-chat](https://modrinth.com/project/betterchat)
+Official Download on Modrinth: [https://modrinth.com/mod/better-chat](https://modrinth.com/mod/better-chat)
 
 Source Code on GitHub: [https://github.com/hanhy06/betterchat-1.21.5](https://github.com/hanhy06/betterchat-1.21.5)
 
