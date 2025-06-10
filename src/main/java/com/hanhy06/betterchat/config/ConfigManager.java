@@ -32,7 +32,6 @@ public class ConfigManager {
     public static void handleServerStart(Path modDirPath) {
         configFilePath = modDirPath.resolve(CONFIG_FILE_NAME);
         BetterChat.LOGGER.info("Loading BetterChat config from: {}", configFilePath);
-        listeners.clear();
         loadConfig();
     }
 
@@ -100,6 +99,10 @@ public class ConfigManager {
         } catch (Exception e) {
             BetterChat.LOGGER.error("Unexpected error saving config file: {}", configFilePath, e);
         }
+    }
+
+    public static void listenersClear(){
+        listeners.clear();
     }
 
     public static void configDataLoadedEvents(ConfigLoadedListener listener){

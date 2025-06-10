@@ -75,11 +75,11 @@ public class BetterChat implements ModInitializer {
 
 		ServerPlayConnectionEvents.DISCONNECT.register(playerDataService::handlePlayerLeave);
 
+		ConfigManager.listenersClear();
 		ConfigManager.configDataLoadedEvents(playerDataService);
 		ConfigManager.configDataLoadedEvents(mentionDataService);
 		ConfigManager.configDataLoadedEvents(mention);
 		ConfigManager.configDataLoadedEvents(chatHandler);
-
         ConfigManager.handleServerStart(modDirPath);
 
 		BetterChatCommand.registerBetterChatCommand();
