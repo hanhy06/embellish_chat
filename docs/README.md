@@ -123,10 +123,13 @@ When the mod is first loaded, a `better-chat` directory will be created within y
 
 📜 License & Distribution
 
-This project is licensed under the CC BY 4.0.
+This project is licensed under the **CC BY 4.0**.
 
-While the license does not legally require it, please do not redistribute this mod on other websites or platforms. If you wish to share BetterChat, link to the official mod page at:
-[here](https://github.com/hanhy06/betterchat-1.21.5)
+To ensure everyone gets the latest and safest version, please download the mod from the official sources below. I would appreciate it if you link to these pages rather than re-hosting the files.
+
+Official Download on Modrinth: [https://modrinth.com/mod/better-chat](https://modrinth.com/mod/betterchat)
+
+Source Code on GitHub: [https://github.com/hanhy06/betterchat-1.21.5](https://github.com/hanhy06/betterchat-1.21.5)
 
 If you plan to use this mod on a large-scale server, I would appreciate it if you could let me know! This is not a requirement, but I’m curious how and where my work is used.
 
