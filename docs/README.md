@@ -129,7 +129,7 @@ To ensure everyone gets the latest and safest version, please download the mod f
 
 Official Download on Modrinth: [https://modrinth.com/mod/better-chat](https://modrinth.com/mod/better-chat)
 
-Source Code on GitHub: [https://github.com/com.hanhy06/betterchat-1.21.5](https://github.com/com.hanhy06/betterchat-1.21.5)
+Source Code on GitHub: [https://github.com/hanhy06/better-chat](https://github.com/hanhy06/better-chat)
 
 If you plan to use this mod on a large-scale server, I would appreciate it if you could let me know! This is not a requirement, but I’m curious how and where my work is used.
 
