@@ -1,6 +1,6 @@
 package com.hanhy06.betterchat.chat.processor;
 
-import com.hanhy06.betterchat.BetterChat;
+import com.mojang.serialization.JsonOps;
 import com.hanhy06.betterchat.config.ConfigData;
 import com.hanhy06.betterchat.config.ConfigLoadedListener;
 import com.hanhy06.betterchat.config.ConfigManager;
@@ -19,10 +19,12 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextCodecs;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.UserCache;
 
 import java.util.*;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,7 +51,7 @@ public class Mention implements ConfigLoadedListener {
     }
 
     public void mentionBroadcast(List<MentionUnit> units,Text textMessage,String senderName,UUID senderUUID){
-        String jsonText = Text.Serialization.toJsonString(textMessage, BetterChat.getServerInstance().getRegistryManager());
+        String jsonText = TextCodecs.CODEC.encodeStart(JsonOps.INSTANCE,textMessage).toString();
         String timeStamp = Timestamp.timeStamp();
 
         if(mentionDataService.getPendingMentionCount() + units.size() > maxMentionBufferSize) mentionDataService.bufferClearProcess();
