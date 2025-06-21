@@ -62,7 +62,7 @@ public class PlayerDataService implements ConfigLoadedListener {
         }finally {
             playerDataCache.invalidate(uuid);
         }
-    }
+        }
 
     public PlayerData getPlayerData(UUID uuid){
         try {

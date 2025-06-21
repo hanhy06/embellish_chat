@@ -48,6 +48,7 @@ public class ConfigManager {
         if (configFilePath == null) {
             BetterChat.LOGGER.error("Cannot load config: configFilePath is null.");
             configData = ConfigData.createDefault();
+            configDataBroadcast();
             return;
         }
 
@@ -55,6 +56,7 @@ public class ConfigManager {
             BetterChat.LOGGER.info("Config file not found. Creating default config file at: {}", configFilePath);
             configData = ConfigData.createDefault();
             saveConfig();
+            configDataBroadcast();
             return;
         }
 
@@ -62,22 +64,23 @@ public class ConfigManager {
             ConfigData loaded = gson.fromJson(reader, ConfigData.class);
             if (loaded != null) {
                 configData = loaded;
-                configDataBroadcast();
                 BetterChat.LOGGER.debug("Config loaded successfully.");
             } else {
-                BetterChat.LOGGER.warn("Config file is empty or invalid. Using default values.");
                 configData = ConfigData.createDefault();
+                BetterChat.LOGGER.warn("Config file is empty or invalid. Using default values.");
             }
         } catch (IOException e) {
+            configData = ConfigData.createDefault();
             BetterChat.LOGGER.error("Failed to read config file: {}. Using default values.", configFilePath, e);
-            configData = ConfigData.createDefault();
         } catch (JsonSyntaxException e) {
+            configData = ConfigData.createDefault();
             BetterChat.LOGGER.error("Failed to parse config file: {}. Check JSON syntax. Using default values.", configFilePath, e);
-            configData = ConfigData.createDefault();
         } catch (Exception e) {
-            BetterChat.LOGGER.error("Unexpected error loading config file: {}. Using default values.", configFilePath, e);
             configData = ConfigData.createDefault();
+            BetterChat.LOGGER.error("Unexpected error loading config file: {}. Using default values.", configFilePath, e);
         }
+
+        configDataBroadcast();
     }
 
     private static void saveConfig() {
