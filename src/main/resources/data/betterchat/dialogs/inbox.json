@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:multi_action",
+  "title": { "text": "INBOX" },
+  "body": [],
+  "actions":[
+    {
+      "label":{"text":""},
+      "action":{
+        "type":"custom",
+        "id": ":open_custom_gui",
+        "payload": "betterchat:change_notification"
+      }
+    }
+  ]
+}

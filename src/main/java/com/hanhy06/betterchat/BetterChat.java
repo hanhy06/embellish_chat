@@ -2,6 +2,7 @@ package com.hanhy06.betterchat;
 
 import com.hanhy06.betterchat.chat.ChatHandler;
 import com.hanhy06.betterchat.command.BetterChatCommand;
+import com.hanhy06.betterchat.command.InboxCommand;
 import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.chat.processor.Mention;
 import com.hanhy06.betterchat.data.DatabaseConnector;
@@ -48,6 +49,7 @@ public class BetterChat implements ModInitializer {
 		ServerLifecycleEvents.SERVER_STOPPED.register(BetterChat::handleServerStop);
 
 		BetterChatCommand.registerBetterChatCommand();
+		InboxCommand.registerInboxCommand();
 	}
 
 	private static void handleServerStart(MinecraftServer server) {

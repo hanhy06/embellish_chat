@@ -15,16 +15,16 @@ public class BetterChatCommand {
                             CommandManager.literal("betterchat")
                                     .then(
                                             CommandManager.literal("reload")
-                                                    .executes(BetterChatCommand::reloadConfigData)
+                                                    .executes(BetterChatCommand::executeReloadConfig)
                                     )
                     );
                 }
         );
     }
 
-    private static int reloadConfigData(CommandContext<ServerCommandSource> context) {
+    private static int executeReloadConfig(CommandContext<ServerCommandSource> context) {
         ConfigManager.loadConfig();
-        context.getSource().getPlayer().sendMessage(Text.literal("better chat mod config loaded"));
+        context.getSource().sendFeedback(()-> Text.literal("better chat mod config loaded"),true);
         return 1;
     }
 }

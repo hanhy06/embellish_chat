@@ -87,8 +87,8 @@ When the mod is first loaded, a `better-chat` directory will be created within y
 
 ### Version Compatibility
 
-* **Minecraft Versions Supported:** 1.21.5 (tested).
-* **Fabric Loader Requirement:** Fabric Loader 1.21.5 or newer.
+* **Minecraft Versions Supported:** 1.21.6 (tested).
+* **Fabric Loader Requirement:** Fabric Loader 1.21.6 or newer.
 * **Recommended Fabric API:** 0.16.10 or newer.
 * **Java Version:** Java 21 or newer is required to run this mod.
 

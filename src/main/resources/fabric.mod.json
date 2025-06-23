@@ -8,11 +8,11 @@
 		"hanhy06"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://modrinth.com/mod/better-chat",
+		"sources": "https://github.com/hanhy06/better-chat"
 	},
 	"license": "CC BY",
-	"icon": "assets/betterchat/icon.png",
+	"icon": "assets/betterchat/icon/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
