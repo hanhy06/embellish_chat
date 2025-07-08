@@ -98,7 +98,7 @@ Use the following formats in the chat window to apply various styles to your mes
 * **Mentions Not Notifying Players:**
 
   1. Confirm `mentionEnabled` is `true`.
-  2. Ensure the mentioned player is online to hear the notification sound; offline mentions will be stored instead.
+  2. Ensure the mentioned player is online to hear the notification sound.
   3. If the player is on a team, the mention color will default to the team's color rather than `defaultMentionColor`.
 
 ---
