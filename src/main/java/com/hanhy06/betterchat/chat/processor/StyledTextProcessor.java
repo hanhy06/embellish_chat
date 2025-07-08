@@ -1,6 +1,9 @@
 package com.hanhy06.betterchat.chat.processor;
 
-import com.hanhy06.betterchat.data.model.MentionUnit;
+import com.hanhy06.betterchat.BetterChat;
+import com.hanhy06.betterchat.model.Receiver;
+import com.hanhy06.betterchat.util.Teamcolor;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -18,12 +21,12 @@ public class StyledTextProcessor {
     private static final Pattern STRIKETHROUGH = Pattern.compile("(?<!\\\\)~~(.+?)~~");
     private static final Pattern COLOR = Pattern.compile("(?<!\\\\)(#[0-9A-Fa-f]{6})(.+?)#");
 
-    public static MutableText applyStyles(MutableText context, List<MentionUnit> units){
+    public static MutableText applyStyles(MutableText context, List<Receiver> receivers){
         if (context == null || context.getString().isBlank()) return context;
 
         MutableText result = context;
 
-        result = applyStyledMention(result,units);
+        result = applyStyledMention(result,receivers);
         result = applyStyledColor(result);
         result = applyStyledPattern(BOLD,result,Style.EMPTY.withBold(true));
         result = applyStyledPattern(UNDERLINE,result,Style.EMPTY.withUnderline(true));
@@ -85,21 +88,23 @@ public class StyledTextProcessor {
         return result;
     }
 
-    private static MutableText applyStyledMention(MutableText context, List<MentionUnit> units){
-        if(units == null || units.isEmpty()) return  context;
+    private static MutableText applyStyledMention(MutableText context, List<Receiver> receivers){
+        if(receivers == null || receivers.isEmpty()) return  context;
 
         MutableText result = Text.empty();
         int lastEnd = 0;
 
-        for (MentionUnit unit: units){
-            result.append(substring(context,lastEnd, unit.begin()));
+        for (Receiver receiver: receivers){
+            ServerPlayerEntity player = BetterChat.getManager().getPlayer(receiver.profile().getId());
+
+            result.append(substring(context,lastEnd, receiver.begin()));
             result.append(
-                    substring(context, unit.begin(), unit.end())
+                    substring(context, receiver.begin(), receiver.end())
                             .fillStyle(
-                                    Style.EMPTY.withColor(unit.receiver().getTeamColor()).withBold(true)
+                                    Style.EMPTY.withColor(Teamcolor.getPlayerColor(player)).withBold(true)
                             )
             );
-            lastEnd = unit.end();
+            lastEnd = receiver.end();
         }
 
         result.append(substring(context, lastEnd, context.getString().length()));

@@ -4,7 +4,7 @@ import com.hanhy06.betterchat.chat.processor.Mention;
 import com.hanhy06.betterchat.chat.processor.StyledTextProcessor;
 import com.hanhy06.betterchat.config.ConfigData;
 import com.hanhy06.betterchat.config.ConfigLoadedListener;
-import com.hanhy06.betterchat.data.model.MentionUnit;
+import com.hanhy06.betterchat.model.Receiver;
 import com.hanhy06.betterchat.util.Metadata;
 import net.minecraft.network.message.FilterMask;
 import net.minecraft.network.message.MessageBody;
@@ -26,27 +26,26 @@ public class ChatHandler implements ConfigLoadedListener {
     }
 
     public SignedMessage handleChatMessage(ServerPlayerEntity sender, SignedMessage original){
-        String stringMessage = original.getContent().getString();
-        MutableText textMessage = MutableText.of(original.getContent().getContent());
+        MutableText message = MutableText.of(original.getContent().getContent());
 
-        List<MentionUnit> units = new ArrayList<>();
+        List<Receiver> receivers = new ArrayList<>();
         if (configData.mentionEnabled()) {
-            units = mention.mentionParser(stringMessage);
+            receivers = mention.mentionParser(original.getContent().getString());
         }
 
         if (configData.textPostProcessingEnabled()){
-            textMessage = StyledTextProcessor.applyStyles(textMessage,units);
+            message = StyledTextProcessor.applyStyles(message,receivers);
         }
 
         if (configData.saveMentionEnabled()){
-            mention.mentionBroadcast(units,textMessage,sender.getName().getString(),sender.getUuid());
+            mention.mentionBroadcast(sender.getGameProfile(),message,receivers);
         }
 
         return new SignedMessage(
                 MessageLink.of(new UUID(0L, 0L)),
                 null,
-                MessageBody.ofUnsigned(stringMessage),
-                Metadata.metadata(textMessage),
+                MessageBody.ofUnsigned(message.getString()),
+                Metadata.metadata(message),
                 FilterMask.PASS_THROUGH
         );
     }
