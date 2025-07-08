@@ -78,7 +78,7 @@ public class Mention implements ConfigLoadedListener {
 
     @Override
     public void onConfigLoaded(ConfigData newConfigData) {
-        mentionNotificationSound = RegistryEntry.of(Registries.SOUND_EVENT.get(Identifier.of(newConfigData.defaultMentionNotificationSound())));
+        mentionNotificationSound = RegistryEntry.of(Registries.SOUND_EVENT.get(Identifier.of(newConfigData.defaultMentionSound())));
     }
 
     private record Unit(

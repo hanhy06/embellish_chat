@@ -39,6 +39,7 @@ public class BetterChat implements ModInitializer {
 		mention = new Mention(server.getPlayerManager(),server.getUserCache());
 		chatHandler = new ChatHandler(mention);
 
+		ConfigManager.listenersClear();
 		ConfigManager.configDataLoadedEvents(mention);
 		ConfigManager.configDataLoadedEvents(chatHandler);
         ConfigManager.handleServerStart(modDirPath);
@@ -50,7 +51,7 @@ public class BetterChat implements ModInitializer {
 		ConfigManager.handleServerStop();
 	}
 
-	public static ChatHandler getChatHandler() {return chatHandler;}
+	public static ChatHandler getChatHandler() { return chatHandler; }
 
 	public static PlayerManager getManager() {
 		return manager;

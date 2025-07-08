@@ -7,7 +7,7 @@ public record ConfigData(
         boolean textPostProcessingEnabled,
         boolean mentionEnabled,
         @JsonAdapter(HexIntegerTypeAdapter.class) int defaultMentionColor,
-        String defaultMentionNotificationSound)
+        String defaultMentionSound)
 {
     public static ConfigData createDefault(){
         return new ConfigData(

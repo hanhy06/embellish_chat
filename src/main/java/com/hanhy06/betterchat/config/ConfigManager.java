@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigManager {
-    private static final String CONFIG_FILE_NAME = "config.json";
+    private static final String CONFIG_FILE_NAME = "betterchat_config.json";
 
     private static volatile ConfigData configData = ConfigData.createDefault();
 
