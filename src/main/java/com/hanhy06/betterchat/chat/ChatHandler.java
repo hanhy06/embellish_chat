@@ -4,7 +4,7 @@ import com.hanhy06.betterchat.chat.processor.Mention;
 import com.hanhy06.betterchat.chat.processor.StyledTextProcessor;
 import com.hanhy06.betterchat.config.ConfigData;
 import com.hanhy06.betterchat.config.ConfigLoadedListener;
-import com.hanhy06.betterchat.model.Receiver;
+import com.hanhy06.betterchat.data.Receiver;
 import com.hanhy06.betterchat.util.Metadata;
 import net.minecraft.network.message.FilterMask;
 import net.minecraft.network.message.MessageBody;
@@ -31,14 +31,11 @@ public class ChatHandler implements ConfigLoadedListener {
         List<Receiver> receivers = new ArrayList<>();
         if (configData.mentionEnabled()) {
             receivers = mention.mentionParser(original.getContent().getString());
+            mention.mentionBroadcast(sender.getGameProfile(),receivers);
         }
 
         if (configData.textPostProcessingEnabled()){
             message = StyledTextProcessor.applyStyles(message,receivers);
-        }
-
-        if (configData.saveMentionEnabled()){
-            mention.mentionBroadcast(sender.getGameProfile(),message,receivers);
         }
 
         return new SignedMessage(

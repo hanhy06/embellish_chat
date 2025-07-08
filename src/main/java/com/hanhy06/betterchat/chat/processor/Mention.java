@@ -2,7 +2,7 @@ package com.hanhy06.betterchat.chat.processor;
 
 import com.hanhy06.betterchat.config.ConfigData;
 import com.hanhy06.betterchat.config.ConfigLoadedListener;
-import com.hanhy06.betterchat.model.Receiver;
+import com.hanhy06.betterchat.data.Receiver;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.registry.Registries;
@@ -33,14 +33,14 @@ public class Mention implements ConfigLoadedListener {
         this.userCache = userCache;
     }
 
-    public void mentionBroadcast(GameProfile sender,Text message,List<Receiver> receivers){
+    public void mentionBroadcast(GameProfile sender,List<Receiver> receivers){
         for (Receiver receiver : new HashSet<>(receivers)){
             UUID uuid = receiver.profile().getId();
             ServerPlayerEntity player = manager.getPlayer(uuid);
 
             if(player != null){
                 player.networkHandler.sendPacket(new PlaySoundS2CPacket(mentionNotificationSound, SoundCategory.MASTER,player.getX(),player.getY(),player.getZ(),1f,1.75f,1));
-                player.sendMessage(Text.of(receiver.profile().getName()+" mentioned you"));
+                player.sendMessage(Text.of( sender.getName()+" mentioned you"),true);
             }
         }
     }

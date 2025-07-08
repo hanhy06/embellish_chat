@@ -12,18 +12,13 @@ import net.minecraft.util.WorldSavePath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class BetterChat implements ModInitializer {
 	public static final String MOD_ID = "betterchat";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	private static MinecraftServer serverInstance = null;
-	public static final String MOD_DIRECTORY_NAME = "better-chat";
-
-	private static PlayerManager manager;
+    private static PlayerManager manager;
 	private static Mention mention;
 	private static ChatHandler chatHandler;
 
@@ -38,16 +33,7 @@ public class BetterChat implements ModInitializer {
 	}
 
 	private static void handleServerStart(MinecraftServer server) {
-		serverInstance = server;
-        Path modDirPath = server.getSavePath(WorldSavePath.ROOT).getParent().resolve(MOD_DIRECTORY_NAME);
-
-		if (!Files.exists(modDirPath)) {
-			try {
-				Files.createDirectories(modDirPath);
-			} catch (IOException e) {
-				LOGGER.error("Failed to create mod directory: {}. Mod may not function correctly.", modDirPath, e);
-			}
-		}
+        Path modDirPath = server.getSavePath(WorldSavePath.ROOT).getParent();
 
 		manager = server.getPlayerManager();
 		mention = new Mention(server.getPlayerManager(),server.getUserCache());

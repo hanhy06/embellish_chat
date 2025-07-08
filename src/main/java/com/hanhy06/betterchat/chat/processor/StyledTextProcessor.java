@@ -1,7 +1,7 @@
 package com.hanhy06.betterchat.chat.processor;
 
 import com.hanhy06.betterchat.BetterChat;
-import com.hanhy06.betterchat.model.Receiver;
+import com.hanhy06.betterchat.data.Receiver;
 import com.hanhy06.betterchat.util.Teamcolor;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
