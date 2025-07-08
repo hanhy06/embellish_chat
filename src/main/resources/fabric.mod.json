@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"id": "betterchat",
-	"version": "0.1.0-beta",
+	"version": "1.0.0",
 	"name": "BetterChat",
 	"description": "BetterChat Mode made by hanhy06",
 	"authors": [
@@ -24,7 +24,7 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.16.14",
-		"minecraft": "~1.21.6",
+		"minecraft": "~1.21.7",
 		"java": ">=21",
 		"fabric-api": "*"
 	},
