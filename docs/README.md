@@ -14,6 +14,8 @@ BetterChat is a Fabric mod designed to enhance the chat experience on Minecraft 
 
   ~~Strikethrough Text~~
 
+  ||obfuscated||
+
 * **HEX Color Code Support:** Freely apply any color to your text using the `#RRGGBB` format.
 
 * **Player Mention System:** Use the `@` symbol to mention other players.
@@ -26,7 +28,7 @@ BetterChat is a Fabric mod designed to enhance the chat experience on Minecraft 
 
 * **Message Metadata & Copy:** Hovering over a chat message displays its timestamp. Clicking the message copies its content to your clipboard.
 
-* **Customizable by Server:** All major features can be enabled, disabled, or fine-tuned by server administrators via the `config.json` file.
+* **Customizable by Server:** All major features can be enabled, disabled, or fine-tuned by server administrators via the `betterchat_config.json` file.
 
 💾 Installation
 
@@ -40,11 +42,12 @@ BetterChat is a Fabric mod designed to enhance the chat experience on Minecraft 
 Use the following formats in the chat window to apply various styles to your messages.
 
 | Feature           | Syntax              | Example                         | Result                                                     |
-| ----------------- | ------------------- |---------------------------------|------------------------------------------------------------|
+|-------------------|---------------------|:--------------------------------|------------------------------------------------------------|
 | **Bold**          | `**Text**`          | `**Important Message**`         | **Important Message**                                      |
 | *Italic*          | `_Text_`            | `_A point I want to emphasize_` | _A point I want to emphasize_                              |
 | **Underline**     | `__Text__`          | `__This looks like a link__`    | __This looks like a link__                                 |
 | ~~Strike~~        | `~~Text~~`          | `~~This content is outdated~~`  | ~~This content is outdated~~                               |
+| obfuscated        | `\|\|Text\|\|`      | `This will be unreadable`       | ajsabjkdbakb                                               |
 | Color             | `#HexCodeText#`     | `#FF5555Hello World#`           | <span style="color:#FF5555;">Hello World</span>            |
 | Mention           | `@PlayerName`       | `Hello, @Player492!`            | Hello, <span style="color:#FFFF55;">**@Player492**</span>! |
 | Escape Formatting | Use a backslash `\` | `This is not \**bold**.`        | This is not \*\*bold**.                                    |
@@ -54,6 +57,8 @@ Use the following formats in the chat window to apply various styles to your mes
 ⚙️ Configuration
 
 ### Sample `betterchat_config.json`
+
+You can find `betterchat_config.json` in your save folder.
 
 ```jsonc
 {

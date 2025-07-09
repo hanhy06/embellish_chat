@@ -31,7 +31,7 @@ public class ChatHandler implements ConfigLoadedListener {
         List<Receiver> receivers = new ArrayList<>();
         if (configData.mentionEnabled()) {
             receivers = mention.mentionParser(original.getContent().getString());
-            mention.mentionBroadcast(sender.getGameProfile(),receivers);
+            mention.mentionBroadcast(sender,receivers);
         }
 
         if (configData.textPostProcessingEnabled()){
@@ -42,7 +42,7 @@ public class ChatHandler implements ConfigLoadedListener {
                 MessageLink.of(new UUID(0L, 0L)),
                 null,
                 MessageBody.ofUnsigned(message.getString()),
-                Metadata.metadata(message),
+                message,
                 FilterMask.PASS_THROUGH
         );
     }

@@ -2,6 +2,7 @@ package com.hanhy06.betterchat.chat.processor;
 
 import com.hanhy06.betterchat.BetterChat;
 import com.hanhy06.betterchat.data.Receiver;
+import com.hanhy06.betterchat.util.Metadata;
 import com.hanhy06.betterchat.util.Teamcolor;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
@@ -19,6 +20,7 @@ public class StyledTextProcessor {
     private static final Pattern UNDERLINE = Pattern.compile("(?<!\\\\)__(.+?)__");
     private static final Pattern ITALIC = Pattern.compile("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)");
     private static final Pattern STRIKETHROUGH = Pattern.compile("(?<!\\\\)~~(.+?)~~");
+    private static final Pattern OBFUSCATED = Pattern.compile("(?<!\\\\)\\|\\|(.+?)\\|\\|");
     private static final Pattern COLOR = Pattern.compile("(?<!\\\\)(#[0-9A-Fa-f]{6})(.+?)#");
 
     public static MutableText applyStyles(MutableText context, List<Receiver> receivers){
@@ -32,8 +34,10 @@ public class StyledTextProcessor {
         result = applyStyledPattern(UNDERLINE,result,Style.EMPTY.withUnderline(true));
         result = applyStyledPattern(ITALIC,result,Style.EMPTY.withItalic(true));
         result = applyStyledPattern(STRIKETHROUGH,result,Style.EMPTY.withStrikethrough(true));
+        result = applyStyledPattern(OBFUSCATED,result,Style.EMPTY.withObfuscated(true));
+        result = removeEscapeSlashes(result);
 
-        return removeEscapeSlashes(result);
+        return Metadata.metadata(result);
     }
 
     private static MutableText applyStyledPattern(Pattern pattern, MutableText context, Style style){

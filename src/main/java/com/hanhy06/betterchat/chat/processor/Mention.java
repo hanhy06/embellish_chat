@@ -3,6 +3,7 @@ package com.hanhy06.betterchat.chat.processor;
 import com.hanhy06.betterchat.config.ConfigData;
 import com.hanhy06.betterchat.config.ConfigLoadedListener;
 import com.hanhy06.betterchat.data.Receiver;
+import com.hanhy06.betterchat.util.Teamcolor;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.registry.Registries;
@@ -11,7 +12,10 @@ import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.UserCache;
 
@@ -33,14 +37,18 @@ public class Mention implements ConfigLoadedListener {
         this.userCache = userCache;
     }
 
-    public void mentionBroadcast(GameProfile sender,List<Receiver> receivers){
+    public void mentionBroadcast(ServerPlayerEntity sender,List<Receiver> receivers){
         for (Receiver receiver : new HashSet<>(receivers)){
             UUID uuid = receiver.profile().getId();
             ServerPlayerEntity player = manager.getPlayer(uuid);
 
+            MutableText titleText = sender.getName().copy()
+                    .styled(style -> style.withColor(Teamcolor.getPlayerColor(sender)).withBold(true))
+                    .append(Text.literal(" mentioned you").fillStyle(Style.EMPTY.withBold(false).withColor(Formatting.WHITE)));
+
             if(player != null){
                 player.networkHandler.sendPacket(new PlaySoundS2CPacket(mentionNotificationSound, SoundCategory.MASTER,player.getX(),player.getY(),player.getZ(),1f,1.75f,1));
-                player.sendMessage(Text.of( sender.getName()+" mentioned you"),true);
+                player.sendMessage(titleText ,true);
             }
         }
     }
