@@ -80,8 +80,8 @@ You can find `betterchat_config.json` in your save folder.
 
 ### Version Compatibility
 
-* **Minecraft Versions Supported:** 1.21.7 (tested).
-* **Fabric Loader Requirement:** Fabric Loader 1.21.7 or newer.
+* **Minecraft Versions Supported:** 1.21.8 (tested).
+* **Fabric Loader Requirement:** Fabric Loader 1.21.8 or newer.
 * **Recommended Fabric API:** 0.16.14 or newer.
 * **Java Version:** Java 21 or newer is required to run this mod.
 
