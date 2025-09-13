@@ -52,7 +52,42 @@ public abstract class ChatScreenMixin extends Screen {
         } else if (keyCode == GLFW.GLFW_KEY_DOWN && hasShiftDown()) {
             this.setChatFromHistory(1);
             return true;
-        } else if (keyCode == GLFW.GLFW_KEY_PAGE_UP) {
+        } else if (keyCode == GLFW.GLFW_KEY_UP) {
+            List<String> currentLines = splitToLines(this.chatField.getText(), newLinePositions);
+            if (currentLines.size() <= 1) {
+                this.chatField.setCursor(0, false);
+                return true;
+            }
+            int[] cursorInfo = getCursorLineAndColumn(currentLines, this.chatField.getCursor());
+            int cursorLine = cursorInfo[0];
+            int cursorColumn = cursorInfo[1];
+
+            if (cursorLine > 0) {
+                int targetLineIndex = cursorLine - 1;
+                int targetColumn = Math.min(cursorColumn, currentLines.get(targetLineIndex).length());
+                int newCursorPos = currentLines.stream().limit(targetLineIndex).mapToInt(String::length).sum() + targetColumn;
+                this.chatField.setCursor(newCursorPos, false);
+            }
+            return true;
+        } else if (keyCode == GLFW.GLFW_KEY_DOWN) {
+            List<String> currentLines = splitToLines(this.chatField.getText(), newLinePositions);
+            if (currentLines.size() <= 1) {
+                this.chatField.setCursor(this.chatField.getText().length(), false);
+                return true;
+            }
+            int[] cursorInfo = getCursorLineAndColumn(currentLines, this.chatField.getCursor());
+            int cursorLine = cursorInfo[0];
+            int cursorColumn = cursorInfo[1];
+
+            if (cursorLine < currentLines.size() - 1) {
+                int targetLineIndex = cursorLine + 1;
+                int targetColumn = Math.min(cursorColumn, currentLines.get(targetLineIndex).length());
+                int newCursorPos = currentLines.stream().limit(targetLineIndex).mapToInt(String::length).sum() + targetColumn;
+                this.chatField.setCursor(newCursorPos, false);
+            }
+            return true;
+        }
+        else if (keyCode == GLFW.GLFW_KEY_PAGE_UP) {
             this.client.inGameHud.getChatHud().scroll(this.client.inGameHud.getChatHud().getVisibleLineCount() - 1);
             return true;
         } else if (keyCode == GLFW.GLFW_KEY_PAGE_DOWN) {
@@ -70,16 +105,7 @@ public abstract class ChatScreenMixin extends Screen {
 
         newLinePositions.sort(null);
 
-        List<String> currentLines = new ArrayList<>();
-        String fullText = this.chatField.getText();
-        int lastPos = 0;
-
-        for (int pos : newLinePositions) {
-            if (pos > fullText.length()) continue;
-            currentLines.add(fullText.substring(lastPos, pos));
-            lastPos = pos;
-        }
-        currentLines.add(fullText.substring(lastPos));
+        List<String> currentLines = splitToLines(this.chatField.getText(),newLinePositions);
 
         int lineCount = currentLines.size();
         int topY = this.height - 14 - (lineCount - 1) * 9;
@@ -96,21 +122,9 @@ public abstract class ChatScreenMixin extends Screen {
         }
 
         if (this.client.inGameHud.getTicks() / 6 % 2 == 0) {
-            int cursorIndex = this.chatField.getCursor();
-            int cursorLine = 0;
-            int cursorColumn = 0;
-            int textLengthCounter = 0;
-
-            for (int i = 0; i < currentLines.size(); i++) {
-                int lineLength = currentLines.get(i).length();
-                if (cursorIndex <= textLengthCounter + lineLength) {
-                    cursorLine = i;
-                    cursorColumn = cursorIndex - textLengthCounter;
-                    break;
-                }
-                textLengthCounter += lineLength;
-            }
-
+            int[] cursorInfo = getCursorLineAndColumn(currentLines, this.chatField.getCursor());
+            int cursorLine = cursorInfo[0];
+            int cursorColumn = cursorInfo[1];
             String currentLineText = currentLines.get(cursorLine);
             int cursorRenderX = 4 + this.textRenderer.getWidth(currentLineText.substring(0, cursorColumn));
             int cursorRenderY = topY + (cursorLine * lineHeight);
@@ -129,6 +143,38 @@ public abstract class ChatScreenMixin extends Screen {
         }
     }
 
+    @Unique
+    private List<String> splitToLines(String str,List<Integer> positions){
+        List<String> currentLines = new ArrayList<>();
+        int lastPos = 0;
+
+        for (int pos : positions) {
+            if (pos > str.length()) continue;
+            currentLines.add(str.substring(lastPos, pos));
+            lastPos = pos;
+        }
+        currentLines.add(str.substring(lastPos));
+        return currentLines;
+    }
+
+    @Unique
+    private int[] getCursorLineAndColumn(List<String> lines, int cursorIndex) {
+        int cursorLine = 0;
+        int cursorColumn = 0;
+        int textLengthCounter = 0;
+
+        for (int i = 0; i < lines.size(); i++) {
+            int lineLength = lines.get(i).length();
+            if (cursorIndex <= textLengthCounter + lineLength) {
+                cursorLine = i;
+                cursorColumn = cursorIndex - textLengthCounter;
+                break;
+            }
+            textLengthCounter += lineLength;
+        }
+        return new int[]{cursorLine, cursorColumn};
+    }
+    
     protected ChatScreenMixin(Text title) {
         super(title);
     }
