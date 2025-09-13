@@ -1,5 +1,6 @@
 package com.hanhy06.betterchat.mixin.client;
 
+import com.hanhy06.betterchat.data.CursorPosition;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.MessageIndicator;
 import net.minecraft.client.gui.screen.ChatInputSuggestor;
@@ -29,10 +30,13 @@ public abstract class ChatScreenMixin extends Screen {
 
     @Unique
     private final List<Integer> newLinePositions = new ArrayList<>();
+    @Unique
+    private int lastCursorX = -1;
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (this.chatInputSuggestor.keyPressed(keyCode, scanCode, modifiers)) {
+            this.lastCursorX = -1;
             return true;
         } else if (super.keyPressed(keyCode, scanCode, modifiers)) {
             return true;
@@ -41,26 +45,46 @@ public abstract class ChatScreenMixin extends Screen {
             return true;
         } else if ((keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) && hasShiftDown()) {
             newLinePositions.add(chatField.getCursor());
+            this.lastCursorX = -1;
+            newLinePositions.sort(null);
             return true;
         } else if (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) {
             this.sendMessage(this.chatField.getText(), true);
             this.client.setScreen(null);
             return true;
         } else if (keyCode == GLFW.GLFW_KEY_UP && hasShiftDown()) {
+            this.lastCursorX = -1;
             this.setChatFromHistory(-1);
             return true;
         } else if (keyCode == GLFW.GLFW_KEY_DOWN && hasShiftDown()) {
+            this.lastCursorX = -1;
             this.setChatFromHistory(1);
             return true;
         } else if (keyCode == GLFW.GLFW_KEY_UP) {
+            List<String> line = splitToLines(chatField.getText(),newLinePositions);
+            CursorPosition pos = convertCursorTo2D(line,chatField.getCursor());
 
+            if (this.lastCursorX == -1) {
+                this.lastCursorX = pos.column();
+            }
 
-            this.chatField.setCursor(0,false);
+            int y = Math.max(0, pos.line() - 1);
+            int x = Math.min(this.lastCursorX, line.get(y).length());
+
+            this.chatField.setCursor(convertCursorTo1D(line,y,x),false);
             return true;
         } else if (keyCode == GLFW.GLFW_KEY_DOWN) {
+            List<String> line = splitToLines(chatField.getText(),newLinePositions);
+            CursorPosition pos = convertCursorTo2D(line,chatField.getCursor());
+            
+            if (this.lastCursorX == -1) {
+                this.lastCursorX = pos.column();
+            }
 
+            int y = Math.min(pos.line() + 1, line.size() - 1);
+            int x = Math.min(this.lastCursorX, line.get(y).length());
 
-            this.chatField.setCursor(0,false);
+            this.chatField.setCursor(convertCursorTo1D(line,y,x),false);
             return true;
         }
         else if (keyCode == GLFW.GLFW_KEY_PAGE_UP) {
@@ -70,7 +94,11 @@ public abstract class ChatScreenMixin extends Screen {
             this.client.inGameHud.getChatHud().scroll(-this.client.inGameHud.getChatHud().getVisibleLineCount() + 1);
             return true;
         } else {
-            return false;
+            boolean isHandled = this.chatField.keyPressed(keyCode, scanCode, modifiers);
+            if (isHandled) {
+                this.lastCursorX = -1;
+            }
+            return isHandled;
         }
     }
 
@@ -78,8 +106,6 @@ public abstract class ChatScreenMixin extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.renderBackground(context, mouseX, mouseY, delta);
         this.client.inGameHud.getChatHud().render(context, this.client.inGameHud.getTicks(), mouseX, mouseY, true);
-
-        newLinePositions.sort(null);
 
         List<String> currentLines = splitToLines(this.chatField.getText(),newLinePositions);
 
@@ -90,32 +116,18 @@ public abstract class ChatScreenMixin extends Screen {
                 this.width - 2, this.height - 2,
                 this.client.options.getTextBackgroundColor(Integer.MIN_VALUE)
         );
-
-
+        
         int lineHeight = 9;
         for (int i = 0; i < currentLines.size(); i++) {
             context.drawTextWithShadow(this.textRenderer, currentLines.get(i), 4, topY + (i * lineHeight), 0xFFFFFFFF);
         }
 
         if (this.client.inGameHud.getTicks() / 6 % 2 == 0) {
-            int cursorIndex = this.chatField.getCursor();
-            int cursorLine = 0;
-            int cursorColumn = 0;
-            int textLengthCounter = 0;
+            CursorPosition cursorPos = convertCursorTo2D(currentLines, this.chatField.getCursor());
 
-            for (int i = 0; i < currentLines.size(); i++) {
-                int lineLength = currentLines.get(i).length();
-                if (cursorIndex <= textLengthCounter + lineLength) {
-                    cursorLine = i;
-                    cursorColumn = cursorIndex - textLengthCounter;
-                    break;
-                }
-                textLengthCounter += lineLength;
-            }
-
-            String currentLineText = currentLines.get(cursorLine);
-            int cursorRenderX = 4 + this.textRenderer.getWidth(currentLineText.substring(0, cursorColumn));
-            int cursorRenderY = topY + (cursorLine * lineHeight);
+            String currentLineText = currentLines.get(cursorPos.line());
+            int cursorRenderX = 4 + this.textRenderer.getWidth(currentLineText.substring(0, cursorPos.column()));
+            int cursorRenderY = topY + (cursorPos.line() * lineHeight);
             context.fill(cursorRenderX, cursorRenderY - 1, cursorRenderX + 1, cursorRenderY + lineHeight, 0xFFE0E0E0);
         }
 
@@ -138,13 +150,39 @@ public abstract class ChatScreenMixin extends Screen {
 
         for (int pos : positions) {
             if (pos > str.length()) continue;
-            currentLines.add(str.substring(lastPos, pos));
+            String tmp = str.substring(lastPos, pos);
+            currentLines.add(tmp.isEmpty() ? "":tmp);
             lastPos = pos;
         }
         currentLines.add(str.substring(lastPos));
         return currentLines;
     }
-    
+
+    @Unique
+    private CursorPosition convertCursorTo2D(List<String> lines, int cursorPosition) {
+        int textLengthCounter = 0;
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            int lineLength = line.length();
+            if (cursorPosition <= textLengthCounter + lineLength) {
+                int column = cursorPosition - textLengthCounter;
+                return new CursorPosition(i, column);
+            }
+            textLengthCounter += lineLength;
+        }
+        return new CursorPosition(lines.size() - 1, lines.get(lines.size() - 1).length());
+    }
+
+    @Unique
+    private int convertCursorTo1D(List<String> lines, int line, int column) {
+        int position = 0;
+        for (int i = 0; i < line; i++) {
+            position += lines.get(i).length();
+        }
+        position += column;
+        return position;
+    }
+
     protected ChatScreenMixin(Text title) {
         super(title);
     }
