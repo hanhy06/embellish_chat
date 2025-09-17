@@ -32,7 +32,7 @@ public class ConfigManager {
 
         this.configFilePath = configDirPath.resolve(configFileName);
 
-        if(Files.exists(configFilePath)){
+        if(!Files.exists(configFilePath)){
             try {
                 Files.createFile(configFilePath);
                 writeConfig();
