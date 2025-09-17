@@ -38,12 +38,6 @@ public class ChatHandler {
             message = StyledTextProcessor.applyStyles(message,receivers);
         }
 
-        return new SignedMessage(
-                MessageLink.of(new UUID(0L, 0L)),
-                null,
-                MessageBody.ofUnsigned(message.getString()),
-                message,
-                FilterMask.PASS_THROUGH
-        );
+        return original.withUnsignedContent(message);
     }
 }
