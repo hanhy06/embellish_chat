@@ -46,16 +46,20 @@ public class ConfigManager {
                 EmbellishChat.LOGGER.debug("Config loaded successfully.");
             } else {
                 config = Config.createDefault();
+                writeConfig();
                 EmbellishChat.LOGGER.warn("Config file is empty or invalid. Using default values.");
             }
         } catch (IOException e) {
             config = Config.createDefault();
+            writeConfig();
             EmbellishChat.LOGGER.error("Failed to read config file: {}. Using default values.", configFilePath, e);
         } catch (JsonSyntaxException e) {
             config = Config.createDefault();
+            writeConfig();
             EmbellishChat.LOGGER.error("Failed to parse config file: {}. Check JSON syntax. Using default values.", configFilePath, e);
         } catch (Exception e) {
             config = Config.createDefault();
+            writeConfig();
             EmbellishChat.LOGGER.error("Unexpected error loading config file: {}. Using default values.", configFilePath, e);
         }
     }

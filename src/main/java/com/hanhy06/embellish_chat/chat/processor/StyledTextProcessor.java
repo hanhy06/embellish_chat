@@ -24,16 +24,17 @@ public class StyledTextProcessor {
     private static final Pattern STRIKETHROUGH = Pattern.compile("(?<!\\\\)~~(.+?)~~");
     private static final Pattern OBFUSCATED = Pattern.compile("(?<!\\\\)\\|\\|(.+?)\\|\\|");
     private static final Pattern COLOR = Pattern.compile("(?<!\\\\)(#[0-9A-Fa-f]{6})(.+?)#");
-    private static final Pattern WEBSITE = Pattern.compile("(?<!\\\\)(\\[(.+?)])\\((https?:\\/\\/[^)]+)\\)");
+    private static final Pattern OPEN_URI = Pattern.compile("(?<!\\\\)(\\[(.+?)])\\((https?:\\/\\/[^)]+)\\)");
 
     public static MutableText applyStyles(MutableText context, List<Receiver> receivers){
         if (context == null || context.getString().isBlank()) return context;
 
         MutableText result = context;
 
+         result = applyStyledOpenURI(result);
+
         result = applyStyledMention(result,receivers);
         result = applyStyledColor(result);
-        result = applyStyledWebsite(result);
         result = applyStyledPattern(BOLD,result,Style.EMPTY.withBold(true));
         result = applyStyledPattern(UNDERLINE,result,Style.EMPTY.withUnderline(true));
         result = applyStyledPattern(ITALIC,result,Style.EMPTY.withItalic(true));
@@ -91,9 +92,9 @@ public class StyledTextProcessor {
         return result;
     }
 
-    private static MutableText applyStyledWebsite(MutableText context) {
+    private static MutableText applyStyledOpenURI(MutableText context) {
         String str = context.getString();
-        Matcher matcher = WEBSITE.matcher(str);
+        Matcher matcher = OPEN_URI.matcher(str);
 
         MutableText result = Text.empty();
         int lastEnd = 0;
