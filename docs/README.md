@@ -38,7 +38,7 @@ EmbellishChat is a Fabric mod designed to enhance the chat experience on Minecra
 4. Place the downloaded Fabric API and EmbellishChat `.jar` files into your `.minecraft/mods` folder.
 
 🛠️ Usage
-[README.md](README.md)
+
 Use the following formats in the chat window to apply various styles to your messages.
 
 | Feature           | Syntax              | Example                                                       | Result                                                     |
