@@ -1,4 +1,4 @@
-package com.hanhy06.betterchat.data;
+package com.hanhy06.fancy_chat.data;
 
 import com.mojang.authlib.GameProfile;
 

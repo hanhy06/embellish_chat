@@ -1,8 +1,8 @@
-package com.hanhy06.betterchat.chat.processor;
+package com.hanhy06.fancy_chat.chat.processor;
 
-import com.hanhy06.betterchat.config.ConfigData;
-import com.hanhy06.betterchat.data.Receiver;
-import com.hanhy06.betterchat.util.Teamcolor;
+import com.hanhy06.fancy_chat.config.ConfigManager;
+import com.hanhy06.fancy_chat.data.Receiver;
+import com.hanhy06.fancy_chat.util.Teamcolor;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.registry.Registries;
@@ -27,8 +27,6 @@ public class Mention {
     private final PlayerManager manager;
     private final UserCache userCache;
 
-    private RegistryEntry<SoundEvent> mentionNotificationSound;
-
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{1,16})(?=\\b|$)");
 
     public Mention(PlayerManager manager, UserCache userCache) {
@@ -46,7 +44,15 @@ public class Mention {
                     .append(Text.literal(" mentioned you").fillStyle(Style.EMPTY.withBold(false).withColor(Formatting.WHITE)));
 
             if(player != null){
-                player.networkHandler.sendPacket(new PlaySoundS2CPacket(mentionNotificationSound, SoundCategory.MASTER,player.getX(),player.getY(),player.getZ(),1f,1.75f,1));
+                RegistryEntry<SoundEvent> mentionSound = RegistryEntry.of(Registries.SOUND_EVENT.get(Identifier.of(ConfigManager.INSTANCE.config.defaultMentionSound())));
+                player.networkHandler.sendPacket(
+                        new PlaySoundS2CPacket(
+                                mentionSound,
+                                SoundCategory.MASTER
+                                ,player.getX(),player.getY(),player.getZ()
+                                ,1f,1.75f,1
+                        )
+                );
                 player.sendMessage(titleText ,true);
             }
         }

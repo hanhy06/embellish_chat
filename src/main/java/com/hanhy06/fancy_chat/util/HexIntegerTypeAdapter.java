@@ -1,4 +1,4 @@
-package com.hanhy06.betterchat.util;
+package com.hanhy06.fancy_chat.util;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;

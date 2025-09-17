@@ -1,4 +1,4 @@
-package com.hanhy06.betterchat.util;
+package com.hanhy06.fancy_chat.util;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

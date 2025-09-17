@@ -16,7 +16,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.hanhy06.betterchat.BetterChat"
+			"com.hanhy06.fancy_chat.FancyChat"
 		]
 	},
 	"mixins": [

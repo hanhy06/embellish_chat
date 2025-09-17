@@ -1,9 +1,9 @@
-package com.hanhy06.betterchat.config;
+package com.hanhy06.fancy_chat.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.hanhy06.betterchat.BetterChat;
+import com.hanhy06.fancy_chat.FancyChat;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -32,7 +32,7 @@ public class ConfigManager {
                 Files.createFile(configFilePath);
                 writeConfig();
             } catch (IOException e) {
-                BetterChat.LOGGER.info("Failed to read config file. Using default config settings.");
+                FancyChat.LOGGER.info("Failed to read config file. Using default config settings.");
             }
         }
     }
@@ -42,20 +42,20 @@ public class ConfigManager {
             ConfigData loaded = gson.fromJson(reader, ConfigData.class);
             if (loaded != null) {
                 config = loaded;
-                BetterChat.LOGGER.debug("Config loaded successfully.");
+                FancyChat.LOGGER.debug("Config loaded successfully.");
             } else {
                 config = ConfigData.createDefault();
-                BetterChat.LOGGER.warn("Config file is empty or invalid. Using default values.");
+                FancyChat.LOGGER.warn("Config file is empty or invalid. Using default values.");
             }
         } catch (IOException e) {
             config = ConfigData.createDefault();
-            BetterChat.LOGGER.error("Failed to read config file: {}. Using default values.", configFilePath, e);
+            FancyChat.LOGGER.error("Failed to read config file: {}. Using default values.", configFilePath, e);
         } catch (JsonSyntaxException e) {
             config = ConfigData.createDefault();
-            BetterChat.LOGGER.error("Failed to parse config file: {}. Check JSON syntax. Using default values.", configFilePath, e);
+            FancyChat.LOGGER.error("Failed to parse config file: {}. Check JSON syntax. Using default values.", configFilePath, e);
         } catch (Exception e) {
             config = ConfigData.createDefault();
-            BetterChat.LOGGER.error("Unexpected error loading config file: {}. Using default values.", configFilePath, e);
+            FancyChat.LOGGER.error("Unexpected error loading config file: {}. Using default values.", configFilePath, e);
         }
     }
 
@@ -63,11 +63,11 @@ public class ConfigManager {
         try (BufferedWriter writer = Files.newBufferedWriter(configFilePath, StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
             gson.toJson(config, writer);
-            BetterChat.LOGGER.debug("Config saved successfully to {}", configFilePath);
+            FancyChat.LOGGER.debug("Config saved successfully to {}", configFilePath);
         } catch (IOException e) {
-            BetterChat.LOGGER.error("Failed to write config file: {}", configFilePath, e);
+            FancyChat.LOGGER.error("Failed to write config file: {}", configFilePath, e);
         } catch (Exception e) {
-            BetterChat.LOGGER.error("Unexpected error saving config file: {}", configFilePath, e);
+            FancyChat.LOGGER.error("Unexpected error saving config file: {}", configFilePath, e);
         }
     }
 }

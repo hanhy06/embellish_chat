@@ -1,9 +1,9 @@
-package com.hanhy06.betterchat;
+package com.hanhy06.fancy_chat;
 
-import com.hanhy06.betterchat.chat.ChatHandler;
-import com.hanhy06.betterchat.command.BetterChatCommand;
-import com.hanhy06.betterchat.config.ConfigManager;
-import com.hanhy06.betterchat.chat.processor.Mention;
+import com.hanhy06.fancy_chat.chat.ChatHandler;
+import com.hanhy06.fancy_chat.command.BetterChatCommand;
+import com.hanhy06.fancy_chat.config.ConfigManager;
+import com.hanhy06.fancy_chat.chat.processor.Mention;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 
-public class BetterChat implements ModInitializer {
-	public static final String MOD_ID = "betterchat";
+public class FancyChat implements ModInitializer {
+	public static final String MOD_ID = "fancy_chat";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     private static ConfigManager configManager;
@@ -27,8 +27,7 @@ public class BetterChat implements ModInitializer {
 	public void onInitialize() {
 		LOGGER.info("{} initializing...", MOD_ID);
 
-		ServerLifecycleEvents.SERVER_STARTED.register(BetterChat::handleServerStart);
-		ServerLifecycleEvents.SERVER_STOPPED.register(BetterChat::handleServerStop);
+		ServerLifecycleEvents.SERVER_STARTED.register(FancyChat::handleServerStart);
 
 		BetterChatCommand.registerBetterChatCommand();
 	}
@@ -44,10 +43,6 @@ public class BetterChat implements ModInitializer {
 		configManager.readConfig();
 
 		LOGGER.info("{} initialized successfully.", MOD_ID);
-	}
-
-	private static void handleServerStop(MinecraftServer server){
-		configManager.writeConfig();
 	}
 
 	public static ChatHandler getChatHandler() { return chatHandler; }

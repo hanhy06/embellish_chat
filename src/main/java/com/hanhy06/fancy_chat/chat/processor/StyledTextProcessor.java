@@ -1,9 +1,9 @@
-package com.hanhy06.betterchat.chat.processor;
+package com.hanhy06.fancy_chat.chat.processor;
 
-import com.hanhy06.betterchat.BetterChat;
-import com.hanhy06.betterchat.data.Receiver;
-import com.hanhy06.betterchat.util.Metadata;
-import com.hanhy06.betterchat.util.Teamcolor;
+import com.hanhy06.fancy_chat.FancyChat;
+import com.hanhy06.fancy_chat.data.Receiver;
+import com.hanhy06.fancy_chat.util.Metadata;
+import com.hanhy06.fancy_chat.util.Teamcolor;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -99,7 +99,7 @@ public class StyledTextProcessor {
         int lastEnd = 0;
 
         for (Receiver receiver: receivers){
-            ServerPlayerEntity player = BetterChat.getPlayerManager().getPlayer(receiver.profile().getId());
+            ServerPlayerEntity player = FancyChat.getPlayerManager().getPlayer(receiver.profile().getId());
 
             result.append(substring(context,lastEnd, receiver.begin()));
             result.append(

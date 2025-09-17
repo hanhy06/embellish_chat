@@ -1,6 +1,6 @@
-package com.hanhy06.betterchat.command;
+package com.hanhy06.fancy_chat.command;
 
-import com.hanhy06.betterchat.config.ConfigManager;
+import com.hanhy06.fancy_chat.config.ConfigManager;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.CommandManager;
