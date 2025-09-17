@@ -1,7 +1,7 @@
-package com.hanhy06.fancy_chat.config;
+package com.hanhy06.embellish_chat.config;
 
 import com.google.gson.annotations.JsonAdapter;
-import com.hanhy06.fancy_chat.util.HexIntegerTypeAdapter;
+import com.hanhy06.embellish_chat.util.HexIntegerTypeAdapter;
 
 public record ConfigData(
         boolean textPostProcessingEnabled,

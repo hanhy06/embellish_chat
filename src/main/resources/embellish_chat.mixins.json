@@ -1,6 +1,6 @@
 {
 	"required": true,
-	"package": "com.hanhy06.fancy_chat.mixin",
+	"package": "com.hanhy06.embellish_chat.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
 		"ServerPlayNetworkHandlerMixin"

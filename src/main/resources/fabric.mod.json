@@ -16,11 +16,11 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.hanhy06.fancy_chat.FancyChat"
+			"com.hanhy06.embellish_chat.EmbellishChat"
 		]
 	},
 	"mixins": [
-		"betterchat.mixins.json"
+      "embellish_chat.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.16.14",

@@ -1,9 +1,9 @@
-package com.hanhy06.fancy_chat;
+package com.hanhy06.embellish_chat;
 
-import com.hanhy06.fancy_chat.chat.ChatHandler;
-import com.hanhy06.fancy_chat.command.BetterChatCommand;
-import com.hanhy06.fancy_chat.config.ConfigManager;
-import com.hanhy06.fancy_chat.chat.processor.Mention;
+import com.hanhy06.embellish_chat.chat.ChatHandler;
+import com.hanhy06.embellish_chat.command.BetterChatCommand;
+import com.hanhy06.embellish_chat.config.ConfigManager;
+import com.hanhy06.embellish_chat.chat.processor.Mention;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 
-public class FancyChat implements ModInitializer {
-	public static final String MOD_ID = "fancy_chat";
+public class EmbellishChat implements ModInitializer {
+	public static final String MOD_ID = "embellish_chat";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     private static ConfigManager configManager;
@@ -27,7 +27,7 @@ public class FancyChat implements ModInitializer {
 	public void onInitialize() {
 		LOGGER.info("{} initializing...", MOD_ID);
 
-		ServerLifecycleEvents.SERVER_STARTED.register(FancyChat::handleServerStart);
+		ServerLifecycleEvents.SERVER_STARTED.register(EmbellishChat::handleServerStart);
 
 		BetterChatCommand.registerBetterChatCommand();
 	}

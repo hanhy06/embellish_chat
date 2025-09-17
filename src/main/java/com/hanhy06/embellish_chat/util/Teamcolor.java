@@ -1,6 +1,6 @@
-package com.hanhy06.fancy_chat.util;
+package com.hanhy06.embellish_chat.util;
 
-import com.hanhy06.fancy_chat.config.ConfigManager;
+import com.hanhy06.embellish_chat.config.ConfigManager;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Formatting;

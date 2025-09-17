@@ -1,9 +1,9 @@
-package com.hanhy06.fancy_chat.config;
+package com.hanhy06.embellish_chat.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.hanhy06.fancy_chat.FancyChat;
+import com.hanhy06.embellish_chat.EmbellishChat;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -16,7 +16,7 @@ import java.nio.file.StandardOpenOption;
 public class ConfigManager {
     public static ConfigManager INSTANCE;
 
-    private final String configFileName = "FancyChat.json";
+    private final String configFileName = EmbellishChat.MOD_ID+".json";
     private final Path configFilePath;
     public ConfigData config = ConfigData.createDefault();
 
@@ -32,7 +32,7 @@ public class ConfigManager {
                 Files.createFile(configFilePath);
                 writeConfig();
             } catch (IOException e) {
-                FancyChat.LOGGER.info("Failed to read config file. Using default config settings.");
+                EmbellishChat.LOGGER.info("Failed to read config file. Using default config settings.");
             }
         }
     }
@@ -42,20 +42,20 @@ public class ConfigManager {
             ConfigData loaded = gson.fromJson(reader, ConfigData.class);
             if (loaded != null) {
                 config = loaded;
-                FancyChat.LOGGER.debug("Config loaded successfully.");
+                EmbellishChat.LOGGER.debug("Config loaded successfully.");
             } else {
                 config = ConfigData.createDefault();
-                FancyChat.LOGGER.warn("Config file is empty or invalid. Using default values.");
+                EmbellishChat.LOGGER.warn("Config file is empty or invalid. Using default values.");
             }
         } catch (IOException e) {
             config = ConfigData.createDefault();
-            FancyChat.LOGGER.error("Failed to read config file: {}. Using default values.", configFilePath, e);
+            EmbellishChat.LOGGER.error("Failed to read config file: {}. Using default values.", configFilePath, e);
         } catch (JsonSyntaxException e) {
             config = ConfigData.createDefault();
-            FancyChat.LOGGER.error("Failed to parse config file: {}. Check JSON syntax. Using default values.", configFilePath, e);
+            EmbellishChat.LOGGER.error("Failed to parse config file: {}. Check JSON syntax. Using default values.", configFilePath, e);
         } catch (Exception e) {
             config = ConfigData.createDefault();
-            FancyChat.LOGGER.error("Unexpected error loading config file: {}. Using default values.", configFilePath, e);
+            EmbellishChat.LOGGER.error("Unexpected error loading config file: {}. Using default values.", configFilePath, e);
         }
     }
 
@@ -63,11 +63,11 @@ public class ConfigManager {
         try (BufferedWriter writer = Files.newBufferedWriter(configFilePath, StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
             gson.toJson(config, writer);
-            FancyChat.LOGGER.debug("Config saved successfully to {}", configFilePath);
+            EmbellishChat.LOGGER.debug("Config saved successfully to {}", configFilePath);
         } catch (IOException e) {
-            FancyChat.LOGGER.error("Failed to write config file: {}", configFilePath, e);
+            EmbellishChat.LOGGER.error("Failed to write config file: {}", configFilePath, e);
         } catch (Exception e) {
-            FancyChat.LOGGER.error("Unexpected error saving config file: {}", configFilePath, e);
+            EmbellishChat.LOGGER.error("Unexpected error saving config file: {}", configFilePath, e);
         }
     }
 }

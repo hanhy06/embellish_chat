@@ -1,6 +1,6 @@
-package com.hanhy06.fancy_chat.command;
+package com.hanhy06.embellish_chat.command;
 
-import com.hanhy06.fancy_chat.config.ConfigManager;
+import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.CommandManager;

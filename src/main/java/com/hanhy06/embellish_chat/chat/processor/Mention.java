@@ -1,8 +1,8 @@
-package com.hanhy06.fancy_chat.chat.processor;
+package com.hanhy06.embellish_chat.chat.processor;
 
-import com.hanhy06.fancy_chat.config.ConfigManager;
-import com.hanhy06.fancy_chat.data.Receiver;
-import com.hanhy06.fancy_chat.util.Teamcolor;
+import com.hanhy06.embellish_chat.config.ConfigManager;
+import com.hanhy06.embellish_chat.data.Receiver;
+import com.hanhy06.embellish_chat.util.Teamcolor;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.registry.Registries;

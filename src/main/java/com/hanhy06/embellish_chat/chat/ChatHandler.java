@@ -1,10 +1,10 @@
-package com.hanhy06.fancy_chat.chat;
+package com.hanhy06.embellish_chat.chat;
 
-import com.hanhy06.fancy_chat.chat.processor.Mention;
-import com.hanhy06.fancy_chat.chat.processor.StyledTextProcessor;
-import com.hanhy06.fancy_chat.config.ConfigData;
-import com.hanhy06.fancy_chat.config.ConfigManager;
-import com.hanhy06.fancy_chat.data.Receiver;
+import com.hanhy06.embellish_chat.chat.processor.Mention;
+import com.hanhy06.embellish_chat.chat.processor.StyledTextProcessor;
+import com.hanhy06.embellish_chat.config.ConfigData;
+import com.hanhy06.embellish_chat.config.ConfigManager;
+import com.hanhy06.embellish_chat.data.Receiver;
 import net.minecraft.network.message.FilterMask;
 import net.minecraft.network.message.MessageBody;
 import net.minecraft.network.message.MessageLink;
