@@ -5,11 +5,13 @@ import com.hanhy06.embellish_chat.data.Receiver;
 import com.hanhy06.embellish_chat.util.Metadata;
 import com.hanhy06.embellish_chat.util.Teamcolor;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
 import java.awt.*;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -22,6 +24,7 @@ public class StyledTextProcessor {
     private static final Pattern STRIKETHROUGH = Pattern.compile("(?<!\\\\)~~(.+?)~~");
     private static final Pattern OBFUSCATED = Pattern.compile("(?<!\\\\)\\|\\|(.+?)\\|\\|");
     private static final Pattern COLOR = Pattern.compile("(?<!\\\\)(#[0-9A-Fa-f]{6})(.+?)#");
+    private static final Pattern WEBSITE = Pattern.compile("(?<!\\\\)(\\[(.+?)])\\((https?:\\/\\/[^)]+)\\)");
 
     public static MutableText applyStyles(MutableText context, List<Receiver> receivers){
         if (context == null || context.getString().isBlank()) return context;
@@ -30,6 +33,7 @@ public class StyledTextProcessor {
 
         result = applyStyledMention(result,receivers);
         result = applyStyledColor(result);
+        result = applyStyledWebsite(result);
         result = applyStyledPattern(BOLD,result,Style.EMPTY.withBold(true));
         result = applyStyledPattern(UNDERLINE,result,Style.EMPTY.withUnderline(true));
         result = applyStyledPattern(ITALIC,result,Style.EMPTY.withItalic(true));
@@ -43,8 +47,6 @@ public class StyledTextProcessor {
     private static MutableText applyStyledPattern(Pattern pattern, MutableText context, Style style){
         String str = context.getString();
         Matcher matcher = pattern.matcher(str);
-
-        if (!matcher.find()) return context;
 
         MutableText result = Text.empty();
         int lastEnd = 0;
@@ -67,8 +69,6 @@ public class StyledTextProcessor {
         String str = context.getString();
         Matcher matcher = COLOR.matcher(str);
 
-        if (!matcher.find()) return context;
-
         MutableText result = Text.empty();
         int lastEnd = 0;
 
@@ -80,8 +80,7 @@ public class StyledTextProcessor {
             result.append(
                     substring(context, matcher.start(2), matcher.end(2))
                             .fillStyle(
-                                    Style.EMPTY.withColor(color.getRGB()
-                                    )
+                                    Style.EMPTY.withColor(color.getRGB())
                     )
             );
             lastEnd = matcher.end();
@@ -92,9 +91,31 @@ public class StyledTextProcessor {
         return result;
     }
 
-    private static MutableText applyStyledMention(MutableText context, List<Receiver> receivers){
-        if(receivers == null || receivers.isEmpty()) return  context;
+    private static MutableText applyStyledWebsite(MutableText context) {
+        String str = context.getString();
+        Matcher matcher = WEBSITE.matcher(str);
 
+        MutableText result = Text.empty();
+        int lastEnd = 0;
+
+        while (matcher.find()) {
+            ClickEvent clickEvent = new ClickEvent.OpenUrl(URI.create(matcher.group(3)));
+
+            result.append(substring(context, lastEnd, matcher.start()));
+            result.append(
+                    substring(context, matcher.start(2), matcher.end(2))
+                            .fillStyle(Style.EMPTY
+                                    .withClickEvent(clickEvent)
+                                    .withColor(0x0000EE)
+                            )
+            );
+            lastEnd = matcher.end();
+        }
+
+        result.append(substring(context, lastEnd, str.length()));
+        return result;
+    }
+    private static MutableText applyStyledMention(MutableText context, List<Receiver> receivers){
         MutableText result = Text.empty();
         int lastEnd = 0;
 

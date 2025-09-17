@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.hanhy06.embellish_chat.EmbellishChat;
+import com.hanhy06.embellish_chat.data.Config;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -18,7 +19,7 @@ public class ConfigManager {
 
     private final String configFileName = EmbellishChat.MOD_ID+".json";
     private final Path configFilePath;
-    public ConfigData config = ConfigData.createDefault();
+    public Config config = Config.createDefault();
 
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -39,22 +40,22 @@ public class ConfigManager {
 
     public void readConfig(){
         try (BufferedReader reader = Files.newBufferedReader(configFilePath, StandardCharsets.UTF_8)) {
-            ConfigData loaded = gson.fromJson(reader, ConfigData.class);
+            Config loaded = gson.fromJson(reader, Config.class);
             if (loaded != null) {
                 config = loaded;
                 EmbellishChat.LOGGER.debug("Config loaded successfully.");
             } else {
-                config = ConfigData.createDefault();
+                config = Config.createDefault();
                 EmbellishChat.LOGGER.warn("Config file is empty or invalid. Using default values.");
             }
         } catch (IOException e) {
-            config = ConfigData.createDefault();
+            config = Config.createDefault();
             EmbellishChat.LOGGER.error("Failed to read config file: {}. Using default values.", configFilePath, e);
         } catch (JsonSyntaxException e) {
-            config = ConfigData.createDefault();
+            config = Config.createDefault();
             EmbellishChat.LOGGER.error("Failed to parse config file: {}. Check JSON syntax. Using default values.", configFilePath, e);
         } catch (Exception e) {
-            config = ConfigData.createDefault();
+            config = Config.createDefault();
             EmbellishChat.LOGGER.error("Unexpected error loading config file: {}. Using default values.", configFilePath, e);
         }
     }

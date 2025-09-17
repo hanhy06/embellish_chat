@@ -2,7 +2,7 @@ package com.hanhy06.embellish_chat.chat;
 
 import com.hanhy06.embellish_chat.chat.processor.Mention;
 import com.hanhy06.embellish_chat.chat.processor.StyledTextProcessor;
-import com.hanhy06.embellish_chat.config.ConfigData;
+import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.data.Receiver;
 import net.minecraft.network.message.FilterMask;
@@ -17,24 +17,24 @@ import java.util.List;
 import java.util.UUID;
 
 public class ChatHandler {
-    private ConfigData configData;
+    private Config config;
     private final Mention mention;
 
     public ChatHandler(Mention mention) {
         this.mention = mention;
-        this.configData = ConfigManager.INSTANCE.config;
+        this.config = ConfigManager.INSTANCE.config;
     }
 
     public SignedMessage handleChatMessage(ServerPlayerEntity sender, SignedMessage original){
         MutableText message = MutableText.of(original.getContent().getContent());
 
         List<Receiver> receivers = new ArrayList<>();
-        if (configData.mentionEnabled()) {
+        if (config.mentionEnabled()) {
             receivers = mention.mentionParser(original.getContent().getString());
             mention.mentionBroadcast(sender,receivers);
         }
 
-        if (configData.textPostProcessingEnabled()){
+        if (config.textPostProcessingEnabled()){
             message = StyledTextProcessor.applyStyles(message,receivers);
         }
 

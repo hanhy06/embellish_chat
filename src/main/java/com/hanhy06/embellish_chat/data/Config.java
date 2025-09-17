@@ -1,16 +1,16 @@
-package com.hanhy06.embellish_chat.config;
+package com.hanhy06.embellish_chat.data;
 
 import com.google.gson.annotations.JsonAdapter;
 import com.hanhy06.embellish_chat.util.HexIntegerTypeAdapter;
 
-public record ConfigData(
+public record Config(
         boolean textPostProcessingEnabled,
         boolean mentionEnabled,
         @JsonAdapter(HexIntegerTypeAdapter.class) int defaultMentionColor,
         String defaultMentionSound)
 {
-    public static ConfigData createDefault(){
-        return new ConfigData(
+    public static Config createDefault(){
+        return new Config(
                 true,
                 true,
                 0xFFFF55,
