@@ -1,7 +1,7 @@
 package com.hanhy06.embellish_chat;
 
 import com.hanhy06.embellish_chat.chat.ChatHandler;
-import com.hanhy06.embellish_chat.command.BetterChatCommand;
+import com.hanhy06.embellish_chat.command.EmbellishChatCommand;
 import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.chat.processor.Mention;
 import net.fabricmc.api.ModInitializer;
@@ -22,6 +22,7 @@ public class EmbellishChat implements ModInitializer {
     private static PlayerManager playerManager;
 	private static Mention mention;
 	private static ChatHandler chatHandler;
+    private static MinecraftServer server;
 
     @Override
 	public void onInitialize() {
@@ -29,7 +30,7 @@ public class EmbellishChat implements ModInitializer {
 
 		ServerLifecycleEvents.SERVER_STARTED.register(EmbellishChat::handleServerStart);
 
-		BetterChatCommand.registerBetterChatCommand();
+		EmbellishChatCommand.registerBetterChatCommand();
 	}
 
 	private static void handleServerStart(MinecraftServer server) {
@@ -39,6 +40,9 @@ public class EmbellishChat implements ModInitializer {
 		playerManager = server.getPlayerManager();
 		mention = new Mention(server.getPlayerManager(),server.getUserCache());
 		chatHandler = new ChatHandler(mention);
+        EmbellishChat.server = server;
+
+//        server.
 
 		configManager.readConfig();
 
@@ -50,4 +54,8 @@ public class EmbellishChat implements ModInitializer {
 	public static PlayerManager getPlayerManager() {
 		return playerManager;
 	}
+
+    public static MinecraftServer getServer(){
+        return server;
+    }
 }

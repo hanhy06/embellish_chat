@@ -24,8 +24,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Mention {
-    private final PlayerManager manager;
-    private final UserCache userCache;
+    private PlayerManager manager;
+    private UserCache userCache;
 
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{1,16})(?=\\b|$)");
 
@@ -44,7 +44,7 @@ public class Mention {
                     .append(Text.literal(" mentioned you").fillStyle(Style.EMPTY.withBold(false).withColor(Formatting.WHITE)));
 
             if(player != null){
-                RegistryEntry<SoundEvent> mentionSound = RegistryEntry.of(Registries.SOUND_EVENT.get(Identifier.of(ConfigManager.INSTANCE.config.defaultMentionSound())));
+                RegistryEntry<SoundEvent> mentionSound = RegistryEntry.of(Registries.SOUND_EVENT.get(Identifier.of(ConfigManager.getConfig().defaultMentionSound())));
                 player.networkHandler.sendPacket(
                         new PlaySoundS2CPacket(
                                 mentionSound,

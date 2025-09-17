@@ -1,6 +1,7 @@
 package com.hanhy06.embellish_chat.chat.processor;
 
 import com.hanhy06.embellish_chat.EmbellishChat;
+import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.data.Receiver;
 import com.hanhy06.embellish_chat.util.Metadata;
 import com.hanhy06.embellish_chat.util.Teamcolor;
@@ -31,7 +32,7 @@ public class StyledTextProcessor {
 
         MutableText result = context;
 
-         result = applyStyledOpenURI(result);
+        if(ConfigManager.getConfig().openUriEnabled()) result = applyStyledOpenURI(result);
 
         result = applyStyledMention(result,receivers);
         result = applyStyledColor(result);

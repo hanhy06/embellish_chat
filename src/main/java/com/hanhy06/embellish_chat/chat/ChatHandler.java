@@ -17,15 +17,15 @@ import java.util.List;
 import java.util.UUID;
 
 public class ChatHandler {
-    private Config config;
     private final Mention mention;
 
     public ChatHandler(Mention mention) {
         this.mention = mention;
-        this.config = ConfigManager.INSTANCE.config;
     }
 
     public SignedMessage handleChatMessage(ServerPlayerEntity sender, SignedMessage original){
+        Config config = ConfigManager.getConfig();
+
         MutableText message = MutableText.of(original.getContent().getContent());
 
         List<Receiver> receivers = new ArrayList<>();

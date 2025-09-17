@@ -7,15 +7,15 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
-public class BetterChatCommand {
+public class EmbellishChatCommand {
     public static void registerBetterChatCommand(){
         CommandRegistrationCallback.EVENT.register(
                 (commandDispatcher, commandRegistryAccess, registrationEnvironment) -> {
                     commandDispatcher.register(
-                            CommandManager.literal("betterchat")
+                            CommandManager.literal("embellish_chat")
                                     .then(
                                             CommandManager.literal("reload")
-                                                    .executes(BetterChatCommand::executeReloadConfig)
+                                                    .executes(EmbellishChatCommand::executeReloadConfig)
                                     )
                     );
                 }
@@ -24,7 +24,7 @@ public class BetterChatCommand {
 
     private static int executeReloadConfig(CommandContext<ServerCommandSource> context) {
         ConfigManager.INSTANCE.readConfig();
-        context.getSource().sendFeedback(()-> Text.literal("better chat mod config loaded"),true);
+        context.getSource().sendFeedback(()-> Text.literal("embellish chat mod config loaded"),true);
         return 1;
     }
 }

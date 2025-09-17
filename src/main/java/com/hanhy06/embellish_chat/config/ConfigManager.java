@@ -19,9 +19,13 @@ public class ConfigManager {
 
     private final String configFileName = EmbellishChat.MOD_ID+".json";
     private final Path configFilePath;
-    public Config config = Config.createDefault();
+    private Config config = Config.createDefault();
 
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+    public static Config getConfig(){
+        return INSTANCE.config;
+    }
 
     public ConfigManager(Path configDirPath){
         INSTANCE = this;
