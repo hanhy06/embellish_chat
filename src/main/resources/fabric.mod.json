@@ -1,9 +1,9 @@
 {
 	"schemaVersion": 1,
-	"id": "betterchat",
+	"id": "embellish_chat",
 	"version": "1.1.0",
-	"name": "BetterChat",
-	"description": "BetterChat Mode made by hanhy06",
+	"name": "EmbellishChat",
+	"description": "EmbellishChat Mode made by hanhy06",
 	"authors": [
 		"hanhy06"
 	],
@@ -12,7 +12,7 @@
 		"sources": "https://github.com/hanhy06/better-chat"
 	},
 	"license": "CC BY",
-	"icon": "assets/betterchat/icon/icon.png",
+	"icon": "assets/embellish_chat/icon/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
