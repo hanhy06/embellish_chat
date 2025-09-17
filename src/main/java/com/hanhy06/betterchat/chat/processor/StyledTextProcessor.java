@@ -99,7 +99,7 @@ public class StyledTextProcessor {
         int lastEnd = 0;
 
         for (Receiver receiver: receivers){
-            ServerPlayerEntity player = BetterChat.getManager().getPlayer(receiver.profile().getId());
+            ServerPlayerEntity player = BetterChat.getPlayerManager().getPlayer(receiver.profile().getId());
 
             result.append(substring(context,lastEnd, receiver.begin()));
             result.append(

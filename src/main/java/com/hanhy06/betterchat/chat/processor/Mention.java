@@ -1,7 +1,6 @@
 package com.hanhy06.betterchat.chat.processor;
 
 import com.hanhy06.betterchat.config.ConfigData;
-import com.hanhy06.betterchat.config.ConfigLoadedListener;
 import com.hanhy06.betterchat.data.Receiver;
 import com.hanhy06.betterchat.util.Teamcolor;
 import com.mojang.authlib.GameProfile;
@@ -24,7 +23,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Mention implements ConfigLoadedListener {
+public class Mention {
     private final PlayerManager manager;
     private final UserCache userCache;
 
@@ -82,11 +81,6 @@ public class Mention implements ConfigLoadedListener {
         }
 
         return  unit;
-    }
-
-    @Override
-    public void onConfigLoaded(ConfigData newConfigData) {
-        mentionNotificationSound = RegistryEntry.of(Registries.SOUND_EVENT.get(Identifier.of(newConfigData.defaultMentionSound())));
     }
 
     private record Unit(

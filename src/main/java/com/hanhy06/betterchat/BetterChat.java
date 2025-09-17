@@ -6,9 +6,9 @@ import com.hanhy06.betterchat.config.ConfigManager;
 import com.hanhy06.betterchat.chat.processor.Mention;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
-import net.minecraft.util.WorldSavePath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +18,8 @@ public class BetterChat implements ModInitializer {
 	public static final String MOD_ID = "betterchat";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    private static PlayerManager manager;
+    private static ConfigManager configManager;
+    private static PlayerManager playerManager;
 	private static Mention mention;
 	private static ChatHandler chatHandler;
 
@@ -33,27 +34,25 @@ public class BetterChat implements ModInitializer {
 	}
 
 	private static void handleServerStart(MinecraftServer server) {
-        Path modDirPath = server.getSavePath(WorldSavePath.ROOT).getParent();
+        Path fabricConfigDirPath = FabricLoader.getInstance().getConfigDir();
 
-		manager = server.getPlayerManager();
+        configManager = new ConfigManager(fabricConfigDirPath);
+		playerManager = server.getPlayerManager();
 		mention = new Mention(server.getPlayerManager(),server.getUserCache());
 		chatHandler = new ChatHandler(mention);
 
-		ConfigManager.listenersClear();
-		ConfigManager.configDataLoadedEvents(mention);
-		ConfigManager.configDataLoadedEvents(chatHandler);
-        ConfigManager.handleServerStart(modDirPath);
+		configManager.readConfig();
 
 		LOGGER.info("{} initialized successfully.", MOD_ID);
 	}
 
 	private static void handleServerStop(MinecraftServer server){
-		ConfigManager.handleServerStop();
+		configManager.writeConfig();
 	}
 
 	public static ChatHandler getChatHandler() { return chatHandler; }
 
-	public static PlayerManager getManager() {
-		return manager;
+	public static PlayerManager getPlayerManager() {
+		return playerManager;
 	}
 }

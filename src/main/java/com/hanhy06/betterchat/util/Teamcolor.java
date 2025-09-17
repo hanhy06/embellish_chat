@@ -17,6 +17,6 @@ public class Teamcolor {
             }
         }
 
-        return ConfigManager.getConfigData().defaultMentionColor();
+        return ConfigManager.INSTANCE.config.defaultMentionColor();
     }
 }

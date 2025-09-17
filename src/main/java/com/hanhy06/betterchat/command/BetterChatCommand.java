@@ -23,7 +23,7 @@ public class BetterChatCommand {
     }
 
     private static int executeReloadConfig(CommandContext<ServerCommandSource> context) {
-        ConfigManager.loadConfig();
+        ConfigManager.INSTANCE.readConfig();
         context.getSource().sendFeedback(()-> Text.literal("better chat mod config loaded"),true);
         return 1;
     }
