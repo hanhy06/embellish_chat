@@ -26,8 +26,11 @@ public class Teamcolor {
             Team team = scoreboard.getTeam(teamName);
             if (team != null) {
                 Formatting formatting = team.getColor();
-                if (formatting != null && formatting.isColor() && formatting != Formatting.RESET) {
+                boolean belongTeam = team.getPlayerList().contains(name);
+                if (formatting != null && formatting.isColor() && formatting != Formatting.RESET && belongTeam) {
                     return formatting.getColorValue().intValue();
+                } else if (belongTeam) {
+                    return ConfigManager.getConfig().defaultMentionColor();
                 }
             }
         }

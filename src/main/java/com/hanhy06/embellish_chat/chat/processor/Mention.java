@@ -47,11 +47,11 @@ public class Mention {
         }
     }
 
-    public static List<Receiver> mentionParser(UserCache userCache,String originalMessage){
+    public static List<Receiver> mentionParser(UserCache userCache,String raw){
         List<Receiver> receivers = new ArrayList<>();
-        if(originalMessage == null || !originalMessage.contains("@")) return receivers;
+        if(raw == null || !raw.contains("@")) return receivers;
 
-        for (Unit unit : nameParser(originalMessage)){
+        for (Unit unit : nameParser(raw)){
             Optional<GameProfile> profile = userCache.findByName(unit.name);
 
             if(profile.isEmpty()) continue;
@@ -62,10 +62,10 @@ public class Mention {
         return receivers;
     }
 
-    private static List<Unit> nameParser(String originalMessage){
+    private static List<Unit> nameParser(String raw){
         List<Unit> unit = new ArrayList<>();
 
-        Matcher matcher = MENTION_PATTERN.matcher(originalMessage);
+        Matcher matcher = MENTION_PATTERN.matcher(raw);
 
         while (matcher.find()){
             unit.add(new Unit(
