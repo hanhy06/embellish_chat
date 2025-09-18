@@ -1,6 +1,9 @@
 package com.hanhy06.embellish_chat.util;
 
-import net.minecraft.text.*;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 
 public class Metadata {
     public static MutableText metadata(MutableText context){
