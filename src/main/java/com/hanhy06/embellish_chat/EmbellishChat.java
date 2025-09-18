@@ -20,7 +20,6 @@ public class EmbellishChat implements ModInitializer {
 
     private static ConfigManager configManager;
 	private static ChatHandler chatHandler;
-    private static MinecraftServer server;
 
     @Override
 	public void onInitialize() {
@@ -39,14 +38,8 @@ public class EmbellishChat implements ModInitializer {
         chatHandler = new ChatHandler();
         configManager.addListener(chatHandler);
 
-        EmbellishChat.server = server;
-
 		configManager.readConfig();
 
 		LOGGER.info("{} initialized successfully.", MOD_ID);
 	}
-
-    public static MinecraftServer getServer(){
-        return server;
-    }
 }

@@ -53,6 +53,7 @@ public class Mention {
 
     public static List<Receiver> mentionParser(UserCache userCache,String originalMessage){
         List<Receiver> receivers = new ArrayList<>();
+        if(originalMessage == null || !originalMessage.contains("@")) return receivers;
 
         for (Unit unit : nameParser(originalMessage)){
             Optional<GameProfile> profile = userCache.findByName(unit.name);
@@ -67,7 +68,6 @@ public class Mention {
 
     private static List<Unit> nameParser(String originalMessage){
         List<Unit> unit = new ArrayList<>();
-        if(originalMessage == null || !originalMessage.contains("@")) return unit;
 
         Matcher matcher = MENTION_PATTERN.matcher(originalMessage);
 
