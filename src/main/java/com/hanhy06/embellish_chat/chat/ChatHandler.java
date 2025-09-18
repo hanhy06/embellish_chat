@@ -44,11 +44,11 @@ public class ChatHandler implements ConfigListener {
         if (config.mentionEnabled()) {
             receivers = Mention.mentionParser(server.getUserCache(), raw)
                     .stream()
-                    .map(r -> new Receiver(
-                            r.profile(),
-                            r.begin(),
-                            r.end(),
-                            resolveTeamColor(manager, server, r.profile().getId(), r.profile().getName())
+                    .map(receiver-> new Receiver(
+                            receiver.profile(),
+                            receiver.begin(),
+                            receiver.end(),
+                            resolveTeamColor(manager, server, receiver.profile().getId(), receiver.profile().getName())
                     ))
                     .collect(Collectors.toList());
 
@@ -58,8 +58,7 @@ public class ChatHandler implements ConfigListener {
         }
 
         if (config.textPostProcessingEnabled()) {
-            message = StyledTextProcessor.applyStyles(message, receivers);
-            mentionSound = RegistryEntry.of(Registries.SOUND_EVENT.get(Identifier.of(config.defaultMentionSound())));
+            message = StyledTextProcessor.applyStyles(config,message, receivers);
         }
 
         return original.withUnsignedContent(message);
@@ -68,6 +67,7 @@ public class ChatHandler implements ConfigListener {
     @Override
     public void onConfigReload(Config newConfig) {
         config = newConfig;
+        mentionSound = RegistryEntry.of(Registries.SOUND_EVENT.get(Identifier.of(config.defaultMentionSound())));
     }
 
     private static int resolveTeamColor(

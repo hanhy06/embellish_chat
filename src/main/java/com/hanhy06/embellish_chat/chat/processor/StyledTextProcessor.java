@@ -1,11 +1,8 @@
 package com.hanhy06.embellish_chat.chat.processor;
 
-import com.hanhy06.embellish_chat.EmbellishChat;
-import com.hanhy06.embellish_chat.config.ConfigManager;
+import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
 import com.hanhy06.embellish_chat.util.Metadata;
-import com.hanhy06.embellish_chat.util.Teamcolor;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -27,12 +24,12 @@ public class StyledTextProcessor {
     private static final Pattern COLOR = Pattern.compile("(?<!\\\\)(#[0-9A-Fa-f]{6})(.+?)#");
     private static final Pattern OPEN_URI = Pattern.compile("(?<!\\\\)(\\[(.+?)])\\((https?:\\/\\/[^)]+)\\)");
 
-    public static MutableText applyStyles(MutableText context, List<Receiver> receivers){
+    public static MutableText applyStyles(Config config, MutableText context, List<Receiver> receivers){
         if (context == null || context.getString().isBlank()) return context;
 
         MutableText result = context;
 
-        if(ConfigManager.getConfig().openUriEnabled()) result = applyStyledOpenURI(result);
+        if(config.openUriEnabled()) result = applyStyledOpenURI(result);
 
         result = applyStyledMention(result,receivers);
         result = applyStyledColor(result);
