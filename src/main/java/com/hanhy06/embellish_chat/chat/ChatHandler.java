@@ -35,25 +35,16 @@ public class ChatHandler implements ConfigListener {
 
     public SignedMessage handleChatMessage(ServerPlayerEntity sender, SignedMessage original){
         MinecraftServer server = sender.getServer();
-        PlayerManager manager = server.getPlayerManager();
 
         MutableText message = MutableText.of(original.getContent().getContent());
         String raw = original.getContent().getString();
 
         List<Receiver> receivers = new ArrayList<>();
         if (config.mentionEnabled()) {
-            receivers = Mention.mentionParser(server.getUserCache(), raw)
-                    .stream()
-                    .map(receiver-> new Receiver(
-                            receiver.profile(),
-                            receiver.begin(),
-                            receiver.end(),
-                            resolveTeamColor(manager, server, receiver.profile().getId(), receiver.profile().getName())
-                    ))
-                    .collect(Collectors.toList());
+            receivers = Mention.mentionParser(server, raw);
 
             if (!receivers.isEmpty()) {
-                Mention.broadcastMention(mentionSound, sender, receivers);
+                Mention.broadcastMention(config,mentionSound, sender, receivers);
             }
         }
 
@@ -68,16 +59,5 @@ public class ChatHandler implements ConfigListener {
     public void onConfigReload(Config newConfig) {
         config = newConfig;
         mentionSound = RegistryEntry.of(Registries.SOUND_EVENT.get(Identifier.of(config.defaultMentionSound())));
-    }
-
-    private static int resolveTeamColor(
-            PlayerManager manager,
-            MinecraftServer server,
-            UUID playerId,
-            String playerName
-    ) {
-        int color = Teamcolor.getPlayerColor(manager.getPlayer(playerId));
-        if (color != -1) return color;
-        return Teamcolor.getPlayerColor(server.getScoreboard(), playerName);
     }
 }

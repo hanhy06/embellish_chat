@@ -1,10 +1,12 @@
 package com.hanhy06.embellish_chat.chat.processor;
 
+import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
 import com.hanhy06.embellish_chat.util.Teamcolor;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -22,15 +24,17 @@ import java.util.regex.Pattern;
 public class Mention {
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{1,16})(?=\\b|$)");
 
-    public static void broadcastMention(RegistryEntry<SoundEvent> mentionSound,ServerPlayerEntity sender, List<Receiver> receivers){
+    public static void broadcastMention(Config config, RegistryEntry<SoundEvent> mentionSound, ServerPlayerEntity sender, List<Receiver> receivers){
         PlayerManager manager = sender.getServer().getPlayerManager();
 
         for (Receiver receiver : new HashSet<>(receivers)){
             UUID uuid = receiver.profile().getId();
             ServerPlayerEntity player = manager.getPlayer(uuid);
 
+            int teamColor = Teamcolor.getPlayerColor(sender);
+
             MutableText titleText = sender.getName().copy()
-                    .styled(style -> style.withColor(Teamcolor.getPlayerColor(sender)).withBold(true))
+                    .styled(style -> style.withColor((teamColor == -1) ? config.defaultMentionColor() : teamColor).withBold(true))
                     .append(Text.literal(" mentioned you").fillStyle(Style.EMPTY.withBold(false).withColor(Formatting.WHITE)));
 
             if(player != null){
@@ -47,16 +51,20 @@ public class Mention {
         }
     }
 
-    public static List<Receiver> mentionParser(UserCache userCache,String raw){
+    public static List<Receiver> mentionParser(MinecraftServer server, String originalMessage){
         List<Receiver> receivers = new ArrayList<>();
-        if(raw == null || !raw.contains("@")) return receivers;
+        if(originalMessage == null || !originalMessage.contains("@")) return receivers;
 
-        for (Unit unit : nameParser(raw)){
+        UserCache userCache = server.getUserCache();
+        PlayerManager playerManager = server.getPlayerManager();
+
+        for (Unit unit : nameParser(originalMessage)){
             Optional<GameProfile> profile = userCache.findByName(unit.name);
 
             if(profile.isEmpty()) continue;
 
-            receivers.add(new Receiver(profile.get(),unit.begin, unit.end,-1));
+            int teamColor = Teamcolor.decideTeamColor(playerManager, server, profile.get().getId(), profile.get().getName());
+            receivers.add(new Receiver(profile.get(), unit.begin, unit.end, teamColor));
         }
 
         return receivers;

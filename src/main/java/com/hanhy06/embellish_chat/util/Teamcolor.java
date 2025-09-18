@@ -3,8 +3,12 @@ package com.hanhy06.embellish_chat.util;
 import com.hanhy06.embellish_chat.config.ConfigManager;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.Team;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Formatting;
+
+import java.util.UUID;
 
 public class Teamcolor {
     public static int getPlayerColor(ServerPlayerEntity player){
@@ -36,5 +40,16 @@ public class Teamcolor {
         }
 
         return ConfigManager.getConfig().defaultMentionColor();
+    }
+
+    public static int decideTeamColor(
+            PlayerManager manager,
+            MinecraftServer server,
+            UUID playerId,
+            String playerName
+    ) {
+        int color = Teamcolor.getPlayerColor(manager.getPlayer(playerId));
+        if (color != -1) return color;
+        return Teamcolor.getPlayerColor(server.getScoreboard(), playerName);
     }
 }
