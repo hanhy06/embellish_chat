@@ -24,17 +24,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Mention {
-    private PlayerManager manager;
-    private UserCache userCache;
-
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{1,16})(?=\\b|$)");
 
-    public Mention(PlayerManager manager, UserCache userCache) {
-        this.manager = manager;
-        this.userCache = userCache;
-    }
+    public static void broadcastMention(RegistryEntry<SoundEvent> mentionSound,ServerPlayerEntity sender, List<Receiver> receivers){
+        PlayerManager manager = sender.getServer().getPlayerManager();
 
-    public void mentionBroadcast(ServerPlayerEntity sender,List<Receiver> receivers){
         for (Receiver receiver : new HashSet<>(receivers)){
             UUID uuid = receiver.profile().getId();
             ServerPlayerEntity player = manager.getPlayer(uuid);
@@ -44,7 +38,6 @@ public class Mention {
                     .append(Text.literal(" mentioned you").fillStyle(Style.EMPTY.withBold(false).withColor(Formatting.WHITE)));
 
             if(player != null){
-                RegistryEntry<SoundEvent> mentionSound = RegistryEntry.of(Registries.SOUND_EVENT.get(Identifier.of(ConfigManager.getConfig().defaultMentionSound())));
                 player.networkHandler.sendPacket(
                         new PlaySoundS2CPacket(
                                 mentionSound,
@@ -58,7 +51,7 @@ public class Mention {
         }
     }
 
-    public List<Receiver> mentionParser(String originalMessage){
+    public static List<Receiver> mentionParser(UserCache userCache,String originalMessage){
         List<Receiver> receivers = new ArrayList<>();
 
         for (Unit unit : nameParser(originalMessage)){
@@ -66,13 +59,13 @@ public class Mention {
 
             if(profile.isEmpty()) continue;
 
-            receivers.add(new Receiver(profile.get(),unit.begin, unit.end));
+            receivers.add(new Receiver(profile.get(),unit.begin, unit.end,-1));
         }
 
         return receivers;
     }
 
-    private List<Unit> nameParser(String originalMessage){
+    private static List<Unit> nameParser(String originalMessage){
         List<Unit> unit = new ArrayList<>();
         if(originalMessage == null || !originalMessage.contains("@")) return unit;
 

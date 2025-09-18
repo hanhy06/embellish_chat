@@ -24,6 +24,7 @@ public class EmbellishChatCommand {
 
     private static int executeReloadConfig(CommandContext<ServerCommandSource> context) {
         ConfigManager.INSTANCE.readConfig();
+        ConfigManager.INSTANCE.broadcastConfig();
         context.getSource().sendFeedback(()-> Text.literal("embellish chat mod config loaded"),true);
         return 1;
     }

@@ -19,8 +19,6 @@ public class EmbellishChat implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     private static ConfigManager configManager;
-    private static PlayerManager playerManager;
-	private static Mention mention;
 	private static ChatHandler chatHandler;
     private static MinecraftServer server;
 
@@ -37,22 +35,15 @@ public class EmbellishChat implements ModInitializer {
         Path fabricConfigDirPath = FabricLoader.getInstance().getConfigDir();
 
         configManager = new ConfigManager(fabricConfigDirPath);
-		playerManager = server.getPlayerManager();
-		mention = new Mention(server.getPlayerManager(),server.getUserCache());
-		chatHandler = new ChatHandler(mention);
-        EmbellishChat.server = server;
 
-//        server.
+        chatHandler = new ChatHandler();
+        configManager.addListener(chatHandler);
+
+        EmbellishChat.server = server;
 
 		configManager.readConfig();
 
 		LOGGER.info("{} initialized successfully.", MOD_ID);
-	}
-
-	public static ChatHandler getChatHandler() { return chatHandler; }
-
-	public static PlayerManager getPlayerManager() {
-		return playerManager;
 	}
 
     public static MinecraftServer getServer(){

@@ -117,18 +117,17 @@ public class StyledTextProcessor {
         result.append(substring(context, lastEnd, str.length()));
         return result;
     }
+
     private static MutableText applyStyledMention(MutableText context, List<Receiver> receivers){
         MutableText result = Text.empty();
         int lastEnd = 0;
 
         for (Receiver receiver: receivers){
-            ServerPlayerEntity player = EmbellishChat.getPlayerManager().getPlayer(receiver.profile().getId());
-
             result.append(substring(context,lastEnd, receiver.begin()));
             result.append(
                     substring(context, receiver.begin(), receiver.end())
                             .fillStyle(
-                                    Style.EMPTY.withColor(Teamcolor.getPlayerColor(player)).withBold(true)
+                                    Style.EMPTY.withColor(receiver.teamColor()).withBold(true)
                             )
             );
             lastEnd = receiver.end();

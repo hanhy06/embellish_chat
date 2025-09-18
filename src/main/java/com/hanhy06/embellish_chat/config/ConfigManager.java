@@ -13,6 +13,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConfigManager {
     public static ConfigManager INSTANCE;
@@ -20,6 +22,8 @@ public class ConfigManager {
     private final String configFileName = EmbellishChat.MOD_ID+".json";
     private final Path configFilePath;
     private Config config = Config.createDefault();
+
+    private List<ConfigListener> listeners = new ArrayList<>();
 
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -77,6 +81,16 @@ public class ConfigManager {
             EmbellishChat.LOGGER.error("Failed to write config file: {}", configFilePath, e);
         } catch (Exception e) {
             EmbellishChat.LOGGER.error("Unexpected error saving config file: {}", configFilePath, e);
+        }
+    }
+
+    public void addListener(ConfigListener listener){
+        listeners.add(listener);
+    }
+
+    public void broadcastConfig(){
+        for (ConfigListener listener : listeners){
+            listener.onConfigReload(config);
         }
     }
 }

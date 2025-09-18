@@ -20,13 +20,10 @@ public class Teamcolor {
             }
         }
 
-        return ConfigManager.getConfig().defaultMentionColor();
+        return -1;
     }
 
-    public static int getPlayerColor(String name){
-        MinecraftServer server = EmbellishChat.getServer();
-        Scoreboard scoreboard = server.getScoreboard();
-
+    public static int getPlayerColor(Scoreboard scoreboard,String name){
         for (String teamName : scoreboard.getTeamNames()){
             Team team = scoreboard.getTeam(teamName);
             if (team != null) {
