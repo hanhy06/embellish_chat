@@ -26,17 +26,17 @@ EmbellishChat is a Fabric mod designed to enhance the chat experience on Minecra
 
 Use the following formats in the chat window to apply various styles to your messages.
 
-| Feature           | Syntax              | Example                                                       | Result                                                      |
-|-------------------|---------------------|:--------------------------------------------------------------|-------------------------------------------------------------|
-| Bold              | `**Text**`          | `**Important Message**`                                       | **Important Message**                                       |
-| Italic            | `_Text_`            | `_A point I want to emphasize_`                               | _A point I want to emphasize_                               |
-| Underline         | `__Text__`          | `__This looks like a link__`                                  | __This looks like a link__                                  |
-| Strike            | `~~Text~~`          | `~~This content is outdated~~`                                | ~~This content is outdated~~                                |
-| Obfuscated        | `\|\|Text\|\|`      | `\|\|This will be unreadable\|\|`                             | ajsabjkdbakb                                                |
-| Color             | `#HexCodeText#`     | `#FF5555Hello World#`                                         | <span style="color:#FF5555;">Hello World</span>             |
-| Link              | `[Text](URL)`       | `Download it [here](https://modrinth.com/mod/embellish_chat)` | Download it [here](https://modrinth.com/mod/embellish_chat) |
-| Mention           | `@PlayerName`       | `Hello, @Player492!`                                          | Hello, <span style="color:#FFFF55;">**@Player492**</span>!  |
-| Escape Formatting | Use a backslash `\` | `This is not \**bold**.`                                      | This is not \**bold**.                                      |
+| Feature           | Syntax              | Example                                                       | Result                                                                                                                       |
+|-------------------|---------------------|:--------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
+| Bold              | `**Text**`          | `**Important Message**`                                       | ![Bold](https://raw.githubusercontent.com/hanhy06/embellish_chat/blob/master/docs/images/Bold.png)                           |
+| Italic            | `_Text_`            | `_A point I want to emphasize_`                               | ![Italic](https://raw.githubusercontent.com/hanhy06/embellish_chat/blob/master/docs/images/Italic.png)                       |
+| Underline         | `__Text__`          | `__This looks like a link__`                                  | ![Underline](https://raw.githubusercontent.com/hanhy06/embellish_chat/blob/master/docs/images/Underline.png)                 |
+| Strike            | `~~Text~~`          | `~~This content is outdated~~`                                | ![Strike](https://raw.githubusercontent.com/hanhy06/embellish_chat/blob/master/docs/images/Strike.png)                       |
+| Obfuscated        | `\|\|Text\|\|`      | `\|\|This will be unreadable\|\|`                             | ![Obfuscated](https://raw.githubusercontent.com/hanhy06/embellish_chat/blob/master/docs/images/Obfuscated.png)               |
+| Color             | `#HexCodeText#`     | `#FF5555Hello World#`                                         | ![Color](https://raw.githubusercontent.com/hanhy06/embellish_chat/blob/master/docs/images/Color.png)                         |
+| Link              | `[Text](URL)`       | `Download it [here](https://modrinth.com/mod/embellish_chat)` | ![Link](https://raw.githubusercontent.com/hanhy06/embellish_chat/blob/master/docs/images/Link.png)                           |
+| Mention           | `@PlayerName`       | `Hello, @Player492!`                                          | ![Mention](https://raw.githubusercontent.com/hanhy06/embellish_chat/blob/master/docs/images/Mention.png)                     |
+| Escape Formatting | Use a backslash `\` | `This is not \**bold**.`                                      | ![Escape_Formatting](https://raw.githubusercontent.com/hanhy06/embellish_chat/blob/master/docs/images/Escape_Formatting.png) |
 
 ---
 
