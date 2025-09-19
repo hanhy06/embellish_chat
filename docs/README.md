@@ -6,16 +6,6 @@ EmbellishChat is a Fabric mod designed to enhance the chat experience on Minecra
 
 * **Markdown-Style Chat Formatting:** Emphasize your messages with various text styles.
 
-  **Bold Text**
-
-  _Italic Text_
-
-  __Underlined Text__
-
-  ~~Strikethrough Text~~
-
-  ||obfuscated||
-
 * **HEX Color Code Support:** Freely apply any color to your text using the `#RRGGBB` format.
 
 * **Clickable Links:** Create clickable links in chat.
@@ -30,12 +20,7 @@ EmbellishChat is a Fabric mod designed to enhance the chat experience on Minecra
 
 * **Customizable by Server:** All major features can be enabled, disabled, or fine-tuned by server administrators via the `embellish_chat.json` file.
 
-💾 Installation
-
-1. Install the Fabric Loader.
-2. Download the Fabric API.
-3. Download the latest EmbellishChat mod `.jar` file.
-4. Place the downloaded Fabric API and EmbellishChat `.jar` files into your `.minecraft/mods` folder.
+---
 
 🛠️ Usage
 
@@ -43,15 +28,17 @@ Use the following formats in the chat window to apply various styles to your mes
 
 | Feature           | Syntax              | Example                                                       | Result                                                      |
 |-------------------|---------------------|:--------------------------------------------------------------|-------------------------------------------------------------|
-| **Bold**          | `**Text**`          | `**Important Message**`                                       | **Important Message**                                       |
-| *Italic*          | `_Text_`            | `_A point I want to emphasize_`                               | _A point I want to emphasize_                               |
-| **Underline**     | `__Text__`          | `__This looks like a link__`                                  | __This looks like a link__                                  |
-| ~~Strike~~        | `~~Text~~`          | `~~This content is outdated~~`                                | ~~This content is outdated~~                                |
-| obfuscated        | `\|\|Text\|\|`      | `This will be unreadable`                                     | ajsabjkdbakb                                                |
+| Bold              | `**Text**`          | `**Important Message**`                                       | **Important Message**                                       |
+| Italic            | `_Text_`            | `_A point I want to emphasize_`                               | _A point I want to emphasize_                               |
+| Underline         | `__Text__`          | `__This looks like a link__`                                  | __This looks like a link__                                  |
+| Strike            | `~~Text~~`          | `~~This content is outdated~~`                                | ~~This content is outdated~~                                |
+| Obfuscated        | `\|\|Text\|\|`      | `\|\|This will be unreadable\|\|`                             | ajsabjkdbakb                                                |
 | Color             | `#HexCodeText#`     | `#FF5555Hello World#`                                         | <span style="color:#FF5555;">Hello World</span>             |
 | Link              | `[Text](URL)`       | `Download it [here](https://modrinth.com/mod/embellish_chat)` | Download it [here](https://modrinth.com/mod/embellish_chat) |
 | Mention           | `@PlayerName`       | `Hello, @Player492!`                                          | Hello, <span style="color:#FFFF55;">**@Player492**</span>!  |
 | Escape Formatting | Use a backslash `\` | `This is not \**bold**.`                                      | This is not \**bold**.                                      |
+
+---
 
 ⚙️ Configuration
 
