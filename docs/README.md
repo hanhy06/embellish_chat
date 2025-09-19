@@ -68,7 +68,7 @@ You can find `embellish_chat.json` in your config folder.
 
 📜 License & Distribution
 
-This project is licensed under the **CC BY 4.0**.
+This project is licensed under the **Apache License 2.0**.
 
 To ensure everyone gets the latest and safest version, please download the mod from the official sources below. I would appreciate it if you link to these pages rather than re-hosting the files.
 
