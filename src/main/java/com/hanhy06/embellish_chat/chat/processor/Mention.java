@@ -2,7 +2,7 @@ package com.hanhy06.embellish_chat.chat.processor;
 
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
-import com.hanhy06.embellish_chat.util.Teamcolor;
+import com.hanhy06.embellish_chat.util.TeamColor;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -31,7 +31,7 @@ public class Mention {
             UUID uuid = receiver.profile().getId();
             ServerPlayerEntity player = manager.getPlayer(uuid);
 
-            int teamColor = Teamcolor.getPlayerColor(sender);
+            int teamColor = TeamColor.getPlayerColor(sender);
 
             MutableText titleText = sender.getName().copy()
                     .styled(style -> style.withColor((teamColor == -1) ? config.defaultMentionColor() : teamColor).withBold(true))
@@ -63,7 +63,7 @@ public class Mention {
 
             if(profile.isEmpty()) continue;
 
-            int teamColor = Teamcolor.decideTeamColor(playerManager, server, profile.get().getId(), profile.get().getName());
+            int teamColor = TeamColor.decideTeamColor(playerManager, server, profile.get().getId(), profile.get().getName());
             receivers.add(new Receiver(profile.get(), unit.begin, unit.end, teamColor));
         }
 

@@ -10,7 +10,7 @@ import net.minecraft.util.Formatting;
 
 import java.util.UUID;
 
-public class Teamcolor {
+public class TeamColor {
     public static int getPlayerColor(ServerPlayerEntity player){
         if (player != null) {
             Team team = player.getScoreboardTeam();
@@ -48,8 +48,8 @@ public class Teamcolor {
             UUID playerId,
             String playerName
     ) {
-        int color = Teamcolor.getPlayerColor(manager.getPlayer(playerId));
+        int color = TeamColor.getPlayerColor(manager.getPlayer(playerId));
         if (color != -1) return color;
-        return Teamcolor.getPlayerColor(server.getScoreboard(), playerName);
+        return TeamColor.getPlayerColor(server.getScoreboard(), playerName);
     }
 }

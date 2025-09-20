@@ -3,14 +3,10 @@ package com.hanhy06.embellish_chat.chat.processor;
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
 import com.hanhy06.embellish_chat.util.Metadata;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtString;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
 import java.awt.*;
 import java.net.URI;
@@ -33,6 +29,12 @@ public class StyledTextProcessor {
 
         MutableText result = context;
 
+        int textColor = config.defaultTextColor();
+        if(textColor > 0) {
+            result.fillStyle(Style.EMPTY.withColor(textColor));
+        } else if (textColor < 0) {
+            result = applyStyledRainbow(result);
+        }
         if(config.openUriEnabled()) result = applyStyledOpenURI(result);
 
         result = applyStyledMention(result,receivers);
@@ -135,6 +137,24 @@ public class StyledTextProcessor {
         }
 
         result.append(substring(context, lastEnd, context.getString().length()));
+
+        return result;
+    }
+
+    private static MutableText applyStyledRainbow(MutableText context){
+        MutableText result = Text.empty();
+
+        int length = context.getString().length();
+
+        for (int i = 0; i < length; i++) {
+            float hue = (float) i / length;
+            int rgb = Color.HSBtoRGB(hue, 1f, 1f);
+            result.append(
+                    substring(context, i, i+1).fillStyle(
+                            Style.EMPTY.withColor(rgb)
+                    )
+            );
+        }
 
         return result;
     }
