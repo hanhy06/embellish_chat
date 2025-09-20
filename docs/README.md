@@ -64,7 +64,7 @@ You can find `embellish_chat.json` in your config folder.
 * `mentionEnabled`: If `true`, enables the `@` mention feature.
 * `defaultMentionColor`: Sets the default HEX color for mentioned players who are not on a team. Example: `"0xFFFF55"` will color mentions in yello for non-team players.
 * `defaultMentionSound`: Sets the sound event ID to be played when a mention occurs. For example, `"minecraft:entity.experience_orb.pickup"` will play the experience orb sound.
-
+* `defaultTextColor` : Sets the text color on the server. If set to `0`, it will not be activated.
 ---
 
 📜 License & Distribution
