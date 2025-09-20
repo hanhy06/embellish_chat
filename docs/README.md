@@ -52,7 +52,8 @@ You can find `embellish_chat.json` in your config folder.
   "openUriEnabled": true,
   "mentionEnabled": true,
   "defaultMentionColor": "0xFFFF55",
-  "defaultMentionSound": "minecraft:entity.experience_orb.pickup"
+  "defaultMentionSound": "minecraft:entity.experience_orb.pickup",
+  "defaultTextColor": "-0x1"
 }
 ```
 
