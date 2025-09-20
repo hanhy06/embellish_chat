@@ -6,7 +6,8 @@
     "ServerPlayNetworkHandlerMixin"
   ],
   "client": [
-
+    "client.ChatHudMixin",
+    "client.ChatScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

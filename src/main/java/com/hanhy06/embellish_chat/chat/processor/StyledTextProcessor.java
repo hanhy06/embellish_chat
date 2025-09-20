@@ -3,10 +3,14 @@ package com.hanhy06.embellish_chat.chat.processor;
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
 import com.hanhy06.embellish_chat.util.Metadata;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 import java.awt.*;
 import java.net.URI;
@@ -22,7 +26,8 @@ public class StyledTextProcessor {
     private static final Pattern STRIKETHROUGH = Pattern.compile("(?<!\\\\)~~(.+?)~~");
     private static final Pattern OBFUSCATED = Pattern.compile("(?<!\\\\)\\|\\|(.+?)\\|\\|");
     private static final Pattern COLOR = Pattern.compile("(?<!\\\\)(#[0-9A-Fa-f]{6})(.+?)#");
-    private static final Pattern OPEN_URI = Pattern.compile("(?<!\\\\)(\\[(.+?)])\\((https?:\\/\\/[^)]+)\\)");
+    private static final Pattern OPEN_URI = Pattern.compile("(?<![\\\\!])(\\[(.+?)])\\((https?:\\/\\/[^)]+)\\)");
+    private static final Pattern RENDER_IMAGE = Pattern.compile("(?<!\\\\)(!\\[(.+?)])\\((https?:\\/\\/[^)]+)\\)");
 
     public static MutableText applyStyles(Config config, MutableText context, List<Receiver> receivers){
         if (context == null || context.getString().isBlank()) return context;
@@ -31,6 +36,7 @@ public class StyledTextProcessor {
 
         if(config.openUriEnabled()) result = applyStyledOpenURI(result);
 
+//        result = applyStyledRenderImage(result);
         result = applyStyledMention(result,receivers);
         result = applyStyledColor(result);
         result = applyStyledPattern(BOLD,result,Style.EMPTY.withBold(true));
@@ -106,6 +112,33 @@ public class StyledTextProcessor {
                             .fillStyle(Style.EMPTY
                                     .withClickEvent(clickEvent)
                                     .withColor(0x0000EE)
+                            )
+            );
+            lastEnd = matcher.end();
+        }
+
+        result.append(substring(context, lastEnd, str.length()));
+        return result;
+    }
+
+    private static MutableText applyStyledRenderImage(MutableText context) {
+        String str = context.getString();
+        Matcher matcher = RENDER_IMAGE.matcher(str);
+
+        MutableText result = Text.empty();
+        int lastEnd = 0;
+
+        while (matcher.find()) {
+            ClickEvent clickEvent = new ClickEvent.Custom(
+                    Identifier.of("embellish_chat.render_image"),
+                    Optional.of(NbtString.of(matcher.group(3)))
+            );
+
+            result.append(substring(context, lastEnd, matcher.start()));
+            result.append(
+                    substring(context, matcher.start(2), matcher.end(2))
+                            .fillStyle(Style.EMPTY
+                                    .withClickEvent(clickEvent)
                             )
             );
             lastEnd = matcher.end();
