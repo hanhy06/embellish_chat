@@ -6,6 +6,7 @@ import com.hanhy06.embellish_chat.config.ConfigListener;
 import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
+import net.minecraft.client.font.Font;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -15,7 +16,6 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.util.Identifier;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +28,7 @@ public class ChatHandler implements ConfigListener {
         INSTANCE = this;
         config = ConfigManager.getConfig();
         mentionSound = RegistryEntry.of(Registries.SOUND_EVENT.get(Identifier.of(config.defaultMentionSound())));
+
     }
 
     public SignedMessage handleChatMessage(ServerPlayerEntity sender, SignedMessage original){
@@ -45,7 +46,7 @@ public class ChatHandler implements ConfigListener {
             }
         }
 
-        if (config.textPostProcessingEnabled()) {
+        if (config.inChatStylingEnabled()) {
             message = StyledTextProcessor.applyStyles(config,message, receivers);
         }
 

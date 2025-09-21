@@ -6,6 +6,7 @@
     "ServerPlayNetworkHandlerMixin"
   ],
   "client": [
+
   ],
   "injectors": {
     "defaultRequire": 1

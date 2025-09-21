@@ -7,6 +7,7 @@ import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 import java.awt.*;
 import java.net.URI;
@@ -23,28 +24,46 @@ public class StyledTextProcessor {
     private static final Pattern OBFUSCATED = Pattern.compile("(?<!\\\\)\\|\\|(.+?)\\|\\|");
     private static final Pattern COLOR = Pattern.compile("(?<!\\\\)(#[0-9A-Fa-f]{6})(.+?)#");
     private static final Pattern OPEN_URI = Pattern.compile("(?<![\\\\!])(\\[(.+?)])\\((https?:\\/\\/[^)]+)\\)");
+    private static final Pattern FONT = Pattern.compile("(?<![\\\\!])(\\[(.+?)])\\{(\\/\\/[^)]+)\\}");
 
     public static MutableText applyStyles(Config config, MutableText context, List<Receiver> receivers){
         if (context == null || context.getString().isBlank()) return context;
 
         MutableText result = context;
 
-        int textColor = config.defaultTextColor();
-        if(textColor > 0) {
+        int textColor = config.defaultChatColor();
+        if (textColor > 0) {
             result.fillStyle(Style.EMPTY.withColor(textColor));
         } else if (textColor < 0) {
             result = applyStyledRainbow(result);
         }
-        if(config.openUriEnabled()) result = applyStyledOpenURI(result);
 
-        result = applyStyledMention(result,receivers);
-        result = applyStyledColor(result);
-        result = applyStyledPattern(BOLD,result,Style.EMPTY.withBold(true));
-        result = applyStyledPattern(UNDERLINE,result,Style.EMPTY.withUnderline(true));
-        result = applyStyledPattern(ITALIC,result,Style.EMPTY.withItalic(true));
-        result = applyStyledPattern(STRIKETHROUGH,result,Style.EMPTY.withStrikethrough(true));
-        result = applyStyledPattern(OBFUSCATED,result,Style.EMPTY.withObfuscated(true));
-        result = removeEscapeSlashes(result);
+        String font = config.defaultChatFont();
+        if (!font.isEmpty()){
+            result = result.fillStyle(Style.EMPTY.withFont(Identifier.of(font)));
+        }
+
+        if (config.fontEnabled()) {
+            result = applyStyledFont(result);
+        }
+
+        if (config.coloringEnabled()) {
+            result = applyStyledColor(result);
+        }
+
+        if (config.mentionEnabled()){
+            result = applyStyledMention(result,receivers);
+        }
+
+        if (config.markdownEnabled()){
+            if (config.openUriEnabled()) result = applyStyledOpenURI(result);
+            result = applyStyledPattern(BOLD,result,Style.EMPTY.withBold(true));
+            result = applyStyledPattern(UNDERLINE,result,Style.EMPTY.withUnderline(true));
+            result = applyStyledPattern(ITALIC,result,Style.EMPTY.withItalic(true));
+            result = applyStyledPattern(STRIKETHROUGH,result,Style.EMPTY.withStrikethrough(true));
+            result = applyStyledPattern(OBFUSCATED,result,Style.EMPTY.withObfuscated(true));
+            result = removeEscapeSlashes(result);
+        }
 
         return Metadata.metadata(result);
     }
@@ -121,6 +140,28 @@ public class StyledTextProcessor {
         return result;
     }
 
+    private static MutableText applyStyledFont(MutableText context) {
+        String str = context.getString();
+        Matcher matcher = FONT.matcher(str);
+
+        MutableText result = Text.empty();
+        int lastEnd = 0;
+
+        while (matcher.find()) {
+            result.append(substring(context, lastEnd, matcher.start()));
+            result.append(
+                    substring(context, matcher.start(2), matcher.end(2))
+                            .fillStyle(Style.EMPTY
+                                    .withFont(Identifier.of(matcher.group(3)))
+                            )
+            );
+            lastEnd = matcher.end();
+        }
+
+        result.append(substring(context, lastEnd, str.length()));
+        return result;
+    }
+
     private static MutableText applyStyledMention(MutableText context, List<Receiver> receivers){
         MutableText result = Text.empty();
         int lastEnd = 0;
@@ -148,7 +189,7 @@ public class StyledTextProcessor {
 
         for (int i = 0; i < length; i++) {
             float hue = (float) i / length;
-            int rgb = Color.HSBtoRGB(hue, 1f, 1f);
+            int rgb = Color.HSBtoRGB(hue, 0.7f, 1f);
             result.append(
                     substring(context, i, i+1).fillStyle(
                             Style.EMPTY.withColor(rgb)
