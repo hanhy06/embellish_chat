@@ -26,7 +26,7 @@ public record Config(
                 true,
                 0xFFFF55,
                 "minecraft:entity.experience_orb.pickup",
-                0,
+                0x0,
                 ""
         );
     }

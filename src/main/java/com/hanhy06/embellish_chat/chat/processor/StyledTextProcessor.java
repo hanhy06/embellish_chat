@@ -24,7 +24,7 @@ public class StyledTextProcessor {
     private static final Pattern OBFUSCATED = Pattern.compile("(?<!\\\\)\\|\\|(.+?)\\|\\|");
     private static final Pattern COLOR = Pattern.compile("(?<!\\\\)(#[0-9A-Fa-f]{6})(.+?)#");
     private static final Pattern OPEN_URI = Pattern.compile("(?<![\\\\!])(\\[(.+?)])\\((https?:\\/\\/[^)]+)\\)");
-    private static final Pattern FONT = Pattern.compile("(?<![\\\\!])(\\[(.+?)])\\{(\\/\\/[^)]+)\\}");
+    private static final Pattern FONT = Pattern.compile("(?<!\\\\)(\\[(.+?)])\\{([^}]+)\\}");
 
     public static MutableText applyStyles(Config config, MutableText context, List<Receiver> receivers){
         if (context == null || context.getString().isBlank()) return context;
