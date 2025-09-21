@@ -59,7 +59,7 @@ You can find `embellish_chat.json` in your config folder.
   "mentionEnabled": true,
   "defaultMentionColor": "0xFFFF55",
   "defaultMentionSound": "minecraft:entity.experience_orb.pickup",
-  "defaultChatColor": "0x0",
+  "defaultChatColor": "-0x1",
   "defaultChatFont": ""
 }
 ```
