@@ -36,8 +36,8 @@ Use the following formats in the chat window to apply various styles to your mes
 | Strike            | `~~Text~~`          | `~~This content is outdated~~`                                | ![Strike](https://github.com/hanhy06/embellish_chat/blob/master/docs/images/Strike.png?raw=true)                       |
 | Obfuscated        | `\|\|Text\|\|`      | `\|\|This will be unreadable\|\|`                             | ![Obfuscated](https://github.com/hanhy06/embellish_chat/blob/master/docs/images/Obfuscated.gif?raw=true)               |
 | Color             | `#HexCodeText#`     | `#FF5555Hello World#`                                         | ![Color](https://github.com/hanhy06/embellish_chat/blob/master/docs/images/Color.png?raw=true)                         |
-| Link              | `[Text](URL)`       | `Download it [here](https://modrinth.com/mod/embellish_chat)` | ![Font](https://github.com/hanhy06/embellish_chat/blob/master/docs/images/Font.png?raw=true)                           |
-| Font              | `[Text]{Path}`      | `[Blorp Zorp]{minecraft:alt}`                                 | ![Link](https://github.com/hanhy06/embellish_chat/blob/master/docs/images/Link.gif?raw=true)                           |
+| Link              | `[Text](URL)`       | `Download it [here](https://modrinth.com/mod/embellish_chat)` | ![Link](https://github.com/hanhy06/embellish_chat/blob/master/docs/images/Link.gif?raw=true)                           |
+| Font              | `[Text]{Path}`      | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://github.com/hanhy06/embellish_chat/blob/master/docs/images/Font.png?raw=true)                           |
 | Mention           | `@PlayerName`       | `Hello, @Player492!`                                          | ![Mention](https://github.com/hanhy06/embellish_chat/blob/master/docs/images/Mention.png?raw=true)                     |
 | Escape Formatting | Use a backslash `\` | `This is not \**bold**.`                                      | ![Escape_Formatting](https://github.com/hanhy06/embellish_chat/blob/master/docs/images/Escape_Formatting.png?raw=true) |
 
