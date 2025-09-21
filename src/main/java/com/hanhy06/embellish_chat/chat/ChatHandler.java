@@ -28,7 +28,6 @@ public class ChatHandler implements ConfigListener {
         INSTANCE = this;
         config = ConfigManager.getConfig();
         mentionSound = RegistryEntry.of(Registries.SOUND_EVENT.get(Identifier.of(config.defaultMentionSound())));
-
     }
 
     public SignedMessage handleChatMessage(ServerPlayerEntity sender, SignedMessage original){

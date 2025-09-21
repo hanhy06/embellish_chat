@@ -18,6 +18,8 @@ EmbellishChat is a Fabric mod designed to enhance the chat experience on Minecra
 
 * **Message Metadata & Copy:** Hovering over a chat message displays its timestamp. Clicking the message copies its content to your clipboard.
 
+* **Default Style** You can set the default color and font of chat messages through the settings.
+
 * **Customizable by Server:** All major features can be enabled, disabled, or fine-tuned by server administrators via the `embellish_chat.json` file.
 
 ---
@@ -34,7 +36,8 @@ Use the following formats in the chat window to apply various styles to your mes
 | Strike            | `~~Text~~`          | `~~This content is outdated~~`                                | ![Strike](https://github.com/hanhy06/embellish_chat/blob/master/docs/images/Strike.png?raw=true)                       |
 | Obfuscated        | `\|\|Text\|\|`      | `\|\|This will be unreadable\|\|`                             | ![Obfuscated](https://github.com/hanhy06/embellish_chat/blob/master/docs/images/Obfuscated.gif?raw=true)               |
 | Color             | `#HexCodeText#`     | `#FF5555Hello World#`                                         | ![Color](https://github.com/hanhy06/embellish_chat/blob/master/docs/images/Color.png?raw=true)                         |
-| Link              | `[Text](URL)`       | `Download it [here](https://modrinth.com/mod/embellish_chat)` | ![Link](https://github.com/hanhy06/embellish_chat/blob/master/docs/images/Link.gif?raw=true)                           |
+| Link              | `[Text](URL)`       | `Download it [here](https://modrinth.com/mod/embellish_chat)` | ![Font](https://github.com/hanhy06/embellish_chat/blob/master/docs/images/Font.png?raw=true)                           |
+| Font              | `[Text]{Path}`      | `[Blorp Zorp]{minecraft:alt}`                                 | ![Link](https://github.com/hanhy06/embellish_chat/blob/master/docs/images/Link.gif?raw=true)                           |
 | Mention           | `@PlayerName`       | `Hello, @Player492!`                                          | ![Mention](https://github.com/hanhy06/embellish_chat/blob/master/docs/images/Mention.png?raw=true)                     |
 | Escape Formatting | Use a backslash `\` | `This is not \**bold**.`                                      | ![Escape_Formatting](https://github.com/hanhy06/embellish_chat/blob/master/docs/images/Escape_Formatting.png?raw=true) |
 
@@ -48,23 +51,32 @@ You can find `embellish_chat.json` in your config folder.
 
 ```jsonc
 {
-  "textPostProcessingEnabled": true,
+  "inChatStylingEnabled": true,
+  "markdownEnabled": true,
   "openUriEnabled": true,
+  "coloringEnabled": true,
+  "fontEnabled": true,
   "mentionEnabled": true,
   "defaultMentionColor": "0xFFFF55",
   "defaultMentionSound": "minecraft:entity.experience_orb.pickup",
-  "defaultTextColor": "-0x1"
+  "defaultChatColor": "0x0",
+  "defaultChatFont": ""
 }
 ```
 
 ### Configuration Options
 
-* `textPostProcessingEnabled`: If `true`, enables Markdown and color formatting for chat messages.
+* `inChatStylingEnabled`: If `true`, enables all chat styling features (color, font, mentions, markdown, etc.).
+* `markdownEnabled`: If `true`, enables Markdown-like formatting (bold, italic, underline, strikethrough, obfuscation, links).
 * `openUriEnabled`: If `true`, enables clickable links in chat.
+* `coloringEnabled`: If `true`, enables custom text coloring with HEX codes.
+* `fontEnabled`: If `true`, allows specifying a font for chat messages.
 * `mentionEnabled`: If `true`, enables the `@` mention feature.
-* `defaultMentionColor`: Sets the default HEX color for mentioned players who are not on a team. Example: `"0xFFFF55"` will color mentions in yello for non-team players.
-* `defaultMentionSound`: Sets the sound event ID to be played when a mention occurs. For example, `"minecraft:entity.experience_orb.pickup"` will play the experience orb sound.
-* `defaultTextColor` : Sets the text color on the server. If set to `0`, it will not be activated.
+* `defaultMentionColor`: Sets the default HEX color for mentioned players not on a team.
+* `defaultMentionSound`: Sets the sound event ID to play on mention.
+* `defaultChatColor`: Sets the default text color. If `0`, not applied.
+* `defaultChatFont`: Sets the default font for chat messages.
+
 ---
 
 📜 License & Distribution
