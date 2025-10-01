@@ -4,6 +4,7 @@ import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
 import com.hanhy06.embellish_chat.util.TeamColor;
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.GameProfileRepository;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
@@ -15,7 +16,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.UserCache;
+//import net.minecraft.util.UserCache;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -28,7 +29,7 @@ public class Mention {
         PlayerManager manager = sender.getServer().getPlayerManager();
 
         for (Receiver receiver : new HashSet<>(receivers)){
-            UUID uuid = receiver.profile().getId();
+            UUID uuid = receiver.profile().id();
             ServerPlayerEntity player = manager.getPlayer(uuid);
 
             int teamColor = TeamColor.getPlayerColor(sender);
@@ -63,7 +64,7 @@ public class Mention {
 
             if(profile.isEmpty()) continue;
 
-            int teamColor = TeamColor.decideTeamColor(playerManager, server, profile.get().getId(), profile.get().getName());
+            int teamColor = TeamColor.decideTeamColor(playerManager, server, profile.get().id(), profile.get().name());
             receivers.add(new Receiver(profile.get(), unit.begin, unit.end, teamColor));
         }
 

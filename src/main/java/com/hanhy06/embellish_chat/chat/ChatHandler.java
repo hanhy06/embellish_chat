@@ -31,7 +31,7 @@ public class ChatHandler implements ConfigListener {
     }
 
     public SignedMessage handleChatMessage(ServerPlayerEntity sender, SignedMessage original){
-        MinecraftServer server = sender.getServer();
+        MinecraftServer server = sender
 
         MutableText message = MutableText.of(original.getContent().getContent());
         String raw = original.getContent().getString();
