@@ -11,20 +11,6 @@ import net.minecraft.util.Formatting;
 import java.util.UUID;
 
 public class TeamColor {
-    public static int getPlayerColor(ServerPlayerEntity player){
-        if (player != null) {
-            Team team = player.getScoreboardTeam();
-            if (team != null) {
-                Formatting formatting = team.getColor();
-                if (formatting != null && formatting.isColor() && formatting != Formatting.RESET) {
-                    return formatting.getColorValue().intValue();
-                }
-            }
-        }
-
-        return -1;
-    }
-
     public static int getPlayerColor(Scoreboard scoreboard,String name){
         for (String teamName : scoreboard.getTeamNames()){
             Team team = scoreboard.getTeam(teamName);
@@ -40,16 +26,5 @@ public class TeamColor {
         }
 
         return ConfigManager.getConfig().defaultMentionColor();
-    }
-
-    public static int decideTeamColor(
-            PlayerManager manager,
-            MinecraftServer server,
-            UUID playerId,
-            String playerName
-    ) {
-        int color = TeamColor.getPlayerColor(manager.getPlayer(playerId));
-        if (color != -1) return color;
-        return TeamColor.getPlayerColor(server.getScoreboard(), playerName);
     }
 }

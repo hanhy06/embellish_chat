@@ -3,10 +3,7 @@ package com.hanhy06.embellish_chat.chat.processor;
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
 import com.hanhy06.embellish_chat.util.Metadata;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
+import net.minecraft.text.*;
 import net.minecraft.util.Identifier;
 
 import java.awt.*;
@@ -40,7 +37,9 @@ public class StyledTextProcessor {
 
         String font = config.defaultChatFont();
         if (!font.isEmpty()){
-            result = result.fillStyle(Style.EMPTY.withFont(Identifier.of(font)));
+            result = result.fillStyle(Style.EMPTY.withFont(
+                    new StyleSpriteSource.Font(Identifier.of(font))
+            ));
         }
 
         if (config.fontEnabled()) {
@@ -152,7 +151,9 @@ public class StyledTextProcessor {
             result.append(
                     substring(context, matcher.start(2), matcher.end(2))
                             .fillStyle(Style.EMPTY
-                                    .withFont(Identifier.of(matcher.group(3)))
+                                    .withFont(
+                                            new StyleSpriteSource.Font(Identifier.of(matcher.group(3)))
+                                    )
                             )
             );
             lastEnd = matcher.end();

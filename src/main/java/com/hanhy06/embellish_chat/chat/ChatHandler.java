@@ -1,12 +1,12 @@
 package com.hanhy06.embellish_chat.chat;
 
+import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.chat.processor.Mention;
 import com.hanhy06.embellish_chat.chat.processor.StyledTextProcessor;
 import com.hanhy06.embellish_chat.config.ConfigListener;
 import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
-import net.minecraft.client.font.Font;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -22,26 +22,26 @@ import java.util.List;
 public class ChatHandler implements ConfigListener {
     public static ChatHandler INSTANCE;
     private static Config config;
-    private static RegistryEntry<SoundEvent> mentionSound;
+    private static Identifier mentionSound;
 
     public ChatHandler() {
         INSTANCE = this;
         config = ConfigManager.getConfig();
-        mentionSound = RegistryEntry.of(Registries.SOUND_EVENT.get(Identifier.of(config.defaultMentionSound())));
+        mentionSound = Identifier.of(config.defaultMentionSound());
     }
 
     public SignedMessage handleChatMessage(ServerPlayerEntity sender, SignedMessage original){
-        MinecraftServer server = sender
+        MinecraftServer server = EmbellishChat.server;
 
         MutableText message = MutableText.of(original.getContent().getContent());
         String raw = original.getContent().getString();
 
         List<Receiver> receivers = new ArrayList<>();
         if (config.mentionEnabled()) {
-            receivers = Mention.mentionParser(server, raw);
+            receivers = Mention.nameParser(server, raw);
 
             if (!receivers.isEmpty()) {
-                Mention.broadcastMention(config,mentionSound, sender, receivers);
+                Mention.broadcastMention(mentionSound, sender, receivers);
             }
         }
 
@@ -55,6 +55,6 @@ public class ChatHandler implements ConfigListener {
     @Override
     public void onConfigReload(Config newConfig) {
         config = newConfig;
-        mentionSound = RegistryEntry.of(Registries.SOUND_EVENT.get(Identifier.of(config.defaultMentionSound())));
+        mentionSound = Identifier.of(config.defaultMentionSound());
     }
 }
