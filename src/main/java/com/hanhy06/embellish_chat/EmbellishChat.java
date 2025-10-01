@@ -17,8 +17,6 @@ public class EmbellishChat implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     public static MinecraftServer server;
-    private static ConfigManager configManager;
-	private static ChatHandler chatHandler;
 
     @Override
 	public void onInitialize() {
@@ -34,12 +32,11 @@ public class EmbellishChat implements ModInitializer {
 
         EmbellishChat.server = server;
 
-        configManager = new ConfigManager(fabricConfigDirPath);
+        new ChatHandler();
 
-        chatHandler = new ChatHandler();
-        configManager.addListener(chatHandler);
-
-		configManager.readConfig();
+        new ConfigManager(fabricConfigDirPath);
+        ConfigManager.INSTANCE.addListener(ChatHandler.INSTANCE);
+		ConfigManager.INSTANCE.readConfig();
 
 		LOGGER.info("{} initialized successfully.", MOD_ID);
 	}
