@@ -1,9 +1,11 @@
 package com.hanhy06.embellish_chat.data;
 
+import net.minecraft.server.network.ServerPlayerEntity;
+
 import java.util.Objects;
 
 public record Receiver(
-        String name, int begin, int end, int teamColor, boolean isOnline
+        String name, int begin, int end, int teamColor, ServerPlayerEntity player
 ){
     @Override
     public boolean equals(Object o) {

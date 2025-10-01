@@ -25,10 +25,8 @@ public class Mention {
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{1,16})(?=\\b|$)");
 
     public static void broadcastMention(Identifier mentionSound, ServerPlayerEntity sender, List<Receiver> receivers){
-        PlayerManager manager = EmbellishChat.server.getPlayerManager();
-
         for (Receiver receiver : new HashSet<>(receivers)){
-            ServerPlayerEntity player = manager.getPlayer(receiver.name());
+            ServerPlayerEntity player = receiver.player();
             if (player == null) continue;
 
             MutableText titleText = sender.getName().copy()
@@ -51,16 +49,12 @@ public class Mention {
         while (matcher.find()){
             String name = matcher.group(1);
             ServerPlayerEntity player = manager.getPlayer(name);
-
             int teamColor;
-            boolean isOnline;
 
             if (player != null){
                 teamColor = TeamColor.getPlayerColor(player);
-                isOnline = true;
             }else {
                 teamColor = TeamColor.getPlayerColor(scoreboard,name);
-                isOnline = false;
             }
 
             receivers.add(
@@ -69,7 +63,7 @@ public class Mention {
                             matcher.start(),
                             matcher.end(1),
                             teamColor,
-                            isOnline
+                            player
                     )
             );
         }
