@@ -42,16 +42,16 @@ public class StyledTextProcessor {
             ));
         }
 
+        if (config.mentionEnabled()){
+            result = applyStyledMention(result,receivers);
+        }
+
         if (config.fontEnabled()) {
             result = applyStyledFont(result);
         }
 
         if (config.coloringEnabled()) {
             result = applyStyledColor(result);
-        }
-
-        if (config.mentionEnabled()){
-            result = applyStyledMention(result,receivers);
         }
 
         if (config.markdownEnabled()){
