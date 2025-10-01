@@ -1,5 +1,6 @@
 package com.hanhy06.embellish_chat.chat.processor;
 
+import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
 import com.hanhy06.embellish_chat.util.Metadata;
@@ -20,7 +21,7 @@ public class StyledTextProcessor {
     private static final Pattern STRIKETHROUGH = Pattern.compile("(?<!\\\\)~~(.+?)~~");
     private static final Pattern OBFUSCATED = Pattern.compile("(?<!\\\\)\\|\\|(.+?)\\|\\|");
     private static final Pattern COLOR = Pattern.compile("(?<!\\\\)(#[0-9A-Fa-f]{6})(.+?)#");
-    private static final Pattern OPEN_URI = Pattern.compile("(?<![\\\\!])(\\[(.+?)])\\((https?:\\/\\/[^)]+)\\)");
+    private static final Pattern OPEN_URI = Pattern.compile("(?<![\\\\!])(\\[(.+?)])\\((https?://[^\\s)]+)\\)");
     private static final Pattern FONT = Pattern.compile("(?<!\\\\)(\\[(.+?)])\\{([^}]+)\\}");
 
     public static MutableText applyStyles(Config config, MutableText context, List<Receiver> receivers){
@@ -122,9 +123,19 @@ public class StyledTextProcessor {
         int lastEnd = 0;
 
         while (matcher.find()) {
-            ClickEvent clickEvent = new ClickEvent.OpenUrl(URI.create(matcher.group(3)));
-
             result.append(substring(context, lastEnd, matcher.start()));
+
+            URI uri;
+            try {
+                uri = URI.create(matcher.group(3));
+            } catch (IllegalArgumentException e) {
+                EmbellishChat.LOGGER.warn("Invalid URL address: {}", matcher.group(3));
+                result.append(substring(context, matcher.start(), matcher.end()));
+                lastEnd = matcher.end();
+                continue;
+            }
+
+            ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
             result.append(
                     substring(context, matcher.start(2), matcher.end(2))
                             .fillStyle(Style.EMPTY
@@ -132,12 +143,14 @@ public class StyledTextProcessor {
                                     .withColor(0x0000EE)
                             )
             );
+
             lastEnd = matcher.end();
         }
 
         result.append(substring(context, lastEnd, str.length()));
         return result;
     }
+
 
     private static MutableText applyStyledFont(MutableText context) {
         String str = context.getString();
