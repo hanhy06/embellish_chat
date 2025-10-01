@@ -1,14 +1,8 @@
 package com.hanhy06.embellish_chat.chat.processor;
 
 import com.hanhy06.embellish_chat.EmbellishChat;
-import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
 import com.hanhy06.embellish_chat.util.TeamColor;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.GameProfileRepository;
-import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
-import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
@@ -44,7 +38,7 @@ public class Mention {
         }
     }
 
-    public static List<Receiver> nameParser(MinecraftServer server,String raw){
+    public static List<Receiver> parseMentions(MinecraftServer server, String raw){
         List<Receiver> receivers = new ArrayList<>();
         Scoreboard scoreboard = server.getScoreboard();
 

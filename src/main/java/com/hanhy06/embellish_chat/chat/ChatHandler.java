@@ -8,11 +8,8 @@ import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
 import net.minecraft.network.message.SignedMessage;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.util.Identifier;
 
@@ -38,7 +35,7 @@ public class ChatHandler implements ConfigListener {
 
         List<Receiver> receivers = new ArrayList<>();
         if (config.mentionEnabled()) {
-            receivers = Mention.nameParser(server, raw);
+            receivers = Mention.parseMentions(server, raw);
 
             if (!receivers.isEmpty()) {
                 Mention.broadcastMention(mentionSound, sender, receivers);
