@@ -15,7 +15,9 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,17 +42,34 @@ public class Mention {
 
     public static List<Receiver> parseMentions(MinecraftServer server, String raw){
         List<Receiver> receivers = new ArrayList<>();
-        Scoreboard scoreboard = server.getScoreboard();
-
         Matcher matcher = MENTION_PATTERN.matcher(raw);
 
+        Scoreboard scoreboard = server.getScoreboard();
+        PlayerManager manager = server.getPlayerManager();
+
+
         while (matcher.find()){
+            String name = matcher.group(1);
+            ServerPlayerEntity player = manager.getPlayer(name);
+
+            int teamColor;
+            boolean isOnline;
+
+            if (player != null){
+                teamColor = TeamColor.getPlayerColor(player);
+                isOnline = true;
+            }else {
+                teamColor = TeamColor.getPlayerColor(scoreboard,name);
+                isOnline = false;
+            }
+
             receivers.add(
                     new Receiver(
-                            matcher.group(1),
+                            name,
                             matcher.start(),
                             matcher.end(1),
-                            TeamColor.getPlayerColor(scoreboard,matcher.group(1))
+                            teamColor,
+                            isOnline
                     )
             );
         }

@@ -3,7 +3,7 @@ package com.hanhy06.embellish_chat.data;
 import java.util.Objects;
 
 public record Receiver(
-        String name, int begin, int end, int teamColor
+        String name, int begin, int end, int teamColor, boolean isOnline
 ){
     @Override
     public boolean equals(Object o) {
