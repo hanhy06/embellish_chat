@@ -1,6 +1,5 @@
 package com.hanhy06.embellish_chat.chat.processor;
 
-import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.data.Receiver;
 import com.hanhy06.embellish_chat.util.TeamColor;
 import net.minecraft.scoreboard.Scoreboard;
@@ -44,7 +43,6 @@ public class Mention {
 
         Scoreboard scoreboard = server.getScoreboard();
         PlayerManager manager = server.getPlayerManager();
-
 
         while (matcher.find()){
             String name = matcher.group(1);
