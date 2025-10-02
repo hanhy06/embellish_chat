@@ -25,9 +25,8 @@ public class StyledTextProcessor {
     private static final Pattern BRACKET = Pattern.compile(
             "(?<!\\\\)\\[(.+?)](?:\\((https://[^\\s)]+)\\)|\\{(.+?)}|<(#[0-9A-Fa-f]{6})>)"
     );
-    private static final Pattern UNESCAPE = Pattern.compile("\\\\([*_~#\\\\])");
 
-    public static MutableText applyStyles(final Config config, final MutableText text, final List<Receiver> receivers) {
+    public static MutableText applyStyles(Config config, MutableText text, List<Receiver> receivers) {
         if (text == null || text.getString().isBlank()) return text;
 
         MutableText result = text;
@@ -47,8 +46,8 @@ public class StyledTextProcessor {
         return Metadata.metadata(result);
     }
 
-    private static MutableText applyDefaultColor(final Config config, final MutableText text) {
-        final int color = config.defaultChatColor();
+    private static MutableText applyDefaultColor(Config config, MutableText text) {
+        int color = config.defaultChatColor();
         if (color > 0) {
             text.fillStyle(Style.EMPTY.withColor(color));
             return text;
@@ -57,14 +56,14 @@ public class StyledTextProcessor {
         return text;
     }
 
-    private static void applyDefaultFont(final Config config, final MutableText text) {
-        final String font = config.defaultChatFont();
+    private static void applyDefaultFont(Config config, MutableText text) {
+        String font = config.defaultChatFont();
         if (!font.isEmpty()) {
             text.fillStyle(Style.EMPTY.withFont(new StyleSpriteSource.Font(Identifier.tryParse(font))));
         }
     }
 
-    private static MutableText applyMarkdown(final MutableText text) {
+    private static MutableText applyMarkdown(MutableText text) {
         MutableText result = text;
 
         result = applyStyledPattern(BOLD,          result, Style.EMPTY.withBold(true));
@@ -77,11 +76,11 @@ public class StyledTextProcessor {
         return result;
     }
 
-    private static MutableText applyStyledPattern(final Pattern pattern, final MutableText source, final Style style) {
-        final String str = source.getString();
-        final Matcher matcher = pattern.matcher(str);
+    private static MutableText applyStyledPattern(Pattern pattern, MutableText source, Style style) {
+        String str = source.getString();
+        Matcher matcher = pattern.matcher(str);
 
-        final MutableText out = Text.empty();
+        MutableText out = Text.empty();
         int last = 0;
 
         while (matcher.find()) {
@@ -93,17 +92,17 @@ public class StyledTextProcessor {
         return out;
     }
 
-    private static MutableText applyStyledBracketed(final Config config, final MutableText source) {
-        final String str = source.getString();
-        final Matcher matcher = BRACKET.matcher(str);
+    private static MutableText applyStyledBracketed(Config config, MutableText source) {
+        String str = source.getString();
+        Matcher matcher = BRACKET.matcher(str);
 
-        final MutableText out = Text.empty();
+        MutableText out = Text.empty();
         int last = 0;
 
         while (matcher.find()) {
             out.append(substring(source, last, matcher.start()));
 
-            final char tail = str.charAt(matcher.end() - 1);
+            char tail = str.charAt(matcher.end() - 1);
             Style style = Style.EMPTY;
 
             if (tail == ')' && config.openUriEnabled()) {
@@ -121,19 +120,19 @@ public class StyledTextProcessor {
         return out;
     }
 
-    private static Style withColor(final String hex) {
-        final int rgb = Color.decode(hex).getRGB();
+    private static Style withColor(String hex) {
+        int rgb = Color.decode(hex).getRGB();
         return Style.EMPTY.withColor(rgb);
     }
 
-    private static Style withFont(final String fontId) {
+    private static Style withFont(String fontId) {
         return Style.EMPTY.withFont(new StyleSpriteSource.Font(Identifier.tryParse(fontId)));
     }
 
-    private static Style withUrl(final String url) {
+    private static Style withUrl(String url) {
         try {
-            final URI uri = URI.create(url);
-            final ClickEvent click = new ClickEvent.OpenUrl(uri);
+            URI uri = URI.create(url);
+            ClickEvent click = new ClickEvent.OpenUrl(uri);
             return Style.EMPTY.withClickEvent(click).withColor(LINK_COLOR);
         } catch (IllegalArgumentException e) {
             EmbellishChat.LOGGER.warn("Invalid URL address: {}", url);
@@ -141,8 +140,8 @@ public class StyledTextProcessor {
         }
     }
 
-    private static MutableText applyMention(final MutableText source, final List<Receiver> receivers) {
-        final MutableText out = Text.empty();
+    private static MutableText applyMention(MutableText source, List<Receiver> receivers) {
+        MutableText out = Text.empty();
         int last = 0;
 
         for (Receiver r : receivers) {
@@ -155,17 +154,18 @@ public class StyledTextProcessor {
         return out;
     }
 
-    private static MutableText applyRainbow(final MutableText source) {
-        final MutableText out = Text.empty();
-        final int n = source.getString().length();
+    private static MutableText applyRainbow(MutableText source) {
+        MutableText out = Text.empty();
+        int n = source.getString().length();
 
         for (int i = 0; i < n; i++) {
-            final float hue = (float) i / n;
-            final int rgb = Color.HSBtoRGB(hue, 0.7f, 1f);
+            float hue = (float) i / n;
+            int rgb = Color.HSBtoRGB(hue, 0.7f, 1f);
             out.append(substring(source, i, i + 1).fillStyle(Style.EMPTY.withColor(rgb)));
         }
         return out;
     }
+
     private static MutableText removeEscapeSlashes(MutableText text) {
         MutableText result = Text.empty();
         final int[] offset = { 0 };
