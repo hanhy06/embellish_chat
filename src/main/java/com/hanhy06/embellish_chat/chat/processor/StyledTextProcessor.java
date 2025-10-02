@@ -1,6 +1,7 @@
 package com.hanhy06.embellish_chat.chat.processor;
 
 import com.hanhy06.embellish_chat.EmbellishChat;
+import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
 import com.hanhy06.embellish_chat.util.Metadata;
@@ -11,22 +12,21 @@ import java.awt.*;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StyledTextProcessor {
-    private static final int LINK_COLOR = 0x0000EE;
-
-    private static final Pattern BOLD          = Pattern.compile("(?<!\\\\)\\*\\*(.+?)\\*\\*");
-    private static final Pattern UNDERLINE     = Pattern.compile("(?<!\\\\)__(.+?)__");
-    private static final Pattern ITALIC        = Pattern.compile("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)");
+    private static final Pattern BOLD = Pattern.compile("(?<!\\\\)\\*\\*(.+?)\\*\\*");
+    private static final Pattern UNDERLINE = Pattern.compile("(?<!\\\\)__(.+?)__");
+    private static final Pattern ITALIC = Pattern.compile("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)");
     private static final Pattern STRIKETHROUGH = Pattern.compile("(?<!\\\\)~~(.+?)~~");
-    private static final Pattern OBFUSCATED    = Pattern.compile("(?<!\\\\)\\|\\|(.+?)\\|\\|");
-    private static final Pattern BRACKET = Pattern.compile(
-            "(?<!\\\\)\\[(.+?)](?:\\((https://[^\\s)]+)\\)|\\{(.+?)}|<(#[0-9A-Fa-f]{6})>)"
-    );
+    private static final Pattern OBFUSCATED = Pattern.compile("(?<!\\\\)\\|\\|(.+?)\\|\\|");
+    private static final Pattern COLOR = Pattern.compile("(?<!\\\\)\\[(.+?)]<([^>]+)>");
+    private static final Pattern OPEN_URI = Pattern.compile("(?<![\\\\!])\\[(.+?)]\\((https?://[^\\s)]+)\\)");
+    private static final Pattern FONT = Pattern.compile("(?<!\\\\)\\[(.+?)]\\{([^}]+)}");
 
-    public static MutableText applyStyles(Config config, MutableText text, List<Receiver> receivers) {
+    public static MutableText applyStyles(Config config, MutableText text, List<Receiver> receivers){
         if (text == null || text.getString().isBlank()) return text;
 
         MutableText result = text;
@@ -38,11 +38,18 @@ public class StyledTextProcessor {
             result = applyMention(result, receivers);
         }
 
-        if (config.markdownEnabled()) {
-            result = applyMarkdown(result);
-            result = applyStyledBracketed(config, result);
+        if (config.fontEnabled()){
+            result = applyPattern(FONT,result,StyledTextProcessor::withFont);
         }
 
+        if (config.openUriEnabled()){
+            result = applyPattern(OPEN_URI,result,StyledTextProcessor::withOpenURI);
+        }
+
+        if (config.markdownEnabled()) {
+            result = applyMarkdown(result);
+            if (config.coloringEnabled()) result = applyPattern(COLOR,result,StyledTextProcessor::withColor);
+        }
         return Metadata.metadata(result);
     }
 
@@ -66,104 +73,122 @@ public class StyledTextProcessor {
     private static MutableText applyMarkdown(MutableText text) {
         MutableText result = text;
 
-        result = applyStyledPattern(BOLD,          result, Style.EMPTY.withBold(true));
-        result = applyStyledPattern(UNDERLINE,     result, Style.EMPTY.withUnderline(true));
-        result = applyStyledPattern(ITALIC,        result, Style.EMPTY.withItalic(true));
-        result = applyStyledPattern(STRIKETHROUGH, result, Style.EMPTY.withStrikethrough(true));
-        result = applyStyledPattern(OBFUSCATED,    result, Style.EMPTY.withObfuscated(true));
+        result = applyPattern(BOLD,          result, Style.EMPTY.withBold(true));
+        result = applyPattern(UNDERLINE,     result, Style.EMPTY.withUnderline(true));
+        result = applyPattern(ITALIC,        result, Style.EMPTY.withItalic(true));
+        result = applyPattern(STRIKETHROUGH, result, Style.EMPTY.withStrikethrough(true));
+        result = applyPattern(OBFUSCATED,    result, Style.EMPTY.withObfuscated(true));
         result = removeEscapeSlashes(result);
 
         return result;
     }
 
-    private static MutableText applyStyledPattern(Pattern pattern, MutableText source, Style style) {
-        String str = source.getString();
+    private static MutableText applyPattern(Pattern pattern, MutableText text, Style style){
+        String str = text.getString();
         Matcher matcher = pattern.matcher(str);
 
-        MutableText out = Text.empty();
-        int last = 0;
+        MutableText result = Text.empty();
+        int lastEnd = 0;
 
+        matcher.reset();
         while (matcher.find()) {
-            out.append(substring(source, last, matcher.start()));
-            out.append(substring(source, matcher.start(1), matcher.end(1)).fillStyle(style));
-            last = matcher.end();
+            result.append(substring(text, lastEnd, matcher.start()));
+            result.append(
+                    substring(text, matcher.start(1), matcher.end(1)).fillStyle(style)
+            );
+            lastEnd = matcher.end();
         }
-        out.append(substring(source, last, str.length()));
-        return out;
+
+        result.append(substring(text, lastEnd, str.length()));
+
+        return result;
     }
 
-    private static MutableText applyStyledBracketed(Config config, MutableText source) {
-        String str = source.getString();
-        Matcher matcher = BRACKET.matcher(str);
+    private static MutableText applyPattern(Pattern pattern, MutableText text, Function<String,Style> function){
+        String str = text.getString();
+        Matcher matcher = pattern.matcher(str);
 
-        MutableText out = Text.empty();
-        int last = 0;
+        MutableText result = Text.empty();
+        int lastEnd = 0;
 
+        matcher.reset();
         while (matcher.find()) {
-            out.append(substring(source, last, matcher.start()));
-
-            char tail = str.charAt(matcher.end() - 1);
-            Style style = Style.EMPTY;
-
-            if (tail == ')' && config.openUriEnabled()) {
-                style = withUrl(matcher.group(2));
-            } else if (tail == '}' && config.fontEnabled()) {
-                style = withFont(matcher.group(3));
-            } else if (tail == '>' && config.coloringEnabled()) {
-                style = withColor(matcher.group(4));
-            }
-
-            out.append(substring(source, matcher.start(1), matcher.end(1)).fillStyle(style));
-            last = matcher.end();
+            Style style = function.apply(matcher.group(2));
+            result.append(substring(text, lastEnd, matcher.start()));
+            result.append(
+                    substring(text, matcher.start(1), matcher.end(1)).fillStyle(style)
+            );
+            lastEnd = matcher.end();
         }
-        out.append(substring(source, last, str.length()));
-        return out;
+
+        result.append(substring(text, lastEnd, str.length()));
+
+        return result;
     }
 
-    private static Style withColor(String hex) {
-        int rgb = Color.decode(hex).getRGB();
-        return Style.EMPTY.withColor(rgb);
+    private static Style withColor(String strColor){
+        if (strColor.charAt(0) == '#'){
+            int color = Color.decode(strColor).getRGB();
+            return Style.EMPTY.withColor(color);
+        }else {
+            int color = ConfigManager.getConfig().defaultColorPreset().getOrDefault(strColor,0xFFFFFF);
+            return Style.EMPTY.withColor(color);
+        }
     }
 
-    private static Style withFont(String fontId) {
-        return Style.EMPTY.withFont(new StyleSpriteSource.Font(Identifier.tryParse(fontId)));
+    private static Style withFont(String fontId){
+        return Style.EMPTY.withFont(
+                new StyleSpriteSource.Font(Identifier.tryParse(fontId))
+        );
     }
 
-    private static Style withUrl(String url) {
+    private static Style withOpenURI(String strUri){
         try {
-            URI uri = URI.create(url);
-            ClickEvent click = new ClickEvent.OpenUrl(uri);
-            return Style.EMPTY.withClickEvent(click).withColor(LINK_COLOR);
-        } catch (IllegalArgumentException e) {
-            EmbellishChat.LOGGER.warn("Invalid URL address: {}", url);
+            URI uri = URI.create(strUri);
+            ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
+            return Style.EMPTY.withClickEvent(clickEvent).withColor(0x0000FF);
+        }catch (IllegalArgumentException e) {
+            EmbellishChat.LOGGER.warn("Invalid URL address: {}", strUri);
             return Style.EMPTY;
         }
     }
 
-    private static MutableText applyMention(MutableText source, List<Receiver> receivers) {
-        MutableText out = Text.empty();
-        int last = 0;
+    private static MutableText applyMention(MutableText text, List<Receiver> receivers){
+        MutableText result = Text.empty();
+        int lastEnd = 0;
 
-        for (Receiver r : receivers) {
-            out.append(substring(source, last, r.begin()));
-            out.append(substring(source, r.begin(), r.end())
-                    .fillStyle(Style.EMPTY.withColor(r.teamColor()).withBold(true)));
-            last = r.end();
+        for (Receiver receiver: receivers){
+            result.append(substring(text,lastEnd, receiver.begin()));
+            result.append(
+                    substring(text, receiver.begin(), receiver.end())
+                            .fillStyle(
+                                    Style.EMPTY.withColor(receiver.teamColor()).withBold(true)
+                            )
+            );
+            lastEnd = receiver.end();
         }
-        out.append(substring(source, last, source.getString().length()));
-        return out;
+
+        result.append(substring(text, lastEnd, text.getString().length()));
+
+        return result;
     }
 
-    private static MutableText applyRainbow(MutableText source) {
-        MutableText out = Text.empty();
-        int n = source.getString().length();
+    private static MutableText applyRainbow(MutableText text){
+        MutableText result = Text.empty();
 
-        for (int i = 0; i < n; i++) {
-            float hue = (float) i / n;
+        int length = text.getString().length();
+
+        for (int i = 0; i < length; i++) {
+            float hue = (float) i / length;
             int rgb = Color.HSBtoRGB(hue, 0.7f, 1f);
-            out.append(substring(source, i, i + 1).fillStyle(Style.EMPTY.withColor(rgb)));
+            result.append(
+                    substring(text, i, i+1).fillStyle(
+                            Style.EMPTY.withColor(rgb)
+                    )
+            );
         }
-        return out;
+
+        return result;
     }
 
     private static MutableText removeEscapeSlashes(MutableText text) {
