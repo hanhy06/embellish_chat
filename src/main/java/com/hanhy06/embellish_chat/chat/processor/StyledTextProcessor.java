@@ -24,10 +24,10 @@ public class StyledTextProcessor {
     private static final Pattern OPEN_URI = Pattern.compile("(?<![\\\\!])(\\[(.+?)])\\((https?://[^\\s)]+)\\)");
     private static final Pattern FONT = Pattern.compile("(?<!\\\\)(\\[(.+?)])\\{([^}]+)\\}");
 
-    public static MutableText applyStyles(Config config, MutableText context, List<Receiver> receivers){
-        if (context == null || context.getString().isBlank()) return context;
+    public static MutableText applyStyles(Config config, MutableText text, List<Receiver> receivers){
+        if (text == null || text.getString().isBlank()) return text;
 
-        MutableText result = context;
+        MutableText result = text;
 
         int textColor = config.defaultChatColor();
         if (textColor > 0) {
@@ -68,8 +68,8 @@ public class StyledTextProcessor {
         return Metadata.metadata(result);
     }
 
-    private static MutableText applyStyledPattern(Pattern pattern, MutableText context, Style style){
-        String str = context.getString();
+    private static MutableText applyStyledPattern(Pattern pattern, MutableText text, Style style){
+        String str = text.getString();
         Matcher matcher = pattern.matcher(str);
 
         MutableText result = Text.empty();
@@ -77,20 +77,20 @@ public class StyledTextProcessor {
 
         matcher.reset();
         while (matcher.find()) {
-            result.append(substring(context, lastEnd, matcher.start()));
+            result.append(substring(text, lastEnd, matcher.start()));
             result.append(
-                    substring(context, matcher.start(1), matcher.end(1)).fillStyle(style)
+                    substring(text, matcher.start(1), matcher.end(1)).fillStyle(style)
             );
             lastEnd = matcher.end();
         }
 
-        result.append(substring(context, lastEnd, str.length()));
+        result.append(substring(text, lastEnd, str.length()));
 
         return result;
     }
 
-    private static MutableText applyStyledColor(MutableText context){
-        String str = context.getString();
+    private static MutableText applyStyledColor(MutableText text){
+        String str = text.getString();
         Matcher matcher = COLOR.matcher(str);
 
         MutableText result = Text.empty();
@@ -100,9 +100,9 @@ public class StyledTextProcessor {
         while (matcher.find()) {
             Color color = Color.decode(matcher.group(1));
 
-            result.append(substring(context, lastEnd, matcher.start()));
+            result.append(substring(text, lastEnd, matcher.start()));
             result.append(
-                    substring(context, matcher.start(2), matcher.end(2))
+                    substring(text, matcher.start(2), matcher.end(2))
                             .fillStyle(
                                     Style.EMPTY.withColor(color.getRGB())
                     )
@@ -110,34 +110,34 @@ public class StyledTextProcessor {
             lastEnd = matcher.end();
         }
 
-        result.append(substring(context, lastEnd, str.length()));
+        result.append(substring(text, lastEnd, str.length()));
 
         return result;
     }
 
-    private static MutableText applyStyledOpenURI(MutableText context) {
-        String str = context.getString();
+    private static MutableText applyStyledOpenURI(MutableText text) {
+        String str = text.getString();
         Matcher matcher = OPEN_URI.matcher(str);
 
         MutableText result = Text.empty();
         int lastEnd = 0;
 
         while (matcher.find()) {
-            result.append(substring(context, lastEnd, matcher.start()));
+            result.append(substring(text, lastEnd, matcher.start()));
 
             URI uri;
             try {
                 uri = URI.create(matcher.group(3));
             } catch (IllegalArgumentException e) {
                 EmbellishChat.LOGGER.warn("Invalid URL address: {}", matcher.group(3));
-                result.append(substring(context, matcher.start(), matcher.end()));
+                result.append(substring(text, matcher.start(), matcher.end()));
                 lastEnd = matcher.end();
                 continue;
             }
 
             ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
             result.append(
-                    substring(context, matcher.start(2), matcher.end(2))
+                    substring(text, matcher.start(2), matcher.end(2))
                             .fillStyle(Style.EMPTY
                                     .withClickEvent(clickEvent)
                                     .withColor(0x0000EE)
@@ -147,22 +147,22 @@ public class StyledTextProcessor {
             lastEnd = matcher.end();
         }
 
-        result.append(substring(context, lastEnd, str.length()));
+        result.append(substring(text, lastEnd, str.length()));
         return result;
     }
 
 
-    private static MutableText applyStyledFont(MutableText context) {
-        String str = context.getString();
+    private static MutableText applyStyledFont(MutableText text) {
+        String str = text.getString();
         Matcher matcher = FONT.matcher(str);
 
         MutableText result = Text.empty();
         int lastEnd = 0;
 
         while (matcher.find()) {
-            result.append(substring(context, lastEnd, matcher.start()));
+            result.append(substring(text, lastEnd, matcher.start()));
             result.append(
-                    substring(context, matcher.start(2), matcher.end(2))
+                    substring(text, matcher.start(2), matcher.end(2))
                             .fillStyle(Style.EMPTY
                                     .withFont(
                                             new StyleSpriteSource.Font(Identifier.tryParse(matcher.group(3)))
@@ -172,18 +172,18 @@ public class StyledTextProcessor {
             lastEnd = matcher.end();
         }
 
-        result.append(substring(context, lastEnd, str.length()));
+        result.append(substring(text, lastEnd, str.length()));
         return result;
     }
 
-    private static MutableText applyStyledMention(MutableText context, List<Receiver> receivers){
+    private static MutableText applyStyledMention(MutableText text, List<Receiver> receivers){
         MutableText result = Text.empty();
         int lastEnd = 0;
 
         for (Receiver receiver: receivers){
-            result.append(substring(context,lastEnd, receiver.begin()));
+            result.append(substring(text,lastEnd, receiver.begin()));
             result.append(
-                    substring(context, receiver.begin(), receiver.end())
+                    substring(text, receiver.begin(), receiver.end())
                             .fillStyle(
                                     Style.EMPTY.withColor(receiver.teamColor()).withBold(true)
                             )
@@ -191,21 +191,21 @@ public class StyledTextProcessor {
             lastEnd = receiver.end();
         }
 
-        result.append(substring(context, lastEnd, context.getString().length()));
+        result.append(substring(text, lastEnd, text.getString().length()));
 
         return result;
     }
 
-    private static MutableText applyStyledRainbow(MutableText context){
+    private static MutableText applyStyledRainbow(MutableText text){
         MutableText result = Text.empty();
 
-        int length = context.getString().length();
+        int length = text.getString().length();
 
         for (int i = 0; i < length; i++) {
             float hue = (float) i / length;
             int rgb = Color.HSBtoRGB(hue, 0.7f, 1f);
             result.append(
-                    substring(context, i, i+1).fillStyle(
+                    substring(text, i, i+1).fillStyle(
                             Style.EMPTY.withColor(rgb)
                     )
             );
@@ -214,11 +214,11 @@ public class StyledTextProcessor {
         return result;
     }
 
-    private static MutableText removeEscapeSlashes(MutableText context) {
+    private static MutableText removeEscapeSlashes(MutableText text) {
         MutableText result = Text.empty();
         final int[] offset = { 0 };
 
-        context.visit(new Text.StyledVisitor<Void>() {
+        text.visit(new Text.StyledVisitor<Void>() {
             @Override
             public Optional<Void> accept(Style style, String content) {
                 String replaced = content.replaceAll("\\\\([*_~#\\\\])", "$1");
