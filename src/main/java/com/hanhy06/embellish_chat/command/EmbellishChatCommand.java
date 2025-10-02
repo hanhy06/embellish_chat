@@ -13,6 +13,7 @@ public class EmbellishChatCommand {
                 (commandDispatcher, commandRegistryAccess, registrationEnvironment) -> {
                     commandDispatcher.register(
                             CommandManager.literal("embellish_chat")
+                                    .requires(serverCommandSource -> serverCommandSource.hasPermissionLevel(2))
                                     .then(
                                             CommandManager.literal("reload")
                                                     .executes(EmbellishChatCommand::executeReloadConfig)
@@ -24,7 +25,6 @@ public class EmbellishChatCommand {
 
     private static int executeReloadConfig(CommandContext<ServerCommandSource> context) {
         ConfigManager.INSTANCE.readConfig();
-        ConfigManager.INSTANCE.broadcastConfig();
         context.getSource().sendFeedback(()-> Text.literal("embellish chat mod config loaded"),true);
         return 1;
     }

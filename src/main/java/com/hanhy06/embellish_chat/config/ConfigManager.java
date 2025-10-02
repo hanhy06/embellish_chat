@@ -19,11 +19,11 @@ import java.util.List;
 public class ConfigManager {
     public static ConfigManager INSTANCE;
 
-    private final String configFileName = EmbellishChat.MOD_ID+".json";
+    private static final String CONFIG_FILE_NAME = EmbellishChat.MOD_ID+".json";
     private final Path configFilePath;
     private Config config = Config.createDefault();
 
-    private List<ConfigListener> listeners = new ArrayList<>();
+    private final List<ConfigListener> listeners = new ArrayList<>();
 
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -34,7 +34,7 @@ public class ConfigManager {
     public ConfigManager(Path configDirPath){
         INSTANCE = this;
 
-        this.configFilePath = configDirPath.resolve(configFileName);
+        this.configFilePath = configDirPath.resolve(CONFIG_FILE_NAME);
 
         if(!Files.exists(configFilePath)){
             try {
@@ -47,16 +47,10 @@ public class ConfigManager {
     }
 
     public void readConfig(){
+        Config loaded = null;
+
         try (BufferedReader reader = Files.newBufferedReader(configFilePath, StandardCharsets.UTF_8)) {
-            Config loaded = gson.fromJson(reader, Config.class);
-            if (loaded != null) {
-                config = loaded;
-                broadcastConfig();
-                EmbellishChat.LOGGER.debug("Config loaded successfully.");
-            } else {
-                writeConfig();
-                EmbellishChat.LOGGER.warn("Config file is empty or invalid. Using default values.");
-            }
+            loaded = gson.fromJson(reader, Config.class);
         } catch (IOException e) {
             writeConfig();
             EmbellishChat.LOGGER.error("Failed to read config file: {}. Using default values.", configFilePath, e);
@@ -67,13 +61,22 @@ public class ConfigManager {
             writeConfig();
             EmbellishChat.LOGGER.error("Unexpected error loading config file: {}. Using default values.", configFilePath, e);
         }
+
+        if (loaded != null) {
+            config = loaded;
+            broadcastConfig();
+            EmbellishChat.LOGGER.info("Config loaded successfully.");
+        } else {
+            writeConfig();
+            EmbellishChat.LOGGER.warn("Config file is empty or invalid. Using default values.");
+        }
     }
 
     public void writeConfig(){
         try (BufferedWriter writer = Files.newBufferedWriter(configFilePath, StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
             gson.toJson(config, writer);
-            EmbellishChat.LOGGER.debug("Config saved successfully to {}", configFilePath);
+            EmbellishChat.LOGGER.info("Config saved successfully to {}", configFilePath);
         } catch (IOException e) {
             EmbellishChat.LOGGER.error("Failed to write config file: {}", configFilePath, e);
         } catch (Exception e) {
@@ -84,6 +87,8 @@ public class ConfigManager {
     public void addListener(ConfigListener listener){
         listeners.add(listener);
     }
+
+    public void clearListener(){listeners.clear();}
 
     public void broadcastConfig(){
         for (ConfigListener listener : listeners){

@@ -32,11 +32,13 @@ public class EmbellishChat implements ModInitializer {
 
         EmbellishChat.server = server;
 
-        new ConfigManager(fabricConfigDirPath);
+        ConfigManager manager = new ConfigManager(fabricConfigDirPath);
+        manager.clearListener();
 
-        new ChatHandler();
-        ConfigManager.INSTANCE.addListener(ChatHandler.INSTANCE);
-		ConfigManager.INSTANCE.readConfig();
+        ChatHandler handler = new  ChatHandler();
+
+        manager.addListener(handler);
+		manager.readConfig();
 
 		LOGGER.info("{} initialized successfully.", MOD_ID);
 	}

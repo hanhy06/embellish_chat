@@ -24,7 +24,7 @@ public class ChatHandler implements ConfigListener {
     public ChatHandler() {
         INSTANCE = this;
         config = ConfigManager.getConfig();
-        mentionSound = Identifier.of(config.defaultMentionSound());
+        mentionSound = Identifier.tryParse(config.defaultMentionSound());
     }
 
     public SignedMessage handleChatMessage(ServerPlayerEntity sender, SignedMessage original){
@@ -52,6 +52,6 @@ public class ChatHandler implements ConfigListener {
     @Override
     public void onConfigReload(Config newConfig) {
         config = newConfig;
-        mentionSound = Identifier.of(config.defaultMentionSound());
+        mentionSound = Identifier.tryParse(config.defaultMentionSound());
     }
 }

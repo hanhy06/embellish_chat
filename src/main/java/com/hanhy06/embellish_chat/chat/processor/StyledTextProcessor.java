@@ -39,7 +39,7 @@ public class StyledTextProcessor {
         String font = config.defaultChatFont();
         if (!font.isEmpty()){
             result = result.fillStyle(Style.EMPTY.withFont(
-                    new StyleSpriteSource.Font(Identifier.of(font))
+                    new StyleSpriteSource.Font(Identifier.tryParse(font))
             ));
         }
 
@@ -165,7 +165,7 @@ public class StyledTextProcessor {
                     substring(context, matcher.start(2), matcher.end(2))
                             .fillStyle(Style.EMPTY
                                     .withFont(
-                                            new StyleSpriteSource.Font(Identifier.of(matcher.group(3)))
+                                            new StyleSpriteSource.Font(Identifier.tryParse(matcher.group(3)))
                                     )
                             )
             );
