@@ -20,52 +20,58 @@ public class StyledTextProcessor {
     private static final Pattern ITALIC = Pattern.compile("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)");
     private static final Pattern STRIKETHROUGH = Pattern.compile("(?<!\\\\)~~(.+?)~~");
     private static final Pattern OBFUSCATED = Pattern.compile("(?<!\\\\)\\|\\|(.+?)\\|\\|");
-    private static final Pattern COLOR = Pattern.compile("(?<!\\\\)(#[0-9A-Fa-f]{6})(.+?)#");
-    private static final Pattern OPEN_URI = Pattern.compile("(?<![\\\\!])(\\[(.+?)])\\((https?://[^\\s)]+)\\)");
-    private static final Pattern FONT = Pattern.compile("(?<!\\\\)(\\[(.+?)])\\{([^}]+)\\}");
+    private static final Pattern BRACKET = Pattern.compile("(?<!\\\\)\\[(.+?)](?:\\((https://[^\\s)]+)\\)|\\{(.+?)}|<(#[0-9A-Fa-f]{6})>)");
 
     public static MutableText applyStyles(Config config, MutableText text, List<Receiver> receivers){
         if (text == null || text.getString().isBlank()) return text;
 
         MutableText result = text;
 
-        int textColor = config.defaultChatColor();
-        if (textColor > 0) {
-            result.fillStyle(Style.EMPTY.withColor(textColor));
-        } else if (textColor < 0) {
-            result = applyStyledRainbow(result);
-        }
-
-        String font = config.defaultChatFont();
-        if (!font.isEmpty()){
-            result = result.fillStyle(Style.EMPTY.withFont(
-                    new StyleSpriteSource.Font(Identifier.tryParse(font))
-            ));
-        }
+        result = applyDefaultColor(config,result);
+        applyDefaultFont(config,result);
 
         if (config.mentionEnabled()){
-            result = applyStyledMention(result,receivers);
-        }
-
-        if (config.fontEnabled()) {
-            result = applyStyledFont(result);
-        }
-
-        if (config.coloringEnabled()) {
-            result = applyStyledColor(result);
+            result = applyMention(result,receivers);
         }
 
         if (config.markdownEnabled()){
-            if (config.openUriEnabled()) result = applyStyledOpenURI(result);
-            result = applyStyledPattern(BOLD,result,Style.EMPTY.withBold(true));
-            result = applyStyledPattern(UNDERLINE,result,Style.EMPTY.withUnderline(true));
-            result = applyStyledPattern(ITALIC,result,Style.EMPTY.withItalic(true));
-            result = applyStyledPattern(STRIKETHROUGH,result,Style.EMPTY.withStrikethrough(true));
-            result = applyStyledPattern(OBFUSCATED,result,Style.EMPTY.withObfuscated(true));
-            result = removeEscapeSlashes(result);
+            result = applyMarkdown(result);
+            result = applyStyledBracketed(config,result);
         }
 
         return Metadata.metadata(result);
+    }
+
+    private static MutableText applyDefaultColor(Config config,MutableText text){
+        int textColor = config.defaultChatColor();
+        if (textColor > 0) {
+            text.fillStyle(Style.EMPTY.withColor(textColor));
+        } else if (textColor < 0) {
+            return applyRainbow(text);
+        }
+        return text;
+    }
+
+    private static void applyDefaultFont(Config config,MutableText text){
+        String font = config.defaultChatFont();
+        if (!font.isEmpty()){
+            text.fillStyle(Style.EMPTY.withFont(
+                    new StyleSpriteSource.Font(Identifier.tryParse(font))
+            ));
+        }
+    }
+
+    private static MutableText applyMarkdown(MutableText text){
+        MutableText result = text;
+
+        result = applyStyledPattern(BOLD,result,Style.EMPTY.withBold(true));
+        result = applyStyledPattern(UNDERLINE,result,Style.EMPTY.withUnderline(true));
+        result = applyStyledPattern(ITALIC,result,Style.EMPTY.withItalic(true));
+        result = applyStyledPattern(STRIKETHROUGH,result,Style.EMPTY.withStrikethrough(true));
+        result = applyStyledPattern(OBFUSCATED,result,Style.EMPTY.withObfuscated(true));
+        result = removeEscapeSlashes(result);
+
+        return result;
     }
 
     private static MutableText applyStyledPattern(Pattern pattern, MutableText text, Style style){
@@ -89,94 +95,63 @@ public class StyledTextProcessor {
         return result;
     }
 
-    private static MutableText applyStyledColor(MutableText text){
+    private static MutableText applyStyledBracketed(Config config, MutableText text){
         String str = text.getString();
-        Matcher matcher = COLOR.matcher(str);
+        Matcher matcher = BRACKET.matcher(str);
 
         MutableText result = Text.empty();
         int lastEnd = 0;
 
         matcher.reset();
         while (matcher.find()) {
-            Color color = Color.decode(matcher.group(1));
-
-            result.append(substring(text, lastEnd, matcher.start()));
-            result.append(
-                    substring(text, matcher.start(2), matcher.end(2))
-                            .fillStyle(
-                                    Style.EMPTY.withColor(color.getRGB())
-                    )
-            );
-            lastEnd = matcher.end();
-        }
-
-        result.append(substring(text, lastEnd, str.length()));
-
-        return result;
-    }
-
-    private static MutableText applyStyledOpenURI(MutableText text) {
-        String str = text.getString();
-        Matcher matcher = OPEN_URI.matcher(str);
-
-        MutableText result = Text.empty();
-        int lastEnd = 0;
-
-        while (matcher.find()) {
             result.append(substring(text, lastEnd, matcher.start()));
 
-            URI uri;
-            try {
-                uri = URI.create(matcher.group(3));
-            } catch (IllegalArgumentException e) {
-                EmbellishChat.LOGGER.warn("Invalid URL address: {}", matcher.group(3));
-                result.append(substring(text, matcher.start(), matcher.end()));
-                lastEnd = matcher.end();
-                continue;
+            char sing = text.getString().charAt(matcher.end()-1);
+            Style style = Style.EMPTY;
+
+            if (sing == ')' && config.openUriEnabled()){
+                style = withUrl(matcher.group(2));
+            } else if (sing == '}' && config.fontEnabled()) {
+                style = withFont(matcher.group(3));
+            }else if (sing == '>' && config.coloringEnabled()){
+                style = withColor(matcher.group(4));
             }
 
-            ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
             result.append(
-                    substring(text, matcher.start(2), matcher.end(2))
-                            .fillStyle(Style.EMPTY
-                                    .withClickEvent(clickEvent)
-                                    .withColor(0x0000EE)
-                            )
-            );
-
-            lastEnd = matcher.end();
-        }
-
-        result.append(substring(text, lastEnd, str.length()));
-        return result;
-    }
-
-
-    private static MutableText applyStyledFont(MutableText text) {
-        String str = text.getString();
-        Matcher matcher = FONT.matcher(str);
-
-        MutableText result = Text.empty();
-        int lastEnd = 0;
-
-        while (matcher.find()) {
-            result.append(substring(text, lastEnd, matcher.start()));
-            result.append(
-                    substring(text, matcher.start(2), matcher.end(2))
-                            .fillStyle(Style.EMPTY
-                                    .withFont(
-                                            new StyleSpriteSource.Font(Identifier.tryParse(matcher.group(3)))
-                                    )
-                            )
+                    substring(text, matcher.start(1), matcher.end(1)).fillStyle(style)
             );
             lastEnd = matcher.end();
         }
 
         result.append(substring(text, lastEnd, str.length()));
+
         return result;
     }
 
-    private static MutableText applyStyledMention(MutableText text, List<Receiver> receivers){
+    private static Style withColor(String hex){
+        int color = Color.decode(hex).getRGB();
+        return Style.EMPTY.withColor(color);
+    }
+
+    private static Style withFont(String fontId){
+        return Style.EMPTY.withFont(new StyleSpriteSource.Font(Identifier.tryParse(fontId)));
+    }
+
+    private static Style withUrl(String url){
+        Style style = Style.EMPTY;
+        URI uri = null;
+        try {
+            uri = URI.create(url);
+        } catch (IllegalArgumentException e) {
+            EmbellishChat.LOGGER.warn("Invalid URL address: {}", url);
+        }
+
+        ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
+        style = style.withClickEvent(clickEvent);
+        return style.withColor(0x0000EE);
+    }
+
+    private static MutableText applyMention(MutableText text, List<Receiver> receivers){
         MutableText result = Text.empty();
         int lastEnd = 0;
 
@@ -196,7 +171,7 @@ public class StyledTextProcessor {
         return result;
     }
 
-    private static MutableText applyStyledRainbow(MutableText text){
+    private static MutableText applyRainbow(MutableText text){
         MutableText result = Text.empty();
 
         int length = text.getString().length();
