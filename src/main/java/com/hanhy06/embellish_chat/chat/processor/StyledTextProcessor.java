@@ -23,7 +23,7 @@ public class StyledTextProcessor {
     private static final Pattern STRIKETHROUGH = Pattern.compile("(?<!\\\\)~~(.+?)~~");
     private static final Pattern OBFUSCATED = Pattern.compile("(?<!\\\\)\\|\\|(.+?)\\|\\|");
     private static final Pattern COLOR = Pattern.compile("(?<!\\\\)\\[(.+?)]<([^>]+)>");
-    private static final Pattern OPEN_URI = Pattern.compile("(?<![\\\\!])\\[(.+?)]\\((https?://[^\\s)]+)\\)");
+    private static final Pattern OPEN_URI = Pattern.compile("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+)\\)");
     private static final Pattern FONT = Pattern.compile("(?<!\\\\)\\[(.+?)]\\{([^}]+)}");
 
     public static MutableText applyStyles(Config config, MutableText text, List<Receiver> receivers){
@@ -34,7 +34,7 @@ public class StyledTextProcessor {
         result = applyDefaultColor(config, result);
         applyDefaultFont(config, result);
 
-        if (config.mentionEnabled() && receivers != null && !receivers.isEmpty()) {
+        if (receivers != null && !receivers.isEmpty()) {
             result = applyMention(result, receivers);
         }
 

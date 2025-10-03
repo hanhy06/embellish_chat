@@ -12,7 +12,6 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,16 +22,16 @@ import java.util.regex.Pattern;
 public class Mention {
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{1,16})(?=\\b|$)");
 
-    public static void broadcastMention(Identifier mentionSound, ServerPlayerEntity sender, List<Receiver> receivers){
+    public static void broadcastMention(SoundEvent mentionSound, float soundPitch, Text sender, List<Receiver> receivers){
+        MutableText titleText = sender.copy();
+        titleText.styled(style -> style.withBold(true));
+        titleText.append("mentioned you");
+
         for (Receiver receiver : new HashSet<>(receivers)){
             ServerPlayerEntity player = receiver.player();
             if (player == null) continue;
 
-            MutableText titleText = sender.getName().copy()
-                    .styled(style -> style.withColor(receiver.teamColor()).withBold(true))
-                    .append(Text.literal(" mentioned you").fillStyle(Style.EMPTY.withBold(false).withColor(Formatting.WHITE)));
-
-            player.playSoundToPlayer(SoundEvent.of(mentionSound),SoundCategory.UI,1f,1.75f);
+            player.playSoundToPlayer(mentionSound,SoundCategory.PLAYERS,1f,soundPitch);
             player.sendMessage(titleText ,true);
         }
     }

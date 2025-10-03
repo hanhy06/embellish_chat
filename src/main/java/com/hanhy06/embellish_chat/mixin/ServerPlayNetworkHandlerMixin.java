@@ -15,6 +15,6 @@ public class ServerPlayNetworkHandlerMixin {
 
     @ModifyVariable(method = "handleDecoratedMessage", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
     private SignedMessage modifyDecoratedMessage(SignedMessage original) {
-        return ChatHandler.INSTANCE.handleChatMessage(player,original);
+        return ChatHandler.INSTANCE.handleChatMessage(player.getName(),original);
     }
 }

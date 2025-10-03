@@ -14,6 +14,7 @@ public record Config(
         boolean markdownEnabled,
         int defaultMentionColor,
         String defaultMentionSound,
+        float defaultMentionSoundPitch,
         int defaultChatColor,
         String defaultChatFont,
         HashMap<String, Integer> defaultColorPreset
@@ -29,6 +30,7 @@ public record Config(
                 true,
                 0xFFFF55,
                 "minecraft:entity.experience_orb.pickup",
+                1.75f,
                 0x0,
                 "",
                 new HashMap<>(

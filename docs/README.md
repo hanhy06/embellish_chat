@@ -4,11 +4,9 @@ EmbellishChat is a Fabric mod designed to enhance the chat experience on Minecra
 
 ✨ Key Features
 
-* **Markdown-Style Chat Formatting:** Emphasize your messages with various text styles.
+* **Extended Markdown-Style Chat Formatting:** Use Markdown-like styles (bold, italic, underline, strikethrough, obfuscation, color, font). Works in normal chat and whispers.
 
-* **HEX Color Code Support:** Freely apply any color to your text using the `#RRGGBB` format.
-
-* **Clickable Links:** Create clickable links in chat.
+* **Clickable Links:** Create clickable links in chat. For security, only the `https` protocol is recognized.
 
 * **Player Mention System:** Use the `@` symbol to mention other players.
 
@@ -28,18 +26,18 @@ EmbellishChat is a Fabric mod designed to enhance the chat experience on Minecra
 
 Use the following formats in the chat window to apply various styles to your messages.
 
-| Feature           | Syntax              | Example                                                       | Result                                                                                                                 |
-|-------------------|---------------------|:--------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|
-| Bold              | `**Text**`          | `**Important Message**`                                       | ![Bold](https://github.com/hanhy06/embellish_chat/blob/1.21.9/docs/images/Bold.png?raw=true)                           |
-| Italic            | `_Text_`            | `_A point I want to emphasize_`                               | ![Italic](https://github.com/hanhy06/embellish_chat/blob/1.21.9/docs/images/Italic.png?raw=true)                       |
-| Underline         | `__Text__`          | `__This looks like a link__`                                  | ![Underline](https://github.com/hanhy06/embellish_chat/blob/1.21.9/docs/images/Underline.png?raw=true)                 |
-| Strike            | `~~Text~~`          | `~~This content is outdated~~`                                | ![Strike](https://github.com/hanhy06/embellish_chat/blob/1.21.9/docs/images/Strike.png?raw=true)                       |
-| Obfuscated        | `\|\|Text\|\|`      | `\|\|This will be unreadable\|\|`                             | ![Obfuscated](https://github.com/hanhy06/embellish_chat/blob/1.21.9/docs/images/Obfuscated.gif?raw=true)               |
-| Color             | `#HexCodeText#`     | `#FF5555Hello World#`                                         | ![Color](https://github.com/hanhy06/embellish_chat/blob/1.21.9/docs/images/Color.png?raw=true)                         |
-| Link              | `[Text](URL)`       | `Download it [here](https://modrinth.com/mod/embellish_chat)` | ![Link](https://github.com/hanhy06/embellish_chat/blob/1.21.9/docs/images/Link.gif?raw=true)                           |
-| Font              | `[Text]{Path}`      | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://github.com/hanhy06/embellish_chat/blob/1.21.9/docs/images/Font.png?raw=true)                           |
-| Mention           | `@PlayerName`       | `Hello, @Player492!`                                          | ![Mention](https://github.com/hanhy06/embellish_chat/blob/1.21.9/docs/images/Mention.png?raw=true)                     |
-| Escape Formatting | Use a backslash `\` | `This is not \**bold**.`                                      | ![Escape_Formatting](https://github.com/hanhy06/embellish_chat/blob/1.21.9/docs/images/Escape_Formatting.png?raw=true) |
+| Feature           | Syntax                         | Example                                                       | Result                                                                                                                 |
+|-------------------|--------------------------------|:--------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|
+| Bold              | `**Text**`                     | `**Important Message**`                                       | ![Bold](https://github.com/hanhy06/embellish_chat/blob/1.21.9/docs/images/Bold.png?raw=true)                           |
+| Italic            | `_Text_`                       | `_A point I want to emphasize_`                               | ![Italic](https://github.com/hanhy06/embellish_chat/blob/1.21.9/docs/images/Italic.png?raw=true)                       |
+| Underline         | `__Text__`                     | `__This looks like a link__`                                  | ![Underline](https://github.com/hanhy06/embellish_chat/blob/1.21.9/docs/images/Underline.png?raw=true)                 |
+| Strike            | `~~Text~~`                     | `~~This content is outdated~~`                                | ![Strike](https://github.com/hanhy06/embellish_chat/blob/1.21.9/docs/images/Strike.png?raw=true)                       |
+| Obfuscated        | `\|\|Text\|\|`                 | `\|\|This will be unreadable\|\|`                             | ![Obfuscated](https://github.com/hanhy06/embellish_chat/blob/1.21.9/docs/images/Obfuscated.gif?raw=true)               |
+| Color             | `[Text]<#hex or color preset>` | `[Hello World]<red>`                                          | ![Color](https://github.com/hanhy06/embellish_chat/blob/1.21.9/docs/images/Color.png?raw=true)                         |
+| Link              | `[Text](URL)`                  | `Download it [here](https://modrinth.com/mod/embellish_chat)` | ![Link](https://github.com/hanhy06/embellish_chat/blob/1.21.9/docs/images/Link.gif?raw=true)                           |
+| Font              | `[Text]{Path}`                 | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://github.com/hanhy06/embellish_chat/blob/1.21.9/docs/images/Font.png?raw=true)                           |
+| Mention           | `@PlayerName`                  | `Hello, @Player492!`                                          | ![Mention](https://github.com/hanhy06/embellish_chat/blob/1.21.9/docs/images/Mention.png?raw=true)                     |
+| Escape Formatting | Use a backslash `\`            | `This is not \**bold**.`                                      | ![Escape_Formatting](https://github.com/hanhy06/embellish_chat/blob/1.21.9/docs/images/Escape_Formatting.png?raw=true) |
 
 ---
 
@@ -49,33 +47,42 @@ Use the following formats in the chat window to apply various styles to your mes
 
 You can find `embellish_chat.json` in your config folder.
 
+The true/false configuration settings are defined in the actual order of application.
+
 ```jsonc
 {
   "inChatStylingEnabled": true,
-  "markdownEnabled": true,
-  "openUriEnabled": true,
-  "coloringEnabled": true,
-  "fontEnabled": true,
   "mentionEnabled": true,
+  "fontEnabled": true,
+  "coloringEnabled": true,
+  "openUriEnabled": true,
+  "markdownEnabled": true,
   "defaultMentionColor": "0xFFFF55",
   "defaultMentionSound": "minecraft:entity.experience_orb.pickup",
-  "defaultChatColor": "-0x1",
-  "defaultChatFont": ""
+  "defaultMentionSoundPitch": 1.75
+  "defaultChatColor": "-0x000001",
+  "defaultChatFont": "",
+  "defaultColorPreset": {
+    "dark green": "0x00AA00",
+    ...
+  }
 }
 ```
 
 ### Configuration Options
 
-* `inChatStylingEnabled`: If `true`, enables all chat styling features (color, font, mentions, markdown, etc.).
-* `markdownEnabled`: If `true`, enables Markdown-like formatting (bold, italic, underline, strikethrough, obfuscation, links).
-* `openUriEnabled`: If `true`, enables clickable links in chat.
-* `coloringEnabled`: If `true`, enables custom text coloring with HEX codes.
-* `fontEnabled`: If `true`, allows specifying a font for chat messages.
-* `mentionEnabled`: If `true`, enables the `@` mention feature.
-* `defaultMentionColor`: Sets the default HEX color for mentioned players not on a team.
-* `defaultMentionSound`: Sets the sound event ID to play on mention.
-* `defaultChatColor`: Sets the default text color. If `0`, not applied.
-* `defaultChatFont`: Sets the default font for chat messages.
+- **`inChatStylingEnabled`**: If `true`, enables all chat styling features (color, font, mentions, markdown, etc.).
+- **`mentionEnabled`**: If `true`, enables the `@` mention feature.
+- **`fontEnabled`**: If `true`, allows specifying a font for chat messages.
+- **`coloringEnabled`**: If `true`, enables custom text coloring with HEX codes or preset.
+- **`openUriEnabled`**: If `true`, enables clickable links in chat.
+- **`markdownEnabled`**: If `true`, enables Markdown-like formatting (bold, italic, underline, strikethrough, obfuscation).
+- **`defaultMentionColor`**: Sets the default HEX color for mentioned players not on a team.
+- **`defaultMentionSound`**: Sets the sound event ID to play on mention.
+- **`defaultMentionSoundPitch`**: Sets the pitch of the mention sound.
+- **`defaultChatColor`**: Sets the default text color. If `0`, not applied.
+- **`defaultChatFont`**: Sets the default font for chat messages.
+- **`defaultColorPreset`**: This is a user-defined preset. It can be defined as `"key" : "hex color value"` (for example, `"poo" : "0x4E3629"`).
 
 ---
 

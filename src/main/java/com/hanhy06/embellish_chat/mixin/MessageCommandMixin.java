@@ -8,6 +8,7 @@ import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.command.MessageCommand;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -28,8 +29,11 @@ public class MessageCommandMixin {
             ServerCommandSource source,
             Collection<ServerPlayerEntity> targets
     ) {
+        Text name = source.getPlayer().getName();
+        if (name == null) name = Text.empty();
+
         return originalCall.call(ChatHandler.INSTANCE.handleChatMessage(
-                source.getPlayer(),
+                name,
                 msg
         ));
     }
