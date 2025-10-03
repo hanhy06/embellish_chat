@@ -50,7 +50,7 @@ public class Mention {
             ServerPlayerEntity player = receiver.player();
             if (player == null) continue;
 
-            player.playSoundToPlayer(mentionSound,SoundCategory.PLAYERS,1f,mentionPitch);
+            player.playSoundToPlayer(mentionSound,SoundCategory.UI,1f,mentionPitch);
             player.sendMessage(titleText ,true);
         }
     }

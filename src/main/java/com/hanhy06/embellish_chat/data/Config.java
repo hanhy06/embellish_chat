@@ -32,7 +32,7 @@ public record Config(
                 0xFFFF55,
                 "minecraft:entity.experience_orb.pickup",
                 1.75f,
-                "",
+                " mentioned you",
                 0x0,
                 "",
                 new HashMap<>(

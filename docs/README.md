@@ -59,7 +59,8 @@ The true/false configuration settings are defined in the actual order of applica
   "markdownEnabled": true,
   "defaultMentionColor": "0xFFFF55",
   "defaultMentionSound": "minecraft:entity.experience_orb.pickup",
-  "defaultMentionSoundPitch": 1.75,
+  "defaultMentionPitch": 1.75,
+  "defaultMentionMessage": " mentioned you",
   "defaultChatColor": "-0x000001",
   "defaultChatFont": "",
   "defaultColorPreset": {
@@ -79,7 +80,8 @@ The true/false configuration settings are defined in the actual order of applica
 - **`markdownEnabled`**: If `true`, enables Markdown formatting (bold, italic, underline, strikethrough, obfuscation).
 - **`defaultMentionColor`**: Sets the default HEX color for mentioned players not on a team.
 - **`defaultMentionSound`**: Sets the sound event ID to play on mention.
-- **`defaultMentionSoundPitch`**: Sets the pitch of the mention sound.
+- **`defaultMentionPitch`**: Sets the pitch of the mention sound.
+- **`defaultMentionMessage`**: Sets the message displayed after the sender's name on mention.
 - **`defaultChatColor`**: Sets the default text color. If `0`, not applied.
 - **`defaultChatFont`**: Sets the default font for chat messages.
 - **`defaultColorPreset`**: This is a user-defined preset. It can be defined as `"key" : "hex color value"` (for example, `"poo" : "0x4E3629"`).
