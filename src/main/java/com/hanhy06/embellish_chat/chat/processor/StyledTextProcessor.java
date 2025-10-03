@@ -46,10 +46,15 @@ public class StyledTextProcessor {
             result = applyPattern(OPEN_URI,result,StyledTextProcessor::withOpenURI);
         }
 
+        if (config.coloringEnabled()) {
+            result = applyPattern(COLOR, result, StyledTextProcessor::withColor);
+        }
+
         if (config.markdownEnabled()) {
             result = applyMarkdown(result);
-            if (config.coloringEnabled()) result = applyPattern(COLOR,result,StyledTextProcessor::withColor);
         }
+
+        result = removeEscapeSlashes(result);
         return Metadata.metadata(result);
     }
 
@@ -78,7 +83,6 @@ public class StyledTextProcessor {
         result = applyPattern(ITALIC,        result, Style.EMPTY.withItalic(true));
         result = applyPattern(STRIKETHROUGH, result, Style.EMPTY.withStrikethrough(true));
         result = applyPattern(OBFUSCATED,    result, Style.EMPTY.withObfuscated(true));
-        result = removeEscapeSlashes(result);
 
         return result;
     }
@@ -114,6 +118,7 @@ public class StyledTextProcessor {
         matcher.reset();
         while (matcher.find()) {
             Style style = function.apply(matcher.group(2));
+
             result.append(substring(text, lastEnd, matcher.start()));
             result.append(
                     substring(text, matcher.start(1), matcher.end(1)).fillStyle(style)
