@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.data.Config;
+import com.hanhy06.embellish_chat.util.HexIntegerTypeAdapter;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -25,7 +26,11 @@ public class ConfigManager {
 
     private final List<ConfigListener> listeners = new ArrayList<>();
 
-    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(int.class,new HexIntegerTypeAdapter())
+            .registerTypeAdapter(Integer.class,new HexIntegerTypeAdapter())
+            .setPrettyPrinting()
+            .create();
 
     public static Config getConfig(){
         return INSTANCE.config;
