@@ -6,55 +6,64 @@ import com.hanhy06.embellish_chat.config.ConfigListener;
 import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
-import net.minecraft.client.font.Font;
 import net.minecraft.network.message.SignedMessage;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ChatHandler implements ConfigListener {
     public static ChatHandler INSTANCE;
-    private static Config config;
-    private static RegistryEntry<SoundEvent> mentionSound;
 
-    public ChatHandler() {
+    private Config config;
+    private Mention mention;
+    private final PlayerManager manager;
+
+    public ChatHandler(PlayerManager manager, Scoreboard scoreboard) {
         INSTANCE = this;
-        config = ConfigManager.getConfig();
-        mentionSound = RegistryEntry.of(Registries.SOUND_EVENT.get(Identifier.of(config.defaultMentionSound())));
-    }
-
-    public SignedMessage handleChatMessage(ServerPlayerEntity sender, SignedMessage original){
-        MinecraftServer server = sender.getServer();
-
-        MutableText message = MutableText.of(original.getContent().getContent());
-        String raw = original.getContent().getString();
-
-        List<Receiver> receivers = new ArrayList<>();
-        if (config.mentionEnabled()) {
-            receivers = Mention.mentionParser(server, raw);
-
-            if (!receivers.isEmpty()) {
-                Mention.broadcastMention(config,mentionSound, sender, receivers);
-            }
-        }
-
-        if (config.inChatStylingEnabled()) {
-            message = StyledTextProcessor.applyStyles(config,message, receivers);
-        }
-
-        return original.withUnsignedContent(message);
+        this.manager = manager;
+        this.mention = new Mention(manager,scoreboard);
     }
 
     @Override
     public void onConfigReload(Config newConfig) {
-        config = newConfig;
-        mentionSound = RegistryEntry.of(Registries.SOUND_EVENT.get(Identifier.of(config.defaultMentionSound())));
+        applyConfig(newConfig);
+    }
+
+    public SignedMessage handleChatMessage(SignedMessage original) {
+        ServerPlayerEntity sender = manager.getPlayer(original.getSender());
+
+        MutableText baseMessage = MutableText.of(original.getContent().getContent());
+        String raw = original.getContent().getString();
+
+        List<Receiver> receivers = List.of();
+        if (config.mentionEnabled()) {
+            receivers = handleMentions(raw,sender);
+        }
+
+        MutableText finalMessage = baseMessage;
+        if (config.inChatStylingEnabled()){
+            finalMessage = StyledTextProcessor.applyStyles(config, baseMessage, receivers);
+        }
+
+        return original.withUnsignedContent(finalMessage);
+    }
+
+    private List<Receiver> handleMentions(String raw,ServerPlayerEntity sender) {
+        List<Receiver> receivers = mention.parseMentions(raw);
+        if (!receivers.isEmpty()) {
+            mention.broadcastMention(sender, receivers);
+        }
+        return receivers;
+    }
+
+    private void applyConfig(Config config) {
+        this.config = config;
+        Identifier id = Identifier.tryParse(config.defaultMentionSound());
+        mention.updateConfig(SoundEvent.of(id),config.defaultMentionPitch(),config.defaultMentionMessage());
     }
 }

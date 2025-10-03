@@ -14,7 +14,7 @@ public class HexIntegerTypeAdapter extends TypeAdapter<Integer> {
         if (value == null) {
             out.nullValue();
         } else {
-            out.value("0x" + Integer.toHexString(value).toUpperCase());
+            out.value(String.format("0x%06X", value & 0xFFFFFF));
         }
     }
 

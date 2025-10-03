@@ -13,31 +13,29 @@ import org.slf4j.LoggerFactory;
 import java.nio.file.Path;
 
 public class EmbellishChat implements ModInitializer {
-	public static final String MOD_ID = "embellish_chat";
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-
-    private static ConfigManager configManager;
-	private static ChatHandler chatHandler;
+    public static final String MOD_ID = "embellish_chat";
+    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     @Override
-	public void onInitialize() {
-		LOGGER.info("{} initializing...", MOD_ID);
+    public void onInitialize() {
+        LOGGER.info("{} initializing...", MOD_ID);
 
-		ServerLifecycleEvents.SERVER_STARTED.register(EmbellishChat::handleServerStart);
+        ServerLifecycleEvents.SERVER_STARTED.register(EmbellishChat::handleServerStart);
 
-		EmbellishChatCommand.registerBetterChatCommand();
-	}
+        EmbellishChatCommand.registerBetterChatCommand();
+    }
 
-	private static void handleServerStart(MinecraftServer server) {
+    private static void handleServerStart(MinecraftServer server) {
         Path fabricConfigDirPath = FabricLoader.getInstance().getConfigDir();
 
-        configManager = new ConfigManager(fabricConfigDirPath);
+        ConfigManager manager = new ConfigManager(fabricConfigDirPath);
+        manager.clearListener();
 
-        chatHandler = new ChatHandler();
-        configManager.addListener(chatHandler);
+        ChatHandler handler = new  ChatHandler(server.getPlayerManager(),server.getScoreboard());
 
-		configManager.readConfig();
+        manager.addListener(handler);
+        manager.readConfig();
 
-		LOGGER.info("{} initialized successfully.", MOD_ID);
-	}
+        LOGGER.info("{} initialized successfully.", MOD_ID);
+    }
 }

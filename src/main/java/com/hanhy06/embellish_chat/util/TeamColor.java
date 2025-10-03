@@ -3,12 +3,8 @@ package com.hanhy06.embellish_chat.util;
 import com.hanhy06.embellish_chat.config.ConfigManager;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.Team;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Formatting;
-
-import java.util.UUID;
 
 public class TeamColor {
     public static int getPlayerColor(ServerPlayerEntity player){
@@ -17,12 +13,12 @@ public class TeamColor {
             if (team != null) {
                 Formatting formatting = team.getColor();
                 if (formatting != null && formatting.isColor() && formatting != Formatting.RESET) {
-                    return formatting.getColorValue().intValue();
+                    return formatting.getColorValue();
                 }
             }
         }
 
-        return -1;
+        return ConfigManager.getConfig().defaultMentionColor();
     }
 
     public static int getPlayerColor(Scoreboard scoreboard,String name){
@@ -32,7 +28,7 @@ public class TeamColor {
                 Formatting formatting = team.getColor();
                 boolean belongTeam = team.getPlayerList().contains(name);
                 if (formatting != null && formatting.isColor() && formatting != Formatting.RESET && belongTeam) {
-                    return formatting.getColorValue().intValue();
+                    return formatting.getColorValue();
                 } else if (belongTeam) {
                     return ConfigManager.getConfig().defaultMentionColor();
                 }
@@ -40,16 +36,5 @@ public class TeamColor {
         }
 
         return ConfigManager.getConfig().defaultMentionColor();
-    }
-
-    public static int decideTeamColor(
-            PlayerManager manager,
-            MinecraftServer server,
-            UUID playerId,
-            String playerName
-    ) {
-        int color = TeamColor.getPlayerColor(manager.getPlayer(playerId));
-        if (color != -1) return color;
-        return TeamColor.getPlayerColor(server.getScoreboard(), playerName);
     }
 }
