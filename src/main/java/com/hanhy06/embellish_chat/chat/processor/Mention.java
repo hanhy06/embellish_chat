@@ -24,22 +24,24 @@ public class Mention {
 
     private SoundEvent mentionSound;
     private float mentionPitch;
+    private String mentionMessage;
 
     public Mention(PlayerManager manager,Scoreboard scoreboard){
         this.manager = manager;
         this.scoreboard = scoreboard;
     }
 
-    public void updateConfig(SoundEvent mentionSound,float mentionPitch){
+    public void updateConfig(SoundEvent mentionSound,float mentionPitch,String mentionMessage){
         this.mentionSound = mentionSound;
         this.mentionPitch = mentionPitch;
+        this.mentionMessage = mentionMessage;
     }
 
     public void broadcastMention(ServerPlayerEntity sender, List<Receiver> receivers){
         MutableText titleText = sender.getName().copy();
         titleText.styled(style -> style.withBold(true).withColor(TeamColor.getPlayerColor(sender)));
         titleText.append(
-                Text.literal(" mentioned you").styled(
+                Text.literal(mentionMessage).styled(
                         style -> style.withBold(false).withColor(0xFFFFFF)
                 )
         );

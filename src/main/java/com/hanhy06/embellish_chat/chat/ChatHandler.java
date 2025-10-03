@@ -64,6 +64,6 @@ public class ChatHandler implements ConfigListener {
     private void applyConfig(Config config) {
         this.config = config;
         Identifier id = Identifier.tryParse(config.defaultMentionSound());
-        mention.updateConfig(SoundEvent.of(id),config.defaultMentionPitch());
+        mention.updateConfig(SoundEvent.of(id),config.defaultMentionPitch(),config.defaultMentionMessage());
     }
 }
