@@ -35,7 +35,7 @@ public class EmbellishChat implements ModInitializer {
         ConfigManager manager = new ConfigManager(fabricConfigDirPath);
         manager.clearListener();
 
-        ChatHandler handler = new  ChatHandler();
+        ChatHandler handler = new  ChatHandler(server.getPlayerManager());
 
         manager.addListener(handler);
 		manager.readConfig();

@@ -22,26 +22,40 @@ import java.util.regex.Pattern;
 public class Mention {
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{1,16})(?=\\b|$)");
 
-    public static void broadcastMention(SoundEvent mentionSound, float soundPitch, Text sender, List<Receiver> receivers){
-        MutableText titleText = sender.copy();
-        titleText.styled(style -> style.withBold(true));
-        titleText.append("mentioned you");
+    private static PlayerManager manager;
+    private static Scoreboard scoreboard;
+
+    private final SoundEvent mentionSound;
+    private final float mentionPitch;
+
+    public Mention(MinecraftServer server,SoundEvent mentionSound,float mentionPitch){
+        manager = server.getPlayerManager();
+        scoreboard = server.getScoreboard();
+        this.mentionSound = mentionSound;
+        this.mentionPitch = mentionPitch;
+    }
+
+    public void broadcastMention(ServerPlayerEntity sender, List<Receiver> receivers){
+        MutableText titleText = sender.getName().copy();
+        titleText.styled(style -> style.withBold(true).withColor(TeamColor.getPlayerColor(sender)));
+        titleText.append(
+                Text.literal(" mentioned you").styled(
+                        style -> style.withBold(false).withColor(0xFFFFFF)
+                )
+        );
 
         for (Receiver receiver : new HashSet<>(receivers)){
             ServerPlayerEntity player = receiver.player();
             if (player == null) continue;
 
-            player.playSoundToPlayer(mentionSound,SoundCategory.PLAYERS,1f,soundPitch);
+            player.playSoundToPlayer(mentionSound,SoundCategory.PLAYERS,1f,mentionPitch);
             player.sendMessage(titleText ,true);
         }
     }
 
-    public static List<Receiver> parseMentions(MinecraftServer server, String raw){
+    public List<Receiver> parseMentions(String raw){
         List<Receiver> receivers = new ArrayList<>();
         Matcher matcher = MENTION_PATTERN.matcher(raw);
-
-        Scoreboard scoreboard = server.getScoreboard();
-        PlayerManager manager = server.getPlayerManager();
 
         while (matcher.find()){
             String name = matcher.group(1);

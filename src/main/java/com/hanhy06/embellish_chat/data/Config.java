@@ -14,7 +14,7 @@ public record Config(
         boolean markdownEnabled,
         int defaultMentionColor,
         String defaultMentionSound,
-        float defaultMentionSoundPitch,
+        float defaultMentionPitch,
         int defaultChatColor,
         String defaultChatFont,
         HashMap<String, Integer> defaultColorPreset

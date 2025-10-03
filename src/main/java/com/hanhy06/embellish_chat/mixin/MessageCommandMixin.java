@@ -29,11 +29,7 @@ public class MessageCommandMixin {
             ServerCommandSource source,
             Collection<ServerPlayerEntity> targets
     ) {
-        Text name = source.getPlayer().getName();
-        if (name == null) name = Text.empty();
-
         return originalCall.call(ChatHandler.INSTANCE.handleChatMessage(
-                name,
                 msg
         ));
     }
