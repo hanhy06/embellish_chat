@@ -42,12 +42,12 @@ public class StyledTextProcessor {
             result = applyPattern(FONT,result,StyledTextProcessor::withFont);
         }
 
-        if (config.openUriEnabled()){
-            result = applyPattern(OPEN_URI,result,StyledTextProcessor::withOpenURI);
-        }
-
         if (config.coloringEnabled()) {
             result = applyPattern(COLOR, result, StyledTextProcessor::withColor);
+        }
+
+        if (config.openUriEnabled()){
+            result = applyPattern(OPEN_URI,result,StyledTextProcessor::withOpenURI);
         }
 
         if (config.markdownEnabled()) {
