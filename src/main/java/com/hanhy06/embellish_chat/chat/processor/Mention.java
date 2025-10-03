@@ -22,15 +22,15 @@ import java.util.regex.Pattern;
 public class Mention {
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{1,16})(?=\\b|$)");
 
-    private static PlayerManager manager;
-    private static Scoreboard scoreboard;
+    private final PlayerManager manager;
+    private final Scoreboard scoreboard;
 
     private final SoundEvent mentionSound;
     private final float mentionPitch;
 
-    public Mention(MinecraftServer server,SoundEvent mentionSound,float mentionPitch){
-        manager = server.getPlayerManager();
-        scoreboard = server.getScoreboard();
+    public Mention(PlayerManager manager,Scoreboard scoreboard,SoundEvent mentionSound,float mentionPitch){
+        this.manager = manager;
+        this.scoreboard = scoreboard;
         this.mentionSound = mentionSound;
         this.mentionPitch = mentionPitch;
     }

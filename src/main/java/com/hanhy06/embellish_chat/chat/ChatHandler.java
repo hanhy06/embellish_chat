@@ -8,6 +8,7 @@ import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
 import net.minecraft.network.message.SignedMessage;
+import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
@@ -29,6 +30,11 @@ public class ChatHandler implements ConfigListener {
         applyConfig(ConfigManager.getConfig());
     }
 
+    @Override
+    public void onConfigReload(Config newConfig) {
+        applyConfig(newConfig);
+    }
+
     public SignedMessage handleChatMessage(SignedMessage original) {
         ServerPlayerEntity sender = manager.getPlayer(original.getSender());
 
@@ -48,11 +54,6 @@ public class ChatHandler implements ConfigListener {
         return original.withUnsignedContent(finalMessage);
     }
 
-    @Override
-    public void onConfigReload(Config newConfig) {
-        applyConfig(newConfig);
-    }
-
     private List<Receiver> handleMentions(String raw,ServerPlayerEntity sender) {
         List<Receiver> receivers = mention.parseMentions(raw);
         if (!receivers.isEmpty()) {
@@ -64,6 +65,6 @@ public class ChatHandler implements ConfigListener {
     private void applyConfig(Config config) {
         this.config = config;
         Identifier id = Identifier.tryParse(config.defaultMentionSound());
-        mention = new Mention(EmbellishChat.server,SoundEvent.of(id),config.defaultMentionPitch());
+        mention = new Mention(manager,manager.getServer().getScoreboard(),SoundEvent.of(id),config.defaultMentionPitch());
     }
 }
