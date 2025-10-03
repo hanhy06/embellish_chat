@@ -59,7 +59,7 @@ The true/false configuration settings are defined in the actual order of applica
   "markdownEnabled": true,
   "defaultMentionColor": "0xFFFF55",
   "defaultMentionSound": "minecraft:entity.experience_orb.pickup",
-  "defaultMentionSoundPitch": 1.75
+  "defaultMentionSoundPitch": 1.75,
   "defaultChatColor": "-0x000001",
   "defaultChatFont": "",
   "defaultColorPreset": {
