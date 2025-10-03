@@ -49,7 +49,7 @@ You can find `embellish_chat.json` in your config folder.
 
 The true/false configuration settings are defined in the actual order of application.
 
-```jsonc
+```
 {
   "inChatStylingEnabled": true,
   "mentionEnabled": true,
