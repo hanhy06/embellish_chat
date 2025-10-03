@@ -57,13 +57,10 @@ public class ConfigManager {
         try (BufferedReader reader = Files.newBufferedReader(configFilePath, StandardCharsets.UTF_8)) {
             loaded = gson.fromJson(reader, Config.class);
         } catch (IOException e) {
-            writeConfig();
             EmbellishChat.LOGGER.error("Failed to read config file: {}. Using default values.", configFilePath, e);
         } catch (JsonSyntaxException e) {
-            writeConfig();
             EmbellishChat.LOGGER.error("Failed to parse config file: {}. Check JSON syntax. Using default values.", configFilePath, e);
         } catch (Exception e) {
-            writeConfig();
             EmbellishChat.LOGGER.error("Unexpected error loading config file: {}. Using default values.", configFilePath, e);
         }
 
