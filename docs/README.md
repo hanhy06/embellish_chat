@@ -76,7 +76,7 @@ The true/false configuration settings are defined in the actual order of applica
 - **`fontEnabled`**: If `true`, allows specifying a font for chat messages.
 - **`coloringEnabled`**: If `true`, enables custom text coloring with HEX codes or preset.
 - **`openUriEnabled`**: If `true`, enables clickable links in chat.
-- **`markdownEnabled`**: If `true`, enables Markdown-like formatting (bold, italic, underline, strikethrough, obfuscation).
+- **`markdownEnabled`**: If `true`, enables Markdown formatting (bold, italic, underline, strikethrough, obfuscation).
 - **`defaultMentionColor`**: Sets the default HEX color for mentioned players not on a team.
 - **`defaultMentionSound`**: Sets the sound event ID to play on mention.
 - **`defaultMentionSoundPitch`**: Sets the pitch of the mention sound.
