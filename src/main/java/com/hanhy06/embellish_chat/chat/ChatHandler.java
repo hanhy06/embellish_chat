@@ -1,6 +1,5 @@
 package com.hanhy06.embellish_chat.chat;
 
-import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.chat.processor.Mention;
 import com.hanhy06.embellish_chat.chat.processor.StyledTextProcessor;
 import com.hanhy06.embellish_chat.config.ConfigListener;
@@ -24,10 +23,10 @@ public class ChatHandler implements ConfigListener {
     private Mention mention;
     private final PlayerManager manager;
 
-    public ChatHandler(PlayerManager manager) {
+    public ChatHandler(PlayerManager manager, Scoreboard scoreboard) {
         INSTANCE = this;
         this.manager = manager;
-        applyConfig(ConfigManager.getConfig());
+        this.mention = new Mention(manager,scoreboard);
     }
 
     @Override
@@ -65,6 +64,6 @@ public class ChatHandler implements ConfigListener {
     private void applyConfig(Config config) {
         this.config = config;
         Identifier id = Identifier.tryParse(config.defaultMentionSound());
-        mention = new Mention(manager,manager.getServer().getScoreboard(),SoundEvent.of(id),config.defaultMentionPitch());
+        mention.updateConfig(SoundEvent.of(id),config.defaultMentionPitch());
     }
 }

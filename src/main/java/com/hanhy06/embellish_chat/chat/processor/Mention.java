@@ -3,15 +3,12 @@ package com.hanhy06.embellish_chat.chat.processor;
 import com.hanhy06.embellish_chat.data.Receiver;
 import com.hanhy06.embellish_chat.util.TeamColor;
 import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,12 +22,15 @@ public class Mention {
     private final PlayerManager manager;
     private final Scoreboard scoreboard;
 
-    private final SoundEvent mentionSound;
-    private final float mentionPitch;
+    private SoundEvent mentionSound;
+    private float mentionPitch;
 
-    public Mention(PlayerManager manager,Scoreboard scoreboard,SoundEvent mentionSound,float mentionPitch){
+    public Mention(PlayerManager manager,Scoreboard scoreboard){
         this.manager = manager;
         this.scoreboard = scoreboard;
+    }
+
+    public void updateConfig(SoundEvent mentionSound,float mentionPitch){
         this.mentionSound = mentionSound;
         this.mentionPitch = mentionPitch;
     }
