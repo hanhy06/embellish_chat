@@ -3,16 +3,13 @@ package com.hanhy06.embellish_chat.chat;
 import com.hanhy06.embellish_chat.chat.processor.Mention;
 import com.hanhy06.embellish_chat.chat.processor.StyledTextProcessor;
 import com.hanhy06.embellish_chat.config.ConfigListener;
-import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.MutableText;
-import net.minecraft.util.Identifier;
 
 import java.util.List;
 
