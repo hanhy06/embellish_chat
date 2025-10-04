@@ -20,13 +20,15 @@ public class ChatHandler implements ConfigListener {
     public static ChatHandler INSTANCE;
 
     private Config config;
-    private Mention mention;
+    private final Mention mention;
+    private final StyledTextProcessor processor;
     private final PlayerManager manager;
 
     public ChatHandler(PlayerManager manager, Scoreboard scoreboard) {
         INSTANCE = this;
         this.manager = manager;
         this.mention = new Mention(manager,scoreboard);
+        this.processor = new StyledTextProcessor();
     }
 
     @Override
@@ -47,7 +49,7 @@ public class ChatHandler implements ConfigListener {
 
         MutableText finalMessage = baseMessage;
         if (config.inChatStylingEnabled()){
-            finalMessage = StyledTextProcessor.applyStyles(config, baseMessage, receivers);
+            finalMessage = processor.applyStyles(baseMessage, receivers);
         }
 
         return original.withUnsignedContent(finalMessage);
@@ -63,7 +65,7 @@ public class ChatHandler implements ConfigListener {
 
     private void applyConfig(Config config) {
         this.config = config;
-        Identifier id = Identifier.tryParse(config.defaultMentionSound());
-        mention.updateConfig(SoundEvent.of(id),config.defaultMentionPitch(),config.defaultMentionMessage());
+        mention.updateConfig(config);
+        processor.updateConfig(config);
     }
 }

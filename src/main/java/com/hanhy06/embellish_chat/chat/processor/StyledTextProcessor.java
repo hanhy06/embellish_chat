@@ -1,7 +1,6 @@
 package com.hanhy06.embellish_chat.chat.processor;
 
 import com.hanhy06.embellish_chat.EmbellishChat;
-import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
 import com.hanhy06.embellish_chat.util.Metadata;
@@ -10,6 +9,7 @@ import net.minecraft.util.Identifier;
 
 import java.awt.*;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -26,28 +26,42 @@ public class StyledTextProcessor {
     private static final Pattern OPEN_URI = Pattern.compile("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+)\\)");
     private static final Pattern FONT = Pattern.compile("(?<!\\\\)\\[(.+?)]\\{([^}]+)}");
 
-    public static MutableText applyStyles(Config config, MutableText text, List<Receiver> receivers){
+    private Config config = null;
+    private int defaultChatColor = 0;
+    private StyleSpriteSource defaultChatFont = null;
+    private HashMap<String,Integer> defaultColorPreset = null;
+
+    public void updateConfig(Config config){
+        this.config = config;
+        this.defaultChatColor = config.defaultChatColor();
+        this.defaultChatFont = new StyleSpriteSource.Font(
+                Identifier.tryParse(config.defaultChatFont())
+        );
+        this.defaultColorPreset = config.defaultColorPreset();
+    }
+
+    public MutableText applyStyles(MutableText text, List<Receiver> receivers){
         if (text == null || text.getString().isBlank()) return text;
 
         MutableText result = text;
 
-        result = applyDefaultColor(config, result);
-        applyDefaultFont(config, result);
+        result = applyDefaultColor(result);
+        applyDefaultFont(result);
 
         if (receivers != null && !receivers.isEmpty()) {
             result = applyMention(result, receivers);
         }
 
         if (config.fontEnabled()){
-            result = applyPattern(FONT,result,StyledTextProcessor::applyFont);
+            result = applyPattern(FONT,result,this::applyFont);
         }
 
         if (config.coloringEnabled()) {
-            result = applyPattern(COLOR, result, StyledTextProcessor::applyColor);
+            result = applyPattern(COLOR, result, this::applyColor);
         }
 
         if (config.openUriEnabled()){
-            result = applyPattern(OPEN_URI,result,StyledTextProcessor::applyOpenURI);
+            result = applyPattern(OPEN_URI,result,this::applyOpenURI);
         }
 
         if (config.markdownEnabled()) {
@@ -58,24 +72,22 @@ public class StyledTextProcessor {
         return Metadata.metadata(result);
     }
 
-    private static MutableText applyDefaultColor(Config config, MutableText text) {
-        int color = config.defaultChatColor();
-        if (color > 0) {
-            text.fillStyle(Style.EMPTY.withColor(color));
+    private MutableText applyDefaultColor(MutableText text) {
+        if (defaultChatColor > 0) {
+            text.styled(style -> style.withColor(defaultChatColor));
             return text;
         }
-        if (color < 0) return applyRainbow(text);
+        if (defaultChatColor < 0) return applyRainbow(text);
         return text;
     }
 
-    private static void applyDefaultFont(Config config, MutableText text) {
-        String font = config.defaultChatFont();
-        if (!font.isEmpty()) {
-            text.fillStyle(Style.EMPTY.withFont(new StyleSpriteSource.Font(Identifier.tryParse(font))));
+    private void applyDefaultFont(MutableText text) {
+        if (defaultChatFont != null) {
+            text.styled(style -> style.withFont(defaultChatFont));
         }
     }
 
-    private static MutableText applyMarkdown(MutableText text) {
+    private MutableText applyMarkdown(MutableText text) {
         MutableText result = text;
 
         result = applyPattern(BOLD,          result, Style.EMPTY.withBold(true));
@@ -87,7 +99,7 @@ public class StyledTextProcessor {
         return result;
     }
 
-    private static MutableText applyPattern(Pattern pattern, MutableText text, Style style){
+    private MutableText applyPattern(Pattern pattern, MutableText text, Style style){
         String str = text.getString();
         Matcher matcher = pattern.matcher(str);
 
@@ -108,7 +120,7 @@ public class StyledTextProcessor {
         return result;
     }
 
-    private static MutableText applyPattern(Pattern pattern, MutableText text, BiFunction<MutableText,String,MutableText> function){
+    private MutableText applyPattern(Pattern pattern, MutableText text, BiFunction<MutableText,String,MutableText> function){
         String str = text.getString();
         Matcher matcher = pattern.matcher(str);
 
@@ -134,25 +146,25 @@ public class StyledTextProcessor {
         return result;
     }
 
-    private static MutableText applyColor(MutableText text, String strColor){
+    private MutableText applyColor(MutableText text, String strColor){
         if (strColor.charAt(0) == '#'){
             int color = Color.decode(strColor).getRGB();
             return text.styled(style -> style.withColor(color));
         } else if (strColor.equals("rainbow")) {
             return applyRainbow(text);
         } else {
-            int color = ConfigManager.getConfig().defaultColorPreset().getOrDefault(strColor,0xFFFFFF);
+            int color = defaultColorPreset.getOrDefault(strColor,0xFFFFFF);
             return text.styled(style -> style.withColor(color));
         }
     }
 
-    private static MutableText applyFont(MutableText text, String strFont){
+    private MutableText applyFont(MutableText text, String strFont){
         return text.styled(style -> style.withFont(
                 new StyleSpriteSource.Font(Identifier.tryParse(strFont))
         ));
     }
 
-    private static MutableText applyOpenURI(MutableText text, String strUri){
+    private MutableText applyOpenURI(MutableText text, String strUri){
         try {
             URI uri = URI.create(strUri);
             ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
@@ -166,7 +178,7 @@ public class StyledTextProcessor {
         }
     }
 
-    private static MutableText applyRainbow(MutableText text){
+    private MutableText applyRainbow(MutableText text){
         MutableText result = Text.empty();
 
         int length = text.getString().length();
@@ -184,7 +196,7 @@ public class StyledTextProcessor {
         return result;
     }
 
-    private static MutableText applyMention(MutableText text, List<Receiver> receivers){
+    private MutableText applyMention(MutableText text, List<Receiver> receivers){
         MutableText result = Text.empty();
         int lastEnd = 0;
 
