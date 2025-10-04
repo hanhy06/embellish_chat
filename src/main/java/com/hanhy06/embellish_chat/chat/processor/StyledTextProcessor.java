@@ -12,7 +12,7 @@ import java.awt.*;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,15 +39,15 @@ public class StyledTextProcessor {
         }
 
         if (config.fontEnabled()){
-            result = applyPattern(FONT,result,StyledTextProcessor::withFont);
+            result = applyPattern(FONT,result,StyledTextProcessor::applyFont);
         }
 
         if (config.coloringEnabled()) {
-            result = applyPattern(COLOR, result, StyledTextProcessor::withColor);
+            result = applyPattern(COLOR, result, StyledTextProcessor::applyColor);
         }
 
         if (config.openUriEnabled()){
-            result = applyPattern(OPEN_URI,result,StyledTextProcessor::withOpenURI);
+            result = applyPattern(OPEN_URI,result,StyledTextProcessor::applyOpenURI);
         }
 
         if (config.markdownEnabled()) {
@@ -108,7 +108,7 @@ public class StyledTextProcessor {
         return result;
     }
 
-    private static MutableText applyPattern(Pattern pattern, MutableText text, Function<String,Style> function){
+    private static MutableText applyPattern(Pattern pattern, MutableText text, BiFunction<MutableText,String,MutableText> function){
         String str = text.getString();
         Matcher matcher = pattern.matcher(str);
 
@@ -117,11 +117,14 @@ public class StyledTextProcessor {
 
         matcher.reset();
         while (matcher.find()) {
-            Style style = function.apply(matcher.group(2));
+            MutableText styledText = function.apply(
+                    substring(text, matcher.start(1), matcher.end(1)),
+                    matcher.group(2)
+            );
 
             result.append(substring(text, lastEnd, matcher.start()));
             result.append(
-                    substring(text, matcher.start(1), matcher.end(1)).fillStyle(style)
+                    styledText
             );
             lastEnd = matcher.end();
         }
@@ -131,31 +134,54 @@ public class StyledTextProcessor {
         return result;
     }
 
-    private static Style withColor(String strColor){
+    private static MutableText applyColor(MutableText text, String strColor){
         if (strColor.charAt(0) == '#'){
             int color = Color.decode(strColor).getRGB();
-            return Style.EMPTY.withColor(color);
-        }else {
+            return text.styled(style -> style.withColor(color));
+        } else if (strColor.equals("rainbow")) {
+            return applyRainbow(text);
+        } else {
             int color = ConfigManager.getConfig().defaultColorPreset().getOrDefault(strColor,0xFFFFFF);
-            return Style.EMPTY.withColor(color);
+            return text.styled(style -> style.withColor(color));
         }
     }
 
-    private static Style withFont(String fontId){
-        return Style.EMPTY.withFont(
-                new StyleSpriteSource.Font(Identifier.tryParse(fontId))
-        );
+    private static MutableText applyFont(MutableText text, String strFont){
+        return text.styled(style -> style.withFont(
+                new StyleSpriteSource.Font(Identifier.tryParse(strFont))
+        ));
     }
 
-    private static Style withOpenURI(String strUri){
+    private static MutableText applyOpenURI(MutableText text, String strUri){
         try {
             URI uri = URI.create(strUri);
             ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
-            return Style.EMPTY.withClickEvent(clickEvent).withColor(0x0000FF);
+            return text.styled(style -> style
+                    .withClickEvent(clickEvent)
+                    .withColor(0x0000FF)
+            );
         }catch (IllegalArgumentException e) {
             EmbellishChat.LOGGER.warn("Invalid URL address: {}", strUri);
-            return Style.EMPTY;
+            return text;
         }
+    }
+
+    private static MutableText applyRainbow(MutableText text){
+        MutableText result = Text.empty();
+
+        int length = text.getString().length();
+
+        for (int i = 0; i < length; i++) {
+            float hue = (float) i / length;
+            int rgb = Color.HSBtoRGB(hue, 0.7f, 1f);
+            result.append(
+                    substring(text, i, i+1).styled(
+                            style -> style.withColor(rgb)
+                    )
+            );
+        }
+
+        return result;
     }
 
     private static MutableText applyMention(MutableText text, List<Receiver> receivers){
@@ -174,24 +200,6 @@ public class StyledTextProcessor {
         }
 
         result.append(substring(text, lastEnd, text.getString().length()));
-
-        return result;
-    }
-
-    private static MutableText applyRainbow(MutableText text){
-        MutableText result = Text.empty();
-
-        int length = text.getString().length();
-
-        for (int i = 0; i < length; i++) {
-            float hue = (float) i / length;
-            int rgb = Color.HSBtoRGB(hue, 0.7f, 1f);
-            result.append(
-                    substring(text, i, i+1).fillStyle(
-                            Style.EMPTY.withColor(rgb)
-                    )
-            );
-        }
 
         return result;
     }
