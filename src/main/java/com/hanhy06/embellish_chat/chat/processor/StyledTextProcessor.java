@@ -34,8 +34,10 @@ public class StyledTextProcessor {
     public void updateConfig(Config config) {
         this.config = config;
         this.defaultChatColor = config.defaultChatColor();
-        this.defaultChatFont = new StyleSpriteSource.Font(Identifier.tryParse(config.defaultChatFont()));
         this.defaultColorPreset = config.defaultColorPreset();
+        if (!config.defaultChatFont().isEmpty()){
+            this.defaultChatFont = new StyleSpriteSource.Font(Identifier.tryParse(config.defaultChatFont()));
+        }
     }
 
     public MutableText applyStyles(MutableText text, List<Receiver> receivers) {
@@ -50,20 +52,20 @@ public class StyledTextProcessor {
             result = applyMention(result, receivers);
         }
 
-        if (config.fontEnabled()) {
-            result = applyPattern(FONT, result, this::applyFont);
+        if (config.markdownEnabled()) {
+            result = applyMarkdown(result);
         }
 
-        if (config.coloringEnabled()) {
-            result = applyPattern(COLOR, result, this::applyColor);
+        if (config.fontEnabled()) {
+            result = applyPattern(FONT, result, this::applyFont);
         }
 
         if (config.openUriEnabled()) {
             result = applyPattern(OPEN_URI, result, this::applyOpenURI);
         }
 
-        if (config.markdownEnabled()) {
-            result = applyMarkdown(result);
+        if (config.coloringEnabled()) {
+            result = applyPattern(COLOR, result, this::applyColor);
         }
 
         result = removeEscapeSlashes(result);
@@ -147,7 +149,7 @@ public class StyledTextProcessor {
         } else if (strColor.equals("rainbow")) {
             return applyRainbow(text);
         } else {
-            int color = defaultColorPreset.getOrDefault(strColor, 0xFFFFFF);
+            int color = defaultColorPreset.getOrDefault(strColor, defaultChatColor);
             return text.fillStyle(Style.EMPTY.withColor(color));
         }
     }
