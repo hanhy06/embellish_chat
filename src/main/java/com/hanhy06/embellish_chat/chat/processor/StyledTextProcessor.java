@@ -26,6 +26,8 @@ public class StyledTextProcessor {
     private static final Pattern OPEN_URI = Pattern.compile("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+)\\)");
     private static final Pattern FONT = Pattern.compile("(?<!\\\\)\\[(.+?)]\\{([^}]+)}");
 
+    private static final int URL_COLOR = 0x0000EE;
+
     private Config config = null;
     private int defaultChatColor = 0;
     private StyleSpriteSource defaultChatFont = null;
@@ -37,6 +39,8 @@ public class StyledTextProcessor {
         this.defaultColorPreset = config.defaultColorPreset();
         if (!config.defaultChatFont().isEmpty()){
             this.defaultChatFont = new StyleSpriteSource.Font(Identifier.tryParse(config.defaultChatFont()));
+        }else {
+            this.defaultChatFont = null;
         }
     }
 
@@ -146,7 +150,7 @@ public class StyledTextProcessor {
         if (strColor.charAt(0) == '#') {
             int color = Color.decode(strColor).getRGB();
             return text.fillStyle(Style.EMPTY.withColor(color));
-        } else if (strColor.equals("rainbow")) {
+        } else if (strColor.equals("rainbow") && config.rainbowEnabled()) {
             return applyRainbow(text);
         } else {
             int color = defaultColorPreset.getOrDefault(strColor, defaultChatColor);
@@ -165,7 +169,7 @@ public class StyledTextProcessor {
             return text.fillStyle(
                     Style.EMPTY
                             .withClickEvent(clickEvent)
-                            .withColor(0x0000FF)
+                            .withColor(URL_COLOR)
             );
         } catch (IllegalArgumentException e) {
             EmbellishChat.LOGGER.warn("Invalid URL address: {}", strUri);
