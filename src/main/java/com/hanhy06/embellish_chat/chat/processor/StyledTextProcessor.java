@@ -147,15 +147,17 @@ public class StyledTextProcessor {
     }
 
     private MutableText applyColor(MutableText text, String strColor) {
-        if (strColor.charAt(0) == '#') {
+        boolean inPreset = defaultColorPreset.containsKey(strColor);
+        if (inPreset){
+            int color = defaultColorPreset.getOrDefault(strColor, defaultChatColor);
+            return text.fillStyle(Style.EMPTY.withColor(color));
+        } else if (strColor.charAt(0) == '#') {
             int color = Color.decode(strColor).getRGB();
             return text.fillStyle(Style.EMPTY.withColor(color));
         } else if (strColor.equals("rainbow") && config.rainbowEnabled()) {
             return applyRainbow(text);
-        } else {
-            int color = defaultColorPreset.getOrDefault(strColor, defaultChatColor);
-            return text.fillStyle(Style.EMPTY.withColor(color));
         }
+        return text;
     }
 
     private MutableText applyFont(MutableText text, String strFont) {
