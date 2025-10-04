@@ -17,14 +17,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StyledTextProcessor {
-    private static final Pattern BOLD = Pattern.compile("(?<!\\\\)\\*\\*(.+?)\\*\\*");
-    private static final Pattern UNDERLINE = Pattern.compile("(?<!\\\\)__(.+?)__");
+    private static final Pattern BOLD = Pattern.compile("(?<!\\\\)\\*\\*([^*]+?)\\*\\*");
+    private static final Pattern UNDERLINE = Pattern.compile("(?<!\\\\)__([^_]+?)__");
     private static final Pattern ITALIC = Pattern.compile("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)");
-    private static final Pattern STRIKETHROUGH = Pattern.compile("(?<!\\\\)~~(.+?)~~");
-    private static final Pattern OBFUSCATED = Pattern.compile("(?<!\\\\)\\|\\|(.+?)\\|\\|");
-    private static final Pattern COLOR = Pattern.compile("(?<!\\\\)\\[(.+?)]<([^>]+)>");
-    private static final Pattern OPEN_URI = Pattern.compile("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+)\\)");
-    private static final Pattern FONT = Pattern.compile("(?<!\\\\)\\[(.+?)]\\{([^}]+)}");
+    private static final Pattern STRIKETHROUGH = Pattern.compile("(?<!\\\\)~~([^~]+?)~~");
+    private static final Pattern OBFUSCATED = Pattern.compile("(?<!\\\\)\\|\\|([^|]+?)\\|\\|");
+    private static final Pattern COLOR = Pattern.compile("(?<!\\\\)\\[(.+?)]<([^>]+?)>");
+    private static final Pattern OPEN_URI = Pattern.compile("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)");
+    private static final Pattern FONT = Pattern.compile("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}");
 
     private static final int URL_COLOR = 0x0000EE;
 
