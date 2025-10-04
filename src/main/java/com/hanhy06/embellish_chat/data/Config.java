@@ -34,7 +34,7 @@ public record Config(
                 1.75f,
                 " mentioned you",
                 0x0,
-                "",
+                "minecraft:default",
                 new HashMap<>(
                         Map.ofEntries(
                                 entry("black", 0x000000),
