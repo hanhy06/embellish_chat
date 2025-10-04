@@ -47,6 +47,8 @@ Use the following formats in the chat window to apply various styles to your mes
 
 You can find `embellish_chat.json` in your config folder.
 
+You can reset the mod settings with `/embellish_chat reload`.
+
 ```
 {
   "inChatStylingEnabled": true,
@@ -60,7 +62,7 @@ You can find `embellish_chat.json` in your config folder.
   "defaultMentionSound": "minecraft:entity.experience_orb.pickup",
   "defaultMentionPitch": 1.75,
   "defaultMentionMessage": " mentioned you",
-  "defaultChatColor": "-0x000001",
+  "defaultChatColor": "0x000000",
   "defaultChatFont": "",
   "defaultColorPreset": {
     "dark green": "0x00AA00",
@@ -82,7 +84,10 @@ You can find `embellish_chat.json` in your config folder.
 - **`defaultMentionSound`**: Sets the sound event ID to play on mention.
 - **`defaultMentionPitch`**: Sets the pitch of the mention sound.
 - **`defaultMentionMessage`**: Sets the message displayed after the sender's name on mention.
-- **`defaultChatColor`**: Sets the default text color. If `0`, not applied.
+- **`defaultChatColor`**: Sets the default text color.
+  If the value is 0, no color is applied.
+  If the value is less than 0, rainbow mode is activated and a gradient is applied to all text.
+  This behavior is not affected by rainbowEnabled.
 - **`defaultChatFont`**: Sets the default font for chat messages.
 - **`defaultColorPreset`**: This is a user-defined preset. It can be defined as `"key" : "hex color value"` (for example, `"poo" : "0x4E3629"`).
 
