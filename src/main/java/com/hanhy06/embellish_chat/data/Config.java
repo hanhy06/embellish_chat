@@ -10,6 +10,7 @@ public record Config(
         boolean mentionEnabled,
         boolean fontEnabled,
         boolean coloringEnabled,
+        boolean rainbowEnabled,
         boolean openUriEnabled,
         boolean markdownEnabled,
         int defaultMentionColor,
@@ -23,6 +24,7 @@ public record Config(
 {
     public static Config createDefault(){
         return new Config(
+                true,
                 true,
                 true,
                 true,

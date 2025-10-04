@@ -1,5 +1,6 @@
 package com.hanhy06.embellish_chat.chat.processor;
 
+import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
 import com.hanhy06.embellish_chat.util.TeamColor;
 import net.minecraft.scoreboard.Scoreboard;
@@ -9,6 +10,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,10 +33,10 @@ public class Mention {
         this.scoreboard = scoreboard;
     }
 
-    public void updateConfig(SoundEvent mentionSound,float mentionPitch,String mentionMessage){
-        this.mentionSound = mentionSound;
-        this.mentionPitch = mentionPitch;
-        this.mentionMessage = mentionMessage;
+    public void updateConfig(Config config){
+        this.mentionSound = SoundEvent.of(Identifier.tryParse(config.defaultMentionSound()));
+        this.mentionPitch = config.defaultMentionPitch();
+        this.mentionMessage = config.defaultMentionMessage();
     }
 
     public void broadcastMention(ServerPlayerEntity sender, List<Receiver> receivers){
