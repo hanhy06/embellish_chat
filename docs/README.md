@@ -41,13 +41,20 @@ Use the following formats in the chat window to apply various styles to your mes
 
 ---
 
+⚙️ Command
+
+- **`/embellish_chat reload`**: Reloads the mod's configuration from the `embellish_chat.json` file.
+
+- **`/embellish_chat ban <player>`**: Prevents the specified player from using the chat styling features.
+
+- **`/embellish_chat pardon <player>`**: Allows the specified player to use the chat styling features again.
+
+---
 ⚙️ Configuration
 
 ### Sample `embellish_chat.json`
 
 You can find `embellish_chat.json` in your config folder.
-
-You can reset the mod settings with `/embellish_chat reload`.
 
 ```
 {
@@ -58,6 +65,7 @@ You can reset the mod settings with `/embellish_chat reload`.
   "rainbowEnabled": true,
   "openUriEnabled": true,
   "markdownEnabled": true,
+  "offlineColorEnabled": true,
   "defaultMentionColor": "0xFFFF55",
   "defaultMentionSound": "minecraft:entity.experience_orb.pickup",
   "defaultMentionPitch": 1.75,
@@ -67,7 +75,10 @@ You can reset the mod settings with `/embellish_chat reload`.
   "defaultColorPreset": {
     "dark green": "0x00AA00",
     ...
-  }
+  },
+  "bannedPlayerList": [
+    ...
+  ]
 }
 ```
 
@@ -80,6 +91,9 @@ You can reset the mod settings with `/embellish_chat reload`.
 - **`rainbowEnabled`** If `true`, enables rainbow text in coloring.
 - **`openUriEnabled`**: If `true`, enables clickable links in chat.
 - **`markdownEnabled`**: If `true`, enables Markdown formatting (bold, italic, underline, strikethrough, obfuscation).
+- **`offlineColorEnabled`**: This mod currently iterates through all teams to check which team an offline player belongs to in order to retrieve their team color.
+  If this option is set to false, the mod will no longer iterate through teams to obtain the color.
+  It is recommended to disable this option if server performance is critical, the computer has low specifications, or the server has a large number of players.
 - **`defaultMentionColor`**: Sets the default HEX color for mentioned players not on a team.
 - **`defaultMentionSound`**: Sets the sound event ID to play on mention.
 - **`defaultMentionPitch`**: Sets the pitch of the mention sound.
@@ -90,6 +104,7 @@ You can reset the mod settings with `/embellish_chat reload`.
   This behavior is not affected by rainbowEnabled.
 - **`defaultChatFont`**: Sets the default font for chat messages.
 - **`defaultColorPreset`**: This is a user-defined preset. It can be defined as `"key" : "hex color value"` (for example, `"poo" : "0x4E3629"`).
+- **`bannedPlayerList`**: Keeps track of the UUIDs of banned users. Players on this list are not allowed to use styling features.
 
 ---
 

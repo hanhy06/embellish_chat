@@ -13,8 +13,13 @@ public class HexIntegerTypeAdapter extends TypeAdapter<Integer> {
     public void write(JsonWriter out, Integer value) throws IOException {
         if (value == null) {
             out.nullValue();
-        } else {
+            return;
+        }
+
+        if (value >= 0) {
             out.value(String.format("0x%06X", value & 0xFFFFFF));
+        } else {
+            out.value(String.valueOf(value));
         }
     }
 
