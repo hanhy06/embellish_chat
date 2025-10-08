@@ -34,6 +34,8 @@ public class ChatHandler implements ConfigListener {
     }
 
     public SignedMessage handleChatMessage(SignedMessage original) {
+        if (config.bannedPlayerList().contains(original.getSender())) return original;
+
         ServerPlayerEntity sender = manager.getPlayer(original.getSender());
 
         MutableText baseMessage = MutableText.of(original.getContent().getContent());

@@ -27,6 +27,8 @@ public class Mention {
     private SoundEvent mentionSound;
     private float mentionPitch;
     private String mentionMessage;
+    private boolean offlineColorEnabled;
+    private int defaultMentionColor;
 
     public Mention(PlayerManager manager,Scoreboard scoreboard){
         this.manager = manager;
@@ -37,6 +39,8 @@ public class Mention {
         this.mentionSound = SoundEvent.of(Identifier.tryParse(config.defaultMentionSound()));
         this.mentionPitch = config.defaultMentionPitch();
         this.mentionMessage = config.defaultMentionMessage();
+        this.offlineColorEnabled = config.offlineColorEnabled();
+        this.defaultMentionColor = config.defaultMentionColor();
     }
 
     public void broadcastMention(ServerPlayerEntity sender, List<Receiver> receivers){
@@ -68,8 +72,10 @@ public class Mention {
 
             if (player != null){
                 teamColor = TeamColor.getPlayerColor(player);
-            }else {
+            }else if (offlineColorEnabled) {
                 teamColor = TeamColor.getPlayerColor(scoreboard,name);
+            } else {
+                teamColor = defaultMentionColor;
             }
 
             receivers.add(

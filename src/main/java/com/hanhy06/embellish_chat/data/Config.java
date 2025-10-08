@@ -1,7 +1,9 @@
 package com.hanhy06.embellish_chat.data;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static java.util.Map.entry;
 
@@ -13,17 +15,20 @@ public record Config(
         boolean rainbowEnabled,
         boolean openUriEnabled,
         boolean markdownEnabled,
+        boolean offlineColorEnabled,
         int defaultMentionColor,
         String defaultMentionSound,
         float defaultMentionPitch,
         String defaultMentionMessage,
         int defaultChatColor,
         String defaultChatFont,
-        HashMap<String, Integer> defaultColorPreset
+        HashMap<String, Integer> defaultColorPreset,
+        List<UUID> bannedPlayerList
 )
 {
     public static Config createDefault(){
         return new Config(
+                true,
                 true,
                 true,
                 true,
@@ -56,7 +61,8 @@ public record Config(
                                 entry("yellow", 0xFFFF55),
                                 entry("white", 0xFFFFFF)
                         )
-                )
+                ),
+                List.of()
         );
     }
 }

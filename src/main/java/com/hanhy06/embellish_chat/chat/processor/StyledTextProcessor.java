@@ -9,9 +9,8 @@ import net.minecraft.util.Identifier;
 
 import java.awt.*;
 import java.net.URI;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,6 +25,8 @@ public class StyledTextProcessor {
     private static final Pattern OPEN_URI = Pattern.compile("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)");
     private static final Pattern FONT = Pattern.compile("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}");
 
+    private static final Pattern ESCAPES = Pattern.compile("\\\\([*_~#\\\\])");
+
     private static final int URL_COLOR = 0x0000EE;
 
     private Config config = null;
@@ -39,7 +40,7 @@ public class StyledTextProcessor {
         this.defaultColorPreset = config.defaultColorPreset();
         if (!config.defaultChatFont().isEmpty()){
             this.defaultChatFont = new StyleSpriteSource.Font(Identifier.tryParse(config.defaultChatFont()));
-        }else {
+        } else {
             this.defaultChatFont = null;
         }
     }
@@ -95,63 +96,101 @@ public class StyledTextProcessor {
 
     private MutableText applyMarkdown(MutableText text) {
         MutableText result = text;
-
         result = applyPattern(BOLD, result, Style.EMPTY.withBold(true));
         result = applyPattern(UNDERLINE, result, Style.EMPTY.withUnderline(true));
         result = applyPattern(ITALIC, result, Style.EMPTY.withItalic(true));
         result = applyPattern(STRIKETHROUGH, result, Style.EMPTY.withStrikethrough(true));
         result = applyPattern(OBFUSCATED, result, Style.EMPTY.withObfuscated(true));
-
         return result;
     }
 
+    record Run(
+            int start,
+            int end,
+            Style style,
+            String content
+    ) {}
+
+    record Runs(
+            String full,
+            List<Run> runs
+    ) {}
+
+    private static Runs flatten(Text text) {
+        List<Run> list = new ArrayList<>();
+        StringBuilder all = new StringBuilder();
+
+        text.visit(new Text.StyledVisitor<Void>() {
+            @Override
+            public Optional<Void> accept(Style style, String content) {
+                int start = all.length();
+                all.append(content);
+                int end = all.length();
+                list.add(new Run(start, end, style, content));
+                return Optional.empty();
+            }
+        }, Style.EMPTY);
+
+        return new Runs(all.toString(), list);
+    }
+
+    private static MutableText slice(Runs runs, int begin, int end) {
+        MutableText out = Text.empty();
+        for (Run run : runs.runs) {
+            if (run.end <= begin) continue;
+            if (run.start >= end) break;
+
+            int startIndex = Math.max(begin, run.start) - run.start;
+            int endIndex = Math.min(end, run.end) - run.start;
+            out.append(Text.literal(run.content.substring(startIndex, endIndex)).setStyle(run.style));
+        }
+        return out;
+    }
+
     private MutableText applyPattern(Pattern pattern, MutableText text, Style style) {
-        String str = text.getString();
-        Matcher matcher = pattern.matcher(str);
+        Runs runs = flatten(text);
+        Matcher matcher = pattern.matcher(runs.full);
+        if (!matcher.find()) return text;
 
         MutableText result = Text.empty();
         int lastEnd = 0;
-
-        matcher.reset();
-        while (matcher.find()) {
-            result.append(substring(text, lastEnd, matcher.start()));
-            result.append(substring(text, matcher.start(1), matcher.end(1)).fillStyle(style));
+        do {
+            result.append(slice(runs, lastEnd, matcher.start()));
+            result.append(slice(runs, matcher.start(1), matcher.end(1)).fillStyle(style));
             lastEnd = matcher.end();
-        }
+        } while (matcher.find());
+        result.append(slice(runs, lastEnd, runs.full.length()));
 
-        result.append(substring(text, lastEnd, str.length()));
         return result;
     }
 
     private MutableText applyPattern(Pattern pattern, MutableText text, BiFunction<MutableText, String, MutableText> function) {
-        String str = text.getString();
-        Matcher matcher = pattern.matcher(str);
+        Runs runs = flatten(text);
+        Matcher matcher = pattern.matcher(runs.full);
+        if (!matcher.find()) return text;
 
         MutableText result = Text.empty();
         int lastEnd = 0;
-
-        matcher.reset();
-        while (matcher.find()) {
-            MutableText styledText = function.apply(
-                    substring(text, matcher.start(1), matcher.end(1)),
-                    matcher.group(2)
+        do {
+            result.append(slice(runs, lastEnd, matcher.start()));
+            result.append(
+                    function.apply(
+                            slice(runs, matcher.start(1), matcher.end(1)),
+                            matcher.group(2)
+                    )
             );
-
-            result.append(substring(text, lastEnd, matcher.start()));
-            result.append(styledText);
             lastEnd = matcher.end();
-        }
+        } while (matcher.find());
 
-        result.append(substring(text, lastEnd, str.length()));
+        result.append(slice(runs, lastEnd, runs.full.length()));
         return result;
     }
 
     private MutableText applyColor(MutableText text, String strColor) {
-        boolean inPreset = defaultColorPreset.containsKey(strColor);
-        if (inPreset){
-            int color = defaultColorPreset.getOrDefault(strColor, defaultChatColor);
-            return text.fillStyle(Style.EMPTY.withColor(color));
-        } else if (strColor.charAt(0) == '#') {
+        Integer preset = defaultColorPreset.get(strColor);
+        if (preset != null) {
+            return text.fillStyle(Style.EMPTY.withColor(preset));
+        } else if (!strColor.isEmpty() && strColor.charAt(0) == '#') {
             int color = Color.decode(strColor).getRGB();
             return text.fillStyle(Style.EMPTY.withColor(color));
         } else if (strColor.equals("rainbow") && config.rainbowEnabled()) {
@@ -168,11 +207,7 @@ public class StyledTextProcessor {
         try {
             URI uri = URI.create(strUri);
             ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
-            return text.fillStyle(
-                    Style.EMPTY
-                            .withClickEvent(clickEvent)
-                            .withColor(URL_COLOR)
-            );
+            return text.fillStyle(Style.EMPTY.withClickEvent(clickEvent).withColor(URL_COLOR));
         } catch (IllegalArgumentException e) {
             EmbellishChat.LOGGER.warn("Invalid URL address: {}", strUri);
             return text;
@@ -180,83 +215,48 @@ public class StyledTextProcessor {
     }
 
     private MutableText applyRainbow(MutableText text) {
-        MutableText result = Text.empty();
+        Runs runs = flatten(text);
+        String string = runs.full;
+        int length = string.length();
+        if (length == 0) return text;
 
-        int length = text.getString().length();
+        MutableText out = Text.empty();
         for (int i = 0; i < length; i++) {
             float hue = (float) i / length;
             int rgb = Color.HSBtoRGB(hue, 0.7f, 1f);
-            result.append(substring(text, i, i + 1).fillStyle(Style.EMPTY.withColor(rgb)));
+            out.append(slice(runs, i, i + 1).fillStyle(Style.EMPTY.withColor(rgb)));
         }
-
-        return result;
+        return out;
     }
 
     private MutableText applyMention(MutableText text, List<Receiver> receivers) {
+        Runs runs = flatten(text);
         MutableText result = Text.empty();
         int lastEnd = 0;
-
         for (Receiver receiver : receivers) {
-            result.append(substring(text, lastEnd, receiver.begin()));
+            result.append(slice(runs, lastEnd, receiver.begin()));
             result.append(
-                    substring(text, receiver.begin(), receiver.end())
+                    slice(runs, receiver.begin(), receiver.end())
                             .fillStyle(Style.EMPTY.withColor(receiver.teamColor()).withBold(true))
             );
             lastEnd = receiver.end();
         }
-
-        result.append(substring(text, lastEnd, text.getString().length()));
+        result.append(slice(runs, lastEnd, runs.full.length()));
         return result;
     }
 
     private static MutableText removeEscapeSlashes(MutableText text) {
+        Runs runs = flatten(text);
         MutableText result = Text.empty();
-        final int[] offset = {0};
-
-        text.visit(new Text.StyledVisitor<Void>() {
-            @Override
-            public Optional<Void> accept(Style style, String content) {
-                String replaced = content.replaceAll("\\\\([*_~#\\\\])", "$1");
-                result.append(Text.literal(replaced).setStyle(style));
-
-                offset[0] += content.length();
-                return Optional.empty();
+        for (Run run : runs.runs) {
+            String content = run.content;
+            if (content.indexOf('\\') < 0) {
+                result.append(Text.literal(content).setStyle(run.style));
+            } else {
+                String replaced = ESCAPES.matcher(content).replaceAll("$1");
+                result.append(Text.literal(replaced).setStyle(run.style));
             }
-        }, Style.EMPTY);
-
-        return result;
-    }
-
-    private static MutableText substring(Text text, int beginIndex, int endIndex) {
-        if (beginIndex >= endIndex || text == null) {
-            return Text.empty();
         }
-
-        MutableText result = Text.empty();
-        final int[] currentCharacterOffset = {0};
-
-        text.visit(new Text.StyledVisitor<Void>() {
-            @Override
-            public Optional<Void> accept(Style style, String content) {
-                int contentStartOffset = currentCharacterOffset[0];
-                int contentEndOffset = contentStartOffset + content.length();
-
-                int effectiveStartIndexInFullText = Math.max(contentStartOffset, beginIndex);
-                int effectiveEndIndexInFullText = Math.min(contentEndOffset, endIndex);
-
-                if (effectiveStartIndexInFullText < effectiveEndIndexInFullText) {
-                    int subStartIndexInContentPiece = effectiveStartIndexInFullText - contentStartOffset;
-                    int subEndIndexInContentPiece = effectiveEndIndexInFullText - contentStartOffset;
-
-                    String subContent = content.substring(subStartIndexInContentPiece, subEndIndexInContentPiece);
-                    result.append(Text.literal(subContent).setStyle(style));
-                }
-
-                currentCharacterOffset[0] = contentEndOffset;
-                return Optional.empty();
-            }
-        }, Style.EMPTY);
-
         return result;
     }
 }
