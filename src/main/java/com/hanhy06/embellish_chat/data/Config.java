@@ -1,9 +1,6 @@
 package com.hanhy06.embellish_chat.data;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static java.util.Map.entry;
 
@@ -62,7 +59,7 @@ public record Config(
                                 entry("white", 0xFFFFFF)
                         )
                 ),
-                List.of()
+                new ArrayList<>()
         );
     }
 }

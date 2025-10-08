@@ -21,15 +21,24 @@ public class EmbellishChatCommand {
                 (commandDispatcher, commandRegistryAccess, registrationEnvironment) -> {
                     commandDispatcher.register(
                             CommandManager.literal("embellish_chat")
-                                    .requires(serverCommandSource -> serverCommandSource.hasPermissionLevel(2))
+                                    .requires(src -> src.hasPermissionLevel(2))
                                     .then(
                                             CommandManager.literal("reload")
                                                     .executes(EmbellishChatCommand::executeReloadConfig)
                                     )
                                     .then(
                                             CommandManager.literal("ban")
-                                                    .then(CommandManager.argument("target", EntityArgumentType.players()))
-                                                    .executes(EmbellishChatCommand::executeBanPlayer)
+                                                    .then(
+                                                            CommandManager.argument("target", EntityArgumentType.players())
+                                                                    .executes(EmbellishChatCommand::executeBanPlayer)
+                                                    )
+                                    )
+                                    .then(
+                                            CommandManager.literal("pardon")
+                                                    .then(
+                                                            CommandManager.argument("target", EntityArgumentType.players())
+                                                                    .executes(EmbellishChatCommand::executePardonPlayer)
+                                                    )
                                     )
                     );
                 }
@@ -59,6 +68,32 @@ public class EmbellishChatCommand {
                 () -> Text.literal(
                         String.format(
                                 "Player(s) %s has been banned.",
+                                players.stream().map(ServerPlayerEntity::getName).map(Text::getString).collect(Collectors.joining(", "))
+                        )
+                ),
+                true
+        );
+
+        return 1;
+    }
+
+    private static int executePardonPlayer(CommandContext<ServerCommandSource> context){
+        Collection<ServerPlayerEntity> players;
+
+        try {
+            players = EntityArgumentType.getPlayers(context,"target");
+        } catch (CommandSyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+        ConfigManager.getConfig().bannedPlayerList().removeAll(
+                players.stream().map(ServerPlayerEntity::getUuid).toList()
+        );
+        ConfigManager.INSTANCE.writeConfig();
+        context.getSource().sendFeedback(
+                () -> Text.literal(
+                        String.format(
+                                "Player(s) %s has been pardoned.",
                                 players.stream().map(ServerPlayerEntity::getName).map(Text::getString).collect(Collectors.joining(", "))
                         )
                 ),
