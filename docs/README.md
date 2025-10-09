@@ -119,5 +119,3 @@ If you discover a bug or would like to suggest a new feature, please use the Dis
 Official Download on Modrinth: [here](https://modrinth.com/mod/embellish_chat)
 
 Source Code on GitHub: [here](https://github.com/hanhy06/embellish_chat)
-
-Discord server:[here](https://discord.gg/mudwDgk3Fs)
