@@ -10,7 +10,7 @@ EmbellishChat is a Fabric mod designed to enhance the chat experience on Minecra
 
 * **Player Mention System:** Use the `@` symbol to mention other players.
 
-* **Notification:** Mentioned players who are online will hear a notification sound.
+* **Notification:** Mentioned players who are online will hear a notification sound. In version 1.21.6 and above, the notification sound category is UI (in lower versions, it belongs to the PLAYER category).
 
 * **Team Colors:** If a mentioned player is on a team, their name will be displayed in their team's color.
 
