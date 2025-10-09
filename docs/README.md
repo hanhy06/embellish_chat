@@ -4,7 +4,7 @@ EmbellishChat is a Fabric mod designed to enhance the chat experience on Minecra
 
 ✨ Key Features
 
-* **Extended Markdown-Style Chat Formatting:** Use Markdown-like styles (bold, italic, underline, strikethrough, obfuscation, color, font). Works in normal chat and whispers.
+* **Extended Markdown-Style Chat Formatting:** Use Markdown-like styles (bold, italic, underline, strikethrough, obfuscation, color, font, url). Works in normal chat and whispers.
 
 * **Clickable Links:** Create clickable links in chat. For security, only the `https` protocol is recognized.
 
@@ -108,12 +108,16 @@ You can find `embellish_chat.json` in your config folder.
 
 ---
 
-📜 License & Distribution
+📜 License & Etc.
 
 This project is licensed under the **Apache License 2.0**.
 
 To ensure everyone gets the latest and safest version, please download the mod from the official sources below. I would appreciate it if you link to these pages rather than re-hosting the files.
 
+If you discover a bug or would like to suggest a new feature, please use the Discord server to let me know.
+
 Official Download on Modrinth: [here](https://modrinth.com/mod/embellish_chat)
 
 Source Code on GitHub: [here](https://github.com/hanhy06/embellish_chat)
+
+Discord server:[here](https://discord.gg/mudwDgk3Fs)
