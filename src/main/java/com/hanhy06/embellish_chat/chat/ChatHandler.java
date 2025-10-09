@@ -12,11 +12,14 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 
 import java.util.List;
+import java.util.UUID;
 
 public class ChatHandler implements ConfigListener {
     public static ChatHandler INSTANCE;
 
     private Config config;
+    private List<UUID> bannedPlayerList;
+
     private final Mention mention;
     private final StyledTextProcessor processor;
     private final PlayerManager manager;
@@ -34,7 +37,7 @@ public class ChatHandler implements ConfigListener {
     }
 
     public SignedMessage handleChatMessage(SignedMessage original) {
-        if (config.bannedPlayerList().contains(original.getSender())) return original;
+        if (bannedPlayerList.contains(original.getSender())) return original;
 
         ServerPlayerEntity sender = manager.getPlayer(original.getSender());
 
@@ -64,6 +67,8 @@ public class ChatHandler implements ConfigListener {
 
     private void applyConfig(Config config) {
         this.config = config;
+        this.bannedPlayerList = config.bannedPlayerList();
+
         mention.updateConfig(config);
         processor.updateConfig(config);
     }

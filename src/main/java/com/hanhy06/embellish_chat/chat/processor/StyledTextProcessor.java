@@ -108,7 +108,7 @@ public class StyledTextProcessor {
 
     private MutableText applyPattern(Pattern pattern, MutableText text, Style style) {
         Runs runs = flatten(text);
-        Matcher matcher = pattern.matcher(runs.full);
+        Matcher matcher = pattern.matcher(runs.full());
         if (!matcher.find()) return text;
 
         MutableText result = Text.empty();
@@ -118,14 +118,14 @@ public class StyledTextProcessor {
             result.append(slice(runs, matcher.start(1), matcher.end(1)).fillStyle(style));
             lastEnd = matcher.end();
         } while (matcher.find());
-        result.append(slice(runs, lastEnd, runs.full.length()));
+        result.append(slice(runs, lastEnd, runs.full().length()));
 
         return result;
     }
 
     private MutableText applyPattern(Pattern pattern, MutableText text, BiFunction<MutableText, String, MutableText> function) {
         Runs runs = flatten(text);
-        Matcher matcher = pattern.matcher(runs.full);
+        Matcher matcher = pattern.matcher(runs.full());
         if (!matcher.find()) return text;
 
         MutableText result = Text.empty();
@@ -141,7 +141,7 @@ public class StyledTextProcessor {
             lastEnd = matcher.end();
         } while (matcher.find());
 
-        result.append(slice(runs, lastEnd, runs.full.length()));
+        result.append(slice(runs, lastEnd, runs.full().length()));
         return result;
     }
 
@@ -175,7 +175,7 @@ public class StyledTextProcessor {
 
     private MutableText applyRainbow(MutableText text) {
         Runs runs = flatten(text);
-        String string = runs.full;
+        String string = runs.full();
         int length = string.length();
         if (length == 0) return text;
 
@@ -200,20 +200,20 @@ public class StyledTextProcessor {
             );
             lastEnd = receiver.end();
         }
-        result.append(slice(runs, lastEnd, runs.full.length()));
+        result.append(slice(runs, lastEnd, runs.full().length()));
         return result;
     }
 
     private static MutableText removeEscapeSlashes(MutableText text) {
         Runs runs = flatten(text);
         MutableText result = Text.empty();
-        for (Run run : runs.runs) {
-            String content = run.content;
+        for (Run run : runs.runs()) {
+            String content = run.content();
             if (content.indexOf('\\') < 0) {
-                result.append(Text.literal(content).setStyle(run.style));
+                result.append(Text.literal(content).setStyle(run.style()));
             } else {
                 String replaced = ESCAPES.matcher(content).replaceAll("$1");
-                result.append(Text.literal(replaced).setStyle(run.style));
+                result.append(Text.literal(replaced).setStyle(run.style()));
             }
         }
         return result;
@@ -251,13 +251,13 @@ public class StyledTextProcessor {
 
     private static MutableText slice(Runs runs, int begin, int end) {
         MutableText out = Text.empty();
-        for (Run run : runs.runs) {
-            if (run.end <= begin) continue;
-            if (run.start >= end) break;
+        for (Run run : runs.runs()) {
+            if (run.end() <= begin) continue;
+            if (run.start() >= end) break;
 
-            int startIndex = Math.max(begin, run.start) - run.start;
-            int endIndex = Math.min(end, run.end) - run.start;
-            out.append(Text.literal(run.content.substring(startIndex, endIndex)).setStyle(run.style));
+            int startIndex = Math.max(begin, run.start()) - run.start();
+            int endIndex = Math.min(end, run.end()) - run.start();
+            out.append(Text.literal(run.content().substring(startIndex, endIndex)).setStyle(run.style()));
         }
         return out;
     }
