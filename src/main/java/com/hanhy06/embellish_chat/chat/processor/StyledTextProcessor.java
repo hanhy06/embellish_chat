@@ -104,49 +104,6 @@ public class StyledTextProcessor {
         return result;
     }
 
-    record Run(
-            int start,
-            int end,
-            Style style,
-            String content
-    ) {}
-
-    record Runs(
-            String full,
-            List<Run> runs
-    ) {}
-
-    private static Runs flatten(Text text) {
-        List<Run> list = new ArrayList<>();
-        StringBuilder all = new StringBuilder();
-
-        text.visit(new Text.StyledVisitor<Void>() {
-            @Override
-            public Optional<Void> accept(Style style, String content) {
-                int start = all.length();
-                all.append(content);
-                int end = all.length();
-                list.add(new Run(start, end, style, content));
-                return Optional.empty();
-            }
-        }, Style.EMPTY);
-
-        return new Runs(all.toString(), list);
-    }
-
-    private static MutableText slice(Runs runs, int begin, int end) {
-        MutableText out = Text.empty();
-        for (Run run : runs.runs) {
-            if (run.end <= begin) continue;
-            if (run.start >= end) break;
-
-            int startIndex = Math.max(begin, run.start) - run.start;
-            int endIndex = Math.min(end, run.end) - run.start;
-            out.append(Text.literal(run.content.substring(startIndex, endIndex)).setStyle(run.style));
-        }
-        return out;
-    }
-
     private MutableText applyPattern(Pattern pattern, MutableText text, Style style) {
         Runs runs = flatten(text);
         Matcher matcher = pattern.matcher(runs.full);
@@ -258,5 +215,48 @@ public class StyledTextProcessor {
             }
         }
         return result;
+    }
+
+    record Run(
+            int start,
+            int end,
+            Style style,
+            String content
+    ) {}
+
+    record Runs(
+            String full,
+            List<Run> runs
+    ) {}
+
+    private static Runs flatten(Text text) {
+        List<Run> list = new ArrayList<>();
+        StringBuilder all = new StringBuilder();
+
+        text.visit(new Text.StyledVisitor<Void>() {
+            @Override
+            public Optional<Void> accept(Style style, String content) {
+                int start = all.length();
+                all.append(content);
+                int end = all.length();
+                list.add(new Run(start, end, style, content));
+                return Optional.empty();
+            }
+        }, Style.EMPTY);
+
+        return new Runs(all.toString(), list);
+    }
+
+    private static MutableText slice(Runs runs, int begin, int end) {
+        MutableText out = Text.empty();
+        for (Run run : runs.runs) {
+            if (run.end <= begin) continue;
+            if (run.start >= end) break;
+
+            int startIndex = Math.max(begin, run.start) - run.start;
+            int endIndex = Math.min(end, run.end) - run.start;
+            out.append(Text.literal(run.content.substring(startIndex, endIndex)).setStyle(run.style));
+        }
+        return out;
     }
 }
