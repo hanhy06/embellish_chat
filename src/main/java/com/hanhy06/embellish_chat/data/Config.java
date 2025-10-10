@@ -6,20 +6,26 @@ import static java.util.Map.entry;
 
 public record Config(
         boolean inChatStylingEnabled,
-        boolean mentionEnabled,
         boolean fontEnabled,
         boolean coloringEnabled,
         boolean rainbowEnabled,
         boolean openUriEnabled,
         boolean markdownEnabled,
+        HashMap<String, Integer> defaultColorPreset,
+
+        boolean mentionEnabled,
+        boolean groupMentionOpOnly,
         boolean offlineColorEnabled,
         int defaultMentionColor,
+        int defaultGroupMentionColor,
         String defaultMentionSound,
         float defaultMentionPitch,
         String defaultMentionMessage,
+        double defaultHereRadius,
+
         int defaultChatColor,
         String defaultChatFont,
-        HashMap<String, Integer> defaultColorPreset,
+
         List<UUID> bannedPlayerList
 )
 {
@@ -31,14 +37,6 @@ public record Config(
                 true,
                 true,
                 true,
-                true,
-                true,
-                0xFFFF55,
-                "minecraft:entity.experience_orb.pickup",
-                1.75f,
-                " mentioned you",
-                0x0,
-                "",
                 new HashMap<>(
                         Map.ofEntries(
                                 entry("black", 0x000000),
@@ -59,6 +57,20 @@ public record Config(
                                 entry("white", 0xFFFFFF)
                         )
                 ),
+
+                true,
+                true,
+                true,
+                0xFFFF55,
+                0x0000AA,
+                "minecraft:entity.experience_orb.pickup",
+                1.75f,
+                " mentioned you",
+                64,
+
+                0x0,
+                "",
+
                 new ArrayList<>()
         );
     }

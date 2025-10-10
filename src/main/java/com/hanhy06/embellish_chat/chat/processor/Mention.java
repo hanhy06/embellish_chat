@@ -31,6 +31,9 @@ public class Mention {
     private String mentionMessage;
     private boolean offlineColorEnabled;
     private int defaultMentionColor;
+    private int defaultGroupMentionColor;
+    private double defaultHereRadius;
+    private boolean groupMentionOpOnly;
 
     public Mention(PlayerManager manager,Scoreboard scoreboard){
         this.manager = manager;
@@ -43,6 +46,9 @@ public class Mention {
         this.mentionMessage = config.defaultMentionMessage();
         this.offlineColorEnabled = config.offlineColorEnabled();
         this.defaultMentionColor = config.defaultMentionColor();
+        this.defaultGroupMentionColor = config.defaultGroupMentionColor();
+        this.defaultHereRadius = config.defaultHereRadius();
+        this.groupMentionOpOnly = config.groupMentionOpOnly();
     }
 
     public void broadcastMention(ServerPlayerEntity sender, List<Receiver> receivers){
@@ -81,12 +87,11 @@ public class Mention {
     public List<Receiver> processReceiver(ServerPlayerEntity sender, List<Target> targets){
         return targets.stream()
                 .flatMap(target -> {
-                    switch (target.name()) {
-                        case "everyone" -> { return targetEveryone(target).stream(); }
-                        case "here" -> { return targetHere(sender, target).stream(); }
-                        case "team" -> { return targetTeam(sender, target).stream(); }
-                        default -> { return Stream.of(targetPlayer(target)); }
-                    }
+                    String name = target.name();
+                    if (name.equals("everyone") && checkAuthority(sender)){return targetEveryone(target).stream();}
+                    else if (name.equals("here") && checkAuthority(sender)){return targetHere(sender,target).stream();}
+                    else if (name.equals("team")){return targetTeam(sender,target).stream();}
+                    else return Stream.of(targetPlayer(target));
                 })
                 .toList();
     }
@@ -97,21 +102,21 @@ public class Mention {
                         "everyone",
                         target.begin(),
                         target.end(),
-                        0x0000AA, //나중에 바꿀 예정
+                        defaultGroupMentionColor,
                         player
                 ))
                 .toList();
     }
 
     private List<Receiver> targetHere(ServerPlayerEntity sender,Target target){
-        Collection<ServerPlayerEntity> players = PlayerLookup.around(sender.getEntityWorld(),sender.getEntityPos(),32);
+        Collection<ServerPlayerEntity> players = PlayerLookup.around(sender.getEntityWorld(),sender.getEntityPos(),defaultHereRadius);
 
         return players.stream()
                 .map(player -> new Receiver(
                         "here",
                         target.begin(),
                         target.end(),
-                        0x0000AA,
+                        defaultGroupMentionColor,
                         player
                 ))
                 .toList();
@@ -126,7 +131,7 @@ public class Mention {
                             "team",
                             target.begin(),
                             target.end(),
-                            0x0000AA,
+                            defaultGroupMentionColor,
                             player
                     ))
                     .toList();
@@ -136,7 +141,7 @@ public class Mention {
                             "team",
                             target.begin(),
                             target.end(),
-                            0x0000AA,
+                            defaultGroupMentionColor,
                             null
                     )
             );
@@ -166,5 +171,7 @@ public class Mention {
         );
     }
 
-
+    private boolean checkAuthority(ServerPlayerEntity player){
+        return groupMentionOpOnly && manager.isOperator(player.getPlayerConfigEntry());
+    }
 }
