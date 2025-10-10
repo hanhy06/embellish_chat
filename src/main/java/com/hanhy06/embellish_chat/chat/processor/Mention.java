@@ -88,8 +88,8 @@ public class Mention {
         return targets.stream()
                 .flatMap(target -> {
                     String name = target.name();
-                    if (name.equals("everyone") && checkAuthority(sender)){return targetEveryone(target).stream();}
-                    else if (name.equals("here") && checkAuthority(sender)){return targetHere(sender,target).stream();}
+                    if (name.equals("everyone") && canUseGroupMention(sender)){return targetEveryone(target).stream();}
+                    else if (name.equals("here") && canUseGroupMention(sender)){return targetHere(sender,target).stream();}
                     else if (name.equals("team")){return targetTeam(sender,target).stream();}
                     else return Stream.of(targetPlayer(target));
                 })
@@ -171,7 +171,7 @@ public class Mention {
         );
     }
 
-    private boolean checkAuthority(ServerPlayerEntity player){
-        return groupMentionOpOnly && manager.isOperator(player.getPlayerConfigEntry());
+    private boolean canUseGroupMention(ServerPlayerEntity player){
+        return !groupMentionOpOnly || manager.isOperator(player.getPlayerConfigEntry());
     }
 }

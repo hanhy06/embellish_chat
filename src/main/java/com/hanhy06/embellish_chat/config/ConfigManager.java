@@ -3,6 +3,7 @@ package com.hanhy06.embellish_chat.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.Strictness;
 import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.util.HexIntegerTypeAdapter;
@@ -30,6 +31,7 @@ public class ConfigManager {
             .registerTypeAdapter(int.class,new HexIntegerTypeAdapter())
             .registerTypeAdapter(Integer.class,new HexIntegerTypeAdapter())
             .setPrettyPrinting()
+            .setStrictness(Strictness.LENIENT)
             .create();
 
     public static Config getConfig(){

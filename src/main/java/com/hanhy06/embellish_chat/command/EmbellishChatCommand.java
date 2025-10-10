@@ -1,5 +1,6 @@
 package com.hanhy06.embellish_chat.command;
 
+import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -55,7 +56,8 @@ public class EmbellishChatCommand {
         try {
             players = EntityArgumentType.getPlayers(context,"target");
         } catch (CommandSyntaxException e) {
-            throw new RuntimeException(e);
+            EmbellishChat.LOGGER.error("Command execution failed for an unknown reason.",e);
+            return 0;
         }
 
         ConfigManager.getConfig().bannedPlayerList().addAll(
@@ -81,7 +83,8 @@ public class EmbellishChatCommand {
         try {
             players = EntityArgumentType.getPlayers(context,"target");
         } catch (CommandSyntaxException e) {
-            throw new RuntimeException(e);
+            EmbellishChat.LOGGER.error("Command execution failed for an unknown reason.",e);
+            return 0;
         }
 
         ConfigManager.getConfig().bannedPlayerList().removeAll(

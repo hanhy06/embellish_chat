@@ -5,6 +5,7 @@ import java.util.*;
 import static java.util.Map.entry;
 
 public record Config(
+        //styling
         boolean inChatStylingEnabled,
         boolean fontEnabled,
         boolean coloringEnabled,
@@ -13,6 +14,7 @@ public record Config(
         boolean markdownEnabled,
         HashMap<String, Integer> defaultColorPreset,
 
+        //mention
         boolean mentionEnabled,
         boolean groupMentionOpOnly,
         boolean offlineColorEnabled,
@@ -23,9 +25,11 @@ public record Config(
         String defaultMentionMessage,
         double defaultHereRadius,
 
+        //default style
         int defaultChatColor,
         String defaultChatFont,
 
+        //banned player
         List<UUID> bannedPlayerList
 )
 {
@@ -57,7 +61,6 @@ public record Config(
                                 entry("white", 0xFFFFFF)
                         )
                 ),
-
                 true,
                 true,
                 true,
@@ -67,10 +70,8 @@ public record Config(
                 1.75f,
                 " mentioned you",
                 64,
-
                 0x0,
                 "",
-
                 new ArrayList<>()
         );
     }
