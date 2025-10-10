@@ -2,8 +2,11 @@ package com.hanhy06.embellish_chat.chat.processor;
 
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
+import com.hanhy06.embellish_chat.data.Target;
 import com.hanhy06.embellish_chat.util.TeamColor;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -12,11 +15,10 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class Mention {
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{1,16})(?=\\b|$)");
@@ -61,34 +63,108 @@ public class Mention {
         }
     }
 
-    public List<Receiver> parseMentions(String raw){
-        List<Receiver> receivers = new ArrayList<>();
+    public List<Target> parseMentions(String raw){
         Matcher matcher = MENTION_PATTERN.matcher(raw);
 
+        List<Target> targets = new ArrayList<>();
         while (matcher.find()){
-            String name = matcher.group(1);
-            ServerPlayerEntity player = manager.getPlayer(name);
-            int teamColor;
+            targets.add(new Target(
+                    matcher.group(1),
+                    matcher.start(),
+                    matcher.end(1)
+            ));
+        }
 
-            if (player != null){
-                teamColor = TeamColor.getPlayerColor(player);
-            }else if (offlineColorEnabled) {
-                teamColor = TeamColor.getPlayerColor(scoreboard,name);
-            } else {
-                teamColor = defaultMentionColor;
-            }
+        return  targets;
+    }
 
-            receivers.add(
-                    new Receiver(
-                            name,
-                            matcher.start(),
-                            matcher.end(1),
-                            teamColor,
+    public List<Receiver> processReceiver(ServerPlayerEntity sender, List<Target> targets){
+        return targets.stream()
+                .flatMap(target -> {
+                    switch (target.name()) {
+                        case "everyone" -> { return targetEveryone(target).stream(); }
+                        case "here" -> { return targetHere(sender, target).stream(); }
+                        case "team" -> { return targetTeam(sender, target).stream(); }
+                        default -> { return Stream.of(targetPlayer(target)); }
+                    }
+                })
+                .toList();
+    }
+
+    private List<Receiver> targetEveryone(Target target){
+        return manager.getPlayerList().stream()
+                .map(player -> new Receiver(
+                        "everyone",
+                        target.begin(),
+                        target.end(),
+                        0x0000AA, //나중에 바꿀 예정
+                        player
+                ))
+                .toList();
+    }
+
+    private List<Receiver> targetHere(ServerPlayerEntity sender,Target target){
+        Collection<ServerPlayerEntity> players = PlayerLookup.around(sender.getEntityWorld(),sender.getEntityPos(),32);
+
+        return players.stream()
+                .map(player -> new Receiver(
+                        "here",
+                        target.begin(),
+                        target.end(),
+                        0x0000AA,
+                        player
+                ))
+                .toList();
+    }
+
+    private List<Receiver> targetTeam(ServerPlayerEntity sender,Target target){
+        Team team = sender.getScoreboardTeam();
+        if (team != null){
+            List<ServerPlayerEntity> players = team.getPlayerList().stream().map(manager::getPlayer).filter(Objects::nonNull).toList();
+            return players.stream()
+                    .map(player ->new Receiver(
+                            "team",
+                            target.begin(),
+                            target.end(),
+                            0x0000AA,
                             player
+                    ))
+                    .toList();
+        }else {
+            return List.of(
+                    new Receiver(
+                            "team",
+                            target.begin(),
+                            target.end(),
+                            0x0000AA,
+                            null
                     )
             );
         }
 
-        return  receivers;
+
     }
+
+    private Receiver targetPlayer(Target target){
+        ServerPlayerEntity player = manager.getPlayer(target.name());
+
+        int teamColor;
+        if (player != null){
+            teamColor = TeamColor.getPlayerColor(player);
+        }else if (offlineColorEnabled) {
+            teamColor = TeamColor.getPlayerColor(scoreboard, target.name());
+        } else {
+            teamColor = defaultMentionColor;
+        }
+
+        return new Receiver(
+                target.name(),
+                target.begin(),
+                target.end(),
+                teamColor,
+                player
+        );
+    }
+
+
 }

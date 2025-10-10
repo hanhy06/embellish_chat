@@ -12,7 +12,7 @@ EmbellishChat is a Fabric mod designed to enhance the chat experience on Minecra
 
 * **Notification:** Mentioned players who are online will hear a notification sound. In version 1.21.6 and above, the notification sound category is UI (in lower versions, it belongs to the PLAYER category).
 
-* **Team Colors:** If a mentioned player is on a team, their name will be displayed in their team's color.
+* **Team Colors:** If a mentioned player is on a team, their target will be displayed in their team's color.
 
 * **Message Metadata & Copy:** Hovering over a chat message displays its timestamp. Clicking the message copies its content to your clipboard.
 
@@ -97,7 +97,7 @@ You can find `embellish_chat.json` in your config folder.
 - **`defaultMentionColor`**: Sets the default HEX color for mentioned players not on a team.
 - **`defaultMentionSound`**: Sets the sound event ID to play on mention.
 - **`defaultMentionPitch`**: Sets the pitch of the mention sound.
-- **`defaultMentionMessage`**: Sets the message displayed after the sender's name on mention.
+- **`defaultMentionMessage`**: Sets the message displayed after the sender's target on mention.
 - **`defaultChatColor`**: Sets the default text color.
   If the value is 0, no color is applied.
   If the value is less than 0, rainbow mode is activated and a gradient is applied to all text.

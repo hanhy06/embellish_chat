@@ -5,10 +5,12 @@ import com.hanhy06.embellish_chat.chat.processor.StyledTextProcessor;
 import com.hanhy06.embellish_chat.config.ConfigListener;
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
+import com.hanhy06.embellish_chat.data.Target;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.MutableText;
 
 import java.util.List;
@@ -58,8 +60,9 @@ public class ChatHandler implements ConfigListener {
     }
 
     private List<Receiver> handleMentions(String raw,ServerPlayerEntity sender) {
-        List<Receiver> receivers = mention.parseMentions(raw);
-        if (!receivers.isEmpty()) {
+        List<Target> targets = mention.parseMentions(raw);
+        List<Receiver> receivers = mention.processReceiver(sender,targets);
+        if (!targets.isEmpty()) {
             mention.broadcastMention(sender, receivers);
         }
         return receivers;
