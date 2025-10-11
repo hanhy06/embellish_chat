@@ -61,6 +61,7 @@ public record Config(
                                 entry("white", 0xFFFFFF)
                         )
                 ),
+
                 true,
                 true,
                 true,
@@ -70,8 +71,10 @@ public record Config(
                 1.75f,
                 " mentioned you",
                 64,
+
                 0x0,
                 "",
+                
                 new ArrayList<>()
         );
     }

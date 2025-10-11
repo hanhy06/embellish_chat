@@ -13,6 +13,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -136,7 +137,14 @@ public class Mention {
 
     private Receiver targetTeam(ServerPlayerEntity sender,Target target){
         Team team = sender.getScoreboardTeam();
+
         if (team != null){
+            int color = defaultGroupMentionColor;
+            Formatting formatting = team.getColor();
+            if (formatting != null && formatting.isColor() && formatting != Formatting.RESET) {
+                color = formatting.getColorValue();
+            }
+
             List<ServerPlayerEntity> players = team
                     .getPlayerList()
                     .stream()
@@ -148,7 +156,7 @@ public class Mention {
                     "team",
                     target.begin(),
                     target.end(),
-                    defaultGroupMentionColor,
+                    color,
                     players
             );
         }else {
