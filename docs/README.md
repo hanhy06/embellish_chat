@@ -2,27 +2,25 @@
 
 EmbellishChat is a Fabric mod designed to enhance the chat experience on Minecraft servers. It makes communication between players more dynamic and convenient with features like Markdown-style text formatting, player mentions, clickable links, and mention notifications & history.
 
-✨ Key Features
+### ✨ Key Features
 
-* **Extended Markdown-Style Chat Formatting:** Use Markdown-like styles (bold, italic, underline, strikethrough, obfuscation, color, font, url). Works in normal chat and whispers.
+- **Extended Markdown-Style Chat Formatting:** Use Markdown-like styles (bold, italic, underline, strikethrough, obfuscation, color, font, url). Works in normal chat and whispers.
 
-* **Clickable Links:** Create clickable links in chat. For security, only the `https` protocol is recognized.
+- **Mention System:** You can mention players, teams, everyone, or here using the @ symbol.
+  If the mentioned target is online, they will receive a notification,
+  and the message will be automatically formatted in the color of their team.
 
-* **Player Mention System:** Use the `@` symbol to mention other players.
+- **Metadata System:** When you hover the mouse over a message, you can see the time it was sent,
+  and clicking the message automatically copies it to the clipboard.
 
-* **Notification:** Mentioned players who are online will hear a notification sound. In version 1.21.6 and above, the notification sound category is UI (in lower versions, it belongs to the PLAYER category).
-
-* **Team Colors:** If a mentioned player is on a team, their target will be displayed in their team's color.
-
-* **Message Metadata & Copy:** Hovering over a chat message displays its timestamp. Clicking the message copies its content to your clipboard.
-
-* **Default Style** You can set the default color and font of chat messages through the settings.
-
-* **Customizable by Server:** All major features can be enabled, disabled, or fine-tuned by server administrators via the `embellish_chat.json` file.
+- **Default Style System:** You can configure the default color and font of chat messages through the settings.
 
 ---
 
-🛠️ Usage
+### 🛠️ Using Markdown
+
+For security reasons, when using the Markdown URL feature,
+only links with the https:// protocol are detected.
 
 Use the following formats in the chat window to apply various styles to your messages.
 
@@ -41,7 +39,21 @@ Use the following formats in the chat window to apply various styles to your mes
 
 ---
 
-⚙️ Command
+### 🛠️ Using Mention
+
+The mention notification sound uses the UI category by default.
+If the Minecraft version is 1.21.5 or earlier, it instead uses the PLAYER category.
+
+| Feature   | Explanation                                                                                                                                                                                                            |
+|-----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| @Player   | Mentions a player. The mention is automatically bolded and colored using either the team color the player belongs to or the default mention color.                                                                     |
+| @everyone | Mentions all players on the server. Uses the group mention color, and you can configure it so that only players with operator (op) privileges are allowed to use it.                                                   |
+| @here     | Mentions all players within a certain distance of the sender in the same world. The default range is 64 blocks, but it can be adjusted through the settings. The group mention color is used for this type of mention. |
+| @team     | Mentions all players in the sender’s team. By default, the mention is displayed in the team’s color, and if the team has no assigned color, it uses the group mention color instead.                                   |
+
+---
+
+### ⚙️ Command
 
 - **`/embellish_chat reload`**: Reloads the mod's configuration from the `embellish_chat.json` file.
 
@@ -50,7 +62,7 @@ Use the following formats in the chat window to apply various styles to your mes
 - **`/embellish_chat pardon <player>`**: Allows the specified player to use the chat styling features again.
 
 ---
-⚙️ Configuration
+### ⚙️ Configuration
 
 ### Sample `embellish_chat.json`
 
@@ -58,24 +70,34 @@ You can find `embellish_chat.json` in your config folder.
 
 ```
 {
+  //styling
   "inChatStylingEnabled": true,
-  "mentionEnabled": true,
   "fontEnabled": true,
   "coloringEnabled": true,
   "rainbowEnabled": true,
   "openUriEnabled": true,
   "markdownEnabled": true,
-  "offlineColorEnabled": true,
-  "defaultMentionColor": "0xFFFF55",
-  "defaultMentionSound": "minecraft:entity.experience_orb.pickup",
-  "defaultMentionPitch": 1.75,
-  "defaultMentionMessage": " mentioned you",
-  "defaultChatColor": "0x000000",
-  "defaultChatFont": "",
   "defaultColorPreset": {
     "dark green": "0x00AA00",
     ...
   },
+  
+  //mention
+  "mentionEnabled": true,
+  "groupMentionOpOnly": true,
+  "offlineColorEnabled": true,
+  "defaultMentionColor": "0xFFFF55",
+  "defaultGroupMentionColor": "0x0000AA",
+  "defaultMentionSound": "minecraft:entity.experience_orb.pickup",
+  "defaultMentionPitch": 1.75,
+  "defaultMentionMessage": " mentioned you",
+  "defaultHereRadius": 64.0,
+  
+  //default chat style
+  "defaultChatColor": "0x000000",
+  "defaultChatFont": "",
+  
+  //banned players uuid
   "bannedPlayerList": [
     ...
   ]
@@ -85,12 +107,18 @@ You can find `embellish_chat.json` in your config folder.
 ### Configuration Options
 
 - **`inChatStylingEnabled`**: If `true`, enables all chat styling features (color, font, mentions, markdown, etc.).
-- **`mentionEnabled`**: If `true`, enables the `@` mention feature.
 - **`fontEnabled`**: If `true`, allows specifying a font for chat messages.
 - **`coloringEnabled`**: If `true`, enables custom text coloring with HEX codes or preset.
 - **`rainbowEnabled`** If `true`, enables rainbow text in coloring.
 - **`openUriEnabled`**: If `true`, enables clickable links in chat.
 - **`markdownEnabled`**: If `true`, enables Markdown formatting (bold, italic, underline, strikethrough, obfuscation).
+- **`defaultColorPreset`**: This is a user-defined preset. It can be defined as `"key" : "hex color value"` (for example, `"poo" : "0x4E3629"`).
+
+
+
+- **`mentionEnabled`**: If `true`, enables the `@` mention feature.
+- **`groupMentionOpOnly`**: Determines whether a player must have operator (op) privileges to use everyone, here, or team mentions.
+  If set to `false`, all players can use group mentions.
 - **`offlineColorEnabled`**: This mod currently iterates through all teams to check which team an offline player belongs to in order to retrieve their team color.
   If this option is set to false, the mod will no longer iterate through teams to obtain the color.
   It is recommended to disable this option if server performance is critical, the computer has low specifications, or the server has a large number of players.
@@ -98,12 +126,18 @@ You can find `embellish_chat.json` in your config folder.
 - **`defaultMentionSound`**: Sets the sound event ID to play on mention.
 - **`defaultMentionPitch`**: Sets the pitch of the mention sound.
 - **`defaultMentionMessage`**: Sets the message displayed after the sender's target on mention.
+- **`defaultHereRadius`**: When using the here mention, it mentions all players within this radius around the sender.
+
+
+
 - **`defaultChatColor`**: Sets the default text color.
   If the value is 0, no color is applied.
   If the value is less than 0, rainbow mode is activated and a gradient is applied to all text.
   This behavior is not affected by rainbowEnabled.
 - **`defaultChatFont`**: Sets the default font for chat messages.
-- **`defaultColorPreset`**: This is a user-defined preset. It can be defined as `"key" : "hex color value"` (for example, `"poo" : "0x4E3629"`).
+
+
+
 - **`bannedPlayerList`**: Keeps track of the UUIDs of banned users. Players on this list are not allowed to use styling features.
 
 ---

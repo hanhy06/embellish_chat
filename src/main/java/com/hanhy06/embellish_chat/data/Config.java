@@ -12,6 +12,7 @@ public record Config(
         boolean rainbowEnabled,
         boolean openUriEnabled,
         boolean markdownEnabled,
+        boolean metadataEnabled,
         HashMap<String, Integer> defaultColorPreset,
 
         //mention
@@ -35,6 +36,7 @@ public record Config(
 {
     public static Config createDefault(){
         return new Config(
+                true,
                 true,
                 true,
                 true,
@@ -74,7 +76,7 @@ public record Config(
 
                 0x0,
                 "",
-                
+
                 new ArrayList<>()
         );
     }

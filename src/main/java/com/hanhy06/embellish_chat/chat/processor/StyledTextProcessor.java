@@ -75,8 +75,12 @@ public class StyledTextProcessor {
             result = applyPattern(COLOR, result, this::applyColor);
         }
 
+        if (config.metadataEnabled()){
+            result = Metadata.metadata(result);
+        }
+
         result = removeEscapeSlashes(result);
-        return Metadata.metadata(result);
+        return result;
     }
 
     private MutableText applyDefaultColor(MutableText text) {
