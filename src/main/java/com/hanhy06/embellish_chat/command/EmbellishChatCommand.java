@@ -1,6 +1,5 @@
 package com.hanhy06.embellish_chat.command;
 
-import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -50,15 +49,10 @@ public class EmbellishChatCommand {
         return 1;
     }
 
-    private static int executeBanPlayer(CommandContext<ServerCommandSource> context){
+    private static int executeBanPlayer(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         Collection<ServerPlayerEntity> players;
 
-        try {
-            players = EntityArgumentType.getPlayers(context,"target");
-        } catch (CommandSyntaxException e) {
-            EmbellishChat.LOGGER.error("Command execution failed for an unknown reason.",e);
-            return 0;
-        }
+        players = EntityArgumentType.getPlayers(context,"target");
 
         ConfigManager.getConfig().bannedPlayerList().addAll(
                 players.stream().map(ServerPlayerEntity::getUuid).toList()
@@ -77,15 +71,10 @@ public class EmbellishChatCommand {
         return 1;
     }
 
-    private static int executePardonPlayer(CommandContext<ServerCommandSource> context){
+    private static int executePardonPlayer(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         Collection<ServerPlayerEntity> players;
 
-        try {
-            players = EntityArgumentType.getPlayers(context,"target");
-        } catch (CommandSyntaxException e) {
-            EmbellishChat.LOGGER.error("Command execution failed for an unknown reason.",e);
-            return 0;
-        }
+        players = EntityArgumentType.getPlayers(context,"target");
 
         ConfigManager.getConfig().bannedPlayerList().removeAll(
                 players.stream().map(ServerPlayerEntity::getUuid).toList()
