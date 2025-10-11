@@ -159,7 +159,7 @@ You can find `embellish_chat.json` in your config folder.
 
 ---
 
-📜 License & Etc.
+## 📜 License & Etc.
 
 This project is licensed under the **Apache License 2.0**.
 
