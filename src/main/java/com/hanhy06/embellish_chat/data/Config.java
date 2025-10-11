@@ -13,22 +13,23 @@ public record Config(
         boolean openUriEnabled,
         boolean markdownEnabled,
         boolean metadataEnabled,
-        HashMap<String, Integer> defaultColorPreset,
+        HashMap<String, Integer> colorPreset,
 
         //mention
         boolean mentionEnabled,
         boolean groupMentionOpOnly,
         boolean offlineColorEnabled,
-        int defaultMentionColor,
-        int defaultGroupMentionColor,
-        String defaultMentionSound,
-        float defaultMentionPitch,
-        String defaultMentionMessage,
-        double defaultHereRadius,
+        int mentionColor,
+        int groupMentionColor,
+        String mentionSound,
+        float mentionPitch,
+        String mentionTitlePrefix,
+        String mentionTitleSuffix,
+        double hereRadius,
 
         //default style
-        int defaultChatColor,
-        String defaultChatFont,
+        int chatColor,
+        String chatFont,
 
         //banned player
         List<UUID> bannedPlayerList
@@ -71,6 +72,7 @@ public record Config(
                 0x0000AA,
                 "minecraft:entity.experience_orb.pickup",
                 1.75f,
+                "",
                 " mentioned you",
                 64,
 

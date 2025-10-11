@@ -31,19 +31,30 @@ public class StyledTextProcessor {
 
     private static final int URL_COLOR = 0x0000EE;
 
-    private Config config = null;
-    private int defaultChatColor = 0;
-    private StyleSpriteSource defaultChatFont = null;
-    private HashMap<String, Integer> defaultColorPreset = null;
+    private boolean fontEnabled;
+    private boolean coloringEnabled;
+    private boolean rainbowEnabled;
+    private boolean openUriEnabled;
+    private boolean markdownEnabled;
+    private boolean metadataEnabled;
+    private HashMap<String, Integer> colorPreset;
+    private int chatColor;
+    private StyleSpriteSource chatFont;
 
     public void updateConfig(Config config) {
-        this.config = config;
-        this.defaultChatColor = config.defaultChatColor();
-        this.defaultColorPreset = config.defaultColorPreset();
-        if (!config.defaultChatFont().isEmpty()){
-            this.defaultChatFont = new StyleSpriteSource.Font(Identifier.tryParse(config.defaultChatFont()));
+        this.fontEnabled = config.fontEnabled();
+        this.coloringEnabled = config.coloringEnabled();
+        this.rainbowEnabled = config.rainbowEnabled();
+        this.openUriEnabled = config.openUriEnabled();
+        this.markdownEnabled = config.markdownEnabled();
+        this.metadataEnabled = config.metadataEnabled();
+        this.colorPreset = config.colorPreset();
+        this.chatColor = config.chatColor();
+
+        if (!config.chatFont().isEmpty()){
+            this.chatFont = new StyleSpriteSource.Font(Identifier.tryParse(config.chatFont()));
         } else {
-            this.defaultChatFont = null;
+            this.chatFont = null;
         }
     }
 
@@ -59,23 +70,23 @@ public class StyledTextProcessor {
             result = applyMention(result, receivers);
         }
 
-        if (config.markdownEnabled()) {
+        if (markdownEnabled) {
             result = applyMarkdown(result);
         }
 
-        if (config.fontEnabled()) {
+        if (fontEnabled) {
             result = applyPattern(FONT, result, this::applyFont);
         }
 
-        if (config.openUriEnabled()) {
+        if (openUriEnabled) {
             result = applyPattern(OPEN_URI, result, this::applyOpenURI);
         }
 
-        if (config.coloringEnabled()) {
+        if (coloringEnabled) {
             result = applyPattern(COLOR, result, this::applyColor);
         }
 
-        if (config.metadataEnabled()){
+        if (metadataEnabled){
             result = Metadata.metadata(result);
         }
 
@@ -84,9 +95,9 @@ public class StyledTextProcessor {
     }
 
     private MutableText applyDefaultColor(MutableText text) {
-        if (defaultChatColor > 0) {
-            return text.fillStyle(Style.EMPTY.withColor(defaultChatColor));
-        } else if (defaultChatColor < 0) {
+        if (chatColor > 0) {
+            return text.fillStyle(Style.EMPTY.withColor(chatColor));
+        } else if (chatColor < 0) {
             return applyRainbow(text);
         } else {
             return text;
@@ -94,8 +105,8 @@ public class StyledTextProcessor {
     }
 
     private MutableText applyDefaultFont(MutableText text) {
-        if (defaultChatFont != null) {
-            return text.fillStyle(Style.EMPTY.withFont(defaultChatFont));
+        if (chatFont != null) {
+            return text.fillStyle(Style.EMPTY.withFont(chatFont));
         }
         return text;
     }
@@ -150,13 +161,13 @@ public class StyledTextProcessor {
     }
 
     private MutableText applyColor(MutableText text, String strColor) {
-        Integer preset = defaultColorPreset.get(strColor);
+        Integer preset = colorPreset.get(strColor);
         if (preset != null) {
             return text.fillStyle(Style.EMPTY.withColor(preset));
         } else if (!strColor.isEmpty() && strColor.charAt(0) == '#') {
             int color = Color.decode(strColor).getRGB();
             return text.fillStyle(Style.EMPTY.withColor(color));
-        } else if (strColor.equals("rainbow") && config.rainbowEnabled()) {
+        } else if (strColor.equals("rainbow") && rainbowEnabled) {
             return applyRainbow(text);
         }
         return text;

@@ -2,7 +2,7 @@
 
 EmbellishChat is a Fabric mod designed to enhance the chat experience on Minecraft servers. It makes communication between players more dynamic and convenient with features like Markdown-style text formatting, player mentions, clickable links, and mention notifications & history.
 
-### ✨ Key Features
+## ✨ Key Features
 
 - **Extended Markdown-Style Chat Formatting:** Use Markdown-like styles (bold, italic, underline, strikethrough, obfuscation, color, font, url). Works in normal chat and whispers.
 
@@ -17,7 +17,7 @@ EmbellishChat is a Fabric mod designed to enhance the chat experience on Minecra
 
 ---
 
-### 🛠️ Using Markdown
+## 🛠️ Using Markdown
 
 For security reasons, when using the Markdown URL feature,
 only links with the https:// protocol are detected.
@@ -39,7 +39,7 @@ Use the following formats in the chat window to apply various styles to your mes
 
 ---
 
-### 🛠️ Using Mention
+## 🛠️ Using Mention
 
 The mention notification sound uses the UI category by default.
 If the Minecraft version is 1.21.5 or earlier, it instead uses the PLAYER category.
@@ -53,93 +53,108 @@ If the Minecraft version is 1.21.5 or earlier, it instead uses the PLAYER catego
 
 ---
 
-### ⚙️ Command
+## ⚙️ Command
 
 - **`/embellish_chat reload`**: Reloads the mod's configuration from the `embellish_chat.json` file.
 
-- **`/embellish_chat ban <player>`**: Prevents the specified player from using the chat styling features.
+- **`/embellish_chat ban <player>`**: Prevents the specified player from using the mod features.
 
-- **`/embellish_chat pardon <player>`**: Allows the specified player to use the chat styling features again.
+- **`/embellish_chat pardon <player>`**: Allows the specified player to use the mod features again.
 
 ---
-### ⚙️ Configuration
 
-### Sample `embellish_chat.json`
+## ⚙️ Configuration
+
+---
+
+## Sample `embellish_chat.json`
 
 You can find `embellish_chat.json` in your config folder.
 
 ```
 {
-  //styling
+  // styling
   "inChatStylingEnabled": true,
   "fontEnabled": true,
   "coloringEnabled": true,
   "rainbowEnabled": true,
   "openUriEnabled": true,
   "markdownEnabled": true,
-  "defaultColorPreset": {
-    "dark green": "0x00AA00",
-    ...
+  "metadataEnabled": true,
+  "colorPreset": {
+    "black": "0x000000",
+     ...
   },
-  
-  //mention
+
+  // mention
   "mentionEnabled": true,
   "groupMentionOpOnly": true,
   "offlineColorEnabled": true,
-  "defaultMentionColor": "0xFFFF55",
-  "defaultGroupMentionColor": "0x0000AA",
-  "defaultMentionSound": "minecraft:entity.experience_orb.pickup",
-  "defaultMentionPitch": 1.75,
-  "defaultMentionMessage": " mentioned you",
-  "defaultHereRadius": 64.0,
-  
-  //default chat style
-  "defaultChatColor": "0x000000",
-  "defaultChatFont": "",
-  
-  //banned players uuid
+  "mentionColor": "0xFFFF55",
+  "groupMentionColor": "0x0000AA",
+  "mentionSound": "minecraft:entity.experience_orb.pickup",
+  "mentionPitch": 1.75,
+  "mentionTitlePrefix": "",
+  "mentionTitleSuffix": " mentioned you",
+  "hereRadius": 64.0,
+
+  // default style
+  "chatColor": "0x000000",
+  "chatFont": "",
+
+  // banned players (UUID list)
   "bannedPlayerList": [
     ...
   ]
 }
+
 ```
 
-### Configuration Options
+---
+
+## Configuration Options
+
+---
+
+### Styling
 
 - **`inChatStylingEnabled`**: If `true`, enables all chat styling features (color, font, mentions, markdown, etc.).
 - **`fontEnabled`**: If `true`, allows specifying a font for chat messages.
 - **`coloringEnabled`**: If `true`, enables custom text coloring with HEX codes or preset.
-- **`rainbowEnabled`** If `true`, enables rainbow text in coloring.
+- **`rainbowEnabled`**: If `true`, enables rainbow text in coloring.
 - **`openUriEnabled`**: If `true`, enables clickable links in chat.
 - **`markdownEnabled`**: If `true`, enables Markdown formatting (bold, italic, underline, strikethrough, obfuscation).
-- **`metadataEnabled`**: If `true`, metadata is added to the messages received by the user.
+- **`metadataEnabled`**: If `true`, adds metadata to messages received by the user.
   This metadata includes the time the message was sent and allows the message to be automatically copied to the clipboard when clicked.
-- **`defaultColorPreset`**: This is a user-defined preset. It can be defined as `"key" : "hex color value"` (for example, `"poo" : "0x4E3629"`).
+- **`colorPreset`**: A user-defined color preset. It can be defined as `"key" : "hex color value"` (for example, `"poo" : "0x4E3629"`).
 
+---
 
+### Mention
 
 - **`mentionEnabled`**: If `true`, enables the `@` mention feature.
 - **`groupMentionOpOnly`**: Determines whether a player must have operator (op) privileges to use everyone, here, or team mentions.
   If set to `false`, all players can use group mentions.
-- **`offlineColorEnabled`**: This mod currently iterates through all teams to check which team an offline player belongs to in order to retrieve their team color.
-  If this option is set to false, the mod will no longer iterate through teams to obtain the color.
+- **`offlineColorEnabled`**: When enabled, the mod iterates through all teams to check which team an offline player belongs to in order to retrieve their team color.
+  If this option is set to `false`, the mod will no longer iterate through teams to obtain the color.
   It is recommended to disable this option if server performance is critical, the computer has low specifications, or the server has a large number of players.
-- **`defaultMentionColor`**: Sets the default HEX color for mentioned players not on a team.
-- **`defaultMentionSound`**: Sets the sound event ID to play on mention.
-- **`defaultMentionPitch`**: Sets the pitch of the mention sound.
-- **`defaultMentionMessage`**: Sets the message displayed after the sender's target on mention.
-- **`defaultHereRadius`**: When using the here mention, it mentions all players within this radius around the sender.
+- **`mentionColor`**: Sets the default HEX color for mentioned players who are not in a team.
+- **`groupMentionColor`**: Sets the color used for group mentions (`@everyone`, `@here`, `@team`).
+- **`mentionSound`**: Sets the sound event ID to play on mention.
+- **`mentionPitch`**: Sets the pitch of the mention sound.
+- **`mentionTitlePrefix`**: Text displayed before the mentioned target in the notification title.
+- **`mentionTitleSuffix`**: Text displayed after the mentioned target in the notification title.
+- **`hereRadius`**: When using the `@here` mention, it mentions all players within this radius around the sender.
 
+---
 
+### Etc.
 
-- **`defaultChatColor`**: Sets the default text color.
-  If the value is 0, no color is applied.
-  If the value is less than 0, rainbow mode is activated and a gradient is applied to all text.
-  This behavior is not affected by rainbowEnabled.
-- **`defaultChatFont`**: Sets the default font for chat messages.
-
-
-
+- **`chatColor`**: Sets the default text color.
+  If the value is `0`, no color is applied.
+  If the value is less than `0`, rainbow mode is activated and a gradient is applied to all text.
+  This behavior is not affected by `rainbowEnabled`.
+- **`chatFont`**: Sets the default font for chat messages.
 - **`bannedPlayerList`**: Keeps track of the UUIDs of banned users. Players on this list are not allowed to use styling features.
 
 ---

@@ -28,14 +28,15 @@ public class Mention {
     private final PlayerManager manager;
     private final Scoreboard scoreboard;
 
+    private boolean groupMentionOpOnly;
+    private boolean offlineColorEnabled;
+    private int mentionColor;
+    private int groupMentionColor;
     private SoundEvent mentionSound;
     private float mentionPitch;
-    private String mentionMessage;
-    private boolean offlineColorEnabled;
-    private int defaultMentionColor;
-    private int defaultGroupMentionColor;
-    private double defaultHereRadius;
-    private boolean groupMentionOpOnly;
+    private String mentionTitlePrefix;
+    private String mentionTitleSuffix;
+    private double hereRadius;
 
     public Mention(PlayerManager manager,Scoreboard scoreboard){
         this.manager = manager;
@@ -43,21 +44,27 @@ public class Mention {
     }
 
     public void updateConfig(Config config){
-        this.mentionSound = SoundEvent.of(Identifier.tryParse(config.defaultMentionSound()));
-        this.mentionPitch = config.defaultMentionPitch();
-        this.mentionMessage = config.defaultMentionMessage();
-        this.offlineColorEnabled = config.offlineColorEnabled();
-        this.defaultMentionColor = config.defaultMentionColor();
-        this.defaultGroupMentionColor = config.defaultGroupMentionColor();
-        this.defaultHereRadius = config.defaultHereRadius();
         this.groupMentionOpOnly = config.groupMentionOpOnly();
+        this.offlineColorEnabled = config.offlineColorEnabled();
+        this.mentionColor = config.mentionColor();
+        this.groupMentionColor = config.groupMentionColor();
+        this.mentionSound =  SoundEvent.of(Identifier.tryParse(config.mentionSound()));
+        this.mentionPitch = config.mentionPitch();
+        this.mentionTitlePrefix = config.mentionTitlePrefix();
+        this.mentionTitleSuffix = config.mentionTitleSuffix();
+        this.hereRadius = config.hereRadius();
     }
 
     public void broadcastMention(ServerPlayerEntity sender, List<Receiver> receivers){
         MutableText titleText = sender.getName().copy();
+        titleText.append(
+                Text.literal(mentionTitlePrefix).styled(
+                        style -> style.withBold(false).withColor(0xFFFFFF)
+                )
+        );
         titleText.styled(style -> style.withBold(true).withColor(TeamColor.getPlayerColor(sender)));
         titleText.append(
-                Text.literal(mentionMessage).styled(
+                Text.literal(mentionTitleSuffix).styled(
                         style -> style.withBold(false).withColor(0xFFFFFF)
                 )
         );
@@ -114,7 +121,7 @@ public class Mention {
                 "everyone",
                 target.begin(),
                 target.end(),
-                defaultGroupMentionColor,
+                groupMentionColor,
                 manager.getPlayerList()
         );
     }
@@ -123,14 +130,14 @@ public class Mention {
         List<ServerPlayerEntity> players = PlayerLookup.around(
                 sender.getEntityWorld(),
                 sender.getEntityPos(),
-                defaultHereRadius
+                hereRadius
         ).stream().toList();
 
         return new Receiver(
                 "here",
                 target.begin(),
                 target.end(),
-                defaultGroupMentionColor,
+                groupMentionColor,
                 players
         );
     }
@@ -139,7 +146,7 @@ public class Mention {
         Team team = sender.getScoreboardTeam();
 
         if (team != null){
-            int color = defaultGroupMentionColor;
+            int color = groupMentionColor;
             Formatting formatting = team.getColor();
             if (formatting != null && formatting.isColor() && formatting != Formatting.RESET) {
                 color = formatting.getColorValue();
@@ -164,7 +171,7 @@ public class Mention {
                     "team",
                     target.begin(),
                     target.end(),
-                    defaultGroupMentionColor,
+                    groupMentionColor,
                     null
             );
         }
@@ -179,7 +186,7 @@ public class Mention {
         }else if (offlineColorEnabled) {
             teamColor = TeamColor.getPlayerColor(scoreboard, target.name());
         } else {
-            teamColor = defaultMentionColor;
+            teamColor = mentionColor;
         }
 
         return new Receiver(
