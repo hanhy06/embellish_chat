@@ -56,13 +56,17 @@ public class Mention {
     }
 
     public void broadcastMention(ServerPlayerEntity sender, List<Receiver> receivers){
-        MutableText titleText = sender.getName().copy();
+        MutableText titleText = Text.empty();
         titleText.append(
                 Text.literal(mentionTitlePrefix).styled(
                         style -> style.withBold(false).withColor(0xFFFFFF)
                 )
         );
-        titleText.styled(style -> style.withBold(true).withColor(TeamColor.getPlayerColor(sender)));
+        titleText.append(
+                sender.getName().copy().styled(
+                        style -> style.withBold(true).withColor(TeamColor.getPlayerColor(sender))
+                )
+        );
         titleText.append(
                 Text.literal(mentionTitleSuffix).styled(
                         style -> style.withBold(false).withColor(0xFFFFFF)

@@ -18,7 +18,7 @@ public class TeamColor {
             }
         }
 
-        return ConfigManager.getConfig().defaultMentionColor();
+        return ConfigManager.getConfig().mentionColor();
     }
 
     public static int getPlayerColor(Scoreboard scoreboard,String name){
@@ -30,11 +30,11 @@ public class TeamColor {
                 if (formatting != null && formatting.isColor() && formatting != Formatting.RESET && belongTeam) {
                     return formatting.getColorValue();
                 } else if (belongTeam) {
-                    return ConfigManager.getConfig().defaultMentionColor();
+                    return ConfigManager.getConfig().mentionColor();
                 }
             }
         }
 
-        return ConfigManager.getConfig().defaultMentionColor();
+        return ConfigManager.getConfig().mentionColor();
     }
 }

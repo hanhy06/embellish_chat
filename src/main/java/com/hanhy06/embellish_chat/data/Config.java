@@ -69,7 +69,7 @@ public record Config(
                 true,
                 true,
                 0xFFFF55,
-                0x0000AA,
+                0xAAAAFF,
                 "minecraft:entity.experience_orb.pickup",
                 1.75f,
                 "",
