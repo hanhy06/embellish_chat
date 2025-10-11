@@ -60,12 +60,13 @@ public class Mention {
                 )
         );
 
-        for (Receiver receiver : new HashSet<>(receivers)){
-            ServerPlayerEntity player = receiver.player();
-            if (player == null) continue;
+        for (Receiver receiver:receivers){
+            if (receiver.players() == null || receiver.players().isEmpty()) continue;
 
-            player.playSoundToPlayer(mentionSound,SoundCategory.UI,1f,mentionPitch);
-            player.sendMessage(titleText ,true);
+            for (ServerPlayerEntity player : receiver.players()){
+                player.playSoundToPlayer(mentionSound,SoundCategory.UI,1f,mentionPitch);
+                player.sendMessage(titleText ,true);
+            }
         }
     }
 
@@ -85,69 +86,79 @@ public class Mention {
     }
 
     public List<Receiver> processReceiver(ServerPlayerEntity sender, List<Target> targets){
-        return targets.stream()
-                .flatMap(target -> {
-                    String name = target.name();
-                    if (name.equals("everyone") && canUseGroupMention(sender)){return targetEveryone(target).stream();}
-                    else if (name.equals("here") && canUseGroupMention(sender)){return targetHere(sender,target).stream();}
-                    else if (name.equals("team")){return targetTeam(sender,target).stream();}
-                    else return Stream.of(targetPlayer(target));
-                })
-                .toList();
-    }
+        List<Receiver> receivers = new ArrayList<>();
+        boolean canGroupMention = canUseGroupMention(sender);
 
-    private List<Receiver> targetEveryone(Target target){
-        return manager.getPlayerList().stream()
-                .map(player -> new Receiver(
-                        "everyone",
-                        target.begin(),
-                        target.end(),
-                        defaultGroupMentionColor,
-                        player
-                ))
-                .toList();
-    }
+        for (Target target : targets){
+            String name = target.name();
 
-    private List<Receiver> targetHere(ServerPlayerEntity sender,Target target){
-        Collection<ServerPlayerEntity> players = PlayerLookup.around(sender.getEntityWorld(),sender.getEntityPos(),defaultHereRadius);
-
-        return players.stream()
-                .map(player -> new Receiver(
-                        "here",
-                        target.begin(),
-                        target.end(),
-                        defaultGroupMentionColor,
-                        player
-                ))
-                .toList();
-    }
-
-    private List<Receiver> targetTeam(ServerPlayerEntity sender,Target target){
-        Team team = sender.getScoreboardTeam();
-        if (team != null){
-            List<ServerPlayerEntity> players = team.getPlayerList().stream().map(manager::getPlayer).filter(Objects::nonNull).toList();
-            return players.stream()
-                    .map(player ->new Receiver(
-                            "team",
-                            target.begin(),
-                            target.end(),
-                            defaultGroupMentionColor,
-                            player
-                    ))
-                    .toList();
-        }else {
-            return List.of(
-                    new Receiver(
-                            "team",
-                            target.begin(),
-                            target.end(),
-                            defaultGroupMentionColor,
-                            null
-                    )
-            );
+            if (canGroupMention){
+                switch (name) {
+                    case "everyone" -> receivers.add(targetEveryone(target));
+                    case "here" -> receivers.add(targetHere(sender,target));
+                    case "team" -> receivers.add(targetTeam(sender,target));
+                    default -> receivers.add(targetPlayer(target));
+                }
+            }else {
+                receivers.add(targetPlayer(target));
+            }
         }
 
+        return receivers;
+    }
 
+    private Receiver targetEveryone(Target target){
+        return new Receiver(
+                "everyone",
+                target.begin(),
+                target.end(),
+                defaultGroupMentionColor,
+                manager.getPlayerList()
+        );
+    }
+
+    private Receiver targetHere(ServerPlayerEntity sender,Target target){
+        List<ServerPlayerEntity> players = PlayerLookup.around(
+                sender.getEntityWorld(),
+                sender.getEntityPos(),
+                defaultHereRadius
+        ).stream().toList();
+
+        return new Receiver(
+                "here",
+                target.begin(),
+                target.end(),
+                defaultGroupMentionColor,
+                players
+        );
+    }
+
+    private Receiver targetTeam(ServerPlayerEntity sender,Target target){
+        Team team = sender.getScoreboardTeam();
+        if (team != null){
+            List<ServerPlayerEntity> players = team
+                    .getPlayerList()
+                    .stream()
+                    .map(manager::getPlayer)
+                    .filter(Objects::nonNull)
+                    .toList();
+
+            return new Receiver(
+                    "team",
+                    target.begin(),
+                    target.end(),
+                    defaultGroupMentionColor,
+                    players
+            );
+        }else {
+            return new Receiver(
+                    "team",
+                    target.begin(),
+                    target.end(),
+                    defaultGroupMentionColor,
+                    null
+            );
+        }
     }
 
     private Receiver targetPlayer(Target target){
@@ -167,7 +178,7 @@ public class Mention {
                 target.begin(),
                 target.end(),
                 teamColor,
-                player
+                player != null ? List.of(player) : null
         );
     }
 
