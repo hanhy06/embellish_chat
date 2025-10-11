@@ -112,6 +112,8 @@ You can find `embellish_chat.json` in your config folder.
 - **`rainbowEnabled`** If `true`, enables rainbow text in coloring.
 - **`openUriEnabled`**: If `true`, enables clickable links in chat.
 - **`markdownEnabled`**: If `true`, enables Markdown formatting (bold, italic, underline, strikethrough, obfuscation).
+- **`metadataEnabled`**: If `true`, metadata is added to the messages received by the user.
+  This metadata includes the time the message was sent and allows the message to be automatically copied to the clipboard when clicked.
 - **`defaultColorPreset`**: This is a user-defined preset. It can be defined as `"key" : "hex color value"` (for example, `"poo" : "0x4E3629"`).
 
 
