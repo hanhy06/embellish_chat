@@ -3,8 +3,10 @@
   "package": "com.hanhy06.embellish_chat.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "AnvilScreenHandlerMixin",
     "MessageCommandMixin",
-    "ServerPlayNetworkHandlerMixin"
+    "ServerPlayNetworkHandlerMixin",
+    "TextArgumentTypeMixin"
   ],
   "injectors": {
     "defaultRequire": 1

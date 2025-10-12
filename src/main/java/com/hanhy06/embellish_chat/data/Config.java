@@ -7,6 +7,11 @@ import static java.util.Map.entry;
 public record Config(
         //styling
         boolean inChatStylingEnabled,
+        boolean inCommandStylingEnabled,
+        boolean inAnvilStylingEnabled,
+        boolean inBookStylingEnabled,
+
+        //styling option
         boolean fontEnabled,
         boolean coloringEnabled,
         boolean rainbowEnabled,
@@ -37,6 +42,9 @@ public record Config(
 {
     public static Config createDefault(){
         return new Config(
+                true,
+                true,
+                true,
                 true,
                 true,
                 true,
