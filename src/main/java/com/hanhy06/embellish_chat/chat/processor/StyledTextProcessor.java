@@ -1,6 +1,7 @@
 package com.hanhy06.embellish_chat.chat.processor;
 
 import com.hanhy06.embellish_chat.EmbellishChat;
+import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
 import com.hanhy06.embellish_chat.util.Metadata;
@@ -69,26 +70,35 @@ public class StyledTextProcessor {
         if (receivers != null && !receivers.isEmpty()) {
             result = applyMention(result, receivers);
         }
-
         if (markdownEnabled) {
             result = applyMarkdown(result);
         }
-
         if (fontEnabled) {
-            result = applyPattern(FONT, result, this::applyFont);
+            result = applyPattern(FONT, result, StyledTextProcessor::applyFont);
         }
-
         if (openUriEnabled) {
-            result = applyPattern(OPEN_URI, result, this::applyOpenURI);
+            result = applyPattern(OPEN_URI, result, StyledTextProcessor::applyOpenURI);
         }
-
         if (coloringEnabled) {
             result = applyPattern(COLOR, result, this::applyColor);
         }
-
         if (metadataEnabled){
             result = Metadata.metadata(result);
         }
+
+        result = removeEscapeSlashes(result);
+        return result;
+    }
+
+    public static MutableText applyStyles(MutableText text) {
+        if (text == null || text.getString().isBlank()) return text;
+
+        MutableText result = text;
+
+        result = applyMarkdown(result);
+        result = applyPattern(FONT, result, StyledTextProcessor::applyFont);
+        result = applyPattern(OPEN_URI, result, StyledTextProcessor::applyOpenURI);
+        result = applyPattern(COLOR, result, StyledTextProcessor::applyColorStatic);
 
         result = removeEscapeSlashes(result);
         return result;
@@ -111,7 +121,7 @@ public class StyledTextProcessor {
         return text;
     }
 
-    private MutableText applyMarkdown(MutableText text) {
+    private static MutableText applyMarkdown(MutableText text) {
         MutableText result = text;
         result = applyPattern(BOLD, result, Style.EMPTY.withBold(true));
         result = applyPattern(UNDERLINE, result, Style.EMPTY.withUnderline(true));
@@ -121,63 +131,42 @@ public class StyledTextProcessor {
         return result;
     }
 
-    private MutableText applyPattern(Pattern pattern, MutableText text, Style style) {
-        Runs runs = flatten(text);
-        Matcher matcher = pattern.matcher(runs.full());
-        if (!matcher.find()) return text;
-
-        MutableText result = Text.empty();
-        int lastEnd = 0;
-        do {
-            result.append(slice(runs, lastEnd, matcher.start()));
-            result.append(slice(runs, matcher.start(1), matcher.end(1)).fillStyle(style));
-            lastEnd = matcher.end();
-        } while (matcher.find());
-        result.append(slice(runs, lastEnd, runs.full().length()));
-
-        return result;
-    }
-
-    private MutableText applyPattern(Pattern pattern, MutableText text, BiFunction<MutableText, String, MutableText> function) {
-        Runs runs = flatten(text);
-        Matcher matcher = pattern.matcher(runs.full());
-        if (!matcher.find()) return text;
-
-        MutableText result = Text.empty();
-        int lastEnd = 0;
-        do {
-            result.append(slice(runs, lastEnd, matcher.start()));
-            result.append(
-                    function.apply(
-                            slice(runs, matcher.start(1), matcher.end(1)),
-                            matcher.group(2)
-                    )
-            );
-            lastEnd = matcher.end();
-        } while (matcher.find());
-
-        result.append(slice(runs, lastEnd, runs.full().length()));
-        return result;
-    }
-
     private MutableText applyColor(MutableText text, String strColor) {
         Integer preset = colorPreset.get(strColor);
         if (preset != null) {
             return text.fillStyle(Style.EMPTY.withColor(preset));
-        } else if (!strColor.isEmpty() && strColor.charAt(0) == '#') {
+        }
+        if (!strColor.isEmpty() && strColor.charAt(0) == '#') {
             int color = Color.decode(strColor).getRGB();
             return text.fillStyle(Style.EMPTY.withColor(color));
-        } else if (strColor.equals("rainbow") && rainbowEnabled) {
+        }
+        if (strColor.equals("rainbow")) {
             return applyRainbow(text);
         }
         return text;
     }
 
-    private MutableText applyFont(MutableText text, String strFont) {
+    private static MutableText applyColorStatic(MutableText text, String strColor) {
+        Config config = ConfigManager.getConfig();
+        Integer preset = config.colorPreset().get(strColor);
+        if (preset != null) {
+            return text.fillStyle(Style.EMPTY.withColor(preset));
+        }
+        if (!strColor.isEmpty() && strColor.charAt(0) == '#') {
+            int color = Color.decode(strColor).getRGB();
+            return text.fillStyle(Style.EMPTY.withColor(color));
+        }
+        if (strColor.equals("rainbow") && config.rainbowEnabled()) {
+            return applyRainbow(text);
+        }
+        return text;
+    }
+
+    private static MutableText applyFont(MutableText text, String strFont) {
         return text.fillStyle(Style.EMPTY.withFont(new  StyleSpriteSource.Font(Identifier.tryParse(strFont))));
     }
 
-    private MutableText applyOpenURI(MutableText text, String strUri) {
+    private static MutableText applyOpenURI(MutableText text, String strUri) {
         try {
             URI uri = URI.create(strUri);
             ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
@@ -188,7 +177,7 @@ public class StyledTextProcessor {
         }
     }
 
-    private MutableText applyRainbow(MutableText text) {
+    private static MutableText applyRainbow(MutableText text) {
         Runs runs = flatten(text);
         String string = runs.full();
         int length = string.length();
@@ -231,6 +220,45 @@ public class StyledTextProcessor {
                 result.append(Text.literal(replaced).setStyle(run.style()));
             }
         }
+        return result;
+    }
+
+    private static MutableText applyPattern(Pattern pattern, MutableText text, Style style) {
+        Runs runs = flatten(text);
+        Matcher matcher = pattern.matcher(runs.full());
+        if (!matcher.find()) return text;
+
+        MutableText result = Text.empty();
+        int lastEnd = 0;
+        do {
+            result.append(slice(runs, lastEnd, matcher.start()));
+            result.append(slice(runs, matcher.start(1), matcher.end(1)).fillStyle(style));
+            lastEnd = matcher.end();
+        } while (matcher.find());
+        result.append(slice(runs, lastEnd, runs.full().length()));
+
+        return result;
+    }
+
+    private static MutableText applyPattern(Pattern pattern, MutableText text, BiFunction<MutableText, String, MutableText> function) {
+        Runs runs = flatten(text);
+        Matcher matcher = pattern.matcher(runs.full());
+        if (!matcher.find()) return text;
+
+        MutableText result = Text.empty();
+        int lastEnd = 0;
+        do {
+            result.append(slice(runs, lastEnd, matcher.start()));
+            result.append(
+                    function.apply(
+                            slice(runs, matcher.start(1), matcher.end(1)),
+                            matcher.group(2)
+                    )
+            );
+            lastEnd = matcher.end();
+        } while (matcher.find());
+
+        result.append(slice(runs, lastEnd, runs.full().length()));
         return result;
     }
 

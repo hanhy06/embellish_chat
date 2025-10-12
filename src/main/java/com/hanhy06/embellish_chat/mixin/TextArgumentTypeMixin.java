@@ -1,6 +1,5 @@
 package com.hanhy06.embellish_chat.mixin;
 
-import com.hanhy06.embellish_chat.chat.ChatHandler;
 import com.hanhy06.embellish_chat.chat.processor.StyledTextProcessor;
 import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.mojang.brigadier.context.CommandContext;
@@ -22,7 +21,7 @@ public class TextArgumentTypeMixin {
     ) {
         Text text = cir.getReturnValue();
         if (ConfigManager.getConfig().inCommandStylingEnabled()){
-//            text = StyledTextProcessor.applyStyles(text.copy());
+            text = StyledTextProcessor.applyStyles(text.copy());
         }
         cir.setReturnValue(text);
     }
