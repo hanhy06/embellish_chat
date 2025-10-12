@@ -25,6 +25,7 @@ public class ChatHandler implements ConfigListener {
 
     private final Mention mention;
     private final PlayerManager manager;
+    private StyledTextProcessor processor;
 
     public ChatHandler(PlayerManager manager, Scoreboard scoreboard) {
         INSTANCE = this;
@@ -52,7 +53,7 @@ public class ChatHandler implements ConfigListener {
 
         MutableText finalMessage = baseMessage;
         if (config.inChatStylingEnabled()){
-            finalMessage = StyledTextProcessor.applyStyles(baseMessage, receivers);
+            finalMessage = processor.applyStyles(baseMessage, receivers);
         }
 
         return original.withUnsignedContent(finalMessage);
@@ -72,6 +73,6 @@ public class ChatHandler implements ConfigListener {
         this.bannedPlayerList = config.bannedPlayerList();
 
         mention.updateConfig(config);
-        StyledTextProcessor.updateConfig(config);
+        processor.updateConfig(config);
     }
 }

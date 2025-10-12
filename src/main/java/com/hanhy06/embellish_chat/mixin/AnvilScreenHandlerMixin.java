@@ -24,7 +24,7 @@ public class AnvilScreenHandlerMixin {
     public ItemStack updateResult(ItemStack itemStack) {
         Text newName = itemStack.getName();
         if (ConfigManager.getConfig().inAnvilStylingEnabled()){
-            newName = StyledTextProcessor.applyStyles(newName.copy());
+//            newName = StyledTextProcessor.applyStyles(newName.copy());
             itemStack.set(DataComponentTypes.CUSTOM_NAME,newName);
         }
         return itemStack;

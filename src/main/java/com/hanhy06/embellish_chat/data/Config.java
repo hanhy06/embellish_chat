@@ -9,7 +9,6 @@ public record Config(
         boolean inChatStylingEnabled,
         boolean inCommandStylingEnabled,
         boolean inAnvilStylingEnabled,
-        boolean inBookStylingEnabled,
 
         //styling option
         boolean fontEnabled,
@@ -42,7 +41,6 @@ public record Config(
 {
     public static Config createDefault(){
         return new Config(
-                true,
                 true,
                 true,
                 true,

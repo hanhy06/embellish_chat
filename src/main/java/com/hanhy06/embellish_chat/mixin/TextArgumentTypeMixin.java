@@ -22,7 +22,7 @@ public class TextArgumentTypeMixin {
     ) {
         Text text = cir.getReturnValue();
         if (ConfigManager.getConfig().inCommandStylingEnabled()){
-            text = StyledTextProcessor.applyStyles(text.copy());
+//            text = StyledTextProcessor.applyStyles(text.copy());
         }
         cir.setReturnValue(text);
     }
