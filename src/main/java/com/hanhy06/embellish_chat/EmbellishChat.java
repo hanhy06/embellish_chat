@@ -22,18 +22,18 @@ public class EmbellishChat implements ModInitializer {
 
 		ServerLifecycleEvents.SERVER_STARTED.register(EmbellishChat::handleServerStart);
 
-		EmbellishChatCommand.registerBetterChatCommand();
+//		EmbellishChatCommand.registerBetterChatCommand();
 	}
 
 	private static void handleServerStart(MinecraftServer server) {
         Path fabricConfigDirPath = FabricLoader.getInstance().getConfigDir();
 
         ConfigManager manager = new ConfigManager(fabricConfigDirPath);
-        manager.clearListener();
+//        manager.clearListener();
 
-        ChatHandler handler = new  ChatHandler(server.getPlayerManager(),server.getScoreboard());
+//        ChatHandler handler = new  ChatHandler(server.getPlayerManager(),server.getScoreboard());
 
-        manager.addListener(handler);
+//        manager.addListener(handler);
 		manager.readConfig();
 
 		LOGGER.info("{} initialized successfully.", MOD_ID);

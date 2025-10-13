@@ -1,6 +1,9 @@
 package com.hanhy06.embellish_chat.data;
 
+import com.hanhy06.embellish_chat.text.TextStyleUtils;
+
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static java.util.Map.entry;
 
@@ -41,9 +44,12 @@ public record Config(
 {
     public static Config createDefault(){
         return new Config(
+                //styling
                 true,
                 true,
                 true,
+
+                //styling option
                 true,
                 true,
                 true,
@@ -71,6 +77,7 @@ public record Config(
                         )
                 ),
 
+                //mention
                 true,
                 true,
                 true,
@@ -82,9 +89,11 @@ public record Config(
                 " mentioned you",
                 64,
 
+                //default style
                 0x0,
                 "",
 
+                //banned player
                 new ArrayList<>()
         );
     }

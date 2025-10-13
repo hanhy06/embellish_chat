@@ -1,7 +1,6 @@
 package com.hanhy06.embellish_chat.chat;
 
-import com.hanhy06.embellish_chat.EmbellishChat;
-import com.hanhy06.embellish_chat.chat.processor.Mention;
+import com.hanhy06.embellish_chat.chat.processor.MentionManager;
 import com.hanhy06.embellish_chat.chat.processor.StyledTextProcessor;
 import com.hanhy06.embellish_chat.config.ConfigListener;
 import com.hanhy06.embellish_chat.data.Config;
@@ -12,7 +11,6 @@ import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,14 +21,15 @@ public class ChatHandler implements ConfigListener {
     private Config config;
     private List<UUID> bannedPlayerList;
 
-    private final Mention mention;
-    private final PlayerManager manager;
+    private final MentionManager mentionManager;
+    private final PlayerManager playerManager;
     private StyledTextProcessor processor;
 
-    public ChatHandler(PlayerManager manager, Scoreboard scoreboard) {
+    public ChatHandler(PlayerManager playerManager, Scoreboard scoreboard) {
         INSTANCE = this;
-        this.manager = manager;
-        this.mention = new Mention(manager,scoreboard);
+        this.playerManager = playerManager;
+        this.mentionManager = new MentionManager(playerManager,scoreboard);
+        this.processor = new StyledTextProcessor();
     }
 
     @Override
@@ -41,9 +40,9 @@ public class ChatHandler implements ConfigListener {
     public SignedMessage handleChatMessage(SignedMessage original) {
         if (bannedPlayerList.contains(original.getSender())) return original;
 
-        ServerPlayerEntity sender = manager.getPlayer(original.getSender());
+        ServerPlayerEntity sender = playerManager.getPlayer(original.getSender());
 
-        MutableText baseMessage = MutableText.of(original.getContent().getContent());
+        MutableText baseMessage = original.getContent().copy();
         String raw = original.getContent().getString();
 
         List<Receiver> receivers = List.of();
@@ -60,10 +59,10 @@ public class ChatHandler implements ConfigListener {
     }
 
     private List<Receiver> handleMentions(String raw,ServerPlayerEntity sender) {
-        List<Target> targets = mention.parseMentions(raw);
-        List<Receiver> receivers = mention.processReceiver(sender,targets);
+        List<Target> targets = mentionManager.parseMentions(raw);
+        List<Receiver> receivers = mentionManager.processReceiver(sender,targets);
         if (!targets.isEmpty()) {
-            mention.broadcastMention(sender, receivers);
+            mentionManager.broadcastMention(sender, receivers);
         }
         return receivers;
     }
@@ -72,7 +71,7 @@ public class ChatHandler implements ConfigListener {
         this.config = config;
         this.bannedPlayerList = config.bannedPlayerList();
 
-        mention.updateConfig(config);
+        mentionManager.updateConfig(config);
         processor.updateConfig(config);
     }
 }

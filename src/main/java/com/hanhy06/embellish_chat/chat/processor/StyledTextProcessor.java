@@ -192,6 +192,8 @@ public class StyledTextProcessor {
         return out;
     }
 
+    
+
     private MutableText applyMention(MutableText text, List<Receiver> receivers) {
         Runs runs = flatten(text);
         MutableText result = Text.empty();

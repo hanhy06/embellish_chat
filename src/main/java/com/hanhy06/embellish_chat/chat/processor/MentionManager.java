@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Mention {
+public class MentionManager {
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{1,16})(?=\\b|$)");
 
     private final PlayerManager manager;
@@ -38,7 +38,7 @@ public class Mention {
     private String mentionTitleSuffix;
     private double hereRadius;
 
-    public Mention(PlayerManager manager,Scoreboard scoreboard){
+    public MentionManager(PlayerManager manager, Scoreboard scoreboard){
         this.manager = manager;
         this.scoreboard = scoreboard;
     }
