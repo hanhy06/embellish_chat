@@ -1,7 +1,6 @@
-package com.hanhy06.embellish_chat.text;
+package com.hanhy06.embellish_chat.text.utile;
 
 import com.hanhy06.embellish_chat.EmbellishChat;
-import com.hanhy06.embellish_chat.chat.processor.StyledTextProcessor;
 import com.hanhy06.embellish_chat.data.Config;
 import net.minecraft.text.*;
 import net.minecraft.util.Identifier;
@@ -61,18 +60,6 @@ public class TextStyleUtils {
             return text;
         }
     }
-
-    record Run(
-            int start,
-            int end,
-            Style style,
-            String content
-    ) {}
-
-    record Runs(
-            String full,
-            java.util.List<Run> runs
-    ) {}
 
     public static Runs flatten(Text text) {
         List<Run> list = new ArrayList<>();

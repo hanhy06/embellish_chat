@@ -128,8 +128,6 @@ You can find `embellish_chat.json` in your config folder.
   This metadata includes the time the message was sent and allows the message to be automatically copied to the clipboard when clicked.
 - **`colorPreset`**: A user-defined color preset. It can be defined as `"key" : "hex color value"` (for example, `"poo" : "0x4E3629"`).
 
----
-
 ### Mention
 
 - **`mentionEnabled`**: If `true`, enables the `@` mention feature.
@@ -145,8 +143,6 @@ You can find `embellish_chat.json` in your config folder.
 - **`mentionTitlePrefix`**: Text displayed before the mentioned target in the notification title.
 - **`mentionTitleSuffix`**: Text displayed after the mentioned target in the notification title.
 - **`hereRadius`**: When using the `@here` mention, it mentions all players within this radius around the sender.
-
----
 
 ### Etc.
 

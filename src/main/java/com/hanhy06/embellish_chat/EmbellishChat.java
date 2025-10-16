@@ -1,7 +1,5 @@
 package com.hanhy06.embellish_chat;
 
-import com.hanhy06.embellish_chat.chat.ChatHandler;
-import com.hanhy06.embellish_chat.command.EmbellishChatCommand;
 import com.hanhy06.embellish_chat.config.ConfigManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;

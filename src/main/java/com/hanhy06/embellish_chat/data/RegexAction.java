@@ -1,14 +1,12 @@
 package com.hanhy06.embellish_chat.data;
 
-import net.minecraft.text.MutableText;
-
-import java.util.function.BiFunction;
+import com.hanhy06.embellish_chat.text.TextStyleApplier;
 
 public record RegexAction(
         String regex,
-        BiFunction<MutableText,String,MutableText> function
+        TextStyleApplier applier
 ) {
-    public static RegexAction of(String  regex,BiFunction<MutableText,String,MutableText> function){
-        return new RegexAction(regex, function);
+    public static RegexAction of(String  regex,TextStyleApplier applier){
+        return new RegexAction(regex, applier);
     }
 }

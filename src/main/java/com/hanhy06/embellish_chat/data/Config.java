@@ -1,16 +1,13 @@
 package com.hanhy06.embellish_chat.data;
 
-import com.hanhy06.embellish_chat.text.TextStyleUtils;
-
 import java.util.*;
-import java.util.regex.Pattern;
 
 import static java.util.Map.entry;
 
 public record Config(
         //styling
-        boolean inChatStylingEnabled,
-        boolean inCommandStylingEnabled,
+        List<RegexAction> inChatStyling,
+        List<RegexAction> inCommandStyling,
         boolean inAnvilStylingEnabled,
 
         //styling option
@@ -20,6 +17,7 @@ public record Config(
         boolean openUriEnabled,
         boolean markdownEnabled,
         boolean metadataEnabled,
+        int urlColor,
         HashMap<String, Integer> colorPreset,
 
         //mention
@@ -45,8 +43,8 @@ public record Config(
     public static Config createDefault(){
         return new Config(
                 //styling
-                true,
-                true,
+                List.of(),
+                List.of(),
                 true,
 
                 //styling option
@@ -56,6 +54,7 @@ public record Config(
                 true,
                 true,
                 true,
+                0x0000EE,
                 new HashMap<>(
                         Map.ofEntries(
                                 entry("black", 0x000000),
