@@ -31,11 +31,11 @@ public class EmbellishChat implements ModInitializer {
         ConfigManager manager = new ConfigManager(fabricConfigDirPath);
         manager.clearListener();
 
-        ChatHandler handler = new  ChatHandler(server.getPlayerManager(),server.getScoreboard());
         TextStylingManager styler = new TextStylingManager();
+        ChatHandler handler = new  ChatHandler(server.getPlayerManager(),server.getScoreboard(),styler);
 
-        manager.addListener(handler);
         manager.addListener(styler);
+        manager.addListener(handler);
 		manager.readConfig();
 
 		LOGGER.info("{} initialized successfully.", MOD_ID);

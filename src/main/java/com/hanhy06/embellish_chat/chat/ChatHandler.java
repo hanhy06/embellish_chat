@@ -5,6 +5,7 @@ import com.hanhy06.embellish_chat.config.ConfigListener;
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
 import com.hanhy06.embellish_chat.data.Target;
+import com.hanhy06.embellish_chat.styling.TextStylingManager;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.PlayerManager;
@@ -21,12 +22,14 @@ public class ChatHandler implements ConfigListener {
     private List<UUID> bannedPlayerList;
 
     private final MentionManager mentionManager;
+    private final TextStylingManager stylingManager;
     private final PlayerManager playerManager;
 
-    public ChatHandler(PlayerManager playerManager, Scoreboard scoreboard) {
+    public ChatHandler(PlayerManager playerManager, Scoreboard scoreboard,TextStylingManager stylingManager) {
         INSTANCE = this;
         this.playerManager = playerManager;
         this.mentionManager = new MentionManager(playerManager,scoreboard);
+        this.stylingManager = stylingManager;
     }
 
     @Override
@@ -48,7 +51,12 @@ public class ChatHandler implements ConfigListener {
         }
 
         MutableText finalMessage = baseMessage;
-
+        if (!config.inChatStyling().isEmpty()){
+            finalMessage = stylingManager.applyStyles(
+                    stylingManager.inChatStyling,
+                    finalMessage
+            );
+        }
 
         return original.withUnsignedContent(finalMessage);
     }
