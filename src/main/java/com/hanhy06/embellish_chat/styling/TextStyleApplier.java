@@ -1,17 +1,17 @@
-package com.hanhy06.embellish_chat.text;
+package com.hanhy06.embellish_chat.styling;
 
 import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.data.Config;
-import com.hanhy06.embellish_chat.text.utile.Runs;
+import com.hanhy06.embellish_chat.styling.utile.Runs;
 import net.minecraft.text.*;
 import net.minecraft.util.Identifier;
 
 import java.awt.*;
 import java.net.URI;
 
-import static com.hanhy06.embellish_chat.text.utile.TextStyleUtils.flatten;
-import static com.hanhy06.embellish_chat.text.utile.TextStyleUtils.slice;
+import static com.hanhy06.embellish_chat.styling.utile.TextStyleUtils.flatten;
+import static com.hanhy06.embellish_chat.styling.utile.TextStyleUtils.slice;
 
 public enum TextStyleApplier {
     COLOR_HEX{

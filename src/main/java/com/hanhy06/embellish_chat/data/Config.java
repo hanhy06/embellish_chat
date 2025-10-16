@@ -1,6 +1,6 @@
 package com.hanhy06.embellish_chat.data;
 
-import com.hanhy06.embellish_chat.text.TextStyleApplier;
+import com.hanhy06.embellish_chat.styling.TextStyleApplier;
 
 import java.util.*;
 

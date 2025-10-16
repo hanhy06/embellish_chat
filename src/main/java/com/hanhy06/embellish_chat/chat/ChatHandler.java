@@ -1,7 +1,6 @@
 package com.hanhy06.embellish_chat.chat;
 
 import com.hanhy06.embellish_chat.chat.processor.MentionManager;
-import com.hanhy06.embellish_chat.chat.processor.StyledTextProcessor;
 import com.hanhy06.embellish_chat.config.ConfigListener;
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
@@ -23,13 +22,11 @@ public class ChatHandler implements ConfigListener {
 
     private final MentionManager mentionManager;
     private final PlayerManager playerManager;
-    private StyledTextProcessor processor;
 
     public ChatHandler(PlayerManager playerManager, Scoreboard scoreboard) {
         INSTANCE = this;
         this.playerManager = playerManager;
         this.mentionManager = new MentionManager(playerManager,scoreboard);
-        this.processor = new StyledTextProcessor();
     }
 
     @Override
@@ -51,9 +48,7 @@ public class ChatHandler implements ConfigListener {
         }
 
         MutableText finalMessage = baseMessage;
-//        if (config.inChatStylingEnabled()){
-//            finalMessage = processor.applyStyles(baseMessage, receivers);
-//        }
+
 
         return original.withUnsignedContent(finalMessage);
     }
@@ -72,6 +67,5 @@ public class ChatHandler implements ConfigListener {
         this.bannedPlayerList = config.bannedPlayerList();
 
         mentionManager.updateConfig(config);
-        processor.updateConfig(config);
     }
 }

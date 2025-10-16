@@ -32,6 +32,7 @@ public class ConfigManager {
             .registerTypeAdapter(Integer.class,new HexIntegerTypeAdapter())
             .setPrettyPrinting()
             .setStrictness(Strictness.LENIENT)
+            .disableHtmlEscaping()
             .create();
 
     public static Config getConfig(){

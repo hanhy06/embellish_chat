@@ -1,4 +1,4 @@
-package com.hanhy06.embellish_chat.text.utile;
+package com.hanhy06.embellish_chat.styling.utile;
 
 public record Runs(
         String full,
