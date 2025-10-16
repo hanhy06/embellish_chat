@@ -51,9 +51,9 @@ public class ChatHandler implements ConfigListener {
         }
 
         MutableText finalMessage = baseMessage;
-        if (config.inChatStylingEnabled()){
-            finalMessage = processor.applyStyles(baseMessage, receivers);
-        }
+//        if (config.inChatStylingEnabled()){
+//            finalMessage = processor.applyStyles(baseMessage, receivers);
+//        }
 
         return original.withUnsignedContent(finalMessage);
     }

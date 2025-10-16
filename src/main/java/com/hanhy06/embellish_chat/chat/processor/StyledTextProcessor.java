@@ -43,11 +43,6 @@ public class StyledTextProcessor {
     private StyleSpriteSource chatFont;
 
     public void updateConfig(Config config) {
-        this.fontEnabled = config.fontEnabled();
-        this.coloringEnabled = config.coloringEnabled();
-        this.rainbowEnabled = config.rainbowEnabled();
-        this.openUriEnabled = config.openUriEnabled();
-        this.markdownEnabled = config.markdownEnabled();
         this.metadataEnabled = config.metadataEnabled();
         this.colorPreset = config.colorPreset();
         this.chatColor = config.chatColor();
@@ -156,9 +151,9 @@ public class StyledTextProcessor {
             int color = Color.decode(strColor).getRGB();
             return text.fillStyle(Style.EMPTY.withColor(color));
         }
-        if (strColor.equals("rainbow") && config.rainbowEnabled()) {
-            return applyRainbow(text);
-        }
+//        if (strColor.equals("rainbow") && config.rainbowEnabled()) {
+//            return applyRainbow(text);
+//        }
         return text;
     }
 
