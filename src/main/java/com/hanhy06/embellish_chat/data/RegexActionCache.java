@@ -1,5 +1,6 @@
 package com.hanhy06.embellish_chat.data;
 
+import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.styling.TextStyleApplier;
 
 import java.util.regex.Pattern;
@@ -9,6 +10,14 @@ public record RegexActionCache(
         TextStyleApplier applier
 ) {
     public static RegexActionCache of(RegexAction action){
-        return new RegexActionCache(Pattern.compile(action.regex()), action.applier());
+        try {
+            return new RegexActionCache(Pattern.compile(action.regex()), action.applier());
+        } catch (java.util.regex.PatternSyntaxException e) {
+            EmbellishChat.LOGGER.error(
+                    "Regex compile failed. applier={}, regex='{}', reason={}",
+                    action.applier(), action.regex(), e.getDescription()
+            );
+            return null;
+        }
     }
 }

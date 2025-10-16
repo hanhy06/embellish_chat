@@ -95,5 +95,7 @@ public enum TextStyleApplier {
         public MutableText apply(MutableText text,String option){
             return text.fillStyle(Style.EMPTY.withObfuscated(true));
         }
-    }
+    };
+
+    public abstract MutableText apply(MutableText text, String option);
 }
