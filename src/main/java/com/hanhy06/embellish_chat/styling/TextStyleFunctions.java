@@ -14,17 +14,31 @@ import static com.hanhy06.embellish_chat.styling.utile.TextStyleUtils.flatten;
 import static com.hanhy06.embellish_chat.styling.utile.TextStyleUtils.slice;
 
 public class TextStyleFunctions {
+    private final int chatColor;
+    private final StyleSpriteSource chatFont;
+
+    public TextStyleFunctions(Config config){
+        this.chatColor = config.chatColor();
+        String font = config.chatFont();
+        if (font.isBlank()){
+            chatFont = null;
+        }else {
+            chatFont = new StyleSpriteSource.Font(
+                    Identifier.tryParse(font)
+            );
+        }
+    }
+
     public static MutableText PREPROCESSING_MENTION(MutableText text, String option){
         return text;
     }
 
-    public static MutableText PREPROCESSING_COLOR(MutableText text, String option){
-        return text.fillStyle(Style.EMPTY.withColor(ConfigManager.getConfig().chatColor()));
+    public MutableText PREPROCESSING_COLOR(MutableText text, String option){
+        return text.fillStyle(Style.EMPTY.withColor(chatColor));
     }
 
-    public static MutableText PREPROCESSING_FONT(MutableText text, String option){
-        StyleSpriteSource font = new StyleSpriteSource.Font(Identifier.tryParse(ConfigManager.getConfig().chatFont()));
-        return text.fillStyle(Style.EMPTY.withFont(font));
+    public MutableText PREPROCESSING_FONT(MutableText text, String option){
+        return text.fillStyle(Style.EMPTY.withFont(chatFont));
     }
 
     public static MutableText COLOR_HEX(MutableText text, String option){
