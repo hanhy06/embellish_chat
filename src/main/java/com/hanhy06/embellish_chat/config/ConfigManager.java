@@ -7,6 +7,7 @@ import com.google.gson.Strictness;
 import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.util.HexIntegerTypeAdapter;
+import com.hanhy06.embellish_chat.util.PatternTypeAdapter;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -17,6 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class ConfigManager {
     public static ConfigManager INSTANCE;
@@ -30,6 +32,7 @@ public class ConfigManager {
     private final Gson gson = new GsonBuilder()
             .registerTypeAdapter(int.class,new HexIntegerTypeAdapter())
             .registerTypeAdapter(Integer.class,new HexIntegerTypeAdapter())
+            .registerTypeAdapter(Pattern.class,new PatternTypeAdapter())
             .setPrettyPrinting()
             .setStrictness(Strictness.LENIENT)
             .disableHtmlEscaping()

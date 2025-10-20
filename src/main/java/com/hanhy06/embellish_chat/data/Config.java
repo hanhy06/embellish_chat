@@ -1,5 +1,6 @@
 package com.hanhy06.embellish_chat.data;
 
+import com.hanhy06.embellish_chat.styling.StyleRegex;
 import com.hanhy06.embellish_chat.styling.TextStyleApplier;
 
 import java.util.*;
@@ -8,9 +9,9 @@ import static java.util.Map.entry;
 
 public record Config(
         //style
-        LinkedHashMap<String,TextStyleApplier> inChatStyling,
-        LinkedHashMap<String,TextStyleApplier> inCommandStyling,
-        LinkedHashMap<String,TextStyleApplier> inAnvilStyling,
+        List<StyleRegex> inChatStyling,
+        List<StyleRegex> inCommandStyling,
+        List<StyleRegex> inAnvilStyling,
 
         //styling option
         boolean metadataEnabled,
@@ -40,42 +41,42 @@ public record Config(
     public static Config createDefault(){
         return new Config(
                 //style
-                new LinkedHashMap<>(Map.ofEntries(
-                        entry("(?<!\\\\)\\[(.+?)]<(#.{6})>", TextStyleApplier.COLOR_HEX),
-                        entry("(?<!\\\\)\\[(.+?)]<rainbow>", TextStyleApplier.COLOR_RAINBOW),
-                        entry("(?<!\\\\)\\[(.+?)]<(.+?)>", TextStyleApplier.COLOR_PRESET),
-                        entry("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", TextStyleApplier.URL),
-                        entry("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", TextStyleApplier.FONT),
-                        entry("(?<!\\\\)\\*\\*(.+?)\\*\\*", TextStyleApplier.BOLD),
-                        entry("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)", TextStyleApplier.ITALIC),
-                        entry("(?<!\\\\)__(.+?)__", TextStyleApplier.UNDERLINE),
-                        entry("(?<!\\\\)~~(.+?)~~", TextStyleApplier.STRIKETHROUGH),
-                        entry("(?<!\\\\)\\|\\|(.+?)\\|\\|", TextStyleApplier.OBFUSCATED)
-                )),
-                new LinkedHashMap<>(Map.ofEntries(
-                        entry("(?<!\\\\)\\[(.+?)]<(#.{6})>", TextStyleApplier.COLOR_HEX),
-                        entry("(?<!\\\\)\\[(.+?)]<rainbow>", TextStyleApplier.COLOR_RAINBOW),
-                        entry("(?<!\\\\)\\[(.+?)]<(.+?)>", TextStyleApplier.COLOR_PRESET),
-                        entry("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", TextStyleApplier.URL),
-                        entry("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", TextStyleApplier.FONT),
-                        entry("(?<!\\\\)\\*\\*(.+?)\\*\\*", TextStyleApplier.BOLD),
-                        entry("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)", TextStyleApplier.ITALIC),
-                        entry("(?<!\\\\)__(.+?)__", TextStyleApplier.UNDERLINE),
-                        entry("(?<!\\\\)~~(.+?)~~", TextStyleApplier.STRIKETHROUGH),
-                        entry("(?<!\\\\)\\|\\|(.+?)\\|\\|", TextStyleApplier.OBFUSCATED)
-                )),
-                new LinkedHashMap<>(Map.ofEntries(
-                        entry("(?<!\\\\)\\[(.+?)]<(#.{6})>", TextStyleApplier.COLOR_HEX),
-                        entry("(?<!\\\\)\\[(.+?)]<rainbow>", TextStyleApplier.COLOR_RAINBOW),
-                        entry("(?<!\\\\)\\[(.+?)]<(.+?)>", TextStyleApplier.COLOR_PRESET),
-                        entry("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", TextStyleApplier.URL),
-                        entry("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", TextStyleApplier.FONT),
-                        entry("(?<!\\\\)\\*\\*(.+?)\\*\\*", TextStyleApplier.BOLD),
-                        entry("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)", TextStyleApplier.ITALIC),
-                        entry("(?<!\\\\)__(.+?)__", TextStyleApplier.UNDERLINE),
-                        entry("(?<!\\\\)~~(.+?)~~", TextStyleApplier.STRIKETHROUGH),
-                        entry("(?<!\\\\)\\|\\|(.+?)\\|\\|", TextStyleApplier.OBFUSCATED)
-                )),
+                List.of(
+                        StyleRegex.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", TextStyleApplier.COLOR_HEX),
+                        StyleRegex.of("(?<!\\\\)\\[(.+?)]<rainbow>", TextStyleApplier.COLOR_RAINBOW),
+                        StyleRegex.of("(?<!\\\\)\\[(.+?)]<(.+?)>", TextStyleApplier.COLOR_PRESET),
+                        StyleRegex.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", TextStyleApplier.URL),
+                        StyleRegex.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", TextStyleApplier.FONT),
+                        StyleRegex.of("(?<!\\\\)\\*\\*(.+?)\\*\\*", TextStyleApplier.BOLD),
+                        StyleRegex.of("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)", TextStyleApplier.ITALIC),
+                        StyleRegex.of("(?<!\\\\)__(.+?)__", TextStyleApplier.UNDERLINE),
+                        StyleRegex.of("(?<!\\\\)~~(.+?)~~", TextStyleApplier.STRIKETHROUGH),
+                        StyleRegex.of("(?<!\\\\)\\|\\|(.+?)\\|\\|", TextStyleApplier.OBFUSCATED)
+                ),
+                List.of(
+                        StyleRegex.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", TextStyleApplier.COLOR_HEX),
+                        StyleRegex.of("(?<!\\\\)\\[(.+?)]<rainbow>", TextStyleApplier.COLOR_RAINBOW),
+                        StyleRegex.of("(?<!\\\\)\\[(.+?)]<(.+?)>", TextStyleApplier.COLOR_PRESET),
+                        StyleRegex.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", TextStyleApplier.URL),
+                        StyleRegex.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", TextStyleApplier.FONT),
+                        StyleRegex.of("(?<!\\\\)\\*\\*(.+?)\\*\\*", TextStyleApplier.BOLD),
+                        StyleRegex.of("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)", TextStyleApplier.ITALIC),
+                        StyleRegex.of("(?<!\\\\)__(.+?)__", TextStyleApplier.UNDERLINE),
+                        StyleRegex.of("(?<!\\\\)~~(.+?)~~", TextStyleApplier.STRIKETHROUGH),
+                        StyleRegex.of("(?<!\\\\)\\|\\|(.+?)\\|\\|", TextStyleApplier.OBFUSCATED)
+                ),
+                List.of(
+                        StyleRegex.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", TextStyleApplier.COLOR_HEX),
+                        StyleRegex.of("(?<!\\\\)\\[(.+?)]<rainbow>", TextStyleApplier.COLOR_RAINBOW),
+                        StyleRegex.of("(?<!\\\\)\\[(.+?)]<(.+?)>", TextStyleApplier.COLOR_PRESET),
+                        StyleRegex.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", TextStyleApplier.URL),
+                        StyleRegex.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", TextStyleApplier.FONT),
+                        StyleRegex.of("(?<!\\\\)\\*\\*(.+?)\\*\\*", TextStyleApplier.BOLD),
+                        StyleRegex.of("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)", TextStyleApplier.ITALIC),
+                        StyleRegex.of("(?<!\\\\)__(.+?)__", TextStyleApplier.UNDERLINE),
+                        StyleRegex.of("(?<!\\\\)~~(.+?)~~", TextStyleApplier.STRIKETHROUGH),
+                        StyleRegex.of("(?<!\\\\)\\|\\|(.+?)\\|\\|", TextStyleApplier.OBFUSCATED)
+                ),
 
                 //styling option
                 true,

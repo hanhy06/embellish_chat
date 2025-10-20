@@ -1,9 +1,9 @@
 package com.hanhy06.embellish_chat.chat;
 
-import com.hanhy06.embellish_chat.mention.MentionManager;
 import com.hanhy06.embellish_chat.config.ConfigListener;
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
+import com.hanhy06.embellish_chat.mention.MentionManager;
 import com.hanhy06.embellish_chat.mention.Target;
 import com.hanhy06.embellish_chat.styling.TextStylingManager;
 import net.minecraft.network.message.SignedMessage;
