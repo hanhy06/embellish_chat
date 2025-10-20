@@ -9,27 +9,27 @@ import net.minecraft.util.Identifier;
 
 import java.awt.*;
 import java.net.URI;
+import java.util.HashMap;
 
 import static com.hanhy06.embellish_chat.styling.utile.TextStyleUtils.flatten;
 import static com.hanhy06.embellish_chat.styling.utile.TextStyleUtils.slice;
 
 public class TextStyleFunctions {
+    private final Config config;
+    private final HashMap<String,Integer> colorPreset;
     private final int chatColor;
     private final StyleSpriteSource chatFont;
 
     public TextStyleFunctions(Config config){
-        this.chatColor = config.chatColor();
+        this.config = config;
+
         String font = config.chatFont();
-        if (font.isBlank()){
-            chatFont = null;
-        }else {
-            chatFont = new StyleSpriteSource.Font(
-                    Identifier.tryParse(font)
-            );
-        }
+        this.colorPreset = config.colorPreset();
+        this.chatColor = config.chatColor();
+        this.chatFont = font.isBlank() ? null : new  StyleSpriteSource.Font(Identifier.tryParse(font));
     }
 
-    public static MutableText PREPROCESSING_MENTION(MutableText text, String option){
+    public MutableText PREPROCESSING_MENTION(MutableText text, String option){
         return text;
     }
 
@@ -41,12 +41,12 @@ public class TextStyleFunctions {
         return text.fillStyle(Style.EMPTY.withFont(chatFont));
     }
 
-    public static MutableText COLOR_HEX(MutableText text, String option){
+    public MutableText COLOR_HEX(MutableText text, String option){
         int color = Color.decode(option).getRGB();
         return text.fillStyle(Style.EMPTY.withColor(color));
     }
 
-    public static MutableText COLOR_RAINBOW(MutableText text, String option){
+    public MutableText COLOR_RAINBOW(MutableText text, String option){
         Runs runs = flatten(text);
         String string = runs.full();
         int length = string.length();
@@ -61,45 +61,45 @@ public class TextStyleFunctions {
         return out;
     }
 
-    public static MutableText COLOR_PRESET(MutableText text, String option){
+    public MutableText COLOR_PRESET(MutableText text, String option){
         Config config = ConfigManager.getConfig();
-        int color = config.colorPreset().getOrDefault(option,config.chatColor());
+        int color = colorPreset.getOrDefault(option,chatColor);
         return text.fillStyle(Style.EMPTY.withColor(color));
     }
 
-    public static MutableText FONT(MutableText text, String option){
+    public MutableText FONT(MutableText text, String option){
         StyleSpriteSource font = new StyleSpriteSource.Font(Identifier.tryParse(option));
         return text.fillStyle(Style.EMPTY.withFont(font));
     }
 
-    public static MutableText URL(MutableText text, String option){
+    public MutableText URL(MutableText text, String option){
         try {
             URI uri = URI.create(option);
             ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
-            return text.fillStyle(Style.EMPTY.withClickEvent(clickEvent).withColor(ConfigManager.getConfig().urlColor()));
+            return text.fillStyle(Style.EMPTY.withClickEvent(clickEvent).withColor(config.urlColor()));
         } catch (IllegalArgumentException e) {
             EmbellishChat.LOGGER.warn("Invalid URL address: {}", option);
             return text;
         }
     }
 
-    public static MutableText BOLD(MutableText text, String option){
+    public MutableText BOLD(MutableText text, String option){
         return text.fillStyle(Style.EMPTY.withBold(true));
     }
 
-    public static MutableText ITALIC(MutableText text, String option){
+    public MutableText ITALIC(MutableText text, String option){
         return text.fillStyle(Style.EMPTY.withItalic(true));
     }
 
-    public static MutableText UNDERLINE(MutableText text, String option){
+    public MutableText UNDERLINE(MutableText text, String option){
         return text.fillStyle(Style.EMPTY.withUnderline(true));
     }
 
-    public static MutableText STRIKETHROUGH(MutableText text, String option){
+    public MutableText STRIKETHROUGH(MutableText text, String option){
         return text.fillStyle(Style.EMPTY.withStrikethrough(true));
     }
 
-    public static MutableText OBFUSCATED(MutableText text, String option){
+    public MutableText OBFUSCATED(MutableText text, String option){
         return text.fillStyle(Style.EMPTY.withObfuscated(true));
     }
 }
