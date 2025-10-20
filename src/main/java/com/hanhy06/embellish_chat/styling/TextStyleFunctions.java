@@ -14,18 +14,31 @@ import static com.hanhy06.embellish_chat.styling.utile.TextStyleUtils.flatten;
 import static com.hanhy06.embellish_chat.styling.utile.TextStyleUtils.slice;
 
 public class TextStyleFunctions {
-    public static MutableText COLOR_HEX(MutableText text, String option){
-        int color = Color.decode(option).getRGB();
+    public static MutableText PREPROCESSING_MENTION(MutableText text, Object option){
+        return text;
+    }
+
+    public static MutableText PREPROCESSING_COLOR(MutableText text, Object option){
+        return text.fillStyle(Style.EMPTY.withColor(ConfigManager.getConfig().chatColor()));
+    }
+
+    public static MutableText PREPROCESSING_FONT(MutableText text, Object option){
+        StyleSpriteSource font = new StyleSpriteSource.Font(Identifier.tryParse(ConfigManager.getConfig().chatFont()));
+        return text.fillStyle(Style.EMPTY.withFont(font));
+    }
+
+    public static MutableText COLOR_HEX(MutableText text, Object option){
+        int color = Color.decode(option.toString()).getRGB();
         return text.fillStyle(Style.EMPTY.withColor(color));
     }
 
-    public static MutableText COLOR_PRESET(MutableText text, String option){
+    public static MutableText COLOR_PRESET(MutableText text, Object option){
         Config config = ConfigManager.getConfig();
-        int color = config.colorPreset().getOrDefault(option,config.chatColor());
+        int color = config.colorPreset().getOrDefault(option.toString(),config.chatColor());
         return text.fillStyle(Style.EMPTY.withColor(color));
     }
 
-    public static MutableText COLOR_RAINBOW(MutableText text, String option){
+    public static MutableText COLOR_RAINBOW(MutableText text, Object option){
         Runs runs = flatten(text);
         String string = runs.full();
         int length = string.length();
@@ -40,14 +53,14 @@ public class TextStyleFunctions {
         return out;
     }
 
-    public static MutableText FONT(MutableText text, String option){
-        StyleSpriteSource font = new StyleSpriteSource.Font(Identifier.tryParse(option));
+    public static MutableText FONT(MutableText text, Object option){
+        StyleSpriteSource font = new StyleSpriteSource.Font(Identifier.tryParse(option.toString()));
         return text.fillStyle(Style.EMPTY.withFont(font));
     }
 
-    public static MutableText URL(MutableText text, String option){
+    public static MutableText URL(MutableText text, Object option){
         try {
-            URI uri = URI.create(option);
+            URI uri = URI.create(option.toString());
             ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
             return text.fillStyle(Style.EMPTY.withClickEvent(clickEvent).withColor(ConfigManager.getConfig().urlColor()));
         } catch (IllegalArgumentException e) {
@@ -56,23 +69,23 @@ public class TextStyleFunctions {
         }
     }
 
-    public static MutableText BOLD(MutableText text, String option){
+    public static MutableText BOLD(MutableText text, Object option){
         return text.fillStyle(Style.EMPTY.withBold(true));
     }
 
-    public static MutableText ITALIC(MutableText text, String option){
+    public static MutableText ITALIC(MutableText text, Object option){
         return text.fillStyle(Style.EMPTY.withItalic(true));
     }
 
-    public static MutableText UNDERLINE(MutableText text, String option){
+    public static MutableText UNDERLINE(MutableText text, Object option){
         return text.fillStyle(Style.EMPTY.withUnderline(true));
     }
 
-    public static MutableText STRIKETHROUGH(MutableText text, String option){
+    public static MutableText STRIKETHROUGH(MutableText text, Object option){
         return text.fillStyle(Style.EMPTY.withStrikethrough(true));
     }
 
-    public static MutableText OBFUSCATED(MutableText text, String option){
+    public static MutableText OBFUSCATED(MutableText text, Object option){
         return text.fillStyle(Style.EMPTY.withObfuscated(true));
     }
 }

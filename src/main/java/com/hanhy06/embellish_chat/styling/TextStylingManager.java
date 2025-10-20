@@ -1,6 +1,7 @@
 package com.hanhy06.embellish_chat.styling;
 
 import com.hanhy06.embellish_chat.config.ConfigListener;
+import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.RegexAction;
 import com.hanhy06.embellish_chat.data.RegexActionCache;
@@ -19,6 +20,10 @@ public class TextStylingManager implements ConfigListener {
     public List<RegexActionCache> inChatStyling;
     public List<RegexActionCache> inCommandStyling;
     public List<RegexActionCache> inAnvilStyling;
+
+    public TextStylingManager(Config config){
+        onConfigReload(config);
+    }
 
     @Override
     public void onConfigReload(Config newConfig) {
@@ -40,30 +45,20 @@ public class TextStylingManager implements ConfigListener {
 
     private MutableText applyStyle(RegexActionCache action,MutableText text){
         Runs runs = flatten(text);
+        MutableText result = Text.empty();
+
         Matcher matcher = action.regex().matcher(runs.full());
         if (!matcher.find()) return text;
 
         int groupCount = matcher.groupCount();
         int lastEnd = 0;
-        MutableText result = Text.empty();
         do {
             result.append(slice(runs, lastEnd, matcher.start()));
 
-            if (groupCount == 1){
-                result.append(
-                        action.applier().apply(
-                                slice(runs, matcher.start(1), matcher.end(1)),
-                                ""
-                        )
-                );
-            }else {
-                result.append(
-                        action.applier().apply(
-                                slice(runs, matcher.start(1), matcher.end(1)),
-                                matcher.group(2)
-                        )
-                );
-            }
+            MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
+            String option = (groupCount == 1) ? "" : matcher.group(2);
+            segment = action.applier().apply(segment, option);
+            result.append(segment);
 
             lastEnd = matcher.end();
         } while (matcher.find());

@@ -1,6 +1,6 @@
 package com.hanhy06.embellish_chat.chat;
 
-import com.hanhy06.embellish_chat.chat.processor.MentionManager;
+import com.hanhy06.embellish_chat.mention.MentionManager;
 import com.hanhy06.embellish_chat.config.ConfigListener;
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
@@ -15,8 +15,8 @@ import net.minecraft.text.MutableText;
 import java.util.List;
 import java.util.UUID;
 
-public class ChatHandler implements ConfigListener {
-    public static ChatHandler INSTANCE;
+public class ChatManager implements ConfigListener {
+    public static ChatManager INSTANCE;
 
     private Config config;
     private List<UUID> bannedPlayerList;
@@ -25,7 +25,7 @@ public class ChatHandler implements ConfigListener {
     private final TextStylingManager stylingManager;
     private final PlayerManager playerManager;
 
-    public ChatHandler(PlayerManager playerManager, Scoreboard scoreboard,TextStylingManager stylingManager) {
+    public ChatManager(PlayerManager playerManager, Scoreboard scoreboard, TextStylingManager stylingManager) {
         INSTANCE = this;
         this.playerManager = playerManager;
         this.mentionManager = new MentionManager(playerManager,scoreboard);

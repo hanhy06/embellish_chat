@@ -1,6 +1,7 @@
 package com.hanhy06.embellish_chat;
 
-import com.hanhy06.embellish_chat.chat.ChatHandler;
+import com.hanhy06.embellish_chat.chat.ChatManager;
+import com.hanhy06.embellish_chat.command.EmbellishChatCommand;
 import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.styling.TextStylingManager;
 import net.fabricmc.api.ModInitializer;
@@ -22,7 +23,7 @@ public class EmbellishChat implements ModInitializer {
 
 		ServerLifecycleEvents.SERVER_STARTED.register(EmbellishChat::handleServerStart);
 
-//		EmbellishChatCommand.registerBetterChatCommand();
+		EmbellishChatCommand.registerBetterChatCommand();
 	}
 
 	private static void handleServerStart(MinecraftServer server) {
@@ -31,8 +32,8 @@ public class EmbellishChat implements ModInitializer {
         ConfigManager manager = new ConfigManager(fabricConfigDirPath);
         manager.clearListener();
 
-        TextStylingManager styler = new TextStylingManager();
-        ChatHandler handler = new  ChatHandler(server.getPlayerManager(),server.getScoreboard(),styler);
+        TextStylingManager styler = new TextStylingManager(ConfigManager.getConfig());
+        ChatManager handler = new ChatManager(server.getPlayerManager(),server.getScoreboard(),styler);
 
         manager.addListener(styler);
         manager.addListener(handler);

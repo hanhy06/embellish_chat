@@ -1,4 +1,4 @@
-package com.hanhy06.embellish_chat.chat.processor;
+package com.hanhy06.embellish_chat.mention;
 
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;

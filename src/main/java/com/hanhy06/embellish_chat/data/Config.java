@@ -42,7 +42,7 @@ public record Config(
                 //style
                 List.of(
                         RegexAction.of(
-                                "(?<!\\\\)\\[(.+?)]<(#[A-Za-z0-9]{6}|[A-Za-z0-9]{8})>",
+                                "(?<!\\\\)\\[(.+?)]<(#.{8}|.{6})>",
                                 TextStyleApplier.COLOR_HEX
                         ),
                         RegexAction.of(
