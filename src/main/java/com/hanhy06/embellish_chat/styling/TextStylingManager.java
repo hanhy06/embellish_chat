@@ -28,17 +28,17 @@ public class TextStylingManager implements ConfigListener {
 
     @Override
     public void onConfigReload(Config newConfig) {
-        this.inChatStyling = actionCaching(newConfig.inChatStyling());
-        this.inCommandStyling = actionCaching(newConfig.inCommandStyling());
-        this.inAnvilStyling = actionCaching(newConfig.inAnvilStyling());
+        this.inChatStyling = styleCompile(newConfig.inChatStyling());
+        this.inCommandStyling = styleCompile(newConfig.inCommandStyling());
+        this.inAnvilStyling = styleCompile(newConfig.inAnvilStyling());
     }
 
-    public MutableText applyStyles(HashMap<Pattern,TextStyleApplier> actions,MutableText text){
-        if (text.getString().isBlank()) return text;
+    public MutableText applyStyles(HashMap<Pattern,TextStyleApplier> style,MutableText text){
+        if (text.getString().isBlank() || style.isEmpty()) return text;
 
         MutableText result = text;
-        for (Map.Entry<Pattern, TextStyleApplier> action : actions.entrySet()){
-            result = applyStyle(action.getKey(),action.getValue(),result);
+        for (Map.Entry<Pattern, TextStyleApplier> rule : style.entrySet()){
+            result = applyStyle(rule.getKey(),rule.getValue(),result);
         }
 
         return result;
@@ -68,9 +68,9 @@ public class TextStylingManager implements ConfigListener {
         return result;
     }
 
-    private LinkedHashMap<Pattern,TextStyleApplier> actionCaching(LinkedHashMap<String,TextStyleApplier> actions){
+    private LinkedHashMap<Pattern,TextStyleApplier> styleCompile(LinkedHashMap<String,TextStyleApplier> style){
         LinkedHashMap<Pattern,TextStyleApplier> action = new LinkedHashMap<>();
-        for (Map.Entry<String,TextStyleApplier> entry : actions.entrySet()){
+        for (Map.Entry<String,TextStyleApplier> entry : style.entrySet()){
             try {
                 action.put(Pattern.compile(entry.getKey()),entry.getValue());
             }catch (PatternSyntaxException e){
