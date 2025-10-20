@@ -6,8 +6,8 @@ import java.util.function.BiFunction;
 
 public enum TextStyleApplier {
     COLOR_HEX(TextStyleFunctions::COLOR_HEX),
-    COLOR_PRESET(TextStyleFunctions::COLOR_PRESET),
     COLOR_RAINBOW(TextStyleFunctions::COLOR_RAINBOW),
+    COLOR_PRESET(TextStyleFunctions::COLOR_PRESET),
     COLOR_GRADIENT((text,option) -> text),
     COLOR_SHADOW((text,option) -> text),
     FONT(TextStyleFunctions::FONT),

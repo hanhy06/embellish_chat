@@ -32,12 +32,6 @@ public class TextStyleFunctions {
         return text.fillStyle(Style.EMPTY.withColor(color));
     }
 
-    public static MutableText COLOR_PRESET(MutableText text, Object option){
-        Config config = ConfigManager.getConfig();
-        int color = config.colorPreset().getOrDefault(option.toString(),config.chatColor());
-        return text.fillStyle(Style.EMPTY.withColor(color));
-    }
-
     public static MutableText COLOR_RAINBOW(MutableText text, Object option){
         Runs runs = flatten(text);
         String string = runs.full();
@@ -51,6 +45,12 @@ public class TextStyleFunctions {
             out.append(slice(runs, i, i + 1).fillStyle(Style.EMPTY.withColor(rgb)));
         }
         return out;
+    }
+
+    public static MutableText COLOR_PRESET(MutableText text, Object option){
+        Config config = ConfigManager.getConfig();
+        int color = config.colorPreset().getOrDefault(option.toString(),config.chatColor());
+        return text.fillStyle(Style.EMPTY.withColor(color));
     }
 
     public static MutableText FONT(MutableText text, Object option){

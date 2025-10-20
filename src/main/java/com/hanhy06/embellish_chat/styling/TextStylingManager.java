@@ -1,25 +1,26 @@
 package com.hanhy06.embellish_chat.styling;
 
+import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.config.ConfigListener;
-import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.data.Config;
-import com.hanhy06.embellish_chat.data.RegexAction;
-import com.hanhy06.embellish_chat.data.RegexActionCache;
 import com.hanhy06.embellish_chat.styling.utile.Runs;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import static com.hanhy06.embellish_chat.styling.utile.TextStyleUtils.flatten;
 import static com.hanhy06.embellish_chat.styling.utile.TextStyleUtils.slice;
 
 public class TextStylingManager implements ConfigListener {
-    public List<RegexActionCache> inChatStyling;
-    public List<RegexActionCache> inCommandStyling;
-    public List<RegexActionCache> inAnvilStyling;
+    public LinkedHashMap<Pattern,TextStyleApplier> inChatStyling;
+    public LinkedHashMap<Pattern,TextStyleApplier> inCommandStyling;
+    public LinkedHashMap<Pattern,TextStyleApplier> inAnvilStyling;
 
     public TextStylingManager(Config config){
         onConfigReload(config);
@@ -32,22 +33,22 @@ public class TextStylingManager implements ConfigListener {
         this.inAnvilStyling = actionCaching(newConfig.inAnvilStyling());
     }
 
-    public MutableText applyStyles(List<RegexActionCache> actions,MutableText text){
+    public MutableText applyStyles(HashMap<Pattern,TextStyleApplier> actions,MutableText text){
         if (text.getString().isBlank()) return text;
 
         MutableText result = text;
-        for (RegexActionCache action : actions){
-            result = applyStyle(action,result);
+        for (Map.Entry<Pattern, TextStyleApplier> action : actions.entrySet()){
+            result = applyStyle(action.getKey(),action.getValue(),result);
         }
 
         return result;
     }
 
-    private MutableText applyStyle(RegexActionCache action,MutableText text){
+    private MutableText applyStyle(Pattern regex,TextStyleApplier applier,MutableText text){
         Runs runs = flatten(text);
         MutableText result = Text.empty();
 
-        Matcher matcher = action.regex().matcher(runs.full());
+        Matcher matcher = regex.matcher(runs.full());
         if (!matcher.find()) return text;
 
         int groupCount = matcher.groupCount();
@@ -57,7 +58,7 @@ public class TextStylingManager implements ConfigListener {
 
             MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
             String option = (groupCount == 1) ? "" : matcher.group(2);
-            segment = action.applier().apply(segment, option);
+            segment = applier.apply(segment, option);
             result.append(segment);
 
             lastEnd = matcher.end();
@@ -67,7 +68,15 @@ public class TextStylingManager implements ConfigListener {
         return result;
     }
 
-    private List<RegexActionCache> actionCaching(List<RegexAction> actions){
-        return actions.stream().map(RegexActionCache::of).filter(Objects::nonNull).toList();
+    private LinkedHashMap<Pattern,TextStyleApplier> actionCaching(LinkedHashMap<String,TextStyleApplier> actions){
+        LinkedHashMap<Pattern,TextStyleApplier> action = new LinkedHashMap<>();
+        for (Map.Entry<String,TextStyleApplier> entry : actions.entrySet()){
+            try {
+                action.put(Pattern.compile(entry.getKey()),entry.getValue());
+            }catch (PatternSyntaxException e){
+                EmbellishChat.LOGGER.error("regex error: ",e);
+            }
+        }
+        return action;
     }
 }

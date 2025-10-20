@@ -8,9 +8,9 @@ import static java.util.Map.entry;
 
 public record Config(
         //style
-        List<RegexAction> inChatStyling,
-        List<RegexAction> inCommandStyling,
-        List<RegexAction> inAnvilStyling,
+        LinkedHashMap<String,TextStyleApplier> inChatStyling,
+        LinkedHashMap<String,TextStyleApplier> inCommandStyling,
+        LinkedHashMap<String,TextStyleApplier> inAnvilStyling,
 
         //styling option
         boolean metadataEnabled,
@@ -40,156 +40,64 @@ public record Config(
     public static Config createDefault(){
         return new Config(
                 //style
-                List.of(
-                        RegexAction.of(
-                                "(?<!\\\\)\\[(.+?)]<(#.{8}|.{6})>",
-                                TextStyleApplier.COLOR_HEX
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)\\[(.+?)]<([a-z0-9]+?)>",
-                                TextStyleApplier.COLOR_PRESET
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)\\[(.+?)]<RAINBOW>",
-                                TextStyleApplier.COLOR_RAINBOW
-                        ),
-                        RegexAction.of(
-                                "(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)",
-                                TextStyleApplier.URL
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)\\[(.+?)]\\{([^}]+?)}",
-                                TextStyleApplier.FONT
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)\\*\\*(.+?)\\*\\*",
-                                TextStyleApplier.BOLD
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)(?<!_)_([^_]+?)_(?!_)",
-                                TextStyleApplier.ITALIC
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)__(.+?)__",
-                                TextStyleApplier.UNDERLINE
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)~~(.+?)~~",
-                                TextStyleApplier.STRIKETHROUGH
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)\\|\\|(.+?)\\|\\|",
-                                TextStyleApplier.OBFUSCATED
-                        )
-                ),
-                List.of(
-                        RegexAction.of(
-                                "(?<!\\\\)\\[(.+?)]<(#[A-Za-z0-9]{6}|[A-Za-z0-9]{8})>",
-                                TextStyleApplier.COLOR_HEX
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)\\[(.+?)]<([a-z0-9]+?)>",
-                                TextStyleApplier.COLOR_PRESET
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)\\[(.+?)]<RAINBOW>",
-                                TextStyleApplier.COLOR_RAINBOW
-                        ),
-                        RegexAction.of(
-                                "(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)",
-                                TextStyleApplier.URL
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)\\[(.+?)]\\{([^}]+?)}",
-                                TextStyleApplier.FONT
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)\\*\\*(.+?)\\*\\*",
-                                TextStyleApplier.BOLD
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)(?<!_)_([^_]+?)_(?!_)",
-                                TextStyleApplier.ITALIC
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)__(.+?)__",
-                                TextStyleApplier.UNDERLINE
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)~~(.+?)~~",
-                                TextStyleApplier.STRIKETHROUGH
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)\\|\\|(.+?)\\|\\|",
-                                TextStyleApplier.OBFUSCATED
-                        )
-                ),
-                List.of(
-                        RegexAction.of(
-                                "(?<!\\\\)\\[(.+?)]<(#[A-Za-z0-9]{6}|[A-Za-z0-9]{8})>",
-                                TextStyleApplier.COLOR_HEX
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)\\[(.+?)]<([a-z0-9]+?)>",
-                                TextStyleApplier.COLOR_PRESET
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)\\[(.+?)]<RAINBOW>",
-                                TextStyleApplier.COLOR_RAINBOW
-                        ),
-                        RegexAction.of(
-                                "(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)",
-                                TextStyleApplier.URL
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)\\[(.+?)]\\{([^}]+?)}",
-                                TextStyleApplier.FONT
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)\\*\\*(.+?)\\*\\*",
-                                TextStyleApplier.BOLD
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)(?<!_)_([^_]+?)_(?!_)",
-                                TextStyleApplier.ITALIC
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)__(.+?)__",
-                                TextStyleApplier.UNDERLINE
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)~~(.+?)~~",
-                                TextStyleApplier.STRIKETHROUGH
-                        ),
-                        RegexAction.of(
-                                "(?<!\\\\)\\|\\|(.+?)\\|\\|",
-                                TextStyleApplier.OBFUSCATED
-                        )
-                ),
+                new LinkedHashMap<>(Map.ofEntries(
+                        entry("(?<!\\\\)\\[(.+?)]<(#.{6})>", TextStyleApplier.COLOR_HEX),
+                        entry("(?<!\\\\)\\[(.+?)]<rainbow>", TextStyleApplier.COLOR_RAINBOW),
+                        entry("(?<!\\\\)\\[(.+?)]<(.+?)>", TextStyleApplier.COLOR_PRESET),
+                        entry("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", TextStyleApplier.URL),
+                        entry("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", TextStyleApplier.FONT),
+                        entry("(?<!\\\\)\\*\\*(.+?)\\*\\*", TextStyleApplier.BOLD),
+                        entry("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)", TextStyleApplier.ITALIC),
+                        entry("(?<!\\\\)__(.+?)__", TextStyleApplier.UNDERLINE),
+                        entry("(?<!\\\\)~~(.+?)~~", TextStyleApplier.STRIKETHROUGH),
+                        entry("(?<!\\\\)\\|\\|(.+?)\\|\\|", TextStyleApplier.OBFUSCATED)
+                )),
+                new LinkedHashMap<>(Map.ofEntries(
+                        entry("(?<!\\\\)\\[(.+?)]<(#.{6})>", TextStyleApplier.COLOR_HEX),
+                        entry("(?<!\\\\)\\[(.+?)]<rainbow>", TextStyleApplier.COLOR_RAINBOW),
+                        entry("(?<!\\\\)\\[(.+?)]<(.+?)>", TextStyleApplier.COLOR_PRESET),
+                        entry("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", TextStyleApplier.URL),
+                        entry("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", TextStyleApplier.FONT),
+                        entry("(?<!\\\\)\\*\\*(.+?)\\*\\*", TextStyleApplier.BOLD),
+                        entry("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)", TextStyleApplier.ITALIC),
+                        entry("(?<!\\\\)__(.+?)__", TextStyleApplier.UNDERLINE),
+                        entry("(?<!\\\\)~~(.+?)~~", TextStyleApplier.STRIKETHROUGH),
+                        entry("(?<!\\\\)\\|\\|(.+?)\\|\\|", TextStyleApplier.OBFUSCATED)
+                )),
+                new LinkedHashMap<>(Map.ofEntries(
+                        entry("(?<!\\\\)\\[(.+?)]<(#.{6})>", TextStyleApplier.COLOR_HEX),
+                        entry("(?<!\\\\)\\[(.+?)]<rainbow>", TextStyleApplier.COLOR_RAINBOW),
+                        entry("(?<!\\\\)\\[(.+?)]<(.+?)>", TextStyleApplier.COLOR_PRESET),
+                        entry("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", TextStyleApplier.URL),
+                        entry("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", TextStyleApplier.FONT),
+                        entry("(?<!\\\\)\\*\\*(.+?)\\*\\*", TextStyleApplier.BOLD),
+                        entry("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)", TextStyleApplier.ITALIC),
+                        entry("(?<!\\\\)__(.+?)__", TextStyleApplier.UNDERLINE),
+                        entry("(?<!\\\\)~~(.+?)~~", TextStyleApplier.STRIKETHROUGH),
+                        entry("(?<!\\\\)\\|\\|(.+?)\\|\\|", TextStyleApplier.OBFUSCATED)
+                )),
 
                 //styling option
                 true,
                 0x0000EE,
-                new HashMap<>(
-                        Map.ofEntries(
-                                entry("black", 0x000000),
-                                entry("dark blue", 0x0000AA),
-                                entry("dark green", 0x00AA00),
-                                entry("dark aqua", 0x00AAAA),
-                                entry("dark red", 0xAA0000),
-                                entry("dark purple", 0xAA00AA),
-                                entry("gold", 0xFFAA00),
-                                entry("gray", 0xAAAAAA),
-                                entry("dark gray", 0x555555),
-                                entry("blue", 0x5555FF),
-                                entry("green", 0x55FF55),
-                                entry("aqua", 0x55FFFF),
-                                entry("red", 0xFF5555),
-                                entry("light purple", 0xFF55FF),
-                                entry("yellow", 0xFFFF55),
-                                entry("white", 0xFFFFFF)
-                        )
-                ),
+                new HashMap<>(Map.ofEntries(
+                        entry("black", 0x000000),
+                        entry("dark blue", 0x0000AA),
+                        entry("dark green", 0x00AA00),
+                        entry("dark aqua", 0x00AAAA),
+                        entry("dark red", 0xAA0000),
+                        entry("dark purple", 0xAA00AA),
+                        entry("gold", 0xFFAA00),
+                        entry("gray", 0xAAAAAA),
+                        entry("dark gray", 0x555555),
+                        entry("blue", 0x5555FF),
+                        entry("green", 0x55FF55),
+                        entry("aqua", 0x55FFFF),
+                        entry("red", 0xFF5555),
+                        entry("light purple", 0xFF55FF),
+                        entry("yellow", 0xFFFF55),
+                        entry("white", 0xFFFFFF)
+                )),
 
                 //mention
                 true,
