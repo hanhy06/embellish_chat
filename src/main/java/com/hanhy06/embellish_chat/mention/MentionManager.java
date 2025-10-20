@@ -2,7 +2,6 @@ package com.hanhy06.embellish_chat.mention;
 
 import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.data.Receiver;
-import com.hanhy06.embellish_chat.data.Target;
 import com.hanhy06.embellish_chat.util.TeamColor;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.scoreboard.Scoreboard;
