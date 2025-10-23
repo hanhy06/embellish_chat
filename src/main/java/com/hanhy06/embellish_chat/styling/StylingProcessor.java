@@ -55,7 +55,7 @@ public class StylingProcessor implements ConfigListener {
 
         MutableText result = text;
         for (StylingRule style : styles){
-            result = applyStyle(style.regex(),style.applier(),result);
+            result = applyStyle(style.regex(),style.styleType(),result);
         }
 
         return result;
@@ -69,14 +69,12 @@ public class StylingProcessor implements ConfigListener {
         Matcher matcher = regex.matcher(runs.full());
         if (!matcher.find()) return text;
 
-        int groupCount = matcher.groupCount();
         int lastEnd = 0;
         do {
             result.append(slice(runs, lastEnd, matcher.start()));
 
             MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
-            String option = (groupCount == 1) ? "" : matcher.group(2);
-            segment = function.apply(segment, option);
+            segment = function.apply(segment, matcher.group(2));
             result.append(segment);
 
             lastEnd = matcher.end();

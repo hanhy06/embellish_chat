@@ -42,16 +42,17 @@ public record Config(
         return new Config(
                 //style
                 List.of(
+                        StylingRule.of("(.+)()",StyleType.METADATA),
                         StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX),
                         StylingRule.of("(?<!\\\\)\\[(.+?)]<rainbow>", StyleType.COLOR_RAINBOW),
                         StylingRule.of("(?<!\\\\)\\[(.+?)]<(.+?)>", StyleType.COLOR_PRESET),
                         StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL),
                         StylingRule.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", StyleType.FONT),
-                        StylingRule.of("(?<!\\\\)\\*\\*(.+?)\\*\\*", StyleType.BOLD),
-                        StylingRule.of("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)", StyleType.ITALIC),
-                        StylingRule.of("(?<!\\\\)__(.+?)__", StyleType.UNDERLINE),
-                        StylingRule.of("(?<!\\\\)~~(.+?)~~", StyleType.STRIKETHROUGH),
-                        StylingRule.of("(?<!\\\\)\\|\\|(.+?)\\|\\|", StyleType.OBFUSCATED)
+                        StylingRule.of("(?<!\\\\)\\*\\*(.+?)\\*\\*()", StyleType.BOLD),
+                        StylingRule.of("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)()", StyleType.ITALIC),
+                        StylingRule.of("(?<!\\\\)__(.+?)__()", StyleType.UNDERLINE),
+                        StylingRule.of("(?<!\\\\)~~(.+?)~~()", StyleType.STRIKETHROUGH),
+                        StylingRule.of("(?<!\\\\)\\|\\|(.+?)\\|\\|()", StyleType.OBFUSCATED)
                 ),
                 List.of(
                         StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX),

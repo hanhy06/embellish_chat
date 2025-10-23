@@ -3,6 +3,7 @@ package com.hanhy06.embellish_chat;
 import com.hanhy06.embellish_chat.chat.MessageProcessor;
 import com.hanhy06.embellish_chat.command.EmbellishChatCommand;
 import com.hanhy06.embellish_chat.config.ConfigManager;
+import com.hanhy06.embellish_chat.mention.MentionProcessor;
 import com.hanhy06.embellish_chat.styling.StylingProcessor;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -33,7 +34,8 @@ public class EmbellishChat implements ModInitializer {
         manager.clearListener();
 
         StylingProcessor styler = new StylingProcessor(ConfigManager.getConfig());
-        MessageProcessor handler = new MessageProcessor(server.getPlayerManager(),server.getScoreboard(),styler);
+        MentionProcessor mention = new MentionProcessor(server.getPlayerManager(),server.getScoreboard());
+        MessageProcessor handler = new MessageProcessor(mention,styler, server.getPlayerManager());
 
         manager.addListener(styler);
         manager.addListener(handler);

@@ -4,6 +4,7 @@ import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.config.Config;
 import com.hanhy06.embellish_chat.styling.util.Runs;
+import com.hanhy06.embellish_chat.util.Timestamp;
 import net.minecraft.text.*;
 import net.minecraft.util.Identifier;
 
@@ -17,7 +18,6 @@ import static com.hanhy06.embellish_chat.styling.util.TextSliceUtil.slice;
 public class StyleRegistry {
     private final Config config;
     private final HashMap<String,Integer> colorPreset;
-    private final int chatColor;
     private final StyleSpriteSource chatFont;
 
     public StyleRegistry(Config config){
@@ -25,8 +25,23 @@ public class StyleRegistry {
 
         String font = config.chatFont();
         this.colorPreset = config.colorPreset();
-        this.chatColor = config.chatColor();
         this.chatFont = font.isBlank() ? null : new  StyleSpriteSource.Font(Identifier.tryParse(font));
+    }
+
+    public MutableText METADATA(MutableText text,String option){
+        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(
+                Timestamp.timeStamp() + "\nClick to copy to clipboard"
+        ));
+
+        ClickEvent clickEvent = new ClickEvent.CopyToClipboard(text.getString());
+
+        return text.fillStyle(
+                Style.EMPTY.withHoverEvent(
+                        hoverEvent
+                ).withClickEvent(
+                        clickEvent
+                )
+        );
     }
 
     public MutableText PREPROCESSING_MENTION(MutableText text, String option){
@@ -34,7 +49,7 @@ public class StyleRegistry {
     }
 
     public MutableText PREPROCESSING_COLOR(MutableText text, String option){
-        return text.fillStyle(Style.EMPTY.withColor(chatColor));
+        return text.fillStyle(Style.EMPTY.withColor(config.chatColor()));
     }
 
     public MutableText PREPROCESSING_FONT(MutableText text, String option){
@@ -63,7 +78,7 @@ public class StyleRegistry {
 
     public MutableText COLOR_PRESET(MutableText text, String option){
         Config config = ConfigManager.getConfig();
-        int color = colorPreset.getOrDefault(option,chatColor);
+        int color = colorPreset.getOrDefault(option,config.chatColor());
         return text.fillStyle(Style.EMPTY.withColor(color));
     }
 

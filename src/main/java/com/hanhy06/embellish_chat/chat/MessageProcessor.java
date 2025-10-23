@@ -25,11 +25,11 @@ public class MessageProcessor implements ConfigListener {
     private final StylingProcessor stylingManager;
     private final PlayerManager playerManager;
 
-    public MessageProcessor(PlayerManager playerManager, Scoreboard scoreboard, StylingProcessor stylingManager) {
+    public MessageProcessor(MentionProcessor mentionProcessor, StylingProcessor stylingManager,PlayerManager playerManager) {
         INSTANCE = this;
-        this.playerManager = playerManager;
-        this.mentionProcessor = new MentionProcessor(playerManager,scoreboard);
+        this.mentionProcessor = mentionProcessor;
         this.stylingManager = stylingManager;
+        this.playerManager = playerManager;
     }
 
     @Override

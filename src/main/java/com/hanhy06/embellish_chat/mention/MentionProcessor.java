@@ -1,6 +1,7 @@
 package com.hanhy06.embellish_chat.mention;
 
 import com.hanhy06.embellish_chat.config.Config;
+import com.hanhy06.embellish_chat.config.ConfigListener;
 import com.hanhy06.embellish_chat.util.TeamColor;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.scoreboard.Scoreboard;
@@ -20,43 +21,31 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MentionProcessor {
+public class MentionProcessor implements ConfigListener {
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{1,16})(?=\\b|$)");
 
     private final PlayerManager manager;
     private final Scoreboard scoreboard;
 
-    private boolean groupMentionOpOnly;
-    private boolean offlineColorEnabled;
-    private int mentionColor;
-    private int groupMentionColor;
+    private Config config;
     private SoundEvent mentionSound;
-    private float mentionPitch;
-    private String mentionTitlePrefix;
-    private String mentionTitleSuffix;
-    private double hereRadius;
 
-    public MentionProcessor(PlayerManager manager, Scoreboard scoreboard){
-        this.manager = manager;
-        this.scoreboard = scoreboard;
+
+    @Override
+    public void onConfigReload(Config newConfig) {
+        this.config = newConfig;
+        this.mentionSound =  SoundEvent.of(Identifier.tryParse(config.mentionSound()));
     }
 
-    public void updateConfig(Config config){
-        this.groupMentionOpOnly = config.groupMentionOpOnly();
-        this.offlineColorEnabled = config.offlineColorEnabled();
-        this.mentionColor = config.mentionColor();
-        this.groupMentionColor = config.groupMentionColor();
-        this.mentionSound =  SoundEvent.of(Identifier.tryParse(config.mentionSound()));
-        this.mentionPitch = config.mentionPitch();
-        this.mentionTitlePrefix = config.mentionTitlePrefix();
-        this.mentionTitleSuffix = config.mentionTitleSuffix();
-        this.hereRadius = config.hereRadius();
+    public MentionProcessor(PlayerManager manager, Scoreboard scoreboard) {
+        this.manager = manager;
+        this.scoreboard = scoreboard;
     }
 
     public void broadcastMention(ServerPlayerEntity sender, List<MentionTarget> mentionTargets){
         MutableText titleText = Text.empty();
         titleText.append(
-                Text.literal(mentionTitlePrefix).styled(
+                Text.literal(config.mentionTitlePrefix()).styled(
                         style -> style.withBold(false).withColor(0xFFFFFF)
                 )
         );
@@ -66,7 +55,7 @@ public class MentionProcessor {
                 )
         );
         titleText.append(
-                Text.literal(mentionTitleSuffix).styled(
+                Text.literal(config.mentionTitleSuffix()).styled(
                         style -> style.withBold(false).withColor(0xFFFFFF)
                 )
         );
@@ -75,7 +64,7 @@ public class MentionProcessor {
             if (mentionTarget.players() == null || mentionTarget.players().isEmpty()) continue;
 
             for (ServerPlayerEntity player : mentionTarget.players()){
-                player.playSoundToPlayer(mentionSound,SoundCategory.UI,1f,mentionPitch);
+                player.playSoundToPlayer(mentionSound,SoundCategory.UI,1f,config.mentionPitch());
                 player.sendMessage(titleText ,true);
             }
         }
@@ -123,7 +112,7 @@ public class MentionProcessor {
                 "everyone",
                 parsedMention.begin(),
                 parsedMention.end(),
-                groupMentionColor,
+                config.groupMentionColor(),
                 manager.getPlayerList()
         );
     }
@@ -132,14 +121,14 @@ public class MentionProcessor {
         List<ServerPlayerEntity> players = PlayerLookup.around(
                 sender.getEntityWorld(),
                 sender.getEntityPos(),
-                hereRadius
+                config.hereRadius()
         ).stream().toList();
 
         return new MentionTarget(
                 "here",
                 parsedMention.begin(),
                 parsedMention.end(),
-                groupMentionColor,
+                config.groupMentionColor(),
                 players
         );
     }
@@ -148,7 +137,7 @@ public class MentionProcessor {
         Team team = sender.getScoreboardTeam();
 
         if (team != null){
-            int color = groupMentionColor;
+            int color = config.groupMentionColor();
             Formatting formatting = team.getColor();
             if (formatting != null && formatting.isColor() && formatting != Formatting.RESET) {
                 color = formatting.getColorValue();
@@ -173,7 +162,7 @@ public class MentionProcessor {
                     "team",
                     parsedMention.begin(),
                     parsedMention.end(),
-                    groupMentionColor,
+                    config.groupMentionColor(),
                     null
             );
         }
@@ -185,10 +174,10 @@ public class MentionProcessor {
         int teamColor;
         if (player != null){
             teamColor = TeamColor.getPlayerColor(player);
-        }else if (offlineColorEnabled) {
+        }else if (config.offlineColorEnabled()) {
             teamColor = TeamColor.getPlayerColor(scoreboard, parsedMention.name());
         } else {
-            teamColor = mentionColor;
+            teamColor = config.mentionColor();
         }
 
         return new MentionTarget(
@@ -201,6 +190,6 @@ public class MentionProcessor {
     }
 
     private boolean canUseGroupMention(ServerPlayerEntity player){
-        return !groupMentionOpOnly || manager.isOperator(player.getPlayerConfigEntry());
+        return !config.groupMentionOpOnly() || manager.isOperator(player.getPlayerConfigEntry());
     }
 }
