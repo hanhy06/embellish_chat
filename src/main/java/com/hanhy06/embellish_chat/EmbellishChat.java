@@ -1,6 +1,6 @@
 package com.hanhy06.embellish_chat;
 
-import com.hanhy06.embellish_chat.chat.MessageProcessor;
+import com.hanhy06.embellish_chat.message.MessageProcessor;
 import com.hanhy06.embellish_chat.command.EmbellishChatCommand;
 import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.mention.MentionProcessor;

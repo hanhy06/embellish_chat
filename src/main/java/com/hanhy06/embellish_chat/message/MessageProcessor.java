@@ -1,4 +1,4 @@
-package com.hanhy06.embellish_chat.chat;
+package com.hanhy06.embellish_chat.message;
 
 import com.hanhy06.embellish_chat.config.ConfigListener;
 import com.hanhy06.embellish_chat.config.Config;
@@ -7,7 +7,6 @@ import com.hanhy06.embellish_chat.mention.MentionProcessor;
 import com.hanhy06.embellish_chat.mention.ParsedMention;
 import com.hanhy06.embellish_chat.styling.StylingProcessor;
 import net.minecraft.network.message.SignedMessage;
-import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;

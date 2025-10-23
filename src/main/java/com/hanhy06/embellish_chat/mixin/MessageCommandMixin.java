@@ -1,6 +1,6 @@
 package com.hanhy06.embellish_chat.mixin;
 
-import com.hanhy06.embellish_chat.chat.MessageProcessor;
+import com.hanhy06.embellish_chat.message.MessageProcessor;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.command.MessageCommand;
 import org.spongepowered.asm.mixin.Mixin;
