@@ -27,19 +27,19 @@ public class PatternTypeAdapter extends TypeAdapter<Pattern> {
 
         if (token == JsonToken.NULL) {
             in.nextNull();
-            throw new JsonSyntaxException("Cannot parse JSON null as a regex pattern.");
+            throw new JsonSyntaxException("Cannot parse JSON null as a pattern pattern.");
         }
 
         if (token != JsonToken.STRING) {
-            throw new JsonSyntaxException("Expected a string for a regex pattern, but found " + token + ".");
+            throw new JsonSyntaxException("Expected a string for a pattern pattern, but found " + token + ".");
         }
 
         String regex = in.nextString();
         try {
             return Pattern.compile(regex);
         } catch (PatternSyntaxException e) {
-            EmbellishChat.LOGGER.error("Failed to compile regex pattern: \"{}\" ({})", regex, e.getMessage());
-            throw new JsonSyntaxException("Invalid regex pattern: \"" + regex + "\"", e);
+            EmbellishChat.LOGGER.error("Failed to compile pattern pattern: \"{}\" ({})", regex, e.getMessage());
+            throw new JsonSyntaxException("Invalid pattern pattern: \"" + regex + "\"", e);
         }
     }
 }

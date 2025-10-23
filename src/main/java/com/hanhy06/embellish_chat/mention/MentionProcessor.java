@@ -30,7 +30,6 @@ public class MentionProcessor implements ConfigListener {
     private Config config;
     private SoundEvent mentionSound;
 
-
     @Override
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
@@ -42,7 +41,7 @@ public class MentionProcessor implements ConfigListener {
         this.scoreboard = scoreboard;
     }
 
-    public void broadcastMention(ServerPlayerEntity sender, List<MentionTarget> mentionTargets){
+    public void broadcastMention(ServerPlayerEntity sender, List<MentionTarget> targets){
         MutableText titleText = Text.empty();
         titleText.append(
                 Text.literal(config.mentionTitlePrefix()).styled(
@@ -60,10 +59,10 @@ public class MentionProcessor implements ConfigListener {
                 )
         );
 
-        for (MentionTarget mentionTarget : mentionTargets){
-            if (mentionTarget.players() == null || mentionTarget.players().isEmpty()) continue;
+        for (MentionTarget target : targets){
+            if (target.players() == null || target.players().isEmpty()) continue;
 
-            for (ServerPlayerEntity player : mentionTarget.players()){
+            for (ServerPlayerEntity player : target.players()){
                 player.playSoundToPlayer(mentionSound,SoundCategory.UI,1f,config.mentionPitch());
                 player.sendMessage(titleText ,true);
             }
@@ -85,8 +84,8 @@ public class MentionProcessor implements ConfigListener {
         return parsedMentions;
     }
 
-    public List<MentionTarget> processReceiver(ServerPlayerEntity sender, List<ParsedMention> parsedMentions){
-        List<MentionTarget> mentionTargets = new ArrayList<>();
+    public List<MentionTarget> identifyMentionTargets(ServerPlayerEntity sender, List<ParsedMention> parsedMentions){
+        List<MentionTarget> targets = new ArrayList<>();
         boolean canGroupMention = canUseGroupMention(sender);
 
         for (ParsedMention parsedMention : parsedMentions){
@@ -94,20 +93,20 @@ public class MentionProcessor implements ConfigListener {
 
             if (canGroupMention){
                 switch (name) {
-                    case "everyone" -> mentionTargets.add(targetEveryone(parsedMention));
-                    case "here" -> mentionTargets.add(targetHere(sender, parsedMention));
-                    case "team" -> mentionTargets.add(targetTeam(sender, parsedMention));
-                    default -> mentionTargets.add(targetPlayer(parsedMention));
+                    case "everyone" -> targets.add(everyone(parsedMention));
+                    case "here" -> targets.add(here(sender, parsedMention));
+                    case "team" -> targets.add(team(sender, parsedMention));
+                    default -> targets.add(player(parsedMention));
                 }
             }else {
-                mentionTargets.add(targetPlayer(parsedMention));
+                targets.add(player(parsedMention));
             }
         }
 
-        return mentionTargets;
+        return targets;
     }
 
-    private MentionTarget targetEveryone(ParsedMention parsedMention){
+    private MentionTarget everyone(ParsedMention parsedMention){
         return new MentionTarget(
                 "everyone",
                 parsedMention.begin(),
@@ -117,7 +116,7 @@ public class MentionProcessor implements ConfigListener {
         );
     }
 
-    private MentionTarget targetHere(ServerPlayerEntity sender, ParsedMention parsedMention){
+    private MentionTarget here(ServerPlayerEntity sender, ParsedMention parsedMention){
         List<ServerPlayerEntity> players = PlayerLookup.around(
                 sender.getEntityWorld(),
                 sender.getEntityPos(),
@@ -133,7 +132,7 @@ public class MentionProcessor implements ConfigListener {
         );
     }
 
-    private MentionTarget targetTeam(ServerPlayerEntity sender, ParsedMention parsedMention){
+    private MentionTarget team(ServerPlayerEntity sender, ParsedMention parsedMention){
         Team team = sender.getScoreboardTeam();
 
         if (team != null){
@@ -168,7 +167,7 @@ public class MentionProcessor implements ConfigListener {
         }
     }
 
-    private MentionTarget targetPlayer(ParsedMention parsedMention){
+    private MentionTarget player(ParsedMention parsedMention){
         ServerPlayerEntity player = manager.getPlayer(parsedMention.name());
 
         int teamColor;

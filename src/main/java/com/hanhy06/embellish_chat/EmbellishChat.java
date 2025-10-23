@@ -31,7 +31,6 @@ public class EmbellishChat implements ModInitializer {
         Path fabricConfigDirPath = FabricLoader.getInstance().getConfigDir();
 
         ConfigManager manager = new ConfigManager(fabricConfigDirPath);
-        manager.clearListener();
 
         StylingProcessor styler = new StylingProcessor(ConfigManager.getConfig());
         MentionProcessor mention = new MentionProcessor(server.getPlayerManager(),server.getScoreboard());

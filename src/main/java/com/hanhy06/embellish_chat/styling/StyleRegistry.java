@@ -3,6 +3,7 @@ package com.hanhy06.embellish_chat.styling;
 import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.config.Config;
 import com.hanhy06.embellish_chat.config.ConfigManager;
+import com.hanhy06.embellish_chat.mention.MentionTarget;
 import com.hanhy06.embellish_chat.styling.util.Runs;
 import com.hanhy06.embellish_chat.util.Timestamp;
 import net.minecraft.text.*;
@@ -11,6 +12,7 @@ import net.minecraft.util.Identifier;
 import java.awt.*;
 import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 
 import static com.hanhy06.embellish_chat.styling.util.TextSliceUtil.flatten;
 import static com.hanhy06.embellish_chat.styling.util.TextSliceUtil.slice;
@@ -28,7 +30,7 @@ public class StyleRegistry {
         this.chatFont = font.isBlank() ? null : new  StyleSpriteSource.Font(Identifier.tryParse(font));
     }
 
-    public MutableText METADATA(MutableText text,String option){
+    public MutableText PREPROCESSING_METADATA(MutableText text,String option){
         HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(
                 Timestamp.timeStamp() + "\nClick to copy to clipboard"
         ));
@@ -44,7 +46,7 @@ public class StyleRegistry {
         );
     }
 
-    public MutableText PREPROCESSING_MENTION(MutableText text, String option){
+    public MutableText PREPROCESSING_MENTION(MutableText text, List<MentionTarget> targets){
         return text;
     }
 

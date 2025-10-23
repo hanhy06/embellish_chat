@@ -96,8 +96,6 @@ public class ConfigManager {
         listeners.add(listener);
     }
 
-    public void clearListener(){listeners.clear();}
-
     public void broadcastConfig(){
         for (ConfigListener listener : listeners){
             listener.onConfigReload(config);

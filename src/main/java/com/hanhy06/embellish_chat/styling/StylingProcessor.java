@@ -37,7 +37,7 @@ public class StylingProcessor implements ConfigListener {
 
         StyleRegistry registry = new StyleRegistry(newConfig);
         this.registers = new EnumMap<>(Map.ofEntries(
-                entry(StyleType.METADATA, registry::METADATA),
+                entry(StyleType.METADATA, registry::PREPROCESSING_METADATA),
                 entry(StyleType.COLOR_HEX, registry::COLOR_HEX),
                 entry(StyleType.COLOR_RAINBOW, registry::COLOR_RAINBOW),
                 entry(StyleType.COLOR_PRESET, registry::COLOR_PRESET),
@@ -56,18 +56,18 @@ public class StylingProcessor implements ConfigListener {
 
         MutableText result = text;
         for (StylingRule style : styles){
-            result = applyStyle(style.regex(),style.styleType(),result);
+            result = applyStyle(style.pattern(),style.styleType(),result);
         }
 
         return result;
     }
 
-    private MutableText applyStyle(Pattern regex, StyleType styleType, MutableText text){
+    private MutableText applyStyle(Pattern pattern, StyleType styleType, MutableText text){
         Runs runs = flatten(text);
         MutableText result = Text.empty();
 
         BiFunction<MutableText,String,MutableText> function = registers.get(styleType);
-        Matcher matcher = regex.matcher(runs.full());
+        Matcher matcher = pattern.matcher(runs.full());
         if (!matcher.find()) return text;
 
         int lastEnd = 0;

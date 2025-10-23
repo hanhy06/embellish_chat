@@ -16,6 +16,6 @@ public class MessageCommandMixin {
             ordinal = 2
     )
     private static SignedMessage tweakMessageAtHead(SignedMessage original) {
-        return MessageProcessor.INSTANCE.handleChatMessage(original);
+        return MessageProcessor.INSTANCE.handleMessage(original);
     }
 }

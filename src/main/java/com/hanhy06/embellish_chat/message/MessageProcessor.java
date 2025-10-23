@@ -37,17 +37,17 @@ public class MessageProcessor implements ConfigListener {
         this.bannedPlayerList = config.bannedPlayerList();
     }
 
-    public SignedMessage handleChatMessage(SignedMessage original) {
-        if (bannedPlayerList.contains(original.getSender())) return original;
+    public SignedMessage handleMessage(SignedMessage message) {
+        if (bannedPlayerList.contains(message.getSender())) return message;
 
-        ServerPlayerEntity sender = playerManager.getPlayer(original.getSender());
+        ServerPlayerEntity sender = playerManager.getPlayer(message.getSender());
 
-        MutableText baseMessage = original.getContent().copy();
-        String raw = original.getContent().getString();
+        MutableText baseMessage = message.getContent().copy();
+        String raw = message.getContent().getString();
 
-        List<MentionTarget> mentionTargets = List.of();
+        List<MentionTarget> targets = List.of();
         if (config.mentionEnabled()) {
-             mentionTargets = handleMentions(raw,sender);
+             targets = handleMentions(raw,sender);
         }
 
         MutableText finalMessage = baseMessage;
@@ -58,12 +58,12 @@ public class MessageProcessor implements ConfigListener {
             );
         }
 
-        return original.withUnsignedContent(finalMessage);
+        return message.withUnsignedContent(finalMessage);
     }
 
     private List<MentionTarget> handleMentions(String raw, ServerPlayerEntity sender) {
         List<ParsedMention> parsedMentions = mentionProcessor.parseMentions(raw);
-        List<MentionTarget> mentionTargets = mentionProcessor.processReceiver(sender, parsedMentions);
+        List<MentionTarget> mentionTargets = mentionProcessor.identifyMentionTargets(sender, parsedMentions);
         if (!parsedMentions.isEmpty()) {
             mentionProcessor.broadcastMention(sender, mentionTargets);
         }
