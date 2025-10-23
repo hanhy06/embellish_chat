@@ -6,6 +6,7 @@ import com.hanhy06.embellish_chat.styling.util.Runs;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
+import java.lang.reflect.Method;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class StylingProcessor implements ConfigListener {
     public List<StylingRule> inCommandStyling;
     public List<StylingRule> inAnvilStyling;
 
-    private EnumMap<StyleType, BiFunction<MutableText,String,MutableText>> appliers;
+    private EnumMap<StyleType, BiFunction<MutableText,String,MutableText>> registers;
 
     public StylingProcessor(Config config){
         onConfigReload(config);
@@ -35,18 +36,19 @@ public class StylingProcessor implements ConfigListener {
         this.inCommandStyling = newConfig.inCommandStyling().stream().filter(Objects::nonNull).toList();
         this.inAnvilStyling = newConfig.inAnvilStyling().stream().filter(Objects::nonNull).toList();
 
-        StyleRegistry functions = new StyleRegistry(newConfig);
-        this.appliers = new EnumMap<>(Map.ofEntries(
-                entry(StyleType.COLOR_HEX, functions::COLOR_HEX),
-                entry(StyleType.COLOR_RAINBOW, functions::COLOR_RAINBOW),
-                entry(StyleType.COLOR_PRESET, functions::COLOR_PRESET),
-                entry(StyleType.FONT, functions::FONT),
-                entry(StyleType.URL, functions::URL),
-                entry(StyleType.BOLD, functions::BOLD),
-                entry(StyleType.ITALIC, functions::ITALIC),
-                entry(StyleType.UNDERLINE, functions::UNDERLINE),
-                entry(StyleType.STRIKETHROUGH, functions::STRIKETHROUGH),
-                entry(StyleType.OBFUSCATED, functions::OBFUSCATED)
+        StyleRegistry registry = new StyleRegistry(newConfig);
+        this.registers = new EnumMap<>(Map.ofEntries(
+                entry(StyleType.METADATA, registry::METADATA),
+                entry(StyleType.COLOR_HEX, registry::COLOR_HEX),
+                entry(StyleType.COLOR_RAINBOW, registry::COLOR_RAINBOW),
+                entry(StyleType.COLOR_PRESET, registry::COLOR_PRESET),
+                entry(StyleType.FONT, registry::FONT),
+                entry(StyleType.URL, registry::URL),
+                entry(StyleType.BOLD, registry::BOLD),
+                entry(StyleType.ITALIC, registry::ITALIC),
+                entry(StyleType.UNDERLINE, registry::UNDERLINE),
+                entry(StyleType.STRIKETHROUGH, registry::STRIKETHROUGH),
+                entry(StyleType.OBFUSCATED, registry::OBFUSCATED)
         ));
     }
 
@@ -61,11 +63,11 @@ public class StylingProcessor implements ConfigListener {
         return result;
     }
 
-    private MutableText applyStyle(Pattern regex, StyleType applier, MutableText text){
+    private MutableText applyStyle(Pattern regex, StyleType styleType, MutableText text){
         Runs runs = flatten(text);
         MutableText result = Text.empty();
 
-        BiFunction<MutableText,String,MutableText> function = appliers.get(applier);
+        BiFunction<MutableText,String,MutableText> function = registers.get(styleType);
         Matcher matcher = regex.matcher(runs.full());
         if (!matcher.find()) return text;
 

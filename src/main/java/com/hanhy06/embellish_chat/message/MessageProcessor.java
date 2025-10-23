@@ -33,7 +33,8 @@ public class MessageProcessor implements ConfigListener {
 
     @Override
     public void onConfigReload(Config newConfig) {
-        applyConfig(newConfig);
+        this.config = newConfig;
+        this.bannedPlayerList = config.bannedPlayerList();
     }
 
     public SignedMessage handleChatMessage(SignedMessage original) {
@@ -67,12 +68,5 @@ public class MessageProcessor implements ConfigListener {
             mentionProcessor.broadcastMention(sender, mentionTargets);
         }
         return mentionTargets;
-    }
-
-    private void applyConfig(Config config) {
-        this.config = config;
-        this.bannedPlayerList = config.bannedPlayerList();
-
-        mentionProcessor.updateConfig(config);
     }
 }
