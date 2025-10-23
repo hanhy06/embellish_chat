@@ -1,4 +1,4 @@
-package com.hanhy06.embellish_chat.styling.utile;
+package com.hanhy06.embellish_chat.styling.util;
 
 import net.minecraft.text.Style;
 

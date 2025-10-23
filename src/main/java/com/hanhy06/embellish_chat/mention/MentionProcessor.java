@@ -1,7 +1,6 @@
 package com.hanhy06.embellish_chat.mention;
 
-import com.hanhy06.embellish_chat.data.Config;
-import com.hanhy06.embellish_chat.data.Receiver;
+import com.hanhy06.embellish_chat.config.Config;
 import com.hanhy06.embellish_chat.util.TeamColor;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.scoreboard.Scoreboard;
@@ -21,7 +20,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MentionManager {
+public class MentionProcessor {
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{1,16})(?=\\b|$)");
 
     private final PlayerManager manager;
@@ -37,7 +36,7 @@ public class MentionManager {
     private String mentionTitleSuffix;
     private double hereRadius;
 
-    public MentionManager(PlayerManager manager, Scoreboard scoreboard){
+    public MentionProcessor(PlayerManager manager, Scoreboard scoreboard){
         this.manager = manager;
         this.scoreboard = scoreboard;
     }
@@ -54,7 +53,7 @@ public class MentionManager {
         this.hereRadius = config.hereRadius();
     }
 
-    public void broadcastMention(ServerPlayerEntity sender, List<Receiver> receivers){
+    public void broadcastMention(ServerPlayerEntity sender, List<MentionTarget> mentionTargets){
         MutableText titleText = Text.empty();
         titleText.append(
                 Text.literal(mentionTitlePrefix).styled(
@@ -72,80 +71,80 @@ public class MentionManager {
                 )
         );
 
-        for (Receiver receiver:receivers){
-            if (receiver.players() == null || receiver.players().isEmpty()) continue;
+        for (MentionTarget mentionTarget : mentionTargets){
+            if (mentionTarget.players() == null || mentionTarget.players().isEmpty()) continue;
 
-            for (ServerPlayerEntity player : receiver.players()){
+            for (ServerPlayerEntity player : mentionTarget.players()){
                 player.playSoundToPlayer(mentionSound,SoundCategory.UI,1f,mentionPitch);
                 player.sendMessage(titleText ,true);
             }
         }
     }
 
-    public List<Target> parseMentions(String raw){
+    public List<ParsedMention> parseMentions(String raw){
         Matcher matcher = MENTION_PATTERN.matcher(raw);
 
-        List<Target> targets = new ArrayList<>();
+        List<ParsedMention> parsedMentions = new ArrayList<>();
         while (matcher.find()){
-            targets.add(new Target(
+            parsedMentions.add(new ParsedMention(
                     matcher.group(1),
                     matcher.start(),
                     matcher.end(1)
             ));
         }
 
-        return  targets;
+        return parsedMentions;
     }
 
-    public List<Receiver> processReceiver(ServerPlayerEntity sender, List<Target> targets){
-        List<Receiver> receivers = new ArrayList<>();
+    public List<MentionTarget> processReceiver(ServerPlayerEntity sender, List<ParsedMention> parsedMentions){
+        List<MentionTarget> mentionTargets = new ArrayList<>();
         boolean canGroupMention = canUseGroupMention(sender);
 
-        for (Target target : targets){
-            String name = target.name();
+        for (ParsedMention parsedMention : parsedMentions){
+            String name = parsedMention.name();
 
             if (canGroupMention){
                 switch (name) {
-                    case "everyone" -> receivers.add(targetEveryone(target));
-                    case "here" -> receivers.add(targetHere(sender,target));
-                    case "team" -> receivers.add(targetTeam(sender,target));
-                    default -> receivers.add(targetPlayer(target));
+                    case "everyone" -> mentionTargets.add(targetEveryone(parsedMention));
+                    case "here" -> mentionTargets.add(targetHere(sender, parsedMention));
+                    case "team" -> mentionTargets.add(targetTeam(sender, parsedMention));
+                    default -> mentionTargets.add(targetPlayer(parsedMention));
                 }
             }else {
-                receivers.add(targetPlayer(target));
+                mentionTargets.add(targetPlayer(parsedMention));
             }
         }
 
-        return receivers;
+        return mentionTargets;
     }
 
-    private Receiver targetEveryone(Target target){
-        return new Receiver(
+    private MentionTarget targetEveryone(ParsedMention parsedMention){
+        return new MentionTarget(
                 "everyone",
-                target.begin(),
-                target.end(),
+                parsedMention.begin(),
+                parsedMention.end(),
                 groupMentionColor,
                 manager.getPlayerList()
         );
     }
 
-    private Receiver targetHere(ServerPlayerEntity sender,Target target){
+    private MentionTarget targetHere(ServerPlayerEntity sender, ParsedMention parsedMention){
         List<ServerPlayerEntity> players = PlayerLookup.around(
                 sender.getEntityWorld(),
                 sender.getEntityPos(),
                 hereRadius
         ).stream().toList();
 
-        return new Receiver(
+        return new MentionTarget(
                 "here",
-                target.begin(),
-                target.end(),
+                parsedMention.begin(),
+                parsedMention.end(),
                 groupMentionColor,
                 players
         );
     }
 
-    private Receiver targetTeam(ServerPlayerEntity sender,Target target){
+    private MentionTarget targetTeam(ServerPlayerEntity sender, ParsedMention parsedMention){
         Team team = sender.getScoreboardTeam();
 
         if (team != null){
@@ -162,40 +161,40 @@ public class MentionManager {
                     .filter(Objects::nonNull)
                     .toList();
 
-            return new Receiver(
+            return new MentionTarget(
                     "team",
-                    target.begin(),
-                    target.end(),
+                    parsedMention.begin(),
+                    parsedMention.end(),
                     color,
                     players
             );
         }else {
-            return new Receiver(
+            return new MentionTarget(
                     "team",
-                    target.begin(),
-                    target.end(),
+                    parsedMention.begin(),
+                    parsedMention.end(),
                     groupMentionColor,
                     null
             );
         }
     }
 
-    private Receiver targetPlayer(Target target){
-        ServerPlayerEntity player = manager.getPlayer(target.name());
+    private MentionTarget targetPlayer(ParsedMention parsedMention){
+        ServerPlayerEntity player = manager.getPlayer(parsedMention.name());
 
         int teamColor;
         if (player != null){
             teamColor = TeamColor.getPlayerColor(player);
         }else if (offlineColorEnabled) {
-            teamColor = TeamColor.getPlayerColor(scoreboard, target.name());
+            teamColor = TeamColor.getPlayerColor(scoreboard, parsedMention.name());
         } else {
             teamColor = mentionColor;
         }
 
-        return new Receiver(
-                target.name(),
-                target.begin(),
-                target.end(),
+        return new MentionTarget(
+                parsedMention.name(),
+                parsedMention.begin(),
+                parsedMention.end(),
                 teamColor,
                 player != null ? List.of(player) : null
         );

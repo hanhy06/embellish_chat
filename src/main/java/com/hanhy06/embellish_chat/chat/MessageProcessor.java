@@ -1,11 +1,11 @@
 package com.hanhy06.embellish_chat.chat;
 
 import com.hanhy06.embellish_chat.config.ConfigListener;
-import com.hanhy06.embellish_chat.data.Config;
-import com.hanhy06.embellish_chat.data.Receiver;
-import com.hanhy06.embellish_chat.mention.MentionManager;
-import com.hanhy06.embellish_chat.mention.Target;
-import com.hanhy06.embellish_chat.styling.TextStylingManager;
+import com.hanhy06.embellish_chat.config.Config;
+import com.hanhy06.embellish_chat.mention.MentionTarget;
+import com.hanhy06.embellish_chat.mention.MentionProcessor;
+import com.hanhy06.embellish_chat.mention.ParsedMention;
+import com.hanhy06.embellish_chat.styling.StylingProcessor;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.PlayerManager;
@@ -15,20 +15,20 @@ import net.minecraft.text.MutableText;
 import java.util.List;
 import java.util.UUID;
 
-public class ChatManager implements ConfigListener {
-    public static ChatManager INSTANCE;
+public class MessageProcessor implements ConfigListener {
+    public static MessageProcessor INSTANCE;
 
     private Config config;
     private List<UUID> bannedPlayerList;
 
-    private final MentionManager mentionManager;
-    private final TextStylingManager stylingManager;
+    private final MentionProcessor mentionProcessor;
+    private final StylingProcessor stylingManager;
     private final PlayerManager playerManager;
 
-    public ChatManager(PlayerManager playerManager, Scoreboard scoreboard, TextStylingManager stylingManager) {
+    public MessageProcessor(PlayerManager playerManager, Scoreboard scoreboard, StylingProcessor stylingManager) {
         INSTANCE = this;
         this.playerManager = playerManager;
-        this.mentionManager = new MentionManager(playerManager,scoreboard);
+        this.mentionProcessor = new MentionProcessor(playerManager,scoreboard);
         this.stylingManager = stylingManager;
     }
 
@@ -45,9 +45,9 @@ public class ChatManager implements ConfigListener {
         MutableText baseMessage = original.getContent().copy();
         String raw = original.getContent().getString();
 
-        List<Receiver> receivers = List.of();
+        List<MentionTarget> mentionTargets = List.of();
         if (config.mentionEnabled()) {
-             receivers = handleMentions(raw,sender);
+             mentionTargets = handleMentions(raw,sender);
         }
 
         MutableText finalMessage = baseMessage;
@@ -61,19 +61,19 @@ public class ChatManager implements ConfigListener {
         return original.withUnsignedContent(finalMessage);
     }
 
-    private List<Receiver> handleMentions(String raw,ServerPlayerEntity sender) {
-        List<Target> targets = mentionManager.parseMentions(raw);
-        List<Receiver> receivers = mentionManager.processReceiver(sender,targets);
-        if (!targets.isEmpty()) {
-            mentionManager.broadcastMention(sender, receivers);
+    private List<MentionTarget> handleMentions(String raw, ServerPlayerEntity sender) {
+        List<ParsedMention> parsedMentions = mentionProcessor.parseMentions(raw);
+        List<MentionTarget> mentionTargets = mentionProcessor.processReceiver(sender, parsedMentions);
+        if (!parsedMentions.isEmpty()) {
+            mentionProcessor.broadcastMention(sender, mentionTargets);
         }
-        return receivers;
+        return mentionTargets;
     }
 
     private void applyConfig(Config config) {
         this.config = config;
         this.bannedPlayerList = config.bannedPlayerList();
 
-        mentionManager.updateConfig(config);
+        mentionProcessor.updateConfig(config);
     }
 }

@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.Strictness;
 import com.hanhy06.embellish_chat.EmbellishChat;
-import com.hanhy06.embellish_chat.data.Config;
 import com.hanhy06.embellish_chat.util.HexIntegerTypeAdapter;
 import com.hanhy06.embellish_chat.util.PatternTypeAdapter;
 

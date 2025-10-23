@@ -1,8 +1,8 @@
 package com.hanhy06.embellish_chat.styling;
 
 import com.hanhy06.embellish_chat.config.ConfigListener;
-import com.hanhy06.embellish_chat.data.Config;
-import com.hanhy06.embellish_chat.styling.utile.Runs;
+import com.hanhy06.embellish_chat.config.Config;
+import com.hanhy06.embellish_chat.styling.util.Runs;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
@@ -14,18 +14,18 @@ import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.hanhy06.embellish_chat.styling.utile.TextStyleUtils.flatten;
-import static com.hanhy06.embellish_chat.styling.utile.TextStyleUtils.slice;
+import static com.hanhy06.embellish_chat.styling.util.TextSliceUtil.flatten;
+import static com.hanhy06.embellish_chat.styling.util.TextSliceUtil.slice;
 import static java.util.Map.entry;
 
-public class TextStylingManager implements ConfigListener {
-    public List<StyleRegex> inChatStyling;
-    public List<StyleRegex> inCommandStyling;
-    public List<StyleRegex> inAnvilStyling;
+public class StylingProcessor implements ConfigListener {
+    public List<StylingRule> inChatStyling;
+    public List<StylingRule> inCommandStyling;
+    public List<StylingRule> inAnvilStyling;
 
-    private EnumMap<TextStyleApplier, BiFunction<MutableText,String,MutableText>> appliers;
+    private EnumMap<StyleType, BiFunction<MutableText,String,MutableText>> appliers;
 
-    public TextStylingManager(Config config){
+    public StylingProcessor(Config config){
         onConfigReload(config);
     }
 
@@ -35,32 +35,33 @@ public class TextStylingManager implements ConfigListener {
         this.inCommandStyling = newConfig.inCommandStyling().stream().filter(Objects::nonNull).toList();
         this.inAnvilStyling = newConfig.inAnvilStyling().stream().filter(Objects::nonNull).toList();
 
-        TextStyleFunctions functions = new TextStyleFunctions(newConfig);
+        StyleRegistry functions = new StyleRegistry(newConfig);
         this.appliers = new EnumMap<>(Map.ofEntries(
-                entry(TextStyleApplier.COLOR_HEX, functions::COLOR_HEX),
-                entry(TextStyleApplier.COLOR_RAINBOW, functions::COLOR_RAINBOW),
-                entry(TextStyleApplier.COLOR_PRESET, functions::COLOR_PRESET),
-                entry(TextStyleApplier.FONT, functions::FONT),
-                entry(TextStyleApplier.URL, functions::URL),
-                entry(TextStyleApplier.BOLD, functions::ITALIC),
-                entry(TextStyleApplier.UNDERLINE, functions::UNDERLINE),
-                entry(TextStyleApplier.STRIKETHROUGH, functions::STRIKETHROUGH),
-                entry(TextStyleApplier.OBFUSCATED, functions::OBFUSCATED)
+                entry(StyleType.COLOR_HEX, functions::COLOR_HEX),
+                entry(StyleType.COLOR_RAINBOW, functions::COLOR_RAINBOW),
+                entry(StyleType.COLOR_PRESET, functions::COLOR_PRESET),
+                entry(StyleType.FONT, functions::FONT),
+                entry(StyleType.URL, functions::URL),
+                entry(StyleType.BOLD, functions::BOLD),
+                entry(StyleType.ITALIC, functions::ITALIC),
+                entry(StyleType.UNDERLINE, functions::UNDERLINE),
+                entry(StyleType.STRIKETHROUGH, functions::STRIKETHROUGH),
+                entry(StyleType.OBFUSCATED, functions::OBFUSCATED)
         ));
     }
 
-    public MutableText applyStyles(List<StyleRegex> styles,MutableText text){
+    public MutableText applyStyles(List<StylingRule> styles, MutableText text){
         if (text.getString().isBlank() || styles.isEmpty()) return text;
 
         MutableText result = text;
-        for (StyleRegex style : styles){
+        for (StylingRule style : styles){
             result = applyStyle(style.regex(),style.applier(),result);
         }
 
         return result;
     }
 
-    private MutableText applyStyle(Pattern regex,TextStyleApplier applier,MutableText text){
+    private MutableText applyStyle(Pattern regex, StyleType applier, MutableText text){
         Runs runs = flatten(text);
         MutableText result = Text.empty();
 

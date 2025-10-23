@@ -1,6 +1,6 @@
 package com.hanhy06.embellish_chat.mixin;
 
-import com.hanhy06.embellish_chat.chat.ChatManager;
+import com.hanhy06.embellish_chat.chat.MessageProcessor;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.command.MessageCommand;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,6 +16,6 @@ public class MessageCommandMixin {
             ordinal = 2
     )
     private static SignedMessage tweakMessageAtHead(SignedMessage original) {
-        return ChatManager.INSTANCE.handleChatMessage(original);
+        return MessageProcessor.INSTANCE.handleChatMessage(original);
     }
 }

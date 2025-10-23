@@ -1,4 +1,4 @@
-package com.hanhy06.embellish_chat.styling.utile;
+package com.hanhy06.embellish_chat.styling.util;
 
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class TextStyleUtils {
+public class TextSliceUtil {
     public static Runs flatten(Text text) {
         List<Run> list = new ArrayList<>();
         StringBuilder all = new StringBuilder();

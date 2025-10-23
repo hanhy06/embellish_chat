@@ -2,8 +2,8 @@ package com.hanhy06.embellish_chat.styling;
 
 import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.config.ConfigManager;
-import com.hanhy06.embellish_chat.data.Config;
-import com.hanhy06.embellish_chat.styling.utile.Runs;
+import com.hanhy06.embellish_chat.config.Config;
+import com.hanhy06.embellish_chat.styling.util.Runs;
 import net.minecraft.text.*;
 import net.minecraft.util.Identifier;
 
@@ -11,16 +11,16 @@ import java.awt.*;
 import java.net.URI;
 import java.util.HashMap;
 
-import static com.hanhy06.embellish_chat.styling.utile.TextStyleUtils.flatten;
-import static com.hanhy06.embellish_chat.styling.utile.TextStyleUtils.slice;
+import static com.hanhy06.embellish_chat.styling.util.TextSliceUtil.flatten;
+import static com.hanhy06.embellish_chat.styling.util.TextSliceUtil.slice;
 
-public class TextStyleFunctions {
+public class StyleRegistry {
     private final Config config;
     private final HashMap<String,Integer> colorPreset;
     private final int chatColor;
     private final StyleSpriteSource chatFont;
 
-    public TextStyleFunctions(Config config){
+    public StyleRegistry(Config config){
         this.config = config;
 
         String font = config.chatFont();

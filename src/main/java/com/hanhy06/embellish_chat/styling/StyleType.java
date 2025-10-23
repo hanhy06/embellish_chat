@@ -1,6 +1,6 @@
 package com.hanhy06.embellish_chat.styling;
 
-public enum TextStyleApplier {
+public enum StyleType {
     COLOR_HEX,
     COLOR_RAINBOW,
     COLOR_PRESET,

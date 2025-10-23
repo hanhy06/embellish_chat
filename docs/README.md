@@ -7,7 +7,7 @@ EmbellishChat is a Fabric mod designed to enhance the chat experience on Minecra
 - **Extended Markdown-Style Chat Formatting:** Use Markdown-like styles (bold, italic, underline, strikethrough, obfuscation, color, font, url). Works in normal chat and whispers.
 
 - **Mention System:** You can mention players, teams, everyone, or here using the @ symbol.
-  If the mentioned target is online, they will receive a notification,
+  If the mentioned parsedMention is online, they will receive a notification,
   and the message will be automatically formatted in the color of their team.
 
 - **Metadata System:** When you hover the mouse over a message, you can see the time it was sent,
@@ -140,8 +140,8 @@ You can find `embellish_chat.json` in your config folder.
 - **`groupMentionColor`**: Sets the color used for group mentions (`@everyone`, `@here`, `@team`).
 - **`mentionSound`**: Sets the sound event ID to play on mention.
 - **`mentionPitch`**: Sets the pitch of the mention sound.
-- **`mentionTitlePrefix`**: Text displayed before the mentioned target in the notification title.
-- **`mentionTitleSuffix`**: Text displayed after the mentioned target in the notification title.
+- **`mentionTitlePrefix`**: Text displayed before the mentioned parsedMention in the notification title.
+- **`mentionTitleSuffix`**: Text displayed after the mentioned parsedMention in the notification title.
 - **`hereRadius`**: When using the `@here` mention, it mentions all players within this radius around the sender.
 
 ### Etc.

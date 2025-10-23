@@ -1,9 +1,9 @@
 package com.hanhy06.embellish_chat;
 
-import com.hanhy06.embellish_chat.chat.ChatManager;
+import com.hanhy06.embellish_chat.chat.MessageProcessor;
 import com.hanhy06.embellish_chat.command.EmbellishChatCommand;
 import com.hanhy06.embellish_chat.config.ConfigManager;
-import com.hanhy06.embellish_chat.styling.TextStylingManager;
+import com.hanhy06.embellish_chat.styling.StylingProcessor;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
@@ -32,8 +32,8 @@ public class EmbellishChat implements ModInitializer {
         ConfigManager manager = new ConfigManager(fabricConfigDirPath);
         manager.clearListener();
 
-        TextStylingManager styler = new TextStylingManager(ConfigManager.getConfig());
-        ChatManager handler = new ChatManager(server.getPlayerManager(),server.getScoreboard(),styler);
+        StylingProcessor styler = new StylingProcessor(ConfigManager.getConfig());
+        MessageProcessor handler = new MessageProcessor(server.getPlayerManager(),server.getScoreboard(),styler);
 
         manager.addListener(styler);
         manager.addListener(handler);
