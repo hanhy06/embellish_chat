@@ -56,18 +56,18 @@ public class StylingProcessor implements ConfigListener {
 
         MutableText result = text;
         for (StylingRule style : styles){
-            result = applyStyle(style.pattern(),style.styleType(),result);
+            result = applyStyle(style,result);
         }
 
         return result;
     }
 
-    private MutableText applyStyle(Pattern pattern, StyleType styleType, MutableText text){
+    private MutableText applyStyle(StylingRule style, MutableText text){
         Runs runs = flatten(text);
         MutableText result = Text.empty();
 
-        BiFunction<MutableText,String,MutableText> function = registers.get(styleType);
-        Matcher matcher = pattern.matcher(runs.full());
+        BiFunction<MutableText,String,MutableText> function = registers.get(style.styleType());
+        Matcher matcher = style.pattern().matcher(runs.full());
         if (!matcher.find()) return text;
 
         int lastEnd = 0;
