@@ -1,7 +1,7 @@
 package com.hanhy06.embellish_chat.config;
 
-import com.hanhy06.embellish_chat.styling.StylingRule;
 import com.hanhy06.embellish_chat.styling.StyleType;
+import com.hanhy06.embellish_chat.styling.StylingRule;
 
 import java.util.*;
 

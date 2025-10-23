@@ -1,8 +1,8 @@
 package com.hanhy06.embellish_chat.styling;
 
 import com.hanhy06.embellish_chat.EmbellishChat;
-import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.config.Config;
+import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.styling.util.Runs;
 import com.hanhy06.embellish_chat.util.Timestamp;
 import net.minecraft.text.*;

@@ -1,12 +1,11 @@
 package com.hanhy06.embellish_chat.styling;
 
-import com.hanhy06.embellish_chat.config.ConfigListener;
 import com.hanhy06.embellish_chat.config.Config;
+import com.hanhy06.embellish_chat.config.ConfigListener;
 import com.hanhy06.embellish_chat.styling.util.Runs;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
-import java.lang.reflect.Method;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
