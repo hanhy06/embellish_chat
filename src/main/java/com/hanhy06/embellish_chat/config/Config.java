@@ -14,8 +14,6 @@ public record Config(
         //styling option
         int urlColor,
         HashMap<String, Integer> colorPreset,
-        int chatColor,
-        String chatFont,
 
         //mention
         boolean mentionEnabled,
@@ -39,9 +37,7 @@ public record Config(
                 new HashMap<>(Map.ofEntries(
                         entry("chat",
                                 List.of(
-                                        StylingRule.of("(.+)()",StyleType.PREPROCESSING_METADATA,""),
-                                        StylingRule.of("(.+)()",StyleType.PREPROCESSING_COLOR,""),
-                                        StylingRule.of("(.+)()",StyleType.PREPROCESSING_FONT,""),
+                                        StylingRule.of("(.+)()",StyleType.METADATA,""),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX,""),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<([a-z]+?)>", StyleType.COLOR_PRESET,""),
                                         StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL,""),
@@ -56,8 +52,6 @@ public record Config(
                         ),
                         entry("anvil",
                                 List.of(
-                                        StylingRule.of("(.+)()",StyleType.PREPROCESSING_COLOR,""),
-                                        StylingRule.of("(.+)()",StyleType.PREPROCESSING_FONT,""),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX,""),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<([a-z]+?)>", StyleType.COLOR_PRESET,""),
                                         StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL,""),
@@ -72,8 +66,6 @@ public record Config(
                         ),
                         entry("book",
                                 List.of(
-                                        StylingRule.of("(.+)()",StyleType.PREPROCESSING_COLOR,""),
-                                        StylingRule.of("(.+)()",StyleType.PREPROCESSING_FONT,""),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX,""),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<([a-z]+?)>", StyleType.COLOR_PRESET,""),
                                         StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL,""),
@@ -88,8 +80,6 @@ public record Config(
                         ),
                         entry("sign",
                                 List.of(
-                                        StylingRule.of("(.+)()",StyleType.PREPROCESSING_COLOR,""),
-                                        StylingRule.of("(.+)()",StyleType.PREPROCESSING_FONT,""),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX,""),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<([a-z]+?)>", StyleType.COLOR_PRESET,""),
                                         StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL,""),
@@ -104,8 +94,6 @@ public record Config(
                         ),
                         entry("command",
                                 List.of(
-                                        StylingRule.of("(.+)()",StyleType.PREPROCESSING_COLOR,""),
-                                        StylingRule.of("(.+)()",StyleType.PREPROCESSING_FONT,""),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX,""),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<([a-z]+?)>", StyleType.COLOR_PRESET,""),
                                         StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL,""),
@@ -140,8 +128,6 @@ public record Config(
                         entry("yellow", 0xFFFF55),
                         entry("white", 0xFFFFFF)
                 )),
-                0x0,
-                "",
 
                 //mention
                 true,

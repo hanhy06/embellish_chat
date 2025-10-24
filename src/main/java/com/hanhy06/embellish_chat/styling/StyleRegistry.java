@@ -20,17 +20,14 @@ import static com.hanhy06.embellish_chat.styling.util.TextSliceUtil.slice;
 public class StyleRegistry {
     private final Config config;
     private final HashMap<String,Integer> colorPreset;
-    private final StyleSpriteSource chatFont;
 
     public StyleRegistry(Config config){
         this.config = config;
 
-        String font = config.chatFont();
         this.colorPreset = config.colorPreset();
-        this.chatFont = font.isBlank() ? null : new  StyleSpriteSource.Font(Identifier.tryParse(font));
     }
 
-    public MutableText PREPROCESSING_METADATA(MutableText text,String option){
+    public MutableText METADATA(MutableText text, String option){
         HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(
                 Timestamp.timeStamp() + "\nClick to copy to clipboard"
         ));
@@ -46,7 +43,7 @@ public class StyleRegistry {
         );
     }
 
-    public static MutableText PREPROCESSING_MENTION(MutableText text, List<MentionTarget> targets){
+    public static MutableText MENTION(MutableText text, List<MentionTarget> targets){
         Runs runs = flatten(text);
         MutableText result = Text.empty();
         int lastEnd = 0;
@@ -60,20 +57,6 @@ public class StyleRegistry {
         }
         result.append(slice(runs, lastEnd, runs.full().length()));
         return result;
-    }
-
-    public MutableText PREPROCESSING_COLOR(MutableText text, String option){
-        if (config.chatColor() != 0){
-            return text.fillStyle(Style.EMPTY.withColor(config.chatColor()));
-        }
-        return text;
-    }
-
-    public MutableText PREPROCESSING_FONT(MutableText text, String option){
-        if (chatFont != null){
-            return text.fillStyle(Style.EMPTY.withFont(chatFont));
-        }
-        return text;
     }
 
     public MutableText COLOR_HEX(MutableText text, String option){
@@ -97,8 +80,7 @@ public class StyleRegistry {
     }
 
     public MutableText COLOR_PRESET(MutableText text, String option){
-        Config config = ConfigManager.getConfig();
-        int color = colorPreset.getOrDefault(option,config.chatColor());
+        int color = colorPreset.getOrDefault(option,0xFFFFFF);
         return text.fillStyle(Style.EMPTY.withColor(color));
     }
 

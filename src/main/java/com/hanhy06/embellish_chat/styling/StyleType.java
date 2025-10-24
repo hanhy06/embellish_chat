@@ -1,9 +1,7 @@
 package com.hanhy06.embellish_chat.styling;
 
 public enum StyleType {
-    PREPROCESSING_METADATA,
-    PREPROCESSING_COLOR,
-    PREPROCESSING_FONT,
+    METADATA,
     COLOR_HEX,
     COLOR_RAINBOW,
     COLOR_PRESET,

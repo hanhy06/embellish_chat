@@ -31,9 +31,7 @@ public class StylingProcessor implements ConfigListener {
 
         StyleRegistry registry = new StyleRegistry(newConfig);
         this.registers = new EnumMap<>(Map.ofEntries(
-                entry(StyleType.PREPROCESSING_METADATA, registry::PREPROCESSING_METADATA),
-                entry(StyleType.PREPROCESSING_COLOR, registry::PREPROCESSING_COLOR),
-                entry(StyleType.PREPROCESSING_FONT, registry::PREPROCESSING_FONT),
+                entry(StyleType.METADATA, registry::METADATA),
                 entry(StyleType.COLOR_HEX, registry::COLOR_HEX),
                 entry(StyleType.COLOR_RAINBOW, registry::COLOR_RAINBOW),
                 entry(StyleType.COLOR_PRESET, registry::COLOR_PRESET),
@@ -59,7 +57,7 @@ public class StylingProcessor implements ConfigListener {
     }
 
     public MutableText applyMention(MutableText text, List<MentionTarget> targets){
-        return StyleRegistry.PREPROCESSING_MENTION(text,targets);
+        return StyleRegistry.MENTION(text,targets);
     }
 
     private MutableText applyStyle(StylingRule style, MutableText text){
