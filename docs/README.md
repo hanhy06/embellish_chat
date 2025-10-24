@@ -24,18 +24,20 @@ only links with the https:// protocol are detected.
 
 Use the following formats in the chat window to apply various styles to your messages.
 
-| Feature           | Syntax                                    | Example                                                       | Result                                                                                                                        |
-|-------------------|-------------------------------------------|:--------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
-| Bold              | `**Text**`                                | `**Important Message**`                                       | ![Bold](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Bold.png?raw=true)                           |
-| Italic            | `_Text_`                                  | `_A point I want to emphasize_`                               | ![Italic](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Italic.png?raw=true)                       |
-| Underline         | `__Text__`                                | `__This looks like a link__`                                  | ![Underline](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Underline.png?raw=true)                 |
-| Strike            | `~~Text~~`                                | `~~This content is outdated~~`                                | ![Strike](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Strike.png?raw=true)                       |
-| Obfuscated        | `\|\|Text\|\|`                            | `\|\|This will be unreadable\|\|`                             | ![Obfuscated](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Obfuscated.gif?raw=true)               |
-| Color             | `[Text]<#hex or color preset or rainbow>` | `look at this [rainbow]<rainbow>`                             | ![Color](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Color.png?raw=true)                         |
-| Link              | `[Text](URL)`                             | `Download it [here](https://modrinth.com/mod/embellish_chat)` | ![Link](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Link.gif?raw=true)                           |
-| Font              | `[Text]{Path}`                            | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Font.png?raw=true)                           |
-| Mention           | `@PlayerName`                             | `Hello, @Player492!`                                          | ![Mention](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Mention.png?raw=true)                     |
-| Escape Formatting | Use a backslash `\`                       | `This is not \**bold**.`                                      | ![Escape_Formatting](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Escape_Formatting.png?raw=true) |
+| Feature       | Syntax             | Example                                                       | Result                                                                                                          |
+|---------------|--------------------|:--------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|
+| Bold          | `**Text**`         | `**Important Message**`                                       | ![Bold](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Bold.png?raw=true)             |
+| Italic        | `_Text_`           | `_A point I want to emphasize_`                               | ![Italic](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Italic.png?raw=true)         |
+| Underline     | `__Text__`         | `__This looks like a link__`                                  | ![Underline](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Underline.png?raw=true)   |
+| Strike        | `~~Text~~`         | `~~This content is outdated~~`                                | ![Strike](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Strike.png?raw=true)         |
+| Obfuscated    | `\|\|Text\|\|`     | `\|\|This will be unreadable\|\|`                             | ![Obfuscated](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Obfuscated.gif?raw=true) |
+| Color Hex     | `[Text]<#hex>`     | `[Blue]<blue> water`                                          | ![Color](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Color.png?raw=true)           |
+| Color Preset  | `[Text]<preset>`   | `[pinkpinkpink]<pink>`                                        |                                                                                                                 |
+| Color Rainbow | `[Text]<RAINBOW>`  | `look at this [rainbow]<RAINBOW>`                             |                                                                                                                 |
+| Color Shadow  | `[Text]<\SD:#hex>` | `[greeea]<\SD:#00ff00>`                                       |                                                                                                                 |
+| Link          | `[Text](URL)`      | `Download it [here](https://modrinth.com/mod/embellish_chat)` | ![Link](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Link.gif?raw=true)             |
+| Font          | `[Text]{Path}`     | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Font.png?raw=true)             |
+| Mention       | `@PlayerName`      | `Hello, @Player492!`                                          | ![Mention](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Mention.png?raw=true)       |
 
 ---
 
@@ -65,48 +67,11 @@ If the Minecraft version is 1.21.5 or earlier, it instead uses the PLAYER catego
 
 ## ⚙️ Configuration
 
----
-
 ## Sample `embellish_chat.json`
 
 You can find `embellish_chat.json` in your config folder.
 
 ```
-{
-  // styling
-  "inChatStylingEnabled": true,
-  "fontEnabled": true,
-  "coloringEnabled": true,
-  "rainbowEnabled": true,
-  "openUriEnabled": true,
-  "markdownEnabled": true,
-  "metadataEnabled": true,
-  "colorPreset": {
-    "black": "0x000000",
-     ...
-  },
-
-  // mention
-  "mentionEnabled": true,
-  "groupMentionOpOnly": true,
-  "offlineColorEnabled": true,
-  "mentionColor": "0xFFFF55",
-  "groupMentionColor": "0x0000AA",
-  "mentionSound": "minecraft:entity.experience_orb.pickup",
-  "mentionPitch": 1.75,
-  "mentionTitlePrefix": "",
-  "mentionTitleSuffix": " mentioned you",
-  "hereRadius": 64.0,
-
-  // default style
-  "chatColor": "0x000000",
-  "chatFont": "",
-
-  // banned players (UUID list)
-  "bannedPlayerList": [
-    ...
-  ]
-}
 
 ```
 
@@ -114,19 +79,9 @@ You can find `embellish_chat.json` in your config folder.
 
 ## Configuration Options
 
----
 
 ### Styling
 
-- **`inChatStylingEnabled`**: If `true`, enables all chat styling features (color, font, mentions, markdown, etc.).
-- **`fontEnabled`**: If `true`, allows specifying a font for chat messages.
-- **`coloringEnabled`**: If `true`, enables custom text coloring with HEX codes or preset.
-- **`rainbowEnabled`**: If `true`, enables rainbow text in coloring.
-- **`openUriEnabled`**: If `true`, enables clickable links in chat.
-- **`markdownEnabled`**: If `true`, enables Markdown formatting (bold, italic, underline, strikethrough, obfuscation).
-- **`metadataEnabled`**: If `true`, adds metadata to messages received by the user.
-  This metadata includes the time the message was sent and allows the message to be automatically copied to the clipboard when clicked.
-- **`colorPreset`**: A user-defined color preset. It can be defined as `"key" : "hex color value"` (for example, `"poo" : "0x4E3629"`).
 
 ### Mention
 
@@ -146,11 +101,6 @@ You can find `embellish_chat.json` in your config folder.
 
 ### Etc.
 
-- **`chatColor`**: Sets the default text color.
-  If the value is `0`, no color is applied.
-  If the value is less than `0`, rainbow mode is activated and a gradient is applied to all text.
-  This behavior is not affected by `rainbowEnabled`.
-- **`chatFont`**: Sets the default font for chat messages.
 - **`bannedPlayerList`**: Keeps track of the UUIDs of banned users. Players on this list are not allowed to use styling features.
 
 ---

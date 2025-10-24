@@ -12,10 +12,9 @@ public class MessageCommandMixin {
     @ModifyVariable(
             method = "execute",
             at = @At("HEAD"),
-            argsOnly = true,
-            ordinal = 2
+            argsOnly = true
     )
-    private static SignedMessage tweakMessageAtHead(SignedMessage original) {
+    private static SignedMessage execute(SignedMessage original) {
         return MessageProcessor.INSTANCE.handleMessage(original);
     }
 }
