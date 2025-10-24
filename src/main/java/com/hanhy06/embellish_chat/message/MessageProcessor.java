@@ -46,7 +46,7 @@ public class MessageProcessor implements ConfigListener {
         String raw = message.getContent().getString();
 
         List<MentionTarget> targets = List.of();
-        if (config.mentionEnabled()) {
+        if (config.mentionEnabled() && sender != null) {
             targets = handleMentions(raw,sender);
             finalMessage = stylingManager.applyMention(
                     finalMessage,
