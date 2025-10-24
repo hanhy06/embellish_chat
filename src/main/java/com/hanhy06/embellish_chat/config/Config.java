@@ -46,7 +46,7 @@ public record Config(
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", StyleType.FONT,""),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX,""),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<SD:(#.{6})>", StyleType.COLOR_SHADOW,""),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<([a-z ]+?)>", StyleType.COLOR_PRESET,""),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<([a-z\\s]+?)>", StyleType.COLOR_PRESET,""),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<(RAINBOW)>", StyleType.COLOR_RAINBOW,""),
                                         StylingRule.of("(.+)()",StyleType.METADATA,"")
                                 )
@@ -62,7 +62,7 @@ public record Config(
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", StyleType.FONT,""),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX,""),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<SD:(#.{6})>", StyleType.COLOR_SHADOW,""),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<([a-z ]+?)>", StyleType.COLOR_PRESET,""),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<([a-z\\s]+?)>", StyleType.COLOR_PRESET,""),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<(RAINBOW)>", StyleType.COLOR_RAINBOW,"")
                                 )
                         )
