@@ -42,31 +42,32 @@ public class MessageProcessor implements ConfigListener {
 
         ServerPlayerEntity sender = playerManager.getPlayer(message.getSender());
 
-        MutableText baseMessage = message.getContent().copy();
+        MutableText finalMessage = message.getContent().copy();
         String raw = message.getContent().getString();
 
         List<MentionTarget> targets = List.of();
         if (config.mentionEnabled()) {
-             targets = handleMentions(raw,sender);
-        }
-
-        MutableText finalMessage = baseMessage;
-        if (!config.inChatStyling().isEmpty()){
-            finalMessage = stylingManager.applyStyles(
-                    stylingManager.inChatStyling,
-                    finalMessage
+            targets = handleMentions(raw,sender);
+            finalMessage = stylingManager.applyMention(
+                    finalMessage,
+                    targets
             );
         }
+
+        finalMessage = stylingManager.applyStyles(
+                finalMessage,
+                "chat"
+        );
 
         return message.withUnsignedContent(finalMessage);
     }
 
     private List<MentionTarget> handleMentions(String raw, ServerPlayerEntity sender) {
         List<ParsedMention> parsedMentions = mentionProcessor.parseMentions(raw);
-        List<MentionTarget> mentionTargets = mentionProcessor.identifyMentionTargets(sender, parsedMentions);
+        List<MentionTarget> targets = mentionProcessor.identifyMentionTargets(sender, parsedMentions);
         if (!parsedMentions.isEmpty()) {
-            mentionProcessor.broadcastMention(sender, mentionTargets);
+            mentionProcessor.broadcastMention(sender, targets);
         }
-        return mentionTargets;
+        return targets;
     }
 }

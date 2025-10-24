@@ -1,5 +1,6 @@
 package com.hanhy06.embellish_chat.mixin;
 
+import com.hanhy06.embellish_chat.styling.StylingProcessor;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.command.argument.TextArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
@@ -17,10 +18,10 @@ public class TextArgumentTypeMixin {
             String name,
             CallbackInfoReturnable<Text> cir
     ) {
-//        Text text = cir.getReturnValue();
-//        if (ConfigManager.getConfig().inCommandStylingEnabled()){
-//            text = StyledTextProcessor.applyStyles(text.copy());
-//        }
-//        cir.setReturnValue(text);
+        Text text = cir.getReturnValue();
+
+        text = StylingProcessor.INSTANCE.applyStyles(text.copy(),"command");
+
+        cir.setReturnValue(text);
     }
 }

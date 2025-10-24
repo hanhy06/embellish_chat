@@ -2,38 +2,33 @@ package com.hanhy06.embellish_chat.styling;
 
 import com.hanhy06.embellish_chat.config.Config;
 import com.hanhy06.embellish_chat.config.ConfigListener;
+import com.hanhy06.embellish_chat.mention.MentionTarget;
 import com.hanhy06.embellish_chat.styling.util.Runs;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.hanhy06.embellish_chat.styling.util.TextSliceUtil.flatten;
 import static com.hanhy06.embellish_chat.styling.util.TextSliceUtil.slice;
 import static java.util.Map.entry;
 
 public class StylingProcessor implements ConfigListener {
-    public List<StylingRule> inChatStyling;
-    public List<StylingRule> inCommandStyling;
-    public List<StylingRule> inAnvilStyling;
+    public static StylingProcessor INSTANCE;
 
+    private HashMap<String,List<StylingRule>> stylingRules;
     private EnumMap<StyleType, BiFunction<MutableText,String,MutableText>> registers;
 
     public StylingProcessor(Config config){
+        INSTANCE = this;
         onConfigReload(config);
     }
 
     @Override
     public void onConfigReload(Config newConfig) {
-        this.inChatStyling = newConfig.inChatStyling().stream().filter(Objects::nonNull).toList();
-        this.inCommandStyling = newConfig.inCommandStyling().stream().filter(Objects::nonNull).toList();
-        this.inAnvilStyling = newConfig.inAnvilStyling().stream().filter(Objects::nonNull).toList();
+        this.stylingRules = newConfig.stylingRules();
 
         StyleRegistry registry = new StyleRegistry(newConfig);
         this.registers = new EnumMap<>(Map.ofEntries(
@@ -51,15 +46,19 @@ public class StylingProcessor implements ConfigListener {
         ));
     }
 
-    public MutableText applyStyles(List<StylingRule> styles, MutableText text){
-        if (text.getString().isBlank() || styles.isEmpty()) return text;
+    public MutableText applyStyles(MutableText text,String key){
+        if (text.getString().isBlank()) return text;
 
         MutableText result = text;
-        for (StylingRule style : styles){
+        for (StylingRule style : stylingRules.get(key)){
             result = applyStyle(style,result);
         }
 
         return result;
+    }
+
+    public MutableText applyMention(MutableText text, List<MentionTarget> targets){
+        return StyleRegistry.PREPROCESSING_MENTION(text,targets);
     }
 
     private MutableText applyStyle(StylingRule style, MutableText text){

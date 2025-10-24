@@ -46,8 +46,20 @@ public class StyleRegistry {
         );
     }
 
-    public MutableText PREPROCESSING_MENTION(MutableText text, List<MentionTarget> targets){
-        return text;
+    public static MutableText PREPROCESSING_MENTION(MutableText text, List<MentionTarget> targets){
+        Runs runs = flatten(text);
+        MutableText result = Text.empty();
+        int lastEnd = 0;
+        for (MentionTarget target : targets) {
+            result.append(slice(runs, lastEnd, target.begin()));
+            result.append(
+                    slice(runs, target.begin(), target.end())
+                            .fillStyle(Style.EMPTY.withColor(target.teamColor()).withBold(true))
+            );
+            lastEnd = target.end();
+        }
+        result.append(slice(runs, lastEnd, runs.full().length()));
+        return result;
     }
 
     public MutableText PREPROCESSING_COLOR(MutableText text, String option){
@@ -69,13 +81,13 @@ public class StyleRegistry {
         int length = string.length();
         if (length == 0) return text;
 
-        MutableText out = Text.empty();
+        MutableText result = Text.empty();
         for (int i = 0; i < length; i++) {
             float hue = (float) i / length;
             int rgb = Color.HSBtoRGB(hue, 0.7f, 1f);
-            out.append(slice(runs, i, i + 1).fillStyle(Style.EMPTY.withColor(rgb)));
+            result.append(slice(runs, i, i + 1).fillStyle(Style.EMPTY.withColor(rgb)));
         }
-        return out;
+        return result;
     }
 
     public MutableText COLOR_PRESET(MutableText text, String option){

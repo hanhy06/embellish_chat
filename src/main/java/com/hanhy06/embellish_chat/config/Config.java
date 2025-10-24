@@ -9,14 +9,13 @@ import static java.util.Map.entry;
 
 public record Config(
         //style
-        List<StylingRule> inChatStyling,
-        List<StylingRule> inCommandStyling,
-        List<StylingRule> inAnvilStyling,
+        HashMap<String,List<StylingRule>> stylingRules,
 
         //styling option
-        boolean metadataEnabled,
         int urlColor,
         HashMap<String, Integer> colorPreset,
+        int chatColor,
+        String chatFont,
 
         //mention
         boolean mentionEnabled,
@@ -30,10 +29,6 @@ public record Config(
         String mentionTitleSuffix,
         double hereRadius,
 
-        //default style
-        int chatColor,
-        String chatFont,
-
         //banned player
         List<UUID> bannedPlayerList
 )
@@ -41,46 +36,81 @@ public record Config(
     public static Config createDefault(){
         return new Config(
                 //style
-                List.of(
-                        StylingRule.of("(.+)()",StyleType.METADATA),
-                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX),
-                        StylingRule.of("(?<!\\\\)\\[(.+?)]<rainbow>", StyleType.COLOR_RAINBOW),
-                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(.+?)>", StyleType.COLOR_PRESET),
-                        StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL),
-                        StylingRule.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", StyleType.FONT),
-                        StylingRule.of("(?<!\\\\)\\*\\*(.+?)\\*\\*()", StyleType.BOLD),
-                        StylingRule.of("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)()", StyleType.ITALIC),
-                        StylingRule.of("(?<!\\\\)__(.+?)__()", StyleType.UNDERLINE),
-                        StylingRule.of("(?<!\\\\)~~(.+?)~~()", StyleType.STRIKETHROUGH),
-                        StylingRule.of("(?<!\\\\)\\|\\|(.+?)\\|\\|()", StyleType.OBFUSCATED)
-                ),
-                List.of(
-                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX),
-                        StylingRule.of("(?<!\\\\)\\[(.+?)]<rainbow>", StyleType.COLOR_RAINBOW),
-                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(.+?)>", StyleType.COLOR_PRESET),
-                        StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL),
-                        StylingRule.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", StyleType.FONT),
-                        StylingRule.of("(?<!\\\\)\\*\\*(.+?)\\*\\*", StyleType.BOLD),
-                        StylingRule.of("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)", StyleType.ITALIC),
-                        StylingRule.of("(?<!\\\\)__(.+?)__", StyleType.UNDERLINE),
-                        StylingRule.of("(?<!\\\\)~~(.+?)~~", StyleType.STRIKETHROUGH),
-                        StylingRule.of("(?<!\\\\)\\|\\|(.+?)\\|\\|", StyleType.OBFUSCATED)
-                ),
-                List.of(
-                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX),
-                        StylingRule.of("(?<!\\\\)\\[(.+?)]<rainbow>", StyleType.COLOR_RAINBOW),
-                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(.+?)>", StyleType.COLOR_PRESET),
-                        StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL),
-                        StylingRule.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", StyleType.FONT),
-                        StylingRule.of("(?<!\\\\)\\*\\*(.+?)\\*\\*", StyleType.BOLD),
-                        StylingRule.of("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)", StyleType.ITALIC),
-                        StylingRule.of("(?<!\\\\)__(.+?)__", StyleType.UNDERLINE),
-                        StylingRule.of("(?<!\\\\)~~(.+?)~~", StyleType.STRIKETHROUGH),
-                        StylingRule.of("(?<!\\\\)\\|\\|(.+?)\\|\\|", StyleType.OBFUSCATED)
-                ),
+                new HashMap<>(Map.ofEntries(
+                        entry("chat",
+                                List.of(
+                                        StylingRule.of("(.+)()",StyleType.METADATA),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<rainbow>", StyleType.COLOR_RAINBOW),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(.+?)>", StyleType.COLOR_PRESET),
+                                        StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", StyleType.FONT),
+                                        StylingRule.of("(?<!\\\\)\\*\\*(.+?)\\*\\*()", StyleType.BOLD),
+                                        StylingRule.of("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)()", StyleType.ITALIC),
+                                        StylingRule.of("(?<!\\\\)__(.+?)__()", StyleType.UNDERLINE),
+                                        StylingRule.of("(?<!\\\\)~~(.+?)~~()", StyleType.STRIKETHROUGH),
+                                        StylingRule.of("(?<!\\\\)\\|\\|(.+?)\\|\\|()", StyleType.OBFUSCATED)
+                                )
+                        ),
+                        entry("anvil",
+                                List.of(
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<rainbow>", StyleType.COLOR_RAINBOW),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(.+?)>", StyleType.COLOR_PRESET),
+                                        StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", StyleType.FONT),
+                                        StylingRule.of("(?<!\\\\)\\*\\*(.+?)\\*\\*", StyleType.BOLD),
+                                        StylingRule.of("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)", StyleType.ITALIC),
+                                        StylingRule.of("(?<!\\\\)__(.+?)__", StyleType.UNDERLINE),
+                                        StylingRule.of("(?<!\\\\)~~(.+?)~~", StyleType.STRIKETHROUGH),
+                                        StylingRule.of("(?<!\\\\)\\|\\|(.+?)\\|\\|", StyleType.OBFUSCATED)
+                                )
+                        ),
+                        entry("book",
+                                List.of(
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<rainbow>", StyleType.COLOR_RAINBOW),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(.+?)>", StyleType.COLOR_PRESET),
+                                        StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", StyleType.FONT),
+                                        StylingRule.of("(?<!\\\\)\\*\\*(.+?)\\*\\*", StyleType.BOLD),
+                                        StylingRule.of("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)", StyleType.ITALIC),
+                                        StylingRule.of("(?<!\\\\)__(.+?)__", StyleType.UNDERLINE),
+                                        StylingRule.of("(?<!\\\\)~~(.+?)~~", StyleType.STRIKETHROUGH),
+                                        StylingRule.of("(?<!\\\\)\\|\\|(.+?)\\|\\|", StyleType.OBFUSCATED)
+                                )
+                        ),
+                        entry("sign",
+                                List.of(
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<rainbow>", StyleType.COLOR_RAINBOW),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(.+?)>", StyleType.COLOR_PRESET),
+                                        StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", StyleType.FONT),
+                                        StylingRule.of("(?<!\\\\)\\*\\*(.+?)\\*\\*", StyleType.BOLD),
+                                        StylingRule.of("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)", StyleType.ITALIC),
+                                        StylingRule.of("(?<!\\\\)__(.+?)__", StyleType.UNDERLINE),
+                                        StylingRule.of("(?<!\\\\)~~(.+?)~~", StyleType.STRIKETHROUGH),
+                                        StylingRule.of("(?<!\\\\)\\|\\|(.+?)\\|\\|", StyleType.OBFUSCATED)
+                                )
+                        ),
+                        entry("command",
+                                List.of(
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<rainbow>", StyleType.COLOR_RAINBOW),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(.+?)>", StyleType.COLOR_PRESET),
+                                        StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", StyleType.FONT),
+                                        StylingRule.of("(?<!\\\\)\\*\\*(.+?)\\*\\*", StyleType.BOLD),
+                                        StylingRule.of("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)", StyleType.ITALIC),
+                                        StylingRule.of("(?<!\\\\)__(.+?)__", StyleType.UNDERLINE),
+                                        StylingRule.of("(?<!\\\\)~~(.+?)~~", StyleType.STRIKETHROUGH),
+                                        StylingRule.of("(?<!\\\\)\\|\\|(.+?)\\|\\|", StyleType.OBFUSCATED)
+                                )
+                        )
+                )),
 
                 //styling option
-                true,
                 0x0000EE,
                 new HashMap<>(Map.ofEntries(
                         entry("black", 0x000000),
@@ -100,6 +130,8 @@ public record Config(
                         entry("yellow", 0xFFFF55),
                         entry("white", 0xFFFFFF)
                 )),
+                0x0,
+                "",
 
                 //mention
                 true,
@@ -112,10 +144,6 @@ public record Config(
                 "",
                 " mentioned you",
                 64,
-
-                //default style
-                0x0,
-                "",
 
                 //banned player
                 new ArrayList<>()
