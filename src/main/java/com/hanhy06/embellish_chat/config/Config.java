@@ -8,8 +8,6 @@ import java.util.*;
 import static java.util.Map.entry;
 
 public record Config(
-        double configVersion,
-
         //style
         HashMap<String,List<StylingRule>> stylingRules,
 
@@ -35,7 +33,6 @@ public record Config(
 {
     public static Config createDefault(){
         return new Config(
-                1,
                 //style
                 //TODO: 나중에 LuckPerms쓸때 각 그룹이 어떤 스타일링을 할지 그룹 이름이 키로 써야함
                 new HashMap<>(Map.ofEntries(

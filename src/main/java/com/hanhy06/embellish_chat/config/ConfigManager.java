@@ -73,9 +73,6 @@ public class ConfigManager {
             config = loaded;
             broadcastConfig();
             EmbellishChat.LOGGER.info("Config loaded successfully.");
-        } else if (loaded != null) {
-            EmbellishChat.LOGGER.warn("The loaded config version is different from the current mod’s config version. Please update the config to match the current version. load:{} current:{}",loaded.configVersion(),config.configVersion());
-            broadcastConfig();
         } else {
             writeConfig();
             broadcastConfig();
