@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(ServerPlayNetworkHandler.class)
 public class ServerPlayNetworkHandlerMixin {
-    @ModifyVariable(method = "handleDecoratedMessage", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
+    @ModifyVariable(method = "handleDecoratedMessage", at = @At("HEAD"), ordinal = 0, argsOnly = true)
     private SignedMessage modifyDecoratedMessage(SignedMessage original) {
         return MessageProcessor.INSTANCE.handleMessage(original);
     }

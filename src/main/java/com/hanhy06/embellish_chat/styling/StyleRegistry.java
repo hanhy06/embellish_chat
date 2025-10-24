@@ -10,7 +10,6 @@ import net.minecraft.util.Identifier;
 
 import java.awt.*;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 

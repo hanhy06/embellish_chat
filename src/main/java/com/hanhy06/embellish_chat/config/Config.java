@@ -39,48 +39,7 @@ public record Config(
                                 List.of(
                                         StylingRule.of("(.+)()",StyleType.METADATA,""),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX,""),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<([a-z]+?)>", StyleType.COLOR_PRESET,""),
-                                        StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL,""),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", StyleType.FONT,""),
-                                        StylingRule.of("(?<!\\\\)\\*\\*(.+?)\\*\\*()", StyleType.BOLD,""),
-                                        StylingRule.of("(?<!\\\\)__(.+?)__()", StyleType.UNDERLINE,""),
-                                        StylingRule.of("(?<!\\\\)_(.+?)_()", StyleType.ITALIC,""),
-                                        StylingRule.of("(?<!\\\\)~~(.+?)~~()", StyleType.STRIKETHROUGH,""),
-                                        StylingRule.of("(?<!\\\\)\\|\\|(.+?)\\|\\|()", StyleType.OBFUSCATED,""),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(RAINBOW)>", StyleType.COLOR_RAINBOW,"")
-                                )
-                        ),
-                        entry("anvil",
-                                List.of(
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX,""),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<([a-z]+?)>", StyleType.COLOR_PRESET,""),
-                                        StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL,""),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", StyleType.FONT,""),
-                                        StylingRule.of("(?<!\\\\)\\*\\*(.+?)\\*\\*()", StyleType.BOLD,""),
-                                        StylingRule.of("(?<!\\\\)__(.+?)__()", StyleType.UNDERLINE,""),
-                                        StylingRule.of("(?<!\\\\)_(.+?)_()", StyleType.ITALIC,""),
-                                        StylingRule.of("(?<!\\\\)~~(.+?)~~()", StyleType.STRIKETHROUGH,""),
-                                        StylingRule.of("(?<!\\\\)\\|\\|(.+?)\\|\\|()", StyleType.OBFUSCATED,""),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(RAINBOW)>", StyleType.COLOR_RAINBOW,"")
-                                )
-                        ),
-                        entry("book",
-                                List.of(
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX,""),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<([a-z]+?)>", StyleType.COLOR_PRESET,""),
-                                        StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL,""),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", StyleType.FONT,""),
-                                        StylingRule.of("(?<!\\\\)\\*\\*(.+?)\\*\\*()", StyleType.BOLD,""),
-                                        StylingRule.of("(?<!\\\\)__(.+?)__()", StyleType.UNDERLINE,""),
-                                        StylingRule.of("(?<!\\\\)_(.+?)_()", StyleType.ITALIC,""),
-                                        StylingRule.of("(?<!\\\\)~~(.+?)~~()", StyleType.STRIKETHROUGH,""),
-                                        StylingRule.of("(?<!\\\\)\\|\\|(.+?)\\|\\|()", StyleType.OBFUSCATED,""),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(RAINBOW)>", StyleType.COLOR_RAINBOW,"")
-                                )
-                        ),
-                        entry("sign",
-                                List.of(
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX,""),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<SD:(#.{6})>", StyleType.COLOR_SHADOW,""),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<([a-z]+?)>", StyleType.COLOR_PRESET,""),
                                         StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL,""),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", StyleType.FONT,""),
@@ -95,6 +54,7 @@ public record Config(
                         entry("command",
                                 List.of(
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX,""),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<SD:(#.{6})>", StyleType.COLOR_SHADOW,""),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<([a-z]+?)>", StyleType.COLOR_PRESET,""),
                                         StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL,""),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", StyleType.FONT,""),
