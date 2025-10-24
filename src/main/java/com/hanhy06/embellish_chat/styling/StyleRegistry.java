@@ -63,11 +63,17 @@ public class StyleRegistry {
     }
 
     public MutableText PREPROCESSING_COLOR(MutableText text, String option){
-        return text.fillStyle(Style.EMPTY.withColor(config.chatColor()));
+        if (config.chatColor() != 0){
+            return text.fillStyle(Style.EMPTY.withColor(config.chatColor()));
+        }
+        return text;
     }
 
     public MutableText PREPROCESSING_FONT(MutableText text, String option){
-        return text.fillStyle(Style.EMPTY.withFont(chatFont));
+        if (chatFont != null){
+            return text.fillStyle(Style.EMPTY.withFont(chatFont));
+        }
+        return text;
     }
 
     public MutableText COLOR_HEX(MutableText text, String option){

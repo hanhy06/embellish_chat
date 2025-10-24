@@ -32,7 +32,9 @@ public class StylingProcessor implements ConfigListener {
 
         StyleRegistry registry = new StyleRegistry(newConfig);
         this.registers = new EnumMap<>(Map.ofEntries(
-                entry(StyleType.METADATA, registry::PREPROCESSING_METADATA),
+                entry(StyleType.PREPROCESSING_METADATA, registry::PREPROCESSING_METADATA),
+                entry(StyleType.PREPROCESSING_COLOR, registry::PREPROCESSING_COLOR),
+                entry(StyleType.PREPROCESSING_FONT, registry::PREPROCESSING_FONT),
                 entry(StyleType.COLOR_HEX, registry::COLOR_HEX),
                 entry(StyleType.COLOR_RAINBOW, registry::COLOR_RAINBOW),
                 entry(StyleType.COLOR_PRESET, registry::COLOR_PRESET),

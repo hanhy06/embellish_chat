@@ -39,7 +39,7 @@ public record Config(
                 new HashMap<>(Map.ofEntries(
                         entry("chat",
                                 List.of(
-                                        StylingRule.of("(.+)()",StyleType.METADATA),
+                                        StylingRule.of("(.+)()",StyleType.PREPROCESSING_FONT),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<rainbow>", StyleType.COLOR_RAINBOW),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<(.+?)>", StyleType.COLOR_PRESET),
