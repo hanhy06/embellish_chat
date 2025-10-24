@@ -1,118 +1,196 @@
 # EmbellishChat for Fabric
 
-EmbellishChat is a Fabric mod designed to enhance the chat experience on Minecraft servers. It makes communication between players more dynamic and convenient with features like Markdown-style text formatting, player mentions, clickable links, and mention notifications & history.
+**EmbellishChat** is a Fabric mod that enhances the Minecraft chat experience on servers. It makes player communication more expressive and convenient with Markdown‑style formatting, mentions, clickable links, and mention notifications.
+
+---
 
 ## ✨ Key Features
 
-- **Extended Markdown-Style Chat Formatting:** Use Markdown-like styles (bold, italic, underline, strikethrough, obfuscation, color, font, url). Works in normal chat and whispers.
-
-- **Mention System:** You can mention players, teams, everyone, or here using the @ symbol.
-  If the mentioned parsedMention is online, they will receive a notification,
-  and the message will be automatically formatted in the color of their team.
-
-- **Metadata System:** When you hover the mouse over a message, you can see the time it was sent,
-  and clicking the message automatically copies it to the clipboard.
-
-- **Default Style System:** You can configure the default color and font of chat messages through the settings.
+* **Markdown‑Style Formatting**: Bold, italic, underline, strikethrough, obfuscation, color, custom font, and links. Works in public chat, private messages and command.
+* **Mention System**: Mention individual players, your team, everyone, or nearby players with `@`. Online targets receive a notification; mentions auto‑tint to the player/team color.
+* **Message Metadata**: Hover to see the send time click a message to copy it to the clipboard.
 
 ---
 
-## 🛠️ Using Markdown
+## 🛠️ Markdown Usage
 
-For security reasons, when using the Markdown URL feature,
-only links with the https:// protocol are detected.
+Use the following patterns directly in the chat window:
 
-Use the following formats in the chat window to apply various styles to your messages.
+| Feature         | Syntax            | Example                                                       | Preview                                                                                                         |
+|-----------------| ----------------- |---------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|
+| Bold            | `**Text**`        | `**You really need to read this!**`                           | ![Bold](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Bold.png?raw=true)             |
+| Italic          | `_Text_`          | `_This is top secret..._`                                     | ![Italic](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Italic.png?raw=true)         |
+| Underline       | `__Text__`        | `__Check this out__`                                          | ![Underline](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Underline.png?raw=true)   |
+| Strikethrough   | `~~Text~~`        | `~~We don’t talk about this anymore~~`                        | ![Strike](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Strikethrough.png?raw=true)  |
+| Obfuscated      | `\|\|Text\|\|`    | `\|\|Unreadable text\|\|`                                     | ![Obfuscated](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Obfuscated.gif?raw=true) |
+| Color (Hex)     | `[Text]<#RRGGBB>` | `[Blue]<#0000FF> like the deep ocean`                         | ![Color](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Color_Hex.png?raw=true)       |
+| Color (Preset)  | `[Text]<preset>`  | `[pink]<pink> pig`                                            | ![Color](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Color_Preset.png?raw=true)    |
+| Color (Rainbow) | `[Text]<RAINBOW>` | `look at this [rainbow]<RAINBOW>`                             | ![Color](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Color_Rainbow.png?raw=true)   |
+| Color (Shadow)  | `[Text]<SD:#hex>` | `[greeea]<SD:#00ff00>`                                        | ![Color](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Color_Shadow.png?raw=true)    |
+| Link            | `[Text](URL)`     | `Download it [here](https://modrinth.com/mod/embellish-chat)` | ![Link](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Link.gif?raw=true)             |
+| Font            | `[Text]{path}`    | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Font.png?raw=true)             |
+| Mention         | `@PlayerName`     | `Hello, @User`                                                | ![Mention](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Mention.png?raw=true)       |
 
-| Feature       | Syntax             | Example                                                       | Result                                                                                                          |
-|---------------|--------------------|:--------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|
-| Bold          | `**Text**`         | `**Important Message**`                                       | ![Bold](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Bold.png?raw=true)             |
-| Italic        | `_Text_`           | `_A point I want to emphasize_`                               | ![Italic](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Italic.png?raw=true)         |
-| Underline     | `__Text__`         | `__This looks like a link__`                                  | ![Underline](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Underline.png?raw=true)   |
-| Strike        | `~~Text~~`         | `~~This content is outdated~~`                                | ![Strike](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Strike.png?raw=true)         |
-| Obfuscated    | `\|\|Text\|\|`     | `\|\|This will be unreadable\|\|`                             | ![Obfuscated](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Obfuscated.gif?raw=true) |
-| Color Hex     | `[Text]<#hex>`     | `[Blue]<blue> water`                                          | ![Color](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Color.png?raw=true)           |
-| Color Preset  | `[Text]<preset>`   | `[pinkpinkpink]<pink>`                                        |                                                                                                                 |
-| Color Rainbow | `[Text]<RAINBOW>`  | `look at this [rainbow]<RAINBOW>`                             |                                                                                                                 |
-| Color Shadow  | `[Text]<\SD:#hex>` | `[greeea]<\SD:#00ff00>`                                       |                                                                                                                 |
-| Link          | `[Text](URL)`      | `Download it [here](https://modrinth.com/mod/embellish_chat)` | ![Link](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Link.gif?raw=true)             |
-| Font          | `[Text]{Path}`     | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Font.png?raw=true)             |
-| Mention       | `@PlayerName`      | `Hello, @Player492!`                                          | ![Mention](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Mention.png?raw=true)       |
-
----
-
-## 🛠️ Using Mention
-
-The mention notification sound uses the UI category by default.
-If the Minecraft version is 1.21.5 or earlier, it instead uses the PLAYER category.
-
-| Feature   | Explanation                                                                                                                                                                                                            |
-|-----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| @Player   | Mentions a player. The mention is automatically bolded and colored using either the team color the player belongs to or the default mention color.                                                                     |
-| @everyone | Mentions all players on the server. Uses the group mention color, and you can configure it so that only players with operator (op) privileges are allowed to use it.                                                   |
-| @here     | Mentions all players within a certain distance of the sender in the same world. The default range is 64 blocks, but it can be adjusted through the settings. The group mention color is used for this type of mention. |
-| @team     | Mentions all players in the sender’s team. By default, the mention is displayed in the team’s color, and if the team has no assigned color, it uses the group mention color instead.                                   |
+> **Notes**
+>
+> * For security, the **Link** feature only recognizes URLs using the `https://` protocol.
+> * *Preset* values depend on the mod's configuration (e.g., `pink`, `blue`, etc.).
+> * `path` for **Font** accepts a namespaced ID such as `minecraft:alt`.
 
 ---
 
-## ⚙️ Command
+## 🗣️ Mention System
 
-- **`/embellish_chat reload`**: Reloads the mod's configuration from the `embellish_chat.json` file.
+The mention notification sound uses the **UI** sound category by default. On **Minecraft 1.21.5 and earlier**, it falls back to the **PLAYER** category.
 
-- **`/embellish_chat ban <player>`**: Prevents the specified player from using the mod features.
+| Target      | Behavior                                                                                                                                                                      |
+| ----------- |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `@Player`   | Mentions a specific player. The mention is bolded and tinted with the player's team color if available; otherwise the default mention color is used.                          |
+| `@team`     | Mentions all players on the sender’s team. Displays in the team color falls back to the group mention color if the team has no color.                                         |
+| `@everyone` | Mentions everyone on the server. Uses the **group mention color**.                                                                                                            |
+| `@here`     | Mentions all players within a configurable radius in the same world as the sender. Default radius is **64 blocks**; adjustable in settings. Uses the **group mention color**. |
 
-- **`/embellish_chat pardon <player>`**: Allows the specified player to use the mod features again.
+Online mention targets receive a notification, and the message is automatically styled (bold + color) according to team/default rules.
+
+You can configure group mentions so that only players with operator privileges (op) are allowed to use them.
+
+---
+
+## ⌨️ Commands
+
+* **`/embellish_chat reload`** — Reloads the configuration from `config/embellish_chat.json`.
+* **`/embellish_chat ban <player>`** — Prevents the specified player from using the mod’s styling features.
+* **`/embellish_chat pardon <player>`** — Restores access to the mod’s styling features for the specified player.
 
 ---
 
 ## ⚙️ Configuration
 
-## Sample `embellish_chat.json`
+The configuration file is located at: `config/embellish_chat.json`.
 
-You can find `embellish_chat.json` in your config folder.
+### Sample
 
 ```
-
+{
+  //style
+  "stylingRules": {
+    "command": [
+      {
+        "pattern": "(?<!\\\\)\\*\\*(.+?)\\*\\*()",
+        "styleType": "BOLD",
+        "option": ""
+      },
+      {
+        "pattern": "(?<!\\\\)__(.+?)__()",
+        "styleType": "UNDERLINE",
+        "option": ""
+      },
+      ...
+    ],
+    "chat": [
+      ...
+    ]
+  },
+  "urlColor": "0x0000EE",
+  "colorPreset": {
+    "dark green": "0x00AA00",
+    "green": "0x55FF55",
+    ...
+  },
+  
+  //mention
+  "mentionEnabled": true,
+  "groupMentionOpOnly": true,
+  "offlineColorEnabled": true,
+  "mentionColor": "0xFFFF55",
+  "groupMentionColor": "0xAAAAFF",
+  "mentionSound": "minecraft:entity.experience_orb.pickup",
+  "mentionPitch": 1.75,
+  "mentionTitlePrefix": "",
+  "mentionTitleSuffix": " mentioned you",
+  "hereRadius": 64.0,
+  
+  //banned plsyer list
+  "bannedPlayerList": []
+}
 ```
 
 ---
 
-## Configuration Options
+## Styling Configuration
 
+Embellish Chat , powered by a regular expression , provides powerful flexibility to style nearly any chat pattern imaginable.
+However, this approach parses every chat message and may cause performance degradation on large-scale servers. (It is expected to have no significant performance impact on typical small servers.)
+Furthermore, creating custom rules can be challenging because Regex itself is inherently complex. We recommend using various AI tools for assistance with rule creation and optimization.
 
-### Styling
+### Rule Structure
 
+Defines the text styling rules.<br>
+Each rule consists of a regular expression (`pattern`), a style type (`styleType`), and an option (`option`).
 
-### Mention
+```
+{
+    "pattern": "(?<!\\\\)\\*\\*(.+?)\\*\\*()",
+    "styleType": "BOLD",
+    "option": ""
+}
+```
 
-- **`mentionEnabled`**: If `true`, enables the `@` mention feature.
-- **`groupMentionOpOnly`**: Determines whether a player must have operator (op) privileges to use everyone, here, or team mentions.
-  If set to `false`, all players can use group mentions.
-- **`offlineColorEnabled`**: When enabled, the mod iterates through all teams to check which team an offline player belongs to in order to retrieve their team color.
-  If this option is set to `false`, the mod will no longer iterate through teams to obtain the color.
-  It is recommended to disable this option if server performance is critical, the computer has low specifications, or the server has a large number of players.
-- **`mentionColor`**: Sets the default HEX color for mentioned players who are not in a team.
-- **`groupMentionColor`**: Sets the color used for group mentions (`@everyone`, `@here`, `@team`).
-- **`mentionSound`**: Sets the sound event ID to play on mention.
-- **`mentionPitch`**: Sets the pitch of the mention sound.
-- **`mentionTitlePrefix`**: Text displayed before the mentioned parsedMention in the notification title.
-- **`mentionTitleSuffix`**: Text displayed after the mentioned parsedMention in the notification title.
-- **`hereRadius`**: When using the `@here` mention, it mentions all players within this radius around the sender.
+* **pattern**
+  Must contain **two capturing groups**:<br>
+  1 the text to apply the style to,<br>
+  2 an optional captured value that can be passed as an argument.
 
-### Etc.
+* **styleType**
+  Specifies the type of style to apply (see the list below).
 
-- **`bannedPlayerList`**: Keeps track of the UUIDs of banned users. Players on this list are not allowed to use styling features.
+* **option**
+  A constant-like global option that can override dynamic behavior.
+  If empty, the captured **group 2** from the regex is used instead.
+
+### Global Style Configuration
+
+```
+{
+    "pattern": "(.+)()",
+    "styleType": "COLOR_HEX",
+    "option": "#FFAAAA"
+}
+```
+
+You can define a global style by capturing the entire text and assigning a fixed option value.
+For example, to make all text a specific color, capture all text and set a color in the option field.
+
+### Available Style Types
+
+| Type            | Description                                                                                                                |
+| --------------- |----------------------------------------------------------------------------------------------------------------------------|
+| `METADATA`      | When the mouse hovers over the text, display the time the server received it, and when clicked, copy it to the clipboard.  |
+| `COLOR_HEX`     | Applies the color specified by the HEX code provided as an option.                                                         |
+| `COLOR_RAINBOW` | Cycles through rainbow colors                                                                                              |
+| `COLOR_PRESET`  | Uses a predefined color name from the `colorPreset` section                                                                |
+| `COLOR_SHADOW`  | Applies the HEX code color provided as an option to the shadow.                                                            |
+| `FONT`          | Changes the font style                                                                                                     |
+| `URL`           | Allows opening the URL provided as an option when clicked.                                                                 |
+| `BOLD`          | Bold text (**text**)                                                                                                       |
+| `ITALIC`        | Italic text (*text*)                                                                                                       |
+| `UNDERLINE`     | Underlined text (**text**)                                                                                                 |
+| `STRIKETHROUGH` | Strikethrough text (~~text~~)                                                                                              |
+| `OBFUSCATED`    | Applies Minecraft style obfuscation to make the text unreadable.                                                           |
 
 ---
 
-## 📜 License & Etc.
+## 📜 License & Links
 
 This project is licensed under the **Apache License 2.0**.
 
-To ensure everyone gets the latest and safest version, please download the mod from the official sources below. I would appreciate it if you link to these pages rather than re-hosting the files.
+Please download the mod from the official sources below to ensure you have the latest, safest version. Linking to these pages is appreciated; please avoid re‑hosting files.
 
-If you discover a bug or would like to suggest a new feature, please use the Discord server to let me know.
+* **Official Download (Modrinth):** [https://modrinth.com/mod/embellish-chat](https://modrinth.com/mod/embellish-chat)
+* **Source Code (GitHub):** [https://github.com/hanhy06/embellish_chat](https://github.com/hanhy06/embellish_chat)
 
-Official Download on Modrinth: [here](https://modrinth.com/mod/embellish_chat)
+---
 
-Source Code on GitHub: [here](https://github.com/hanhy06/embellish_chat)
+## 🐞 Feedback & Support
+
+Found a bug or have a feature request? Please open an issue or reach out on the project’s Discord server.
