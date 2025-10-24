@@ -5,7 +5,6 @@ public enum StyleType {
     COLOR_HEX,
     COLOR_RAINBOW,
     COLOR_PRESET,
-    COLOR_GRADIENT,
     COLOR_SHADOW,
     FONT,
     URL,

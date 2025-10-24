@@ -7,7 +7,10 @@ import com.hanhy06.embellish_chat.styling.util.Runs;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
-import java.util.*;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 
@@ -35,6 +38,7 @@ public class StylingProcessor implements ConfigListener {
                 entry(StyleType.COLOR_HEX, registry::COLOR_HEX),
                 entry(StyleType.COLOR_RAINBOW, registry::COLOR_RAINBOW),
                 entry(StyleType.COLOR_PRESET, registry::COLOR_PRESET),
+                entry(StyleType.COLOR_SHADOW, registry::COLOR_SHADOW),
                 entry(StyleType.FONT, registry::FONT),
                 entry(StyleType.URL, registry::URL),
                 entry(StyleType.BOLD, registry::BOLD),

@@ -2,7 +2,6 @@ package com.hanhy06.embellish_chat.styling;
 
 import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.config.Config;
-import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.mention.MentionTarget;
 import com.hanhy06.embellish_chat.styling.util.Runs;
 import com.hanhy06.embellish_chat.util.Timestamp;
@@ -11,6 +10,7 @@ import net.minecraft.util.Identifier;
 
 import java.awt.*;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -82,6 +82,11 @@ public class StyleRegistry {
     public MutableText COLOR_PRESET(MutableText text, String option){
         int color = colorPreset.getOrDefault(option,0xFFFFFF);
         return text.fillStyle(Style.EMPTY.withColor(color));
+    }
+
+    public MutableText COLOR_SHADOW(MutableText text, String  option){
+        int color = Color.decode(option).getRGB();
+        return text.fillStyle(Style.EMPTY.withShadowColor(color));
     }
 
     public MutableText FONT(MutableText text, String option){
