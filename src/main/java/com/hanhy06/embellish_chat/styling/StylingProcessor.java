@@ -70,7 +70,6 @@ public class StylingProcessor implements ConfigListener {
 
         BiFunction<MutableText,String,MutableText> function = registers.get(style.styleType());
         Matcher matcher = style.pattern().matcher(runs.full());
-        String option = style.option();
         if (!matcher.find()) return text;
 
         int lastEnd = 0;
@@ -78,6 +77,7 @@ public class StylingProcessor implements ConfigListener {
             result.append(slice(runs, lastEnd, matcher.start()));
 
             MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
+            String option = style.option();
             if (option.isBlank()) option = matcher.group(2);
 
             segment = function.apply(segment, option);
