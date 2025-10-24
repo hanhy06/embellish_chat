@@ -58,7 +58,6 @@ public class ConfigManager {
 
     public void readConfig(){
         Config loaded = null;
-        int version = config.configVersion();
 
         try (BufferedReader reader = Files.newBufferedReader(configFilePath, StandardCharsets.UTF_8)) {
             loaded = gson.fromJson(reader, Config.class);
@@ -70,12 +69,12 @@ public class ConfigManager {
             EmbellishChat.LOGGER.error("Unexpected error loading config file: {}. Using default values.", configFilePath, e);
         }
 
-        if (loaded != null && loaded.configVersion() == version) {
+        if (loaded != null && loaded.configVersion() == config.configVersion()) {
             config = loaded;
             broadcastConfig();
             EmbellishChat.LOGGER.info("Config loaded successfully.");
         } else if (loaded != null) {
-            EmbellishChat.LOGGER.warn("The loaded config version is different from the current mod’s config version. Please update the config to match the current version. load:{} crruent:{}",loaded.configVersion(),version);
+            EmbellishChat.LOGGER.warn("The loaded config version is different from the current mod’s config version. Please update the config to match the current version. load:{} current:{}",loaded.configVersion(),config.configVersion());
             broadcastConfig();
         } else {
             writeConfig();

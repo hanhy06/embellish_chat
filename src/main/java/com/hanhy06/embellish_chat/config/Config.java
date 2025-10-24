@@ -8,7 +8,7 @@ import java.util.*;
 import static java.util.Map.entry;
 
 public record Config(
-        int configVersion,
+        double configVersion,
 
         //style
         HashMap<String,List<StylingRule>> stylingRules,
