@@ -32,12 +32,13 @@ public class EmbellishChat implements ModInitializer {
 
         ConfigManager manager = new ConfigManager(fabricConfigDirPath);
 
-        StylingProcessor styler = new StylingProcessor(ConfigManager.getConfig());
+        StylingProcessor styler = new StylingProcessor();
         MentionProcessor mention = new MentionProcessor(server.getPlayerManager(),server.getScoreboard());
-        MessageProcessor handler = new MessageProcessor(mention,styler, server.getPlayerManager());
+        MessageProcessor message = new MessageProcessor(mention,styler, server.getPlayerManager());
 
         manager.addListener(styler);
-        manager.addListener(handler);
+        manager.addListener(mention);
+        manager.addListener(message);
 		manager.readConfig();
 
 		LOGGER.info("{} initialized successfully.", MOD_ID);

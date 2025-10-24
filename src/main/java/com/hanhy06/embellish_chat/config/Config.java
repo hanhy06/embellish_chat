@@ -39,17 +39,19 @@ public record Config(
                 new HashMap<>(Map.ofEntries(
                         entry("chat",
                                 List.of(
+                                        StylingRule.of("(.+)()",StyleType.PREPROCESSING_METADATA),
+                                        StylingRule.of("(.+)()",StyleType.PREPROCESSING_COLOR),
                                         StylingRule.of("(.+)()",StyleType.PREPROCESSING_FONT),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<rainbow>", StyleType.COLOR_RAINBOW),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(.+?)>", StyleType.COLOR_PRESET),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<([a-z]+?)>", StyleType.COLOR_PRESET),
                                         StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL),
                                         StylingRule.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", StyleType.FONT),
                                         StylingRule.of("(?<!\\\\)\\*\\*(.+?)\\*\\*()", StyleType.BOLD),
-                                        StylingRule.of("(?<!\\\\)(?<!_)_([^_]+?)_(?!_)()", StyleType.ITALIC),
                                         StylingRule.of("(?<!\\\\)__(.+?)__()", StyleType.UNDERLINE),
+                                        StylingRule.of("(?<!\\\\)_(.+?)_()", StyleType.ITALIC),
                                         StylingRule.of("(?<!\\\\)~~(.+?)~~()", StyleType.STRIKETHROUGH),
-                                        StylingRule.of("(?<!\\\\)\\|\\|(.+?)\\|\\|()", StyleType.OBFUSCATED)
+                                        StylingRule.of("(?<!\\\\)\\|\\|(.+?)\\|\\|()", StyleType.OBFUSCATED),
+                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(RAINBOW)>", StyleType.COLOR_RAINBOW)
                                 )
                         ),
                         entry("anvil",

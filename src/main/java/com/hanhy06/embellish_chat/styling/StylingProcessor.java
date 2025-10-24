@@ -21,9 +21,8 @@ public class StylingProcessor implements ConfigListener {
     private HashMap<String,List<StylingRule>> stylingRules;
     private EnumMap<StyleType, BiFunction<MutableText,String,MutableText>> registers;
 
-    public StylingProcessor(Config config){
+    public StylingProcessor(){
         INSTANCE = this;
-        onConfigReload(config);
     }
 
     @Override

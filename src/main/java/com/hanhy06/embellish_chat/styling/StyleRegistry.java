@@ -130,11 +130,11 @@ public class StyleRegistry {
         return text.fillStyle(Style.EMPTY.withUnderline(true));
     }
 
-    public MutableText STRIKETHROUGH(MutableText text, String option){
-        return text.fillStyle(Style.EMPTY.withStrikethrough(true));
-    }
-
     public MutableText OBFUSCATED(MutableText text, String option){
         return text.fillStyle(Style.EMPTY.withObfuscated(true));
+    }
+
+    public MutableText STRIKETHROUGH(MutableText text, String option){
+        return text.fillStyle(Style.EMPTY.withStrikethrough(true));
     }
 }
