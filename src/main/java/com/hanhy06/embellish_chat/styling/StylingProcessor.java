@@ -7,10 +7,7 @@ import com.hanhy06.embellish_chat.styling.util.Runs;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 
@@ -54,7 +51,7 @@ public class StylingProcessor implements ConfigListener {
 
         MutableText result = text;
         for (StylingRule style : stylingRules.get(key)){
-            result = applyStyle(style,result);
+            result = identifyRule(style,result);
         }
 
         return result;
@@ -64,11 +61,10 @@ public class StylingProcessor implements ConfigListener {
         return StyleRegistry.MENTION(text,targets);
     }
 
-    private MutableText applyStyle(StylingRule style, MutableText text){
+    private MutableText identifyRule(StylingRule style, MutableText text){
         Runs runs = flatten(text);
         MutableText result = Text.empty();
 
-        BiFunction<MutableText,String,MutableText> function = registers.get(style.styleType());
         Matcher matcher = style.pattern().matcher(runs.full());
         if (!matcher.find()) return text;
 
@@ -77,15 +73,32 @@ public class StylingProcessor implements ConfigListener {
             result.append(slice(runs, lastEnd, matcher.start()));
 
             MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
-            String option = style.option();
-            if (option.isBlank()) option = matcher.group(2);
-
-            segment = function.apply(segment, option);
-            result.append(segment);
+            result.append(
+                    applyStyle(
+                            style.actions(),
+                            segment,
+                            List.of(matcher.group(2).split("-"))
+                    )
+            );
 
             lastEnd = matcher.end();
         } while (matcher.find());
         result.append(slice(runs, lastEnd, runs.full().length()));
+
+        return result;
+    }
+
+    private MutableText applyStyle(List<StyleAction> actions, MutableText text, List<String> options){
+        if (actions.size() != options.size()) return text;
+        MutableText result = text;
+
+        int index = 0;
+        for (StyleAction action : actions){
+            BiFunction<MutableText,String,MutableText> function = registers.get(action.styleType());
+            String option = action.preset().isBlank() ? options.get(index) : action.preset();
+            result = function.apply(result, option);
+            index++;
+        }
 
         return result;
     }

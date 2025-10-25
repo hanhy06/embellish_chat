@@ -1,5 +1,6 @@
 package com.hanhy06.embellish_chat.config;
 
+import com.hanhy06.embellish_chat.styling.StyleAction;
 import com.hanhy06.embellish_chat.styling.StyleType;
 import com.hanhy06.embellish_chat.styling.StylingRule;
 
@@ -11,7 +12,7 @@ public record Config(
         //style
         HashMap<String,List<StylingRule>> stylingRules,
 
-        //styling option
+        //styling preset
         int urlColor,
         HashMap<String, Integer> colorPreset,
 
@@ -38,38 +39,107 @@ public record Config(
                 new HashMap<>(Map.ofEntries(
                         entry("chat",
                                 List.of(
-                                        StylingRule.of("(?<!\\\\)\\*\\*(.+?)\\*\\*()", StyleType.BOLD,""),
-                                        StylingRule.of("(?<!\\\\)__(.+?)__()", StyleType.UNDERLINE,""),
-                                        StylingRule.of("(?<!\\\\)_(.+?)_()", StyleType.ITALIC,""),
-                                        StylingRule.of("(?<!\\\\)~~(.+?)~~()", StyleType.STRIKETHROUGH,""),
-                                        StylingRule.of("(?<!\\\\)\\|\\|(.+?)\\|\\|()", StyleType.OBFUSCATED,""),
-                                        StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL,""),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", StyleType.FONT,""),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX,""),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<SD:(#.{6})>", StyleType.COLOR_SHADOW,""),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<([a-z\\s]+?)>", StyleType.COLOR_PRESET,""),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(RAINBOW)>", StyleType.COLOR_RAINBOW,""),
-                                        StylingRule.of("(.+)()",StyleType.METADATA,"")
+                                        StylingRule.of(
+                                                "(?<!\\\\)\\*\\*(.+?)\\*\\*()",
+                                                List.of(StyleAction.of(StyleType.BOLD,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(?<!\\\\)__(.+?)__()",
+                                                List.of(StyleAction.of(StyleType.UNDERLINE,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(?<!\\\\)_(.+?)_()",
+                                                List.of(StyleAction.of(StyleType.ITALIC,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(?<!\\\\)~~(.+?)~~()",
+                                                List.of(StyleAction.of(StyleType.STRIKETHROUGH,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(?<!\\\\)\\|\\|(.+?)\\|\\|()",
+                                                List.of(StyleAction.of(StyleType.OBFUSCATED,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)",
+                                                List.of(StyleAction.of(StyleType.URL,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(?<!\\\\)\\[(.+?)]\\{([^}]+?)}",
+                                                List.of(StyleAction.of(StyleType.FONT,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(?<!\\\\)\\[(.+?)]<(#.{6})>",
+                                                List.of(StyleAction.of(StyleType.COLOR_HEX,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(?<!\\\\)\\[(.+?)]<SD:(#.{6})>",
+                                                List.of(StyleAction.of(StyleType.COLOR_SHADOW,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(?<!\\\\)\\[(.+?)]<([a-z\\s]+?)>",
+                                                List.of(StyleAction.of(StyleType.COLOR_PRESET,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(?<!\\\\)\\[(.+?)]<(RAINBOW)>",
+                                                List.of(StyleAction.of(StyleType.COLOR_RAINBOW,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(.+)()",
+                                                List.of(StyleAction.of(StyleType.METADATA,""))
+                                        )
                                 )
                         ),
                         entry("command",
                                 List.of(
-                                        StylingRule.of("(?<!\\\\)\\*\\*(.+?)\\*\\*()", StyleType.BOLD,""),
-                                        StylingRule.of("(?<!\\\\)__(.+?)__()", StyleType.UNDERLINE,""),
-                                        StylingRule.of("(?<!\\\\)_(.+?)_()", StyleType.ITALIC,""),
-                                        StylingRule.of("(?<!\\\\)~~(.+?)~~()", StyleType.STRIKETHROUGH,""),
-                                        StylingRule.of("(?<!\\\\)\\|\\|(.+?)\\|\\|()", StyleType.OBFUSCATED,""),
-                                        StylingRule.of("(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)", StyleType.URL,""),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]\\{([^}]+?)}", StyleType.FONT,""),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(#.{6})>", StyleType.COLOR_HEX,""),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<SD:(#.{6})>", StyleType.COLOR_SHADOW,""),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<([a-z\\s]+?)>", StyleType.COLOR_PRESET,""),
-                                        StylingRule.of("(?<!\\\\)\\[(.+?)]<(RAINBOW)>", StyleType.COLOR_RAINBOW,"")
+                                        StylingRule.of(
+                                                "(?<!\\\\)\\*\\*(.+?)\\*\\*()",
+                                                List.of(StyleAction.of(StyleType.BOLD,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(?<!\\\\)__(.+?)__()",
+                                                List.of(StyleAction.of(StyleType.UNDERLINE,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(?<!\\\\)_(.+?)_()",
+                                                List.of(StyleAction.of(StyleType.ITALIC,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(?<!\\\\)~~(.+?)~~()",
+                                                List.of(StyleAction.of(StyleType.STRIKETHROUGH,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(?<!\\\\)\\|\\|(.+?)\\|\\|()",
+                                                List.of(StyleAction.of(StyleType.OBFUSCATED,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)",
+                                                List.of(StyleAction.of(StyleType.URL,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(?<!\\\\)\\[(.+?)]\\{([^}]+?)}",
+                                                List.of(StyleAction.of(StyleType.FONT,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(?<!\\\\)\\[(.+?)]<(#.{6})>",
+                                                List.of(StyleAction.of(StyleType.COLOR_HEX,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(?<!\\\\)\\[(.+?)]<SD:(#.{6})>",
+                                                List.of(StyleAction.of(StyleType.COLOR_SHADOW,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(?<!\\\\)\\[(.+?)]<([a-z\\s]+?)>",
+                                                List.of(StyleAction.of(StyleType.COLOR_PRESET,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(?<!\\\\)\\[(.+?)]<(RAINBOW)>",
+                                                List.of(StyleAction.of(StyleType.COLOR_RAINBOW,""))
+                                        )
                                 )
                         )
                 )),
 
-                //styling option
+                //styling preset
                 0x0000EE,
                 new HashMap<>(Map.ofEntries(
                         entry("black", 0x000000),

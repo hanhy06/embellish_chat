@@ -12,5 +12,7 @@ public enum StyleType {
     ITALIC,
     UNDERLINE,
     STRIKETHROUGH,
-    OBFUSCATED
+    OBFUSCATED,
+    REPLACE,
+    MASK
 }
