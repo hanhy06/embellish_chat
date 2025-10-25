@@ -69,7 +69,7 @@ public record Config(
                                                 List.of(StyleAction.of(StyleType.FONT,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)\\[(.+?)]<(#.{6})>",
+                                                "(?<!\\\\)\\[(.+?)]<(#[A-Fa-f0-9]{6})>",
                                                 List.of(StyleAction.of(StyleType.COLOR_HEX,""))
                                         ),
                                         StylingRule.of(
@@ -121,7 +121,7 @@ public record Config(
                                                 List.of(StyleAction.of(StyleType.FONT,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)\\[(.+?)]<(#.{6})>",
+                                                "(?<!\\\\)\\[(.+?)]<(#[A-Fa-f0-9]{6})>",
                                                 List.of(StyleAction.of(StyleType.COLOR_HEX,""))
                                         ),
                                         StylingRule.of(
