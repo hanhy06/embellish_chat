@@ -123,4 +123,13 @@ public class StyleRegistry {
     public MutableText STRIKETHROUGH(MutableText text, String option){
         return text.fillStyle(Style.EMPTY.withStrikethrough(true));
     }
+
+    public MutableText REPLACE(MutableText text, String option){
+        return Text.of(option).copy();
+    }
+
+    public MutableText MASK(MutableText text, String option){
+        int length = text.getString().length();
+        return Text.of(option.repeat(length)).copy();
+    }
 }

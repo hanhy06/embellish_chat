@@ -18,6 +18,7 @@ import static java.util.Map.entry;
 public class StylingProcessor implements ConfigListener {
     public static StylingProcessor INSTANCE;
 
+    private Config config;
     private HashMap<String,List<StylingRule>> stylingRules;
     private EnumMap<StyleType, BiFunction<MutableText,String,MutableText>> registers;
 
@@ -27,6 +28,7 @@ public class StylingProcessor implements ConfigListener {
 
     @Override
     public void onConfigReload(Config newConfig) {
+        this.config = newConfig;
         this.stylingRules = newConfig.stylingRules();
 
         StyleRegistry registry = new StyleRegistry(newConfig);
@@ -42,7 +44,9 @@ public class StylingProcessor implements ConfigListener {
                 entry(StyleType.ITALIC, registry::ITALIC),
                 entry(StyleType.UNDERLINE, registry::UNDERLINE),
                 entry(StyleType.STRIKETHROUGH, registry::STRIKETHROUGH),
-                entry(StyleType.OBFUSCATED, registry::OBFUSCATED)
+                entry(StyleType.OBFUSCATED, registry::OBFUSCATED),
+                entry(StyleType.REPLACE, registry::REPLACE),
+                entry(StyleType.MASK, registry::MASK)
         ));
     }
 
@@ -73,11 +77,19 @@ public class StylingProcessor implements ConfigListener {
             result.append(slice(runs, lastEnd, matcher.start()));
 
             MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
+
+            String option = matcher.group(2);
+            List<String> options = List.of();
+
+            if (option != null && !option.isBlank()){
+                options = List.of(option.split(config.delimiter()));
+            }
+
             result.append(
                     applyStyle(
                             style.actions(),
                             segment,
-                            List.of(matcher.group(2).split("-"))
+                            options
                     )
             );
 

@@ -15,6 +15,7 @@ public record Config(
         //styling preset
         int urlColor,
         HashMap<String, Integer> colorPreset,
+        String delimiter,
 
         //mention
         boolean mentionEnabled,
@@ -159,6 +160,7 @@ public record Config(
                         entry("yellow", 0xFFFF55),
                         entry("white", 0xFFFFFF)
                 )),
+                "-",
 
                 //mention
                 true,
