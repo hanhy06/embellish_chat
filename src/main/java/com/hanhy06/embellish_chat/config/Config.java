@@ -82,7 +82,7 @@ public record Config(
                                         ),
                                         StylingRule.of(
                                                 "(?<!\\\\)\\[(.+?)]<(RAINBOW)>",
-                                                List.of(StyleAction.of(StyleType.COLOR_RAINBOW,""))
+                                                List.of(StyleAction.of(StyleType.COLOR_RAINBOW,"0.7"))
                                         ),
                                         StylingRule.of(
                                                 "(.+)()",

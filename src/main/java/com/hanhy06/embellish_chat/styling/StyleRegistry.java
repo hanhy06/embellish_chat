@@ -67,12 +67,13 @@ public class StyleRegistry {
         Runs runs = flatten(text);
         String string = runs.full();
         int length = string.length();
+        float saturation = Float.parseFloat(option);
         if (length == 0) return text;
 
         MutableText result = Text.empty();
         for (int i = 0; i < length; i++) {
             float hue = (float) i / length;
-            int rgb = Color.HSBtoRGB(hue, 0.7f, 1f);
+            int rgb = Color.HSBtoRGB(hue, saturation, 1f);
             result.append(slice(runs, i, i + 1).fillStyle(Style.EMPTY.withColor(rgb)));
         }
         return result;
