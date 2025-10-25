@@ -182,6 +182,8 @@ For example, to make all text a specific color, capture all text and set a color
 
 ## 📊 TPS Latency Test
 
+Test Version : Embellish Chat 2.0.0(DEV)
+
 The graph below shows the TPS (Ticks Per Second) latency measurement results for this mod.
 
 Each command was configured to parse 250 characters per tick,
@@ -210,6 +212,9 @@ Please download the mod from the official sources below to ensure you have the l
 
 ---
 
-## 🐞 Feedback & Support
+## ✨ Feedback & Support
 
 Found a bug or have a feature request? Please open an issue or reach out on the project’s Discord server.
+
+In version 2.1.0, we plan to add support for applying multiple StyleTypes to a single StyleRule, as well as integration with the LuckPerms API.
+If you’d like to be the first to know about updates, please click the heart icon on Modrinth!
