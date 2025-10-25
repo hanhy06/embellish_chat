@@ -54,7 +54,7 @@ public class MessageProcessor implements ConfigListener {
             );
         }
 
-        finalMessage = stylingManager.applyStylingRuls(
+        finalMessage = stylingManager.applyStylingRule(
                 finalMessage,
                 "chat"
         );

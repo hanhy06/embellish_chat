@@ -50,7 +50,7 @@ public class StylingProcessor implements ConfigListener {
         ));
     }
 
-    public MutableText applyStylingRuls(MutableText text, String key){
+    public MutableText applyStylingRule(MutableText text, String key){
         if (text.getString().isBlank()) return text;
 
         MutableText result = text;
@@ -98,13 +98,15 @@ public class StylingProcessor implements ConfigListener {
     }
 
     private MutableText applyStyles(List<StyleAction> actions, MutableText text, List<String> options){
-        if (actions.size() != options.size()) return text;
         MutableText result = text;
 
         int index = 0;
         for (StyleAction action : actions){
             BiFunction<MutableText,String,MutableText> function = registers.get(action.styleType());
-            String option = action.preset().isBlank() ? options.get(index) : action.preset();
+            String option = action.preset();
+            if (option.isBlank() && index < options.size()){
+                option = options.get(index);
+            }
             result = function.apply(result, option);
             index++;
         }
