@@ -110,7 +110,7 @@ The configuration file is located at: `config/embellish_chat.json`.
   "mentionTitleSuffix": " mentioned you",
   "hereRadius": 64.0,
   
-  //banned plsyer list
+  //banned player list
   "bannedPlayerList": []
 }
 ```
