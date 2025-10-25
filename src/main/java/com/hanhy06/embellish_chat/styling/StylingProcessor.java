@@ -50,22 +50,19 @@ public class StylingProcessor implements ConfigListener {
         ));
     }
 
-    public MutableText applyStyles(MutableText text,String key){
+    public MutableText applyStylingRuls(MutableText text, String key){
         if (text.getString().isBlank()) return text;
 
         MutableText result = text;
         for (StylingRule style : stylingRules.get(key)){
-            result = identifyRule(style,result);
+            result = applyStyles(style,result);
         }
 
         return result;
     }
 
-    public MutableText applyMention(MutableText text, List<MentionTarget> targets){
-        return StyleRegistry.MENTION(text,targets);
-    }
 
-    private MutableText identifyRule(StylingRule style, MutableText text){
+    private MutableText applyStyles(StylingRule style, MutableText text){
         Runs runs = flatten(text);
         MutableText result = Text.empty();
 
@@ -86,7 +83,7 @@ public class StylingProcessor implements ConfigListener {
             }
 
             result.append(
-                    applyStyle(
+                    applyStyles(
                             style.actions(),
                             segment,
                             options
@@ -100,7 +97,7 @@ public class StylingProcessor implements ConfigListener {
         return result;
     }
 
-    private MutableText applyStyle(List<StyleAction> actions, MutableText text, List<String> options){
+    private MutableText applyStyles(List<StyleAction> actions, MutableText text, List<String> options){
         if (actions.size() != options.size()) return text;
         MutableText result = text;
 
@@ -113,5 +110,9 @@ public class StylingProcessor implements ConfigListener {
         }
 
         return result;
+    }
+
+    public MutableText applyMention(MutableText text, List<MentionTarget> targets){
+        return StyleRegistry.MENTION(text,targets);
     }
 }

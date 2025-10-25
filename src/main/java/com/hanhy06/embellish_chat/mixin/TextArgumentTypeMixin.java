@@ -20,7 +20,7 @@ public class TextArgumentTypeMixin {
     ) {
         Text text = cir.getReturnValue();
 
-        text = StylingProcessor.INSTANCE.applyStyles(text.copy(),"command");
+        text = StylingProcessor.INSTANCE.applyStylingRuls(text.copy(),"command");
 
         cir.setReturnValue(text);
     }
