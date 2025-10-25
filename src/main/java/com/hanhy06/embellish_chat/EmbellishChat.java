@@ -8,6 +8,8 @@ import com.hanhy06.embellish_chat.styling.StylingProcessor;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
 import net.minecraft.server.MinecraftServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +26,8 @@ public class EmbellishChat implements ModInitializer {
 
 		ServerLifecycleEvents.SERVER_STARTED.register(EmbellishChat::handleServerStart);
 
-		EmbellishChatCommand.registerBetterChatCommand();
+		EmbellishChatCommand.registerEmbellishChat();
+        LuckPerms perms = LuckPermsProvider.get();
 	}
 
 	private static void handleServerStart(MinecraftServer server) {

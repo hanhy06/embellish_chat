@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 public class EmbellishChatCommand {
-    public static void registerBetterChatCommand(){
+    public static void registerEmbellishChat(){
         CommandRegistrationCallback.EVENT.register(
                 (commandDispatcher, commandRegistryAccess, registrationEnvironment) -> {
                     commandDispatcher.register(
