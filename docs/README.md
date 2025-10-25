@@ -120,7 +120,7 @@ The configuration file is located at: `config/embellish_chat.json`.
 ## Styling Configuration
 
 Embellish Chat , powered by a regular expression , provides powerful flexibility to style nearly any chat pattern imaginable.
-However, this approach parses every chat message and may cause performance degradation on large-scale servers. (It is expected to have no significant performance impact on typical small servers.)
+However, this approach parses every chat message and may cause performance degradation on large-scale servers. (It is expected to have no significant performance impact on typical general servers.)
 Furthermore, creating custom rules can be challenging because Regex itself is inherently complex. We recommend using various AI tools for assistance with rule creation and optimization.
 
 ### Rule Structure
@@ -177,6 +177,25 @@ For example, to make all text a specific color, capture all text and set a color
 | `UNDERLINE`     | Underlined text (**text**)                                                                                                 |
 | `STRIKETHROUGH` | Strikethrough text (~~text~~)                                                                                              |
 | `OBFUSCATED`    | Applies Minecraft style obfuscation to make the text unreadable.                                                           |
+
+---
+
+## 📊 TPS Latency Test
+
+The graph below shows the TPS (Ticks Per Second) latency measurement results for this mod.
+
+Each command was configured to parse 250 characters per tick,
+and the test recorded TPS changes when sending up to 378 × 20 chat messages per second.
+
+As shown in the graph, the average latency gradually increases as the command count grows.
+However, since most servers process around 200 × 20 messages per second (≈ 4000 chats) or fewer,
+TPS degradation is negligible in typical gameplay environments.
+
+Below are the commands used in the actual test.
+
+```w @a "**_@everyone__ Everyone, [Attention]<#FFAA00>!__** [This link](https://modrinth.com/mod/embellish-chat) is __*very*__ important. [This is [RAINBOW]<RAINBOW>]<green>! Also check out [shadow text]<SD:#55FFFF>. ||secret|| and [font]{minecraft:alt}."```
+
+![Latency](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Latency.png?raw=true)
 
 ---
 
