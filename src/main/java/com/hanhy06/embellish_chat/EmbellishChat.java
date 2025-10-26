@@ -27,7 +27,6 @@ public class EmbellishChat implements ModInitializer {
 		ServerLifecycleEvents.SERVER_STARTED.register(EmbellishChat::handleServerStart);
 
 		EmbellishChatCommand.registerEmbellishChat();
-        LuckPerms perms = LuckPermsProvider.get();
 	}
 
 	private static void handleServerStart(MinecraftServer server) {
@@ -43,6 +42,8 @@ public class EmbellishChat implements ModInitializer {
         manager.addListener(mention);
         manager.addListener(message);
 		manager.readConfig();
+
+        FabricLoader.getInstance().isModLoaded("luckperms");
 
 		LOGGER.info("{} initialized successfully.", MOD_ID);
 	}

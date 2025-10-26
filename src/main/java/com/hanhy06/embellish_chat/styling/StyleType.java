@@ -14,5 +14,7 @@ public enum StyleType {
     STRIKETHROUGH,
     OBFUSCATED,
     REPLACE,
-    MASK
+    MASK,
+    UPPER,
+    LOWER
 }

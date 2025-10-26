@@ -133,4 +133,14 @@ public class StyleRegistry {
         int length = text.getString().length();
         return Text.of(option.repeat(length)).copy();
     }
+
+    public MutableText UPPER(MutableText text, String option){
+        String string = text.getString();
+        return Text.of(string.toUpperCase()).copy();
+    }
+
+    public MutableText LOWER(MutableText text, String option){
+        String string = text.getString();
+        return Text.of(string.toLowerCase()).copy();
+    }
 }

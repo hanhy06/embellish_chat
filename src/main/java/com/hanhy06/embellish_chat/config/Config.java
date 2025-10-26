@@ -10,6 +10,7 @@ import static java.util.Map.entry;
 
 public record Config(
         //style
+        //TODO: 나중에 LuckPerms쓸때 각 그룹이 어떤 스타일링을 할지 그룹 이름이 키로 써야함
         HashMap<String,List<StylingRule>> stylingRules,
 
         //styling preset
@@ -18,6 +19,8 @@ public record Config(
         String delimiter,
 
         //mention
+        //TODO: 맨션 방식을 기존에서 스타일링과 비슷하게 정규식,맨션타입,List<StyleAction> 으로 변경하여 더 높은 유연성
+        //TODO: 맨션 타입을 기존 team 에서 TEAM_SELF 와 TEAM_OTHER 로 분리 그리고 LuckPerms 와 통합을 위해 LUCK_PERMS_GROUP 추가
         boolean mentionEnabled,
         boolean groupMentionOpOnly,
         boolean offlineColorEnabled,
@@ -36,7 +39,6 @@ public record Config(
     public static Config createDefault(){
         return new Config(
                 //style
-                //TODO: 나중에 LuckPerms쓸때 각 그룹이 어떤 스타일링을 할지 그룹 이름이 키로 써야함
                 new HashMap<>(Map.ofEntries(
                         entry("chat",
                                 List.of(
@@ -73,7 +75,7 @@ public record Config(
                                                 List.of(StyleAction.of(StyleType.COLOR_HEX,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)\\[(.+?)]<SD:(#.{6})>",
+                                                "(?<!\\\\)\\[(.+?)]<SD:(#[A-Fa-f0-9]{6}))>",
                                                 List.of(StyleAction.of(StyleType.COLOR_SHADOW,""))
                                         ),
                                         StylingRule.of(
@@ -125,7 +127,7 @@ public record Config(
                                                 List.of(StyleAction.of(StyleType.COLOR_HEX,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)\\[(.+?)]<SD:(#.{6})>",
+                                                "(?<!\\\\)\\[(.+?)]<SD:(#[A-Fa-f0-9]{6}))>",
                                                 List.of(StyleAction.of(StyleType.COLOR_SHADOW,""))
                                         ),
                                         StylingRule.of(
@@ -134,7 +136,7 @@ public record Config(
                                         ),
                                         StylingRule.of(
                                                 "(?<!\\\\)\\[(.+?)]<(RAINBOW)>",
-                                                List.of(StyleAction.of(StyleType.COLOR_RAINBOW,""))
+                                                List.of(StyleAction.of(StyleType.COLOR_RAINBOW,"0.7"))
                                         )
                                 )
                         )

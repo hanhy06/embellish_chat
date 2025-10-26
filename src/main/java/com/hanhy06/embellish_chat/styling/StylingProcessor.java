@@ -46,7 +46,9 @@ public class StylingProcessor implements ConfigListener {
                 entry(StyleType.STRIKETHROUGH, registry::STRIKETHROUGH),
                 entry(StyleType.OBFUSCATED, registry::OBFUSCATED),
                 entry(StyleType.REPLACE, registry::REPLACE),
-                entry(StyleType.MASK, registry::MASK)
+                entry(StyleType.MASK, registry::MASK),
+                entry(StyleType.UPPER, registry::UPPER),
+                entry(StyleType.LOWER, registry::LOWER)
         ));
     }
 
