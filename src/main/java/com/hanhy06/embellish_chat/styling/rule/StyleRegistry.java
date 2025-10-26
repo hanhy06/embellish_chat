@@ -28,7 +28,6 @@ public class StyleRegistry {
     public StyleRegistry(Config config){
         this.config = config;
         this.colorPreset = config.colorPreset();
-
         this.registers = new EnumMap<>(Map.ofEntries(
                 entry(StyleType.METADATA, this::METADATA),
                 entry(StyleType.COLOR_HEX, this::COLOR_HEX),

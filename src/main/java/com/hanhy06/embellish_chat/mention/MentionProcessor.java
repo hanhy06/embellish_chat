@@ -32,7 +32,7 @@ public class MentionProcessor implements ConfigListener {
 
     private Config config;
     private SoundEvent mentionSound;
-    private HashMap<String,List<MentionRule>> mentionRules;
+    private HashMap<String,MentionRule> mentionRules;
     private MentionRegistry registries;
 
     @Override
@@ -62,12 +62,10 @@ public class MentionProcessor implements ConfigListener {
     }
 
     public void handleMention(ServerPlayerEntity sender,String message,String key){
-        List<MentionRule> rules = mentionRules.get(key);
+        MentionRule rule = mentionRules.get(key);
 
-        for (MentionRule rule : rules){
-            List<ParsedMention> parsedMentions = parseMentions(rule.pattern(),message);
-
-        }
+        List<ParsedMention> parsedMentions = parseMentions(rule.pattern(),message);
+//        List<ServerPlayerEntity> targets = registries.get(rule.mentionType()).apply()
     }
 
     public List<ParsedMention> parseMentions(Pattern pattern, String message){

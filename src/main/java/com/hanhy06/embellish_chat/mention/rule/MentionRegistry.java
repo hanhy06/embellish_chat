@@ -7,18 +7,37 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
+
+import static java.util.Map.entry;
 
 public class MentionRegistry {
     private final Config config;
     private final PlayerManager manager;
     private final Scoreboard scoreboard;
+    private final EnumMap<MentionType, Function<MentionParameter,List<ServerPlayerEntity>>> registries;
 
     public MentionRegistry(Config config, PlayerManager manager, Scoreboard scoreboard) {
         this.config = config;
         this.manager = manager;
         this.scoreboard = scoreboard;
+
+        this.registries = new EnumMap<>(Map.ofEntries(
+                entry(MentionType.EVERYONE,this::EVERYONE),
+                entry(MentionType.HERE,this::HERE),
+                entry(MentionType.TEAM_SELF,this::TEAM_SELF),
+                entry(MentionType.TEAM_OTHER,this::TEAM_OTHER),
+                entry(MentionType.PLAYER,this::PLAYER),
+                entry(MentionType.LUCK_PERMS_GROUP,this::LUCK_PERMS_GROUP)
+        ));
+    }
+
+    public Function<MentionParameter,List<ServerPlayerEntity>> get(MentionType key){
+        return registries.get(key);
     }
 
     private List<ServerPlayerEntity> EVERYONE(MentionParameter parameter){
