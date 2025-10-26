@@ -48,7 +48,7 @@ public class MentionRegistry {
         return PlayerLookup.around(
                 parameter.sender().getEntityWorld(),
                 parameter.sender().getEntityPos(),
-                config.hereRadius()
+                Float.parseFloat(parameter.mention())
         ).stream().toList();
     }
 
@@ -68,7 +68,7 @@ public class MentionRegistry {
     }
 
     private List<ServerPlayerEntity> TEAM_OTHER(MentionParameter parameter){
-        Team team = scoreboard.getTeam(parameter.name());
+        Team team = scoreboard.getTeam(parameter.mention());
 
         if (team != null){
             return team
@@ -83,7 +83,7 @@ public class MentionRegistry {
     }
 
     private List<ServerPlayerEntity> PLAYER(MentionParameter parameter){
-        ServerPlayerEntity receiver = manager.getPlayer(parameter.name());
+        ServerPlayerEntity receiver = manager.getPlayer(parameter.mention());
 
         if (receiver!=null){
             return List.of(receiver);

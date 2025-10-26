@@ -48,6 +48,15 @@ public class StylingProcessor implements ConfigListener {
         return result;
     }
 
+    public MutableText applyStyles(MutableText text, List<StyleAction> actions){
+        MutableText result = text;
+
+        for (StyleAction action : actions){
+            result = registry.get(action.styleType()).apply(result,action.preset());
+        }
+
+        return result;
+    }
 
     private MutableText applyStyles(StylingRule style, MutableText text){
         Runs runs = flatten(text);
