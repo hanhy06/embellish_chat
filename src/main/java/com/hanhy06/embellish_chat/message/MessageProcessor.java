@@ -45,14 +45,14 @@ public class MessageProcessor implements ConfigListener {
         MutableText finalMessage = message.getContent().copy();
         String raw = message.getContent().getString();
 
-        List<MentionTarget> targets = List.of();
-        if (config.mentionEnabled() && sender != null) {
-            targets = handleMentions(raw,sender);
-            finalMessage = stylingManager.applyMention(
-                    finalMessage,
-                    targets
-            );
-        }
+//        List<MentionTarget> targets = List.of();
+//        if (config.mentionEnabled() && sender != null) {
+//            targets = handleMentions(raw,sender);
+//            finalMessage = stylingManager.applyMention(
+//                    finalMessage,
+//                    targets
+//            );
+//        }
 
         finalMessage = stylingManager.applyStylingRule(
                 finalMessage,
@@ -62,12 +62,12 @@ public class MessageProcessor implements ConfigListener {
         return message.withUnsignedContent(finalMessage);
     }
 
-    private List<MentionTarget> handleMentions(String raw, ServerPlayerEntity sender) {
-        List<ParsedMention> parsedMentions = mentionProcessor.parseMentions(raw);
-        List<MentionTarget> targets = mentionProcessor.identifyMentionTargets(sender, parsedMentions);
-        if (!parsedMentions.isEmpty()) {
-            mentionProcessor.broadcastMention(sender, targets);
-        }
-        return targets;
-    }
+//    private List<MentionTarget> handleMentions(String raw, ServerPlayerEntity sender) {
+//        List<ParsedMention> parsedMentions = mentionProcessor.parseMentions(raw,"mention");
+//        List<MentionTarget> targets = mentionProcessor.identifyMentionTargets(sender, parsedMentions);
+//        if (!parsedMentions.isEmpty()) {
+//            mentionProcessor.broadcastMention(sender, targets);
+//        }
+//        return targets;
+//    }
 }

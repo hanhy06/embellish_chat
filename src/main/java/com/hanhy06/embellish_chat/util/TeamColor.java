@@ -7,7 +7,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Formatting;
 
 public class TeamColor {
-    public static int getPlayerColor(ServerPlayerEntity player){
+    public static Integer getPlayerColor(ServerPlayerEntity player,Integer preset){
         if (player != null) {
             Team team = player.getScoreboardTeam();
             if (team != null) {
@@ -18,10 +18,10 @@ public class TeamColor {
             }
         }
 
-        return ConfigManager.getConfig().mentionColor();
+        return preset;
     }
 
-    public static int getPlayerColor(Scoreboard scoreboard,String name){
+    public static Integer getPlayerColor(Scoreboard scoreboard,String name, Integer preset){
         for (String teamName : scoreboard.getTeamNames()){
             Team team = scoreboard.getTeam(teamName);
             if (team != null) {
@@ -30,11 +30,11 @@ public class TeamColor {
                 if (formatting != null && formatting.isColor() && formatting != Formatting.RESET && belongTeam) {
                     return formatting.getColorValue();
                 } else if (belongTeam) {
-                    return ConfigManager.getConfig().mentionColor();
+                    break;
                 }
             }
         }
 
-        return ConfigManager.getConfig().mentionColor();
+        return preset;
     }
 }

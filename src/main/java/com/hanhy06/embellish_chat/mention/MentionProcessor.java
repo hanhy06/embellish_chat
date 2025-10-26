@@ -2,6 +2,8 @@ package com.hanhy06.embellish_chat.mention;
 
 import com.hanhy06.embellish_chat.config.Config;
 import com.hanhy06.embellish_chat.config.ConfigListener;
+import com.hanhy06.embellish_chat.mention.rule.MentionRegistry;
+import com.hanhy06.embellish_chat.mention.rule.MentionRule;
 import com.hanhy06.embellish_chat.util.TeamColor;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.scoreboard.Scoreboard;
@@ -16,6 +18,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -29,11 +32,15 @@ public class MentionProcessor implements ConfigListener {
 
     private Config config;
     private SoundEvent mentionSound;
+    private HashMap<String,List<MentionRule>> mentionRules;
+    private MentionRegistry registries;
 
     @Override
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
         this.mentionSound =  SoundEvent.of(Identifier.tryParse(config.mentionSound()));
+        this.mentionRules = config.mentionRules();
+        this.registries = new MentionRegistry(newConfig,manager,scoreboard);
     }
 
     public MentionProcessor(PlayerManager manager, Scoreboard scoreboard) {
@@ -42,22 +49,7 @@ public class MentionProcessor implements ConfigListener {
     }
 
     public void broadcastMention(ServerPlayerEntity sender, List<MentionTarget> targets){
-        MutableText titleText = Text.empty();
-        titleText.append(
-                Text.literal(config.mentionTitlePrefix()).styled(
-                        style -> style.withBold(false).withColor(0xFFFFFF)
-                )
-        );
-        titleText.append(
-                sender.getName().copy().styled(
-                        style -> style.withBold(true).withColor(TeamColor.getPlayerColor(sender))
-                )
-        );
-        titleText.append(
-                Text.literal(config.mentionTitleSuffix()).styled(
-                        style -> style.withBold(false).withColor(0xFFFFFF)
-                )
-        );
+        MutableText titleText = createTitle(sender);
 
         for (MentionTarget target : targets){
             if (target.players() == null || target.players().isEmpty()) continue;
@@ -69,8 +61,17 @@ public class MentionProcessor implements ConfigListener {
         }
     }
 
-    public List<ParsedMention> parseMentions(String raw){
-        Matcher matcher = MENTION_PATTERN.matcher(raw);
+    public void handleMention(ServerPlayerEntity sender,String message,String key){
+        List<MentionRule> rules = mentionRules.get(key);
+
+        for (MentionRule rule : rules){
+            List<ParsedMention> parsedMentions = parseMentions(rule.pattern(),message);
+
+        }
+    }
+
+    public List<ParsedMention> parseMentions(Pattern pattern, String message){
+        Matcher matcher = pattern.matcher(message);
 
         List<ParsedMention> parsedMentions = new ArrayList<>();
         while (matcher.find()){
@@ -104,6 +105,26 @@ public class MentionProcessor implements ConfigListener {
         }
 
         return targets;
+    }
+
+    private MutableText createTitle(ServerPlayerEntity sender){
+        MutableText titleText = Text.empty();
+        titleText.append(
+                Text.literal(config.mentionTitlePrefix()).styled(
+                        style -> style.withBold(false).withColor(0xFFFFFF)
+                )
+        );
+        titleText.append(
+                sender.getName().copy().styled(
+                        style -> style.withBold(true).withColor(TeamColor.getPlayerColor(sender,0xffffff))
+                )
+        );
+        titleText.append(
+                Text.literal(config.mentionTitleSuffix()).styled(
+                        style -> style.withBold(false).withColor(0xFFFFFF)
+                )
+        );
+        return titleText;
     }
 
     private MentionTarget everyone(ParsedMention parsedMention){
@@ -170,11 +191,11 @@ public class MentionProcessor implements ConfigListener {
     private MentionTarget player(ParsedMention parsedMention){
         ServerPlayerEntity player = manager.getPlayer(parsedMention.name());
 
-        int teamColor;
+        Integer teamColor = null;
         if (player != null){
-            teamColor = TeamColor.getPlayerColor(player);
+//            teamColor = TeamColor.getPlayerColor(player);
         }else if (config.offlineColorEnabled()) {
-            teamColor = TeamColor.getPlayerColor(scoreboard, parsedMention.name());
+//            teamColor = TeamColor.getPlayerColor(scoreboard, parsedMention.name());
         } else {
             teamColor = config.mentionColor();
         }
