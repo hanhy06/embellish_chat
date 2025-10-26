@@ -10,7 +10,8 @@ import com.hanhy06.embellish_chat.styling.util.Runs;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 

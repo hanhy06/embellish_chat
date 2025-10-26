@@ -1,15 +1,11 @@
 package com.hanhy06.embellish_chat.mention.rule;
 
 import com.hanhy06.embellish_chat.config.Config;
-import com.hanhy06.embellish_chat.mention.MentionTarget;
-import com.hanhy06.embellish_chat.mention.ParsedMention;
-import com.hanhy06.embellish_chat.util.TeamColor;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Formatting;
 
 import java.util.List;
 import java.util.Objects;
@@ -25,85 +21,59 @@ public class MentionRegistry {
         this.scoreboard = scoreboard;
     }
 
-    private MentionTarget EVERYONE(ParsedMention parsedMention){
-        return new MentionTarget(
-                "everyone",
-                parsedMention.begin(),
-                parsedMention.end(),
-                config.groupMentionColor(),
-                manager.getPlayerList()
-        );
+    private List<ServerPlayerEntity> EVERYONE(MentionParameter parameter){
+        return manager.getPlayerList();
     }
 
-    private MentionTarget HERE(ServerPlayerEntity sender, ParsedMention parsedMention){
-        List<ServerPlayerEntity> players = PlayerLookup.around(
-                sender.getEntityWorld(),
-                sender.getEntityPos(),
+    private List<ServerPlayerEntity> HERE(MentionParameter parameter){
+        return PlayerLookup.around(
+                parameter.sender().getEntityWorld(),
+                parameter.sender().getEntityPos(),
                 config.hereRadius()
         ).stream().toList();
-
-        return new MentionTarget(
-                "here",
-                parsedMention.begin(),
-                parsedMention.end(),
-                config.groupMentionColor(),
-                players
-        );
     }
 
-    private MentionTarget TEAM_SELF(ServerPlayerEntity sender, ParsedMention parsedMention){
-        Team team = sender.getScoreboardTeam();
+    private List<ServerPlayerEntity> TEAM_SELF(MentionParameter parameter){
+        Team team = parameter.sender().getScoreboardTeam();
 
         if (team != null){
-            int color = config.groupMentionColor();
-            Formatting formatting = team.getColor();
-            if (formatting != null && formatting.isColor() && formatting != Formatting.RESET) {
-                color = formatting.getColorValue();
-            }
-
-            List<ServerPlayerEntity> players = team
+            return team
                     .getPlayerList()
                     .stream()
                     .map(manager::getPlayer)
                     .filter(Objects::nonNull)
                     .toList();
-
-            return new MentionTarget(
-                    "team",
-                    parsedMention.begin(),
-                    parsedMention.end(),
-                    color,
-                    players
-            );
         }else {
-            return new MentionTarget(
-                    "team",
-                    parsedMention.begin(),
-                    parsedMention.end(),
-                    config.groupMentionColor(),
-                    null
-            );
+            return List.of();
         }
     }
 
-    private MentionTarget PLAYER(ParsedMention parsedMention){
-        ServerPlayerEntity player = manager.getPlayer(parsedMention.name());
+    private List<ServerPlayerEntity> TEAM_OTHER(MentionParameter parameter){
+        Team team = scoreboard.getTeam(parameter.name());
 
-        int teamColor;
-        if (player != null){
-            teamColor = TeamColor.getPlayerColor(player);
-        }else if (config.offlineColorEnabled()) {
-            teamColor = TeamColor.getPlayerColor(scoreboard, parsedMention.name());
-        } else {
-            teamColor = config.mentionColor();
+        if (team != null){
+            return team
+                    .getPlayerList()
+                    .stream()
+                    .map(manager::getPlayer)
+                    .filter(Objects::nonNull)
+                    .toList();
+        }else {
+            return List.of();
         }
+    }
 
-        return new MentionTarget(
-                parsedMention.name(),
-                parsedMention.begin(),
-                parsedMention.end(),
-                teamColor,
-                player != null ? List.of(player) : null
-        );
+    private List<ServerPlayerEntity> PLAYER(MentionParameter parameter){
+        ServerPlayerEntity receiver = manager.getPlayer(parameter.name());
+
+        if (receiver!=null){
+            return List.of(receiver);
+        }else {
+            return List.of();
+        }
+    }
+
+    private List<ServerPlayerEntity> LUCK_PERMS_GROUP(MentionParameter parameter){
+        return List.of();
     }
 }
