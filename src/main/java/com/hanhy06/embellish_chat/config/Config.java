@@ -25,6 +25,7 @@ public record Config(
         //TODO: 하나의 MentionRule 이 여러개의 맨션 타입을 갖을수 있게 즉 두번 ServerPlayerEntity를 갖고와서 두개의 리스트에 포함된
         //플레이어를 호출 가능하도록 할것 ex 우리팀 사람중 근쳐 32블럭 안에 있는 사람
         HashMap<String,List<MentionRule>> mentionRules,
+        Integer mentionColor,
         boolean offlineColorEnabled,
         String mentionSound,
         float mentionPitch,
@@ -165,6 +166,7 @@ public record Config(
 
                 //mention
                 new HashMap<>(),
+                0xff55ff,
                 true,
                 "minecraft:entity.experience_orb.pickup",
                 1.75f,

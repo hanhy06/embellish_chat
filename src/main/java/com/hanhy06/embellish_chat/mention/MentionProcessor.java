@@ -73,7 +73,9 @@ public class MentionProcessor implements ConfigListener {
 
         for (ParsedMention mention : mentions){
             List<ServerPlayerEntity> players = identifyPlayers(sender,mention.mention(),rule.mentionType());
-            MutableText text = styler.applyStyles(Text.of(mention.mention()).copy(),rule.actions());
+            MutableText text = Text.literal(mention.mention());
+
+            text = styler.applyStyles(text,rule.actions());
             targets.add(
                     new MentionTarget(
                             mention.begin(),
