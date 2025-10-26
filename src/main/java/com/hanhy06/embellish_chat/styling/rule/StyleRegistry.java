@@ -1,4 +1,4 @@
-package com.hanhy06.embellish_chat.styling;
+package com.hanhy06.embellish_chat.styling.rule;
 
 import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.config.Config;
@@ -10,20 +10,47 @@ import net.minecraft.util.Identifier;
 
 import java.awt.*;
 import java.net.URI;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
 
 import static com.hanhy06.embellish_chat.styling.util.TextSliceUtil.flatten;
 import static com.hanhy06.embellish_chat.styling.util.TextSliceUtil.slice;
+import static java.util.Map.entry;
 
 public class StyleRegistry {
     private final Config config;
     private final HashMap<String,Integer> colorPreset;
+    private final EnumMap<StyleType, BiFunction<MutableText,String,MutableText>> registers;
 
     public StyleRegistry(Config config){
         this.config = config;
-
         this.colorPreset = config.colorPreset();
+
+        this.registers = new EnumMap<>(Map.ofEntries(
+                entry(StyleType.METADATA, this::METADATA),
+                entry(StyleType.COLOR_HEX, this::COLOR_HEX),
+                entry(StyleType.COLOR_RAINBOW, this::COLOR_RAINBOW),
+                entry(StyleType.COLOR_PRESET, this::COLOR_PRESET),
+                entry(StyleType.COLOR_SHADOW, this::COLOR_SHADOW),
+                entry(StyleType.FONT, this::FONT),
+                entry(StyleType.URL, this::URL),
+                entry(StyleType.BOLD, this::BOLD),
+                entry(StyleType.ITALIC, this::ITALIC),
+                entry(StyleType.UNDERLINE, this::UNDERLINE),
+                entry(StyleType.STRIKETHROUGH, this::STRIKETHROUGH),
+                entry(StyleType.OBFUSCATED, this::OBFUSCATED),
+                entry(StyleType.REPLACE, this::REPLACE),
+                entry(StyleType.MASK, this::MASK),
+                entry(StyleType.UPPER, this::UPPER),
+                entry(StyleType.LOWER, this::LOWER)
+        ));
+    }
+
+    public BiFunction<MutableText,String,MutableText> get(StyleType styleType){
+        return registers.get(styleType);
     }
 
     public MutableText METADATA(MutableText text, String option){

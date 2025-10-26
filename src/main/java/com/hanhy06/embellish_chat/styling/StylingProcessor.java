@@ -3,6 +3,9 @@ package com.hanhy06.embellish_chat.styling;
 import com.hanhy06.embellish_chat.config.Config;
 import com.hanhy06.embellish_chat.config.ConfigListener;
 import com.hanhy06.embellish_chat.mention.MentionTarget;
+import com.hanhy06.embellish_chat.styling.rule.StyleAction;
+import com.hanhy06.embellish_chat.styling.rule.StyleRegistry;
+import com.hanhy06.embellish_chat.styling.rule.StylingRule;
 import com.hanhy06.embellish_chat.styling.util.Runs;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -13,14 +16,13 @@ import java.util.regex.Matcher;
 
 import static com.hanhy06.embellish_chat.styling.util.TextSliceUtil.flatten;
 import static com.hanhy06.embellish_chat.styling.util.TextSliceUtil.slice;
-import static java.util.Map.entry;
 
 public class StylingProcessor implements ConfigListener {
     public static StylingProcessor INSTANCE;
 
     private Config config;
     private HashMap<String,List<StylingRule>> stylingRules;
-    private EnumMap<StyleType, BiFunction<MutableText,String,MutableText>> registers;
+    private StyleRegistry registry;
 
     public StylingProcessor(){
         INSTANCE = this;
@@ -29,27 +31,9 @@ public class StylingProcessor implements ConfigListener {
     @Override
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
-        this.stylingRules = newConfig.stylingRules();
 
-        StyleRegistry registry = new StyleRegistry(newConfig);
-        this.registers = new EnumMap<>(Map.ofEntries(
-                entry(StyleType.METADATA, registry::METADATA),
-                entry(StyleType.COLOR_HEX, registry::COLOR_HEX),
-                entry(StyleType.COLOR_RAINBOW, registry::COLOR_RAINBOW),
-                entry(StyleType.COLOR_PRESET, registry::COLOR_PRESET),
-                entry(StyleType.COLOR_SHADOW, registry::COLOR_SHADOW),
-                entry(StyleType.FONT, registry::FONT),
-                entry(StyleType.URL, registry::URL),
-                entry(StyleType.BOLD, registry::BOLD),
-                entry(StyleType.ITALIC, registry::ITALIC),
-                entry(StyleType.UNDERLINE, registry::UNDERLINE),
-                entry(StyleType.STRIKETHROUGH, registry::STRIKETHROUGH),
-                entry(StyleType.OBFUSCATED, registry::OBFUSCATED),
-                entry(StyleType.REPLACE, registry::REPLACE),
-                entry(StyleType.MASK, registry::MASK),
-                entry(StyleType.UPPER, registry::UPPER),
-                entry(StyleType.LOWER, registry::LOWER)
-        ));
+        this.stylingRules = newConfig.stylingRules();
+        this.registry = new StyleRegistry(newConfig);
     }
 
     public MutableText applyStylingRule(MutableText text, String key){
@@ -104,7 +88,7 @@ public class StylingProcessor implements ConfigListener {
 
         int index = 0;
         for (StyleAction action : actions){
-            BiFunction<MutableText,String,MutableText> function = registers.get(action.styleType());
+            BiFunction<MutableText,String,MutableText> function = registry.get(action.styleType());
             String option = action.preset();
             if (option.isBlank() && index < options.size()){
                 option = options.get(index);

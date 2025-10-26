@@ -1,4 +1,4 @@
-package com.hanhy06.embellish_chat.styling;
+package com.hanhy06.embellish_chat.styling.rule;
 
 import java.util.List;
 import java.util.regex.Pattern;

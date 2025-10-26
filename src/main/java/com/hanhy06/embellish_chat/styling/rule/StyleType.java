@@ -1,4 +1,4 @@
-package com.hanhy06.embellish_chat.styling;
+package com.hanhy06.embellish_chat.styling.rule;
 
 public enum StyleType {
     METADATA,
