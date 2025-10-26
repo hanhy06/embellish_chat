@@ -61,13 +61,4 @@ public class MessageProcessor implements ConfigListener {
 
         return message.withUnsignedContent(finalMessage);
     }
-
-//    private List<MentionTarget> handleMentions(String raw, ServerPlayerEntity sender) {
-//        List<ParsedMention> parsedMentions = mentionProcessor.parseMentions(raw,"mention");
-//        List<MentionTarget> targets = mentionProcessor.identifyMentionTargets(sender, parsedMentions);
-//        if (!parsedMentions.isEmpty()) {
-//            mentionProcessor.broadcastMention(sender, targets);
-//        }
-//        return targets;
-//    }
 }

@@ -32,7 +32,7 @@ public class MentionProcessor implements ConfigListener {
 
     private Config config;
     private SoundEvent mentionSound;
-    private HashMap<String,MentionRule> mentionRules;
+    private HashMap<String,List<MentionRule>> mentionRules;
     private MentionRegistry registries;
 
     @Override
@@ -48,7 +48,15 @@ public class MentionProcessor implements ConfigListener {
         this.scoreboard = scoreboard;
     }
 
-    public void broadcastMention(ServerPlayerEntity sender, List<MentionTarget> targets){
+    public void handleMention(ServerPlayerEntity sender,String message,String key){
+
+    }
+
+    public List<ParsedMention> parseMentions(Pattern pattern, String message){
+        return List.of();
+    }
+
+    private void broadcastMention(ServerPlayerEntity sender, List<MentionTarget> targets){
         MutableText titleText = createTitle(sender);
 
         for (MentionTarget target : targets){
@@ -59,50 +67,6 @@ public class MentionProcessor implements ConfigListener {
                 player.sendMessage(titleText ,true);
             }
         }
-    }
-
-    public void handleMention(ServerPlayerEntity sender,String message,String key){
-        MentionRule rule = mentionRules.get(key);
-
-        List<ParsedMention> parsedMentions = parseMentions(rule.pattern(),message);
-//        List<ServerPlayerEntity> targets = registries.get(rule.mentionType()).apply()
-    }
-
-    public List<ParsedMention> parseMentions(Pattern pattern, String message){
-        Matcher matcher = pattern.matcher(message);
-
-        List<ParsedMention> parsedMentions = new ArrayList<>();
-        while (matcher.find()){
-            parsedMentions.add(new ParsedMention(
-                    matcher.group(1),
-                    matcher.start(),
-                    matcher.end(1)
-            ));
-        }
-
-        return parsedMentions;
-    }
-
-    public List<MentionTarget> identifyMentionTargets(ServerPlayerEntity sender, List<ParsedMention> parsedMentions){
-        List<MentionTarget> targets = new ArrayList<>();
-        boolean canGroupMention = canUseGroupMention(sender);
-
-        for (ParsedMention parsedMention : parsedMentions){
-            String name = parsedMention.name();
-
-            if (canGroupMention){
-                switch (name) {
-                    case "everyone" -> targets.add(everyone(parsedMention));
-                    case "here" -> targets.add(here(sender, parsedMention));
-                    case "team" -> targets.add(team(sender, parsedMention));
-                    default -> targets.add(player(parsedMention));
-                }
-            }else {
-                targets.add(player(parsedMention));
-            }
-        }
-
-        return targets;
     }
 
     private MutableText createTitle(ServerPlayerEntity sender){
@@ -123,91 +87,5 @@ public class MentionProcessor implements ConfigListener {
                 )
         );
         return titleText;
-    }
-
-    private MentionTarget everyone(ParsedMention parsedMention){
-        return new MentionTarget(
-                "everyone",
-                parsedMention.begin(),
-                parsedMention.end(),
-                config.groupMentionColor(),
-                manager.getPlayerList()
-        );
-    }
-
-    private MentionTarget here(ServerPlayerEntity sender, ParsedMention parsedMention){
-        List<ServerPlayerEntity> players = PlayerLookup.around(
-                sender.getEntityWorld(),
-                sender.getEntityPos(),
-                config.hereRadius()
-        ).stream().toList();
-
-        return new MentionTarget(
-                "here",
-                parsedMention.begin(),
-                parsedMention.end(),
-                config.groupMentionColor(),
-                players
-        );
-    }
-
-    private MentionTarget team(ServerPlayerEntity sender, ParsedMention parsedMention){
-        Team team = sender.getScoreboardTeam();
-
-        if (team != null){
-            int color = config.groupMentionColor();
-            Formatting formatting = team.getColor();
-            if (formatting != null && formatting.isColor() && formatting != Formatting.RESET) {
-                color = formatting.getColorValue();
-            }
-
-            List<ServerPlayerEntity> players = team
-                    .getPlayerList()
-                    .stream()
-                    .map(manager::getPlayer)
-                    .filter(Objects::nonNull)
-                    .toList();
-
-            return new MentionTarget(
-                    "team",
-                    parsedMention.begin(),
-                    parsedMention.end(),
-                    color,
-                    players
-            );
-        }else {
-            return new MentionTarget(
-                    "team",
-                    parsedMention.begin(),
-                    parsedMention.end(),
-                    config.groupMentionColor(),
-                    null
-            );
-        }
-    }
-
-    private MentionTarget player(ParsedMention parsedMention){
-        ServerPlayerEntity player = manager.getPlayer(parsedMention.name());
-
-        Integer teamColor = null;
-        if (player != null){
-//            teamColor = TeamColor.getPlayerColor(player);
-        }else if (config.offlineColorEnabled()) {
-//            teamColor = TeamColor.getPlayerColor(scoreboard, parsedMention.name());
-        } else {
-            teamColor = config.mentionColor();
-        }
-
-        return new MentionTarget(
-                parsedMention.name(),
-                parsedMention.begin(),
-                parsedMention.end(),
-                teamColor,
-                player != null ? List.of(player) : null
-        );
-    }
-
-    private boolean canUseGroupMention(ServerPlayerEntity player){
-        return !config.groupMentionOpOnly() || manager.isOperator(player.getPlayerConfigEntry());
     }
 }
