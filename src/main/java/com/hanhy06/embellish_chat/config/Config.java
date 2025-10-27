@@ -20,7 +20,6 @@ public record Config(
         String delimiter,
 
         //mention
-        //TODO: 맨션 방식을 기존에서 스타일링과 비슷하게 정규식,맨션타입,List<StyleAction> 으로 변경하여 더 높은 유연성
         //TODO: 맨션 타입을 기존 team 에서 TEAM_SELF 와 TEAM_OTHER 로 분리 그리고 LuckPerms 와 통합을 위해 LUCK_PERMS_GROUP 추가
         //TODO: 하나의 MentionRule 이 여러개의 맨션 타입을 갖을수 있게 즉 두번 ServerPlayerEntity를 갖고와서 두개의 리스트에 포함된
         //플레이어를 호출 가능하도록 할것 ex 우리팀 사람중 근쳐 32블럭 안에 있는 사람
@@ -75,7 +74,7 @@ public record Config(
                                                 List.of(StyleAction.of(StyleType.COLOR_HEX,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)\\[(.+?)]<SD:(#[A-Fa-f0-9]{6}))>",
+                                                "(?<!\\\\)\\[(.+?)]<SD:(#[A-Fa-f0-9]{6})>",
                                                 List.of(StyleAction.of(StyleType.COLOR_SHADOW,""))
                                         ),
                                         StylingRule.of(
@@ -127,7 +126,7 @@ public record Config(
                                                 List.of(StyleAction.of(StyleType.COLOR_HEX,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)\\[(.+?)]<SD:(#[A-Fa-f0-9]{6}))>",
+                                                "(?<!\\\\)\\[(.+?)]<SD:(#[A-Fa-f0-9]{6})>",
                                                 List.of(StyleAction.of(StyleType.COLOR_SHADOW,""))
                                         ),
                                         StylingRule.of(
