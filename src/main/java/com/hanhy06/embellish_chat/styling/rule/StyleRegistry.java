@@ -10,8 +10,10 @@ import net.minecraft.util.Identifier;
 
 import java.awt.*;
 import java.net.URI;
-import java.util.*;
-import java.util.List;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.BiFunction;
 
 import static com.hanhy06.embellish_chat.styling.util.TextSliceUtil.flatten;
