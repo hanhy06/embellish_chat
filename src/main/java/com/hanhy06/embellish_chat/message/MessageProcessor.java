@@ -3,8 +3,6 @@ package com.hanhy06.embellish_chat.message;
 import com.hanhy06.embellish_chat.config.Config;
 import com.hanhy06.embellish_chat.config.ConfigListener;
 import com.hanhy06.embellish_chat.mention.MentionProcessor;
-import com.hanhy06.embellish_chat.mention.MentionTarget;
-import com.hanhy06.embellish_chat.mention.ParsedMention;
 import com.hanhy06.embellish_chat.styling.StylingProcessor;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.PlayerManager;
@@ -45,12 +43,12 @@ public class MessageProcessor implements ConfigListener {
         MutableText finalMessage = message.getContent().copy();
         String raw = message.getContent().getString();
 
-//        List<MentionTarget> targets = List.of();
+//        List<MentionTarget> players = List.of();
 //        if (config.mentionEnabled() && sender != null) {
-//            targets = handleMentions(raw,sender);
+//            players = handleMentions(raw,sender);
 //            finalMessage = stylingManager.applyMention(
 //                    finalMessage,
-//                    targets
+//                    players
 //            );
 //        }
 

@@ -2,7 +2,7 @@ package com.hanhy06.embellish_chat.styling.rule;
 
 import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.config.Config;
-import com.hanhy06.embellish_chat.mention.MentionTarget;
+import com.hanhy06.embellish_chat.mention.data.Mention;
 import com.hanhy06.embellish_chat.styling.util.Runs;
 import com.hanhy06.embellish_chat.util.Timestamp;
 import net.minecraft.text.*;
@@ -68,16 +68,13 @@ public class StyleRegistry {
         );
     }
 
-    public static MutableText MENTION(MutableText text, List<MentionTarget> targets){
+    public static MutableText MENTION(MutableText text, List<Mention> targets){
         Runs runs = flatten(text);
         MutableText result = Text.empty();
         int lastEnd = 0;
-        for (MentionTarget target : targets) {
+        for (Mention target : targets) {
             result.append(slice(runs, lastEnd, target.begin()));
-            result.append(
-                    slice(runs, target.begin(), target.end())
-                            .fillStyle(Style.EMPTY.withColor(target.teamColor()).withBold(true))
-            );
+            result.append(target.text());
             lastEnd = target.end();
         }
         result.append(slice(runs, lastEnd, runs.full().length()));

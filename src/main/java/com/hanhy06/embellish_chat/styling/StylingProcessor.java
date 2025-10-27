@@ -2,7 +2,7 @@ package com.hanhy06.embellish_chat.styling;
 
 import com.hanhy06.embellish_chat.config.Config;
 import com.hanhy06.embellish_chat.config.ConfigListener;
-import com.hanhy06.embellish_chat.mention.MentionTarget;
+import com.hanhy06.embellish_chat.mention.data.Mention;
 import com.hanhy06.embellish_chat.styling.rule.StyleAction;
 import com.hanhy06.embellish_chat.styling.rule.StyleRegistry;
 import com.hanhy06.embellish_chat.styling.rule.StylingRule;
@@ -110,7 +110,7 @@ public class StylingProcessor implements ConfigListener {
         return result;
     }
 
-    public MutableText applyMention(MutableText text, List<MentionTarget> targets){
+    public MutableText applyMention(MutableText text, List<Mention> targets){
         return StyleRegistry.MENTION(text,targets);
     }
 }

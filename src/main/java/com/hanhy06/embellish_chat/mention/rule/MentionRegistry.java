@@ -1,11 +1,13 @@
 package com.hanhy06.embellish_chat.mention.rule;
 
 import com.hanhy06.embellish_chat.config.Config;
+import com.hanhy06.embellish_chat.mention.data.ParsedTarget;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Style;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -19,7 +21,7 @@ public class MentionRegistry {
     private final Config config;
     private final PlayerManager manager;
     private final Scoreboard scoreboard;
-    private final EnumMap<MentionType, Function<MentionParameter,List<ServerPlayerEntity>>> registries;
+    private final EnumMap<MentionType, Function<MentionParameter,ParsedTarget>> registries;
 
     public MentionRegistry(Config config, PlayerManager manager, Scoreboard scoreboard) {
         this.config = config;
@@ -36,63 +38,91 @@ public class MentionRegistry {
         ));
     }
 
-    public Function<MentionParameter,List<ServerPlayerEntity>> get(MentionType key){
+    public Function<MentionParameter,ParsedTarget> get(MentionType key){
         return registries.get(key);
     }
 
-    private List<ServerPlayerEntity> EVERYONE(MentionParameter parameter){
-        return manager.getPlayerList();
+    private ParsedTarget EVERYONE(MentionParameter parameter){
+        return ParsedTarget.of(
+                manager.getPlayerList(),
+                Style.EMPTY
+        );
     }
 
-    private List<ServerPlayerEntity> HERE(MentionParameter parameter){
-        return PlayerLookup.around(
-                parameter.sender().getEntityWorld(),
-                parameter.sender().getEntityPos(),
-                Float.parseFloat(parameter.mention())
-        ).stream().toList();
+    private ParsedTarget HERE(MentionParameter parameter){
+        return ParsedTarget.of(
+                PlayerLookup.around(
+                        parameter.sender().getEntityWorld(),
+                        parameter.sender().getEntityPos(),
+                        Float.parseFloat(parameter.mention())
+                ).stream().toList(),
+                Style.EMPTY
+        );
     }
 
-    private List<ServerPlayerEntity> TEAM_SELF(MentionParameter parameter){
+    private ParsedTarget TEAM_SELF(MentionParameter parameter){
         Team team = parameter.sender().getScoreboardTeam();
 
         if (team != null){
-            return team
-                    .getPlayerList()
-                    .stream()
-                    .map(manager::getPlayer)
-                    .filter(Objects::nonNull)
-                    .toList();
+            return ParsedTarget.of(
+                    team
+                            .getPlayerList()
+                            .stream()
+                            .map(manager::getPlayer)
+                            .filter(Objects::nonNull)
+                            .toList(),
+                    team.getDisplayName().getStyle()
+            );
         }else {
-            return List.of();
+            return ParsedTarget.of(
+                    List.of(),
+                    Style.EMPTY
+            );
         }
     }
 
-    private List<ServerPlayerEntity> TEAM_OTHER(MentionParameter parameter){
+    private ParsedTarget TEAM_OTHER(MentionParameter parameter){
         Team team = scoreboard.getTeam(parameter.mention());
 
         if (team != null){
-            return team
-                    .getPlayerList()
-                    .stream()
-                    .map(manager::getPlayer)
-                    .filter(Objects::nonNull)
-                    .toList();
+            return ParsedTarget.of(
+                    team
+                            .getPlayerList()
+                            .stream()
+                            .map(manager::getPlayer)
+                            .filter(Objects::nonNull)
+                            .toList(),
+                    team.getDisplayName().getStyle()
+            );
         }else {
-            return List.of();
+            return ParsedTarget.of(
+                    List.of(),
+                    Style.EMPTY
+            );
         }
     }
 
-    private List<ServerPlayerEntity> PLAYER(MentionParameter parameter){
-        ServerPlayerEntity receiver = manager.getPlayer(parameter.mention());
+    private ParsedTarget PLAYER(MentionParameter parameter){
+        ServerPlayerEntity target = manager.getPlayer(parameter.mention());
 
-        if (receiver!=null){
-            return List.of(receiver);
+        if (target!=null){
+            Style style = target.getDisplayName().getStyle();
+            return ParsedTarget.of(
+                    List.of(target),
+                    style
+            );
         }else {
-            return List.of();
+            return ParsedTarget.of(
+                    List.of(),
+                    Style.EMPTY
+            );
         }
     }
 
-    private List<ServerPlayerEntity> LUCK_PERMS_GROUP(MentionParameter parameter){
-        return List.of();
+    private ParsedTarget LUCK_PERMS_GROUP(MentionParameter parameter){
+        return ParsedTarget.of(
+                List.of(),
+                Style.EMPTY
+        );
     }
 }
