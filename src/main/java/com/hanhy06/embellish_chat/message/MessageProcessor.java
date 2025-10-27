@@ -3,6 +3,7 @@ package com.hanhy06.embellish_chat.message;
 import com.hanhy06.embellish_chat.config.Config;
 import com.hanhy06.embellish_chat.config.ConfigListener;
 import com.hanhy06.embellish_chat.mention.MentionProcessor;
+import com.hanhy06.embellish_chat.mention.data.Mention;
 import com.hanhy06.embellish_chat.styling.StylingProcessor;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.PlayerManager;
@@ -10,6 +11,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class MessageProcessor implements ConfigListener {
@@ -40,16 +42,17 @@ public class MessageProcessor implements ConfigListener {
 
         ServerPlayerEntity sender = playerManager.getPlayer(message.getSender());
 
-        MutableText finalMessage = message.getContent().copy();
-        String raw = message.getContent().getString();
+        MutableText textMessage = message.getContent().copy();
+        String stringMessage = message.getContent().getString();
 
+        Set<Mention> mentions = mentionProcessor.handleMention(sender,stringMessage,"mention");
 
-
-        finalMessage = stylingManager.applyStylingRule(
-                finalMessage,
+        textMessage = stylingManager.applyMention(textMessage,mentions);
+        textMessage = stylingManager.applyStylingRule(
+                textMessage,
                 "chat"
         );
 
-        return message.withUnsignedContent(finalMessage);
+        return message.withUnsignedContent(textMessage);
     }
 }

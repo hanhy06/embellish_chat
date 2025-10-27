@@ -10,10 +10,8 @@ import net.minecraft.util.Identifier;
 
 import java.awt.*;
 import java.net.URI;
-import java.util.EnumMap;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.function.BiFunction;
 
 import static com.hanhy06.embellish_chat.styling.util.TextSliceUtil.flatten;
@@ -52,7 +50,7 @@ public class StyleRegistry {
         return registers.get(styleType);
     }
 
-    public static MutableText MENTION(MutableText text, List<Mention> targets){
+    public static MutableText MENTION(MutableText text, Set<Mention> targets){
         Runs runs = flatten(text);
         MutableText result = Text.empty();
         int lastEnd = 0;

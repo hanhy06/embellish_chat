@@ -12,6 +12,7 @@ import net.minecraft.text.Text;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 
@@ -110,7 +111,7 @@ public class StylingProcessor implements ConfigListener {
         return result;
     }
 
-    public MutableText applyMention(MutableText text, List<Mention> targets){
-        return StyleRegistry.MENTION(text,targets);
+    public MutableText applyMention(MutableText text, Set<Mention> mentions){
+        return StyleRegistry.MENTION(text,mentions);
     }
 }
