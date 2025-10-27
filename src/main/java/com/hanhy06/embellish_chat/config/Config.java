@@ -1,6 +1,7 @@
 package com.hanhy06.embellish_chat.config;
 
 import com.hanhy06.embellish_chat.mention.rule.MentionRule;
+import com.hanhy06.embellish_chat.mention.rule.MentionType;
 import com.hanhy06.embellish_chat.styling.rule.StyleAction;
 import com.hanhy06.embellish_chat.styling.rule.StyleType;
 import com.hanhy06.embellish_chat.styling.rule.StylingRule;
@@ -164,7 +165,9 @@ public record Config(
                 "-",
 
                 //mention
-                new HashMap<>(),
+                new HashMap<>(Map.ofEntries(
+
+                )),
                 0xff55ff,
                 true,
                 "minecraft:entity.experience_orb.pickup",

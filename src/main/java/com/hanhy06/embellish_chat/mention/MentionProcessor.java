@@ -71,7 +71,7 @@ public class MentionProcessor implements ConfigListener {
                 ParsedTarget target = targets.get(i);
 
                 MutableText text = Text.literal(mention.mention()).fillStyle(target.style());
-                text = styler.applyStyles(text,rule.actions());
+                text = styler.applyStyles(text,rule.styles());
 
                 result.add(
                         new Mention(
