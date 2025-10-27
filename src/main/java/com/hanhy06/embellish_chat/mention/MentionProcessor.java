@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 public class MentionProcessor implements ConfigListener {
     private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{1,16})(?=\\b|$)");
 
+    private final StylingProcessor styler;
     private final PlayerManager manager;
     private final Scoreboard scoreboard;
 
@@ -37,6 +38,7 @@ public class MentionProcessor implements ConfigListener {
     private MentionRegistry registries;
 
     public MentionProcessor(StylingProcessor styler, PlayerManager manager, Scoreboard scoreboard) {
+        this.styler = styler;
         this.manager = manager;
         this.scoreboard = scoreboard;
     }
@@ -65,10 +67,16 @@ public class MentionProcessor implements ConfigListener {
                     .toList());
 
             for (int i = 0; i < parsedTargets.size(); i++) {
+                ParsedMention parsedMention = parsedMentions.get(i);
+                ParsedTarget parsedTarget = parsedTargets.get(i);
+
+                MutableText text = Text.literal(parsedMention.mention()).fillStyle(parsedTarget.style());
+                text = styler.applyStyles(text,rule.actions());
+
                 Mention mention = new Mention(
-                        parsedMentions.get(i).begin(),
-                        parsedMentions.get(i).end(),
-                        Text.literal(parsedMentions.get(i).mention()).fillStyle(parsedTargets.get(i).style())
+                        parsedMention.begin(),
+                        parsedMention.end(),
+                        text
                 );
                 mentions.add(mention);
             }

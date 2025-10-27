@@ -52,6 +52,19 @@ public class StyleRegistry {
         return registers.get(styleType);
     }
 
+    public static MutableText MENTION(MutableText text, List<Mention> targets){
+        Runs runs = flatten(text);
+        MutableText result = Text.empty();
+        int lastEnd = 0;
+        for (Mention target : targets) {
+            result.append(slice(runs, lastEnd, target.begin()));
+            result.append(target.text());
+            lastEnd = target.end();
+        }
+        result.append(slice(runs, lastEnd, runs.full().length()));
+        return result;
+    }
+
     public MutableText METADATA(MutableText text, String option){
         HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(
                 Timestamp.timeStamp() + "\nClick to copy to clipboard"
@@ -66,19 +79,6 @@ public class StyleRegistry {
                         clickEvent
                 )
         );
-    }
-
-    public static MutableText MENTION(MutableText text, List<Mention> targets){
-        Runs runs = flatten(text);
-        MutableText result = Text.empty();
-        int lastEnd = 0;
-        for (Mention target : targets) {
-            result.append(slice(runs, lastEnd, target.begin()));
-            result.append(target.text());
-            lastEnd = target.end();
-        }
-        result.append(slice(runs, lastEnd, runs.full().length()));
-        return result;
     }
 
     public MutableText COLOR_HEX(MutableText text, String option){

@@ -18,15 +18,15 @@ import java.util.function.Function;
 import static java.util.Map.entry;
 
 public class MentionRegistry {
-    private final Config config;
     private final PlayerManager manager;
     private final Scoreboard scoreboard;
+    private final Style mentionStyle;
     private final EnumMap<MentionType, Function<MentionParameter,ParsedTarget>> registries;
 
     public MentionRegistry(Config config, PlayerManager manager, Scoreboard scoreboard) {
-        this.config = config;
         this.manager = manager;
         this.scoreboard = scoreboard;
+        this.mentionStyle = Style.EMPTY.withBold(true).withColor(config.mentionColor());
 
         this.registries = new EnumMap<>(Map.ofEntries(
                 entry(MentionType.EVERYONE,this::EVERYONE),
@@ -45,7 +45,7 @@ public class MentionRegistry {
     private ParsedTarget EVERYONE(MentionParameter parameter){
         return ParsedTarget.of(
                 manager.getPlayerList(),
-                Style.EMPTY
+                mentionStyle
         );
     }
 
@@ -56,7 +56,7 @@ public class MentionRegistry {
                         parameter.sender().getEntityPos(),
                         Float.parseFloat(parameter.mention())
                 ).stream().toList(),
-                Style.EMPTY
+                mentionStyle
         );
     }
 
@@ -76,7 +76,7 @@ public class MentionRegistry {
         }else {
             return ParsedTarget.of(
                     List.of(),
-                    Style.EMPTY
+                    mentionStyle
             );
         }
     }
@@ -97,7 +97,7 @@ public class MentionRegistry {
         }else {
             return ParsedTarget.of(
                     List.of(),
-                    Style.EMPTY
+                    mentionStyle
             );
         }
     }
@@ -114,7 +114,7 @@ public class MentionRegistry {
         }else {
             return ParsedTarget.of(
                     List.of(),
-                    Style.EMPTY
+                    mentionStyle
             );
         }
     }
@@ -122,7 +122,7 @@ public class MentionRegistry {
     private ParsedTarget LUCK_PERMS_GROUP(MentionParameter parameter){
         return ParsedTarget.of(
                 List.of(),
-                Style.EMPTY
+                mentionStyle
         );
     }
 }
