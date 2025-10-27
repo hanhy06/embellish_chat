@@ -54,36 +54,37 @@ public class MentionProcessor implements ConfigListener {
     public Set<Mention> handleMention(ServerPlayerEntity sender, String message, String key) {
         List<MentionRule> rules = mentionRules.get(key);
         Set<ServerPlayerEntity> players = new HashSet<>();
-        Set<Mention> mentions = new HashSet<>();
+        Set<Mention> result = new HashSet<>();
 
         for (MentionRule rule : rules) {
-            List<ParsedMention> parsedMentions = parsedMentions(message, rule.pattern());
-            List<ParsedTarget> parsedTargets = parsedMentions.stream()
+            List<ParsedMention> mentions = parsedMentions(message, rule.pattern());
+            List<ParsedTarget> targets = mentions.stream()
                     .map(parsedMention -> parsedTarget(sender, parsedMention.mention(), rule.mentionType()))
                     .toList();
 
-            players.addAll(parsedTargets.stream()
+            players.addAll(targets.stream()
                     .flatMap(parsedTarget -> parsedTarget.players().stream())
                     .toList());
 
-            for (int i = 0; i < parsedTargets.size(); i++) {
-                ParsedMention parsedMention = parsedMentions.get(i);
-                ParsedTarget parsedTarget = parsedTargets.get(i);
+            for (int i = 0; i < targets.size(); i++) {
+                ParsedMention mention = mentions.get(i);
+                ParsedTarget target = targets.get(i);
 
-                MutableText text = Text.literal(parsedMention.mention()).fillStyle(parsedTarget.style());
+                MutableText text = Text.literal(mention.mention()).fillStyle(target.style());
                 text = styler.applyStyles(text,rule.actions());
 
-                Mention mention = new Mention(
-                        parsedMention.begin(),
-                        parsedMention.end(),
-                        text
+                result.add(
+                        new Mention(
+                                mention.begin(),
+                                mention.end(),
+                                text
+                        )
                 );
-                mentions.add(mention);
             }
         }
 
         broadcastMentions(sender, players);
-        return mentions;
+        return result;
     }
 
     private void broadcastMentions(ServerPlayerEntity sender, Set<ServerPlayerEntity> players) {
