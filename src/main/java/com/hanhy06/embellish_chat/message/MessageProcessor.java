@@ -43,14 +43,7 @@ public class MessageProcessor implements ConfigListener {
         MutableText finalMessage = message.getContent().copy();
         String raw = message.getContent().getString();
 
-//        List<MentionTarget> players = List.of();
-//        if (config.mentionEnabled() && sender != null) {
-//            players = handleMentions(raw,sender);
-//            finalMessage = stylingManager.applyMention(
-//                    finalMessage,
-//                    players
-//            );
-//        }
+
 
         finalMessage = stylingManager.applyStylingRule(
                 finalMessage,

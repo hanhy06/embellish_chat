@@ -33,84 +33,80 @@ public class MentionProcessor implements ConfigListener {
 
     private Config config;
     private SoundEvent mentionSound;
-    private HashMap<String,List<MentionRule>> mentionRules;
+    private HashMap<String, List<MentionRule>> mentionRules;
     private MentionRegistry registries;
 
-    @Override
-    public void onConfigReload(Config newConfig) {
-        this.config = newConfig;
-        this.mentionSound =  SoundEvent.of(Identifier.tryParse(config.mentionSound()));
-        this.mentionRules = config.mentionRules();
-        this.registries = new MentionRegistry(newConfig,manager,scoreboard);
-    }
-
-    public MentionProcessor(StylingProcessor styler,PlayerManager manager, Scoreboard scoreboard) {
+    public MentionProcessor(StylingProcessor styler, PlayerManager manager, Scoreboard scoreboard) {
         this.manager = manager;
         this.scoreboard = scoreboard;
     }
 
-    public Set<Mention> handleMention(ServerPlayerEntity sender, String message, String key){
+    @Override
+    public void onConfigReload(Config newConfig) {
+        this.config = newConfig;
+        this.mentionSound = SoundEvent.of(Identifier.tryParse(config.mentionSound()));
+        this.mentionRules = config.mentionRules();
+        this.registries = new MentionRegistry(newConfig, manager, scoreboard);
+    }
+
+    public Set<Mention> handleMention(ServerPlayerEntity sender, String message, String key) {
         List<MentionRule> rules = mentionRules.get(key);
         Set<ServerPlayerEntity> targets = new HashSet<>();
         Set<Mention> mentions = new HashSet<>();
 
-        for (MentionRule rule : rules){
-            List<ParsedMention> parsedMentions = parsedMentions(message,rule.pattern());
+        for (MentionRule rule : rules) {
+            List<ParsedMention> parsedMentions = parsedMentions(message, rule.pattern());
             List<ParsedTarget> parsedTargets = parsedMentions.stream()
                     .map(parsedMention -> parsedTarget(sender, parsedMention.mention(), rule.mentionType()))
                     .toList();
-            targets.addAll(
-                    parsedTargets.stream().flatMap(parsedTarget -> parsedTarget.players().stream()).toList()
-            );
-            for (int i = 0 ; i<parsedTargets.size();i++){
+
+            targets.addAll(parsedTargets.stream()
+                    .flatMap(parsedTarget -> parsedTarget.players().stream())
+                    .toList());
+
+            for (int i = 0; i < parsedTargets.size(); i++) {
                 Mention mention = new Mention(
                         parsedMentions.get(i).begin(),
                         parsedMentions.get(i).end(),
                         Text.literal(parsedMentions.get(i).mention()).fillStyle(parsedTargets.get(i).style())
                 );
-
                 mentions.add(mention);
             }
         }
 
-        broadcastMentions(targets);
+        broadcastMentions(sender, targets);
         return mentions;
     }
 
-    private void broadcastMentions(Set<ServerPlayerEntity> players){
-        for (ServerPlayerEntity player : players){
-            player.playSoundToPlayer(
-                    mentionSound,
-                    SoundCategory.UI,
-                    1,
-                    config.mentionPitch()
-            );
+    private void broadcastMentions(ServerPlayerEntity sender, Set<ServerPlayerEntity> players) {
+        MutableText title = createTitle(sender);
+
+        for (ServerPlayerEntity player : players) {
+            player.sendMessage(title, true);
+            player.playSoundToPlayer(mentionSound, SoundCategory.UI, 1, config.mentionPitch());
         }
     }
 
-    private ParsedTarget parsedTarget(ServerPlayerEntity sender, String mention,MentionType mentionType){
-        Function<MentionParameter,ParsedTarget> function = registries.get(mentionType);
-        return function.apply(MentionParameter.of(
-                sender,mention
-        ));
+    private ParsedTarget parsedTarget(ServerPlayerEntity sender, String mention, MentionType mentionType) {
+        Function<MentionParameter, ParsedTarget> function = registries.get(mentionType);
+        return function.apply(MentionParameter.of(sender, mention));
     }
 
-    private List<ParsedMention> parsedMentions(String message, Pattern pattern){
+    private List<ParsedMention> parsedMentions(String message, Pattern pattern) {
         Matcher matcher = pattern.matcher(message);
         List<ParsedMention> mentions = new ArrayList<>();
 
-        while (matcher.find()){
+        while (matcher.find()) {
             ParsedMention mention = ParsedMention.of(
-                matcher.group(),matcher.start(),matcher.end()
+                    matcher.group(), matcher.start(), matcher.end()
             );
-
             mentions.add(mention);
         }
 
         return mentions;
     }
 
-    private MutableText createTitle(ServerPlayerEntity sender){
+    private MutableText createTitle(ServerPlayerEntity sender) {
         MutableText titleText = Text.empty();
         titleText.append(
                 Text.literal(config.mentionTitlePrefix()).styled(
@@ -119,7 +115,7 @@ public class MentionProcessor implements ConfigListener {
         );
         titleText.append(
                 sender.getName().copy().styled(
-                        style -> style.withBold(true).withColor(TeamColor.getPlayerColor(sender,0xffffff))
+                        style -> style.withBold(true).withColor(TeamColor.getPlayerColor(sender, 0xffffff))
                 )
         );
         titleText.append(
