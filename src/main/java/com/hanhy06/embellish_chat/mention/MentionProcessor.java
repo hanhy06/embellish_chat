@@ -52,39 +52,7 @@ public class MentionProcessor implements ConfigListener {
     }
 
     public Set<Mention> handleMention(ServerPlayerEntity sender, String message, String key) {
-        List<MentionRule> rules = mentionRules.get(key);
-        Set<ServerPlayerEntity> players = new HashSet<>();
-        Set<Mention> result = new HashSet<>();
-
-        for (MentionRule rule : rules) {
-            List<ParsedMention> mentions = parsedMentions(message, rule.pattern());
-            List<ParsedTarget> targets = mentions.stream()
-                    .map(parsedMention -> parsedTarget(sender, parsedMention.mention(), rule.mentionType()))
-                    .toList();
-
-            players.addAll(targets.stream()
-                    .flatMap(parsedTarget -> parsedTarget.players().stream())
-                    .toList());
-
-            for (int i = 0; i < targets.size(); i++) {
-                ParsedMention mention = mentions.get(i);
-                ParsedTarget target = targets.get(i);
-
-                MutableText text = Text.literal(mention.mention()).fillStyle(target.style());
-                text = styler.applyStyles(text,rule.styles());
-
-                result.add(
-                        new Mention(
-                                mention.begin(),
-                                mention.end(),
-                                text
-                        )
-                );
-            }
-        }
-
-        broadcastMentions(sender, players);
-        return result;
+            return Set.of();
     }
 
     private void broadcastMentions(ServerPlayerEntity sender, Set<ServerPlayerEntity> players) {
