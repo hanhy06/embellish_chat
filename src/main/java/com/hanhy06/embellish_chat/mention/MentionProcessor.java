@@ -75,7 +75,7 @@ public class MentionProcessor implements ConfigListener {
 
         while (matcher.find()) {
             ParsedMention mention = ParsedMention.of(
-                    matcher.group(), matcher.start(), matcher.end()
+                    matcher.group(1), matcher.start(), matcher.end()
             );
             mentions.add(mention);
         }
@@ -90,11 +90,7 @@ public class MentionProcessor implements ConfigListener {
                         style -> style.withBold(false).withColor(0xFFFFFF)
                 )
         );
-        titleText.append(
-                sender.getName().copy().styled(
-                        style -> style.withBold(true).withColor(TeamColor.getPlayerColor(sender, 0xffffff))
-                )
-        );
+        titleText.append(sender.getDisplayName());
         titleText.append(
                 Text.literal(config.mentionTitleSuffix()).styled(
                         style -> style.withBold(false).withColor(0xFFFFFF)
