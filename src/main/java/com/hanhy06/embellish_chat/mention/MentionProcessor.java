@@ -13,18 +13,13 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MentionProcessor implements ConfigListener {
-    private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_]{1,16})(?=\\b|$)");
-
     private final StylingProcessor styler;
     private final PlayerManager manager;
     private final Scoreboard scoreboard;
@@ -49,26 +44,38 @@ public class MentionProcessor implements ConfigListener {
     }
 
     public Set<Mention> handleMention(ServerPlayerEntity sender, String message, String key) {
-        Set<Mention> result = new HashSet<>();
         Set<ServerPlayerEntity> players = new HashSet<>();
+        Set<ParsedMention> parsedMentions = parseMentions(message, key);
+        Map<String, ParsedTarget> parsedTargets = parseTargets(sender, parsedMentions);
 
+        parsedTargets.values().forEach(target -> players.addAll(target.players()));
+        broadcastMentions(sender, players);
+
+        return new HashSet<>();
+    }
+
+    private Set<ParsedMention> parseMentions(String message, String key) {
         Set<ParsedMention> parsedMentions = new HashSet<>();
-        for (MentionRule rule : mentionRules.get(key)){
-                parsedMentions.addAll(parsedMention(rule,message)) ;
+        List<MentionRule> rules = mentionRules.get(key);
+
+        if (rules != null) {
+            for (MentionRule rule : rules) {
+                parsedMentions.addAll(parseMention(rule, message));
+            }
         }
 
-        HashMap<String ,ParsedTarget> parsedTargets = new HashMap<>();
-        for (ParsedMention mention : parsedMentions){
-            ParsedTarget target = parsedTarget(sender,mention.rule().mentions(), mention.mention());
-            parsedTargets.put(
-                    mention.mention(),
-                    target
-            );
-            players.addAll(target.players());
+        return parsedMentions;
+    }
+
+    private Map<String, ParsedTarget> parseTargets(ServerPlayerEntity sender, Set<ParsedMention> parsedMentions) {
+        Map<String, ParsedTarget> parsedTargets = new HashMap<>();
+
+        for (ParsedMention mention : parsedMentions) {
+            ParsedTarget target = parseTarget(sender, mention.rule().mentions(), mention.mention());
+            parsedTargets.put(mention.mention(), target);
         }
 
-        broadcastMentions(sender,players);
-        return result;
+        return parsedTargets;
     }
 
     private void broadcastMentions(ServerPlayerEntity sender, Set<ServerPlayerEntity> players) {
@@ -80,54 +87,44 @@ public class MentionProcessor implements ConfigListener {
         }
     }
 
-    private ParsedTarget parsedTarget(ServerPlayerEntity sender, List<MentionAction> actions,String mention) {
+    private ParsedTarget parseTarget(ServerPlayerEntity sender, List<MentionAction> actions, String mention) {
         List<ParsedTarget> targets = new ArrayList<>();
 
-        for (MentionAction action : actions){
-            String option = action.preset();
-            if (option.isBlank()) option = mention;
-
-            ParsedTarget target = registries.get(action.mentionType()).apply(
-                    MentionParameter.of(sender,option)
-            );
-
+        for (MentionAction action : actions) {
+            String option = action.preset().isBlank() ? mention : action.preset();
+            ParsedTarget target = registries.get(action.mentionType())
+                    .apply(MentionParameter.of(sender, option));
             targets.add(target);
         }
 
-        for (ParsedTarget target : targets){
-            targets.getFirst().players().retainAll(target.players());
+        if (!targets.isEmpty()) {
+            ParsedTarget first = targets.getFirst();
+            for (int i = 1; i < targets.size(); i++) {
+                first.players().retainAll(targets.get(i).players());
+            }
+            return first;
         }
 
-        return targets.getFirst();
+//        return ParsedTarget.of(null,null,null);
     }
 
-    private List<ParsedMention> parsedMention(MentionRule rule, String message) {
+    private List<ParsedMention> parseMention(MentionRule rule, String message) {
         Matcher matcher = rule.pattern().matcher(message);
         List<ParsedMention> mentions = new ArrayList<>();
 
         while (matcher.find()) {
-            ParsedMention mention = ParsedMention.of(
-                    rule, matcher.group(1), matcher.start(), matcher.end()
-            );
-            mentions.add(mention);
+            mentions.add(ParsedMention.of(rule, matcher.group(1), matcher.start(), matcher.end()));
         }
 
         return mentions;
     }
 
     private MutableText createTitle(ServerPlayerEntity sender) {
-        MutableText titleText = Text.empty();
-        titleText.append(
-                Text.literal(config.mentionTitlePrefix()).styled(
-                        style -> style.withBold(false).withColor(0xFFFFFF)
-                )
-        );
-        titleText.append(sender.getDisplayName());
-        titleText.append(
-                Text.literal(config.mentionTitleSuffix()).styled(
-                        style -> style.withBold(false).withColor(0xFFFFFF)
-                )
-        );
-        return titleText;
+        return Text.empty()
+                .append(Text.literal(config.mentionTitlePrefix())
+                        .styled(style -> style.withBold(false).withColor(0xFFFFFF)))
+                .append(sender.getDisplayName())
+                .append(Text.literal(config.mentionTitleSuffix())
+                        .styled(style -> style.withBold(false).withColor(0xFFFFFF)));
     }
 }
