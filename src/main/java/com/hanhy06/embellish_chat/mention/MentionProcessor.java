@@ -46,9 +46,9 @@ public class MentionProcessor implements ConfigListener {
     public Set<Mention> handleMention(ServerPlayerEntity sender, String message, String key) {
         Set<ServerPlayerEntity> players = new HashSet<>();
         Set<ParsedMention> parsedMentions = parseMentions(message, key);
-        Map<String, ParsedTarget> parsedTargets = parseTargets(sender, parsedMentions);
+        Set<ParsedTarget> parsedTargets = parseTargets(sender, parsedMentions);
 
-        parsedTargets.values().forEach(target -> players.addAll(target.players()));
+        parsedTargets.forEach(target -> players.addAll(target.players()));
         broadcastMentions(sender, players);
 
         return new HashSet<>();
@@ -65,12 +65,12 @@ public class MentionProcessor implements ConfigListener {
         return parsedMentions;
     }
 
-    private Map<String, ParsedTarget> parseTargets(ServerPlayerEntity sender, Set<ParsedMention> parsedMentions) {
-        Map<String, ParsedTarget> parsedTargets = new HashMap<>();
+    private Set<ParsedTarget> parseTargets(ServerPlayerEntity sender, Set<ParsedMention> parsedMentions) {
+        Set<ParsedTarget> parsedTargets = new HashSet<>();
 
         for (ParsedMention mention : parsedMentions) {
             ParsedTarget target = parseTarget(sender, mention.rule().mentions(), mention.mention());
-            parsedTargets.put(mention.mention(), target);
+            parsedTargets.add(target);
         }
 
         return parsedTargets;
