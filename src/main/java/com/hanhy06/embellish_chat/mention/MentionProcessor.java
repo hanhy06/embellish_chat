@@ -58,10 +58,8 @@ public class MentionProcessor implements ConfigListener {
         Set<ParsedMention> parsedMentions = new HashSet<>();
         List<MentionRule> rules = mentionRules.get(key);
 
-        if (rules != null) {
-            for (MentionRule rule : rules) {
-                parsedMentions.addAll(parseMention(rule, message));
-            }
+        for (MentionRule rule : rules) {
+            parsedMentions.addAll(parseMention(rule, message));
         }
 
         return parsedMentions;
@@ -97,15 +95,11 @@ public class MentionProcessor implements ConfigListener {
             targets.add(target);
         }
 
-        if (!targets.isEmpty()) {
-            ParsedTarget first = targets.getFirst();
-            for (int i = 1; i < targets.size(); i++) {
-                first.players().retainAll(targets.get(i).players());
-            }
-            return first;
+        ParsedTarget first = targets.getFirst();
+        for (ParsedTarget target : targets) {
+            first.players().retainAll(target.players());
         }
-
-//        return ParsedTarget.of(null,null,null);
+        return first;
     }
 
     private List<ParsedMention> parseMention(MentionRule rule, String message) {
