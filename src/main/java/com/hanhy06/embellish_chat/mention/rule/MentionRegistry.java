@@ -31,7 +31,7 @@ public class MentionRegistry {
         this.mentionStyle = Style.EMPTY.withBold(true).withColor(config.mentionColor());
         this.registries = new EnumMap<>(Map.ofEntries(
                 entry(MentionType.EVERYONE,this::EVERYONE),
-                entry(MentionType.HERE,this::HERE),
+                entry(MentionType.HERE,this::INSIDE),
                 entry(MentionType.TEAM,this::TEAM),
                 entry(MentionType.OUTSIDE,this::OUTSIDE),
                 entry(MentionType.PLAYER,this::PLAYER),
@@ -50,7 +50,7 @@ public class MentionRegistry {
         );
     }
 
-    private ParsedTarget HERE(MentionParameter parameter){
+    private ParsedTarget INSIDE(MentionParameter parameter){
         return ParsedTarget.of(
                 PlayerLookup.around(
                         parameter.sender().getEntityWorld(),

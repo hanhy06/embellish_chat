@@ -148,6 +148,7 @@ public class StyleRegistry {
         return text.fillStyle(Style.EMPTY.withStrikethrough(true));
     }
 
+    //TODO: REPLACE MASK UPPER LOWER 이 기존 스타일을 유지하도록 바꿀것
     public MutableText REPLACE(MutableText text, String option){
         return Text.of(option).copy();
     }

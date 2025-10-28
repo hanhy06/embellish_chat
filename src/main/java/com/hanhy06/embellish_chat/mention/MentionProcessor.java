@@ -43,6 +43,10 @@ public class MentionProcessor implements ConfigListener {
         this.registries = new MentionRegistry(newConfig, manager, scoreboard);
     }
 
+    //TODO: 각 Parsed는 자기의 상위 데이터를 가져서 계층 구조를 명확히 할것
+    //TODO: ParsedMention 이 MentionRule 를 ParsedTarget이 ParsedMention을
+    //TODO: ParsedTarget.createMention을 만들어서 한번에 맨션데이터를 만들도록 할것
+    //TODO: 스타일링을 온전히 MessageProcessor 에게 위임할것
     public Set<Mention> handleMention(ServerPlayerEntity sender, String message, String key) {
         Set<ServerPlayerEntity> players = new HashSet<>();
         Set<ParsedMention> parsedMentions = parseMentions(message, key);
