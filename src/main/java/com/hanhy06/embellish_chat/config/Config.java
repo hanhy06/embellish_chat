@@ -11,22 +11,21 @@ import java.util.*;
 import static java.util.Map.entry;
 
 public record Config(
-        //style
+        //Rules
         //TODO: 나중에 LuckPerms쓸때 각 그룹이 어떤 스타일링을 할지 그룹 이름이 키로 써야함
         HashMap<String,List<StylingRule>> stylingRules,
+        HashMap<String,List<MentionRule>> mentionRules,
 
         //styling preset
         int urlColor,
         HashMap<String, Integer> colorPreset,
         String delimiter,
 
-        //mention
+        //mention preset
         //TODO: 맨션 타입을 기존 team 에서 TEAM_SELF 와 TEAM_OTHER 로 분리 그리고 LuckPerms 와 통합을 위해 LUCK_PERMS_GROUP 추가
         //TODO: 하나의 MentionRule 이 여러개의 맨션 타입을 갖을수 있게 즉 두번 ServerPlayerEntity를 갖고와서 두개의 리스트에 포함된
         //플레이어를 호출 가능하도록 할것 ex 우리팀 사람중 근쳐 32블럭 안에 있는 사람
-        HashMap<String,List<MentionRule>> mentionRules,
         Integer mentionColor,
-        boolean offlineColorEnabled,
         String mentionSound,
         float mentionPitch,
         String mentionTitlePrefix,
@@ -141,6 +140,9 @@ public record Config(
                                 )
                         )
                 )),
+                new HashMap<>(Map.ofEntries(
+
+                )),
 
                 //styling preset
                 0x0000EE,
@@ -165,11 +167,7 @@ public record Config(
                 "-",
 
                 //mention
-                new HashMap<>(Map.ofEntries(
-
-                )),
                 0xff55ff,
-                true,
                 "minecraft:entity.experience_orb.pickup",
                 1.75f,
                 "",

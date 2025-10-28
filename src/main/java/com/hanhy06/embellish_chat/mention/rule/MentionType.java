@@ -2,9 +2,9 @@ package com.hanhy06.embellish_chat.mention.rule;
 
 public enum MentionType {
     PLAYER,
-    TEAM_SELF,
-    TEAM_OTHER,
+    TEAM,
     HERE,
+    OUTSIDE,
     EVERYONE,
     LUCK_PERMS_GROUP
 }

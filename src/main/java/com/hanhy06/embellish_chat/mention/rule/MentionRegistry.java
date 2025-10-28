@@ -2,6 +2,7 @@ package com.hanhy06.embellish_chat.mention.rule;
 
 import com.hanhy06.embellish_chat.config.Config;
 import com.hanhy06.embellish_chat.mention.data.ParsedTarget;
+import com.hanhy06.embellish_chat.util.TeamColor;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.Team;
@@ -9,10 +10,7 @@ import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Style;
 
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 
 import static java.util.Map.entry;
@@ -20,19 +18,22 @@ import static java.util.Map.entry;
 public class MentionRegistry {
     private final PlayerManager manager;
     private final Scoreboard scoreboard;
+
+    private final Config config;
     private final Style mentionStyle;
     private final EnumMap<MentionType, Function<MentionParameter,ParsedTarget>> registries;
 
     public MentionRegistry(Config config, PlayerManager manager, Scoreboard scoreboard) {
         this.manager = manager;
         this.scoreboard = scoreboard;
-        this.mentionStyle = Style.EMPTY.withBold(true).withColor(config.mentionColor());
 
+        this.config = config;
+        this.mentionStyle = Style.EMPTY.withBold(true).withColor(config.mentionColor());
         this.registries = new EnumMap<>(Map.ofEntries(
                 entry(MentionType.EVERYONE,this::EVERYONE),
                 entry(MentionType.HERE,this::HERE),
-                entry(MentionType.TEAM_SELF,this::TEAM_SELF),
-                entry(MentionType.TEAM_OTHER,this::TEAM_OTHER),
+                entry(MentionType.TEAM,this::TEAM),
+                entry(MentionType.OUTSIDE,this::OUTSIDE),
                 entry(MentionType.PLAYER,this::PLAYER),
                 entry(MentionType.LUCK_PERMS_GROUP,this::LUCK_PERMS_GROUP)
         ));
@@ -60,7 +61,22 @@ public class MentionRegistry {
         );
     }
 
-    private ParsedTarget TEAM_SELF(MentionParameter parameter){
+    private ParsedTarget OUTSIDE(MentionParameter parameter){
+        Collection<ServerPlayerEntity> insides = PlayerLookup.around(
+                parameter.sender().getEntityWorld(),
+                parameter.sender().getEntityPos(),
+                Float.parseFloat(parameter.mention())
+        );
+        List<ServerPlayerEntity> outsides = manager.getPlayerList();
+        outsides.removeAll(insides);
+
+        return ParsedTarget.of(
+                outsides,
+                mentionStyle
+        );
+    }
+
+    private ParsedTarget TEAM(MentionParameter parameter){
         Team team = parameter.sender().getScoreboardTeam();
 
         if (team != null){
@@ -81,26 +97,6 @@ public class MentionRegistry {
         }
     }
 
-    private ParsedTarget TEAM_OTHER(MentionParameter parameter){
-        Team team = scoreboard.getTeam(parameter.mention());
-
-        if (team != null){
-            return ParsedTarget.of(
-                    team
-                            .getPlayerList()
-                            .stream()
-                            .map(manager::getPlayer)
-                            .filter(Objects::nonNull)
-                            .toList(),
-                    team.getDisplayName().getStyle()
-            );
-        }else {
-            return ParsedTarget.of(
-                    List.of(),
-                    mentionStyle
-            );
-        }
-    }
 
     private ParsedTarget PLAYER(MentionParameter parameter){
         ServerPlayerEntity target = manager.getPlayer(parameter.mention());
@@ -114,7 +110,13 @@ public class MentionRegistry {
         }else {
             return ParsedTarget.of(
                     List.of(),
-                    mentionStyle
+                    mentionStyle.withColor(
+                            TeamColor.getPlayerColor(
+                                    scoreboard,
+                                    parameter.mention(),
+                                    config.mentionColor()
+                                    )
+                    )
             );
         }
     }
