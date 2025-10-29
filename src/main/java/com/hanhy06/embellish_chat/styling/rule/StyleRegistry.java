@@ -52,6 +52,8 @@ public class StyleRegistry {
         return registers.get(styleType);
     }
 
+    //TODO: 모든 타입을 StyleParameter를 받게 하고 sender로 소리를 재생하는등 새 타입들을 추가하것
+
     public static MutableText MENTION(MutableText text, Set<Mention> targets){
         Runs runs = flatten(text);
         MutableText result = Text.empty();
@@ -148,23 +150,22 @@ public class StyleRegistry {
         return text.fillStyle(Style.EMPTY.withStrikethrough(true));
     }
 
-    //TODO: REPLACE MASK UPPER LOWER 이 기존 스타일을 유지하도록 바꿀것
     public MutableText REPLACE(MutableText text, String option){
-        return Text.of(option).copy();
+        return Text.of(option).copy().fillStyle(text.getStyle());
     }
 
     public MutableText MASK(MutableText text, String option){
         int length = text.getString().length();
-        return Text.of(option.repeat(length)).copy();
+        return Text.of(option.repeat(length)).copy().fillStyle(text.getStyle());
     }
 
     public MutableText UPPER(MutableText text, String option){
         String string = text.getString();
-        return Text.of(string.toUpperCase()).copy();
+        return Text.of(string.toUpperCase()).copy().fillStyle(text.getStyle());
     }
 
     public MutableText LOWER(MutableText text, String option){
         String string = text.getString();
-        return Text.of(string.toLowerCase()).copy();
+        return Text.of(string.toLowerCase()).copy().fillStyle(text.getStyle());
     }
 }

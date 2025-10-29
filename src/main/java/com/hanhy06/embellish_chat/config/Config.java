@@ -42,47 +42,47 @@ public record Config(
                         entry("chat",
                                 List.of(
                                         StylingRule.of(
-                                                "(?<!\\\\)\\*\\*(.+?)\\*\\*()",
+                                                "\\*\\*(.+?)\\*\\*()",
                                                 List.of(StyleAction.of(StyleType.BOLD,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)__(.+?)__()",
+                                                "__(.+?)__()",
                                                 List.of(StyleAction.of(StyleType.UNDERLINE,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)_(.+?)_()",
+                                                "_(.+?)_()",
                                                 List.of(StyleAction.of(StyleType.ITALIC,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)~~(.+?)~~()",
+                                                "~~(.+?)~~()",
                                                 List.of(StyleAction.of(StyleType.STRIKETHROUGH,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)\\|\\|(.+?)\\|\\|()",
+                                                "\\|\\|(.+?)\\|\\|()",
                                                 List.of(StyleAction.of(StyleType.OBFUSCATED,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)",
+                                                "\\[(.+?)]\\((.*?))",
                                                 List.of(StyleAction.of(StyleType.URL,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)\\[(.+?)]\\{([^}]+?)}",
+                                                "\\[(.+?)]\\{(.*?)}",
                                                 List.of(StyleAction.of(StyleType.FONT,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)\\[(.+?)]<(#[A-Fa-f0-9]{6})>",
+                                                "\\[(.+?)]<(#[A-Fa-f0-9]{6})>",
                                                 List.of(StyleAction.of(StyleType.COLOR_HEX,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)\\[(.+?)]<SD:(#[A-Fa-f0-9]{6})>",
+                                                "\\[(.+?)]<SD:(#[A-Fa-f0-9]{6})>",
                                                 List.of(StyleAction.of(StyleType.COLOR_SHADOW,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)\\[(.+?)]<([a-z\\s]+?)>",
+                                                "\\[(.+?)]<([a-z\\s]+?)>",
                                                 List.of(StyleAction.of(StyleType.COLOR_PRESET,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)\\[(.+?)]<(RAINBOW)>",
+                                                "\\[(.+?)]<(RAINBOW)>",
                                                 List.of(StyleAction.of(StyleType.COLOR_RAINBOW,"0.7"))
                                         ),
                                         StylingRule.of(
@@ -94,48 +94,52 @@ public record Config(
                         entry("command",
                                 List.of(
                                         StylingRule.of(
-                                                "(?<!\\\\)\\*\\*(.+?)\\*\\*()",
+                                                "\\*\\*(.+?)\\*\\*()",
                                                 List.of(StyleAction.of(StyleType.BOLD,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)__(.+?)__()",
+                                                "__(.+?)__()",
                                                 List.of(StyleAction.of(StyleType.UNDERLINE,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)_(.+?)_()",
+                                                "_(.+?)_()",
                                                 List.of(StyleAction.of(StyleType.ITALIC,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)~~(.+?)~~()",
+                                                "~~(.+?)~~()",
                                                 List.of(StyleAction.of(StyleType.STRIKETHROUGH,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)\\|\\|(.+?)\\|\\|()",
+                                                "\\|\\|(.+?)\\|\\|()",
                                                 List.of(StyleAction.of(StyleType.OBFUSCATED,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<![\\\\!])\\[(.+?)]\\((https://[^\\s)]+?)\\)",
+                                                "\\[(.+?)]\\((.*?))",
                                                 List.of(StyleAction.of(StyleType.URL,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)\\[(.+?)]\\{([^}]+?)}",
+                                                "\\[(.+?)]\\{(.*?)}",
                                                 List.of(StyleAction.of(StyleType.FONT,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)\\[(.+?)]<(#[A-Fa-f0-9]{6})>",
+                                                "\\[(.+?)]<(#[A-Fa-f0-9]{6})>",
                                                 List.of(StyleAction.of(StyleType.COLOR_HEX,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)\\[(.+?)]<SD:(#[A-Fa-f0-9]{6})>",
+                                                "\\[(.+?)]<SD:(#[A-Fa-f0-9]{6})>",
                                                 List.of(StyleAction.of(StyleType.COLOR_SHADOW,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)\\[(.+?)]<([a-z\\s]+?)>",
+                                                "\\[(.+?)]<([a-z\\s]+?)>",
                                                 List.of(StyleAction.of(StyleType.COLOR_PRESET,""))
                                         ),
                                         StylingRule.of(
-                                                "(?<!\\\\)\\[(.+?)]<(RAINBOW)>",
+                                                "\\[(.+?)]<(RAINBOW)>",
                                                 List.of(StyleAction.of(StyleType.COLOR_RAINBOW,"0.7"))
+                                        ),
+                                        StylingRule.of(
+                                                "(.+)()",
+                                                List.of(StyleAction.of(StyleType.METADATA,""))
                                         )
                                 )
                         )

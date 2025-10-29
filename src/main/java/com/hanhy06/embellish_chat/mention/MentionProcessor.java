@@ -47,15 +47,15 @@ public class MentionProcessor implements ConfigListener {
     //TODO: ParsedMention 이 MentionRule 를 ParsedTarget이 ParsedMention을
     //TODO: ParsedTarget.createMention을 만들어서 한번에 맨션데이터를 만들도록 할것
     //TODO: 스타일링을 온전히 MessageProcessor 에게 위임할것
-    public Set<Mention> handleMention(ServerPlayerEntity sender, String message, String key) {
+    public List<Mention> handleMention(ServerPlayerEntity sender, String message, String key) {
         Set<ServerPlayerEntity> players = new HashSet<>();
         Set<ParsedMention> parsedMentions = parseMentions(message, key);
-        Set<ParsedTarget> parsedTargets = parseTargets(sender, parsedMentions);
+        List<ParsedTarget> parsedTargets = parseTargets(sender, parsedMentions);
 
         parsedTargets.forEach(target -> players.addAll(target.players()));
         broadcastMentions(sender, players);
 
-        return new HashSet<>();
+        return parsedTargets.stream().map(ParsedTarget::createMention).toList();
     }
 
     private Set<ParsedMention> parseMentions(String message, String key) {
@@ -69,34 +69,42 @@ public class MentionProcessor implements ConfigListener {
         return parsedMentions;
     }
 
-    private Set<ParsedTarget> parseTargets(ServerPlayerEntity sender, Set<ParsedMention> parsedMentions) {
-        Set<ParsedTarget> parsedTargets = new HashSet<>();
+    private List<ParsedMention> parseMention(MentionRule rule, String message) {
+        Matcher matcher = rule.pattern().matcher(message);
+        List<ParsedMention> mentions = new ArrayList<>();
+
+        while (matcher.find()) {
+            List<String> mention = List.of(matcher.group(1).split(config.delimiter()));
+            mentions.add(ParsedMention.of(rule, mention, matcher.start(), matcher.end()));
+        }
+
+        return mentions;
+    }
+
+    private List<ParsedTarget> parseTargets(ServerPlayerEntity sender, Set<ParsedMention> parsedMentions) {
+        List<ParsedTarget> parsedTargets = new ArrayList<>();
 
         for (ParsedMention mention : parsedMentions) {
-            ParsedTarget target = parseTarget(sender, mention.rule().mentions(), mention.mention());
+            ParsedTarget target = parseTarget(sender, mention.rule().mentions(), mention.mentions());
             parsedTargets.add(target);
         }
 
         return parsedTargets;
     }
 
-    private void broadcastMentions(ServerPlayerEntity sender, Set<ServerPlayerEntity> players) {
-        MutableText title = createTitle(sender);
-
-        for (ServerPlayerEntity player : players) {
-            player.sendMessage(title, true);
-            player.playSoundToPlayer(mentionSound, SoundCategory.UI, 1, config.mentionPitch());
-        }
-    }
-
-    private ParsedTarget parseTarget(ServerPlayerEntity sender, List<MentionAction> actions, String mention) {
+    private ParsedTarget parseTarget(ServerPlayerEntity sender, List<MentionAction> actions, List<String> mentions) {
         List<ParsedTarget> targets = new ArrayList<>();
 
+        int index = 0;
         for (MentionAction action : actions) {
-            String option = action.preset().isBlank() ? mention : action.preset();
+            String option = action.preset();
+            if (option.isBlank() && index< mentions.size()){
+                option = mentions.get(index);
+            }
             ParsedTarget target = registries.get(action.mentionType())
                     .apply(MentionParameter.of(sender, option));
             targets.add(target);
+            index++;
         }
 
         ParsedTarget first = targets.getFirst();
@@ -106,15 +114,13 @@ public class MentionProcessor implements ConfigListener {
         return first;
     }
 
-    private List<ParsedMention> parseMention(MentionRule rule, String message) {
-        Matcher matcher = rule.pattern().matcher(message);
-        List<ParsedMention> mentions = new ArrayList<>();
+    private void broadcastMentions(ServerPlayerEntity sender, Set<ServerPlayerEntity> players) {
+        MutableText title = createTitle(sender);
 
-        while (matcher.find()) {
-            mentions.add(ParsedMention.of(rule, matcher.group(1), matcher.start(), matcher.end()));
+        for (ServerPlayerEntity player : players) {
+            player.sendMessage(title, true);
+            player.playSoundToPlayer(mentionSound, SoundCategory.UI, 1, config.mentionPitch());
         }
-
-        return mentions;
     }
 
     private MutableText createTitle(ServerPlayerEntity sender) {

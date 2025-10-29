@@ -1,19 +1,9 @@
 package com.hanhy06.embellish_chat.mention.data;
 
+import com.hanhy06.embellish_chat.styling.rule.StyleAction;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 
-public record Mention(
-        int begin, int end, MutableText text
-){
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof Mention other)) return false;
-        return this.begin == other.begin && this.end == other.end;
-    }
+import java.util.List;
 
-    @Override
-    public int hashCode() {
-        return 31 * begin + end;
-    }
-}
+public record Mention(int begin, int end, List<StyleAction> styles, Style style){ }

@@ -2,11 +2,12 @@ package com.hanhy06.embellish_chat.mention.data;
 
 import com.hanhy06.embellish_chat.mention.rule.MentionRule;
 
+import java.util.List;
 import java.util.Objects;
 
-public record ParsedMention(MentionRule rule, String mention, int begin, int end){
-    public static ParsedMention of(MentionRule rule, String mention, int begin, int end){
-        return new ParsedMention(rule,mention,begin,end);
+public record ParsedMention(MentionRule rule, List<String> mentions, int begin, int end){
+    public static ParsedMention of(MentionRule rule, List<String> mentions, int begin, int end){
+        return new ParsedMention(rule,mentions,begin,end);
     }
 
     @Override
