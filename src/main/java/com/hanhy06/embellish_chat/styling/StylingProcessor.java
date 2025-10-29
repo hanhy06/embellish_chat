@@ -38,7 +38,7 @@ public class StylingProcessor implements ConfigListener {
     }
 
     public MutableText applyStylingRule(MutableText text, String key){
-        if (text.getString().isBlank()) return text;
+        if (text.getString().isBlank() || !stylingRules.containsKey(key)) return text;
 
         MutableText result = text;
         for (StylingRule style : stylingRules.get(key)){

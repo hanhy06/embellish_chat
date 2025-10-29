@@ -44,6 +44,8 @@ public class MentionProcessor implements ConfigListener {
     }
 
     public List<Mention> handleMention(ServerPlayerEntity sender, String message, String key) {
+        if (!mentionRules.containsKey(key)) return new ArrayList<>();
+
         Set<ServerPlayerEntity> players = new HashSet<>();
         Set<ParsedMention> parsedMentions = parseMentions(message, key);
         List<ParsedTarget> parsedTargets = parseTargets(sender, parsedMentions);
