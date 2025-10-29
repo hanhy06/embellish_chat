@@ -72,18 +72,26 @@ The configuration file is located at: `config/embellish_chat.json`.
 
 ```
 {
-  //style
+  //rules
   "stylingRules": {
     "command": [
       {
-        "pattern": "(?<!\\\\)\\*\\*(.+?)\\*\\*()",
-        "styleType": "BOLD",
-        "option": ""
+        "pattern": "\\*\\*(.+?)\\*\\*()",
+        "actions": [
+          {
+            "styleType": "BOLD",
+            "preset": ""
+          }
+        ]
       },
       {
-        "pattern": "(?<!\\\\)__(.+?)__()",
-        "styleType": "UNDERLINE",
-        "option": ""
+        "pattern": "__(.+?)__()",
+        "actions": [
+          {
+            "styleType": "UNDERLINE",
+            "preset": ""
+          }
+        ]
       },
       ...
     ],
@@ -91,26 +99,55 @@ The configuration file is located at: `config/embellish_chat.json`.
       ...
     ]
   },
+  "mentionRules": {
+    "mention": [
+      {
+        "pattern": "@here()",
+        "mentions": [
+          {
+            "mentionType": "HERE",
+            "preset": ""
+          }
+        ],
+        "styles": [
+          {
+            "styleType": "BOLD",
+            "preset": ""
+          }
+        ]
+      },
+      ...
+    ]
+  },
+  
+  //preset
   "urlColor": "0x0000EE",
   "colorPreset": {
     "dark green": "0x00AA00",
     "green": "0x55FF55",
-    ...
+    "yellow": "0xFFFF55",
+    "black": "0x000000",
+    "dark red": "0xAA0000",
+    "dark purple": "0xAA00AA",
+    "light purple": "0xFF55FF",
+    "dark gray": "0x555555",
+    "red": "0xFF5555",
+    "gold": "0xFFAA00",
+    "aqua": "0x55FFFF",
+    "gray": "0xAAAAAA",
+    "white": "0xFFFFFF",
+    "blue": "0x5555FF",
+    "dark aqua": "0x00AAAA",
+    "dark blue": "0x0000AA"
   },
-  
-  //mention
-  "mentionEnabled": true,
-  "groupMentionOpOnly": true,
-  "offlineColorEnabled": true,
-  "mentionColor": "0xFFFF55",
-  "groupMentionColor": "0xAAAAFF",
+  "delimiter": "-",
+  "mentionColor": "0xFF55FF",
   "mentionSound": "minecraft:entity.experience_orb.pickup",
   "mentionPitch": 1.75,
   "mentionTitlePrefix": "",
   "mentionTitleSuffix": " mentioned you",
-  "hereRadius": 64.0,
-  
-  //banned player list
+ 
+  //baned player list
   "bannedPlayerList": []
 }
 ```
@@ -126,13 +163,17 @@ Furthermore, creating custom rules can be challenging because Regex itself is in
 ### Rule Structure
 
 Defines the text styling rules.<br>
-Each rule consists of a regular expression (`pattern`), a style type (`styleType`), and an option (`option`).
+Each rule consists of a regular expression (`pattern`) and style action list(`actions`).
 
 ```
 {
-    "pattern": "(?<!\\\\)\\*\\*(.+?)\\*\\*()",
-    "styleType": "BOLD",
-    "option": ""
+    "pattern": "\\*\\*(.+?)\\*\\*()",
+    "actions": [
+        {
+            "styleType": "BOLD",
+            "preset": ""
+        }
+    ]
 }
 ```
 
@@ -141,43 +182,31 @@ Each rule consists of a regular expression (`pattern`), a style type (`styleType
   1 the text to apply the style to,<br>
   2 an optional captured value that can be passed as an argument.
 
-* **styleType**
-  Specifies the type of style to apply (see the list below).
+* **actions**
+  This is a list of style actions.
+  Each action consists of a style type (`styleType`) and style option preset(`preset`).
 
-* **option**
-  A constant-like global option that can override dynamic behavior.
-  If empty, the captured **group 2** from the regex is used instead.
-
-### Global Style Configuration
-
-```
-{
-    "pattern": "(.+)()",
-    "styleType": "COLOR_HEX",
-    "option": "#FFAAAA"
-}
-```
-
-You can define a global style by capturing the entire text and assigning a fixed option value.
-For example, to make all text a specific color, capture all text and set a color in the option field.
 
 ### Available Style Types
 
-| Type            | Description                                                                                                                |
-| --------------- |----------------------------------------------------------------------------------------------------------------------------|
-| `METADATA`      | When the mouse hovers over the text, display the time the server received it, and when clicked, copy it to the clipboard.  |
-| `COLOR_HEX`     | Applies the color specified by the HEX code provided as an option.                                                         |
-| `COLOR_RAINBOW` | Cycles through rainbow colors                                                                                              |
-| `COLOR_PRESET`  | Uses a predefined color name from the `colorPreset` section                                                                |
-| `COLOR_SHADOW`  | Applies the HEX code color provided as an option to the shadow.                                                            |
-| `FONT`          | Changes the font style                                                                                                     |
-| `URL`           | Allows opening the URL provided as an option when clicked.                                                                 |
-| `BOLD`          | Bold text (**text**)                                                                                                       |
-| `ITALIC`        | Italic text (*text*)                                                                                                       |
-| `UNDERLINE`     | Underlined text (**text**)                                                                                                 |
-| `STRIKETHROUGH` | Strikethrough text (~~text~~)                                                                                              |
-| `OBFUSCATED`    | Applies Minecraft style obfuscation to make the text unreadable.                                                           |
-
+| Type            | Description                                                                                                               | Option                   |
+|-----------------|---------------------------------------------------------------------------------------------------------------------------|--------------------------|
+| `METADATA`      | When the mouse hovers over the text, display the time the server received it, and when clicked, copy it to the clipboard. | No options are required  |
+| `COLOR_HEX`     | Applies the color specified by the HEX code provided as an option.                                                        | HEX code                 |
+| `COLOR_RAINBOW` | Cycles through rainbow colors                                                                                             | saturation               |
+| `COLOR_PRESET`  | Uses a predefined color name from the `colorPreset` section                                                               | color preset             |
+| `COLOR_SHADOW`  | Applies the HEX code color provided as an option to the shadow.                                                           | HEX code                 |
+| `FONT`          | Changes the font style                                                                                                    | font id                  |
+| `URL`           | Allows opening the URL provided as an option when clicked.                                                                | url                      |
+| `BOLD`          | Bold text                                                                                                                 | No options are required  |
+| `ITALIC`        | Italic text                                                                                                               | No options are required  |
+| `UNDERLINE`     | Underlined text                                                                                                           | No options are required  |
+| `STRIKETHROUGH` | Strikethrough text                                                                                                        | No options are required  |
+| `OBFUSCATED`    | Applies Minecraft style obfuscation to make the text unreadable.                                                          | No options are required  |
+| `REPLACE`       | Replaces the matched text using the provided option string while preserving the original style.                           | Replacement string       |
+| `MASK`          | Replaces the original string with the characters supplied via options, adjusting to match the original length.            | Replacement character    |
+| `UPPER`         | Transforms every matched substring into uppercase characters.                                                             | No options are required  |
+| `LOWER`         | Transforms every matched substring into lowercase characters.                                                             | No options are required  |
 ---
 
 ## 📊 TPS Latency Test
@@ -215,6 +244,3 @@ Please download the mod from the official sources below to ensure you have the l
 ## ✨ Feedback & Support
 
 Found a bug or have a feature request? Please open an issue or reach out on the project’s Discord server.
-
-In version 2.1.0, we plan to add support for applying multiple StyleTypes to a single StyleRule, as well as integration with the LuckPerms API.
-If you’d like to be the first to know about updates, please click the heart icon on Modrinth!
