@@ -11,7 +11,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 public class MessageProcessor implements ConfigListener {
@@ -45,7 +44,11 @@ public class MessageProcessor implements ConfigListener {
         MutableText textMessage = message.getContent().copy();
         String stringMessage = message.getContent().getString();
 
-        List<Mention> mentions = mentionProcessor.handleMention(sender,stringMessage,"mention");
+        List<Mention> mentions = mentionProcessor.handleMention(
+                sender,
+                stringMessage,
+                "mention"
+        );
 
         textMessage = stylingManager.applyMention(textMessage,mentions);
         textMessage = stylingManager.applyStylingRule(

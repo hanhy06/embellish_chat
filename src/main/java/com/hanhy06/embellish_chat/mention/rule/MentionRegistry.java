@@ -1,6 +1,7 @@
 package com.hanhy06.embellish_chat.mention.rule;
 
 import com.hanhy06.embellish_chat.config.Config;
+import com.hanhy06.embellish_chat.mention.data.ParsedMention;
 import com.hanhy06.embellish_chat.mention.data.ParsedTarget;
 import com.hanhy06.embellish_chat.util.TeamColor;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -20,7 +21,7 @@ public class MentionRegistry {
     private final Scoreboard scoreboard;
 
     private final Config config;
-    private final Style mentionStyle;
+    private final Style stylePreset;
     private final EnumMap<MentionType, Function<MentionParameter,ParsedTarget>> registries;
 
     public MentionRegistry(Config config, PlayerManager manager, Scoreboard scoreboard) {
@@ -28,7 +29,7 @@ public class MentionRegistry {
         this.scoreboard = scoreboard;
 
         this.config = config;
-        this.mentionStyle = Style.EMPTY.withBold(true).withColor(config.mentionColor());
+        this.stylePreset = Style.EMPTY.withColor(config.mentionColor());
         this.registries = new EnumMap<>(Map.ofEntries(
                 entry(MentionType.EVERYONE,this::EVERYONE),
                 entry(MentionType.HERE,this::INSIDE),
@@ -44,95 +45,104 @@ public class MentionRegistry {
     }
 
     private ParsedTarget EVERYONE(MentionParameter parameter){
+        ParsedMention mention = parameter.parsedMention();
+        List<ServerPlayerEntity> players = manager.getPlayerList();
+
         return ParsedTarget.of(
-                parameter.parsedMention(),
-                manager.getPlayerList(),
-                mentionStyle
+                mention,
+                players,
+                stylePreset
         );
     }
 
     private ParsedTarget INSIDE(MentionParameter parameter){
+        ParsedMention mention = parameter.parsedMention();
+        List<ServerPlayerEntity> players = PlayerLookup.around(
+                parameter.sender().getEntityWorld(),
+                parameter.sender().getEntityPos(),
+                Float.parseFloat(parameter.mention())
+        ).stream().toList();
+
         return ParsedTarget.of(
-                parameter.parsedMention(),
-                PlayerLookup.around(
-                        parameter.sender().getEntityWorld(),
-                        parameter.sender().getEntityPos(),
-                        Float.parseFloat(parameter.mention())
-                ).stream().toList(),
-                mentionStyle
+                mention,
+                players,
+                stylePreset
         );
     }
 
     private ParsedTarget OUTSIDE(MentionParameter parameter){
-        Collection<ServerPlayerEntity> insides = PlayerLookup.around(
-                parameter.sender().getEntityWorld(),
-                parameter.sender().getEntityPos(),
-                Float.parseFloat(parameter.mention())
-        );
+        ParsedMention parsedMention = parameter.parsedMention();
         List<ServerPlayerEntity> outsides = manager.getPlayerList();
-        outsides.removeAll(insides);
+        outsides.removeAll(INSIDE(parameter).players());
 
         return ParsedTarget.of(
-                parameter.parsedMention(),
+                parsedMention,
                 outsides,
-                mentionStyle
+                stylePreset
         );
     }
 
     private ParsedTarget TEAM(MentionParameter parameter){
         Team team = parameter.sender().getScoreboardTeam();
+        ParsedMention parsedMention = parameter.parsedMention();
+        List<ServerPlayerEntity> players = new ArrayList<>();
+        Style style = stylePreset;
 
         if (team != null){
-            return ParsedTarget.of(
-                    parameter.parsedMention(),
-                    team
-                            .getPlayerList()
-                            .stream()
-                            .map(manager::getPlayer)
-                            .filter(Objects::nonNull)
-                            .toList(),
-                    team.getDisplayName().getStyle()
-            );
-        }else {
-            return ParsedTarget.of(
-                    parameter.parsedMention(),
-                    new ArrayList<>(),
-                    mentionStyle
-            );
+            players = team
+                    .getPlayerList()
+                    .stream()
+                    .map(manager::getPlayer)
+                    .filter(Objects::nonNull)
+                    .toList();
+            style = team
+                    .getDisplayName()
+                    .getStyle()
+                    .withParent(style);
         }
+
+        return ParsedTarget.of(
+                parsedMention,
+                players,
+                style
+        );
     }
 
 
     private ParsedTarget PLAYER(MentionParameter parameter){
+        ParsedMention parsedMention = parameter.parsedMention();
         ServerPlayerEntity target = manager.getPlayer(parameter.mention());
+        Style style = stylePreset;
+        List<ServerPlayerEntity> players = new ArrayList<>();
 
         if (target!=null){
-            Style style = target.getDisplayName().getStyle();
-            return ParsedTarget.of(
-                    parameter.parsedMention(),
-                    new ArrayList<>(List.of(target)),
-                    style
-            );
+            style = target
+                    .getDisplayName()
+                    .getStyle()
+                    .withParent(style);
+            players.add(target);
         }else {
-            return ParsedTarget.of(
-                    parameter.parsedMention(),
-                    new ArrayList<>(),
-                    mentionStyle.withColor(
-                            TeamColor.getPlayerColor(
-                                    scoreboard,
-                                    parameter.mention(),
-                                    config.mentionColor()
-                                    )
-                    )
-            );
+            style = Style.EMPTY
+                    .withParent(stylePreset)
+                    .withColor(TeamColor.getPlayerColor(
+                            scoreboard,
+                            parameter.mention(),
+                            config.mentionColor())
+                    );
         }
+
+        return ParsedTarget.of(
+                parsedMention,
+                players,
+                style
+        );
     }
 
     private ParsedTarget LUCK_PERMS_GROUP(MentionParameter parameter){
         return ParsedTarget.of(
                 parameter.parsedMention(),
                 new ArrayList<>(),
-                mentionStyle
+                stylePreset
         );
     }
 }

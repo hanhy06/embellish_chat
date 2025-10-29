@@ -12,7 +12,6 @@ import net.minecraft.text.Text;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 

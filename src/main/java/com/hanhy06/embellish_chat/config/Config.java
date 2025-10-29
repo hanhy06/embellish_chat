@@ -1,5 +1,6 @@
 package com.hanhy06.embellish_chat.config;
 
+import com.hanhy06.embellish_chat.mention.rule.MentionAction;
 import com.hanhy06.embellish_chat.mention.rule.MentionRule;
 import com.hanhy06.embellish_chat.mention.rule.MentionType;
 import com.hanhy06.embellish_chat.styling.rule.StyleAction;
@@ -22,9 +23,6 @@ public record Config(
         String delimiter,
 
         //mention preset
-        //TODO: 맨션 타입을 기존 team 에서 TEAM_SELF 와 TEAM_OTHER 로 분리 그리고 LuckPerms 와 통합을 위해 LUCK_PERMS_GROUP 추가
-        //TODO: 하나의 MentionRule 이 여러개의 맨션 타입을 갖을수 있게 즉 두번 ServerPlayerEntity를 갖고와서 두개의 리스트에 포함된
-        //플레이어를 호출 가능하도록 할것 ex 우리팀 사람중 근쳐 32블럭 안에 있는 사람
         Integer mentionColor,
         String mentionSound,
         float mentionPitch,
@@ -145,7 +143,24 @@ public record Config(
                         )
                 )),
                 new HashMap<>(Map.ofEntries(
-
+                    entry(
+                            "mention",
+                            List.of(
+                                    MentionRule.of(
+                                            "@([A-Za-z0-9_]{1,16})(?=\\b|$)",
+                                            List.of(
+                                                    MentionAction.of(
+                                                            MentionType.PLAYER,""
+                                                    )
+                                            ),
+                                            List.of(
+                                                    StyleAction.of(
+                                                            StyleType.BOLD,""
+                                                    )
+                                            )
+                                    )
+                            )
+                    )
                 )),
 
                 //styling preset
@@ -170,7 +185,7 @@ public record Config(
                 )),
                 "-",
 
-                //mention
+                //mention preset
                 0xff55ff,
                 "minecraft:entity.experience_orb.pickup",
                 1.75f,

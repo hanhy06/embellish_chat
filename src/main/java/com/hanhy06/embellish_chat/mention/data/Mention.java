@@ -1,7 +1,6 @@
 package com.hanhy06.embellish_chat.mention.data;
 
 import com.hanhy06.embellish_chat.styling.rule.StyleAction;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 
 import java.util.List;
