@@ -54,14 +54,14 @@ public class StyleRegistry {
 
     //TODO: 모든 타입을 StyleParameter를 받게 하고 sender로 소리를 재생하는등 새 타입들을 추가하것
 
-    public static MutableText MENTION(MutableText text, Set<Mention> targets){
+    public static MutableText MENTION(MutableText text, Set<Mention> mentions){
         Runs runs = flatten(text);
         MutableText result = Text.empty();
         int lastEnd = 0;
-        for (Mention target : targets) {
-            result.append(slice(runs, lastEnd, target.begin()));
-            result.append(target.text());
-            lastEnd = target.end();
+        for (Mention mention : mentions) {
+            result.append(slice(runs, lastEnd, mention.begin()));
+            result.append(slice(runs, mention.begin(), mention.end())).fillStyle(mention.style());
+            lastEnd = mention.end();
         }
         result.append(slice(runs, lastEnd, runs.full().length()));
         return result;

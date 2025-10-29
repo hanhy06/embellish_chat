@@ -42,13 +42,13 @@ public class StylingProcessor implements ConfigListener {
 
         MutableText result = text;
         for (StylingRule style : stylingRules.get(key)){
-            result = applyStyles(style,result);
+            result = applyStyles(result,style);
         }
 
         return result;
     }
 
-    private MutableText applyStyles(StylingRule style, MutableText text){
+    private MutableText applyStyles(MutableText text,StylingRule style){
         Runs runs = flatten(text);
         MutableText result = Text.empty();
 
@@ -70,8 +70,8 @@ public class StylingProcessor implements ConfigListener {
 
             result.append(
                     applyStyles(
-                            style.actions(),
                             segment,
+                            style.actions(),
                             options
                     )
             );
@@ -83,7 +83,7 @@ public class StylingProcessor implements ConfigListener {
         return result;
     }
 
-    private MutableText applyStyles(List<StyleAction> actions, MutableText text, List<String> options){
+    private MutableText applyStyles(MutableText text,List<StyleAction> actions, List<String> options){
         MutableText result = text;
 
         int index = 0;
