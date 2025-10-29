@@ -45,6 +45,7 @@ public class MentionRegistry {
 
     private ParsedTarget EVERYONE(MentionParameter parameter){
         return ParsedTarget.of(
+                parameter.parsedMention(),
                 manager.getPlayerList(),
                 mentionStyle
         );
@@ -52,6 +53,7 @@ public class MentionRegistry {
 
     private ParsedTarget INSIDE(MentionParameter parameter){
         return ParsedTarget.of(
+                parameter.parsedMention(),
                 PlayerLookup.around(
                         parameter.sender().getEntityWorld(),
                         parameter.sender().getEntityPos(),
@@ -71,6 +73,7 @@ public class MentionRegistry {
         outsides.removeAll(insides);
 
         return ParsedTarget.of(
+                parameter.parsedMention(),
                 outsides,
                 mentionStyle
         );
@@ -81,6 +84,7 @@ public class MentionRegistry {
 
         if (team != null){
             return ParsedTarget.of(
+                    parameter.parsedMention(),
                     team
                             .getPlayerList()
                             .stream()
@@ -91,7 +95,8 @@ public class MentionRegistry {
             );
         }else {
             return ParsedTarget.of(
-                    List.of(),
+                    parameter.parsedMention(),
+                    new ArrayList<>(),
                     mentionStyle
             );
         }
@@ -104,12 +109,14 @@ public class MentionRegistry {
         if (target!=null){
             Style style = target.getDisplayName().getStyle();
             return ParsedTarget.of(
-                    List.of(target),
+                    parameter.parsedMention(),
+                    new ArrayList<>(List.of(target)),
                     style
             );
         }else {
             return ParsedTarget.of(
-                    List.of(),
+                    parameter.parsedMention(),
+                    new ArrayList<>(),
                     mentionStyle.withColor(
                             TeamColor.getPlayerColor(
                                     scoreboard,
@@ -123,7 +130,8 @@ public class MentionRegistry {
 
     private ParsedTarget LUCK_PERMS_GROUP(MentionParameter parameter){
         return ParsedTarget.of(
-                List.of(),
+                parameter.parsedMention(),
+                new ArrayList<>(),
                 mentionStyle
         );
     }

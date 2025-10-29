@@ -83,24 +83,24 @@ public class MentionProcessor implements ConfigListener {
         List<ParsedTarget> parsedTargets = new ArrayList<>();
 
         for (ParsedMention mention : parsedMentions) {
-            ParsedTarget target = parseTarget(sender, mention.rule().mentions(), mention.mentions());
+            ParsedTarget target = parseTarget(sender, mention);
             parsedTargets.add(target);
         }
 
         return parsedTargets;
     }
 
-    private ParsedTarget parseTarget(ServerPlayerEntity sender, List<MentionAction> actions, List<String> mentions) {
+    private ParsedTarget parseTarget(ServerPlayerEntity sender, ParsedMention mention) {
         List<ParsedTarget> targets = new ArrayList<>();
 
         int index = 0;
-        for (MentionAction action : actions) {
+        for (MentionAction action : mention.rule().mentions()) {
             String option = action.preset();
-            if (option.isBlank() && index< mentions.size()){
-                option = mentions.get(index);
+            if (option.isBlank() && index< mention.mentions().size()){
+                option = mention.mentions().get(index);
             }
             ParsedTarget target = registries.get(action.mentionType())
-                    .apply(MentionParameter.of(sender, option));
+                    .apply(MentionParameter.of(mention, sender, option));
             targets.add(target);
             index++;
         }
