@@ -45,7 +45,7 @@ public class MessageProcessor implements ConfigListener {
         MutableText textMessage = message.getContent().copy();
         String stringMessage = message.getContent().getString();
 
-        Set<Mention> mentions = mentionProcessor.handleMention(sender,stringMessage,"mention");
+        List<Mention> mentions = mentionProcessor.handleMention(sender,stringMessage,"mention");
 
         textMessage = stylingManager.applyMention(textMessage,mentions);
         textMessage = stylingManager.applyStylingRule(

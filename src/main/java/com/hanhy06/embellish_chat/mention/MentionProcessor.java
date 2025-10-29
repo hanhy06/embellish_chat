@@ -20,7 +20,6 @@ import java.util.*;
 import java.util.regex.Matcher;
 
 public class MentionProcessor implements ConfigListener {
-    private final StylingProcessor styler;
     private final PlayerManager manager;
     private final Scoreboard scoreboard;
 
@@ -29,8 +28,7 @@ public class MentionProcessor implements ConfigListener {
     private HashMap<String, List<MentionRule>> mentionRules;
     private MentionRegistry registries;
 
-    public MentionProcessor(StylingProcessor styler, PlayerManager manager, Scoreboard scoreboard) {
-        this.styler = styler;
+    public MentionProcessor(PlayerManager manager, Scoreboard scoreboard) {
         this.manager = manager;
         this.scoreboard = scoreboard;
     }
