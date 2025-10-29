@@ -69,7 +69,7 @@ public class StylingProcessor implements ConfigListener {
             }
 
             result.append(
-                    applyStyles(
+                    applyStyle(
                             segment,
                             style.actions(),
                             options
@@ -83,7 +83,7 @@ public class StylingProcessor implements ConfigListener {
         return result;
     }
 
-    private MutableText applyStyles(MutableText text,List<StyleAction> actions, List<String> options){
+    private MutableText applyStyle(MutableText text, List<StyleAction> actions, List<String> options){
         MutableText result = text;
 
         int index = 0;
