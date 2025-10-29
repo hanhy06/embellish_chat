@@ -44,8 +44,6 @@ public class EmbellishChat implements ModInitializer {
         manager.addListener(message);
 		manager.readConfig();
 
-        FabricLoader.getInstance().isModLoaded("luckperms");
-
 		LOGGER.info("{} initialized successfully.", MOD_ID);
 	}
 }

@@ -9,7 +9,6 @@ import com.hanhy06.embellish_chat.mention.rule.MentionAction;
 import com.hanhy06.embellish_chat.mention.rule.MentionParameter;
 import com.hanhy06.embellish_chat.mention.rule.MentionRegistry;
 import com.hanhy06.embellish_chat.mention.rule.MentionRule;
-import net.luckperms.api.LuckPerms;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
