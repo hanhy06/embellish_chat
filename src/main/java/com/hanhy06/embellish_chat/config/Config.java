@@ -13,7 +13,6 @@ import static java.util.Map.entry;
 
 public record Config(
         //Rules
-        //TODO: 나중에 LuckPerms쓸때 각 그룹이 어떤 스타일링을 할지 그룹 이름이 키로 써야함
         //TODO: 나중에 Rule에 description 즉 설명 필드 추가해야함
         HashMap<String,List<StylingRule>> stylingRules,
         HashMap<String,List<MentionRule>> mentionRules,
@@ -61,7 +60,7 @@ public record Config(
                                                 List.of(StyleAction.of(StyleType.OBFUSCATED,""))
                                         ),
                                         StylingRule.of(
-                                                "\\[(.+?)]\\((.*?))",
+                                                "\\[(.+?)]\\((.*?)\\)",
                                                 List.of(StyleAction.of(StyleType.URL,""))
                                         ),
                                         StylingRule.of(
@@ -113,7 +112,7 @@ public record Config(
                                                 List.of(StyleAction.of(StyleType.OBFUSCATED,""))
                                         ),
                                         StylingRule.of(
-                                                "\\[(.+?)]\\((.*?))",
+                                                "\\[(.+?)]\\((.*?)\\)",
                                                 List.of(StyleAction.of(StyleType.URL,""))
                                         ),
                                         StylingRule.of(
@@ -135,10 +134,6 @@ public record Config(
                                         StylingRule.of(
                                                 "\\[(.+?)]<(RAINBOW)>",
                                                 List.of(StyleAction.of(StyleType.COLOR_RAINBOW,"0.7"))
-                                        ),
-                                        StylingRule.of(
-                                                "(.+)()",
-                                                List.of(StyleAction.of(StyleType.METADATA,""))
                                         )
                                 )
                         )

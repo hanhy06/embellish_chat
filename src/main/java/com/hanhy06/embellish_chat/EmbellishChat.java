@@ -33,8 +33,16 @@ public class EmbellishChat implements ModInitializer {
         Path fabricConfigDirPath = FabricLoader.getInstance().getConfigDir();
         ConfigManager manager = new ConfigManager(fabricConfigDirPath);
 
-        FabricLoader.getInstance().isModLoaded("luckperms");
-        LuckPerms luckPerms = LuckPermsProvider.get();
+        LuckPerms luckPerms = null;
+        if (FabricLoader.getInstance().isModLoaded("luckperms")) {
+            try {
+                luckPerms = LuckPermsProvider.get();
+            } catch (IllegalStateException exception) {
+                LOGGER.warn("LuckPerms is present but not ready yet. Permission features will be disabled: {}", exception.getMessage());
+            }
+        } else {
+            LOGGER.info("LuckPerms not detected. Permission-based chat styling is disabled.");
+        }
 
         StylingProcessor styler = new StylingProcessor();
         MentionProcessor mention = new MentionProcessor(server.getPlayerManager(),server.getScoreboard());
