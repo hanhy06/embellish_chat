@@ -46,17 +46,24 @@ public class MessageProcessor implements ConfigListener {
     public SignedMessage handleMessage(SignedMessage message) {
         if (bannedPlayerList.contains(message.getSender())) return message;
 
-        ServerPlayerEntity sender = playerManager.getPlayer(message.getSender());
-        List<String> permissions = getPermission(sender);
-
         MutableText textMessage = message.getContent().copy();
         String stringMessage = message.getContent().getString();
+
+        ServerPlayerEntity sender = playerManager.getPlayer(message.getSender());
+        List<String> permissions = getPermissions(sender);
 
         List<Mention> mentions = mentionProcessor.handleMention(
                 sender,
                 stringMessage,
                 "mention"
         );
+
+        textMessage = stylingManager.applyMention(textMessage,mentions);
+        textMessage = stylingManager.applyStylingRule(
+                textMessage,
+                "chat"
+        );
+
         for (String permission : permissions){
             mentions.addAll(
                     mentionProcessor.handleMention(
@@ -65,14 +72,7 @@ public class MessageProcessor implements ConfigListener {
                             permission
                     )
             );
-        }
 
-        textMessage = stylingManager.applyMention(textMessage,mentions);
-        textMessage = stylingManager.applyStylingRule(
-                textMessage,
-                "chat"
-        );
-        for (String permission : permissions){
             textMessage = stylingManager.applyStylingRule(
                     textMessage,
                     permission
@@ -82,7 +82,7 @@ public class MessageProcessor implements ConfigListener {
         return message.withUnsignedContent(textMessage);
     }
 
-    private List<String> getPermission(ServerPlayerEntity sender){
+    private List<String> getPermissions(ServerPlayerEntity sender){
         User user = luckPerms.getUserManager().getUser(sender.getUuid());
         QueryOptions query = luckPerms.getContextManager().getQueryOptions(sender);
         CachedPermissionData permission = user.getCachedData().getPermissionData(query);

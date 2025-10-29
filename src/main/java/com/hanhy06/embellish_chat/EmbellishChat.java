@@ -31,9 +31,10 @@ public class EmbellishChat implements ModInitializer {
 
 	private static void handleServerStart(MinecraftServer server) {
         Path fabricConfigDirPath = FabricLoader.getInstance().getConfigDir();
-        LuckPerms luckPerms = LuckPermsProvider.get();
-
         ConfigManager manager = new ConfigManager(fabricConfigDirPath);
+
+        FabricLoader.getInstance().isModLoaded("luckperms");
+        LuckPerms luckPerms = LuckPermsProvider.get();
 
         StylingProcessor styler = new StylingProcessor();
         MentionProcessor mention = new MentionProcessor(server.getPlayerManager(),server.getScoreboard());

@@ -148,6 +148,45 @@ public record Config(
                             "mention",
                             List.of(
                                     MentionRule.of(
+                                            "@here()",
+                                            List.of(
+                                                    MentionAction.of(
+                                                            MentionType.HERE,""
+                                                    )
+                                            ),
+                                            List.of(
+                                                    StyleAction.of(
+                                                            StyleType.BOLD,""
+                                                    )
+                                            )
+                                    ),
+                                    MentionRule.of(
+                                            "@everyone()",
+                                            List.of(
+                                                    MentionAction.of(
+                                                            MentionType.EVERYONE,""
+                                                    )
+                                            ),
+                                            List.of(
+                                                    StyleAction.of(
+                                                            StyleType.BOLD,""
+                                                    )
+                                            )
+                                    ),
+                                    MentionRule.of(
+                                            "@team:(.*?)",
+                                            List.of(
+                                                    MentionAction.of(
+                                                            MentionType.TEAM,""
+                                                    )
+                                            ),
+                                            List.of(
+                                                    StyleAction.of(
+                                                            StyleType.BOLD,""
+                                                    )
+                                            )
+                                    ),
+                                    MentionRule.of(
                                             "@([A-Za-z0-9_]{1,16})(?=\\b|$)",
                                             List.of(
                                                     MentionAction.of(
