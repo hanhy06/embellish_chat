@@ -75,7 +75,6 @@ public class StylingProcessor implements ConfigListener {
                             options
                     )
             );
-
             lastEnd = matcher.end();
         } while (matcher.find());
         result.append(slice(runs, lastEnd, runs.full().length()));
@@ -101,6 +100,26 @@ public class StylingProcessor implements ConfigListener {
     }
 
     public MutableText applyMention(MutableText text, List<Mention> mentions){
-        return Text.empty();
+        Runs runs = flatten(text);
+        MutableText result = Text.empty();
+
+        int lastEnd = 0;
+        for (Mention mention : mentions){
+            result.append(slice(runs,lastEnd,mention.begin()));
+
+            MutableText segment = slice(runs, mention.begin(), mention.end());
+            segment.fillStyle(mention.style());
+            for (StyleAction action : mention.styles()){
+                segment = registry
+                        .get(action.styleType())
+                        .apply(segment,action.preset());
+            }
+
+            result.append(segment);
+            lastEnd = mention.end();
+        }
+        result.append(slice(runs, lastEnd, runs.full().length()));
+
+        return result;
     }
 }
