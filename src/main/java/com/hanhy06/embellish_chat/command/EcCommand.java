@@ -56,10 +56,10 @@ public class EcCommand {
 
         for (MentionRule rule : rules){
             player.sendMessage(Text.literal(
-                    String.format("use:%s",rule.pattern().pattern())
+                    String.format("use :%s",rule.pattern().pattern())
             ));
             player.sendMessage(Text.literal(
-                    String.format("intersection (elements):%s",rule
+                    String.format("intersection (elements) :%s",rule
                             .mentions()
                             .stream()
                             .map(MentionAction::mentionType)
@@ -68,7 +68,7 @@ public class EcCommand {
                     )
             ));
             player.sendMessage(Text.literal(
-                    String.format("apply style:%s",rule
+                    String.format("apply style :%s\n",rule
                             .mentions()
                             .stream()
                             .map(MentionAction::preset)
@@ -96,10 +96,10 @@ public class EcCommand {
 
         for (StylingRule rule : rules){
             player.sendMessage(Text.literal(
-                    String.format("use:%s",rule.pattern().pattern())
+                    String.format("use :%s",rule.pattern().pattern())
             ));
             player.sendMessage(Text.literal(
-                    String.format("apply style:%s",rule
+                    String.format("apply style :%s",rule
                             .actions()
                             .stream()
                             .map(StyleAction::styleType)
@@ -108,7 +108,7 @@ public class EcCommand {
                     )
             ));
             player.sendMessage(Text.literal(
-                    String.format("input options:%s",rule.
+                    String.format("input options :%s\n",rule.
                             actions()
                             .stream()
                             .map(StyleAction::preset)

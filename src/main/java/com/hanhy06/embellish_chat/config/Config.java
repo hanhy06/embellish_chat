@@ -40,19 +40,19 @@ public record Config(
                         entry("chat",
                                 List.of(
                                         StylingRule.of(
-                                                "\\*\\*(.+?)\\*\\*()",
+                                                "\\*\\*([^*]+?)\\*\\*()",
                                                 List.of(StyleAction.of(StyleType.BOLD,""))
                                         ),
                                         StylingRule.of(
-                                                "__(.+?)__()",
+                                                "__([^_]+?)__()",
                                                 List.of(StyleAction.of(StyleType.UNDERLINE,""))
                                         ),
                                         StylingRule.of(
-                                                "_(.+?)_()",
+                                                "_([^_]+?)_()",
                                                 List.of(StyleAction.of(StyleType.ITALIC,""))
                                         ),
                                         StylingRule.of(
-                                                "~~(.+?)~~()",
+                                                "~~([^~]+?)~~()",
                                                 List.of(StyleAction.of(StyleType.STRIKETHROUGH,""))
                                         ),
                                         StylingRule.of(
@@ -92,19 +92,19 @@ public record Config(
                         entry("command",
                                 List.of(
                                         StylingRule.of(
-                                                "\\*\\*(.+?)\\*\\*()",
+                                                "\\*\\*([^*]+?)\\*\\*()",
                                                 List.of(StyleAction.of(StyleType.BOLD,""))
                                         ),
                                         StylingRule.of(
-                                                "__(.+?)__()",
+                                                "__([^_]+?)__()",
                                                 List.of(StyleAction.of(StyleType.UNDERLINE,""))
                                         ),
                                         StylingRule.of(
-                                                "_(.+?)_()",
+                                                "_([^_]+?)_()",
                                                 List.of(StyleAction.of(StyleType.ITALIC,""))
                                         ),
                                         StylingRule.of(
-                                                "~~(.+?)~~()",
+                                                "~~([^~]+?)~~()",
                                                 List.of(StyleAction.of(StyleType.STRIKETHROUGH,""))
                                         ),
                                         StylingRule.of(
