@@ -5,17 +5,15 @@ import com.hanhy06.embellish_chat.config.ConfigListener;
 import com.hanhy06.embellish_chat.mention.MentionProcessor;
 import com.hanhy06.embellish_chat.mention.data.Mention;
 import com.hanhy06.embellish_chat.styling.StylingProcessor;
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.cacheddata.CachedPermissionData;
-import net.luckperms.api.model.user.User;
-import net.luckperms.api.query.QueryOptions;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class MessageProcessor implements ConfigListener {
@@ -48,42 +46,32 @@ public class MessageProcessor implements ConfigListener {
         String stringMessage = message.getContent().getString();
 
         ServerPlayerEntity sender = playerManager.getPlayer(message.getSender());
-//        List<String> permissions = getPermissions(sender);
 
-        List<Mention> mentions = mentionProcessor.handleMention(
-                sender,
-                stringMessage,
-                "mention"
-        );
+        List<Mention> mentions = new ArrayList<>();
+        for (String key: getPermissionsKeys(sender,"mention",config.mentionRules().keySet())){
+            List<Mention> mention = mentionProcessor.handleMention(
+                    sender,stringMessage,key
+            );
+
+            mentions.addAll(mention);
+        }
 
         textMessage = stylingManager.applyMention(textMessage,mentions);
-        textMessage = stylingManager.applyStylingRule(
-                textMessage,
-                "chat"
-        );
-
-//        for (String permission : permissions){
-//            mentions.addAll(
-//                    mentionProcessor.handleMention(
-//                            sender,
-//                            stringMessage,
-//                            permission
-//                    )
-//            );
-//
-//            textMessage = stylingManager.applyStylingRule(
-//                    textMessage,
-//                    permission
-//            );
-//        }
+        for (String key: getPermissionsKeys(sender,"chat",config.stylingRules().keySet())){
+            textMessage = stylingManager.applyStylingRule(textMessage,key);
+        }
 
         return message.withUnsignedContent(textMessage);
     }
 
-//    private List<String> getPermissions(ServerPlayerEntity sender){
-//        User user = luckPerms.getUserManager().getUser(sender.getUuid());
-//        QueryOptions query = luckPerms.getContextManager().getQueryOptions(sender);
-//        CachedPermissionData permission = user.getCachedData().getPermissionData(query);
-//        return permission.getPermissionMap().entrySet().stream().filter(Map.Entry::getValue).map(Map.Entry::getKey).toList();
-//    }
+    private List<String> getPermissionsKeys(ServerPlayerEntity sender, String defaultKey, Set<String> keySet){
+        List<String> keys = new ArrayList<>();
+        keys.add(defaultKey);
+
+        for (String key : keySet){
+            if (Permissions.check(sender,key)) keys.add(key);
+        }
+
+        return keys;
+    }
 }
