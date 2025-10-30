@@ -38,7 +38,6 @@ public class MentionRegistry {
                 entry(MentionType.EVERYONE,this::EVERYONE),
                 entry(MentionType.HERE,this::INSIDE),
                 entry(MentionType.TEAM,this::TEAM),
-                entry(MentionType.OUTSIDE,this::OUTSIDE),
                 entry(MentionType.PLAYER,this::PLAYER),
                 entry(MentionType.LUCK_PERMS_GROUP,this::LUCK_PERMS_GROUP)
         ));
@@ -70,18 +69,6 @@ public class MentionRegistry {
         return ParsedTarget.of(
                 mention,
                 players,
-                stylePreset
-        );
-    }
-
-    private ParsedTarget OUTSIDE(MentionParameter parameter){
-        ParsedMention parsedMention = parameter.parsedMention();
-        List<ServerPlayerEntity> outsides = manager.getPlayerList();
-        outsides.removeAll(INSIDE(parameter).players());
-
-        return ParsedTarget.of(
-                parsedMention,
-                outsides,
                 stylePreset
         );
     }

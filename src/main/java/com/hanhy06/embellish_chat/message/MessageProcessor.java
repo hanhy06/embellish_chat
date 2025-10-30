@@ -5,7 +5,6 @@ import com.hanhy06.embellish_chat.config.ConfigListener;
 import com.hanhy06.embellish_chat.mention.MentionProcessor;
 import com.hanhy06.embellish_chat.mention.data.Mention;
 import com.hanhy06.embellish_chat.styling.StylingProcessor;
-import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -13,8 +12,9 @@ import net.minecraft.text.MutableText;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
+
+import static com.hanhy06.embellish_chat.util.PermissionUtil.getPermissionsKeys;
 
 public class MessageProcessor implements ConfigListener {
     public static MessageProcessor INSTANCE;
@@ -48,7 +48,7 @@ public class MessageProcessor implements ConfigListener {
         ServerPlayerEntity sender = playerManager.getPlayer(message.getSender());
 
         List<Mention> mentions = new ArrayList<>();
-        for (String key: getPermissionsKeys(sender,"mention",config.mentionRules().keySet())){
+        for (String key: getPermissionsKeys(sender,config.mentionRules().keySet())){
             List<Mention> mention = mentionProcessor.handleMention(
                     sender,stringMessage,key
             );
@@ -57,21 +57,10 @@ public class MessageProcessor implements ConfigListener {
         }
 
         textMessage = stylingManager.applyMention(textMessage,mentions);
-        for (String key: getPermissionsKeys(sender,"chat",config.stylingRules().keySet())){
+        for (String key: getPermissionsKeys(sender,config.stylingRules().keySet())){
             textMessage = stylingManager.applyStylingRule(textMessage,key);
         }
 
         return message.withUnsignedContent(textMessage);
-    }
-
-    private List<String> getPermissionsKeys(ServerPlayerEntity sender, String defaultKey, Set<String> keySet){
-        List<String> keys = new ArrayList<>();
-        keys.add(defaultKey);
-
-        for (String key : keySet){
-            if (Permissions.check(sender,key)) keys.add(key);
-        }
-
-        return keys;
     }
 }
