@@ -99,7 +99,7 @@ public class EcCommand {
             ));
             player.sendMessage(Text.literal(
                     String.format("apply styles :%s",rule
-                            .actions()
+                            .styles()
                             .stream()
                             .map(StyleAction::styleType)
                             .map(StyleType::name)
@@ -108,7 +108,7 @@ public class EcCommand {
             ));
             player.sendMessage(Text.literal(
                     String.format("preset options :%s\n",rule.
-                            actions()
+                            styles()
                             .stream()
                             .map(StyleAction::preset)
                             .map(str -> String.format("\"%s\"",str.isBlank() ? "your input":str))

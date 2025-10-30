@@ -71,7 +71,7 @@ public class StylingProcessor implements ConfigListener {
             result.append(
                     applyStyle(
                             segment,
-                            style.actions(),
+                            style.styles(),
                             options
                     )
             );

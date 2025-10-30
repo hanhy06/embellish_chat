@@ -1,6 +1,6 @@
 # Embellish Chat for Fabric
 
-**Embellish Chat** is a Fabric mod that enhances the Minecraft chat experience on servers. It makes player communication more expressive and convenient with Markdown‑style formatting, mentions, clickable links, and mention notifications.
+**Embellish Chat** is a Fabric mod that enhances the chat experience on Minecraft servers. It makes player communication more expressive and convenient with Markdown‑style formatting, mentions, clickable links, and mention notifications.
 
 ---
 
@@ -77,7 +77,7 @@ The configuration file is located at: `config/embellish_chat.json`.
     "command": [
       {
         "pattern": "\\*\\*(.+?)\\*\\*()",
-        "actions": [
+        "styles": [
           {
             "styleType": "BOLD",
             "preset": ""
@@ -86,7 +86,7 @@ The configuration file is located at: `config/embellish_chat.json`.
       },
       {
         "pattern": "__(.+?)__()",
-        "actions": [
+        "styles": [
           {
             "styleType": "UNDERLINE",
             "preset": ""
@@ -163,12 +163,12 @@ Furthermore, creating custom rules can be challenging because Regex itself is in
 ### Style Rule Structure
 
 Defines the text styling rules.<br>
-Each rule consists of a regular expression (`pattern`) and style action list(`actions`).
+Each rule consists of a regular expression (`pattern`) and a style action list(`styles`).
 
 ```
 {
     "pattern": "\\*\\*(.+?)\\*\\*()",
-    "actions": [
+    "styles": [
         {
             "styleType": "BOLD",
             "preset": ""
@@ -177,38 +177,47 @@ Each rule consists of a regular expression (`pattern`) and style action list(`ac
 }
 ```
 
-* **pattern**
-  Must contain **two capturing groups**:<br>
-  1 the text to apply the style to,<br>
-  2 an optional captured value that can be passed as an argument.
+* **pattern** Must contain **two capturing groups**: 1 the text to apply the style to, 2 an optional captured value that can be passed as an argument.
+* **styles** This is a list of style actions. Each action consists of a style type (`styleType`) and style option preset(`preset`).
 
-* **actions**
-  This is a list of style actions.
-  Each action consists of a style type (`styleType`) and style option preset(`preset`).
+you can see style type list in StyleWiki.md
 
-
-### Available Style Types
-
-| Type            | Description                                                                                                               | Option                   |
-|-----------------|---------------------------------------------------------------------------------------------------------------------------|--------------------------|
-| `METADATA`      | When the mouse hovers over the text, display the time the server received it, and when clicked, copy it to the clipboard. | No options are required  |
-| `COLOR_HEX`     | Applies the color specified by the HEX code provided as an option.                                                        | HEX code                 |
-| `COLOR_RAINBOW` | Cycles through rainbow colors                                                                                             | saturation               |
-| `COLOR_PRESET`  | Uses a predefined color name from the `colorPreset` section                                                               | color preset             |
-| `COLOR_SHADOW`  | Applies the HEX code color provided as an option to the shadow.                                                           | HEX code                 |
-| `FONT`          | Changes the font style                                                                                                    | font id                  |
-| `URL`           | Allows opening the URL provided as an option when clicked.                                                                | url                      |
-| `BOLD`          | Bold text                                                                                                                 | No options are required  |
-| `ITALIC`        | Italic text                                                                                                               | No options are required  |
-| `UNDERLINE`     | Underlined text                                                                                                           | No options are required  |
-| `STRIKETHROUGH` | Strikethrough text                                                                                                        | No options are required  |
-| `OBFUSCATED`    | Applies Minecraft style obfuscation to make the text unreadable.                                                          | No options are required  |
-| `REPLACE`       | Replaces the matched text using the provided option string while preserving the original style.                           | Replacement string       |
-| `MASK`          | Replaces the original string with the characters supplied via options, adjusting to match the original length.            | Replacement character    |
-| `UPPER`         | Transforms every matched substring into uppercase characters.                                                             | No options are required  |
-| `LOWER`         | Transforms every matched substring into lowercase characters.                                                             | No options are required  |
 ---
 
+## Mention Configuration
+
+A mention rule is applied only when the message satisfies all targets specified in the rule — effectively using the intersection of all mention targets.
+
+### Mention Rule Structure
+
+Defines the text styling rules.<br>
+Each rule consists of a regular expression (`pattern`), mention action list(`mentions`) and style action list(`styles`).
+
+```
+{
+    "pattern": "@here()",
+    "mentions": [
+      {
+        "mentionType": "HERE",
+        "preset": ""
+      }
+    ],
+    "styles": [
+      {
+        "styleType": "BOLD",
+         "preset": ""
+      }
+  ]
+}
+```
+
+* **pattern** The pattern must contain one capturing group, which represents the mention target. For example, this could be a team name or a LuckPerms group name.
+* **mentions** The mentions field is a list of mention actions. Each action specifies a mentionType and an optional preset.
+* **styles** The styles field works the same way as in the styling rules section.
+
+you can see mention type list in MentionWiki.md
+
+---
 ## 📊 TPS Latency Test
 
 Test Version : Embellish Chat 2.0.0(DEV)
