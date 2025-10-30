@@ -1,5 +1,6 @@
 package com.hanhy06.embellish_chat;
 
+import com.hanhy06.embellish_chat.command.EcCommand;
 import com.hanhy06.embellish_chat.command.EmbellishChatCommand;
 import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.mention.MentionProcessor;
@@ -25,6 +26,7 @@ public class EmbellishChat implements ModInitializer {
 		ServerLifecycleEvents.SERVER_STARTED.register(EmbellishChat::handleServerStart);
 
 		EmbellishChatCommand.registerEmbellishChat();
+        EcCommand.registerEc();
 	}
 
 	private static void handleServerStart(MinecraftServer server) {

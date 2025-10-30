@@ -3,7 +3,9 @@ package com.hanhy06.embellish_chat.command;
 import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.mention.rule.MentionAction;
 import com.hanhy06.embellish_chat.mention.rule.MentionRule;
+import com.hanhy06.embellish_chat.mention.rule.MentionType;
 import com.hanhy06.embellish_chat.styling.rule.StyleAction;
+import com.hanhy06.embellish_chat.styling.rule.StyleType;
 import com.hanhy06.embellish_chat.styling.rule.StylingRule;
 import com.hanhy06.embellish_chat.util.PermissionUtil;
 import com.mojang.brigadier.context.CommandContext;
@@ -16,6 +18,7 @@ import net.minecraft.text.Text;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EcCommand {
     public static void registerEc(){
@@ -56,10 +59,21 @@ public class EcCommand {
                     String.format("use:%s",rule.pattern().pattern())
             ));
             player.sendMessage(Text.literal(
-                    String.format("intersection (elements):%s",rule.mentions().stream().map(MentionAction::mentionType))
+                    String.format("intersection (elements):%s",rule
+                            .mentions()
+                            .stream()
+                            .map(MentionAction::mentionType)
+                            .map(MentionType::name)
+                            .collect(Collectors.joining(", "))
+                    )
             ));
             player.sendMessage(Text.literal(
-                    String.format("apply style:%s",rule.mentions().stream().map(MentionAction::preset))
+                    String.format("apply style:%s",rule
+                            .mentions()
+                            .stream()
+                            .map(MentionAction::preset)
+                            .collect(Collectors.joining(", "))
+                    )
             ));
         }
 
@@ -85,10 +99,21 @@ public class EcCommand {
                     String.format("use:%s",rule.pattern().pattern())
             ));
             player.sendMessage(Text.literal(
-                    String.format("apply style:%s",rule.actions().stream().map(StyleAction::styleType))
+                    String.format("apply style:%s",rule
+                            .actions()
+                            .stream()
+                            .map(StyleAction::styleType)
+                            .map(StyleType::name)
+                            .collect(Collectors.joining(", "))
+                    )
             ));
             player.sendMessage(Text.literal(
-                    String.format("input options:%s",rule.actions().stream().map(StyleAction::preset))
+                    String.format("input options:%s",rule.
+                            actions()
+                            .stream()
+                            .map(StyleAction::preset)
+                            .collect(Collectors.joining(", "))
+                    )
             ));
         }
 
