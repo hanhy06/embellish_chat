@@ -68,10 +68,10 @@ public class EcCommand {
                     )
             ));
             player.sendMessage(Text.literal(
-                    String.format("apply style :%s\n",rule
-                            .mentions()
-                            .stream()
-                            .map(MentionAction::preset)
+                    String.format("apply styles :%s\n",rule
+                            .styles().stream()
+                            .map(StyleAction::styleType)
+                            .map(StyleType::name)
                             .collect(Collectors.joining(", "))
                     )
             ));
@@ -99,7 +99,7 @@ public class EcCommand {
                     String.format("use :%s",rule.pattern().pattern())
             ));
             player.sendMessage(Text.literal(
-                    String.format("apply style :%s",rule
+                    String.format("apply styles :%s",rule
                             .actions()
                             .stream()
                             .map(StyleAction::styleType)
@@ -108,10 +108,11 @@ public class EcCommand {
                     )
             ));
             player.sendMessage(Text.literal(
-                    String.format("input options :%s\n",rule.
+                    String.format("preset options :%s\n",rule.
                             actions()
                             .stream()
                             .map(StyleAction::preset)
+                            .map(str -> String.format("\"%s\"",str.isBlank() ? "your input":str))
                             .collect(Collectors.joining(", "))
                     )
             ));
