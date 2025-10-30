@@ -48,7 +48,7 @@ public class MessageProcessor implements ConfigListener {
         ServerPlayerEntity sender = playerManager.getPlayer(message.getSender());
 
         List<Mention> mentions = new ArrayList<>();
-        for (String key: getPermissionsKeys(sender,config.mentionRules().keySet())){
+        for (String key: getPermissionsKeys(sender,"mention",config.mentionRules().keySet())){
             List<Mention> mention = mentionProcessor.handleMention(
                     sender,stringMessage,key
             );
@@ -57,7 +57,7 @@ public class MessageProcessor implements ConfigListener {
         }
 
         textMessage = stylingManager.applyMention(textMessage,mentions);
-        for (String key: getPermissionsKeys(sender,config.stylingRules().keySet())){
+        for (String key: getPermissionsKeys(sender,"chat",config.stylingRules().keySet())){
             textMessage = stylingManager.applyStylingRule(textMessage,key);
         }
 

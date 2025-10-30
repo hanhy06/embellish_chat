@@ -1,7 +1,9 @@
 package com.hanhy06.embellish_chat.command;
 
 import com.hanhy06.embellish_chat.config.ConfigManager;
+import com.hanhy06.embellish_chat.mention.rule.MentionAction;
 import com.hanhy06.embellish_chat.mention.rule.MentionRule;
+import com.hanhy06.embellish_chat.styling.rule.StyleAction;
 import com.hanhy06.embellish_chat.styling.rule.StylingRule;
 import com.hanhy06.embellish_chat.util.PermissionUtil;
 import com.mojang.brigadier.context.CommandContext;
@@ -11,6 +13,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,6 +27,10 @@ public class EcCommand {
                                             CommandManager.literal("help_mention")
                                                     .executes(EcCommand::executeHelpMention)
                                     )
+                                    .then(
+                                            CommandManager.literal("help_style")
+                                                    .executes(EcCommand::executeHelpStyle)
+                                    )
 
                     );
                 }
@@ -35,9 +42,56 @@ public class EcCommand {
         if (player == null) return 1;
 
         player.sendMessage(Text.literal("_____Available mentions_____"));
-        HashMap<String,List<MentionRule>> rules = ConfigManager.getConfig().mentionRules();
-        List<String> keys = PermissionUtil.getPermissionsKeys(player,rules.keySet());
+        List<String> keys = PermissionUtil.getPermissionsKeys(player,"mention",ConfigManager.getConfig().mentionRules().keySet());
+        List<MentionRule> rules = new ArrayList<>();
 
+        for (String key : keys){
+            rules.addAll(
+                    ConfigManager.getConfig().mentionRules().get(key)
+            );
+        }
+
+        for (MentionRule rule : rules){
+            player.sendMessage(Text.literal(
+                    String.format("use:%s",rule.pattern().pattern())
+            ));
+            player.sendMessage(Text.literal(
+                    String.format("intersection (elements):%s",rule.mentions().stream().map(MentionAction::mentionType))
+            ));
+            player.sendMessage(Text.literal(
+                    String.format("apply style:%s",rule.mentions().stream().map(MentionAction::preset))
+            ));
+        }
+
+
+        return 1;
+    }
+
+    private static int executeHelpStyle(CommandContext<ServerCommandSource> context){
+        ServerPlayerEntity player = context.getSource().getPlayer();
+        if (player == null) return 1;
+
+        player.sendMessage(Text.literal("_____Available styles_____"));
+        List<String> keys = PermissionUtil.getPermissionsKeys(player,"chat",ConfigManager.getConfig().stylingRules().keySet());
+        List<StylingRule> rules = new ArrayList<>();
+
+        for (String key : keys){
+            rules.addAll(
+                    ConfigManager.getConfig().stylingRules().get(key)
+            );
+        }
+
+        for (StylingRule rule : rules){
+            player.sendMessage(Text.literal(
+                    String.format("use:%s",rule.pattern().pattern())
+            ));
+            player.sendMessage(Text.literal(
+                    String.format("apply style:%s",rule.actions().stream().map(StyleAction::styleType))
+            ));
+            player.sendMessage(Text.literal(
+                    String.format("input options:%s",rule.actions().stream().map(StyleAction::preset))
+            ));
+        }
 
 
         return 1;
