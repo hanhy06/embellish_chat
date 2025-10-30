@@ -180,7 +180,7 @@ Each rule consists of a regular expression (`pattern`) and a style action list(`
 * **pattern** Must contain **two capturing groups**: 1 the text to apply the style to, 2 an optional captured value that can be passed as an argument.
 * **styles** This is a list of style actions. Each action consists of a style type (`styleType`) and style option preset(`preset`).
 
-you can see style type list in StyleWiki.md
+you can see style type list in [StyleWiki.md](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/wiki/StyleWiki.md)
 
 ---
 
@@ -215,23 +215,24 @@ Each rule consists of a regular expression (`pattern`), mention action list(`men
 * **mentions** The mentions field is a list of mention actions. Each action specifies a mentionType and an optional preset.
 * **styles** The styles field works the same way as in the styling rules section.
 
-you can see mention type list in MentionWiki.md
+you can see mention type list in [MentionWiki.md](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/wiki/MentionWiki.md)
 
 ---
 ## 📊 TPS Latency Test
 
-Test Version : Embellish Chat 2.0.0(DEV)
+**Test Environment**
+Version: Embellish Chat 2.0.0 (DEV)
+CPU: 13th Gen Intel(R) Core(TM) i7-1360P
+RAM: 2GB max
+System: Windows 11
 
-The graph below shows the TPS (Ticks Per Second) latency measurement results for this mod.
+The graph below shows the TPS (Ticks Per Second) latency measurements for this mod.
 
-Each command was configured to parse 250 characters per tick,
-and the test recorded TPS changes when sending up to 378 × 20 chat messages per second.
+Each test message was configured to include 250 characters per tick, and the system was stressed by sending up to 378 × 20 chat messages per second. Although the average latency increases as the message rate rises, most servers handle around 200 × 20 messages per second (≈4,000 messages) or fewer, making TPS impact negligible under typical gameplay conditions.
 
-As shown in the graph, the average latency gradually increases as the command count grows.
-However, since most servers process around 200 × 20 messages per second (≈ 4000 chats) or fewer,
-TPS degradation is negligible in typical gameplay environments.
+Although command blocks were used to automate message generation during the test, each message was sent using /w, ensuring that every message passed through the same processing pipeline as a real player-sent chat message.
 
-Below are the commands used in the actual test.
+Below are the messages that were used in the test.
 
 ```w @a "**_@everyone__ Everyone, [Attention]<#FFAA00>!__** [This link](https://modrinth.com/mod/embellish-chat) is __*very*__ important. [This is [RAINBOW]<RAINBOW>]<green>! Also check out [shadow text]<SD:#55FFFF>. ||secret|| and [font]{minecraft:alt}."```
 
