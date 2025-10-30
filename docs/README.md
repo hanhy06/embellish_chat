@@ -160,7 +160,7 @@ Embellish Chat , powered by a regular expression , provides powerful flexibility
 However, this approach parses every chat message and may cause performance degradation on large-scale servers. (It is expected to have no significant performance impact on typical general servers.)
 Furthermore, creating custom rules can be challenging because Regex itself is inherently complex. We recommend using various AI tools for assistance with rule creation and optimization.
 
-### Rule Structure
+### Style Rule Structure
 
 Defines the text styling rules.<br>
 Each rule consists of a regular expression (`pattern`) and style action list(`actions`).

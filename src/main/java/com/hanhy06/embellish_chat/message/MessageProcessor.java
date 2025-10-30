@@ -24,17 +24,15 @@ public class MessageProcessor implements ConfigListener {
     private final MentionProcessor mentionProcessor;
     private final StylingProcessor stylingManager;
     private final PlayerManager playerManager;
-    private final LuckPerms luckPerms;
 
     private Config config;
     private List<UUID> bannedPlayerList;
 
-    public MessageProcessor(MentionProcessor mentionProcessor, StylingProcessor stylingManager,PlayerManager playerManager,LuckPerms luckPerms) {
+    public MessageProcessor(MentionProcessor mentionProcessor, StylingProcessor stylingManager,PlayerManager playerManager) {
         INSTANCE = this;
         this.mentionProcessor = mentionProcessor;
         this.stylingManager = stylingManager;
         this.playerManager = playerManager;
-        this.luckPerms = luckPerms;
     }
 
     @Override
@@ -50,7 +48,7 @@ public class MessageProcessor implements ConfigListener {
         String stringMessage = message.getContent().getString();
 
         ServerPlayerEntity sender = playerManager.getPlayer(message.getSender());
-        List<String> permissions = getPermissions(sender);
+//        List<String> permissions = getPermissions(sender);
 
         List<Mention> mentions = mentionProcessor.handleMention(
                 sender,
@@ -64,28 +62,28 @@ public class MessageProcessor implements ConfigListener {
                 "chat"
         );
 
-        for (String permission : permissions){
-            mentions.addAll(
-                    mentionProcessor.handleMention(
-                            sender,
-                            stringMessage,
-                            permission
-                    )
-            );
-
-            textMessage = stylingManager.applyStylingRule(
-                    textMessage,
-                    permission
-            );
-        }
+//        for (String permission : permissions){
+//            mentions.addAll(
+//                    mentionProcessor.handleMention(
+//                            sender,
+//                            stringMessage,
+//                            permission
+//                    )
+//            );
+//
+//            textMessage = stylingManager.applyStylingRule(
+//                    textMessage,
+//                    permission
+//            );
+//        }
 
         return message.withUnsignedContent(textMessage);
     }
 
-    private List<String> getPermissions(ServerPlayerEntity sender){
-        User user = luckPerms.getUserManager().getUser(sender.getUuid());
-        QueryOptions query = luckPerms.getContextManager().getQueryOptions(sender);
-        CachedPermissionData permission = user.getCachedData().getPermissionData(query);
-        return permission.getPermissionMap().entrySet().stream().filter(Map.Entry::getValue).map(Map.Entry::getKey).toList();
-    }
+//    private List<String> getPermissions(ServerPlayerEntity sender){
+//        User user = luckPerms.getUserManager().getUser(sender.getUuid());
+//        QueryOptions query = luckPerms.getContextManager().getQueryOptions(sender);
+//        CachedPermissionData permission = user.getCachedData().getPermissionData(query);
+//        return permission.getPermissionMap().entrySet().stream().filter(Map.Entry::getValue).map(Map.Entry::getKey).toList();
+//    }
 }
