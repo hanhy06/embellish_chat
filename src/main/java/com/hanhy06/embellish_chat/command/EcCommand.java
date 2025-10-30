@@ -63,7 +63,6 @@ public class EcCommand {
             ));
         }
 
-
         return 1;
     }
 
@@ -92,7 +91,6 @@ public class EcCommand {
                     String.format("input options:%s",rule.actions().stream().map(StyleAction::preset))
             ));
         }
-
 
         return 1;
     }

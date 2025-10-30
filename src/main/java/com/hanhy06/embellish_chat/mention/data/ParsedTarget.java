@@ -4,11 +4,12 @@ import com.hanhy06.embellish_chat.styling.rule.StyleAction;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Style;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public record ParsedTarget(ParsedMention mention,List<ServerPlayerEntity> players, Style style) {
     public static ParsedTarget of(ParsedMention mention,List<ServerPlayerEntity> players, Style style){
-        return new ParsedTarget(mention,players,style);
+        return new ParsedTarget(mention,new ArrayList<>(players),style);
     }
 
     public Mention createMention(){
