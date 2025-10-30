@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.loader.api.FabricLoader;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.model.user.User;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.PlayerManager;
@@ -133,27 +134,25 @@ public class MentionRegistry {
         ParsedMention parsedMention = parameter.parsedMention();
         List<ServerPlayerEntity> players = new ArrayList<>();
 
-
-        if (FabricLoader.getInstance().isModLoaded("luckperms")) {
-            try {
-                LuckPerms luckPerms = LuckPermsProvider.get();
-                players = manager.getPlayerList().stream()
-                        .filter(player -> luckPerms.getUserManager()
-                                .getUser(player.getUuid())
-                                .getPrimaryGroup()
-                                .equals(parameter.mention()))
-                        .toList();
-            } catch (IllegalStateException exception) {
-                EmbellishChat.LOGGER.warn("LuckPerms is present but not ready yet. Permission features will be disabled: {}", exception.getMessage());
-            }
-        } else {
+        if (!FabricLoader.getInstance().isModLoaded("luckperms")) {
             EmbellishChat.LOGGER.info("LuckPerms not detected. Permission-based chat styling is disabled.");
+            return ParsedTarget.of(parsedMention, players, stylePreset);
         }
 
-        return ParsedTarget.of(
-                parsedMention,
-                players,
-                stylePreset
-        );
+        try {
+            LuckPerms luckPerms = LuckPermsProvider.get();
+            String targetGroup = parameter.mention();
+
+            players = manager.getPlayerList().stream()
+                    .filter(player -> {
+                        User user = luckPerms.getUserManager().getUser(player.getUuid());
+                        return user != null && targetGroup.equals(user.getPrimaryGroup());
+                    })
+                    .toList();
+        } catch (IllegalStateException exception) {
+            EmbellishChat.LOGGER.warn("LuckPerms is present but not ready yet. Permission features will be disabled: {}", exception.getMessage());
+        }
+
+        return ParsedTarget.of(parsedMention, players, stylePreset);
     }
 }
