@@ -11,6 +11,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,6 +56,7 @@ public class MessageProcessor implements ConfigListener {
 
             mentions.addAll(mention);
         }
+        mentions.sort(Comparator.comparing(Mention::begin));
 
         textMessage = stylingManager.applyMention(textMessage,mentions);
         for (String key: getPermissionsKeys(sender,"chat",config.stylingRules().keySet())){
