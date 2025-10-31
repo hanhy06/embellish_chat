@@ -18,3 +18,79 @@
 | `MASK`          | Replaces the original string with the characters supplied via options, adjusting to match the original length.            | Replacement character    |
 | `UPPER`         | Transforms every matched substring into uppercase characters.                                                             | No options are required  |
 | `LOWER`         | Transforms every matched substring into lowercase characters.                                                             | No options are required  |
+
+---
+
+# Usage
+
+## Single Style
+
+```
+{
+  "pattern": "__(.+?)__()",
+  "styles": [
+    {
+      "styleType": "UNDERLINE",
+      "preset": ""
+    }
+  ]
+}
+```
+This is the most basic way to use it.
+
+## Multiple Style
+
+```
+{
+  "pattern": "_*(.+?)*_()",
+  "styles": [
+    {
+      "styleType": "UNDERLINE",
+      "preset": ""
+    },
+    {
+      "styleType": "BOLD",
+      "preset": ""
+    }
+  ]
+}
+```
+You can use multiple types in a single rule.
+
+> **Notes**
+> 
+> * In multi-style types, options are separated based on a delimiter.
+> * For example, if you combine rainbow and font, the user must enter it like 0.3-minecraft:alt (the hyphen is the default delimiter).
+
+## Preset
+
+```
+{
+  "pattern": "\\[([^\\]]+?)]<(RAINBOW)>",
+  "styles": [
+    {
+      "styleType": "COLOR_RAINBOW",
+      "preset": "0.7"
+    }
+  ]
+}
+```
+
+You can set a preset by specifying it, and if the preset is empty, the option provided by the user will be used.
+
+
+## Applying It – Global Style
+
+```
+{
+  "pattern": "(.+)()",
+  "styles": [
+    {
+      "styleType": "COLOR_RAINBOW",
+      "preset": "0.3"
+    }
+  ]
+}
+```
+
+In regular expressions, .+ means all characters. Using this method, you can apply a subtle rainbow effect to all text.

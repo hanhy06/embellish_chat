@@ -13,3 +13,85 @@
 > * All mentions use the mentionColor defined in the configuration by default.
 > * The TEAM and PLAYER types follow the style of the team they belong to.
 > * You can modify the mention styles in the config.json file.
+
+---
+
+# Usage
+
+# Single Mention
+
+```
+{
+  "pattern": "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
+  "mentions": [
+    {
+      "mentionType": "PLAYER",
+      "preset": ""
+    }
+  ],
+  "styles": [
+    {
+      "styleType": "BOLD",
+      "preset": ""
+    }
+  ]
+}
+```
+
+This is the most basic way to use it.
+
+## Multiple Mention
+
+```
+{
+  "pattern": "@red-team-here()",
+  "mentions": [
+    {
+      "mentionType": "HERE",
+      "preset": "64"
+    },
+    {
+      "mentionType": "TEAM",
+      "preset": "red"
+    }
+  ],
+  "styles": [
+    {
+      "styleType": "BOLD",
+      "preset": ""
+    },
+    {
+      "styleType": "COLOR_HEX",
+      "preset": "#FFAAAA"
+    }
+  ]
+}
+```
+
+Mentions any red-team player within a 64-block radius.
+
+## Application – Making an announcement
+
+```
+{
+  "pattern": "[notification]()",
+  "mentions": [
+    {
+      "mentionType": "EVERYONE",
+      "preset": ""
+    }
+  ],
+  "styles": [
+    {
+      "styleType": "BOLD",
+      "preset": ""
+    },
+    {
+      "styleType": "COLOR_HEX",
+      "preset": "#FFAAAA"
+    }
+  ]
+}
+```
+
+Typing `[notification]` will send an alert to everyone.
