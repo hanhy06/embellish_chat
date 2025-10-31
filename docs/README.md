@@ -43,16 +43,14 @@ Use the following patterns directly in the chat window:
 
 The mention notification sound uses the **UI** sound category by default. On **Minecraft 1.21.5 and earlier**, it falls back to the **PLAYER** category.
 
-| Target      | Behavior                                                                                                                                                                      |
-| ----------- |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `@Player`   | Mentions a specific player. The mention is bolded and tinted with the player's team color if available; otherwise the default mention color is used.                          |
-| `@team`     | Mentions all players on the sender’s team. Displays in the team color falls back to the group mention color if the team has no color.                                         |
-| `@everyone` | Mentions everyone on the server. Uses the **group mention color**.                                                                                                            |
-| `@here`     | Mentions all players within a configurable radius in the same world as the sender. Default radius is **64 blocks**; adjustable in settings. Uses the **group mention color**. |
+| Target        | Behavior                                                                                                                                                                                                                                                                |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@Player`     | Mentions a specific player. If the player is online, the mention adopts the player’s display name style (including team color). If the player is offline or does not exist, the mention uses the player’s team color if available, otherwise the default mention color. |
+| `@team(name)` | Mentions all players in the specified team. If the team has a color, the mention is displayed in that color; otherwise it falls back to the default mention color.                                                                                                      |
+| `@everyone`   | Mentions all players on the server. Always uses the **default mention color**.                                                                                                                                                                                          |
+| `@here`       | Mentions all players within a configurable radius in the same world as the sender. The default radius is **64 blocks**, adjustable in the configuration. Uses the **default mention color**.                                                                            |
 
-Online mention targets receive a notification, and the message is automatically styled (bold + color) according to team/default rules.
-
-You can configure group mentions so that only players with operator privileges (op) are allowed to use them.
+Online mention targets receive a notification, and the message is automatically styled using the appropriate color and formatting based on the target’s team, display name, or default rules.
 
 ---
 
@@ -239,10 +237,6 @@ Because the mention system doesn’t apply to command blocks, the actual latency
 The graph below shows the TPS (Ticks Per Second) latency measurements for this mod.
 
 Each test message was configured to include 230 characters per tick, and the system was stressed by sending up to 382 × 20 chat messages per second. Although the average latency increases as the message rate rises, most servers handle around 200 × 20 messages per second (≈4,000 messages) or fewer, making TPS impact negligible under typical gameplay conditions.
-
-Although command blocks were used to automate message generation during the test, each message was sent using /w, ensuring that every message passed through the same processing pipeline as a real player-sent chat message.
-
-Below are the messages that were used in the test.
 
 ```w @a "@everyone @here **Check out this new [update]<green> __news__** right [here](https://github.com/hanhy06/embellish_chat)! _First come, first served — join now for an exclusive ||special|| gift!_ ~~If you come late, there won't be any left~~"```
 
