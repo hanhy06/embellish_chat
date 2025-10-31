@@ -104,7 +104,7 @@ The configuration file is located at: `config/embellish_chat.json`.
         "mentions": [
           {
             "mentionType": "HERE",
-            "preset": ""
+            "preset": "64"
           }
         ],
         "styles": [
