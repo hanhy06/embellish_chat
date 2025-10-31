@@ -232,6 +232,16 @@ Each rule consists of a regular expression (`pattern`), mention action list(`men
 you can see mention type list in [MentionWiki.md](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/wiki/MentionWiki.md)
 
 ---
+
+### Permission
+
+This mode supports the permission features of the Fabric Permissions API.
+
+The keys in stylingRules and mentionRules represent each permission (such as chat, command, mention, etc.). These keys are default keys, and the system works even if they are not explicitly defined.
+
+The mod checks from top to bottom and applies the rules registered for each permission.
+
+---
 ## 📊 TPS Latency Test
 
 **Test Environment**
