@@ -238,7 +238,7 @@ Because the mention system doesn’t apply to command blocks, the actual latency
 
 The graph below shows the TPS (Ticks Per Second) latency measurements for this mod.
 
-Each test message was configured to include 250 characters per tick, and the system was stressed by sending up to 378 × 20 chat messages per second. Although the average latency increases as the message rate rises, most servers handle around 200 × 20 messages per second (≈4,000 messages) or fewer, making TPS impact negligible under typical gameplay conditions.
+Each test message was configured to include 230 characters per tick, and the system was stressed by sending up to 382 × 20 chat messages per second. Although the average latency increases as the message rate rises, most servers handle around 200 × 20 messages per second (≈4,000 messages) or fewer, making TPS impact negligible under typical gameplay conditions.
 
 Although command blocks were used to automate message generation during the test, each message was sent using /w, ensuring that every message passed through the same processing pipeline as a real player-sent chat message.
 
