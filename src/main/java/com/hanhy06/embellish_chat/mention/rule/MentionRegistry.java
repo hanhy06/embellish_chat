@@ -64,7 +64,7 @@ public class MentionRegistry {
         List<ServerPlayerEntity> players = PlayerLookup.around(
                 parameter.sender().getEntityWorld(),
                 parameter.sender().getEntityPos(),
-                Float.parseFloat(parameter.mention())
+                Float.parseFloat(parameter.option())
         ).stream().toList();
 
         return ParsedTarget.of(
@@ -75,7 +75,7 @@ public class MentionRegistry {
     }
 
     private ParsedTarget TEAM(MentionParameter parameter){
-        Team team = parameter.sender().getScoreboardTeam();
+        Team team = scoreboard.getTeam(parameter.option());
         ParsedMention parsedMention = parameter.parsedMention();
         List<ServerPlayerEntity> players = new ArrayList<>();
         Style style = stylePreset;
@@ -103,7 +103,7 @@ public class MentionRegistry {
 
     private ParsedTarget PLAYER(MentionParameter parameter){
         ParsedMention parsedMention = parameter.parsedMention();
-        ServerPlayerEntity target = manager.getPlayer(parameter.mention());
+        ServerPlayerEntity target = manager.getPlayer(parameter.option());
         Style style = stylePreset;
         List<ServerPlayerEntity> players = new ArrayList<>();
 
@@ -118,7 +118,7 @@ public class MentionRegistry {
                     .withParent(stylePreset)
                     .withColor(TeamColor.getPlayerColor(
                             scoreboard,
-                            parameter.mention(),
+                            parameter.option(),
                             config.mentionColor())
                     );
         }
@@ -141,7 +141,7 @@ public class MentionRegistry {
 
         try {
             LuckPerms luckPerms = LuckPermsProvider.get();
-            String targetGroup = parameter.mention();
+            String targetGroup = parameter.option();
 
             players = manager.getPlayerList().stream()
                     .filter(player -> {

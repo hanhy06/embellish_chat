@@ -72,8 +72,8 @@ public class MentionProcessor implements ConfigListener {
         List<ParsedMention> mentions = new ArrayList<>();
 
         while (matcher.find()) {
-            List<String> mention = List.of(matcher.group(1).split(config.delimiter()));
-            mentions.add(ParsedMention.of(rule, mention, matcher.start(), matcher.end()));
+            List<String> options = List.of(matcher.group(1).split(config.delimiter()));
+            mentions.add(ParsedMention.of(rule, options, matcher.start(), matcher.end()));
         }
 
         return mentions;
@@ -96,8 +96,8 @@ public class MentionProcessor implements ConfigListener {
         int index = 0;
         for (MentionAction action : mention.rule().mentions()) {
             String option = action.preset();
-            if (option.isBlank() && index< mention.mentions().size()){
-                option = mention.mentions().get(index);
+            if (option.isBlank() && index< mention.options().size()){
+                option = mention.options().get(index);
             }
             ParsedTarget target = registries.get(action.mentionType())
                     .apply(MentionParameter.of(mention, sender, option));

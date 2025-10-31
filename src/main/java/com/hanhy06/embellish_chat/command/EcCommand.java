@@ -44,7 +44,7 @@ public class EcCommand {
         if (player == null) return 1;
 
         player.sendMessage(Text.literal("_____Available mentions_____"));
-        List<String> keys = PermissionUtil.getPermissionsKeys(player,"mention",ConfigManager.getConfig().mentionRules().keySet());
+        List<String> keys = PermissionUtil.getPermissionsKeys(player,"option",ConfigManager.getConfig().mentionRules().keySet());
         List<MentionRule> rules = new ArrayList<>();
 
         for (String key : keys){
@@ -111,8 +111,8 @@ public class EcCommand {
                             styles()
                             .stream()
                             .map(StyleAction::preset)
-                            .map(str -> String.format("\"%s\"",str.isBlank() ? "your input":str))
-                            .collect(Collectors.joining(", "))
+                            .map(str -> String.format("%s",str.isBlank() ? "your input":str))
+                            .collect(Collectors.joining(ConfigManager.getConfig().delimiter()))
                     )
             ));
         }

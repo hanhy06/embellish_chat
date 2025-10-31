@@ -22,7 +22,7 @@ public record Config(
         HashMap<String, Integer> colorPreset,
         String delimiter,
 
-        //mention preset
+        //option preset
         Integer mentionColor,
         String mentionSound,
         float mentionPitch,
@@ -140,7 +140,7 @@ public record Config(
                 )),
                 new HashMap<>(Map.ofEntries(
                     entry(
-                            "mention",
+                            "option",
                             List.of(
                                     MentionRule.of(
                                             "@here()",
@@ -220,7 +220,7 @@ public record Config(
                 )),
                 "-",
 
-                //mention preset
+                //option preset
                 0xff55ff,
                 "minecraft:entity.experience_orb.pickup",
                 1.75f,
