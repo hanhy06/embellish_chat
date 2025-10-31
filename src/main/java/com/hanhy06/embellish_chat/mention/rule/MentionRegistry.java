@@ -133,10 +133,11 @@ public class MentionRegistry {
     private ParsedTarget LUCK_PERMS_GROUP(MentionParameter parameter){
         ParsedMention parsedMention = parameter.parsedMention();
         List<ServerPlayerEntity> players = new ArrayList<>();
+        Style style = stylePreset;
 
         if (!FabricLoader.getInstance().isModLoaded("luckperms")) {
             EmbellishChat.LOGGER.info("LuckPerms not detected. Permission-based chat styling is disabled.");
-            return ParsedTarget.of(parsedMention, players, stylePreset);
+            return ParsedTarget.of(parsedMention, players, style);
         }
 
         try {
@@ -149,6 +150,12 @@ public class MentionRegistry {
                         return user != null && targetGroup.equals(user.getPrimaryGroup());
                     })
                     .toList();
+
+            style = Optional.ofNullable(luckPerms.getGroupManager().getGroup(targetGroup))
+                    .map(group -> group.getCachedData().getMetaData().getMetaValue("color"))
+                    .map(colorCode -> Style.EMPTY.withColor(Integer.parseInt(colorCode.replace("#", ""), 16)))
+                    .orElse(stylePreset);
+
         } catch (IllegalStateException exception) {
             EmbellishChat.LOGGER.warn("LuckPerms is present but not ready yet. Permission features will be disabled: {}", exception.getMessage());
         }
