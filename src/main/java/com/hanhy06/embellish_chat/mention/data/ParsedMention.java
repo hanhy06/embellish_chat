@@ -14,11 +14,11 @@ public record ParsedMention(MentionRule rule, List<String> options, int begin, i
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         ParsedMention mention = (ParsedMention) o;
-        return end == mention.end && begin == mention.begin;
+        return begin == mention.begin;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(begin, end);
+        return Objects.hash(begin);
     }
 }

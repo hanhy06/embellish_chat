@@ -169,7 +169,7 @@ public record Config(
                                             )
                                     ),
                                     MentionRule.of(
-                                            "@team:(.*?)",
+                                            "@team-(.*?)(?=\\b|$)",
                                             List.of(
                                                     MentionAction.of(
                                                             MentionType.TEAM,""
