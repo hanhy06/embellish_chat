@@ -57,8 +57,8 @@ Online mention targets receive a notification, and the message is automatically 
 ## ⌨️ Commands
 
 * **`/embellish_chat reload`** — Reloads the configuration from `config/embellish_chat.json`.
-* **`/embellish_chat ban <player>`** — Prevents the specified player from using the mod’s styling features.
-* **`/embellish_chat pardon <player>`** — Restores access to the mod’s styling features for the specified player.
+* **`/embellish_chat ban <player>`** — Prevents the specified player from using the mod’s all features.
+* **`/embellish_chat pardon <player>`** — Restores access to the mod’s all features for the specified player.
 
 ---
 

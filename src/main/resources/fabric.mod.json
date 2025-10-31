@@ -29,6 +29,7 @@
 		"fabric-api": "*"
 	},
 	"suggests": {
-		"luckperms": ">=5.4"
+		"luckperms": ">=5.4",
+        "fabric-permissions-api": "5.0"
 	}
 }
