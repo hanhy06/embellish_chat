@@ -111,7 +111,7 @@ public class EcCommand {
                             styles()
                             .stream()
                             .map(StyleAction::preset)
-                            .map(str -> String.format("%s",str.isBlank() ? "your input":str))
+                            .map(str -> String.format("%s",str.isBlank() ? "user input":str))
                             .collect(Collectors.joining(ConfigManager.getConfig().delimiter()))
                     )
             ));
