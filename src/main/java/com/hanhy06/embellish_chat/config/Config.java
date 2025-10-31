@@ -169,7 +169,7 @@ public record Config(
                                             )
                                     ),
                                     MentionRule.of(
-                                            "@team-(.*?)(?=\\b|$)",
+                                            "@team\\((.*?)\\)",
                                             List.of(
                                                     MentionAction.of(
                                                             MentionType.TEAM,""
@@ -182,7 +182,7 @@ public record Config(
                                             )
                                     ),
                                     MentionRule.of(
-                                            "@([A-Za-z0-9_]{1,16})(?=\\b|$)",
+                                            "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
                                             List.of(
                                                     MentionAction.of(
                                                             MentionType.PLAYER,""
