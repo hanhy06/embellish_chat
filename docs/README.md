@@ -203,7 +203,7 @@ Each rule consists of a regular expression (`pattern`), mention action list(`men
     "mentions": [
       {
         "mentionType": "HERE",
-        "preset": ""
+        "preset": "64"
       }
     ],
     "styles": [
