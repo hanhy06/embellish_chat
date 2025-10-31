@@ -36,12 +36,11 @@ Use the following patterns directly in the chat window:
 > * For security, the **Link** feature only recognizes URLs using the `https://` protocol.
 > * *Preset* values depend on the mod's configuration (e.g., `pink`, `blue`, etc.).
 > * `path` for **Font** accepts a namespaced ID such as `minecraft:alt`.
+> * If multiple style types exist and no preset is configured, the user can enter one manually. The separator can be checked through /ec help_style.
 
 ---
 
 ## 🗣️ Mention System
-
-The mention notification sound uses the **UI** sound category by default. On **Minecraft 1.21.5 and earlier**, it falls back to the **PLAYER** category.
 
 | Target        | Behavior                                                                                                                                                                                                                                                                |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -50,7 +49,10 @@ The mention notification sound uses the **UI** sound category by default. On **M
 | `@everyone`   | Mentions all players on the server. Always uses the **default mention color**.                                                                                                                                                                                          |
 | `@here`       | Mentions all players within a configurable radius in the same world as the sender. The default radius is **64 blocks**, adjustable in the configuration. Uses the **default mention color**.                                                                            |
 
-Online mention targets receive a notification, and the message is automatically styled using the appropriate color and formatting based on the target’s team, display name, or default rules.
+> **Notes**
+> 
+> * Online mention targets receive a notification, and the message is automatically styled using the appropriate color and formatting based on the target’s team, display name, or default rules.
+> * The mention notification sound uses the **UI** sound category by default. On **Minecraft 1.21.5 and earlier**, it falls back to the **PLAYER** category.
 
 ---
 
@@ -59,6 +61,14 @@ Online mention targets receive a notification, and the message is automatically 
 * **`/embellish_chat reload`** — Reloads the configuration from `config/embellish_chat.json`.
 * **`/embellish_chat ban <player>`** — Prevents the specified player from using the mod’s all features.
 * **`/embellish_chat pardon <player>`** — Restores access to the mod’s all features for the specified player.
+
+* **`/ec help_mention`** - Displays the currently available mentions, how to use them, the mention targets, and the applicable style types.
+* **`/ec hemp_mention`** - Displays the currently available styles, how to use them, the applicable style types, and the required input options.
+
+> **Notes**
+>
+> * All commands in the /embellish_chat family require OP level 2.
+> * Commands in the /ec family do not require any OP level and can be used by all users.
 
 ---
 
