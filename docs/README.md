@@ -215,7 +215,7 @@ Each rule consists of a regular expression (`pattern`), mention action list(`men
 }
 ```
 
-* **pattern** The pattern must contain one capturing group, which represents the mention target. For example, this could be a team name or a LuckPerms group name.
+* **pattern** The pattern must contain one capturing group, which represents the mention option. For example, this could be a team name or a LuckPerms group name.
 * **mentions** The mentions field is a list of mention actions. Each action specifies a mentionType and an optional preset.
 * **styles** The styles field works the same way as in the styling rules section.
 
