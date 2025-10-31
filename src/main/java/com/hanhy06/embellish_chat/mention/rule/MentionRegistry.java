@@ -88,7 +88,7 @@ public class MentionRegistry {
                     .filter(Objects::nonNull)
                     .toList();
             style = team
-                    .getDisplayName()
+                    .getFormattedName()
                     .getStyle()
                     .withParent(style);
         }
