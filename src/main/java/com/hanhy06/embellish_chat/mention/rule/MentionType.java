@@ -4,7 +4,6 @@ public enum MentionType {
     PLAYER,
     TEAM,
     HERE,
-    OUTSIDE,
     EVERYONE,
     LUCK_PERMS_GROUP
 }
