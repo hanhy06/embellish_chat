@@ -221,7 +221,7 @@ you can see mention type list in [MentionWiki.md](https://github.com/hanhy06/emb
 ## 📊 TPS Latency Test
 
 **Test Environment**
-Version: Embellish Chat 2.0.0 (DEV)
+Version: Embellish Chat 2.1.0 (DEV)
 CPU: 13th Gen Intel(R) Core(TM) i7-1360P
 RAM: 2GB max
 System: Windows 11
@@ -234,7 +234,7 @@ Although command blocks were used to automate message generation during the test
 
 Below are the messages that were used in the test.
 
-```w @a "**_@everyone__ Everyone, [Attention]<#FFAA00>!__** [This link](https://modrinth.com/mod/embellish-chat) is __*very*__ important. [This is [RAINBOW]<RAINBOW>]<green>! Also check out [shadow text]<SD:#55FFFF>. ||secret|| and [font]{minecraft:alt}."```
+```execute as @a run w @s "@everyone @here **Check out this new [update]<green> __news__** right [here](https://github.com/hanhy06/embellish_chat)! _First come, first served — join now for an exclusive ||special|| gift!_ ~~If you come late, there won't be any left~~"```
 
 ![Latency](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Latency.png?raw=true)
 
