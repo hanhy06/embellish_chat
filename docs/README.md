@@ -227,10 +227,14 @@ you can see mention type list in [MentionWiki.md](https://github.com/hanhy06/emb
 ## 📊 TPS Latency Test
 
 **Test Environment**
+
 Version: Embellish Chat 2.1.0 (DEV)
 CPU: 13th Gen Intel(R) Core(TM) i7-1360P
 RAM: 2GB max
 System: Windows 11
+
+**Since I couldn’t run 400 latency tests per tick, I used command blocks instead.
+Because the mention system doesn’t apply to command blocks, the actual latency is expected to be slightly higher than the results shown here.**
 
 The graph below shows the TPS (Ticks Per Second) latency measurements for this mod.
 
@@ -240,7 +244,7 @@ Although command blocks were used to automate message generation during the test
 
 Below are the messages that were used in the test.
 
-```execute as @a run w @a "@everyone @here **Check out this new [update]<green> __news__** right [here](https://github.com/hanhy06/embellish_chat)! _First come, first served — join now for an exclusive ||special|| gift!_ ~~If you come late, there won't be any left~~"```
+```w @a "@everyone @here **Check out this new [update]<green> __news__** right [here](https://github.com/hanhy06/embellish_chat)! _First come, first served — join now for an exclusive ||special|| gift!_ ~~If you come late, there won't be any left~~"```
 
 ![Latency](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Latency.png?raw=true)
 
