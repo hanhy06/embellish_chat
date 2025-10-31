@@ -27,7 +27,7 @@ public class MentionProcessor implements ConfigListener {
 
     private Config config;
     private SoundEvent mentionSound;
-    private HashMap<String, List<MentionRule>> mentionRules;
+    private Map<String, List<MentionRule>> mentionRules;
     private MentionRegistry registries;
 
     public MentionProcessor(PlayerManager manager, Scoreboard scoreboard) {

@@ -14,8 +14,8 @@ import static java.util.Map.entry;
 public record Config(
         //Rules
         //TODO: 나중에 Rule에 description 즉 설명 필드 추가해야함
-        HashMap<String,List<StylingRule>> stylingRules,
-        HashMap<String,List<MentionRule>> mentionRules,
+        Map<String,List<StylingRule>> stylingRules,
+        Map<String,List<MentionRule>> mentionRules,
 
         //styling preset
         int urlColor,
@@ -36,29 +36,9 @@ public record Config(
     public static Config createDefault(){
         return new Config(
                 //style
-                new HashMap<>(Map.ofEntries(
+                new TreeMap<>(Map.ofEntries(
                         entry("chat",
                                 List.of(
-                                        StylingRule.of(
-                                                "\\*\\*([^(?!*+$).+?)\\*\\*()",
-                                                List.of(StyleAction.of(StyleType.BOLD,""))
-                                        ),
-                                        StylingRule.of(
-                                                "__(^(?!_+$).+?)__()",
-                                                List.of(StyleAction.of(StyleType.UNDERLINE,""))
-                                        ),
-                                        StylingRule.of(
-                                                "_(^(?!_+$).+?)_()",
-                                                List.of(StyleAction.of(StyleType.ITALIC,""))
-                                        ),
-                                        StylingRule.of(
-                                                "~~(^(?!~+$).+?)~~()",
-                                                List.of(StyleAction.of(StyleType.STRIKETHROUGH,""))
-                                        ),
-                                        StylingRule.of(
-                                                "\\|\\|(^(?!\\|+$).+?)\\|\\|()",
-                                                List.of(StyleAction.of(StyleType.OBFUSCATED,""))
-                                        ),
                                         StylingRule.of(
                                                 "\\[([^\\]]+?)]\\((.*?)\\)",
                                                 List.of(StyleAction.of(StyleType.URL,""))
@@ -80,6 +60,26 @@ public record Config(
                                                 List.of(StyleAction.of(StyleType.COLOR_PRESET,""))
                                         ),
                                         StylingRule.of(
+                                                "\\*\\*(.+?)\\*\\*()",
+                                                List.of(StyleAction.of(StyleType.BOLD,""))
+                                        ),
+                                        StylingRule.of(
+                                                "__(.+?)__()",
+                                                List.of(StyleAction.of(StyleType.UNDERLINE,""))
+                                        ),
+                                        StylingRule.of(
+                                                "_(.+?)_()",
+                                                List.of(StyleAction.of(StyleType.ITALIC,""))
+                                        ),
+                                        StylingRule.of(
+                                                "~~(.+?)~~()",
+                                                List.of(StyleAction.of(StyleType.STRIKETHROUGH,""))
+                                        ),
+                                        StylingRule.of(
+                                                "\\|\\|(.+?)\\|\\|()",
+                                                List.of(StyleAction.of(StyleType.OBFUSCATED,""))
+                                        ),
+                                        StylingRule.of(
                                                 "\\[([^\\]]+?)]<(RAINBOW)>",
                                                 List.of(StyleAction.of(StyleType.COLOR_RAINBOW,"0.7"))
                                         ),
@@ -92,23 +92,23 @@ public record Config(
                         entry("command",
                                 List.of(
                                         StylingRule.of(
-                                                "\\*\\*([^(?!*+$).+?)\\*\\*()",
+                                                "\\*\\*(.+?)\\*\\*()",
                                                 List.of(StyleAction.of(StyleType.BOLD,""))
                                         ),
                                         StylingRule.of(
-                                                "__(^(?!_+$).+?)__()",
+                                                "__(.+?)__()",
                                                 List.of(StyleAction.of(StyleType.UNDERLINE,""))
                                         ),
                                         StylingRule.of(
-                                                "_(^(?!_+$).+?)_()",
+                                                "_(.+?)_()",
                                                 List.of(StyleAction.of(StyleType.ITALIC,""))
                                         ),
                                         StylingRule.of(
-                                                "~~(^(?!~+$).+?)~~()",
+                                                "~~(.+?)~~()",
                                                 List.of(StyleAction.of(StyleType.STRIKETHROUGH,""))
                                         ),
                                         StylingRule.of(
-                                                "\\|\\|(^(?!\\|+$).+?)\\|\\|()",
+                                                "\\|\\|(.+?)\\|\\|()",
                                                 List.of(StyleAction.of(StyleType.OBFUSCATED,""))
                                         ),
                                         StylingRule.of(
@@ -138,7 +138,7 @@ public record Config(
                                 )
                         )
                 )),
-                new HashMap<>(Map.ofEntries(
+                new TreeMap<>(Map.ofEntries(
                     entry(
                             "option",
                             List.of(

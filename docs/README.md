@@ -160,6 +160,12 @@ Embellish Chat , powered by a regular expression , provides powerful flexibility
 However, this approach parses every chat message and may cause performance degradation on large-scale servers. (It is expected to have no significant performance impact on typical general servers.)
 Furthermore, creating custom rules can be challenging because Regex itself is inherently complex. We recommend using various AI tools for assistance with rule creation and optimization.
 
+<span style="color:red">
+In this mod, the order of mention rules and styling rules is extremely important!
+Depending on the order, serious bugs may occur, so please be careful.  
+The mod applies mentions and styling from top to bottom in the given order.
+</span>
+
 ### Style Rule Structure
 
 Defines the text styling rules.<br>

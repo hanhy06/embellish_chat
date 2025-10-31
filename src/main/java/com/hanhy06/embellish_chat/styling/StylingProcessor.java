@@ -10,8 +10,8 @@ import com.hanhy06.embellish_chat.styling.util.Runs;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 
@@ -22,7 +22,7 @@ public class StylingProcessor implements ConfigListener {
     public static StylingProcessor INSTANCE;
 
     private Config config;
-    private HashMap<String,List<StylingRule>> stylingRules;
+    private Map<String,List<StylingRule>> stylingRules;
     private StyleRegistry registry;
 
     public StylingProcessor(){
