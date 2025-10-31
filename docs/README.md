@@ -240,7 +240,7 @@ Each test message was configured to include 230 characters per tick, and the sys
 
 ```w @a "@everyone @here **Check out this new [update]<green> __news__** right [here](https://github.com/hanhy06/embellish_chat)! _First come, first served — join now for an exclusive ||special|| gift!_ ~~If you come late, there won't be any left~~"```
 
-![Latency](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Latency.png?raw=true)
+![Latency](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Latency 2.1.0.png?raw=true)
 
 ---
 
