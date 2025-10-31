@@ -12,24 +12,22 @@ import java.util.*;
 import static java.util.Map.entry;
 
 public record Config(
-        //Rules
+        //rules
         //TODO: 나중에 Rule에 description 즉 설명 필드 추가해야함
         Map<String,List<StylingRule>> stylingRules,
         Map<String,List<MentionRule>> mentionRules,
 
-        //styling preset
+        //option preset
         int urlColor,
         HashMap<String, Integer> colorPreset,
         String delimiter,
-
-        //option preset
         Integer mentionColor,
         String mentionSound,
         float mentionPitch,
         String mentionTitlePrefix,
         String mentionTitleSuffix,
 
-        //banned player
+        //banned player list
         List<UUID> bannedPlayerList
 )
 {

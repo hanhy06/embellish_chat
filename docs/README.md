@@ -63,7 +63,7 @@ Use the following patterns directly in the chat window:
 * **`/embellish_chat pardon <player>`** — Restores access to the mod’s all features for the specified player.
 
 * **`/ec help_mention`** - Displays the currently available mentions, how to use them, the mention targets, and the applicable style types.
-* **`/ec hemp_mention`** - Displays the currently available styles, how to use them, the applicable style types, and the required input options.
+* **`/ec help_style`** - Displays the currently available styles, how to use them, the applicable style types, and the required input options.
 
 > **Notes**
 >
@@ -155,7 +155,7 @@ The configuration file is located at: `config/embellish_chat.json`.
   "mentionTitlePrefix": "",
   "mentionTitleSuffix": " mentioned you",
  
-  //baned player list
+  //banned player list
   "bannedPlayerList": []
 }
 ```
