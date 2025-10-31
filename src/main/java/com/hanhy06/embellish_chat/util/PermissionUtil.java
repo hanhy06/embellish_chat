@@ -11,6 +11,7 @@ public class PermissionUtil {
     public static List<String> getPermissionsKeys(ServerPlayerEntity player, String defaultKey, Set<String> keySet){
         List<String> keys = new ArrayList<>();
         keys.add(defaultKey);
+        if (player == null) return keys;
 
         for (String key : keySet){
             if (Permissions.check(player,key)) keys.add(key);

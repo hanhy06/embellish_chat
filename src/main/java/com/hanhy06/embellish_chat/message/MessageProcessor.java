@@ -53,7 +53,6 @@ public class MessageProcessor implements ConfigListener {
             List<Mention> mention = mentionProcessor.handleMention(
                     sender,stringMessage,key
             );
-
             mentions.addAll(mention);
         }
         mentions.sort(Comparator.comparing(Mention::begin));
