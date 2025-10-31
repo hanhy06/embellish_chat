@@ -92,26 +92,6 @@ public record Config(
                         entry("command",
                                 List.of(
                                         StylingRule.of(
-                                                "\\*\\*(.+?)\\*\\*()",
-                                                List.of(StyleAction.of(StyleType.BOLD,""))
-                                        ),
-                                        StylingRule.of(
-                                                "__(.+?)__()",
-                                                List.of(StyleAction.of(StyleType.UNDERLINE,""))
-                                        ),
-                                        StylingRule.of(
-                                                "_(.+?)_()",
-                                                List.of(StyleAction.of(StyleType.ITALIC,""))
-                                        ),
-                                        StylingRule.of(
-                                                "~~(.+?)~~()",
-                                                List.of(StyleAction.of(StyleType.STRIKETHROUGH,""))
-                                        ),
-                                        StylingRule.of(
-                                                "\\|\\|(.+?)\\|\\|()",
-                                                List.of(StyleAction.of(StyleType.OBFUSCATED,""))
-                                        ),
-                                        StylingRule.of(
                                                 "\\[([^\\]]+?)]\\((.*?)\\)",
                                                 List.of(StyleAction.of(StyleType.URL,""))
                                         ),
@@ -130,6 +110,26 @@ public record Config(
                                         StylingRule.of(
                                                 "\\[([^\\]]+?)]<([a-z\\s]+?)>",
                                                 List.of(StyleAction.of(StyleType.COLOR_PRESET,""))
+                                        ),
+                                        StylingRule.of(
+                                                "\\*\\*(.+?)\\*\\*()",
+                                                List.of(StyleAction.of(StyleType.BOLD,""))
+                                        ),
+                                        StylingRule.of(
+                                                "__(.+?)__()",
+                                                List.of(StyleAction.of(StyleType.UNDERLINE,""))
+                                        ),
+                                        StylingRule.of(
+                                                "_(.+?)_()",
+                                                List.of(StyleAction.of(StyleType.ITALIC,""))
+                                        ),
+                                        StylingRule.of(
+                                                "~~(.+?)~~()",
+                                                List.of(StyleAction.of(StyleType.STRIKETHROUGH,""))
+                                        ),
+                                        StylingRule.of(
+                                                "\\|\\|(.+?)\\|\\|()",
+                                                List.of(StyleAction.of(StyleType.OBFUSCATED,""))
                                         ),
                                         StylingRule.of(
                                                 "\\[([^\\]]+?)]<(RAINBOW)>",
