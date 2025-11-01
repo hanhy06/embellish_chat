@@ -43,10 +43,9 @@ public class MessageProcessor implements ConfigListener {
     public SignedMessage handleMessage(SignedMessage message) {
         if (bannedPlayerList.contains(message.getSender())) return message;
 
+        ServerPlayerEntity sender = playerManager.getPlayer(message.getSender());
         MutableText textMessage = message.getContent().copy();
         String stringMessage = message.getContent().getString();
-
-        ServerPlayerEntity sender = playerManager.getPlayer(message.getSender());
 
         List<Mention> mentions = handleMention(sender,stringMessage);
         textMessage = stylingManager.applyMention(textMessage,mentions);
