@@ -60,21 +60,13 @@ public class StylingProcessor implements ConfigListener {
             result.append(slice(runs, lastEnd, matcher.start()));
 
             MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
-
             String option = matcher.group(2);
             List<String> options = List.of();
-
             if (option != null && !option.isBlank()){
                 options = List.of(option.split(config.delimiter()));
             }
 
-            result.append(
-                    applyStyle(
-                            segment,
-                            style.styles(),
-                            options
-                    )
-            );
+            result.append(applyStyle(segment, style.styles(), options));
             lastEnd = matcher.end();
         } while (matcher.find());
         result.append(slice(runs, lastEnd, runs.full().length()));
