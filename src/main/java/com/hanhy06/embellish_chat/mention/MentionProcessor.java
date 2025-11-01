@@ -94,8 +94,11 @@ public class MentionProcessor implements ConfigListener {
         }
 
         ParsedTarget first = targets.getFirst();
-        for (ParsedTarget target : targets) {
-            first.players().retainAll(target.players());
+        for (int i = 1; i < targets.size(); i++) {
+            first.players().retainAll(targets.get(i).players());
+            if (first.players().isEmpty()) {
+                break;
+            }
         }
         return first;
     }

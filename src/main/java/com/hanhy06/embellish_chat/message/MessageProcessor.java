@@ -72,7 +72,7 @@ public class MessageProcessor implements ConfigListener {
 
         Set<ServerPlayerEntity> targets = new HashSet<>();
         parsedTargets.forEach(target -> targets.addAll(target.players()));
-        mentionProcessor.broadcastMentions(sender,targets);
+        if (!targets.isEmpty())mentionProcessor.broadcastMentions(sender,targets);
 
         parsedTargets.forEach(target -> mentions.add(target.createMention()));
         mentions.sort(Comparator.comparing(Mention::begin));
