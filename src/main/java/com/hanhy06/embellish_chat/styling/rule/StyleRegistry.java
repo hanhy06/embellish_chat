@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import static com.hanhy06.embellish_chat.styling.util.TextSliceUtil.flatten;
 import static com.hanhy06.embellish_chat.styling.util.TextSliceUtil.slice;
@@ -23,7 +23,7 @@ public class StyleRegistry {
     private final Config config;
     private final DateTimeFormatter timestamp;
     private final HashMap<String,Integer> colorPreset;
-    private final EnumMap<StyleType, BiFunction<MutableText,String,MutableText>> registers;
+    private final EnumMap<StyleType, Function<StyleParameter,MutableText>> registers;
 
     public StyleRegistry(Config config){
         this.config = config;
@@ -49,21 +49,23 @@ public class StyleRegistry {
         ));
     }
 
-    public BiFunction<MutableText,String,MutableText> get(StyleType styleType){
+    public Function<StyleParameter,MutableText> get(StyleType styleType){
         return registers.get(styleType);
     }
 
     //TODO: 모든 타입을 StyleParameter를 받게 하고 sender로 소리를 재생하는등 새 타입들을 추가하것
 
-    public MutableText METADATA(MutableText text, String option){
+    public MutableText METADATA(StyleParameter parameter){
+        MutableText text = parameter.text();
         String now = LocalDateTime.now().format(timestamp);
 
         HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(
                  now +
                 "\nClick to copy to clipboard"
         ));
-
-        ClickEvent clickEvent = new ClickEvent.CopyToClipboard(now + " "+ text.getString());
+        ClickEvent clickEvent = new ClickEvent.CopyToClipboard(
+                now + " "+ text.getString()
+        );
 
         return text.fillStyle(
                 Style.EMPTY.withHoverEvent(
@@ -74,17 +76,17 @@ public class StyleRegistry {
         );
     }
 
-    public MutableText COLOR_HEX(MutableText text, String option){
-        int color = Color.decode(option).getRGB();
-        return text.fillStyle(Style.EMPTY.withColor(color));
+    public MutableText COLOR_HEX(StyleParameter parameter){
+        int color = Color.decode(parameter.option()).getRGB();
+        return parameter.text().fillStyle(Style.EMPTY.withColor(color));
     }
 
-    public MutableText COLOR_RAINBOW(MutableText text, String option){
-        Runs runs = flatten(text);
+    public MutableText COLOR_RAINBOW(StyleParameter parameter){
+        Runs runs = flatten(parameter.text());
         String string = runs.full();
         int length = string.length();
-        float saturation = Float.parseFloat(option);
-        if (length == 0) return text;
+        float saturation = Float.parseFloat(parameter.option());
+        if (length == 0) return parameter.text();
 
         MutableText result = Text.empty();
         for (int i = 0; i < length; i++) {
@@ -95,68 +97,68 @@ public class StyleRegistry {
         return result;
     }
 
-    public MutableText COLOR_PRESET(MutableText text, String option){
-        int color = colorPreset.getOrDefault(option,0xFFFFFF);
-        return text.fillStyle(Style.EMPTY.withColor(color));
+    public MutableText COLOR_PRESET(StyleParameter parameter){
+        int color = colorPreset.getOrDefault(parameter.option(),0xFFFFFF);
+        return parameter.text().fillStyle(Style.EMPTY.withColor(color));
     }
 
-    public MutableText COLOR_SHADOW(MutableText text, String  option){
-        int color = Color.decode(option).getRGB();
-        return text.fillStyle(Style.EMPTY.withShadowColor(color));
+    public MutableText COLOR_SHADOW(StyleParameter parameter){
+        int color = Color.decode(parameter.option()).getRGB();
+        return parameter.text().fillStyle(Style.EMPTY.withShadowColor(color));
     }
 
-    public MutableText FONT(MutableText text, String option){
-        StyleSpriteSource font = new StyleSpriteSource.Font(Identifier.tryParse(option));
-        return text.fillStyle(Style.EMPTY.withFont(font));
+    public MutableText FONT(StyleParameter parameter){
+        StyleSpriteSource font = new StyleSpriteSource.Font(Identifier.tryParse(parameter.option()));
+        return parameter.text().fillStyle(Style.EMPTY.withFont(font));
     }
 
-    public MutableText URL(MutableText text, String option){
+    public MutableText URL(StyleParameter parameter){
         try {
-            URI uri = URI.create(option);
+            URI uri = URI.create(parameter.option());
             ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
-            return text.fillStyle(Style.EMPTY.withClickEvent(clickEvent).withColor(config.urlColor()));
+            return parameter.text().fillStyle(Style.EMPTY.withClickEvent(clickEvent).withColor(config.urlColor()));
         } catch (IllegalArgumentException e) {
-            EmbellishChat.LOGGER.warn("Invalid URL address: {}", option);
-            return text;
+            EmbellishChat.LOGGER.warn("Invalid URL address: {}", parameter.option());
+            return parameter.text();
         }
     }
 
-    public MutableText BOLD(MutableText text, String option){
-        return text.fillStyle(Style.EMPTY.withBold(true));
+    public MutableText BOLD(StyleParameter parameter){
+        return parameter.text().fillStyle(Style.EMPTY.withBold(true));
     }
 
-    public MutableText ITALIC(MutableText text, String option){
-        return text.fillStyle(Style.EMPTY.withItalic(true));
+    public MutableText ITALIC(StyleParameter parameter){
+        return parameter.text().fillStyle(Style.EMPTY.withItalic(true));
     }
 
-    public MutableText UNDERLINE(MutableText text, String option){
-        return text.fillStyle(Style.EMPTY.withUnderline(true));
+    public MutableText UNDERLINE(StyleParameter parameter){
+        return parameter.text().fillStyle(Style.EMPTY.withUnderline(true));
     }
 
-    public MutableText OBFUSCATED(MutableText text, String option){
-        return text.fillStyle(Style.EMPTY.withObfuscated(true));
+    public MutableText OBFUSCATED(StyleParameter parameter){
+        return parameter.text().fillStyle(Style.EMPTY.withObfuscated(true));
     }
 
-    public MutableText STRIKETHROUGH(MutableText text, String option){
-        return text.fillStyle(Style.EMPTY.withStrikethrough(true));
+    public MutableText STRIKETHROUGH(StyleParameter parameter){
+        return parameter.text().fillStyle(Style.EMPTY.withStrikethrough(true));
     }
 
-    public MutableText REPLACE(MutableText text, String option){
-        return Text.of(option).copy().fillStyle(text.getStyle());
+    public MutableText REPLACE(StyleParameter parameter){
+        return Text.of(parameter.option()).copy().fillStyle(parameter.text().getStyle());
     }
 
-    public MutableText MASK(MutableText text, String option){
-        int length = text.getString().length();
-        return Text.of(option.repeat(length)).copy().fillStyle(text.getStyle());
+    public MutableText MASK(StyleParameter parameter){
+        int length = parameter.text().getString().length();
+        return Text.of(parameter.option().repeat(length)).copy().fillStyle(parameter.text().getStyle());
     }
 
-    public MutableText UPPER(MutableText text, String option){
-        String string = text.getString();
-        return Text.of(string.toUpperCase()).copy().fillStyle(text.getStyle());
+    public MutableText UPPER(StyleParameter parameter){
+        String string = parameter.text().getString();
+        return Text.of(string.toUpperCase()).copy().fillStyle(parameter.text().getStyle());
     }
 
-    public MutableText LOWER(MutableText text, String option){
-        String string = text.getString();
-        return Text.of(string.toLowerCase()).copy().fillStyle(text.getStyle());
+    public MutableText LOWER(StyleParameter parameter){
+        String string = parameter.text().getString();
+        return Text.of(string.toLowerCase()).copy().fillStyle(parameter.text().getStyle());
     }
 }

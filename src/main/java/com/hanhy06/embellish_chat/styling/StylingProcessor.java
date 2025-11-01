@@ -4,6 +4,7 @@ import com.hanhy06.embellish_chat.config.Config;
 import com.hanhy06.embellish_chat.config.ConfigListener;
 import com.hanhy06.embellish_chat.mention.data.Mention;
 import com.hanhy06.embellish_chat.styling.rule.StyleAction;
+import com.hanhy06.embellish_chat.styling.rule.StyleParameter;
 import com.hanhy06.embellish_chat.styling.rule.StyleRegistry;
 import com.hanhy06.embellish_chat.styling.rule.StylingRule;
 import com.hanhy06.embellish_chat.styling.util.Runs;
@@ -12,7 +13,6 @@ import net.minecraft.text.Text;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 
 import static com.hanhy06.embellish_chat.styling.util.TextSliceUtil.flatten;
@@ -87,12 +87,13 @@ public class StylingProcessor implements ConfigListener {
 
         int index = 0;
         for (StyleAction action : actions){
-            BiFunction<MutableText,String,MutableText> function = registry.get(action.styleType());
             String option = action.preset();
             if (option.isBlank() && index < options.size()){
                 option = options.get(index);
             }
-            result = function.apply(result, option);
+            result = registry
+                    .get(action.styleType())
+                    .apply(StyleParameter.of(result,option));
             index++;
         }
 
@@ -112,7 +113,7 @@ public class StylingProcessor implements ConfigListener {
             for (StyleAction action : mention.styles()){
                 segment = registry
                         .get(action.styleType())
-                        .apply(segment,action.preset());
+                        .apply(StyleParameter.of(segment,action.preset()));
             }
 
             result.append(segment);
