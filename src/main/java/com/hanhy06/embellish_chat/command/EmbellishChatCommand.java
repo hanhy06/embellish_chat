@@ -1,6 +1,9 @@
 package com.hanhy06.embellish_chat.command;
 
+import com.google.gson.JsonSyntaxException;
+import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.config.ConfigManager;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -11,6 +14,9 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
 import java.util.Collection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
 public class EmbellishChatCommand {
@@ -36,6 +42,16 @@ public class EmbellishChatCommand {
                                                     .then(
                                                             CommandManager.argument("target", EntityArgumentType.players())
                                                                     .executes(EmbellishChatCommand::executePardonPlayer)
+                                                    )
+                                    )
+                                    .then(
+                                            CommandManager.literal("regex_test")
+                                                    .then(
+                                                            CommandManager.argument("regex", StringArgumentType.string())
+                                                                    .then(
+                                                                            CommandManager.argument("test",StringArgumentType.string())
+                                                                                    .executes(EmbellishChatCommand::executeRegexTest)
+                                                                    )
                                                     )
                                     )
                     );
@@ -90,6 +106,38 @@ public class EmbellishChatCommand {
                 true
         );
 
+        return 1;
+    }
+
+    private static int executeRegexTest(CommandContext<ServerCommandSource> context){
+        Pattern pattern;
+        Matcher matcher;
+        String result;
+
+        try {
+            pattern = Pattern.compile(StringArgumentType.getString(context,"regex"));
+            matcher = pattern.matcher(StringArgumentType.getString(context,"test"));
+        }catch (PatternSyntaxException e){
+            String error = String.format("Failed to compile pattern pattern: \"%s\" (%s)",StringArgumentType.getString(context,"regex"),e.getMessage());
+            EmbellishChat.LOGGER.error(error,e);
+            context.getSource().sendFeedback(() -> Text.literal(error),false);
+            throw new JsonSyntaxException(error,e);
+        }
+
+        if (!matcher.find()) {
+            context.getSource().sendFeedback(() -> Text.literal("no match"), false);
+            return 0;
+        }
+
+        if (matcher.groupCount() == 1){
+            result = String.format("matched group1: %s",matcher.group(1));
+        }else if (matcher.groupCount() == 2){;
+            result = String.format("matched group1: %s | matched group2: %s",matcher.group(1),matcher.group(2));
+        }else {
+            result = "The entered regular expression or test string is invalid.";
+        }
+
+        context.getSource().sendFeedback(() -> Text.literal(result),false);
         return 1;
     }
 }
