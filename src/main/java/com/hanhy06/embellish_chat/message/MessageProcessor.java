@@ -49,7 +49,7 @@ public class MessageProcessor implements ConfigListener {
         ServerPlayerEntity sender = playerManager.getPlayer(message.getSender());
 
         List<Mention> mentions = new ArrayList<>();
-        for (String key: getPermissionsKeys(sender,"option",config.mentionRules().keySet())){
+        for (String key: getPermissionsKeys(sender,"mention",config.mentionRules().keySet())){
             List<Mention> mention = mentionProcessor.handleMention(
                     sender,stringMessage,key
             );

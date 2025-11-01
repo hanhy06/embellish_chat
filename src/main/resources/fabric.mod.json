@@ -1,9 +1,9 @@
 {
-	"schemaVersion": 1,
-	"id": "embellish_chat",
+  "schemaVersion": 1,
+  "id": "embellish_chat",
   "version": "${version}",
 	"name": "EmbellishChat",
-	"description": "EmbellishChat Mode made by hanhy06",
+	"description": "EmbellishChat made by hanhy06",
 	"authors": [
 		"hanhy06"
 	],

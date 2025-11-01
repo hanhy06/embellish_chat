@@ -74,7 +74,6 @@ public class ConfigManager {
             broadcastConfig();
             EmbellishChat.LOGGER.info("Config loaded successfully.");
         } else {
-            writeConfig();
             broadcastConfig();
             EmbellishChat.LOGGER.warn("Config file is empty or invalid. Using default values.");
         }
