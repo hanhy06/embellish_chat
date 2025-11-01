@@ -26,12 +26,13 @@ public class EcCommand {
                     commandDispatcher.register(
                             CommandManager.literal("ec")
                                     .then(
-                                            CommandManager.literal("help_mention")
-                                                    .executes(EcCommand::executeHelpMention)
+                                            CommandManager.literal("help")
+                                                    .then(CommandManager.literal("mention").executes(EcCommand::executeHelpMention))
+                                                    .then(CommandManager.literal("style").executes(EcCommand::executeHelpStyle))
                                     )
                                     .then(
-                                            CommandManager.literal("help_style")
-                                                    .executes(EcCommand::executeHelpStyle)
+                                            CommandManager.literal("Notification")
+                                                    .executes((s)->1)
                                     )
 
                     );

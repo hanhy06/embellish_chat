@@ -34,14 +34,14 @@ public class EmbellishChatCommand {
                                             CommandManager.literal("ban")
                                                     .then(
                                                             CommandManager.argument("target", EntityArgumentType.players())
-                                                                    .executes(EmbellishChatCommand::executeBanPlayer)
+                                                                    .executes(context -> executeBanOrPardon(context,true))
                                                     )
                                     )
                                     .then(
                                             CommandManager.literal("pardon")
                                                     .then(
                                                             CommandManager.argument("target", EntityArgumentType.players())
-                                                                    .executes(EmbellishChatCommand::executePardonPlayer)
+                                                                    .executes(context -> executeBanOrPardon(context,false))
                                                     )
                                     )
                                     .then(
@@ -65,46 +65,27 @@ public class EmbellishChatCommand {
         return 1;
     }
 
-    private static int executeBanPlayer(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        Collection<ServerPlayerEntity> players;
+    private static int executeBanOrPardon(CommandContext<ServerCommandSource> context, boolean determine) throws CommandSyntaxException {
+        Collection<ServerPlayerEntity> players = EntityArgumentType.getPlayers(context,"target");
 
-        players = EntityArgumentType.getPlayers(context,"target");
+        if (determine){
+            ConfigManager.getConfig().bannedPlayerList().addAll(
+                    players.stream().map(ServerPlayerEntity::getUuid).toList()
+            );
+        }else {
+            ConfigManager.getConfig().bannedPlayerList().removeAll(
+                    players.stream().map(ServerPlayerEntity::getUuid).toList()
+            );
+        }
 
-        ConfigManager.getConfig().bannedPlayerList().addAll(
-                players.stream().map(ServerPlayerEntity::getUuid).toList()
-        );
         ConfigManager.INSTANCE.writeConfig();
-        context.getSource().sendFeedback(
-                () -> Text.literal(
-                        String.format(
-                                "Player(s) %s has been banned.",
-                                players.stream().map(ServerPlayerEntity::getName).map(Text::getString).collect(Collectors.joining(", "))
-                        )
-                ),
-                true
+
+        String result = String.format(
+                "Player(s) %s has been %s.",
+                players.stream().map(ServerPlayerEntity::getName).map(Text::getString).collect(Collectors.joining(", ")),
+                determine ? "banned" : "pardoned"
         );
-
-        return 1;
-    }
-
-    private static int executePardonPlayer(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        Collection<ServerPlayerEntity> players;
-
-        players = EntityArgumentType.getPlayers(context,"target");
-
-        ConfigManager.getConfig().bannedPlayerList().removeAll(
-                players.stream().map(ServerPlayerEntity::getUuid).toList()
-        );
-        ConfigManager.INSTANCE.writeConfig();
-        context.getSource().sendFeedback(
-                () -> Text.literal(
-                        String.format(
-                                "Player(s) %s has been pardoned.",
-                                players.stream().map(ServerPlayerEntity::getName).map(Text::getString).collect(Collectors.joining(", "))
-                        )
-                ),
-                true
-        );
+        context.getSource().sendFeedback(() -> Text.literal(result),true);
 
         return 1;
     }
@@ -119,9 +100,8 @@ public class EmbellishChatCommand {
             matcher = pattern.matcher(StringArgumentType.getString(context,"test"));
         }catch (PatternSyntaxException e){
             String error = String.format("Failed to compile pattern pattern: \"%s\" (%s)",StringArgumentType.getString(context,"regex"),e.getMessage());
-            EmbellishChat.LOGGER.error(error,e);
             context.getSource().sendFeedback(() -> Text.literal(error),false);
-            throw new JsonSyntaxException(error,e);
+            return 0;
         }
 
         if (!matcher.find()) {
