@@ -194,7 +194,7 @@ Each rule consists of a regular expression (`pattern`) and a style action list(`
 * **pattern** Must contain **two capturing groups**: 1 the text to apply the style to, 2 an optional captured value that can be passed as an argument.
 * **styles** This is a list of style actions. Each action consists of a style type (`styleType`) and style option preset(`preset`).
 
-you can see style type list in [StyleWiki.md](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/wiki/StyleWiki.md)
+you can see more detail [StyleWiki.md](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/wiki/StyleWiki.md)
 
 ---
 
@@ -229,7 +229,7 @@ Each rule consists of a regular expression (`pattern`), mention action list(`men
 * **mentions** The mentions field is a list of mention actions. Each action specifies a mentionType and an optional preset.
 * **styles** The styles field works the same way as in the styling rules section.
 
-you can see mention type list in [MentionWiki.md](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/wiki/MentionWiki.md)
+you can see more detail [MentionWiki.md](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/wiki/MentionWiki.md)
 
 ---
 

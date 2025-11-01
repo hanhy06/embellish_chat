@@ -17,10 +17,11 @@ public record Config(
         Map<String,List<StylingRule>> stylingRules,
         Map<String,List<MentionRule>> mentionRules,
 
-        //option preset
+        //preset
+        String delimiter,
+        String timestamp,
         int urlColor,
         HashMap<String, Integer> colorPreset,
-        String delimiter,
         Integer mentionColor,
         String mentionSound,
         float mentionPitch,
@@ -138,7 +139,7 @@ public record Config(
                 )),
                 new TreeMap<>(Map.ofEntries(
                     entry(
-                            "option",
+                            "mention",
                             List.of(
                                     MentionRule.of(
                                             "@here()",
@@ -196,7 +197,9 @@ public record Config(
                     )
                 )),
 
-                //styling preset
+                //preset
+                "-",
+                "yyyy-MM-dd HH:mm:ss",
                 0x0000EE,
                 new HashMap<>(Map.ofEntries(
                         entry("black", 0x000000),
@@ -216,16 +219,13 @@ public record Config(
                         entry("yellow", 0xFFFF55),
                         entry("white", 0xFFFFFF)
                 )),
-                "-",
-
-                //option preset
                 0xff55ff,
                 "minecraft:entity.experience_orb.pickup",
                 1.75f,
                 "",
                 " mentioned you",
 
-                //banned player
+                //banned player list
                 new ArrayList<>()
         );
     }

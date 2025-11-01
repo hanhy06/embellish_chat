@@ -2,18 +2,17 @@ package com.hanhy06.embellish_chat.styling.rule;
 
 import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.config.Config;
-import com.hanhy06.embellish_chat.mention.data.Mention;
 import com.hanhy06.embellish_chat.styling.util.Runs;
-import com.hanhy06.embellish_chat.util.Timestamp;
 import net.minecraft.text.*;
 import net.minecraft.util.Identifier;
 
 import java.awt.*;
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.BiFunction;
 
 import static com.hanhy06.embellish_chat.styling.util.TextSliceUtil.flatten;
@@ -22,11 +21,13 @@ import static java.util.Map.entry;
 
 public class StyleRegistry {
     private final Config config;
+    private final DateTimeFormatter timestamp;
     private final HashMap<String,Integer> colorPreset;
     private final EnumMap<StyleType, BiFunction<MutableText,String,MutableText>> registers;
 
     public StyleRegistry(Config config){
         this.config = config;
+        this.timestamp = DateTimeFormatter.ofPattern(config.timestamp());
         this.colorPreset = config.colorPreset();
         this.registers = new EnumMap<>(Map.ofEntries(
                 entry(StyleType.METADATA, this::METADATA),
@@ -54,25 +55,15 @@ public class StyleRegistry {
 
     //TODO: 모든 타입을 StyleParameter를 받게 하고 sender로 소리를 재생하는등 새 타입들을 추가하것
 
-    public static MutableText MENTION(MutableText text, Set<Mention> mentions){
-        Runs runs = flatten(text);
-        MutableText result = Text.empty();
-        int lastEnd = 0;
-        for (Mention mention : mentions) {
-            result.append(slice(runs, lastEnd, mention.begin()));
-            result.append(slice(runs, mention.begin(), mention.end())).fillStyle(mention.style());
-            lastEnd = mention.end();
-        }
-        result.append(slice(runs, lastEnd, runs.full().length()));
-        return result;
-    }
-
     public MutableText METADATA(MutableText text, String option){
+        String now = LocalDateTime.now().format(timestamp);
+
         HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(
-                Timestamp.timeStamp() + "\nClick to copy to clipboard"
+                 now +
+                "\nClick to copy to clipboard"
         ));
 
-        ClickEvent clickEvent = new ClickEvent.CopyToClipboard(text.getString());
+        ClickEvent clickEvent = new ClickEvent.CopyToClipboard(now + " "+ text.getString());
 
         return text.fillStyle(
                 Style.EMPTY.withHoverEvent(
