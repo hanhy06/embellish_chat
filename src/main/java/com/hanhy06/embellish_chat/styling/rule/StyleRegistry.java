@@ -22,10 +22,10 @@ import static java.util.Map.entry;
 public class StyleRegistry {
     private final Config config;
     private final DateTimeFormatter timestamp;
-    private final HashMap<String,Integer> colorPreset;
-    private final EnumMap<StyleType, Function<StyleParameter,MutableText>> registers;
+    private final HashMap<String, Integer> colorPreset;
+    private final EnumMap<StyleType, Function<StyleParameter, MutableText>> registers;
 
-    public StyleRegistry(Config config){
+    public StyleRegistry(Config config) {
         this.config = config;
         this.timestamp = DateTimeFormatter.ofPattern(config.timestamp());
         this.colorPreset = config.colorPreset();
@@ -49,44 +49,32 @@ public class StyleRegistry {
         ));
     }
 
-    public Function<StyleParameter,MutableText> get(StyleType styleType){
+    public Function<StyleParameter, MutableText> get(StyleType styleType) {
         return registers.get(styleType);
     }
 
-    //TODO: 모든 타입을 StyleParameter를 받게 하고 sender로 소리를 재생하는등 새 타입들을 추가하것
-
-    public MutableText METADATA(StyleParameter parameter){
+    public MutableText METADATA(StyleParameter parameter) {
         MutableText text = parameter.text();
         String now = LocalDateTime.now().format(timestamp);
 
-        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(
-                 now +
-                "\nClick to copy to clipboard"
-        ));
-        ClickEvent clickEvent = new ClickEvent.CopyToClipboard(
-                now + " "+ text.getString()
-        );
+        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(now + "\nClick to copy to clipboard"));
+        ClickEvent clickEvent = new ClickEvent.CopyToClipboard(now + " " + text.getString());
 
-        return text.fillStyle(
-                Style.EMPTY.withHoverEvent(
-                        hoverEvent
-                ).withClickEvent(
-                        clickEvent
-                )
-        );
+        return text.fillStyle(Style.EMPTY
+                .withHoverEvent(hoverEvent)
+                .withClickEvent(clickEvent));
     }
 
-    public MutableText COLOR_HEX(StyleParameter parameter){
+    public MutableText COLOR_HEX(StyleParameter parameter) {
         int color = Color.decode(parameter.option()).getRGB();
         return parameter.text().fillStyle(Style.EMPTY.withColor(color));
     }
 
-    public MutableText COLOR_RAINBOW(StyleParameter parameter){
+    public MutableText COLOR_RAINBOW(StyleParameter parameter) {
         Runs runs = flatten(parameter.text());
         String string = runs.full();
         int length = string.length();
         float saturation = Float.parseFloat(parameter.option());
-        if (length == 0) return parameter.text();
 
         MutableText result = Text.empty();
         for (int i = 0; i < length; i++) {
@@ -97,67 +85,69 @@ public class StyleRegistry {
         return result;
     }
 
-    public MutableText COLOR_PRESET(StyleParameter parameter){
-        int color = colorPreset.getOrDefault(parameter.option(),0xFFFFFF);
+    public MutableText COLOR_PRESET(StyleParameter parameter) {
+        int color = colorPreset.getOrDefault(parameter.option(), 0xFFFFFF);
         return parameter.text().fillStyle(Style.EMPTY.withColor(color));
     }
 
-    public MutableText COLOR_SHADOW(StyleParameter parameter){
+    public MutableText COLOR_SHADOW(StyleParameter parameter) {
         int color = Color.decode(parameter.option()).getRGB();
         return parameter.text().fillStyle(Style.EMPTY.withShadowColor(color));
     }
 
-    public MutableText FONT(StyleParameter parameter){
+    public MutableText FONT(StyleParameter parameter) {
         StyleSpriteSource font = new StyleSpriteSource.Font(Identifier.tryParse(parameter.option()));
         return parameter.text().fillStyle(Style.EMPTY.withFont(font));
     }
 
-    public MutableText URL(StyleParameter parameter){
+    public MutableText URL(StyleParameter parameter) {
         try {
             URI uri = URI.create(parameter.option());
             ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
-            return parameter.text().fillStyle(Style.EMPTY.withClickEvent(clickEvent).withColor(config.urlColor()));
+            return parameter.text().fillStyle(Style.EMPTY
+                    .withClickEvent(clickEvent)
+                    .withColor(config.urlColor()));
         } catch (IllegalArgumentException e) {
             EmbellishChat.LOGGER.warn("Invalid URL address: {}", parameter.option());
             return parameter.text();
         }
     }
 
-    public MutableText BOLD(StyleParameter parameter){
+    public MutableText BOLD(StyleParameter parameter) {
         return parameter.text().fillStyle(Style.EMPTY.withBold(true));
     }
 
-    public MutableText ITALIC(StyleParameter parameter){
+    public MutableText ITALIC(StyleParameter parameter) {
         return parameter.text().fillStyle(Style.EMPTY.withItalic(true));
     }
 
-    public MutableText UNDERLINE(StyleParameter parameter){
+    public MutableText UNDERLINE(StyleParameter parameter) {
         return parameter.text().fillStyle(Style.EMPTY.withUnderline(true));
     }
 
-    public MutableText OBFUSCATED(StyleParameter parameter){
+    public MutableText OBFUSCATED(StyleParameter parameter) {
         return parameter.text().fillStyle(Style.EMPTY.withObfuscated(true));
     }
 
-    public MutableText STRIKETHROUGH(StyleParameter parameter){
+    public MutableText STRIKETHROUGH(StyleParameter parameter) {
         return parameter.text().fillStyle(Style.EMPTY.withStrikethrough(true));
     }
 
-    public MutableText REPLACE(StyleParameter parameter){
+    public MutableText REPLACE(StyleParameter parameter) {
         return Text.of(parameter.option()).copy().fillStyle(parameter.text().getStyle());
     }
 
-    public MutableText MASK(StyleParameter parameter){
+    public MutableText MASK(StyleParameter parameter) {
         int length = parameter.text().getString().length();
         return Text.of(parameter.option().repeat(length)).copy().fillStyle(parameter.text().getStyle());
     }
 
-    public MutableText UPPER(StyleParameter parameter){
+    public MutableText UPPER(StyleParameter parameter) {
         String string = parameter.text().getString();
         return Text.of(string.toUpperCase()).copy().fillStyle(parameter.text().getStyle());
     }
 
-    public MutableText LOWER(StyleParameter parameter){
+    public MutableText LOWER(StyleParameter parameter) {
         String string = parameter.text().getString();
         return Text.of(string.toLowerCase()).copy().fillStyle(parameter.text().getStyle());
     }
