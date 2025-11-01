@@ -4,16 +4,16 @@ import com.hanhy06.embellish_chat.config.Config;
 import com.hanhy06.embellish_chat.config.ConfigListener;
 import com.hanhy06.embellish_chat.mention.MentionProcessor;
 import com.hanhy06.embellish_chat.mention.data.Mention;
+import com.hanhy06.embellish_chat.mention.data.ParsedMention;
+import com.hanhy06.embellish_chat.mention.data.ParsedTarget;
 import com.hanhy06.embellish_chat.styling.StylingProcessor;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.hanhy06.embellish_chat.util.PermissionUtil.getPermissionsKeys;
 
@@ -48,20 +48,34 @@ public class MessageProcessor implements ConfigListener {
 
         ServerPlayerEntity sender = playerManager.getPlayer(message.getSender());
 
-        List<Mention> mentions = new ArrayList<>();
-        for (String key: getPermissionsKeys(sender,"mention",config.mentionRules().keySet())){
-            List<Mention> mention = mentionProcessor.handleMention(
-                    sender,stringMessage,key
-            );
-            mentions.addAll(mention);
-        }
-        mentions.sort(Comparator.comparing(Mention::begin));
-
+        List<Mention> mentions = handleMention(sender,stringMessage);
         textMessage = stylingManager.applyMention(textMessage,mentions);
+
         for (String key: getPermissionsKeys(sender,"chat",config.stylingRules().keySet())){
             textMessage = stylingManager.applyStylingRule(textMessage,key);
         }
 
         return message.withUnsignedContent(textMessage);
+    }
+
+    private List<Mention> handleMention(ServerPlayerEntity sender,String message){
+        List<Mention> mentions = new ArrayList<>();
+        if (sender ==null || message.isBlank()) return mentions;
+
+        List<String> keys = getPermissionsKeys(sender,"mention",config.mentionRules().keySet());
+        Set<ParsedMention> parsedMentions = new HashSet<>();
+        for (String key : keys){
+            parsedMentions.addAll(mentionProcessor.parseMentions(message,key));
+        }
+
+        List<ParsedTarget> parsedTargets = mentionProcessor.parseTargets(sender,parsedMentions);
+
+        Set<ServerPlayerEntity> targets = new HashSet<>();
+        parsedTargets.forEach(target -> targets.addAll(target.players()));
+        mentionProcessor.broadcastMentions(sender,targets);
+
+        parsedTargets.forEach(target -> mentions.add(target.createMention()));
+        mentions.sort(Comparator.comparing(Mention::begin));
+        return mentions;
     }
 }

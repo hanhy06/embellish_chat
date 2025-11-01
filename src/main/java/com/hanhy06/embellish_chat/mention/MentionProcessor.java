@@ -43,23 +43,11 @@ public class MentionProcessor implements ConfigListener {
         this.registries = new MentionRegistry(newConfig, manager, scoreboard);
     }
 
-    public List<Mention> handleMention(ServerPlayerEntity sender, String message, String key) {
-        if (!mentionRules.containsKey(key) || sender == null) return new ArrayList<>();
-
-        Set<ServerPlayerEntity> players = new HashSet<>();
-        Set<ParsedMention> parsedMentions = parseMentions(message, key);
-        List<ParsedTarget> parsedTargets = parseTargets(sender, parsedMentions);
-
-        parsedTargets.forEach(target -> players.addAll(target.players()));
-        broadcastMentions(sender, players);
-
-        return parsedTargets.stream().map(ParsedTarget::createMention).toList();
-    }
-
-    private Set<ParsedMention> parseMentions(String message, String key) {
+    public Set<ParsedMention> parseMentions(String message, String key) {
         Set<ParsedMention> parsedMentions = new HashSet<>();
-        List<MentionRule> rules = mentionRules.get(key);
+        if (!mentionRules.containsKey(key)) return parsedMentions;
 
+        List<MentionRule> rules = mentionRules.get(key);
         for (MentionRule rule : rules) {
             parsedMentions.addAll(parseMention(rule, message));
         }
@@ -79,7 +67,7 @@ public class MentionProcessor implements ConfigListener {
         return mentions;
     }
 
-    private List<ParsedTarget> parseTargets(ServerPlayerEntity sender, Set<ParsedMention> parsedMentions) {
+    public List<ParsedTarget> parseTargets(ServerPlayerEntity sender, Set<ParsedMention> parsedMentions) {
         List<ParsedTarget> parsedTargets = new ArrayList<>();
 
         for (ParsedMention mention : parsedMentions) {
@@ -112,7 +100,7 @@ public class MentionProcessor implements ConfigListener {
         return first;
     }
 
-    private void broadcastMentions(ServerPlayerEntity sender, Set<ServerPlayerEntity> players) {
+    public void broadcastMentions(ServerPlayerEntity sender, Set<ServerPlayerEntity> players) {
         MutableText title = createTitle(sender);
 
         for (ServerPlayerEntity player : players) {

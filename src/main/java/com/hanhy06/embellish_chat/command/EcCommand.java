@@ -48,9 +48,7 @@ public class EcCommand {
         List<MentionRule> rules = new ArrayList<>();
 
         for (String key : keys){
-            rules.addAll(
-                    ConfigManager.getConfig().mentionRules().get(key)
-            );
+            rules.addAll(ConfigManager.getConfig().mentionRules().get(key));
         }
 
         for (MentionRule rule : rules){
