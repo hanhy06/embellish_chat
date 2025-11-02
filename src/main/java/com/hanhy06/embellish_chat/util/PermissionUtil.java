@@ -1,6 +1,8 @@
 package com.hanhy06.embellish_chat.util;
 
+import me.lucko.fabric.api.permissions.v0.PermissionCheckEvent;
 import me.lucko.fabric.api.permissions.v0.Permissions;
+import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.ArrayList;
@@ -8,9 +10,8 @@ import java.util.List;
 import java.util.Set;
 
 public class PermissionUtil {
-    public static List<String> getPermissions(ServerPlayerEntity player, String permission, Set<String> permissions){
+    public static List<String> getPermissions(ServerPlayerEntity player, Set<String> permissions){
         List<String> result = new ArrayList<>();
-        result.add(permission);
         if (player == null) return result;
 
         for (String key : permissions){
@@ -18,5 +19,21 @@ public class PermissionUtil {
         }
 
         return result;
+    }
+
+    public static void registerPermissions(){
+        PermissionCheckEvent.EVENT.register((source, permission) -> {
+            if (permission.equals("embellish_chat.chat")) {
+                return TriState.TRUE;
+            }
+            if (permission.equals("embellish_chat.command")) {
+                return TriState.TRUE;
+            }
+            if (permission.equals("embellish_chat.mention")) {
+                return TriState.TRUE;
+            }
+            return TriState.DEFAULT;
+        });
+
     }
 }

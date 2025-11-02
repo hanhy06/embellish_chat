@@ -6,6 +6,7 @@ import com.hanhy06.embellish_chat.config.ConfigManager;
 import com.hanhy06.embellish_chat.mention.MentionProcessor;
 import com.hanhy06.embellish_chat.message.MessageProcessor;
 import com.hanhy06.embellish_chat.styling.StylingProcessor;
+import com.hanhy06.embellish_chat.util.PermissionUtil;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
@@ -25,6 +26,7 @@ public class EmbellishChat implements ModInitializer {
 
 		ServerLifecycleEvents.SERVER_STARTED.register(EmbellishChat::handleServerStart);
 
+        PermissionUtil.registerPermissions();
 		EmbellishChatCommand.registerEmbellishChat();
         EcCommand.registerEc();
 	}

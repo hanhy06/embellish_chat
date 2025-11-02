@@ -44,7 +44,7 @@ public class EcCommand {
         }
 
         player.sendMessage(Text.literal("_____Available mentions_____"));
-        List<String> keys = PermissionUtil.getPermissions(player, "mention", ConfigManager.getConfig().mentionRules().keySet());
+        List<String> keys = PermissionUtil.getPermissions(player, ConfigManager.getConfig().mentionRules().keySet());
         List<MentionRule> rules = new ArrayList<>();
 
         for (String key : keys) {
@@ -79,7 +79,7 @@ public class EcCommand {
         }
 
         player.sendMessage(Text.literal("_____Available styles_____"));
-        List<String> keys = PermissionUtil.getPermissions(player, "chat", ConfigManager.getConfig().stylingRules().keySet());
+        List<String> keys = PermissionUtil.getPermissions(player, ConfigManager.getConfig().stylingRules().keySet());
         List<StylingRule> rules = new ArrayList<>();
 
         for (String key : keys) {

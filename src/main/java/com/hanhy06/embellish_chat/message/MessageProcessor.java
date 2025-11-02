@@ -54,7 +54,7 @@ public class MessageProcessor implements ConfigListener {
         List<Mention> mentions = handleMention(sender, stringMessage);
         textMessage = stylingManager.applyMention(textMessage, mentions);
 
-        for (String key : getPermissions(sender, "chat", config.stylingRules().keySet())) {
+        for (String key : getPermissions(sender, config.stylingRules().keySet())) {
             textMessage = stylingManager.applyStylingRule(textMessage, key);
         }
 
@@ -67,7 +67,7 @@ public class MessageProcessor implements ConfigListener {
             return mentions;
         }
 
-        List<String> keys = getPermissions(sender, "mention", config.mentionRules().keySet());
+        List<String> keys = getPermissions(sender, config.mentionRules().keySet());
         Set<ParsedMention> parsedMentions = new HashSet<>();
         for (String key : keys) {
             parsedMentions.addAll(mentionProcessor.parseMentions(message, key));

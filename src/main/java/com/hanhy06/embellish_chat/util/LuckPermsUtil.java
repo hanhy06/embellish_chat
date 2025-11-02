@@ -6,6 +6,7 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.Node;
+import net.luckperms.api.node.types.MetaNode;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 public class LuckPermsUtil {
@@ -43,9 +44,9 @@ public class LuckPermsUtil {
                 return;
             }
 
-            user.data().add(Node.builder("embellish-chat-notification." + bool).build());
+            user.data().remove(MetaNode.builder("embellish-chat-notification",String.valueOf(!bool)).build());
+            user.data().add(MetaNode.builder("embellish-chat-notification",String.valueOf(bool)).build());
             luckPerms.getUserManager().saveUser(user);
-            user.getCachedData().invalidate();
         } catch (IllegalStateException e) {
             EmbellishChat.LOGGER.warn("LuckPerms is present but not ready for metadata set.", e);
         }
