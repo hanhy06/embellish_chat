@@ -126,25 +126,19 @@ public class EcCommand {
         if (player == null) return 1;
 
         if (!FabricLoader.getInstance().isModLoaded("luckperms")) {
-            context.getSource().sendFeedback(() ->Text.literal(
-                            "LuckPerms is not currently installed on this server. You cannot use the mention notification settings feature. Please contact the administrator."),
+            context.getSource().sendFeedback(() ->
+                    Text.translatable("command.ec.notification.no_luckperms"),
                     false
             );
             return 1;
         }
 
         boolean notification = !LuckPermsUtil.getNotification(player);
-
-        if (LuckPermsUtil.setNotification(player,notification)){
-            context.getSource().sendFeedback(() -> Text.literal(
-                    String.format("Successfully updated the mention notification setting. The current status is %b.",notification)
-            ),false);
-        }else {
-            context.getSource().sendFeedback(() -> Text.literal(
-                    "Failed to update the mention notification setting. Please contact the administrator."),
-                    false
-            );
-        }
+        LuckPermsUtil.setNotification(player,notification);
+        context.getSource().sendFeedback(() ->
+                Text.translatable("command.ec.notification.success",notification),
+                false
+        );
 
         return 1;
     }

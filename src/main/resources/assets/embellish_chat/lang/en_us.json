@@ -1,0 +1,8 @@
+{
+  "command.ec.notification.no_luckperms": "LuckPerms is not currently installed on this server. You cannot use the mention notification settings feature. Please contact the administrator.",
+  "command.ec.notification.success": "Successfully updated the mention notification setting. The current status is %b",
+  "command.embellish_chat.config_reload": "embellish chat mod config loaded",
+  "command.embellish_chat.stress_test.need_uuid": "The stress test of Embellish Chat requires the user's UUID for more accurate testing, please run it in-game instead of from the console.",
+  "command.embellish_chat.stress_test.test_message": "@everyone @here **Check out this new [update]<green> __news__** right [here](https://github.com/hanhy06/embellish_chat)! _First come, first served — join now for an exclusive ||special|| gift!_ ~~If you come late, there won't be any left~~",
+  "command.embellish_chat.stress_test.test_result": "Stress test completed: %d messages processed in %dms (%.2f msg/s)"
+}
