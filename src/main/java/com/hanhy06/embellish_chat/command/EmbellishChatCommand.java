@@ -50,7 +50,7 @@ public class EmbellishChatCommand {
     private static int executeReloadConfig(CommandContext<ServerCommandSource> context) {
         ConfigManager.INSTANCE.readConfig();
         context.getSource().sendFeedback(() ->
-                        Text.translatable("command.embellish_chat.config_reload"),
+                        Text.literal("embellish chat mod config loaded"),
                 true
         );
         return 1;
@@ -127,20 +127,20 @@ public class EmbellishChatCommand {
 
         if (player == null) {
             source.sendFeedback(() ->
-                            Text.translatable("command.embellish_chat.stress_test.need_uuid"),
+                            Text.literal("The stress test of Embellish Chat requires the user's UUID for more accurate testing, please run it in-game instead of from the console."),
                     false
             );
             return 0;
         }
 
-        if (count >= 400) {
-            source.sendFeedback(() -> Text.literal(String.valueOf(400)), true);
+        if (count > 500) {
+            source.sendFeedback(() -> Text.literal("This value is too large to test with."), true);
             return 0;
         }
 
         SignedMessage testMessage = SignedMessage.ofUnsigned(
                 player.getUuid(),
-                Text.translatable("command.embellish_chat.stress_test.test_message").getString()
+                "@everyone @here **Check out this new [update]<green> __news__** right [here](https://github.com/hanhy06/embellish_chat)! _First come, first served — join now for an exclusive ||special|| gift!_ ~~If you come late, there won't be any left~~"
         );
 
         long startTime = System.currentTimeMillis();
@@ -150,8 +150,9 @@ public class EmbellishChatCommand {
         long duration = System.currentTimeMillis() - startTime;
 
         double messagesPerSecond = (count * 1000.0) / duration;
+        String result = String.format("Stress test completed: %d messages processed in %dms (%.2f msg/s)",count, duration, messagesPerSecond);
         source.sendFeedback(() ->
-                        Text.translatable("command.embellish_chat.stress_test.test_result", count, duration, messagesPerSecond),
+                        Text.literal(result),
                 false
         );
         return 1;

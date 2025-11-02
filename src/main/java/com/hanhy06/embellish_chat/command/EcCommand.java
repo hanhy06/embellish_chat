@@ -115,7 +115,7 @@ public class EcCommand {
 
         if (!FabricLoader.getInstance().isModLoaded("luckperms")) {
             context.getSource().sendFeedback(() ->
-                            Text.translatable("command.ec.notification.no_luckperms"),
+                            Text.literal("LuckPerms is not currently installed on this server. You cannot use the mention notification settings feature. Please contact the administrator."),
                     false
             );
             return 1;
@@ -123,11 +123,11 @@ public class EcCommand {
 
         boolean notification = !LuckPermsUtil.getNotification(player);
         LuckPermsUtil.setNotification(player, notification);
+        String result = String.format("Successfully updated the mention notification setting. The current status is %b",notification);
         context.getSource().sendFeedback(() ->
-                        Text.translatable("command.ec.notification.success", notification),
+                        Text.literal(result),
                 false
         );
-
 
         return 1;
     }
