@@ -1,0 +1,159 @@
+package io.github.hanhy06.embellish_chat.mention.rule;
+
+import io.github.hanhy06.embellish_chat.EmbellishChat;
+import io.github.hanhy06.embellish_chat.config.Config;
+import io.github.hanhy06.embellish_chat.mention.data.ParsedMention;
+import io.github.hanhy06.embellish_chat.mention.data.ParsedTarget;
+import io.github.hanhy06.embellish_chat.util.TeamColor;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.loader.api.FabricLoader;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.model.user.User;
+import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.scoreboard.Team;
+import net.minecraft.server.PlayerManager;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Style;
+
+import java.util.*;
+import java.util.function.Function;
+
+import static java.util.Map.entry;
+
+public class MentionRegistry {
+    private final PlayerManager manager;
+    private final Scoreboard scoreboard;
+
+    private final Config config;
+    private final Style stylePreset;
+    private final EnumMap<MentionType, Function<MentionParameter,ParsedTarget>> registries;
+
+    public MentionRegistry(Config config, PlayerManager manager, Scoreboard scoreboard) {
+        this.manager = manager;
+        this.scoreboard = scoreboard;
+
+        this.config = config;
+        this.stylePreset = Style.EMPTY.withColor(config.mentionColor());
+        this.registries = new EnumMap<>(Map.ofEntries(
+                entry(MentionType.EVERYONE,this::EVERYONE),
+                entry(MentionType.HERE,this::INSIDE),
+                entry(MentionType.TEAM,this::TEAM),
+                entry(MentionType.PLAYER,this::PLAYER),
+                entry(MentionType.LUCK_PERMS_GROUP,this::LUCK_PERMS_GROUP)
+        ));
+    }
+
+    public Function<MentionParameter,ParsedTarget> get(MentionType key){
+        return registries.get(key);
+    }
+
+    private ParsedTarget EVERYONE(MentionParameter parameter){
+        ParsedMention mention = parameter.parsedMention();
+        List<ServerPlayerEntity> players = manager.getPlayerList();
+
+        return ParsedTarget.of(
+                mention,
+                players,
+                stylePreset
+        );
+    }
+
+    private ParsedTarget INSIDE(MentionParameter parameter){
+        ParsedMention mention = parameter.parsedMention();
+        List<ServerPlayerEntity> players = PlayerLookup.around(
+                parameter.sender().getEntityWorld(),
+                parameter.sender().getEntityPos(),
+                Float.parseFloat(parameter.option())
+        ).stream().toList();
+
+        return ParsedTarget.of(
+                mention,
+                players,
+                stylePreset
+        );
+    }
+
+    private ParsedTarget TEAM(MentionParameter parameter){
+        Team team = scoreboard.getTeam(parameter.option());
+        ParsedMention parsedMention = parameter.parsedMention();
+        List<ServerPlayerEntity> players = new ArrayList<>();
+        Style style = stylePreset;
+
+        if (team != null){
+            players = team
+                    .getPlayerList()
+                    .stream()
+                    .map(manager::getPlayer)
+                    .filter(Objects::nonNull)
+                    .toList();
+            style = team
+                    .getFormattedName()
+                    .getStyle()
+                    .withParent(style);
+        }
+
+        return ParsedTarget.of(
+                parsedMention,
+                players,
+                style
+        );
+    }
+
+
+    private ParsedTarget PLAYER(MentionParameter parameter){
+        ParsedMention parsedMention = parameter.parsedMention();
+        ServerPlayerEntity target = manager.getPlayer(parameter.option());
+        Style style = stylePreset;
+        List<ServerPlayerEntity> players = new ArrayList<>();
+
+        if (target!=null){
+            style = target
+                    .getDisplayName()
+                    .getStyle()
+                    .withParent(style);
+            players.add(target);
+        }else {
+            style = Style.EMPTY
+                    .withParent(stylePreset)
+                    .withColor(TeamColor.getPlayerColor(
+                            scoreboard,
+                            parameter.option(),
+                            config.mentionColor())
+                    );
+        }
+
+        return ParsedTarget.of(
+                parsedMention,
+                players,
+                style
+        );
+    }
+
+    private ParsedTarget LUCK_PERMS_GROUP(MentionParameter parameter){
+        ParsedMention parsedMention = parameter.parsedMention();
+        List<ServerPlayerEntity> players = new ArrayList<>();
+
+        if (!FabricLoader.getInstance().isModLoaded("luckperms")) {
+            EmbellishChat.LOGGER.info("LuckPerms not detected. Permission-based chat styling is disabled.");
+            return ParsedTarget.of(parsedMention, players, stylePreset);
+        }
+
+        try {
+            LuckPerms luckPerms = LuckPermsProvider.get();
+            String targetGroup = parameter.option();
+
+            players = manager.getPlayerList().stream()
+                    .filter(player -> {
+                        User user = luckPerms.getUserManager().getUser(player.getUuid());
+                        return user != null && targetGroup.equals(user.getPrimaryGroup());
+                    })
+                    .toList();
+
+        } catch (IllegalStateException exception) {
+            EmbellishChat.LOGGER.warn("LuckPerms is present but not ready yet. Permission features will be disabled: {}", exception.getMessage());
+        }
+
+        return ParsedTarget.of(parsedMention, players, stylePreset);
+    }
+}

@@ -16,7 +16,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.hanhy06.embellish_chat.EmbellishChat"
+          "io.github.hanhy06.embellish_chat.EmbellishChat"
 		]
 	},
 	"mixins": [
