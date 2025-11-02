@@ -118,4 +118,24 @@ public class EcCommand {
 
         return 1;
     }
+
+    private static int executeNotification(CommandContext<ServerCommandSource> context){
+        ServerPlayerEntity player = context.getSource().getPlayer();
+        if (player == null) return 1;
+
+        boolean notification = !LuckPermsUtil.getNotification(player);
+
+        if (LuckPermsUtil.setNotification(player,notification)){
+            context.getSource().sendFeedback(() -> Text.literal(
+                    String.format("Successfully updated the mention notification setting. The current status is %b.",notification)
+            ),false);
+        }else {
+            context.getSource().sendFeedback(() -> Text.literal(
+                    "Failed to update the mention notification setting. Please contact the administrator."),
+                    false
+            );
+        }
+
+        return 1;
+    }
 }

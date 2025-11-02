@@ -7,6 +7,7 @@ import com.hanhy06.embellish_chat.mention.data.Mention;
 import com.hanhy06.embellish_chat.mention.data.ParsedMention;
 import com.hanhy06.embellish_chat.mention.data.ParsedTarget;
 import com.hanhy06.embellish_chat.styling.StylingProcessor;
+import com.hanhy06.embellish_chat.util.LuckPermsUtil;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -69,7 +70,7 @@ public class MessageProcessor implements ConfigListener {
         List<ParsedTarget> parsedTargets = mentionProcessor.parseTargets(sender,parsedMentions);
 
         Set<ServerPlayerEntity> targets = new HashSet<>();
-        parsedTargets.forEach(target -> targets.addAll(target.players()));
+        parsedTargets.forEach(target -> targets.addAll(target.players().stream().filter(LuckPermsUtil::getNotification).toList()));
         if (!targets.isEmpty())mentionProcessor.broadcastMentions(sender,targets);
 
         parsedTargets.forEach(target -> mentions.add(target.createMention()));
