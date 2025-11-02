@@ -42,18 +42,19 @@ Use the following patterns directly in the chat window:
 
 ## 🗣️ Mention System
 
-| Target        | Behavior                                                                                                                                                                                                                                                                |
-| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@Player`     | Mentions a specific player. If the player is online, the mention adopts the player’s display name style (including team color). If the player is offline or does not exist, the mention uses the player’s team color if available, otherwise the default mention color. |
-| `@team(name)` | Mentions all players in the specified team. If the team has a color, the mention is displayed in that color; otherwise it falls back to the default mention color.                                                                                                      |
-| `@everyone`   | Mentions all players on the server. Always uses the **default mention color**.                                                                                                                                                                                          |
-| `@here`       | Mentions all players within a configurable radius in the same world as the sender. The default radius is **64 blocks**, adjustable in the configuration. Uses the **default mention color**.                                                                            |
+| Target          | Behavior                                                                                                                                                                                                                                                                |
+|-----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `@Player`       | Mentions a specific player. If the player is online, the mention adopts the player’s display name style (including team color). If the player is offline or does not exist, the mention uses the player’s team color if available, otherwise the default mention color. |
+| `@team(name)`   | Mentions all players in the specified team. If the team has a color, the mention is displayed in that color; otherwise it falls back to the default mention color.                                                                                                      |
+| `@group(name)`  | Mentions all players in the specified LuckPerms group.                                                                                                                                                                                                                  |
+| `@everyone`     | Mentions all players on the server. Always uses the **default mention color**.                                                                                                                                                                                          |
+| `@here`         | Mentions all players within a configurable radius in the same world as the sender. The default radius is **64 blocks**, adjustable in the configuration. Uses the **default mention color**.                                                                            |
 
 > **Notes**
 > 
 > * Online mention targets receive a notification, and the message is automatically styled using the appropriate color and formatting based on the target’s team, display name, or default rules.
 > * The mention notification sound uses the **UI** sound category by default. On **Minecraft 1.21.5 and earlier**, it falls back to the **PLAYER** category.
-
+> * Requires LuckPerms. If not installed, this group mention is ignored.
 ---
 
 ## ⌨️ Commands
@@ -233,7 +234,7 @@ you can see more detail [MentionWiki.md](https://github.com/hanhy06/embellish_ch
 
 ---
 
-### Permission
+### Permission & LuckPerms
 
 This mode supports the permission features of the Fabric Permissions API.
 

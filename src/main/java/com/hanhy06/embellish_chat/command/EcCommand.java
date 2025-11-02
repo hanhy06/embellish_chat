@@ -31,7 +31,7 @@ public class EcCommand {
                                                     .then(CommandManager.literal("style").executes(EcCommand::executeHelpStyle))
                                     )
                                     .then(
-                                            CommandManager.literal("Notification")
+                                            CommandManager.literal("notification")
                                                     .executes((s)->1)
                                     )
 

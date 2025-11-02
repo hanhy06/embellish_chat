@@ -168,10 +168,23 @@ public record Config(
                                             )
                                     ),
                                     MentionRule.of(
-                                            "@team\\((.*?)\\)",
+                                            "@team\\((.+?)\\)",
                                             List.of(
                                                     MentionAction.of(
                                                             MentionType.TEAM,""
+                                                    )
+                                            ),
+                                            List.of(
+                                                    StyleAction.of(
+                                                            StyleType.BOLD,""
+                                                    )
+                                            )
+                                    ),
+                                    MentionRule.of(
+                                            "@group\\((.+?)\\)",
+                                            List.of(
+                                                    MentionAction.of(
+                                                            MentionType.LUCK_PERMS_GROUP,""
                                                     )
                                             ),
                                             List.of(
