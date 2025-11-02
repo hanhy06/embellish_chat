@@ -7,7 +7,7 @@ import com.hanhy06.embellish_chat.mention.rule.MentionType;
 import com.hanhy06.embellish_chat.styling.rule.StyleAction;
 import com.hanhy06.embellish_chat.styling.rule.StyleType;
 import com.hanhy06.embellish_chat.styling.rule.StylingRule;
-import com.hanhy06.embellish_chat.util.PermissionUtil;
+import com.hanhy06.embellish_chat.util.LuckPermsUtil;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.CommandManager;
@@ -45,7 +45,7 @@ public class EcCommand {
         if (player == null) return 1;
 
         player.sendMessage(Text.literal("_____Available mentions_____"));
-        List<String> keys = PermissionUtil.getPermissionsKeys(player,"mention",ConfigManager.getConfig().mentionRules().keySet());
+        List<String> keys = LuckPermsUtil.getPermissions(player,"mention",ConfigManager.getConfig().mentionRules().keySet());
         List<MentionRule> rules = new ArrayList<>();
 
         for (String key : keys){
@@ -83,7 +83,7 @@ public class EcCommand {
         if (player == null) return 1;
 
         player.sendMessage(Text.literal("_____Available styles_____"));
-        List<String> keys = PermissionUtil.getPermissionsKeys(player,"chat",ConfigManager.getConfig().stylingRules().keySet());
+        List<String> keys = LuckPermsUtil.getPermissions(player,"chat",ConfigManager.getConfig().stylingRules().keySet());
         List<StylingRule> rules = new ArrayList<>();
 
         for (String key : keys){

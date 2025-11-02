@@ -14,7 +14,7 @@ import net.minecraft.text.MutableText;
 
 import java.util.*;
 
-import static com.hanhy06.embellish_chat.util.PermissionUtil.getPermissionsKeys;
+import static com.hanhy06.embellish_chat.util.LuckPermsUtil.getPermissions;
 
 public class MessageProcessor implements ConfigListener {
     public static MessageProcessor INSTANCE;
@@ -49,7 +49,7 @@ public class MessageProcessor implements ConfigListener {
         List<Mention> mentions = handleMention(sender,stringMessage);
         textMessage = stylingManager.applyMention(textMessage,mentions);
 
-        for (String key: getPermissionsKeys(sender,"chat",config.stylingRules().keySet())){
+        for (String key: getPermissions(sender,"chat",config.stylingRules().keySet())){
             textMessage = stylingManager.applyStylingRule(textMessage,key);
         }
 
@@ -60,7 +60,7 @@ public class MessageProcessor implements ConfigListener {
         List<Mention> mentions = new ArrayList<>();
         if (sender ==null || message.isBlank()) return mentions;
 
-        List<String> keys = getPermissionsKeys(sender,"mention",config.mentionRules().keySet());
+        List<String> keys = getPermissions(sender,"mention",config.mentionRules().keySet());
         Set<ParsedMention> parsedMentions = new HashSet<>();
         for (String key : keys){
             parsedMentions.addAll(mentionProcessor.parseMentions(message,key));
