@@ -68,12 +68,10 @@ public class MessageProcessor implements ConfigListener {
         for (String key : keys){
             parsedMentions.addAll(mentionProcessor.parseMentions(message,key));
         }
-
         List<ParsedTarget> parsedTargets = mentionProcessor.parseTargets(sender,parsedMentions);
 
         Set<ServerPlayerEntity> targets = new HashSet<>();
         parsedTargets.forEach(target -> targets.addAll(target.players()));
-
         if (!targets.isEmpty() && FabricLoader.getInstance().isModLoaded("luckperms")){
             mentionProcessor.broadcastMentions(
                     sender,

@@ -125,15 +125,15 @@ public class EcCommand {
         ServerPlayerEntity player = context.getSource().getPlayer();
         if (player == null) return 1;
 
-        boolean notification = !LuckPermsUtil.getNotification(player);
-
         if (!FabricLoader.getInstance().isModLoaded("luckperms")) {
             context.getSource().sendFeedback(() ->Text.literal(
-                    "LuckPerms is not currently installed on this server. You cannot use the mention notification settings feature. Please contact the administrator."),
+                            "LuckPerms is not currently installed on this server. You cannot use the mention notification settings feature. Please contact the administrator."),
                     false
             );
             return 1;
         }
+
+        boolean notification = !LuckPermsUtil.getNotification(player);
 
         if (LuckPermsUtil.setNotification(player,notification)){
             context.getSource().sendFeedback(() -> Text.literal(

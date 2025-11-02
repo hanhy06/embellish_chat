@@ -21,7 +21,7 @@ public class LuckPermsUtil {
             String notificationValue = user
                     .getCachedData()
                     .getMetaData()
-                    .getMetaValue("meta.embellish-chat-notification");
+                    .getMetaValue("embellish-chat-notification");
 
             return notificationValue == null || "true".equals(notificationValue);
         } catch (IllegalStateException e) {
@@ -32,7 +32,7 @@ public class LuckPermsUtil {
 
     public static boolean setNotification(ServerPlayerEntity player,boolean bool){
         if (!FabricLoader.getInstance().isModLoaded("luckperms")) {
-            return true;
+            return false;
         }
 
         try {
@@ -43,7 +43,7 @@ public class LuckPermsUtil {
                 return false;
             }
 
-            user.data().add(Node.builder("meta.embellish-chat-notification." + bool).build());
+            user.data().add(Node.builder("embellish-chat-notification." + bool).build());
             luckPerms.getUserManager().saveUser(user);
             return true;
         } catch (IllegalStateException e) {
