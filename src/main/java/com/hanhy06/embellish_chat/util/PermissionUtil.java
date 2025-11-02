@@ -26,9 +26,6 @@ public class PermissionUtil {
             if (permission.equals("embellish_chat.chat")) {
                 return TriState.TRUE;
             }
-            if (permission.equals("embellish_chat.command")) {
-                return TriState.TRUE;
-            }
             if (permission.equals("embellish_chat.mention")) {
                 return TriState.TRUE;
             }
