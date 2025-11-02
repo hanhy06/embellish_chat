@@ -1,8 +1,7 @@
 package com.hanhy06.embellish_chat.command;
 
-import com.google.gson.JsonSyntaxException;
-import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.config.ConfigManager;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -45,13 +44,21 @@ public class EmbellishChatCommand {
                                                     )
                                     )
                                     .then(
-                                            CommandManager.literal("regex_test")
+                                            CommandManager.literal("test")
                                                     .then(
-                                                            CommandManager.argument("regex", StringArgumentType.string())
-                                                                    .then(
-                                                                            CommandManager.argument("test",StringArgumentType.string())
-                                                                                    .executes(EmbellishChatCommand::executeRegexTest)
-                                                                    )
+                                                            CommandManager.literal("regex").then(
+                                                                    CommandManager.argument("regex", StringArgumentType.string())
+                                                                            .then(
+                                                                                    CommandManager.argument("test",StringArgumentType.string())
+                                                                                            .executes(EmbellishChatCommand::executeRegexTest)
+                                                                            )
+                                                            )
+                                                    )
+                                                    .then(
+                                                            CommandManager.literal("stress").then(
+                                                                    CommandManager.argument("count", IntegerArgumentType.integer())
+                                                                            .executes(EmbellishChatCommand::executeStressTest)
+                                                            )
                                                     )
                                     )
                     );
@@ -118,6 +125,10 @@ public class EmbellishChatCommand {
         }
 
         context.getSource().sendFeedback(() -> Text.literal(result),false);
+        return 1;
+    }
+
+    private static int executeStressTest(CommandContext<ServerCommandSource> context){
         return 1;
     }
 }

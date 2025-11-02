@@ -13,7 +13,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.hanhy06.embellish_chat.util.PermissionUtil.getPermissionsKeys;
 

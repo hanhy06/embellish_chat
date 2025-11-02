@@ -1,17 +1,21 @@
 package com.hanhy06.embellish_chat.config;
 
+import com.hanhy06.embellish_chat.EmbellishChat;
 import com.hanhy06.embellish_chat.mention.rule.MentionAction;
 import com.hanhy06.embellish_chat.mention.rule.MentionRule;
 import com.hanhy06.embellish_chat.mention.rule.MentionType;
 import com.hanhy06.embellish_chat.styling.rule.StyleAction;
 import com.hanhy06.embellish_chat.styling.rule.StyleType;
 import com.hanhy06.embellish_chat.styling.rule.StylingRule;
+import net.fabricmc.loader.api.FabricLoader;
 
 import java.util.*;
 
 import static java.util.Map.entry;
 
 public record Config(
+        String version,
+
         //rules
         //TODO: 나중에 Rule에 description 즉 설명 필드 추가해야함
         Map<String,List<StylingRule>> stylingRules,
@@ -34,6 +38,13 @@ public record Config(
 {
     public static Config createDefault(){
         return new Config(
+                FabricLoader.getInstance()
+                        .getModContainer(EmbellishChat.MOD_ID)
+                        .orElseThrow()
+                        .getMetadata()
+                        .getVersion()
+                        .getFriendlyString(),
+
                 //style
                 new TreeMap<>(Map.ofEntries(
                         entry("chat",

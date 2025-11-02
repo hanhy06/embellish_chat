@@ -69,7 +69,7 @@ public class ConfigManager {
             EmbellishChat.LOGGER.error("Unexpected error loading config file: {}. Using default values.", configFilePath, e);
         }
 
-        if (loaded != null) {
+        if (loaded != null && loaded.version().equals(config.version())) {
             config = loaded;
             broadcastConfig();
             EmbellishChat.LOGGER.info("Config loaded successfully.");

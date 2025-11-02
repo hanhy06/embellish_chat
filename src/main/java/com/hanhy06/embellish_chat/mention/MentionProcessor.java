@@ -2,7 +2,6 @@ package com.hanhy06.embellish_chat.mention;
 
 import com.hanhy06.embellish_chat.config.Config;
 import com.hanhy06.embellish_chat.config.ConfigListener;
-import com.hanhy06.embellish_chat.mention.data.Mention;
 import com.hanhy06.embellish_chat.mention.data.ParsedMention;
 import com.hanhy06.embellish_chat.mention.data.ParsedTarget;
 import com.hanhy06.embellish_chat.mention.rule.MentionAction;
