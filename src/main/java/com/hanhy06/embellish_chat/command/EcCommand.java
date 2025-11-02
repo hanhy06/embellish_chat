@@ -52,21 +52,29 @@ public class EcCommand {
         }
 
         for (MentionRule rule : rules) {
-            player.sendMessage(Text.literal(String.format("use :%s", rule.pattern().pattern())));
-
+            String pattern = rule.pattern().pattern();
             String mentionTypes = rule.mentions()
                     .stream()
                     .map(MentionAction::mentionType)
                     .map(MentionType::name)
                     .collect(Collectors.joining(", "));
-            player.sendMessage(Text.literal(String.format("intersection (elements) :%s", mentionTypes)));
-
             String styles = rule.styles()
                     .stream()
                     .map(StyleAction::styleType)
                     .map(StyleType::name)
                     .collect(Collectors.joining(", "));
-            player.sendMessage(Text.literal(String.format("apply styles :%s\n", styles)));
+
+            String message = String.format(
+                    """
+                        use :%s
+                        intersection (elements) :%s
+                        preset options :%s
+                    
+                    """,
+                    pattern, mentionTypes, styles
+            );
+
+            player.sendMessage(Text.literal(message));
         }
 
         return 1;
@@ -87,21 +95,29 @@ public class EcCommand {
         }
 
         for (StylingRule rule : rules) {
-            player.sendMessage(Text.literal(String.format("use :%s", rule.pattern().pattern())));
-
+            String pattern = rule.pattern().pattern();
             String styles = rule.styles()
                     .stream()
                     .map(StyleAction::styleType)
                     .map(StyleType::name)
                     .collect(Collectors.joining(", "));
-            player.sendMessage(Text.literal(String.format("apply styles :%s", styles)));
-
             String presetOptions = rule.styles()
                     .stream()
                     .map(StyleAction::preset)
                     .map(str -> String.format("%s", str.isBlank() ? "user input" : str))
                     .collect(Collectors.joining(ConfigManager.getConfig().delimiter()));
-            player.sendMessage(Text.literal(String.format("preset options :%s\n", presetOptions)));
+
+            String message = String.format(
+                    """
+                        use :%s
+                        apply styles :%s
+                        preset options :%s
+                    
+                    """,
+                    pattern, styles, presetOptions
+            );
+
+            player.sendMessage(Text.literal(message));
         }
 
         return 1;
@@ -123,7 +139,7 @@ public class EcCommand {
 
         boolean notification = !LuckPermsUtil.getNotification(player);
         LuckPermsUtil.setNotification(player, notification);
-        String result = String.format("Smention notification setting. The current status is %b",notification);
+        String result = String.format("mention notification setting current status is %b",notification);
         context.getSource().sendFeedback(() ->
                         Text.literal(result),
                 false
