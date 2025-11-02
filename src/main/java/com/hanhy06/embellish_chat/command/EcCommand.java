@@ -8,8 +8,10 @@ import com.hanhy06.embellish_chat.styling.rule.StyleAction;
 import com.hanhy06.embellish_chat.styling.rule.StyleType;
 import com.hanhy06.embellish_chat.styling.rule.StylingRule;
 import com.hanhy06.embellish_chat.util.LuckPermsUtil;
+import com.hanhy06.embellish_chat.util.PermissionUtil;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -32,7 +34,7 @@ public class EcCommand {
                                     )
                                     .then(
                                             CommandManager.literal("notification")
-                                                    .executes((s)->1)
+                                                    .executes(EcCommand::executeNotification)
                                     )
 
                     );
@@ -45,7 +47,7 @@ public class EcCommand {
         if (player == null) return 1;
 
         player.sendMessage(Text.literal("_____Available mentions_____"));
-        List<String> keys = LuckPermsUtil.getPermissions(player,"mention",ConfigManager.getConfig().mentionRules().keySet());
+        List<String> keys = PermissionUtil.getPermissions(player,"mention",ConfigManager.getConfig().mentionRules().keySet());
         List<MentionRule> rules = new ArrayList<>();
 
         for (String key : keys){
@@ -83,7 +85,7 @@ public class EcCommand {
         if (player == null) return 1;
 
         player.sendMessage(Text.literal("_____Available styles_____"));
-        List<String> keys = LuckPermsUtil.getPermissions(player,"chat",ConfigManager.getConfig().stylingRules().keySet());
+        List<String> keys = PermissionUtil.getPermissions(player,"chat",ConfigManager.getConfig().stylingRules().keySet());
         List<StylingRule> rules = new ArrayList<>();
 
         for (String key : keys){
@@ -124,6 +126,14 @@ public class EcCommand {
         if (player == null) return 1;
 
         boolean notification = !LuckPermsUtil.getNotification(player);
+
+        if (!FabricLoader.getInstance().isModLoaded("luckperms")) {
+            context.getSource().sendFeedback(() ->Text.literal(
+                    "LuckPerms is not currently installed on this server. You cannot use the mention notification settings feature. Please contact the administrator."),
+                    false
+            );
+            return 1;
+        }
 
         if (LuckPermsUtil.setNotification(player,notification)){
             context.getSource().sendFeedback(() -> Text.literal(

@@ -8,14 +8,16 @@ import com.hanhy06.embellish_chat.mention.data.ParsedMention;
 import com.hanhy06.embellish_chat.mention.data.ParsedTarget;
 import com.hanhy06.embellish_chat.styling.StylingProcessor;
 import com.hanhy06.embellish_chat.util.LuckPermsUtil;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-import static com.hanhy06.embellish_chat.util.LuckPermsUtil.getPermissions;
+import static com.hanhy06.embellish_chat.util.PermissionUtil.getPermissions;
 
 public class MessageProcessor implements ConfigListener {
     public static MessageProcessor INSTANCE;
@@ -70,8 +72,16 @@ public class MessageProcessor implements ConfigListener {
         List<ParsedTarget> parsedTargets = mentionProcessor.parseTargets(sender,parsedMentions);
 
         Set<ServerPlayerEntity> targets = new HashSet<>();
-        parsedTargets.forEach(target -> targets.addAll(target.players().stream().filter(LuckPermsUtil::getNotification).toList()));
-        if (!targets.isEmpty())mentionProcessor.broadcastMentions(sender,targets);
+        parsedTargets.forEach(target -> targets.addAll(target.players()));
+
+        if (!targets.isEmpty() && FabricLoader.getInstance().isModLoaded("luckperms")){
+            mentionProcessor.broadcastMentions(
+                    sender,
+                    targets.stream().filter(LuckPermsUtil::getNotification).collect(Collectors.toSet())
+            );
+        } else if (!targets.isEmpty()) {
+            mentionProcessor.broadcastMentions(sender, targets);
+        }
 
         parsedTargets.forEach(target -> mentions.add(target.createMention()));
         mentions.sort(Comparator.comparing(Mention::begin));
