@@ -1,12 +1,14 @@
 package com.hanhy06.embellish_chat.command;
 
 import com.hanhy06.embellish_chat.config.ConfigManager;
+import com.hanhy06.embellish_chat.message.MessageProcessor;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.argument.EntityArgumentType;
+import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -129,6 +131,36 @@ public class EmbellishChatCommand {
     }
 
     private static int executeStressTest(CommandContext<ServerCommandSource> context){
+        int count = IntegerArgumentType.getInteger(context, "count");
+        ServerCommandSource source = context.getSource();
+        ServerPlayerEntity player = source.getPlayer();
+        if (player == null) {
+            source.sendFeedback(() -> Text.literal("The stress test of Embellish Chat requires the user's UUID for more accurate testing, please run it in-game instead of from the console."),false);
+            return 0;
+        }
+        if (count >= 400) {
+            source.sendFeedback(() -> Text.literal("400"), true);
+            return 0;
+        }
+
+        SignedMessage testMessage = SignedMessage.ofUnsigned(
+                player.getUuid(),
+                "@everyone @here **Check out this new [update]<green> __news__** right [here](https://github.com/hanhy06/embellish_chat)! _First come, first served — join now for an exclusive ||special|| gift!_ ~~If you come late, there won't be any left~~"
+        );
+        long startTime = System.currentTimeMillis();
+
+        for (int i = 0; i < count; i++) {
+            MessageProcessor.INSTANCE.handleMessage(testMessage);
+        }
+
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+
+        String result = String.format(
+                "Stress test completed: %d messages processed in %dms (%.2f msg/s)",
+                count, duration, (count * 1000.0) / duration
+        );
+        source.sendFeedback(() -> Text.literal(result), false);
         return 1;
     }
 }
