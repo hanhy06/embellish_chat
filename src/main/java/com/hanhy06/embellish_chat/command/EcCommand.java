@@ -123,7 +123,7 @@ public class EcCommand {
 
         boolean notification = !LuckPermsUtil.getNotification(player);
         LuckPermsUtil.setNotification(player, notification);
-        String result = String.format("Successfully updated the mention notification setting. The current status is %b",notification);
+        String result = String.format("Smention notification setting. The current status is %b",notification);
         context.getSource().sendFeedback(() ->
                         Text.literal(result),
                 false
