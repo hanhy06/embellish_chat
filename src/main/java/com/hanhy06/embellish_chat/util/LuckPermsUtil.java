@@ -30,9 +30,9 @@ public class LuckPermsUtil {
         }
     }
 
-    public static boolean setNotification(ServerPlayerEntity player,boolean bool){
+    public static void setNotification(ServerPlayerEntity player, boolean bool){
         if (!FabricLoader.getInstance().isModLoaded("luckperms")) {
-            return false;
+            return;
         }
 
         try {
@@ -40,15 +40,14 @@ public class LuckPermsUtil {
             User user = luckPerms.getUserManager().getUser(player.getUuid());
 
             if (user == null) {
-                return false;
+                return;
             }
 
             user.data().add(Node.builder("embellish-chat-notification." + bool).build());
             luckPerms.getUserManager().saveUser(user);
-            return true;
+            user.getCachedData().invalidate();
         } catch (IllegalStateException e) {
             EmbellishChat.LOGGER.warn("LuckPerms is present but not ready for metadata set.", e);
-            return false;
         }
     }
 }
