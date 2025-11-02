@@ -22,121 +22,109 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class EcCommand {
-    public static void registerEc(){
-        CommandRegistrationCallback.EVENT.register(
-                (commandDispatcher, commandRegistryAccess, registrationEnvironment) -> {
-                    commandDispatcher.register(
-                            CommandManager.literal("ec")
-                                    .then(
-                                            CommandManager.literal("help")
-                                                    .then(CommandManager.literal("mention").executes(EcCommand::executeHelpMention))
-                                                    .then(CommandManager.literal("style").executes(EcCommand::executeHelpStyle))
-                                    )
-                                    .then(
-                                            CommandManager.literal("notification")
-                                                    .executes(EcCommand::executeNotification)
-                                    )
-
-                    );
-                }
-        );
+    public static void registerEc() {
+        CommandRegistrationCallback.EVENT.register((commandDispatcher, commandRegistryAccess, registrationEnvironment) -> {
+            commandDispatcher.register(
+                    CommandManager.literal("ec")
+                            .then(CommandManager.literal("help")
+                                    .then(CommandManager.literal("mention").executes(EcCommand::executeHelpMention))
+                                    .then(CommandManager.literal("style").executes(EcCommand::executeHelpStyle))
+                            )
+                            .then(CommandManager.literal("notification")
+                                    .executes(EcCommand::executeNotification)
+                            )
+            );
+        });
     }
 
-    private static int executeHelpMention(CommandContext<ServerCommandSource> context){
+    private static int executeHelpMention(CommandContext<ServerCommandSource> context) {
         ServerPlayerEntity player = context.getSource().getPlayer();
-        if (player == null) return 1;
+        if (player == null) {
+            return 1;
+        }
 
         player.sendMessage(Text.literal("_____Available mentions_____"));
-        List<String> keys = PermissionUtil.getPermissions(player,"mention",ConfigManager.getConfig().mentionRules().keySet());
+        List<String> keys = PermissionUtil.getPermissions(player, "mention", ConfigManager.getConfig().mentionRules().keySet());
         List<MentionRule> rules = new ArrayList<>();
 
-        for (String key : keys){
+        for (String key : keys) {
             rules.addAll(ConfigManager.getConfig().mentionRules().get(key));
         }
 
-        for (MentionRule rule : rules){
-            player.sendMessage(Text.literal(
-                    String.format("use :%s",rule.pattern().pattern())
-            ));
-            player.sendMessage(Text.literal(
-                    String.format("intersection (elements) :%s",rule
-                            .mentions()
-                            .stream()
-                            .map(MentionAction::mentionType)
-                            .map(MentionType::name)
-                            .collect(Collectors.joining(", "))
-                    )
-            ));
-            player.sendMessage(Text.literal(
-                    String.format("apply styles :%s\n",rule
-                            .styles().stream()
-                            .map(StyleAction::styleType)
-                            .map(StyleType::name)
-                            .collect(Collectors.joining(", "))
-                    )
-            ));
+        for (MentionRule rule : rules) {
+            player.sendMessage(Text.literal(String.format("use :%s", rule.pattern().pattern())));
+
+            String mentionTypes = rule.mentions()
+                    .stream()
+                    .map(MentionAction::mentionType)
+                    .map(MentionType::name)
+                    .collect(Collectors.joining(", "));
+            player.sendMessage(Text.literal(String.format("intersection (elements) :%s", mentionTypes)));
+
+            String styles = rule.styles()
+                    .stream()
+                    .map(StyleAction::styleType)
+                    .map(StyleType::name)
+                    .collect(Collectors.joining(", "));
+            player.sendMessage(Text.literal(String.format("apply styles :%s\n", styles)));
         }
 
         return 1;
     }
 
-    private static int executeHelpStyle(CommandContext<ServerCommandSource> context){
+    private static int executeHelpStyle(CommandContext<ServerCommandSource> context) {
         ServerPlayerEntity player = context.getSource().getPlayer();
-        if (player == null) return 1;
+        if (player == null) {
+            return 1;
+        }
 
         player.sendMessage(Text.literal("_____Available styles_____"));
-        List<String> keys = PermissionUtil.getPermissions(player,"chat",ConfigManager.getConfig().stylingRules().keySet());
+        List<String> keys = PermissionUtil.getPermissions(player, "chat", ConfigManager.getConfig().stylingRules().keySet());
         List<StylingRule> rules = new ArrayList<>();
 
-        for (String key : keys){
-            rules.addAll(
-                    ConfigManager.getConfig().stylingRules().get(key)
-            );
+        for (String key : keys) {
+            rules.addAll(ConfigManager.getConfig().stylingRules().get(key));
         }
 
-        for (StylingRule rule : rules){
-            player.sendMessage(Text.literal(
-                    String.format("use :%s",rule.pattern().pattern())
-            ));
-            player.sendMessage(Text.literal(
-                    String.format("apply styles :%s",rule
-                            .styles()
-                            .stream()
-                            .map(StyleAction::styleType)
-                            .map(StyleType::name)
-                            .collect(Collectors.joining(", "))
-                    )
-            ));
-            player.sendMessage(Text.literal(
-                    String.format("preset options :%s\n",rule.
-                            styles()
-                            .stream()
-                            .map(StyleAction::preset)
-                            .map(str -> String.format("%s",str.isBlank() ? "user input":str))
-                            .collect(Collectors.joining(ConfigManager.getConfig().delimiter()))
-                    )
-            ));
+        for (StylingRule rule : rules) {
+            player.sendMessage(Text.literal(String.format("use :%s", rule.pattern().pattern())));
+
+            String styles = rule.styles()
+                    .stream()
+                    .map(StyleAction::styleType)
+                    .map(StyleType::name)
+                    .collect(Collectors.joining(", "));
+            player.sendMessage(Text.literal(String.format("apply styles :%s", styles)));
+
+            String presetOptions = rule.styles()
+                    .stream()
+                    .map(StyleAction::preset)
+                    .map(str -> String.format("%s", str.isBlank() ? "user input" : str))
+                    .collect(Collectors.joining(ConfigManager.getConfig().delimiter()));
+            player.sendMessage(Text.literal(String.format("preset options :%s\n", presetOptions)));
         }
 
         return 1;
     }
 
-    private static int executeNotification(CommandContext<ServerCommandSource> context){
+    private static int executeNotification(CommandContext<ServerCommandSource> context) {
         ServerPlayerEntity player = context.getSource().getPlayer();
-        if (player == null) return 1;
+        if (player == null) {
+            return 1;
+        }
 
         if (!FabricLoader.getInstance().isModLoaded("luckperms")) {
             context.getSource().sendFeedback(() ->
-                    Text.translatable("command.ec.notification.no_luckperms"),
+                            Text.translatable("command.ec.notification.no_luckperms"),
                     false
             );
             return 1;
         }
 
         boolean notification = !LuckPermsUtil.getNotification(player);
-        LuckPermsUtil.setNotification(player,notification);
+        LuckPermsUtil.setNotification(player, notification);
         context.getSource().sendFeedback(() ->
-                Text.translatable("command.ec.notification.success",notification),
+                        Text.translatable("command.ec.notification.success", notification),
                 false
         );
 
