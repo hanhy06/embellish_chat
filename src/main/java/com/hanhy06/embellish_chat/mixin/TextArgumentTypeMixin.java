@@ -20,7 +20,7 @@ public class TextArgumentTypeMixin {
     ) {
         Text text = cir.getReturnValue();
 
-        text = StylingProcessor.INSTANCE.applyStylingRule(text.copy(),"embellish_chat.command_block");
+        text = StylingProcessor.INSTANCE.applyStylingRule(text.copy(),"embellish_chat.command_argument");
 
         cir.setReturnValue(text);
     }

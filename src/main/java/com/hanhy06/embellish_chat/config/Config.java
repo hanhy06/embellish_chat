@@ -99,7 +99,7 @@ public record Config(
                                         )
                                 )
                         ),
-                        entry("embellish_chat.command_block",
+                        entry("embellish_chat.command_argument",
                                 List.of(
                                         StylingRule.of(
                                                 "\\[([^\\]]+?)]\\((.*?)\\)",
