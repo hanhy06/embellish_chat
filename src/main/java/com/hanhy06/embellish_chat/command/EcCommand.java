@@ -68,7 +68,7 @@ public class EcCommand {
                     """
                         use :%s
                         intersection (elements) :%s
-                        preset options :%s
+                        apply styles :%s
                     
                     """,
                     pattern, mentionTypes, styles
