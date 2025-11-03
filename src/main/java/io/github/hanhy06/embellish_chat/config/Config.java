@@ -50,7 +50,7 @@ public record Config(
                         entry("embellish_chat.chat",
                                 List.of(
                                         StylingRule.of(
-                                                "\\[([^\\]]+?)]\\((.*?)\\)",
+                                                "\\[([^\\]]+?)]\\((https://.*?)\\)",
                                                 List.of(StyleAction.of(StyleType.URL,""))
                                         ),
                                         StylingRule.of(
@@ -102,7 +102,7 @@ public record Config(
                         entry("embellish_chat.command_argument",
                                 List.of(
                                         StylingRule.of(
-                                                "\\[([^\\]]+?)]\\((.*?)\\)",
+                                                "\\[([^\\]]+?)]\\((https://.*?)\\)",
                                                 List.of(StyleAction.of(StyleType.URL,""))
                                         ),
                                         StylingRule.of(
