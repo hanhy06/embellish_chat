@@ -212,7 +212,7 @@ Each rule consists of a regular expression (`pattern`), mention action list(`men
     "pattern": "@here()",
     "mentions": [
       {
-        "mentionType": "HERE",
+        "mentionType": "INSIDE",
         "preset": "64"
       }
     ],
