@@ -112,7 +112,7 @@ The configuration file is located at: `config/embellish_chat.json`.
         "pattern": "@here()",
         "mentions": [
           {
-            "mentionType": "HERE",
+            "mentionType": "INSIDE",
             "preset": "64"
           }
         ],
