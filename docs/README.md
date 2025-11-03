@@ -268,7 +268,7 @@ Each test message was configured to include 230 characters per tick, and the sys
 
 ```execute as @a run embellish_chat test stress "@everyone @here **Check out this new [update]<green> __news__** right [here](https://github.com/hanhy06/embellish_chat)! _First come, first served — join now for an exclusive ||special|| gift!_ ~~If you come late, there won't be any left~~"```
 
-![Latency](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Latency2.1.0.png?raw=true)
+![Latency](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Latency2.2.0.png?raw=true)
 
 ---
 
