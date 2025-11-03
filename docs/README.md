@@ -36,7 +36,7 @@ Use the following patterns directly in the chat window:
 > * For security, the **Link** feature only recognizes URLs using the `https://` protocol.
 > * *Preset* values depend on the mod's configuration (e.g., `pink`, `blue`, etc.).
 > * `path` for **Font** accepts a namespaced ID such as `minecraft:alt`.
-> * If multiple style types exist and no preset is configured, the user can enter one manually. The separator can be checked through /ec help_style.
+> * If multiple style types exist and no preset is configured, the user can enter one manually. The separator can be checked through /ec help style.
 
 ---
 
