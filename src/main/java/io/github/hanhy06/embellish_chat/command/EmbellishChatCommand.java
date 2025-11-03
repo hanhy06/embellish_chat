@@ -42,7 +42,9 @@ public class EmbellishChatCommand {
                                                                         .executes(EmbellishChatCommand::executeRegexTest))))
                                                 .then(CommandManager.literal("stress")
                                                         .then(CommandManager.argument("count", IntegerArgumentType.integer())
-                                                                .executes(EmbellishChatCommand::executeStressTest))))
+                                                                .then(CommandManager.argument("test", StringArgumentType.string())
+                                                                        .executes(EmbellishChatCommand::executeStressTest))))
+                                        )
                         )
         );
     }
@@ -122,6 +124,7 @@ public class EmbellishChatCommand {
 
     private static int executeStressTest(CommandContext<ServerCommandSource> context) {
         int count = IntegerArgumentType.getInteger(context, "count");
+        String test  = StringArgumentType.getString(context,"test");
         ServerCommandSource source = context.getSource();
         ServerPlayerEntity player = source.getPlayer();
 
@@ -140,7 +143,7 @@ public class EmbellishChatCommand {
 
         SignedMessage testMessage = SignedMessage.ofUnsigned(
                 player.getUuid(),
-                "@everyone @here **Check out this new [update]<green> __news__** right [here](https://github.com/hanhy06/embellish_chat)! _First come, first served — join now for an exclusive ||special|| gift!_ ~~If you come late, there won't be any left~~"
+                test
         );
 
         long startTime = System.currentTimeMillis();
