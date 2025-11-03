@@ -254,6 +254,9 @@ If it’s not installed, these features do nothing.
 * RAM: 2GB max
 * System: Windows 11
 
+* Minecraft: 1.21.10
+* World: Single Play/Plat
+
 **Since I couldn’t run 400 latency tests per tick, I used command blocks instead.
 Because the mention system doesn’t apply to command blocks, the actual latency is expected to be slightly higher than the results shown here.**
 
