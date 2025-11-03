@@ -95,3 +95,29 @@ Mentions any red-team player within a 64-block radius.
 ```
 
 Typing `[notification]` will send an alert to everyone.
+
+## Application - Admin Mention
+
+```
+{
+  "pattern": "@admin()",
+  "mentions": [
+    {
+      "mentionType": "LUCK_PERMS_GROUP",
+      "preset": "admin"
+    }
+  ],
+  "styles": [
+    {
+      "styleType": "BOLD",
+      "preset": ""
+    },
+    {
+      "styleType": "COLOR_HEX",
+      "preset": "#FFAAAA"
+    }
+  ]
+}
+```
+
+You can put any value accepted as an option into the preset. Used this way, you can always trigger the administrator simply by using `@admin`.

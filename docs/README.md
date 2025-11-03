@@ -6,9 +6,9 @@
 
 ## ✨ Key Features
 
-* **Markdown‑Style Formatting**: Bold, italic, underline, strikethrough, obfuscation, color, custom font, and links. Works in public chat, private messages and command.
+* **Markdown‑Style Formatting**: Bold, italic, underline, strikethrough, obfuscation, color, custom font, and links. Works in public chat, private messages, and commands.
 * **Mention System**: Mention individual players, your team, everyone, or nearby players with `@`. Online targets receive a notification; mentions auto‑tint to the player/team color.
-* **Message Metadata**: Hover to see the send time click a message to copy it to the clipboard.
+* **Message Metadata**: Hover to see the send time, and click a message to copy it to the clipboard.
 
 ---
 
@@ -42,18 +42,19 @@ Use the following patterns directly in the chat window:
 
 ## 🗣️ Mention System
 
-| Target        | Behavior                                                                                                                                                                                                                                                                |
-| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@Player`     | Mentions a specific player. If the player is online, the mention adopts the player’s display name style (including team color). If the player is offline or does not exist, the mention uses the player’s team color if available, otherwise the default mention color. |
-| `@team(name)` | Mentions all players in the specified team. If the team has a color, the mention is displayed in that color; otherwise it falls back to the default mention color.                                                                                                      |
-| `@everyone`   | Mentions all players on the server. Always uses the **default mention color**.                                                                                                                                                                                          |
-| `@here`       | Mentions all players within a configurable radius in the same world as the sender. The default radius is **64 blocks**, adjustable in the configuration. Uses the **default mention color**.                                                                            |
+| Target          | Behavior                                                                                                                                                                                                                                                                |
+|-----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `@Player`       | Mentions a specific player. If the player is online, the mention adopts the player’s display name style (including team color). If the player is offline or does not exist, the mention uses the player’s team color if available, otherwise the default mention color. |
+| `@team(name)`   | Mentions all players in the specified team. If the team has a color, the mention is displayed in that color; otherwise it falls back to the default mention color.                                                                                                      |
+| `@group(name)`  | Mentions all players in the specified LuckPerms group.                                                                                                                                                                                                                  |
+| `@everyone`     | Mentions all players on the server. Always uses the **default mention color**.                                                                                                                                                                                          |
+| `@here`         | Mentions all players within a configurable radius in the same world as the sender. The default radius is **64 blocks**, adjustable in the configuration. Uses the **default mention color**.                                                                            |
 
 > **Notes**
 > 
 > * Online mention targets receive a notification, and the message is automatically styled using the appropriate color and formatting based on the target’s team, display name, or default rules.
 > * The mention notification sound uses the **UI** sound category by default. On **Minecraft 1.21.5 and earlier**, it falls back to the **PLAYER** category.
-
+> * `@group(name)` requires LuckPerms. Without it, the mention resolves to no players.
 ---
 
 ## ⌨️ Commands
@@ -61,14 +62,18 @@ Use the following patterns directly in the chat window:
 * **`/embellish_chat reload`** — Reloads the configuration from `config/embellish_chat.json`.
 * **`/embellish_chat ban <player>`** — Prevents the specified player from using the mod’s all features.
 * **`/embellish_chat pardon <player>`** — Restores access to the mod’s all features for the specified player.
+* **`/embellish_chat test regex <regex> <test>`** - Compiles the `<regex>` pattern and matches it against the `<test>` string.
+* **`/embellish_chat test stress <count> <test>`** - Sends a fake message containing `<test>` exactly `<count>` times with the permissions of the user who executed the command, and processes it the same way as a real message.
 
-* **`/ec help_mention`** - Displays the currently available mentions, how to use them, the mention targets, and the applicable style types.
-* **`/ec help_style`** - Displays the currently available styles, how to use them, the applicable style types, and the required input options.
+* **`/ec help mention`** - Displays the currently available mentions, how to use them, the mention targets, and the applicable style types.
+* **`/ec help style`** - Displays the currently available styles, how to use them, the applicable style types, and the required input options.
+* **`/ec notification`** - Allows you to decide whether to receive a notification when you are mentioned.
 
 > **Notes**
 >
 > * All commands in the /embellish_chat family require OP level 2.
 > * Commands in the /ec family do not require any OP level and can be used by all users.
+> * /ec notification requires LuckPerms, otherwise the setting is unavailable.
 
 ---
 
@@ -80,35 +85,29 @@ The configuration file is located at: `config/embellish_chat.json`.
 
 ```
 {
+  //version
+  "version": "2.2.0",
+  
   //rules
   "stylingRules": {
-    "command": [
+    "embellish_chat.chat": [
       {
-        "pattern": "\\*\\*(.+?)\\*\\*()",
+        "pattern": "\\[([^\\]]+?)]\\((.*?)\\)",
         "styles": [
           {
-            "styleType": "BOLD",
-            "preset": ""
-          }
-        ]
-      },
-      {
-        "pattern": "__(.+?)__()",
-        "styles": [
-          {
-            "styleType": "UNDERLINE",
+            "styleType": "URL",
             "preset": ""
           }
         ]
       },
       ...
     ],
-    "chat": [
+    "embellish_chat.command_argument": [
       ...
     ]
   },
   "mentionRules": {
-    "mention": [
+    "embellish_chat.mention": [
       {
         "pattern": "@here()",
         "mentions": [
@@ -128,19 +127,21 @@ The configuration file is located at: `config/embellish_chat.json`.
     ]
   },
   
-  //preset
+  //presets
+  "delimiter": ",",
+  "timestamp": "yyyy-MM-dd HH:mm:ss",
   "urlColor": "0x0000EE",
   "colorPreset": {
-    "dark green": "0x00AA00",
     "green": "0x55FF55",
-    "yellow": "0xFFFF55",
+    "dark green": "0x00AA00",
     "black": "0x000000",
+    "yellow": "0xFFFF55",
     "dark red": "0xAA0000",
-    "dark purple": "0xAA00AA",
     "light purple": "0xFF55FF",
-    "dark gray": "0x555555",
-    "red": "0xFF5555",
+    "dark purple": "0xAA00AA",
     "gold": "0xFFAA00",
+    "red": "0xFF5555",
+    "dark gray": "0x555555",
     "aqua": "0x55FFFF",
     "gray": "0xAAAAAA",
     "white": "0xFFFFFF",
@@ -148,13 +149,12 @@ The configuration file is located at: `config/embellish_chat.json`.
     "dark aqua": "0x00AAAA",
     "dark blue": "0x0000AA"
   },
-  "delimiter": "-",
   "mentionColor": "0xFF55FF",
   "mentionSound": "minecraft:entity.experience_orb.pickup",
   "mentionPitch": 1.75,
   "mentionTitlePrefix": "",
   "mentionTitleSuffix": " mentioned you",
- 
+  
   //banned player list
   "bannedPlayerList": []
 }
@@ -176,7 +176,7 @@ The mod applies mentions and styling from top to bottom in the given order.
 
 ### Style Rule Structure
 
-Defines the text styling rules.<br>
+This section defines the text styling rules.<br>
 Each rule consists of a regular expression (`pattern`) and a style action list(`styles`).
 
 ```
@@ -233,34 +233,40 @@ you can see more detail [MentionWiki.md](https://github.com/hanhy06/embellish_ch
 
 ---
 
-### Permission
+### LuckPerms & Permission
 
-This mode supports the permission features of the Fabric Permissions API.
+This mode supports the permission features of the LuckPerms and Fabric Permissions API.
 
 The keys in stylingRules and mentionRules represent each permission (such as chat, command, mention, etc.). These keys are default keys, and the system works even if they are not explicitly defined.
 
 The mod checks from top to bottom and applies the rules registered for each permission.
+
+Both the `LUCK_PERMS_GROUP` mention type and `/ec notification` require LuckPerms.
+If it’s not installed, these features do nothing.
 
 ---
 ## 📊 TPS Latency Test
 
 **Test Environment**
 
-* Version: Embellish Chat 2.1.0 (DEV)
+* Version: Embellish Chat 2.2.0 (DEV)
 * CPU: 13th Gen Intel(R) Core(TM) i7-1360P
 * RAM: 2GB max
 * System: Windows 11
 
-**Since I couldn’t run 400 latency tests per tick, I used command blocks instead.
-Because the mention system doesn’t apply to command blocks, the actual latency is expected to be slightly higher than the results shown here.**
+* Minecraft: 1.21.10
+* World: Single Play / Superflat
+
+**These results illustrate general performance trends rather than a strict scientific benchmark, as the testing environment does not fully replicate all possible server configurations.**
 
 The graph below shows the TPS (Ticks Per Second) latency measurements for this mod.
 
-Each test message was configured to include 230 characters per tick, and the system was stressed by sending up to 382 × 20 chat messages per second. Although the average latency increases as the message rate rises, most servers handle around 200 × 20 messages per second (≈4,000 messages) or fewer, making TPS impact negligible under typical gameplay conditions.
+Each test message was configured to include 230 or 50 characters per tick, and the system was stressed by sending up to 400 × 20 chat messages per second. Although the average latency increases as the message rate rises, most servers handle around 200 × 20 messages per second (≈4,000 messages) or fewer, making TPS impact negligible under typical gameplay conditions.
 
-```w @a "@everyone @here **Check out this new [update]<green> __news__** right [here](https://github.com/hanhy06/embellish_chat)! _First come, first served — join now for an exclusive ||special|| gift!_ ~~If you come late, there won't be any left~~"```
+```execute as @a run embellish_chat test stress n "@hanhy ~~[Test]<RAINBOW>__ 100% working!__||50||~~"```
+```execute as @a run embellish_chat test stress n "@everyone @here **Check out this new [update]<green> __news__** right [here](https://github.com/hanhy06/embellish_chat)! _First come, first served — join now for an exclusive ||special|| gift!_ ~~If you come late, there won't be any left~~"```
 
-![Latency](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Latency2.1.0.png?raw=true)
+![Latency](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Latency2.2.0.png?raw=true)
 
 ---
 
@@ -278,3 +284,5 @@ Please download the mod from the official sources below to ensure you have the l
 ## ✨ Feedback & Support
 
 Found a bug or have a feature request? Please open an issue or reach out on the project’s Discord server.
+
+If you want to receive updates sooner, please press the heart ❤️ on our Modrinth page! Your support means a lot!

@@ -59,8 +59,8 @@ You can use multiple types in a single rule.
 
 > **Notes**
 > 
-> * In multi-style types, options are separated based on a delimiter.
-> * For example, if you combine rainbow and font, the user must enter it like 0.3-minecraft:alt (the hyphen is the default delimiter).
+> * For multi-style rules, options are separated using the configured delimiter.
+> * For example, if you combine rainbow and font, the user must enter it like 0.3,minecraft:alt (the ',' is the default delimiter).
 
 ## Preset
 

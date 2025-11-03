@@ -8,7 +8,7 @@
 		"hanhy06"
 	],
 	"contact": {
-		"homepage": "https://modrinth.com/mod/embellish_chat",
+		"homepage": "https://modrinth.com/mod/embellish-chat",
 		"sources": "https://github.com/hanhy06/embellish_chat"
 	},
 	"license": "Apache Version 2.0",
@@ -16,7 +16,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.hanhy06.embellish_chat.EmbellishChat"
+          "io.github.hanhy06.embellish_chat.EmbellishChat"
 		]
 	},
 	"mixins": [
