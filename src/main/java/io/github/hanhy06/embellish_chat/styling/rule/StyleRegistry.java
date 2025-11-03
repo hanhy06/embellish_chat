@@ -66,7 +66,16 @@ public class StyleRegistry {
     }
 
     public MutableText COLOR_HEX(StyleParameter parameter) {
-        int color = Color.decode(parameter.option()).getRGB();
+        int color = 0xffffff;
+
+        try {
+            color = Color.decode(parameter.option()).getRGB();
+        } catch (NumberFormatException e) {
+            EmbellishChat.LOGGER.warn("Invalid hex color format: {}", parameter.option());
+        } catch (NullPointerException e){
+            EmbellishChat.LOGGER.warn("The option value you entered is null.");
+        }
+
         return parameter.text().fillStyle(Style.EMPTY.withColor(color));
     }
 
@@ -74,7 +83,15 @@ public class StyleRegistry {
         Runs runs = flatten(parameter.text());
         String string = runs.full();
         int length = string.length();
-        float saturation = Float.parseFloat(parameter.option());
+        float saturation = 0.7f;
+
+        try {
+            saturation = Float.parseFloat(parameter.option());
+        } catch (NumberFormatException e) {
+            EmbellishChat.LOGGER.warn("The option value you entered is not a valid number.");
+        } catch (NullPointerException e){
+            EmbellishChat.LOGGER.warn("The option value you entered is null.");
+        }
 
         MutableText result = Text.empty();
         for (int i = 0; i < length; i++) {
@@ -91,7 +108,16 @@ public class StyleRegistry {
     }
 
     public MutableText COLOR_SHADOW(StyleParameter parameter) {
-        int color = Color.decode(parameter.option()).getRGB();
+        int color = 0xffffff;
+
+        try {
+            color = Color.decode(parameter.option()).getRGB();
+        } catch (NumberFormatException e) {
+            EmbellishChat.LOGGER.warn("Invalid hex color format: {}", parameter.option());
+        } catch (NullPointerException e){
+            EmbellishChat.LOGGER.warn("The option value you entered is null.");
+        }
+
         return parameter.text().fillStyle(Style.EMPTY.withShadowColor(color));
     }
 
