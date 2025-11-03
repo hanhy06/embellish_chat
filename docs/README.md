@@ -6,9 +6,9 @@
 
 ## ✨ Key Features
 
-* **Markdown‑Style Formatting**: Bold, italic, underline, strikethrough, obfuscation, color, custom font, and links. Works in public chat, private messages and command.
+* **Markdown‑Style Formatting**: Bold, italic, underline, strikethrough, obfuscation, color, custom font, and links. Works in public chat, private messages, and commands.
 * **Mention System**: Mention individual players, your team, everyone, or nearby players with `@`. Online targets receive a notification; mentions auto‑tint to the player/team color.
-* **Message Metadata**: Hover to see the send time click a message to copy it to the clipboard.
+* **Message Metadata**: Hover to see the send time, and click a message to copy it to the clipboard.
 
 ---
 
@@ -176,7 +176,7 @@ The mod applies mentions and styling from top to bottom in the given order.
 
 ### Style Rule Structure
 
-Defines the text styling rules.<br>
+This section defines the text styling rules.<br>
 Each rule consists of a regular expression (`pattern`) and a style action list(`styles`).
 
 ```
@@ -281,3 +281,5 @@ Please download the mod from the official sources below to ensure you have the l
 ## ✨ Feedback & Support
 
 Found a bug or have a feature request? Please open an issue or reach out on the project’s Discord server.
+
+If you want to receive updates sooner, please press the heart ❤️ on our Modrinth page! Your support means a lot!
