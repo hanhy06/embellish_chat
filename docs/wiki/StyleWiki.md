@@ -19,6 +19,10 @@
 | `UPPER`         | Transforms every matched substring into uppercase characters.                                                             | No options are required  |
 | `LOWER`         | Transforms every matched substring into lowercase characters.                                                             | No options are required  |
 
+> **Notes**
+>
+> * `COLOR_SHADOW` is not available in versions earlier than 1.21.1.
+
 ---
 
 # Usage
