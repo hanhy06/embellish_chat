@@ -54,7 +54,7 @@ Use the following patterns directly in the chat window:
 > 
 > * Online mention targets receive a notification, and the message is automatically styled using the appropriate color and formatting based on the target’s team, display name, or default rules.
 > * The mention notification sound uses the **UI** sound category by default. On **Minecraft 1.21.5 and earlier**, it falls back to the **PLAYER** category.
-> * Requires LuckPerms. If not installed, this group mention is ignored.
+> * `@group(name)` requires LuckPerms. Without it, the mention resolves to no players.
 ---
 
 ## ⌨️ Commands
@@ -62,14 +62,18 @@ Use the following patterns directly in the chat window:
 * **`/embellish_chat reload`** — Reloads the configuration from `config/embellish_chat.json`.
 * **`/embellish_chat ban <player>`** — Prevents the specified player from using the mod’s all features.
 * **`/embellish_chat pardon <player>`** — Restores access to the mod’s all features for the specified player.
+* **`/embellish_chat test regex <regex> <test>`** - Compiles the `<regex>` pattern and matches it against the `<test>` string.
+* **`/embellish_chat test stress <count> <test>`** - Sends a fake message containing `<test>` exactly `<count>` times with the permissions of the user who executed the command, and processes it the same way as a real message.
 
-* **`/ec help_mention`** - Displays the currently available mentions, how to use them, the mention targets, and the applicable style types.
-* **`/ec help_style`** - Displays the currently available styles, how to use them, the applicable style types, and the required input options.
+* **`/ec help mention`** - Displays the currently available mentions, how to use them, the mention targets, and the applicable style types.
+* **`/ec help style`** - Displays the currently available styles, how to use them, the applicable style types, and the required input options.
+* **`/ec notification`** - Allows you to decide whether to receive a notification when you are mentioned.
 
 > **Notes**
 >
 > * All commands in the /embellish_chat family require OP level 2.
 > * Commands in the /ec family do not require any OP level and can be used by all users.
+> * /ec notification requires LuckPerms, otherwise the setting is unavailable.
 
 ---
 
@@ -81,35 +85,29 @@ The configuration file is located at: `config/embellish_chat.json`.
 
 ```
 {
+  //version
+  "version": "2.2.0",
+  
   //rules
   "stylingRules": {
-    "command": [
+    "embellish_chat.chat": [
       {
-        "pattern": "\\*\\*(.+?)\\*\\*()",
+        "pattern": "\\[([^\\]]+?)]\\((.*?)\\)",
         "styles": [
           {
-            "styleType": "BOLD",
-            "preset": ""
-          }
-        ]
-      },
-      {
-        "pattern": "__(.+?)__()",
-        "styles": [
-          {
-            "styleType": "UNDERLINE",
+            "styleType": "URL",
             "preset": ""
           }
         ]
       },
       ...
     ],
-    "chat": [
+    "embellish_chat.command_argument": [
       ...
     ]
   },
   "mentionRules": {
-    "mention": [
+    "embellish_chat.mention": [
       {
         "pattern": "@here()",
         "mentions": [
@@ -129,19 +127,21 @@ The configuration file is located at: `config/embellish_chat.json`.
     ]
   },
   
-  //preset
+  //presets
+  "delimiter": ",",
+  "timestamp": "yyyy-MM-dd HH:mm:ss",
   "urlColor": "0x0000EE",
   "colorPreset": {
-    "dark green": "0x00AA00",
     "green": "0x55FF55",
-    "yellow": "0xFFFF55",
+    "dark green": "0x00AA00",
     "black": "0x000000",
+    "yellow": "0xFFFF55",
     "dark red": "0xAA0000",
-    "dark purple": "0xAA00AA",
     "light purple": "0xFF55FF",
-    "dark gray": "0x555555",
-    "red": "0xFF5555",
+    "dark purple": "0xAA00AA",
     "gold": "0xFFAA00",
+    "red": "0xFF5555",
+    "dark gray": "0x555555",
     "aqua": "0x55FFFF",
     "gray": "0xAAAAAA",
     "white": "0xFFFFFF",
@@ -149,13 +149,12 @@ The configuration file is located at: `config/embellish_chat.json`.
     "dark aqua": "0x00AAAA",
     "dark blue": "0x0000AA"
   },
-  "delimiter": "-",
   "mentionColor": "0xFF55FF",
   "mentionSound": "minecraft:entity.experience_orb.pickup",
   "mentionPitch": 1.75,
   "mentionTitlePrefix": "",
   "mentionTitleSuffix": " mentioned you",
- 
+  
   //banned player list
   "bannedPlayerList": []
 }
@@ -234,13 +233,16 @@ you can see more detail [MentionWiki.md](https://github.com/hanhy06/embellish_ch
 
 ---
 
-### Permission & LuckPerms
+### LuckPerms & Permission
 
-This mode supports the permission features of the Fabric Permissions API.
+This mode supports the permission features of the LuckPerms and Fabric Permissions API.
 
 The keys in stylingRules and mentionRules represent each permission (such as chat, command, mention, etc.). These keys are default keys, and the system works even if they are not explicitly defined.
 
 The mod checks from top to bottom and applies the rules registered for each permission.
+
+Both the `LUCK_PERMS_GROUP` mention type and `/ec notification` require LuckPerms.
+If it’s not installed, these features do nothing.
 
 ---
 ## 📊 TPS Latency Test

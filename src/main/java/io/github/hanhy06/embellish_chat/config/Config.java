@@ -222,7 +222,7 @@ public record Config(
                 )),
 
                 //preset
-                "-",
+                ",",
                 "yyyy-MM-dd HH:mm:ss",
                 0x0000EE,
                 new HashMap<>(Map.ofEntries(
