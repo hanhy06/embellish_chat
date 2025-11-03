@@ -156,7 +156,7 @@ public record Config(
                                             "@here()",
                                             List.of(
                                                     MentionAction.of(
-                                                            MentionType.HERE,"64"
+                                                            MentionType.INSIDE,"64"
                                                     )
                                             ),
                                             List.of(

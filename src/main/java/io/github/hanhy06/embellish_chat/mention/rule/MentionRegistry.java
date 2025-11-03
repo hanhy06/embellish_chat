@@ -35,7 +35,7 @@ public class MentionRegistry {
         this.stylePreset = Style.EMPTY.withColor(config.mentionColor());
         this.registries = new EnumMap<>(Map.ofEntries(
                 entry(MentionType.EVERYONE,this::EVERYONE),
-                entry(MentionType.HERE,this::INSIDE),
+                entry(MentionType.INSIDE,this::INSIDE),
                 entry(MentionType.TEAM,this::TEAM),
                 entry(MentionType.PLAYER,this::PLAYER),
                 entry(MentionType.LUCK_PERMS_GROUP,this::LUCK_PERMS_GROUP)
