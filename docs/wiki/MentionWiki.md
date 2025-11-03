@@ -47,7 +47,7 @@ This is the most basic way to use it.
   "pattern": "@red-team-here()",
   "mentions": [
     {
-      "mentionType": "HERE",
+      "mentionType": "INSIDE",
       "preset": "64"
     },
     {
