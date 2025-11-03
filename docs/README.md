@@ -255,18 +255,16 @@ If it’s not installed, these features do nothing.
 * System: Windows 11
 
 * Minecraft: 1.21.10
-* World: Single Play/Plat
+* World: Single Play / Superflat
 
-**Since I couldn’t run 400 latency tests per tick, I used command blocks instead.
-Because the mention system doesn’t apply to command blocks, the actual latency is expected to be slightly higher than the results shown here.**
-
-**I don’t know the exact benchmarking method, so please understand that the table only shows general trends and is not an accurate benchmark.**
+**These results illustrate general performance trends rather than a strict scientific benchmark, as the testing environment does not fully replicate all possible server configurations.**
 
 The graph below shows the TPS (Ticks Per Second) latency measurements for this mod.
 
-Each test message was configured to include 230 characters per tick, and the system was stressed by sending up to 382 × 20 chat messages per second. Although the average latency increases as the message rate rises, most servers handle around 200 × 20 messages per second (≈4,000 messages) or fewer, making TPS impact negligible under typical gameplay conditions.
+Each test message was configured to include 230 or 50 characters per tick, and the system was stressed by sending up to 400 × 20 chat messages per second. Although the average latency increases as the message rate rises, most servers handle around 200 × 20 messages per second (≈4,000 messages) or fewer, making TPS impact negligible under typical gameplay conditions.
 
-```execute as @a run embellish_chat test stress "@everyone @here **Check out this new [update]<green> __news__** right [here](https://github.com/hanhy06/embellish_chat)! _First come, first served — join now for an exclusive ||special|| gift!_ ~~If you come late, there won't be any left~~"```
+```execute as @a run embellish_chat test stress n "@hanhy ~~[Test]<RAINBOW>__ 100% working!__||50||~~"```
+```execute as @a run embellish_chat test stress n "@everyone @here **Check out this new [update]<green> __news__** right [here](https://github.com/hanhy06/embellish_chat)! _First come, first served — join now for an exclusive ||special|| gift!_ ~~If you come late, there won't be any left~~"```
 
 ![Latency](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Latency2.2.0.png?raw=true)
 
