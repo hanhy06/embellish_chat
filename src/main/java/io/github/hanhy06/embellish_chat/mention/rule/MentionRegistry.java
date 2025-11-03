@@ -4,12 +4,10 @@ import io.github.hanhy06.embellish_chat.EmbellishChat;
 import io.github.hanhy06.embellish_chat.config.Config;
 import io.github.hanhy06.embellish_chat.mention.data.ParsedMention;
 import io.github.hanhy06.embellish_chat.mention.data.ParsedTarget;
+import io.github.hanhy06.embellish_chat.util.LuckPermsUtil;
 import io.github.hanhy06.embellish_chat.util.TeamColor;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.loader.api.FabricLoader;
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.LuckPermsProvider;
-import net.luckperms.api.model.user.User;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.PlayerManager;
@@ -135,24 +133,11 @@ public class MentionRegistry {
         List<ServerPlayerEntity> players = new ArrayList<>();
 
         if (!FabricLoader.getInstance().isModLoaded("luckperms")) {
-            EmbellishChat.LOGGER.info("LuckPerms not detected. Permission-based chat styling is disabled.");
+            EmbellishChat.LOGGER.info("LuckPerms not found. @group mentions will be ignored.");
             return ParsedTarget.of(parsedMention, players, stylePreset);
         }
 
-        try {
-            LuckPerms luckPerms = LuckPermsProvider.get();
-            String targetGroup = parameter.option();
-
-            players = manager.getPlayerList().stream()
-                    .filter(player -> {
-                        User user = luckPerms.getUserManager().getUser(player.getUuid());
-                        return user != null && targetGroup.equals(user.getPrimaryGroup());
-                    })
-                    .toList();
-
-        } catch (IllegalStateException exception) {
-            EmbellishChat.LOGGER.warn("LuckPerms is present but not ready yet. Permission features will be disabled: {}", exception.getMessage());
-        }
+        players = LuckPermsUtil.getGroupPlayers(parameter.option(),manager.getPlayerList());
 
         return ParsedTarget.of(parsedMention, players, stylePreset);
     }

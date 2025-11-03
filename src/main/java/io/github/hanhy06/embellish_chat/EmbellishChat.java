@@ -22,7 +22,7 @@ public class EmbellishChat implements ModInitializer {
 
     @Override
 	public void onInitialize() {
-		LOGGER.info("{} initializing...", MOD_ID);
+        LOGGER.info("Initializing {}...", MOD_ID);
 
 		ServerLifecycleEvents.SERVER_STARTED.register(EmbellishChat::handleServerStart);
 

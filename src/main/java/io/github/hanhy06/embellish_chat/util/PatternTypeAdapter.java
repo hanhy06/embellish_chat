@@ -38,7 +38,7 @@ public class PatternTypeAdapter extends TypeAdapter<Pattern> {
         try {
             return Pattern.compile(regex);
         } catch (PatternSyntaxException e) {
-            EmbellishChat.LOGGER.error("Failed to compile pattern pattern: \"{}\" ({})", regex, e.getMessage());
+            EmbellishChat.LOGGER.error("Failed to compile regex pattern from config: \"{}\"", regex, e);
             throw new JsonSyntaxException("Invalid pattern pattern: \"" + regex + "\"", e);
         }
     }

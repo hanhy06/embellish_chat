@@ -51,7 +51,7 @@ public class ConfigManager {
                 Files.createFile(configFilePath);
                 writeConfig();
             } catch (IOException e) {
-                EmbellishChat.LOGGER.info("Failed to read config file. Using default config settings.");
+                EmbellishChat.LOGGER.warn("Failed to create config file. Using default settings.", e);
             }
         }
     }
@@ -75,10 +75,10 @@ public class ConfigManager {
             EmbellishChat.LOGGER.info("Config loaded successfully.");
         } else if (loaded != null) {
             broadcastConfig();
-            EmbellishChat.LOGGER.warn("The configuration version is different from the current version or missing. Please update the settings to match the current version. Using default values.");
+            EmbellishChat.LOGGER.warn("Config version mismatch or missing. Using default config. Please review and update your config file.");
         } else {
             broadcastConfig();
-            EmbellishChat.LOGGER.warn("Config file is empty or invalid. Using default values.");
+            EmbellishChat.LOGGER.warn("Config file is empty or invalid. Using default config.");
         }
     }
 

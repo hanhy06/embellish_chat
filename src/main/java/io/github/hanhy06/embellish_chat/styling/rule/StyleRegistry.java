@@ -108,7 +108,7 @@ public class StyleRegistry {
                     .withClickEvent(clickEvent)
                     .withColor(config.urlColor()));
         } catch (IllegalArgumentException e) {
-            EmbellishChat.LOGGER.warn("Invalid URL address: {}", parameter.option());
+            EmbellishChat.LOGGER.warn("Invalid URL provided for text [{}]: {}", parameter.text().getString(), parameter.option());
             return parameter.text();
         }
     }

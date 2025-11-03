@@ -1,5 +1,6 @@
 package io.github.hanhy06.embellish_chat.command;
 
+import com.mojang.brigadier.context.CommandContext;
 import io.github.hanhy06.embellish_chat.config.ConfigManager;
 import io.github.hanhy06.embellish_chat.mention.rule.MentionAction;
 import io.github.hanhy06.embellish_chat.mention.rule.MentionRule;
@@ -9,7 +10,6 @@ import io.github.hanhy06.embellish_chat.styling.rule.StyleType;
 import io.github.hanhy06.embellish_chat.styling.rule.StylingRule;
 import io.github.hanhy06.embellish_chat.util.LuckPermsUtil;
 import io.github.hanhy06.embellish_chat.util.PermissionUtil;
-import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.command.CommandManager;
@@ -43,7 +43,7 @@ public class EcCommand {
             return 1;
         }
 
-        player.sendMessage(Text.literal("_____Available mentions_____"));
+        player.sendMessage(Text.literal("--- Available Mentions ---"));
         List<String> keys = PermissionUtil.getPermissions(player, ConfigManager.getConfig().mentionRules().keySet());
         List<MentionRule> rules = new ArrayList<>();
 
@@ -65,12 +65,7 @@ public class EcCommand {
                     .collect(Collectors.joining(", "));
 
             String message = String.format(
-                    """
-                        use :%s
-                        intersection (elements) :%s
-                        apply styles :%s
-                    
-                    """,
+                    "Pattern: %s\nTargets: %s\nStyles: %s\n",
                     pattern, mentionTypes, styles
             );
 
@@ -86,7 +81,7 @@ public class EcCommand {
             return 1;
         }
 
-        player.sendMessage(Text.literal("_____Available styles_____"));
+        player.sendMessage(Text.literal("--- Available Styles ---"));
         List<String> keys = PermissionUtil.getPermissions(player, ConfigManager.getConfig().stylingRules().keySet());
         List<StylingRule> rules = new ArrayList<>();
 
@@ -108,12 +103,7 @@ public class EcCommand {
                     .collect(Collectors.joining(ConfigManager.getConfig().delimiter()));
 
             String message = String.format(
-                    """
-                        use :%s
-                        apply styles :%s
-                        preset options :%s
-                    
-                    """,
+                    "Pattern: %s\nStyles: %s\nPreset Options: %s\n",
                     pattern, styles, presetOptions
             );
 
@@ -131,7 +121,7 @@ public class EcCommand {
 
         if (!FabricLoader.getInstance().isModLoaded("luckperms")) {
             context.getSource().sendFeedback(() ->
-                            Text.literal("LuckPerms is not currently installed on this server. You cannot use the mention notification settings feature. Please contact the administrator."),
+                            Text.literal("LuckPerms is not installed. Notification settings are unavailable."),
                     false
             );
             return 1;
@@ -139,7 +129,7 @@ public class EcCommand {
 
         boolean notification = !LuckPermsUtil.getNotification(player);
         LuckPermsUtil.setNotification(player, notification);
-        String result = String.format("mention notification setting current status is %b",notification);
+        String result = String.format("Mention notifications set to: %s", (notification ? "ON" : "OFF"));
         context.getSource().sendFeedback(() ->
                         Text.literal(result),
                 false

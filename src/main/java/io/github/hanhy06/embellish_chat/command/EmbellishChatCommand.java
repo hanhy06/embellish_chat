@@ -1,11 +1,11 @@
 package io.github.hanhy06.embellish_chat.command;
 
-import io.github.hanhy06.embellish_chat.config.ConfigManager;
-import io.github.hanhy06.embellish_chat.message.MessageProcessor;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import io.github.hanhy06.embellish_chat.config.ConfigManager;
+import io.github.hanhy06.embellish_chat.message.MessageProcessor;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.network.message.SignedMessage;
@@ -50,7 +50,7 @@ public class EmbellishChatCommand {
     private static int executeReloadConfig(CommandContext<ServerCommandSource> context) {
         ConfigManager.INSTANCE.readConfig();
         context.getSource().sendFeedback(() ->
-                        Text.literal("embellish chat mod config loaded"),
+                Text.literal("Config reloaded successfully."),
                 true
         );
         return 1;
@@ -76,7 +76,7 @@ public class EmbellishChatCommand {
                 .map(Text::getString)
                 .collect(Collectors.joining(", "));
         String action = ban ? "banned" : "pardoned";
-        String result = String.format("Player(s) %s has been %s.", playerNames, action);
+        String result = String.format("Player(s) %s %s.", playerNames, action);
 
         context.getSource().sendFeedback(() -> Text.literal(result), true);
         return 1;
@@ -93,13 +93,13 @@ public class EmbellishChatCommand {
             pattern = Pattern.compile(regexString);
             matcher = pattern.matcher(testString);
         } catch (PatternSyntaxException e) {
-            String error = String.format("Failed to compile pattern: \"%s\" (%s)", regexString, e.getMessage());
+            String error = String.format("Failed to compile regex: \"%s\" (%s)", regexString, e.getMessage());
             context.getSource().sendFeedback(() -> Text.literal(error), false);
             return 0;
         }
 
         if (!matcher.find()) {
-            context.getSource().sendFeedback(() -> Text.literal("no match"), false);
+            context.getSource().sendFeedback(() -> Text.literal("No match found."), false);
             return 0;
         }
 
@@ -112,11 +112,11 @@ public class EmbellishChatCommand {
         int groupCount = matcher.groupCount();
 
         if (groupCount == 1) {
-            return String.format("matched group1: %s", matcher.group(1));
+            return String.format("Matched (Group 1): %s", matcher.group(1));
         } else if (groupCount == 2) {
-            return String.format("matched group1: %s | matched group2: %s", matcher.group(1), matcher.group(2));
+            return String.format("Matched [Group 1: %s] | [Group 2: %s]", matcher.group(1), matcher.group(2));
         } else {
-            return "The entered regular expression or test string is invalid.";
+            return "Invalid regex or test string. (Requires 1 or 2 capture groups)";
         }
     }
 
@@ -127,14 +127,14 @@ public class EmbellishChatCommand {
 
         if (player == null) {
             source.sendFeedback(() ->
-                            Text.literal("The stress test of Embellish Chat requires the user's UUID for more accurate testing, please run it in-game instead of from the console."),
+                    Text.literal("Stress test must be run by a player in-game."),
                     false
             );
             return 0;
         }
 
         if (count > 500) {
-            source.sendFeedback(() -> Text.literal("This value is too large to test with."), true);
+            source.sendFeedback(() -> Text.literal("Count is too large. (Max 500)"), true);
             return 0;
         }
 
@@ -150,7 +150,7 @@ public class EmbellishChatCommand {
         long duration = System.currentTimeMillis() - startTime;
 
         double messagesPerSecond = (count * 1000.0) / duration;
-        String result = String.format("Stress test completed: %d messages processed in %dms (%.2f msg/s)",count, duration, messagesPerSecond);
+        String result = String.format("Stress test complete: Processed %d messages in %dms (%.2f msg/s)", count, duration, messagesPerSecond);
         source.sendFeedback(() ->
                         Text.literal(result),
                 false

@@ -1,7 +1,7 @@
 package io.github.hanhy06.embellish_chat.mixin;
 
-import io.github.hanhy06.embellish_chat.styling.StylingProcessor;
 import com.mojang.brigadier.context.CommandContext;
+import io.github.hanhy06.embellish_chat.styling.StylingProcessor;
 import net.minecraft.command.argument.TextArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
