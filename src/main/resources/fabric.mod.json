@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "embellish_chat",
+  "id": "embellish-chat",
   "version": "${version}",
 	"name": "EmbellishChat",
 	"description": "EmbellishChat made by hanhy06",
@@ -16,11 +16,11 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-          "io.github.hanhy06.embellish_chat.EmbellishChat"
+          "io.github.hanhy06.embellishchat.EmbellishChat"
 		]
 	},
 	"mixins": [
-      "embellish_chat.mixins.json"
+      "embellish-chat.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.17.2",

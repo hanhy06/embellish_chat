@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "io.github.hanhy06.embellishchat.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "MessageCommandMixin",
+    "ServerPlayNetworkHandlerMixin",
+    "TextArgumentTypeMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
