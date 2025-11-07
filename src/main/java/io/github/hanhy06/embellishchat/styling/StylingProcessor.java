@@ -3,6 +3,7 @@ package io.github.hanhy06.embellishchat.styling;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
 import io.github.hanhy06.embellishchat.mention.data.Mention;
+import io.github.hanhy06.embellishchat.styling.data.ParsedStyle;
 import io.github.hanhy06.embellishchat.styling.rule.StyleAction;
 import io.github.hanhy06.embellishchat.styling.rule.StyleParameter;
 import io.github.hanhy06.embellishchat.styling.rule.StyleRegistry;
@@ -11,6 +12,7 @@ import io.github.hanhy06.embellishchat.styling.util.Runs;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -35,6 +37,28 @@ public class StylingProcessor implements ConfigListener {
 
         this.stylingRules = newConfig.stylingRules();
         this.registry = new StyleRegistry(newConfig);
+    }
+
+    public List<ParsedStyle> parsedStyles(String text,String key){
+        List<ParsedStyle> styles = new ArrayList<>();
+
+        for (StylingRule rule : stylingRules.get(key)){
+            styles.addAll(parsedStyle(rule,text));
+        }
+
+        return styles;
+    }
+
+    private List<ParsedStyle> parsedStyle(StylingRule rule,String text){
+        Matcher matcher = rule.pattern().matcher(text);
+        List<ParsedStyle> styles = new ArrayList<>();
+
+        while (matcher.find()){
+            ParsedStyle style = ParsedStyle.of(matcher.start(),matcher.end(),rule.styles());
+            styles.add(style);
+        }
+
+        return styles;
     }
 
     public MutableText applyStylingRule(MutableText text, String key){

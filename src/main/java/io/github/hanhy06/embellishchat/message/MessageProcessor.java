@@ -7,6 +7,7 @@ import io.github.hanhy06.embellishchat.mention.data.Mention;
 import io.github.hanhy06.embellishchat.mention.data.ParsedMention;
 import io.github.hanhy06.embellishchat.mention.data.ParsedTarget;
 import io.github.hanhy06.embellishchat.styling.StylingProcessor;
+import io.github.hanhy06.embellishchat.styling.data.ParsedStyle;
 import io.github.hanhy06.embellishchat.util.LuckPermsUtil;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.message.SignedMessage;
@@ -91,5 +92,22 @@ public class MessageProcessor implements ConfigListener {
         parsedTargets.forEach(target -> mentions.add(target.createMention()));
         mentions.sort(Comparator.comparing(Mention::begin));
         return mentions;
+    }
+
+    private MutableText handleStyle(ServerPlayerEntity sender, MutableText message,List<Mention> mentions){
+        MutableText result = stylingManager.applyMention(message,mentions);
+        String text = message.getString();
+        if (sender == null || message.getString().isBlank()) {
+            return result;
+        }
+
+        List<String> keys = getPermissions(sender, config.mentionRules().keySet());
+        List<ParsedStyle> parsedStyles = new ArrayList<>();
+        for (String key : keys){
+            parsedStyles.addAll(stylingManager.parsedStyles(text,key));
+        }
+        parsedStyles.sort(Comparator.comparing(ParsedStyle::begin));
+
+        return result;
     }
 }
