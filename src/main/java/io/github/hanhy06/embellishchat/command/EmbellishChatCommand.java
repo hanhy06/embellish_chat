@@ -25,7 +25,7 @@ public class EmbellishChatCommand {
         CommandRegistrationCallback.EVENT.register(
                 (commandDispatcher, commandRegistryAccess, registrationEnvironment) ->
                         commandDispatcher.register(
-                                CommandManager.literal("embellish_chat")
+                                CommandManager.literal("embellish-chat")
                                         .requires(src -> src.hasPermissionLevel(2))
                                         .then(CommandManager.literal("reload")
                                                 .executes(EmbellishChatCommand::executeReloadConfig))

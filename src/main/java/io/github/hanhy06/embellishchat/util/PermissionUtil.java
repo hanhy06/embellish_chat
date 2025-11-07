@@ -23,10 +23,10 @@ public class PermissionUtil {
 
     public static void registerPermissions(){
         PermissionCheckEvent.EVENT.register((source, permission) -> {
-            if (permission.equals("embellish_chat.chat")) {
+            if (permission.equals("embellish-chat.chat")) {
                 return TriState.TRUE;
             }
-            if (permission.equals("embellish_chat.mention")) {
+            if (permission.equals("embellish-chat.mention")) {
                 return TriState.TRUE;
             }
             return TriState.DEFAULT;

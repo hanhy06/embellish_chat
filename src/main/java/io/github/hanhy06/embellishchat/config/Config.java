@@ -47,7 +47,7 @@ public record Config(
 
                 //style
                 new TreeMap<>(Map.ofEntries(
-                        entry("embellish_chat.chat",
+                        entry("embellish-chat.chat",
                                 List.of(
                                         StylingRule.of(
                                                 "\\[([^\\]]+?)]\\((https://.*?)\\)",
@@ -99,7 +99,7 @@ public record Config(
                                         )
                                 )
                         ),
-                        entry("embellish_chat.command_argument",
+                        entry("embellish-chat.command_argument",
                                 List.of(
                                         StylingRule.of(
                                                 "\\[([^\\]]+?)]\\((https://.*?)\\)",
@@ -150,7 +150,7 @@ public record Config(
                 )),
                 new TreeMap<>(Map.ofEntries(
                     entry(
-                            "embellish_chat.mention",
+                            "embellish-chat.mention",
                             List.of(
                                     MentionRule.of(
                                             "@here()",

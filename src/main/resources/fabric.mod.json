@@ -9,7 +9,7 @@
 	],
 	"contact": {
 		"homepage": "https://modrinth.com/mod/embellish-chat",
-		"sources": "https://github.com/hanhy06/embellish_chat"
+		"sources": "https://github.com/hanhy06/embellish-chat"
 	},
 	"license": "Apache Version 2.0",
 	"icon": "assets/embellish-chat/icon/icon.png",
