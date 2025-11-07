@@ -6,6 +6,8 @@ public enum StyleType {
     COLOR_RAINBOW,
     COLOR_PRESET,
     COLOR_SHADOW,
+    COMMAND_RUN,
+    COMMAND_SUGGEST,
     FONT,
     URL,
     BOLD,
