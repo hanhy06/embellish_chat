@@ -18,18 +18,18 @@ Use the following patterns directly in the chat window:
 
 | Feature         | Syntax            | Example                                                       | Preview                                                                                                         |
 |-----------------| ----------------- |---------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|
-| Bold            | `**Text**`        | `**You really need to read this!**`                           | ![Bold](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Bold.png?raw=true)             |
-| Italic          | `_Text_`          | `_This is top secret..._`                                     | ![Italic](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Italic.png?raw=true)         |
-| Underline       | `__Text__`        | `__Check this out__`                                          | ![Underline](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Underline.png?raw=true)   |
-| Strikethrough   | `~~Text~~`        | `~~We don’t talk about this anymore~~`                        | ![Strike](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Strikethrough.png?raw=true)  |
-| Obfuscated      | `\|\|Text\|\|`    | `\|\|Unreadable text\|\|`                                     | ![Obfuscated](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Obfuscated.gif?raw=true) |
-| Color (Hex)     | `[Text]<#RRGGBB>` | `[Blue]<#0000FF> like the deep ocean`                         | ![Color](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Color_Hex.png?raw=true)       |
-| Color (Preset)  | `[Text]<preset>`  | `[pink]<pink> pig`                                            | ![Color](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Color_Preset.png?raw=true)    |
-| Color (Rainbow) | `[Text]<RAINBOW>` | `look at this [rainbow]<RAINBOW>`                             | ![Color](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Color_Rainbow.png?raw=true)   |
-| Color (Shadow)  | `[Text]<SD:#hex>` | `[greeea]<SD:#00ff00>`                                        | ![Color](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Color_Shadow.png?raw=true)    |
-| Link            | `[Text](URL)`     | `Download it [here](https://modrinth.com/mod/embellish-chat)` | ![Link](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Link.gif?raw=true)             |
-| Font            | `[Text]{path}`    | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Font.png?raw=true)             |
-| Mention         | `@PlayerName`     | `Hello, @User`                                                | ![Mention](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Mention.png?raw=true)       |
+| Bold            | `**Text**`        | `**You really need to read this!**`                           | ![Bold](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Bold.png?raw=true)             |
+| Italic          | `_Text_`          | `_This is top secret..._`                                     | ![Italic](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Italic.png?raw=true)         |
+| Underline       | `__Text__`        | `__Check this out__`                                          | ![Underline](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Underline.png?raw=true)   |
+| Strikethrough   | `~~Text~~`        | `~~We don’t talk about this anymore~~`                        | ![Strike](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Strikethrough.png?raw=true)  |
+| Obfuscated      | `\|\|Text\|\|`    | `\|\|Unreadable text\|\|`                                     | ![Obfuscated](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Obfuscated.gif?raw=true) |
+| Color (Hex)     | `[Text]<#RRGGBB>` | `[Blue]<#0000FF> like the deep ocean`                         | ![Color](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Color_Hex.png?raw=true)       |
+| Color (Preset)  | `[Text]<preset>`  | `[pink]<pink> pig`                                            | ![Color](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Color_Preset.png?raw=true)    |
+| Color (Rainbow) | `[Text]<RAINBOW>` | `look at this [rainbow]<RAINBOW>`                             | ![Color](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Color_Rainbow.png?raw=true)   |
+| Color (Shadow)  | `[Text]<SD:#hex>` | `[greeea]<SD:#00ff00>`                                        | ![Color](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Color_Shadow.png?raw=true)    |
+| Link            | `[Text](URL)`     | `Download it [here](https://modrinth.com/mod/embellish-chat)` | ![Link](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Link.gif?raw=true)             |
+| Font            | `[Text]{path}`    | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Font.png?raw=true)             |
+| Mention         | `@PlayerName`     | `Hello, @User`                                                | ![Mention](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Mention.png?raw=true)       |
 
 > **Notes**
 >
@@ -194,7 +194,7 @@ Each rule consists of a regular expression (`pattern`) and a style action list(`
 * **pattern** Must contain **two capturing groups**: 1 the text to apply the style to, 2 an optional captured value that can be passed as an argument.
 * **styles** This is a list of style actions. Each action consists of a style type (`styleType`) and style option preset(`preset`).
 
-you can see more detail [StyleWiki.md](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/wiki/StyleWiki.md)
+you can see more detail [StyleWiki.md](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/wiki/StyleWiki.md)
 
 ---
 
@@ -229,7 +229,7 @@ Each rule consists of a regular expression (`pattern`), mention action list(`men
 * **mentions** The mentions field is a list of mention actions. Each action specifies a mentionType and an optional preset.
 * **styles** The styles field works the same way as in the styling rules section.
 
-you can see more detail [MentionWiki.md](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/wiki/MentionWiki.md)
+you can see more detail [MentionWiki.md](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/wiki/MentionWiki.md)
 
 ---
 
@@ -263,10 +263,10 @@ The graph below shows the TPS (Ticks Per Second) latency measurements for this m
 
 Each test message was configured to include 230 or 50 characters per tick, and the system was stressed by sending up to 400 × 20 chat messages per second. Although the average latency increases as the message rate rises, most servers handle around 200 × 20 messages per second (≈4,000 messages) or fewer, making TPS impact negligible under typical gameplay conditions.
 
-```execute as @a run embellish_chat test stress n "@hanhy ~~[Test]<RAINBOW>__ 100% working!__||50||~~"```
-```execute as @a run embellish_chat test stress n "@everyone @here **Check out this new [update]<green> __news__** right [here](https://github.com/hanhy06/embellish_chat)! _First come, first served — join now for an exclusive ||special|| gift!_ ~~If you come late, there won't be any left~~"```
+* ```execute as @a run embellish_chat test stress n "@hanhy ~~[Test]<RAINBOW>__ 100% working!__||50||~~"```
+* ```execute as @a run embellish_chat test stress n "@everyone @here **Check out this new [update]<green> __news__** right [here](https://github.com/hanhy06/embellish_chat)! _First come, first served — join now for an exclusive ||special|| gift!_ ~~If you come late, there won't be any left~~"```
 
-![Latency](https://github.com/hanhy06/embellish_chat/blob/fabric/1.21.9/docs/images/Latency2.2.0.png?raw=true)
+![Latency](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Latency2.2.0.png?raw=true)
 
 ---
 
@@ -277,7 +277,7 @@ This project is licensed under the **Apache License 2.0**.
 Please download the mod from the official sources below to ensure you have the latest, safest version. Linking to these pages is appreciated; please avoid re‑hosting files.
 
 * **Official Download (Modrinth):** [https://modrinth.com/mod/embellish-chat](https://modrinth.com/mod/embellish-chat)
-* **Source Code (GitHub):** [https://github.com/hanhy06/embellish_chat](https://github.com/hanhy06/embellish_chat)
+* **Source Code (GitHub):** [https://github.com/hanhy06/embellish-chat](https://github.com/hanhy06/embellish-chat)
 
 ---
 
