@@ -53,11 +53,7 @@ public class MessageProcessor implements ConfigListener {
         String stringMessage = message.getContent().getString();
 
         List<Mention> mentions = handleMention(sender, stringMessage);
-        textMessage = stylingManager.applyMention(textMessage, mentions);
 
-        for (String key : getPermissions(sender, config.stylingRules().keySet())) {
-            textMessage = stylingManager.applyStylingRule(textMessage, key);
-        }
 
         return message.withUnsignedContent(textMessage);
     }

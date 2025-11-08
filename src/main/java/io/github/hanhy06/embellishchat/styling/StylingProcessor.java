@@ -52,65 +52,26 @@ public class StylingProcessor implements ConfigListener {
     private List<ParsedStyle> parsedStyle(StylingRule rule,String text){
         Matcher matcher = rule.pattern().matcher(text);
         List<ParsedStyle> styles = new ArrayList<>();
+        List<String> presets = rule.styles().stream().map(StyleAction::preset).toList();
 
         while (matcher.find()){
-            ParsedStyle style = ParsedStyle.of(matcher.start(),matcher.end(),rule.styles());
+            int begin = matcher.start(1);
+            int end = matcher.start(1);
+            List<String> options = resolveOptions(matcher.group(2), presets);
+
+            ParsedStyle style = ParsedStyle.of(begin,end,rule.styles(),options);
             styles.add(style);
         }
 
         return styles;
     }
 
-    public MutableText applyStylingRule(MutableText text, String key){
-        if (text.getString().isBlank() || !stylingRules.containsKey(key)) return text;
-
-        MutableText result = text;
-        for (StylingRule style : stylingRules.get(key)){
-            result = applyStyles(result,style);
-        }
-
-        return result;
-    }
-
-    private MutableText applyStyles(MutableText text,StylingRule style){
+    public MutableText applyStyle(MutableText text, ParsedStyle parsedStyle){
         Runs runs = flatten(text);
-        MutableText result = Text.empty();
+        MutableText result = slice(runs,parsedStyle.begin(),parsedStyle.end());
 
-        Matcher matcher = style.pattern().matcher(runs.full());
-        if (!matcher.find()) return text;
-
-        int lastEnd = 0;
-        do {
-            result.append(slice(runs, lastEnd, matcher.start()));
-
-            MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
-            String option = matcher.group(2);
-            List<String> options = List.of();
-            if (option != null && !option.isBlank()){
-                options = List.of(option.split(config.delimiter()));
-            }
-
-            result.append(applyStyle(segment, style.styles(), options));
-            lastEnd = matcher.end();
-        } while (matcher.find());
-        result.append(slice(runs, lastEnd, runs.full().length()));
-
-        return result;
-    }
-
-    private MutableText applyStyle(MutableText text, List<StyleAction> actions, List<String> options){
-        MutableText result = text;
-
-        int index = 0;
-        for (StyleAction action : actions){
-            String option = action.preset();
-            if (option.isBlank() && index < options.size()){
-                option = options.get(index);
-            }
-            result = registry
-                    .get(action.styleType())
-                    .apply(StyleParameter.of(result,option));
-            index++;
+        for (StyleAction action : parsedStyle.styles()){
+//            result = registry.get(action.styleType()).apply()
         }
 
         return result;
@@ -136,6 +97,25 @@ public class StylingProcessor implements ConfigListener {
             lastEnd = mention.end();
         }
         result.append(slice(runs, lastEnd, runs.full().length()));
+
+        return result;
+    }
+
+    public List<String> resolveOptions(String option,List<String> presets){
+        List<String> options = List.of(option.split(config.delimiter()));
+        List<String> result = new ArrayList<>();
+
+        int index = 0;
+        for (String preset : presets){
+            String decided = preset;
+
+            if (decided.isBlank() && index< options.size()){
+                decided = options.get(index);
+            }
+
+            result.add(decided);
+            index++;
+        }
 
         return result;
     }
