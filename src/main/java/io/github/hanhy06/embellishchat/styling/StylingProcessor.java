@@ -12,9 +12,8 @@ import io.github.hanhy06.embellishchat.styling.util.Runs;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 
 import static io.github.hanhy06.embellishchat.styling.util.TextSliceUtil.flatten;
@@ -39,14 +38,41 @@ public class StylingProcessor implements ConfigListener {
         this.registry = new StyleRegistry(newConfig);
     }
 
-    public List<ParsedStyle> parsedStyles(String text,String key){
-        List<ParsedStyle> styles = new ArrayList<>();
+    public MutableText applyStyle(StylingRule rule,List<ParsedStyle> parsedStyles,MutableText text){
+        Runs runs = flatten(text);
+        MutableText result = Text.empty();
+        List<Function<StyleParameter, MutableText>> styles = rule.styles()
+                .stream()
+                .map(StyleAction::styleType)
+                .map(type -> registry.get(type))
+                .toList();
+
+        int lastEnd = 0;
+        for (ParsedStyle parsedStyle : parsedStyles){
+            result.append(slice(runs,lastEnd,parsedStyle.begin()));
+
+            MutableText segment = slice(runs,parsedStyle.begin(),parsedStyle.end());
+            for (int i = 0;i<styles.size();i++){
+                StyleParameter parameter = StyleParameter.of(segment,parsedStyle.options().get(i));
+                segment = styles.get(i).apply(parameter);
+            }
+
+            result.append(segment);
+            lastEnd = parsedStyle.end();
+        }
+        result.append(slice(runs,lastEnd,runs.full().length()));
+
+        return result;
+    }
+
+    public Map<StylingRule,List<ParsedStyle>> parsedStyles(String key,String text){
+        Map<StylingRule,List<ParsedStyle>> parsedStyles = new LinkedHashMap<>();
 
         for (StylingRule rule : stylingRules.get(key)){
-            styles.addAll(parsedStyle(rule,text));
+            parsedStyles.put(rule,parsedStyle(rule,text));
         }
 
-        return styles;
+        return parsedStyles;
     }
 
     private List<ParsedStyle> parsedStyle(StylingRule rule,String text){
@@ -59,22 +85,11 @@ public class StylingProcessor implements ConfigListener {
             int end = matcher.start(1);
             List<String> options = resolveOptions(matcher.group(2), presets);
 
-            ParsedStyle style = ParsedStyle.of(begin,end,rule.styles(),options);
+            ParsedStyle style = ParsedStyle.of(begin,end,options);
             styles.add(style);
         }
 
         return styles;
-    }
-
-    public MutableText applyStyle(MutableText text, ParsedStyle parsedStyle){
-        Runs runs = flatten(text);
-        MutableText result = slice(runs,parsedStyle.begin(),parsedStyle.end());
-
-        for (StyleAction action : parsedStyle.styles()){
-//            result = registry.get(action.styleType()).apply()
-        }
-
-        return result;
     }
 
     public MutableText applyMention(MutableText text, List<Mention> mentions){
