@@ -38,7 +38,7 @@ public class StylingProcessor implements ConfigListener {
         this.registry = new StyleRegistry(newConfig);
     }
 
-    public MutableText applyStyle(StylingRule rule,List<ParsedStyle> parsedStyles,MutableText text){
+    public MutableText applyStyle(MutableText text,StylingRule rule,List<ParsedStyle> parsedStyles){
         Runs runs = flatten(text);
         MutableText result = Text.empty();
         List<Function<StyleParameter, MutableText>> styles = rule.styles()
@@ -65,24 +65,25 @@ public class StylingProcessor implements ConfigListener {
         return result;
     }
 
-    public Map<StylingRule,List<ParsedStyle>> parsedStyles(String key,String text){
+    public Map<StylingRule,List<ParsedStyle>> parsedStyles(String text,String key){
         Map<StylingRule,List<ParsedStyle>> parsedStyles = new LinkedHashMap<>();
 
         for (StylingRule rule : stylingRules.get(key)){
-            parsedStyles.put(rule,parsedStyle(rule,text));
+            parsedStyles.put(rule,parsedStyle(text,rule));
         }
 
         return parsedStyles;
     }
 
-    private List<ParsedStyle> parsedStyle(StylingRule rule,String text){
+    private List<ParsedStyle> parsedStyle(String text,StylingRule rule){
         Matcher matcher = rule.pattern().matcher(text);
         List<ParsedStyle> styles = new ArrayList<>();
         List<String> presets = rule.styles().stream().map(StyleAction::preset).toList();
 
         while (matcher.find()){
             int begin = matcher.start(1);
-            int end = matcher.start(1);
+            int end = matcher.end(1);
+
             List<String> options = resolveOptions(matcher.group(2), presets);
 
             ParsedStyle style = ParsedStyle.of(begin,end,options);
@@ -90,6 +91,25 @@ public class StylingProcessor implements ConfigListener {
         }
 
         return styles;
+    }
+
+    public List<String> resolveOptions(String option,List<String> presets){
+        List<String> options = List.of(option.split(config.delimiter()));
+        List<String> result = new ArrayList<>();
+
+        int index = 0;
+        for (String preset : presets){
+            String decided = preset;
+
+            if (decided.isBlank() && index< options.size()){
+                decided = options.get(index);
+            }
+
+            result.add(decided);
+            index++;
+        }
+
+        return result;
     }
 
     public MutableText applyMention(MutableText text, List<Mention> mentions){
@@ -112,25 +132,6 @@ public class StylingProcessor implements ConfigListener {
             lastEnd = mention.end();
         }
         result.append(slice(runs, lastEnd, runs.full().length()));
-
-        return result;
-    }
-
-    public List<String> resolveOptions(String option,List<String> presets){
-        List<String> options = List.of(option.split(config.delimiter()));
-        List<String> result = new ArrayList<>();
-
-        int index = 0;
-        for (String preset : presets){
-            String decided = preset;
-
-            if (decided.isBlank() && index< options.size()){
-                decided = options.get(index);
-            }
-
-            result.add(decided);
-            index++;
-        }
 
         return result;
     }

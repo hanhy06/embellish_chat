@@ -102,7 +102,7 @@ public class MessageProcessor implements ConfigListener {
         Map<StylingRule,List<ParsedStyle>> parsedStyles = new LinkedHashMap<>();
 
         for (String key : keys){
-            parsedStyles.putAll(stylingManager.parsedStyles(key,text));
+            parsedStyles.putAll(stylingManager.parsedStyles(text,key));
         }
 
         return result;
