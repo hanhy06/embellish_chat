@@ -26,16 +26,16 @@ public class MessageProcessor implements ConfigListener {
     public static MessageProcessor INSTANCE;
 
     private final MentionProcessor mentionProcessor;
-    private final StylingProcessor stylingManager;
+    private final StylingProcessor stylingProcessor;
     private final PlayerManager playerManager;
 
     private Config config;
     private List<UUID> bannedPlayerList;
 
-    public MessageProcessor(MentionProcessor mentionProcessor, StylingProcessor stylingManager, PlayerManager playerManager) {
+    public MessageProcessor(MentionProcessor mentionProcessor, StylingProcessor stylingProcessor, PlayerManager playerManager) {
         INSTANCE = this;
         this.mentionProcessor = mentionProcessor;
-        this.stylingManager = stylingManager;
+        this.stylingProcessor = stylingProcessor;
         this.playerManager = playerManager;
     }
 
@@ -93,7 +93,7 @@ public class MessageProcessor implements ConfigListener {
     }
 
     private MutableText handleStyle(ServerPlayerEntity sender, MutableText message,List<Mention> mentions){
-        MutableText result = stylingManager.applyMention(message,mentions);
+        MutableText result = stylingProcessor.applyMention(message,mentions);
         String text = message.getString();
         if (sender == null || message.getString().isBlank()) {
             return result;
@@ -103,16 +103,16 @@ public class MessageProcessor implements ConfigListener {
         Map<StylingRule,List<ParsedStyle>> parsedStyles = new LinkedHashMap<>();
 
         for (String key : keys){
-            parsedStyles.putAll(stylingManager.parsedStyles(text,key));
+            parsedStyles.putAll(stylingProcessor.parsedStyles(text,key));
         }
         for (StylingRule rule : parsedStyles.keySet()){
             List<StyleSegment> segments = parsedStyles
                     .get(rule)
                     .stream()
-                    .map(stylingManager::parsedSegment)
+                    .map(stylingProcessor::parsedSegment)
                     .toList();
 
-            result = stylingManager.applyStyle(result,segments);
+            result = stylingProcessor.applyStyle(result,segments);
         }
 
         return result;
