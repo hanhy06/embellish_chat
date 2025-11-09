@@ -41,26 +41,8 @@ public class StylingProcessor implements ConfigListener {
     public MutableText applyStyle(MutableText text,StylingRule rule,List<ParsedStyle> parsedStyles){
         Runs runs = flatten(text);
         MutableText result = Text.empty();
-        List<Function<StyleParameter, MutableText>> styles = rule.styles()
-                .stream()
-                .map(StyleAction::styleType)
-                .map(type -> registry.get(type))
-                .toList();
 
-        int lastEnd = 0;
-        for (ParsedStyle parsedStyle : parsedStyles){
-            result.append(slice(runs,lastEnd,parsedStyle.begin()));
 
-            MutableText segment = slice(runs,parsedStyle.begin(),parsedStyle.end());
-            for (int i = 0;i<styles.size();i++){
-                StyleParameter parameter = StyleParameter.of(segment,parsedStyle.options().get(i));
-                segment = styles.get(i).apply(parameter);
-            }
-
-            result.append(segment);
-            lastEnd = parsedStyle.end();
-        }
-        result.append(slice(runs,lastEnd,runs.full().length()));
 
         return result;
     }
@@ -77,23 +59,24 @@ public class StylingProcessor implements ConfigListener {
 
     private List<ParsedStyle> parsedStyle(String text,StylingRule rule){
         Matcher matcher = rule.pattern().matcher(text);
-        List<ParsedStyle> styles = new ArrayList<>();
-        List<String> presets = rule.styles().stream().map(StyleAction::preset).toList();
+        List<ParsedStyle> parsedStyles = new ArrayList<>();
+        List<StyleAction> styles = rule.styles();
 
         while (matcher.find()){
             int begin = matcher.start(1);
             int end = matcher.end(1);
+            String option = matcher.group(2);
 
-            List<String> options = resolveOptions(matcher.group(2), presets);
-
-            ParsedStyle style = ParsedStyle.of(begin,end,options);
-            styles.add(style);
+            ParsedStyle style = ParsedStyle.of(begin,end,option,styles);
+            parsedStyles.add(style);
         }
 
-        return styles;
+        return parsedStyles;
     }
 
-    public List<String> resolveOptions(String option,List<String> presets){
+
+
+    private List<String> resolveOptions(String option,List<String> presets){
         List<String> options = List.of(option.split(config.delimiter()));
         List<String> result = new ArrayList<>();
 
