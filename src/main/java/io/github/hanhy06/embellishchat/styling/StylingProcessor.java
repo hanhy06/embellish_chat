@@ -36,11 +36,25 @@ public class StylingProcessor implements ConfigListener {
         this.registry = new StyleRegistry(newConfig);
     }
 
-    public MutableText applyStyle(MutableText text,StylingRule rule,List<ParsedStyle> parsedStyles){
+    public MutableText applyStyle(MutableText text,List<StyleSegment> segments){
         Runs runs = flatten(text);
         MutableText result = Text.empty();
 
+        int lastEnd = 0;
+        for (StyleSegment styleSegment : segments){
+            result.append(slice(runs,lastEnd,styleSegment.begin()));
 
+            MutableText segment = slice(runs,styleSegment.begin(),styleSegment.end());
+            Map<StyleType,String> operation = styleSegment.operation();
+            for (StyleType styleType : operation.keySet()){
+                StyleParameter parameter = StyleParameter.of(segment,operation.get(styleType));
+                segment = registry.get(styleType).apply(parameter);
+            }
+
+            result.append(segment);
+            lastEnd = styleSegment.end();
+        }
+        result.append(slice(runs,lastEnd,runs.full().length()));
 
         return result;
     }
