@@ -101,13 +101,18 @@ public class MessageProcessor implements ConfigListener {
 
         List<String> keys = getPermissions(sender, config.mentionRules().keySet());
         Map<StylingRule,List<ParsedStyle>> parsedStyles = new LinkedHashMap<>();
-        Map<StylingRule,List<StyleSegment>> segments = new LinkedHashMap<>();
 
         for (String key : keys){
             parsedStyles.putAll(stylingManager.parsedStyles(text,key));
         }
         for (StylingRule rule : parsedStyles.keySet()){
-            segments.put(rule,parsedStyles.get(rule).stream().map(stylingManager::parsedSegment).toList());
+            List<StyleSegment> segments = parsedStyles
+                    .get(rule)
+                    .stream()
+                    .map(stylingManager::parsedSegment)
+                    .toList();
+
+            result = stylingManager.applyStyle(result,segments);
         }
 
         return result;
