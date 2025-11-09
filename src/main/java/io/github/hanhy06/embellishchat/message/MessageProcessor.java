@@ -8,6 +8,7 @@ import io.github.hanhy06.embellishchat.mention.data.ParsedMention;
 import io.github.hanhy06.embellishchat.mention.data.ParsedTarget;
 import io.github.hanhy06.embellishchat.styling.StylingProcessor;
 import io.github.hanhy06.embellishchat.styling.data.ParsedStyle;
+import io.github.hanhy06.embellishchat.styling.data.StyleSegment;
 import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
 import io.github.hanhy06.embellishchat.util.LuckPermsUtil;
 import net.fabricmc.loader.api.FabricLoader;
@@ -100,9 +101,13 @@ public class MessageProcessor implements ConfigListener {
 
         List<String> keys = getPermissions(sender, config.mentionRules().keySet());
         Map<StylingRule,List<ParsedStyle>> parsedStyles = new LinkedHashMap<>();
+        Map<StylingRule,List<StyleSegment>> segments = new LinkedHashMap<>();
 
         for (String key : keys){
             parsedStyles.putAll(stylingManager.parsedStyles(text,key));
+        }
+        for (StylingRule rule : parsedStyles.keySet()){
+            segments.put(rule,parsedStyles.get(rule).stream().map(stylingManager::parsedSegment).toList());
         }
 
         return result;

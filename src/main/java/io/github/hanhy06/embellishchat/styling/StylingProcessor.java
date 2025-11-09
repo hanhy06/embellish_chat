@@ -4,10 +4,8 @@ import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
 import io.github.hanhy06.embellishchat.mention.data.Mention;
 import io.github.hanhy06.embellishchat.styling.data.ParsedStyle;
-import io.github.hanhy06.embellishchat.styling.rule.StyleAction;
-import io.github.hanhy06.embellishchat.styling.rule.StyleParameter;
-import io.github.hanhy06.embellishchat.styling.rule.StyleRegistry;
-import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
+import io.github.hanhy06.embellishchat.styling.data.StyleSegment;
+import io.github.hanhy06.embellishchat.styling.rule.*;
 import io.github.hanhy06.embellishchat.styling.util.Runs;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -74,7 +72,18 @@ public class StylingProcessor implements ConfigListener {
         return parsedStyles;
     }
 
+    public StyleSegment parsedSegment(ParsedStyle parsedStyle){
+        List<StyleType> types = parsedStyle.styles().stream().map(StyleAction::styleType).toList();
+        List<String> presets = parsedStyle.styles().stream().map(StyleAction::preset).toList();
+        List<String> options = resolveOptions(parsedStyle.option(),presets);
 
+        Map<StyleType,String> operation = new LinkedHashMap<>();
+        for (int i=0;i< types.size();i++){
+            operation.put(types.get(i),options.get(i));
+        }
+
+        return StyleSegment.of(parsedStyle.begin(),parsedStyle.end(),operation);
+    }
 
     private List<String> resolveOptions(String option,List<String> presets){
         List<String> options = List.of(option.split(config.delimiter()));
