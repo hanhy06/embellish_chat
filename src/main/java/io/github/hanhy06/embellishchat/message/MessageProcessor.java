@@ -55,7 +55,7 @@ public class MessageProcessor implements ConfigListener {
         String stringMessage = message.getContent().getString();
 
         List<Mention> mentions = handleMention(sender, stringMessage);
-
+        textMessage = handleStyle(sender, textMessage, mentions);
 
         return message.withUnsignedContent(textMessage);
     }
@@ -99,7 +99,7 @@ public class MessageProcessor implements ConfigListener {
             return result;
         }
 
-        List<String> keys = getPermissions(sender, config.mentionRules().keySet());
+        List<String> keys = getPermissions(sender, config.stylingRules().keySet());
         Map<StylingRule,List<ParsedStyle>> parsedStyles = new LinkedHashMap<>();
 
         for (String key : keys){

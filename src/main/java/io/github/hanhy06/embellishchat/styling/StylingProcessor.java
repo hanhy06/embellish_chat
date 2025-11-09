@@ -10,8 +10,10 @@ import io.github.hanhy06.embellishchat.styling.util.Runs;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
-import java.util.*;
-import java.util.function.Function;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 
 import static io.github.hanhy06.embellishchat.styling.util.TextSliceUtil.flatten;
