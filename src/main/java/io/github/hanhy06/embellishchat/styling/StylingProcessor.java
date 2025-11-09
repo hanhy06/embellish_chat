@@ -3,15 +3,14 @@ package io.github.hanhy06.embellishchat.styling;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
 import io.github.hanhy06.embellishchat.mention.data.Mention;
-import io.github.hanhy06.embellishchat.styling.data.ParsedStyle;
-import io.github.hanhy06.embellishchat.styling.data.StyleSegment;
-import io.github.hanhy06.embellishchat.styling.rule.*;
+import io.github.hanhy06.embellishchat.styling.rule.StyleAction;
+import io.github.hanhy06.embellishchat.styling.rule.StyleParameter;
+import io.github.hanhy06.embellishchat.styling.rule.StyleRegistry;
+import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
 import io.github.hanhy06.embellishchat.styling.util.Runs;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -38,82 +37,55 @@ public class StylingProcessor implements ConfigListener {
         this.registry = new StyleRegistry(newConfig);
     }
 
-    public MutableText applyStyle(MutableText text,List<StyleSegment> segments){
-        Runs runs = flatten(text);
-        MutableText result = Text.empty();
+    public MutableText applyStylingRule(MutableText text, String key){
+        if (text.getString().isBlank() || !stylingRules.containsKey(key)) return text;
 
-        int lastEnd = 0;
-        for (StyleSegment styleSegment : segments){
-            result.append(slice(runs,lastEnd,styleSegment.begin()));
-
-            MutableText segment = slice(runs,styleSegment.begin(),styleSegment.end());
-            Map<StyleType,String> operation = styleSegment.operation();
-            for (StyleType styleType : operation.keySet()){
-                StyleParameter parameter = StyleParameter.of(segment,operation.get(styleType));
-                segment = registry.get(styleType).apply(parameter);
-            }
-
-            result.append(segment);
-            lastEnd = styleSegment.end();
+        MutableText result = text;
+        for (StylingRule style : stylingRules.get(key)){
+            result = applyStyles(result,style);
         }
-        result.append(slice(runs,lastEnd,runs.full().length()));
 
         return result;
     }
 
-    public Map<StylingRule,List<ParsedStyle>> parsedStyles(String text,String key){
-        Map<StylingRule,List<ParsedStyle>> parsedStyles = new LinkedHashMap<>();
+    private MutableText applyStyles(MutableText text,StylingRule style){
+        Runs runs = flatten(text);
+        MutableText result = Text.empty();
 
-        for (StylingRule rule : stylingRules.get(key)){
-            parsedStyles.put(rule,parsedStyle(text,rule));
-        }
+        Matcher matcher = style.pattern().matcher(runs.full());
+        if (!matcher.find()) return text;
 
-        return parsedStyles;
-    }
+        int lastEnd = 0;
+        do {
+            result.append(slice(runs, lastEnd, matcher.start()));
 
-    private List<ParsedStyle> parsedStyle(String text,StylingRule rule){
-        Matcher matcher = rule.pattern().matcher(text);
-        List<ParsedStyle> parsedStyles = new ArrayList<>();
-        List<StyleAction> styles = rule.styles();
-
-        while (matcher.find()){
-            int begin = matcher.start(1);
-            int end = matcher.end(1);
+            MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
             String option = matcher.group(2);
-
-            ParsedStyle style = ParsedStyle.of(begin,end,option,styles);
-            parsedStyles.add(style);
-        }
-
-        return parsedStyles;
-    }
-
-    public StyleSegment parsedSegment(ParsedStyle parsedStyle){
-        List<StyleType> types = parsedStyle.styles().stream().map(StyleAction::styleType).toList();
-        List<String> presets = parsedStyle.styles().stream().map(StyleAction::preset).toList();
-        List<String> options = resolveOptions(parsedStyle.option(),presets);
-
-        Map<StyleType,String> operation = new LinkedHashMap<>();
-        for (int i=0;i< types.size();i++){
-            operation.put(types.get(i),options.get(i));
-        }
-
-        return StyleSegment.of(parsedStyle.begin(),parsedStyle.end(),operation);
-    }
-
-    private List<String> resolveOptions(String option,List<String> presets){
-        List<String> options = List.of(option.split(config.delimiter()));
-        List<String> result = new ArrayList<>();
-
-        int index = 0;
-        for (String preset : presets){
-            String decided = preset;
-
-            if (decided.isBlank() && index< options.size()){
-                decided = options.get(index);
+            List<String> options = List.of();
+            if (option != null && !option.isBlank()){
+                options = List.of(option.split(config.delimiter()));
             }
 
-            result.add(decided);
+            result.append(applyStyle(segment, style.styles(), options));
+            lastEnd = matcher.end();
+        } while (matcher.find());
+        result.append(slice(runs, lastEnd, runs.full().length()));
+
+        return result;
+    }
+
+    private MutableText applyStyle(MutableText text, List<StyleAction> actions, List<String> options){
+        MutableText result = text;
+
+        int index = 0;
+        for (StyleAction action : actions){
+            String option = action.preset();
+            if (option.isBlank() && index < options.size()){
+                option = options.get(index);
+            }
+            result = registry
+                    .get(action.styleType())
+                    .apply(StyleParameter.of(result,option));
             index++;
         }
 

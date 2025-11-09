@@ -7,9 +7,6 @@ import io.github.hanhy06.embellishchat.mention.data.Mention;
 import io.github.hanhy06.embellishchat.mention.data.ParsedMention;
 import io.github.hanhy06.embellishchat.mention.data.ParsedTarget;
 import io.github.hanhy06.embellishchat.styling.StylingProcessor;
-import io.github.hanhy06.embellishchat.styling.data.ParsedStyle;
-import io.github.hanhy06.embellishchat.styling.data.StyleSegment;
-import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
 import io.github.hanhy06.embellishchat.util.LuckPermsUtil;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.message.SignedMessage;
@@ -55,7 +52,11 @@ public class MessageProcessor implements ConfigListener {
         String stringMessage = message.getContent().getString();
 
         List<Mention> mentions = handleMention(sender, stringMessage);
-        textMessage = handleStyle(sender, textMessage, mentions);
+        textMessage = stylingProcessor.applyMention(textMessage, mentions);
+
+        for (String key : getPermissions(sender, config.stylingRules().keySet())) {
+            textMessage = stylingProcessor.applyStylingRule(textMessage, key);
+        }
 
         return message.withUnsignedContent(textMessage);
     }
@@ -90,31 +91,5 @@ public class MessageProcessor implements ConfigListener {
         parsedTargets.forEach(target -> mentions.add(target.createMention()));
         mentions.sort(Comparator.comparing(Mention::begin));
         return mentions;
-    }
-
-    private MutableText handleStyle(ServerPlayerEntity sender, MutableText message,List<Mention> mentions){
-        MutableText result = stylingProcessor.applyMention(message,mentions);
-        String text = message.getString();
-        if (sender == null || message.getString().isBlank()) {
-            return result;
-        }
-
-        List<String> keys = getPermissions(sender, config.stylingRules().keySet());
-        Map<StylingRule,List<ParsedStyle>> parsedStyles = new LinkedHashMap<>();
-
-        for (String key : keys){
-            parsedStyles.putAll(stylingProcessor.parsedStyles(text,key));
-        }
-        for (StylingRule rule : parsedStyles.keySet()){
-            List<StyleSegment> segments = parsedStyles
-                    .get(rule)
-                    .stream()
-                    .map(stylingProcessor::parsedSegment)
-                    .toList();
-
-            result = stylingProcessor.applyStyle(result,segments);
-        }
-
-        return result;
     }
 }
