@@ -1,4 +1,4 @@
-package io.github.hanhy06.embellishchat.adapter;
+package io.github.hanhy06.embellishchat.config.adapter;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.TypeAdapter;

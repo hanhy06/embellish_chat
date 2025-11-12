@@ -21,10 +21,15 @@ public class OptionUtil {
     public static String parseOption(String option, String preset, ServerPlayerEntity player){
         String value = preset.isBlank() ? option : preset;
 
-        if (!FabricLoader.getInstance().isModLoaded("placeholder-api")){
-            value = PlaceHolderUtil.getParedOption(option,player);
+        if (FabricLoader.getInstance().isModLoaded("placeholder-api")){
+            value = PlaceHolderUtil.getParedOption(value,player);
         }
 
         return value;
+    }
+
+    public static List<String> split(String option, String  delimiter){
+        if (option != null && !option.isBlank()) return List.of(option.split(delimiter));
+        return List.of();
     }
 }

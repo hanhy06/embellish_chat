@@ -5,8 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.Strictness;
 import io.github.hanhy06.embellishchat.EmbellishChat;
-import io.github.hanhy06.embellishchat.adapter.HexIntegerTypeAdapter;
-import io.github.hanhy06.embellishchat.adapter.PatternTypeAdapter;
+import io.github.hanhy06.embellishchat.config.adapter.HexIntegerTypeAdapter;
+import io.github.hanhy06.embellishchat.config.adapter.PatternTypeAdapter;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
