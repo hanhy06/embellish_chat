@@ -8,6 +8,7 @@ import io.github.hanhy06.embellishchat.mention.rule.MentionAction;
 import io.github.hanhy06.embellishchat.mention.rule.MentionParameter;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRegistry;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
+import io.github.hanhy06.embellishchat.util.OptionUtil;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -80,16 +81,16 @@ public class MentionProcessor implements ConfigListener {
     private ParsedTarget parseTarget(ServerPlayerEntity sender, ParsedMention mention) {
         List<ParsedTarget> targets = new ArrayList<>();
 
-        int index = 0;
-        for (MentionAction action : mention.rule().mentions()) {
-            String option = action.preset();
-            if (option.isBlank() && index< mention.options().size()){
-                option = mention.options().get(index);
-            }
+        List<MentionAction> actions = mention.rule().mentions();
+        List<String> options = mention.options();
+
+        for (int i = 0; i < actions.size();i++){
+            MentionAction action = actions.get(i);
+            String option = OptionUtil.parseOption(options.get(i),action.preset(),sender);
+
             ParsedTarget target = registries.get(action.mentionType())
                     .apply(MentionParameter.of(mention, sender, option));
             targets.add(target);
-            index++;
         }
 
         ParsedTarget first = targets.getFirst();

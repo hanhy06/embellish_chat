@@ -5,7 +5,7 @@ import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.mention.data.ParsedMention;
 import io.github.hanhy06.embellishchat.mention.data.ParsedTarget;
 import io.github.hanhy06.embellishchat.util.LuckPermsUtil;
-import io.github.hanhy06.embellishchat.util.TeamColor;
+import io.github.hanhy06.embellishchat.util.TeamColorUtil;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.scoreboard.Scoreboard;
@@ -114,7 +114,7 @@ public class MentionRegistry {
         }else {
             style = Style.EMPTY
                     .withParent(stylePreset)
-                    .withColor(TeamColor.getPlayerColor(
+                    .withColor(TeamColorUtil.getPlayerColor(
                             scoreboard,
                             parameter.option(),
                             config.mentionColor())

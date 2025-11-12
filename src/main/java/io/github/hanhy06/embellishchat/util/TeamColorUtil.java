@@ -5,7 +5,7 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Formatting;
 
-public class TeamColor {
+public class TeamColorUtil {
     public static Integer getPlayerColor(ServerPlayerEntity player,Integer preset){
         if (player != null) {
             Team team = player.getScoreboardTeam();
