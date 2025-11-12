@@ -60,7 +60,7 @@ public class MentionProcessor implements ConfigListener {
         List<ParsedMention> mentions = new ArrayList<>();
 
         while (matcher.find()) {
-            List<String> options = List.of(matcher.group(1).split(config.delimiter()));
+            List<String> options = OptionUtil.split(matcher.group(1),config.delimiter());
             mentions.add(ParsedMention.of(rule, options, matcher.start(), matcher.end()));
         }
 
