@@ -17,7 +17,6 @@ public record Config(
         String version,
 
         //rules
-        //TODO: 나중에 Rule에 description 즉 설명 필드 추가해야함
         Map<String,List<StylingRule>> stylingRules,
         Map<String,List<MentionRule>> mentionRules,
 
