@@ -8,6 +8,7 @@ public enum StyleType {
     COLOR_SHADOW,
     COMMAND_RUN,
     COMMAND_SUGGEST,
+    HOVER,
     FONT,
     URL,
     BOLD,

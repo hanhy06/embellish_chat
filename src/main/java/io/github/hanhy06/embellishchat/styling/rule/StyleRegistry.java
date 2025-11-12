@@ -37,6 +37,7 @@ public class StyleRegistry {
                 entry(StyleType.COLOR_SHADOW, this::COLOR_SHADOW),
                 entry(StyleType.COMMAND_RUN, this::COMMAND_RUN),
                 entry(StyleType.COMMAND_SUGGEST, this::COMMAND_SUGGEST),
+                entry(StyleType.HOVER,this::HOVER),
                 entry(StyleType.FONT, this::FONT),
                 entry(StyleType.URL, this::URL),
                 entry(StyleType.BOLD, this::BOLD),
@@ -131,6 +132,11 @@ public class StyleRegistry {
     public MutableText COMMAND_SUGGEST(StyleParameter parameter){
         ClickEvent clickEvent = new ClickEvent.SuggestCommand(parameter.option());
         return parameter.text().fillStyle(Style.EMPTY.withClickEvent(clickEvent));
+    }
+
+    public MutableText HOVER(StyleParameter parameter){
+        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(parameter.option()));
+        return parameter.text().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
     }
 
     public MutableText FONT(StyleParameter parameter) {
