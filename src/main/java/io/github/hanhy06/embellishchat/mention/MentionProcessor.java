@@ -104,20 +104,11 @@ public class MentionProcessor implements ConfigListener {
     }
 
     public void broadcastMentions(ServerPlayerEntity sender, Set<ServerPlayerEntity> players) {
-        MutableText title = createTitle(sender);
+        MutableText title = Text.empty();
 
         for (ServerPlayerEntity player : players) {
             player.sendMessage(title, true);
-            player.playSoundToPlayer(mentionSound, SoundCategory.UI, 1, config.mentionPitch());
+            player.playSoundToPlayer(mentionSound, SoundCategory.UI, 1, 1.7f);
         }
-    }
-
-    private MutableText createTitle(ServerPlayerEntity sender) {
-        return Text.empty()
-                .append(Text.literal(config.mentionTitlePrefix())
-                        .styled(style -> style.withBold(false).withColor(0xFFFFFF)))
-                .append(sender.getDisplayName())
-                .append(Text.literal(config.mentionTitleSuffix())
-                        .styled(style -> style.withBold(false).withColor(0xFFFFFF)));
     }
 }

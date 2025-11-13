@@ -28,6 +28,7 @@ public record Config(
         String timestamp,
         Color urlColor,
         HashMap<String, Color> colorPreset,
+        Color mentionColor,
 
         //banned player list
         List<UUID> bannedPlayerList
@@ -209,6 +210,7 @@ public record Config(
                         entry("yellow", new Color(0xFFFF55)),
                         entry("white", new Color(0xFFFFFF))
                 )),
+                new Color(0xff55ff),
 
                 //banned player list
                 new ArrayList<>()
