@@ -13,20 +13,20 @@ import java.util.regex.PatternSyntaxException;
 
 public class PatternTypeAdapter extends TypeAdapter<Pattern> {
     @Override
-    public void write(JsonWriter out, Pattern value) throws IOException {
-        if (value == null) {
-            out.nullValue();
+    public void write(JsonWriter jsonWriter, Pattern pattern) throws IOException {
+        if (pattern == null) {
+            jsonWriter.nullValue();
             return;
         }
-        out.value(value.pattern());
+        jsonWriter.value(pattern.pattern());
     }
 
     @Override
-    public Pattern read(JsonReader in) throws IOException {
-        JsonToken token = in.peek();
+    public Pattern read(JsonReader jsonReader) throws IOException {
+        JsonToken token = jsonReader.peek();
 
         if (token == JsonToken.NULL) {
-            in.nextNull();
+            jsonReader.nextNull();
             throw new JsonSyntaxException("Cannot parse JSON null as a pattern pattern.");
         }
 
@@ -34,7 +34,7 @@ public class PatternTypeAdapter extends TypeAdapter<Pattern> {
             throw new JsonSyntaxException("Expected a string for a pattern pattern, but found " + token + ".");
         }
 
-        String regex = in.nextString();
+        String regex = jsonReader.nextString();
         try {
             return Pattern.compile(regex);
         } catch (PatternSyntaxException e) {

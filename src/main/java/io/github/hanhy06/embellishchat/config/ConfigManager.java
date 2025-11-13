@@ -5,8 +5,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.Strictness;
 import io.github.hanhy06.embellishchat.EmbellishChat;
-import io.github.hanhy06.embellishchat.config.adapter.HexIntegerTypeAdapter;
+import io.github.hanhy06.embellishchat.config.adapter.IdentifierTypeAdapter;
 import io.github.hanhy06.embellishchat.config.adapter.PatternTypeAdapter;
+import net.minecraft.util.Identifier;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -29,8 +30,7 @@ public class ConfigManager {
     private final List<ConfigListener> listeners = new ArrayList<>();
 
     private final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(int.class,new HexIntegerTypeAdapter())
-            .registerTypeAdapter(Integer.class,new HexIntegerTypeAdapter())
+            .registerTypeAdapter(Identifier.class, new IdentifierTypeAdapter())
             .registerTypeAdapter(Pattern.class,new PatternTypeAdapter())
             .setPrettyPrinting()
             .setStrictness(Strictness.LENIENT)

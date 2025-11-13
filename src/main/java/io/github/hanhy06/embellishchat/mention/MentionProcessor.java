@@ -38,7 +38,7 @@ public class MentionProcessor implements ConfigListener {
     @Override
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
-        this.mentionSound = SoundEvent.of(Identifier.tryParse(config.mentionSound()));
+        this.mentionSound = SoundEvent.of(Identifier.tryParse("config.mentionSound()"));
         this.mentionRules = config.mentionRules();
         this.registries = new MentionRegistry(newConfig, manager, scoreboard);
     }
