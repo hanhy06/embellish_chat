@@ -28,9 +28,6 @@ public record Config(
         String timestamp,
         Color urlColor,
         HashMap<String, Color> colorPreset,
-        float mentionPitch,
-        String mentionTitlePrefix,
-        String mentionTitleSuffix,
 
         //banned player list
         List<UUID> bannedPlayerList
@@ -110,6 +107,7 @@ public record Config(
                                             "@here()",
                                             Identifier.of("minecraft:entity.experience_orb.pickup"),
                                             1.75f,
+                                            "%player:displayname% mentioned you",
                                             List.of(
                                                     MentionAction.of(
                                                             MentionType.INSIDE,"64"
@@ -125,6 +123,7 @@ public record Config(
                                             "@everyone()",
                                             Identifier.of("minecraft:entity.experience_orb.pickup"),
                                             1.75f,
+                                            "%player:displayname% mentioned you",
                                             List.of(
                                                     MentionAction.of(
                                                             MentionType.EVERYONE,""
@@ -140,6 +139,7 @@ public record Config(
                                             "@team\\((.+?)\\)",
                                             Identifier.of("minecraft:entity.experience_orb.pickup"),
                                             1.75f,
+                                            "%player:displayname% mentioned you",
                                             List.of(
                                                     MentionAction.of(
                                                             MentionType.TEAM,""
@@ -155,6 +155,7 @@ public record Config(
                                             "@group\\((.+?)\\)",
                                             Identifier.of("minecraft:entity.experience_orb.pickup"),
                                             1.75f,
+                                            "%player:displayname% mentioned you",
                                             List.of(
                                                     MentionAction.of(
                                                             MentionType.LUCK_PERMS_GROUP,""
@@ -170,6 +171,7 @@ public record Config(
                                             "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
                                             Identifier.of("minecraft:entity.experience_orb.pickup"),
                                             1.75f,
+                                            "%player:displayname% mentioned you",
                                             List.of(
                                                     MentionAction.of(
                                                             MentionType.PLAYER,""
@@ -207,9 +209,6 @@ public record Config(
                         entry("yellow", new Color(0xFFFF55)),
                         entry("white", new Color(0xFFFFFF))
                 )),
-                1.75f,
-                "",
-                " mentioned you",
 
                 //banned player list
                 new ArrayList<>()
