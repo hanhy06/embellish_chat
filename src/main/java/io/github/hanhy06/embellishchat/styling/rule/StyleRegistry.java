@@ -22,7 +22,7 @@ import static java.util.Map.entry;
 public class StyleRegistry {
     private final Config config;
     private final DateTimeFormatter timestamp;
-    private final HashMap<String, Integer> colorPreset;
+    private final HashMap<String, Color> colorPreset;
     private final EnumMap<StyleType, Function<StyleParameter, MutableText>> registers;
 
     public StyleRegistry(Config config) {
@@ -106,8 +106,8 @@ public class StyleRegistry {
     }
 
     public MutableText COLOR_PRESET(StyleParameter parameter) {
-        int color = colorPreset.getOrDefault(parameter.option(), 0xFFFFFF);
-        return parameter.text().fillStyle(Style.EMPTY.withColor(color));
+        Color color = colorPreset.getOrDefault(parameter.option(), Color.WHITE);
+        return parameter.text().fillStyle(Style.EMPTY.withColor(color.getRGB()));
     }
 
     public MutableText COLOR_SHADOW(StyleParameter parameter) {
@@ -150,7 +150,7 @@ public class StyleRegistry {
             ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
             return parameter.text().fillStyle(Style.EMPTY
                     .withClickEvent(clickEvent)
-                    .withColor(config.urlColor()));
+                    .withColor(config.urlColor().getRGB()));
         } catch (IllegalArgumentException e) {
             EmbellishChat.LOGGER.warn("Invalid URL provided for text [{}]: {}", parameter.text().getString(), parameter.option());
             return parameter.text();

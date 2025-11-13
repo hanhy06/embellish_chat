@@ -5,10 +5,12 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.Strictness;
 import io.github.hanhy06.embellishchat.EmbellishChat;
+import io.github.hanhy06.embellishchat.config.adapter.ColorTypeAdapter;
 import io.github.hanhy06.embellishchat.config.adapter.IdentifierTypeAdapter;
 import io.github.hanhy06.embellishchat.config.adapter.PatternTypeAdapter;
 import net.minecraft.util.Identifier;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -30,8 +32,9 @@ public class ConfigManager {
     private final List<ConfigListener> listeners = new ArrayList<>();
 
     private final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(Identifier.class, new IdentifierTypeAdapter())
             .registerTypeAdapter(Pattern.class,new PatternTypeAdapter())
+            .registerTypeAdapter(Identifier.class,new IdentifierTypeAdapter())
+            .registerTypeAdapter(Color.class,new ColorTypeAdapter())
             .setPrettyPrinting()
             .setStrictness(Strictness.LENIENT)
             .disableHtmlEscaping()

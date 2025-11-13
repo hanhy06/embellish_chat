@@ -32,7 +32,7 @@ public class MentionRegistry {
         this.scoreboard = scoreboard;
 
         this.config = config;
-        this.stylePreset = Style.EMPTY.withColor(config.mentionColor());
+        this.stylePreset = Style.EMPTY;
         this.registries = new EnumMap<>(Map.ofEntries(
                 entry(MentionType.EVERYONE,this::EVERYONE),
                 entry(MentionType.INSIDE,this::INSIDE),
@@ -113,12 +113,12 @@ public class MentionRegistry {
             players.add(target);
         }else {
             style = Style.EMPTY
-                    .withParent(stylePreset)
-                    .withColor(TeamColorUtil.getPlayerColor(
-                            scoreboard,
-                            parameter.option(),
-                            config.mentionColor())
-                    );
+                    .withParent(stylePreset);
+//                    .withColor(TeamColorUtil.getPlayerColor(
+//                            scoreboard,
+//                            parameter.option(),
+//                            config.mentionColor())
+//                    );
         }
 
         return ParsedTarget.of(
