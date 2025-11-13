@@ -77,7 +77,7 @@ public class MessageProcessor implements ConfigListener {
         Set<ServerPlayerEntity> targets = new HashSet<>();
         parsedTargets.forEach(target -> targets.addAll(target.players()));
 
-        if (!targets.isEmpty()) {
+        if (config.notificationEnable() && !targets.isEmpty()) {
             if (FabricLoader.getInstance().isModLoaded("luckperms")) {
                 mentionProcessor.broadcastMentions(
                         sender,

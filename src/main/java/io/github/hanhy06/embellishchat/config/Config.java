@@ -28,6 +28,7 @@ public record Config(
         String timestamp,
         Color urlColor,
         HashMap<String, Color> colorPreset,
+        boolean notificationEnable,
         Color mentionColor,
 
         //banned player list
@@ -210,6 +211,7 @@ public record Config(
                         entry("yellow", new Color(0xFFFF55)),
                         entry("white", new Color(0xFFFFFF))
                 )),
+                true,
                 new Color(0xff55ff),
 
                 //banned player list
