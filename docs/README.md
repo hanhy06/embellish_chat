@@ -138,7 +138,7 @@ The configuration file is located at: `config/embellish-chat.json`.
     "dark green": "#00AA00",
     ...
   },
-  "notificationEnable": true,
+  "notificationCommandEnable": true,
   "mentionColor": "#FF55FF",
   
   // banned players
