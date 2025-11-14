@@ -32,7 +32,7 @@ public class MentionRegistry {
         this.scoreboard = scoreboard;
 
         this.config = config;
-        this.stylePreset = Style.EMPTY;
+        this.stylePreset = Style.EMPTY.withColor(config.mentionColor().getRGB());
         this.registries = new EnumMap<>(Map.ofEntries(
                 entry(MentionType.EVERYONE,this::EVERYONE),
                 entry(MentionType.INSIDE,this::INSIDE),

@@ -61,10 +61,6 @@ public record Config(
                                                 List.of(StyleAction.of(StyleType.COLOR_HEX,""))
                                         ),
                                         StylingRule.of(
-                                                "\\[([^\\]]+?)]<SD:(#[A-Fa-f0-9]{6})>",
-                                                List.of(StyleAction.of(StyleType.COLOR_SHADOW,""))
-                                        ),
-                                        StylingRule.of(
                                                 "\\[([^\\]]+?)]<([a-z\\s]+?)>",
                                                 List.of(StyleAction.of(StyleType.COLOR_PRESET,""))
                                         ),
