@@ -2,6 +2,7 @@ package io.github.hanhy06.embellishchat.mention;
 
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
+import io.github.hanhy06.embellishchat.mention.data.MentionTarget;
 import io.github.hanhy06.embellishchat.mention.data.ParsedMention;
 import io.github.hanhy06.embellishchat.mention.data.ParsedTarget;
 import io.github.hanhy06.embellishchat.mention.rule.MentionAction;
@@ -103,12 +104,10 @@ public class MentionProcessor implements ConfigListener {
         return first;
     }
 
-    public void broadcastMentions(ServerPlayerEntity sender, Set<ServerPlayerEntity> players) {
-        MutableText title = Text.empty();
-
-        for (ServerPlayerEntity player : players) {
-            player.sendMessage(title, true);
-            player.playSoundToPlayer(mentionSound, SoundCategory.UI, 1, 1.7f);
+    public void broadcastMentions(Set<MentionTarget> targets) {
+        for (MentionTarget target : targets) {
+            target.player().sendMessage(target.title(), true);
+            target.player().playSound(target.sound());
         }
     }
 }

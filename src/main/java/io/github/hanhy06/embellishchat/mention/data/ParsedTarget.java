@@ -37,8 +37,8 @@ public record ParsedTarget(ParsedMention mention, List<ServerPlayerEntity> targe
         Text title = PlaceHolderUtil.getParedOption(this.mention.rule().title(),sender);
 
         for (ServerPlayerEntity target : this.targets){
-            if (notificationEnable && permissionCheckEnabled && LuckPermsUtil.getNotification(target)) {
-                result.add(new MentionTarget(target,sound,title));
+            if (permissionCheckEnabled && notificationEnable) {
+                if (LuckPermsUtil.getNotification(target)) result.add(new MentionTarget(target,sound,title));
             }else {
                 result.add(new MentionTarget(target,sound,title));
             }

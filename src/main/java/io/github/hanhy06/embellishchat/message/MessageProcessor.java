@@ -8,6 +8,7 @@ import io.github.hanhy06.embellishchat.mention.data.MentionTarget;
 import io.github.hanhy06.embellishchat.mention.data.ParsedMention;
 import io.github.hanhy06.embellishchat.mention.data.ParsedTarget;
 import io.github.hanhy06.embellishchat.styling.StylingProcessor;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -72,8 +73,10 @@ public class MessageProcessor implements ConfigListener {
         }
         List<ParsedTarget> parsedTargets = mentionProcessor.parseTargets(sender, parsedMentions);
 
+        boolean notification = config.notificationEnable(), permission = FabricLoader.getInstance().isModLoaded("luckperms");
         Set<MentionTarget> targets = new HashSet<>();
-        parsedTargets.forEach(target -> targets.addAll(target.createTarget(sender,true,true)));
+        parsedTargets.forEach(target -> targets.addAll(target.createTarget(sender,notification,permission)));
+        mentionProcessor.broadcastMentions(targets);
 
         parsedTargets.forEach(target -> mentionSegments.add(target.createMention()));
         mentionSegments.sort(Comparator.comparing(MentionSegment::begin));
