@@ -59,7 +59,7 @@ public class ConfigManager {
         }
     }
 
-    public void readConfig(){
+    public boolean readConfig(){
         Config loaded = null;
 
         try (BufferedReader reader = Files.newBufferedReader(configFilePath, StandardCharsets.UTF_8)) {
@@ -76,12 +76,15 @@ public class ConfigManager {
             config = loaded;
             broadcastConfig();
             EmbellishChat.LOGGER.info("Config loaded successfully.");
+            return true;
         } else if (loaded != null) {
             broadcastConfig();
             EmbellishChat.LOGGER.warn("Config version mismatch or missing. Using default config. Please review and update your config file.");
+            return false;
         } else {
             broadcastConfig();
             EmbellishChat.LOGGER.warn("Config file is empty or invalid. Using default config.");
+            return false;
         }
     }
 

@@ -50,11 +50,13 @@ public class EmbellishChatCommand {
     }
 
     private static int executeReloadConfig(CommandContext<ServerCommandSource> context) {
-        ConfigManager.INSTANCE.readConfig();
-        context.getSource().sendFeedback(() ->
-                Text.literal("Config reloaded successfully."),
-                true
-        );
+        Text feedback;
+        if (ConfigManager.INSTANCE.readConfig()){
+            feedback = Text.literal("Config reloaded successfully.");
+        }else {
+            feedback = Text.literal("Failed to reload config. Please check the log.");
+        }
+        context.getSource().sendFeedback(() -> feedback, true);
         return 1;
     }
 
