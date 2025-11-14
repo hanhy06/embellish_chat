@@ -144,3 +144,4 @@ For example, if you put ((red)) in the preset, every red will be displayed in re
 ```
 
 This is how you can apply the Text Placeholder API.
+You can check the default placeholders of the Placeholder API on the official website. [Here](https://placeholders.pb4.eu/user/default-placeholders/#list-of-placeholders)
