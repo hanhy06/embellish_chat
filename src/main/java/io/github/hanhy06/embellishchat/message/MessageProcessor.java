@@ -4,18 +4,16 @@ import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
 import io.github.hanhy06.embellishchat.mention.MentionProcessor;
 import io.github.hanhy06.embellishchat.mention.data.MentionSegment;
+import io.github.hanhy06.embellishchat.mention.data.MentionTarget;
 import io.github.hanhy06.embellishchat.mention.data.ParsedMention;
 import io.github.hanhy06.embellishchat.mention.data.ParsedTarget;
 import io.github.hanhy06.embellishchat.styling.StylingProcessor;
-import io.github.hanhy06.embellishchat.util.LuckPermsUtil;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static io.github.hanhy06.embellishchat.util.PermissionUtil.getPermissions;
 
@@ -74,19 +72,8 @@ public class MessageProcessor implements ConfigListener {
         }
         List<ParsedTarget> parsedTargets = mentionProcessor.parseTargets(sender, parsedMentions);
 
-        Set<ServerPlayerEntity> targets = new HashSet<>();
-        parsedTargets.forEach(target -> targets.addAll(target.targets()));
-
-        if (config.notificationEnable() && !targets.isEmpty()) {
-            if (FabricLoader.getInstance().isModLoaded("luckperms")) {
-                mentionProcessor.broadcastMentions(
-                        sender,
-                        targets.stream().filter(LuckPermsUtil::getNotification).collect(Collectors.toSet())
-                );
-            } else {
-                mentionProcessor.broadcastMentions(sender, targets);
-            }
-        }
+        Set<MentionTarget> targets = new HashSet<>();
+        parsedTargets.forEach(target -> targets.addAll(target.createTarget(sender,true,true)));
 
         parsedTargets.forEach(target -> mentionSegments.add(target.createMention()));
         mentionSegments.sort(Comparator.comparing(MentionSegment::begin));
