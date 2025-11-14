@@ -1,13 +1,13 @@
 # Embellish Chat for Fabric
 
-**Embellish Chat** is a Fabric mod that enhances the chat experience on Minecraft servers. It makes player communication more expressive and convenient with Markdown‑style formatting, mentions, clickable links, and mention notifications.
+**Embellish Chat** is a Fabric mod that enhances the chat experience on Minecraft servers. It makes player communication more expressive and convenient with Markdown‑style formatting, mentionSegments, clickable links, and mentionSegment notifications.
 
 ---
 
 ## ✨ Key Features
 
 * **Markdown‑Style Formatting**: Bold, italic, underline, strikethrough, obfuscation, color, custom font, and links. Works in public chat, private messages, and commands.
-* **Mention System**: Mention individual players, your team, everyone, or nearby players with `@`. Online targets receive a notification; mentions auto‑tint to the player/team color.
+* **Mention System**: Mention individual players, your team, everyone, or nearby players with `@`. Online targets receive a notification; mentionSegments auto‑tint to the player/team color.
 * **Message Metadata**: Hover to see the send time, and click a message to copy it to the clipboard.
 
 ---
@@ -44,17 +44,17 @@ Use the following patterns directly in the chat window:
 
 | Target          | Behavior                                                                                                                                                                                                                                                                |
 |-----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `@Player`       | Mentions a specific player. If the player is online, the mention adopts the player’s display name style (including team color). If the player is offline or does not exist, the mention uses the player’s team color if available, otherwise the default mention color. |
-| `@team(name)`   | Mentions all players in the specified team. If the team has a color, the mention is displayed in that color; otherwise it falls back to the default mention color.                                                                                                      |
+| `@Player`       | Mentions a specific player. If the player is online, the mentionSegment adopts the player’s display name style (including team color). If the player is offline or does not exist, the mentionSegment uses the player’s team color if available, otherwise the default mentionSegment color. |
+| `@team(name)`   | Mentions all players in the specified team. If the team has a color, the mentionSegment is displayed in that color; otherwise it falls back to the default mentionSegment color.                                                                                                      |
 | `@group(name)`  | Mentions all players in the specified LuckPerms group.                                                                                                                                                                                                                  |
-| `@everyone`     | Mentions all players on the server. Always uses the **default mention color**.                                                                                                                                                                                          |
-| `@here`         | Mentions all players within a configurable radius in the same world as the sender. The default radius is **64 blocks**, adjustable in the configuration. Uses the **default mention color**.                                                                            |
+| `@everyone`     | Mentions all players on the server. Always uses the **default mentionSegment color**.                                                                                                                                                                                          |
+| `@here`         | Mentions all players within a configurable radius in the same world as the sender. The default radius is **64 blocks**, adjustable in the configuration. Uses the **default mentionSegment color**.                                                                            |
 
 > **Notes**
 > 
-> * Online mention targets receive a notification, and the message is automatically styled using the appropriate color and formatting based on the target’s team, display name, or default rules.
-> * The mention notification sound uses the **UI** sound category by default. On **Minecraft 1.21.5 and earlier**, it falls back to the **PLAYER** category.
-> * `@group(name)` requires LuckPerms. Without it, the mention resolves to no players.
+> * Online mentionSegment targets receive a notification, and the message is automatically styled using the appropriate color and formatting based on the target’s team, display name, or default rules.
+> * The mentionSegment notification sound uses the **UI** sound category by default. On **Minecraft 1.21.5 and earlier**, it falls back to the **PLAYER** category.
+> * `@group(name)` requires LuckPerms. Without it, the mentionSegment resolves to no players.
 ---
 
 ## ⌨️ Commands
@@ -65,7 +65,7 @@ Use the following patterns directly in the chat window:
 * **`/embellish_chat test regex <regex> <test>`** - Compiles the `<regex>` pattern and matches it against the `<test>` string.
 * **`/embellish_chat test stress <count> <test>`** - Sends a fake message containing `<test>` exactly `<count>` times with the permissions of the user who executed the command, and processes it the same way as a real message.
 
-* **`/ec help mention`** - Displays the currently available mentions, how to use them, the mention targets, and the applicable style types.
+* **`/ec help mentionSegment`** - Displays the currently available mentionSegments, how to use them, the mentionSegment targets, and the applicable style types.
 * **`/ec help style`** - Displays the currently available styles, how to use them, the applicable style types, and the required input options.
 * **`/ec notification`** - Allows you to decide whether to receive a notification when you are mentioned.
 
@@ -107,10 +107,10 @@ The configuration file is located at: `config/embellish_chat.json`.
     ]
   },
   "mentionRules": {
-    "embellish_chat.mention": [
+    "embellish_chat.mentionSegment": [
       {
         "pattern": "@here()",
-        "mentions": [
+        "mentionSegments": [
           {
             "mentionType": "INSIDE",
             "preset": "64"
@@ -169,9 +169,9 @@ However, this approach parses every chat message and may cause performance degra
 Furthermore, creating custom rules can be challenging because Regex itself is inherently complex. We recommend using various AI tools for assistance with rule creation and optimization.
 
 <span style="color:red">
-In this mod, the order of mention rules and styling rules is extremely important!
+In this mod, the order of mentionSegment rules and styling rules is extremely important!
 Depending on the order, serious bugs may occur, so please be careful.  
-The mod applies mentions and styling from top to bottom in the given order.
+The mod applies mentionSegments and styling from top to bottom in the given order.
 </span>
 
 ### Style Rule Structure
@@ -200,17 +200,17 @@ you can see more detail [StyleWiki.md](https://github.com/hanhy06/embellish-chat
 
 ## Mention Configuration
 
-A mention rule is applied only when the message satisfies all targets specified in the rule — effectively using the intersection of all mention targets.
+A mentionSegment rule is applied only when the message satisfies all targets specified in the rule — effectively using the intersection of all mentionSegment targets.
 
 ### Mention Rule Structure
 
 Defines the text styling rules.<br>
-Each rule consists of a regular expression (`pattern`), mention action list(`mentions`) and style action list(`styles`).
+Each rule consists of a regular expression (`pattern`), mentionSegment action list(`mentionSegments`) and style action list(`styles`).
 
 ```
 {
     "pattern": "@here()",
-    "mentions": [
+    "mentionSegments": [
       {
         "mentionType": "INSIDE",
         "preset": "64"
@@ -225,8 +225,8 @@ Each rule consists of a regular expression (`pattern`), mention action list(`men
 }
 ```
 
-* **pattern** The pattern must contain one capturing group, which represents the mention option. For example, this could be a team name or a LuckPerms group name.
-* **mentions** The mentions field is a list of mention actions. Each action specifies a mentionType and an optional preset.
+* **pattern** The pattern must contain one capturing group, which represents the mentionSegment option. For example, this could be a team name or a LuckPerms group name.
+* **mentionSegments** The mentionSegments field is a list of mentionSegment actions. Each action specifies a mentionType and an optional preset.
 * **styles** The styles field works the same way as in the styling rules section.
 
 you can see more detail [MentionWiki.md](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/wiki/MentionWiki.md)
@@ -237,11 +237,11 @@ you can see more detail [MentionWiki.md](https://github.com/hanhy06/embellish-ch
 
 This mode supports the permission features of the LuckPerms and Fabric Permissions API.
 
-The keys in stylingRules and mentionRules represent each permission (such as chat, command, mention, etc.). These keys are default keys, and the system works even if they are not explicitly defined.
+The keys in stylingRules and mentionRules represent each permission (such as chat, command, mentionSegment, etc.). These keys are default keys, and the system works even if they are not explicitly defined.
 
 The mod checks from top to bottom and applies the rules registered for each permission.
 
-Both the `LUCK_PERMS_GROUP` mention type and `/ec notification` require LuckPerms.
+Both the `LUCK_PERMS_GROUP` mentionSegment type and `/ec notification` require LuckPerms.
 If it’s not installed, these features do nothing.
 
 ---

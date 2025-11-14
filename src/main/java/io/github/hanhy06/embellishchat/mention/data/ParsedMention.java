@@ -5,7 +5,7 @@ import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
 import java.util.List;
 import java.util.Objects;
 
-public record ParsedMention(MentionRule rule, List<String> options, int begin, int end){
+public record ParsedMention(MentionRule rule, List<String> mentions, int begin, int end){
     public static ParsedMention of(MentionRule rule, List<String> mentions, int begin, int end){
         return new ParsedMention(rule,mentions,begin,end);
     }

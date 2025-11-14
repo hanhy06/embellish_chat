@@ -3,7 +3,7 @@ package io.github.hanhy06.embellishchat.message;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
 import io.github.hanhy06.embellishchat.mention.MentionProcessor;
-import io.github.hanhy06.embellishchat.mention.data.Mention;
+import io.github.hanhy06.embellishchat.mention.data.MentionSegment;
 import io.github.hanhy06.embellishchat.mention.data.ParsedMention;
 import io.github.hanhy06.embellishchat.mention.data.ParsedTarget;
 import io.github.hanhy06.embellishchat.styling.StylingProcessor;
@@ -51,8 +51,8 @@ public class MessageProcessor implements ConfigListener {
         MutableText textMessage = message.getContent().copy();
         String stringMessage = message.getContent().getString();
 
-        List<Mention> mentions = handleMention(sender, stringMessage);
-        textMessage = stylingProcessor.applyMention(textMessage, mentions);
+        List<MentionSegment> mentionSegments = handleMention(sender, stringMessage);
+        textMessage = stylingProcessor.applyMention(textMessage, mentionSegments);
 
         for (String key : getPermissions(sender, config.stylingRules().keySet())) {
             textMessage = stylingProcessor.applyStylingRule(textMessage, key,sender);
@@ -61,10 +61,10 @@ public class MessageProcessor implements ConfigListener {
         return message.withUnsignedContent(textMessage);
     }
 
-    private List<Mention> handleMention(ServerPlayerEntity sender, String message) {
-        List<Mention> mentions = new ArrayList<>();
+    private List<MentionSegment> handleMention(ServerPlayerEntity sender, String message) {
+        List<MentionSegment> mentionSegments = new ArrayList<>();
         if (sender == null || message.isBlank()) {
-            return mentions;
+            return mentionSegments;
         }
 
         List<String> keys = getPermissions(sender, config.mentionRules().keySet());
@@ -75,7 +75,7 @@ public class MessageProcessor implements ConfigListener {
         List<ParsedTarget> parsedTargets = mentionProcessor.parseTargets(sender, parsedMentions);
 
         Set<ServerPlayerEntity> targets = new HashSet<>();
-        parsedTargets.forEach(target -> targets.addAll(target.players()));
+        parsedTargets.forEach(target -> targets.addAll(target.targets()));
 
         if (config.notificationEnable() && !targets.isEmpty()) {
             if (FabricLoader.getInstance().isModLoaded("luckperms")) {
@@ -88,8 +88,8 @@ public class MessageProcessor implements ConfigListener {
             }
         }
 
-        parsedTargets.forEach(target -> mentions.add(target.createMention()));
-        mentions.sort(Comparator.comparing(Mention::begin));
-        return mentions;
+        parsedTargets.forEach(target -> mentionSegments.add(target.createMention()));
+        mentionSegments.sort(Comparator.comparing(MentionSegment::begin));
+        return mentionSegments;
     }
 }

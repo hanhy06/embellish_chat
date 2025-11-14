@@ -2,7 +2,7 @@ package io.github.hanhy06.embellishchat.styling;
 
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
-import io.github.hanhy06.embellishchat.mention.data.Mention;
+import io.github.hanhy06.embellishchat.mention.data.MentionSegment;
 import io.github.hanhy06.embellishchat.styling.rule.StyleAction;
 import io.github.hanhy06.embellishchat.styling.rule.StyleParameter;
 import io.github.hanhy06.embellishchat.styling.rule.StyleRegistry;
@@ -92,24 +92,24 @@ public class StylingProcessor implements ConfigListener {
         return result;
     }
 
-    public MutableText applyMention(MutableText text, List<Mention> mentions){
+    public MutableText applyMention(MutableText text, List<MentionSegment> mentionSegments){
         Runs runs = flatten(text);
         MutableText result = Text.empty();
 
         int lastEnd = 0;
-        for (Mention mention : mentions){
-            result.append(slice(runs,lastEnd,mention.begin()));
+        for (MentionSegment mentionSegment : mentionSegments){
+            result.append(slice(runs,lastEnd, mentionSegment.begin()));
 
-            MutableText segment = slice(runs, mention.begin(), mention.end());
-            segment.fillStyle(mention.style());
-            for (StyleAction action : mention.styles()){
+            MutableText segment = slice(runs, mentionSegment.begin(), mentionSegment.end());
+            segment.fillStyle(mentionSegment.style());
+            for (StyleAction action : mentionSegment.styles()){
                 segment = registry
                         .get(action.styleType())
                         .apply(StyleParameter.of(segment,action.preset()));
             }
 
             result.append(segment);
-            lastEnd = mention.end();
+            lastEnd = mentionSegment.end();
         }
         result.append(slice(runs, lastEnd, runs.full().length()));
 

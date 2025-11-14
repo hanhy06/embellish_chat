@@ -5,6 +5,6 @@ import net.minecraft.text.Style;
 
 import java.util.List;
 
-public record Mention(int begin, int end, List<StyleAction> styles, Style style){
+public record MentionSegment(int begin, int end, List<StyleAction> styles, Style style){
 
 }

@@ -82,7 +82,7 @@ public class MentionProcessor implements ConfigListener {
         List<ParsedTarget> targets = new ArrayList<>();
 
         List<MentionAction> actions = mention.rule().mentions();
-        List<String> options = mention.options();
+        List<String> options = mention.mentions();
 
         for (int i = 0; i < actions.size();i++){
             MentionAction action = actions.get(i);
@@ -95,8 +95,8 @@ public class MentionProcessor implements ConfigListener {
 
         ParsedTarget first = targets.getFirst();
         for (int i = 1; i < targets.size(); i++) {
-            first.players().retainAll(targets.get(i).players());
-            if (first.players().isEmpty()) {
+            first.targets().retainAll(targets.get(i).targets());
+            if (first.targets().isEmpty()) {
                 break;
             }
         }

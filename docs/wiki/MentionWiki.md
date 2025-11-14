@@ -10,9 +10,9 @@
 
 > **Notes**
 > 
-> * All mentions use the mentionColor defined in the configuration by default.
+> * All mentionSegments use the mentionColor defined in the configuration by default.
 > * The TEAM and PLAYER types follow the style of the team they belong to.
-> * You can modify the mention styles in the config.json file.
+> * You can modify the mentionSegment styles in the config.json file.
 
 ---
 
@@ -23,7 +23,7 @@
 ```
 {
   "pattern": "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
-  "mentions": [
+  "mentionSegments": [
     {
       "mentionType": "PLAYER",
       "preset": ""
@@ -45,7 +45,7 @@ This is the most basic way to use it.
 ```
 {
   "pattern": "@red-team-here()",
-  "mentions": [
+  "mentionSegments": [
     {
       "mentionType": "INSIDE",
       "preset": "64"
@@ -75,7 +75,7 @@ Mentions any red-team player within a 64-block radius.
 ```
 {
   "pattern": "[notification]()",
-  "mentions": [
+  "mentionSegments": [
     {
       "mentionType": "EVERYONE",
       "preset": ""
@@ -101,7 +101,7 @@ Typing `[notification]` will send an alert to everyone.
 ```
 {
   "pattern": "@admin()",
-  "mentions": [
+  "mentionSegments": [
     {
       "mentionType": "LUCK_PERMS_GROUP",
       "preset": "admin"
