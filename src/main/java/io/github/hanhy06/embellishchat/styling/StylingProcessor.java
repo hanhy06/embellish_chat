@@ -83,10 +83,9 @@ public class StylingProcessor implements ConfigListener {
         );
 
         for (int i=0;i<actions.size();i++){
-            StyleParameter parameter = StyleParameter.of(text,option.get(i));
-            Function<StyleParameter, MutableText> function = registry.get(actions.get(i).styleType());
-
-            text = function.apply(parameter);
+            StyleAction action = actions.get(i);
+            Function<StyleParameter, MutableText> function = registry.get(action.styleType());
+            result = function.apply(StyleParameter.of(result, option.get(i)));
         }
 
         return result;

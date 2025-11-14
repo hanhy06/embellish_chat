@@ -13,11 +13,6 @@ import io.github.hanhy06.embellishchat.util.OptionUtil;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -27,7 +22,6 @@ public class MentionProcessor implements ConfigListener {
     private final Scoreboard scoreboard;
 
     private Config config;
-    private SoundEvent mentionSound;
     private Map<String, List<MentionRule>> mentionRules;
     private MentionRegistry registries;
 
@@ -39,7 +33,6 @@ public class MentionProcessor implements ConfigListener {
     @Override
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
-        this.mentionSound = SoundEvent.of(Identifier.tryParse("config.mentionSound()"));
         this.mentionRules = config.mentionRules();
         this.registries = new MentionRegistry(newConfig, manager, scoreboard);
     }
@@ -58,14 +51,14 @@ public class MentionProcessor implements ConfigListener {
 
     private List<ParsedMention> parseMention(MentionRule rule, String message) {
         Matcher matcher = rule.pattern().matcher(message);
-        List<ParsedMention> mentions = new ArrayList<>();
+        List<ParsedMention> parsedMentions = new ArrayList<>();
 
         while (matcher.find()) {
-            List<String> options = OptionUtil.split(matcher.group(1),config.delimiter());
-            mentions.add(ParsedMention.of(rule, options, matcher.start(), matcher.end()));
+            List<String> mentions = OptionUtil.split(matcher.group(1),config.delimiter());
+            parsedMentions.add(ParsedMention.of(rule, mentions, matcher.start(), matcher.end()));
         }
 
-        return mentions;
+        return parsedMentions;
     }
 
     public List<ParsedTarget> parseTargets(ServerPlayerEntity sender, Set<ParsedMention> parsedMentions) {
@@ -83,11 +76,11 @@ public class MentionProcessor implements ConfigListener {
         List<ParsedTarget> targets = new ArrayList<>();
 
         List<MentionAction> actions = mention.rule().mentions();
-        List<String> options = mention.mentions();
+        List<String> mentions = mention.mentions();
 
         for (int i = 0; i < actions.size();i++){
             MentionAction action = actions.get(i);
-            String option = OptionUtil.parseOption(options.get(i),action.preset(),sender);
+            String option = OptionUtil.parseOption(mentions.get(i),action.preset(),sender);
 
             ParsedTarget target = registries.get(action.mentionType())
                     .apply(MentionParameter.of(mention, sender, option));

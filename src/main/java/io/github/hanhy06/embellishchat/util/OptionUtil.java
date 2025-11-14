@@ -27,7 +27,7 @@ public class OptionUtil {
     }
 
     public static List<String> split(String option, String  delimiter){
-        if (option != null && !option.isBlank()) return List.of(option.split(delimiter));
-        return List.of();
+        if (option != null) return List.of(option.split(delimiter));
+        return List.of("");
     }
 }
