@@ -78,10 +78,12 @@ public class MessageProcessor implements ConfigListener {
         List<ParsedTarget> parsedTargets = mentionProcessor.parseTargets(sender, parsedMentions);
 
         Set<MentionTarget> targets = new HashSet<>();
-        parsedTargets.forEach(target -> targets.addAll(target.createTarget(sender,notification,permission)));
+        for (ParsedTarget target : parsedTargets){
+            targets.addAll(target.createTarget(sender,notification,permission));
+            mentionSegments.add(target.createMention());
+        }
         mentionProcessor.broadcastMentions(targets);
 
-        parsedTargets.forEach(target -> mentionSegments.add(target.createMention()));
         mentionSegments.sort(Comparator.comparing(MentionSegment::begin));
         return mentionSegments;
     }

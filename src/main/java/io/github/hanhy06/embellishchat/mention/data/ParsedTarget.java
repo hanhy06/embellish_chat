@@ -33,14 +33,15 @@ public record ParsedTarget(ParsedMention mention, List<ServerPlayerEntity> targe
 
     public Set<MentionTarget> createTarget(ServerPlayerEntity sender,boolean notificationEnable,boolean permissionCheckEnabled){
         Set<MentionTarget> result = new HashSet<>();
-        SoundEvent sound = SoundEvent.of(this.mention.rule().sound(),this.mention.rule().pitch());
+        SoundEvent sound = SoundEvent.of(this.mention.rule().sound());
+        float pitch = this.mention.rule().pitch();
         Text title = PlaceHolderUtil.getParedOption(this.mention.rule().title(),sender);
 
         for (ServerPlayerEntity target : this.targets){
             if (permissionCheckEnabled && notificationEnable) {
-                if (LuckPermsUtil.getNotification(target)) result.add(new MentionTarget(target,sound,title));
+                if (LuckPermsUtil.getNotification(target)) result.add(new MentionTarget(target,sound,pitch,title));
             }else {
-                result.add(new MentionTarget(target,sound,title));
+                result.add(new MentionTarget(target,sound,pitch,title));
             }
         }
 

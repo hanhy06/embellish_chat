@@ -13,6 +13,7 @@ import io.github.hanhy06.embellishchat.util.OptionUtil;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -100,7 +101,7 @@ public class MentionProcessor implements ConfigListener {
     public void broadcastMentions(Set<MentionTarget> targets) {
         for (MentionTarget target : targets) {
             target.player().sendMessage(target.title(), true);
-            target.player().playSound(target.sound());
+            target.player().playSoundToPlayer(target.sound(), SoundCategory.UI,1,target.pitch());
         }
     }
 }

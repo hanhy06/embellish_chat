@@ -6,7 +6,7 @@ import net.minecraft.text.Text;
 
 import java.util.Objects;
 
-public record MentionTarget(ServerPlayerEntity player, SoundEvent sound, Text title) {
+public record MentionTarget(ServerPlayerEntity player, SoundEvent sound, float pitch, Text title) {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
