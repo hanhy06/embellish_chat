@@ -10,9 +10,9 @@
 
 > **Notes**
 > 
-> * All mentionSegments use the mentionColor defined in the configuration by default.
+> * All mentions use the mentionColor defined in the configuration by default.
 > * The TEAM and PLAYER types follow the style of the team they belong to.
-> * You can modify the mentionSegment styles in the config.json file.
+> * You can modify the mention styles in the config.json file.
 
 ---
 
@@ -23,7 +23,9 @@
 ```
 {
   "pattern": "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
-  "mentionSegments": [
+  "sound": "entity.experience_orb.pickup",
+  "pitch": 1.75,
+  "mentions": [
     {
       "mentionType": "PLAYER",
       "preset": ""
@@ -45,7 +47,9 @@ This is the most basic way to use it.
 ```
 {
   "pattern": "@red-team-here()",
-  "mentionSegments": [
+  "sound": "entity.experience_orb.pickup",
+  "pitch": 1.75,
+  "mentions": [
     {
       "mentionType": "INSIDE",
       "preset": "64"
@@ -75,7 +79,9 @@ Mentions any red-team player within a 64-block radius.
 ```
 {
   "pattern": "[notification]()",
-  "mentionSegments": [
+  "sound": "entity.experience_orb.pickup",
+  "pitch": 1.75,
+  "mentions": [
     {
       "mentionType": "EVERYONE",
       "preset": ""
@@ -101,7 +107,9 @@ Typing `[notification]` will send an alert to everyone.
 ```
 {
   "pattern": "@admin()",
-  "mentionSegments": [
+  "sound": "entity.experience_orb.pickup",
+  "pitch": 1.75,
+  "mentions": [
     {
       "mentionType": "LUCK_PERMS_GROUP",
       "preset": "admin"

@@ -35,9 +35,9 @@ public class StyleRegistry {
                 entry(StyleType.COLOR_RAINBOW, this::COLOR_RAINBOW),
                 entry(StyleType.COLOR_PRESET, this::COLOR_PRESET),
                 entry(StyleType.COLOR_SHADOW, this::COLOR_SHADOW),
-                entry(StyleType.COMMAND_RUN, this::COMMAND_RUN),
-                entry(StyleType.COMMAND_SUGGEST, this::COMMAND_SUGGEST),
-                entry(StyleType.HOVER,this::HOVER),
+                entry(StyleType.CLICK_COMMAND_RUN, this::CLICK_COMMAND_RUN),
+                entry(StyleType.CLICK_COMMAND_SUGGEST, this::CLICK_COMMAND_SUGGEST),
+                entry(StyleType.HOVER_TEXT,this::CLICK_HOVER),
                 entry(StyleType.FONT, this::FONT),
                 entry(StyleType.URL, this::URL),
                 entry(StyleType.BOLD, this::BOLD),
@@ -124,17 +124,17 @@ public class StyleRegistry {
         return parameter.text().fillStyle(Style.EMPTY.withShadowColor(color));
     }
 
-    public MutableText COMMAND_RUN(StyleParameter parameter){
+    public MutableText CLICK_COMMAND_RUN(StyleParameter parameter){
         ClickEvent clickEvent = new ClickEvent.RunCommand(parameter.option());
         return parameter.text().fillStyle(Style.EMPTY.withClickEvent(clickEvent));
     }
 
-    public MutableText COMMAND_SUGGEST(StyleParameter parameter){
+    public MutableText CLICK_COMMAND_SUGGEST(StyleParameter parameter){
         ClickEvent clickEvent = new ClickEvent.SuggestCommand(parameter.option());
         return parameter.text().fillStyle(Style.EMPTY.withClickEvent(clickEvent));
     }
 
-    public MutableText HOVER(StyleParameter parameter){
+    public MutableText CLICK_HOVER(StyleParameter parameter){
         HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(parameter.option()));
         return parameter.text().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
     }
