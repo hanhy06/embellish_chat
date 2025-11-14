@@ -101,3 +101,46 @@ You can set a preset by specifying it, and if the preset is empty, the option pr
 ```
 
 In regular expressions, .+ means all characters. Using this method, you can apply a subtle rainbow effect to all text.
+
+
+## Applying It – Using It Directly as an Argument
+
+```
+{
+  "pattern": "((red))",
+  "styles": [
+    {
+      "styleType": "COLOR_PRESET",
+      "preset": ""
+    }
+  ]
+}
+```
+
+If you write it like ((text)), you can make capture group 1 and 2 have the same content in the regular expression.
+For example, if you put ((red)) in the preset, every red will be displayed in red.
+
+
+## Applying It – Text Placeholder API
+
+```
+{
+  "pattern": "(\\[shop])()",
+  "styles": [
+    {
+      "styleType": "REPLACE",
+      "preset": "≫ This is %player:name%’s shop ≪"
+    },
+    {
+      "styleType": "CLICK_COMMAND_RUN",
+      "preset": "/shop open %player:name%"
+    },
+    {
+      "styleType": "BOLD",
+      "preset": ""
+    }
+  ]
+}
+```
+
+This is how you can apply the Text Placeholder API.

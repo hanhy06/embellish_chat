@@ -75,6 +75,7 @@ Use the following patterns directly in the chat window:
 > * All commands in the /embellish-chat family require OP level 2.
 > * Commands in the /ec family do not require any OP level and can be used by all users.
 > * /ec notification requires LuckPerms, otherwise the setting is unavailable.
+> * Through ```notificationEnable```, you can configure whether users are allowed to set their notification preferences using /ec notification. If ```notificationEnable``` is false, the user’s preference is ignored and notifications are sent for all mentions.
 
 ---
 
