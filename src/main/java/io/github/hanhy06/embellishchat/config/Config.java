@@ -32,7 +32,7 @@ public record Config(
         Color mentionColor,
 
         //banned player list
-        List<UUID> bannedPlayerList
+        Set<UUID> bannedPlayerList
 )
 {
     public static Config createDefault(){
@@ -98,8 +98,7 @@ public record Config(
                                         )
                                 )
                         ),
-                        entry("embellish-chat.command_argument", List.of()),
-                        entry("embellish-chat.system_message", List.of())
+                        entry("embellish-chat.command_argument", List.of())
                 )),
                 new TreeMap<>(Map.ofEntries(
                     entry(
@@ -215,7 +214,7 @@ public record Config(
                 new Color(0xff55ff),
 
                 //banned player list
-                new ArrayList<>()
+                new HashSet<>()
         );
     }
 }

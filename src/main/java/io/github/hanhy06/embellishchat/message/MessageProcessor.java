@@ -26,7 +26,9 @@ public class MessageProcessor implements ConfigListener {
     private final PlayerManager playerManager;
 
     private Config config;
-    private List<UUID> bannedPlayerList;
+    private Set<UUID> bannedPlayerList;
+    private boolean notification;
+    private boolean permission;
 
     public MessageProcessor(MentionProcessor mentionProcessor, StylingProcessor stylingProcessor, PlayerManager playerManager) {
         INSTANCE = this;
@@ -39,6 +41,8 @@ public class MessageProcessor implements ConfigListener {
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
         this.bannedPlayerList = config.bannedPlayerList();
+        this.notification = config.notificationEnable();
+        this.permission = FabricLoader.getInstance().isModLoaded("luckperms");
     }
 
     public SignedMessage handleMessage(SignedMessage message) {
@@ -73,7 +77,6 @@ public class MessageProcessor implements ConfigListener {
         }
         List<ParsedTarget> parsedTargets = mentionProcessor.parseTargets(sender, parsedMentions);
 
-        boolean notification = config.notificationEnable(), permission = FabricLoader.getInstance().isModLoaded("luckperms");
         Set<MentionTarget> targets = new HashSet<>();
         parsedTargets.forEach(target -> targets.addAll(target.createTarget(sender,notification,permission)));
         mentionProcessor.broadcastMentions(targets);
