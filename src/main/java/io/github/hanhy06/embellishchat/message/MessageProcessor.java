@@ -41,7 +41,7 @@ public class MessageProcessor implements ConfigListener {
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
         this.bannedPlayerList = config.bannedPlayerList();
-        this.notification = config.notificationEnable();
+        this.notification = config.notificationCommandEnable();
         this.permission = FabricLoader.getInstance().isModLoaded("luckperms");
     }
 
@@ -79,7 +79,7 @@ public class MessageProcessor implements ConfigListener {
 
         Set<MentionTarget> targets = new HashSet<>();
         for (ParsedTarget target : parsedTargets){
-            targets.addAll(target.createTarget(sender,notification,permission));
+            targets.addAll(target.createTarget(sender,permission,notification));
             mentionSegments.add(target.createMention());
         }
         mentionProcessor.broadcastMentions(targets);

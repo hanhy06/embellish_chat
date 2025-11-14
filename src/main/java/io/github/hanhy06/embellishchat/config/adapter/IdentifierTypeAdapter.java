@@ -16,7 +16,7 @@ public class IdentifierTypeAdapter extends TypeAdapter<Identifier> {
             jsonWriter.nullValue();
             return;
         }
-        jsonWriter.value(identifier.getPath());
+        jsonWriter.value(identifier.toString());
     }
 
     @Override

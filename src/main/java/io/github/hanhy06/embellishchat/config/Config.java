@@ -28,7 +28,7 @@ public record Config(
         String timestamp,
         Color urlColor,
         HashMap<String, Color> colorPreset,
-        boolean notificationEnable,
+        boolean notificationCommandEnable,
         Color mentionColor,
 
         //banned player list

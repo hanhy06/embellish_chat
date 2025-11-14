@@ -117,7 +117,7 @@ public class MentionRegistry {
                     .withColor(TeamColorUtil.getPlayerColor(
                             scoreboard,
                             parameter.option(),
-                            config.mentionColor().getRed()
+                            config.mentionColor().getRGB()
                     ));
         }
 

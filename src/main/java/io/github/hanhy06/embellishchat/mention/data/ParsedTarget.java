@@ -31,14 +31,14 @@ public record ParsedTarget(ParsedMention mention, List<ServerPlayerEntity> targe
         );
     }
 
-    public Set<MentionTarget> createTarget(ServerPlayerEntity sender,boolean notificationEnable,boolean permissionCheckEnabled){
+    public Set<MentionTarget> createTarget(ServerPlayerEntity sender,boolean permissionCheckEnabled,boolean notificationCommandEnable){
         Set<MentionTarget> result = new HashSet<>();
         SoundEvent sound = SoundEvent.of(this.mention.rule().sound());
         float pitch = this.mention.rule().pitch();
         Text title = PlaceHolderUtil.getParedOption(this.mention.rule().title(),sender);
 
         for (ServerPlayerEntity target : this.targets){
-            if (permissionCheckEnabled && notificationEnable) {
+            if (permissionCheckEnabled && notificationCommandEnable) {
                 if (LuckPermsUtil.getNotification(target)) result.add(new MentionTarget(target,sound,pitch,title));
             }else {
                 result.add(new MentionTarget(target,sound,pitch,title));
