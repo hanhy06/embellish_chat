@@ -20,8 +20,8 @@ public record Config(
         String version,
 
         //rules
-        Map<String,List<StylingRule>> stylingRules,
-        Map<String,List<MentionRule>> mentionRules,
+        TreeMap<String,List<StylingRule>> stylingRules,
+        TreeMap<String,List<MentionRule>> mentionRules,
 
         //preset
         String delimiter,
