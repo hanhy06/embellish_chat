@@ -36,7 +36,7 @@ Use the following patterns directly in the chat window:
 > * *Preset* values depend on the mod's configuration (e.g., `pink`, `blue`, etc.).
 > * `path` for **Font** accepts a namespaced ID such as `minecraft:alt`.
 > * If multiple style types exist and no preset is configured, the user can enter one manually. The separator can be checked through /ec help style.
-> * There are many style types in addition to the ones shown here. For more details, please refer to the [StyleWiki.md](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/wiki/StyleWiki.md)
+> * The table above shows only the most common styles. Embellish Chat supports many additional style types. For more details, please refer to [StyleWiki.md](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/wiki/StyleWiki.md)
 
 ---
 
@@ -61,10 +61,10 @@ Use the following patterns directly in the chat window:
 ## ⌨️ Commands
 
 * **`/embellish-chat reload`** — Reloads the configuration from `config/embellish-chat.json`.
-* **`/embellish-chat ban <player>`** — Prevents the specified player from using the mod’s all features.
-* **`/embellish-chat pardon <player>`** — Restores access to the mod’s all features for the specified player.
-* **`/embellish-chat test regex <regex> <test>`** - Compiles the `<regex>` pattern and matches it against the `<test>` string.
-* **`/embellish-chat test stress <count> <test>`** - Sends a fake message containing `<test>` exactly `<count>` times with the permissions of the user who executed the command, and processes it the same way as a real message.
+* **`/embellish-chat ban <player>`** — Prevents the specified player from using any features provided by the mod.
+* **`/embellish-chat pardon <player>`** — Restores access to all features provided by the mod for the specified player.
+* **`/embellish-chat test regex <regex> <test>`** - Compiles the `<regex>` pattern and tests it against the `<test>` string.
+* **`/embellish-chat test stress <count> <test>`** - Sends a simulated message containing `<test>` exactly `<count>` times with the permissions of the user who executed the command, and processes it the same way as a real message.
 
 * **`/ec help mention`** - Displays the currently available mentions, how to use them, the mention targets, and the applicable style types.
 * **`/ec help style`** - Displays the currently available styles, how to use them, the applicable style types, and the required input options.
@@ -75,7 +75,7 @@ Use the following patterns directly in the chat window:
 > * All commands in the /embellish-chat family require OP level 2.
 > * Commands in the /ec family do not require any OP level and can be used by all users.
 > * /ec notification requires LuckPerms, otherwise the setting is unavailable.
-> * Through ```notificationEnable```, you can configure whether users are allowed to set their notification preferences using /ec notification. If ```notificationEnable``` is false, the user’s preference is ignored and notifications are sent for all mentions.
+> * Through ```notificationCommandEnable```, you can configure whether users are allowed to set their notification preferences using /ec notification. If ```notificationEnable``` is false, the user’s preference is ignored and notifications are sent for all mentions.
 
 ---
 
@@ -150,14 +150,14 @@ The configuration file is located at: `config/embellish-chat.json`.
 
 ## Styling Configuration
 
-Embellish Chat , powered by a regular expression , provides powerful flexibility to style nearly any chat pattern imaginable.
-However, this approach parses every chat message and may cause performance degradation on large-scale servers. (It is expected to have no significant performance impact on typical general servers.)
-Furthermore, creating custom rules can be challenging because Regex itself is inherently complex. We recommend using various AI tools for assistance with rule creation and optimization.
+Embellish Chat, powered by regular expressions, provides highly flexible styling for nearly any chat pattern imaginable.
+Since every message must be scanned, extremely large servers may experience additional overhead. (It is expected to have no significant performance impact on typical general servers.)
+Furthermore, creating custom rules can be challenging because regular expressions (regex) are inherently complex. We recommend using various AI tools for assistance with rule creation and optimization.
 
 <span style="color:red">
 In this mod, the order of mention rules and styling rules is extremely important!
 Depending on the order, serious bugs may occur, so please be careful.  
-The mod applies mentions and styling from top to bottom in the given order.
+The mod applies mentions and styling strictly from top to bottom in the given order.
 </span>
 
 ### Style Rule Structure
@@ -177,10 +177,10 @@ Each rule consists of a regular expression (`pattern`) and a style action list(`
 }
 ```
 
-* **pattern** Must contain **two capturing groups**: 1 the text to apply the style to, 2 an optional captured value that can be passed as an argument.
+* **pattern** Must contain **two capturing groups**: pattern must contain two capturing groups: 1) the text to apply the style to, 2) an optional captured value that can be passed as an argument.
 * **styles** This is a list of style actions. Each action consists of a style type (`styleType`) and style option preset(`preset`).
 
-you can see more detail [StyleWiki.md](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/wiki/StyleWiki.md)
+you can see more detail in [StyleWiki.md](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/wiki/StyleWiki.md)
 
 ---
 
@@ -190,7 +190,7 @@ A mention rule is applied only when the message satisfies all targets specified 
 
 ### Mention Rule Structure
 
-Defines the text styling rules.<br>
+This section defines the mention rules.<br>
 Each rule consists of a regular expression (`pattern`), mention action list(`mentions`) and style action list(`styles`).
 
 ```
@@ -215,26 +215,26 @@ Each rule consists of a regular expression (`pattern`), mention action list(`men
 ```
 
 * **pattern** The pattern must contain one capturing group, which represents the mention option. For example, this could be a team name or a LuckPerms group name.
-* **sound** This is the ID of the sound that the mentioner hears.
-* **pitch** This is the pitch of the sound that the mentioner hears.”
-* **title** “This is the title that appears on the mentioner’s screen. It supports the Text Placeholder API, and %player:displayname% is the name of the person who was mentioned.”
+* **sound** sound is the ID of the sound that the mentioned player hears.
+* **pitch** pitch is the pitch of the sound that the mentioned player hears.
+* **title** title is the title that appears on the mentioned player’s screen. It supports the Text Placeholder API, and %player:displayname% is the name of the player who was mentioned.
 * **mentions** The mentions field is a list of mention actions. Each action specifies a mentionType and an optional preset.
 * **styles** The styles field works the same way as in the styling rules section.
 
-you can see more detail [MentionWiki.md](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/wiki/MentionWiki.md)
+you can see more detail in [MentionWiki.md](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/wiki/MentionWiki.md)
 
 ---
 
 ### LuckPerms & Permission
 
-This mode supports the permission features of the LuckPerms and Fabric Permissions API.
+This mod supports the permission features of LuckPerms and the Fabric Permissions API.
 
 The keys in stylingRules and mentionRules represent each permission (such as chat, command, mention, etc.). These keys are default keys, and the system works even if they are not explicitly defined.
 
 The mod checks from top to bottom and applies the rules registered for each permission.
 
 Both the `LUCK_PERMS_GROUP` mention type and `/ec notification` require LuckPerms.
-If it’s not installed, these features do nothing.
+If it’s not installed, these features have no effect.
 
 
 ---
@@ -242,7 +242,7 @@ If it’s not installed, these features do nothing.
 ### Text Placeholder API
 
 This mod supports dynamic data through the Text Placeholder API.
-The Text Placeholder API applies to the mention title, all presets used in rules, and the options that users can configure.
+The Text Placeholder API applies to the mention title, all presets used in rules, and any options that users can configure.
 
 ---
 ## 📊 TPS Latency Test
@@ -257,11 +257,18 @@ The Text Placeholder API applies to the mention title, all presets used in rules
 * Minecraft: 1.21.10
 * World: Single Play / Superflat
 
-**These results illustrate general performance trends rather than a strict scientific benchmark, as the testing environment does not fully replicate all possible server configurations.**
+**These results demonstrate general performance characteristics rather than a strict scientific benchmark, as the testing environment does not fully replicate real server conditions.**
 
-The graph below shows the TPS (Ticks Per Second) latency measurements for this mod.
+The graph below shows TPS (Ticks Per Second) latency measurements for this mod.
 
-Each test message was configured to include 230 or 50 characters per tick, and the system was stressed by sending up to 400 × 20 chat messages per second. Although the average latency increases as the message rate rises, most servers handle around 200 × 20 messages per second (≈4,000 messages) or fewer, making TPS impact negligible under typical gameplay conditions.
+Each test message contained either 230 or 50 characters, and the system was stressed by sending up to **400 × 20 chat messages per second**.
+
+Compared to **v2.2.0**, the chat processing pipeline in **v2.3.0** has been heavily optimized.  
+Even under extreme stress conditions, the tick latency remains below **~25ms**,  
+whereas **v2.2.0** could spike up to **47ms**.
+
+In real-world servers, typical chat throughput is far lower,  
+so TPS impact is effectively negligible.
 
 * ```execute as @a run embellish-chat test stress n "@hanhy ~~[Test]<RAINBOW>__ 100% working!__||50||~~"```
 * ```execute as @a run embellish-chat test stress n "@everyone @here **Check out this new [update]<green> __news__** right [here](https://github.com/hanhy06/embellish-chat)! _First come, first served — join now for an exclusive ||special|| gift!_ ~~If you come late, there won't be any left~~"```
