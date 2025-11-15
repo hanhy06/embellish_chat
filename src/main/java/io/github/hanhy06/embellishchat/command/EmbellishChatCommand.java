@@ -143,13 +143,13 @@ public class EmbellishChatCommand {
             return 0;
         }
 
-        SignedMessage testMessage = SignedMessage.ofUnsigned(
-                player.getUuid(),
-                test
-        );
-
         long startTime = System.currentTimeMillis();
         for (int i = 0; i < count; i++) {
+            SignedMessage testMessage = SignedMessage.ofUnsigned(
+                    player.getUuid(),
+                    test
+            );
+
             MessageProcessor.INSTANCE.handleMessage(testMessage);
         }
         long duration = System.currentTimeMillis() - startTime;
