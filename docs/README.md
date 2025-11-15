@@ -263,10 +263,6 @@ The graph below shows TPS (Ticks Per Second) latency measurements for this mod.
 
 Each test message contained either 230 or 50 characters, and the system was stressed by sending up to **400 × 20 chat messages per second**.
 
-Compared to **v2.2.0**, the chat processing pipeline in **v2.3.0** has been heavily optimized.  
-Even under extreme stress conditions, the tick latency remains below **~25ms**,  
-whereas **v2.2.0** could spike up to **47ms**.
-
 In real-world servers, typical chat throughput is far lower,  
 so TPS impact is effectively negligible.
 
