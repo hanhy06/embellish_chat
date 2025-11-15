@@ -263,9 +263,6 @@ The graph below shows TPS (Ticks Per Second) latency measurements for this mod.
 
 Each test message contained either 230 or 50 characters, and the system was stressed by sending up to **400 × 20 chat messages per second**.
 
-In real-world servers, typical chat throughput is far lower,  
-so TPS impact is effectively negligible.
-
 * ```execute as @a run embellish-chat test stress n "@hanhy ~~[Test]<RAINBOW>__ 100% working!__||50||~~"```
 * ```execute as @a run embellish-chat test stress n "@everyone @here **Check out this new [update]<green> __news__** right [here](https://github.com/hanhy06/embellish-chat)! _First come, first served — join now for an exclusive ||special|| gift!_ ~~If you come late, there won't be any left~~"```
 
