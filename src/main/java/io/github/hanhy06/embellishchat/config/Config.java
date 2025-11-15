@@ -32,7 +32,7 @@ public record Config(
         Color mentionColor,
 
         //banned player list
-        Set<UUID> bannedPlayerList
+        HashSet<UUID> bannedPlayerList
 )
 {
     public static Config createDefault(){
