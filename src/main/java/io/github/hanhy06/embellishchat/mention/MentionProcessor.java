@@ -14,6 +14,7 @@ import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.Style;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -81,13 +82,19 @@ public class MentionProcessor implements ConfigListener {
 
         for (int i = 0; i < actions.size();i++){
             MentionAction action = actions.get(i);
-            String option = OptionUtil.parseOption(mentions.get(i),action.preset(),sender);
+            String option = OptionUtil.parseOption(
+                    i < mentions.size() ? mentions.get(i) : "",
+                    action.preset(),sender
+            );
 
             ParsedTarget target = registries.get(action.mentionType())
                     .apply(MentionParameter.of(mention, sender, option));
             targets.add(target);
         }
 
+        if (targets.isEmpty()){
+            return new ParsedTarget(mention,List.of(), Style.EMPTY);
+        }
         ParsedTarget first = targets.getFirst();
         for (int i = 1; i < targets.size(); i++) {
             first.targets().retainAll(targets.get(i).targets());
