@@ -5,5 +5,6 @@ public enum MentionType {
     TEAM,
     INSIDE,
     EVERYONE,
-    LUCK_PERMS_GROUP
+    LUCK_PERMS_GROUP,
+    WORLD
 }

@@ -10,8 +10,10 @@ import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.Team;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Style;
 
 import java.util.*;
@@ -38,7 +40,8 @@ public class MentionRegistry {
                 entry(MentionType.INSIDE,this::INSIDE),
                 entry(MentionType.TEAM,this::TEAM),
                 entry(MentionType.PLAYER,this::PLAYER),
-                entry(MentionType.LUCK_PERMS_GROUP,this::LUCK_PERMS_GROUP)
+                entry(MentionType.LUCK_PERMS_GROUP,this::LUCK_PERMS_GROUP),
+                entry(MentionType.WORLD,this::WORLD)
         ));
     }
 
@@ -138,6 +141,31 @@ public class MentionRegistry {
         }
 
         players = LuckPermsUtil.getGroupPlayers(parameter.option(),manager.getPlayerList());
+
+        return ParsedTarget.of(parsedMention, players, stylePreset);
+    }
+
+    private ParsedTarget WORLD(MentionParameter parameter){
+        String worldName = parameter.option();
+        MinecraftServer server = parameter.sender().getEntityWorld().getServer();
+        ServerWorld targetWorld = null;
+
+        for (ServerWorld world : server.getWorlds()) {
+            String id = world.getRegistryKey().getValue().toString();
+            if (id.equals(worldName) || world.getRegistryKey().getValue().getPath().equals(worldName)) {
+                targetWorld = world;
+                break;
+            }
+        }
+
+        ParsedMention parsedMention = parameter.parsedMention();
+        List<ServerPlayerEntity> players = new ArrayList<>();
+
+        if (targetWorld != null) {
+            players = PlayerLookup.world(targetWorld).stream().toList();
+        } else {
+            EmbellishChat.LOGGER.info("World " + worldName + " not found. @world mention ignored.");
+        }
 
         return ParsedTarget.of(parsedMention, players, stylePreset);
     }
