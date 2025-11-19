@@ -16,19 +16,19 @@
 
 Use the following patterns directly in the chat window:
 
-| Feature         | Syntax            | Example                                                       | Preview                                                                                                  |
-|-----------------| ----------------- |---------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
-| Bold            | `**Text**`        | `**You really need to read this!**`                           | ![Bold](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Bold.png?raw=true)             |
-| Italic          | `_Text_`          | `_This is top secret..._`                                     | ![Italic](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Italic.png?raw=true)         |
-| Underline       | `__Text__`        | `__Check this out__`                                          | ![Underline](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Underline.png?raw=true)   |
-| Strikethrough   | `~~Text~~`        | `~~We don’t talk about this anymore~~`                        | ![Strike](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Strikethrough.png?raw=true)  |
-| Obfuscated      | `\|\|Text\|\|`    | `\|\|Unreadable text\|\|`                                     | ![Obfuscated](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Obfuscated.gif?raw=true) |
-| Color (Hex)     | `[Text]<#RRGGBB>` | `[Blue]<#0000FF> like the deep ocean`                         | ![Color](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Color_Hex.png?raw=true)       |
-| Color (Preset)  | `[Text]<preset>`  | `[pink]<pink> pig`                                            | ![Color](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Color_Preset.png?raw=true)    |
-| Color (Rainbow) | `[Text]<RAINBOW>` | `look at this [rainbow]<RAINBOW>`                             | ![Color](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Color_Rainbow.png?raw=true)   |
-| Link            | `[Text](URL)`     | `Download it [here](https://modrinth.com/mod/embellish-chat)` | ![Link](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Link.gif?raw=true)             |
-| Font            | `[Text]{path}`    | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Font.png?raw=true)             |
-| Mention         | `@PlayerName`     | `Hello, @User`                                                | ![Mention](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Mention.png?raw=true)       |
+| Feature         | Syntax            | Example                                                       | Preview                                                                                                 |
+|-----------------| ----------------- |---------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| Bold            | `**Text**`        | `**You really need to read this!**`                           | ![Bold](https://github.com/hanhy06/embellish-chat/blob/v2.3.0/%2B1.21.9/docs/images/Bold.png?raw=true)            |
+| Italic          | `_Text_`          | `_This is top secret..._`                                     | ![Italic](https://github.com/hanhy06/embellish-chat/blob/v2.3.0/%2B1.21.9/docs/images/Italic.png?raw=true)        |
+| Underline       | `__Text__`        | `__Check this out__`                                          | ![Underline](https://github.com/hanhy06/embellish-chat/blob/v2.3.0/%2B1.21.9/docs/images/Underline.png?raw=true)  |
+| Strikethrough   | `~~Text~~`        | `~~We don’t talk about this anymore~~`                        | ![Strike](https://github.com/hanhy06/embellish-chat/blob/v2.3.0/%2B1.21.9/docs/images/Strikethrough.png?raw=true) |
+| Obfuscated      | `\|\|Text\|\|`    | `\|\|Unreadable text\|\|`                                     | ![Obfuscated](https://github.com/hanhy06/embellish-chat/blob/v2.3.0/%2B1.21.9/docs/images/Obfuscated.gif?raw=true) |
+| Color (Hex)     | `[Text]<#RRGGBB>` | `[Blue]<#0000FF> like the deep ocean`                         | ![Color](https://github.com/hanhy06/embellish-chat/blob/v2.3.0/%2B1.21.9/docs/images/Color_Hex.png?raw=true)      |
+| Color (Preset)  | `[Text]<preset>`  | `[pink]<pink> pig`                                            | ![Color](https://github.com/hanhy06/embellish-chat/blob/v2.3.0/%2B1.21.9/docs/images/Color_Preset.png?raw=true)   |
+| Color (Rainbow) | `[Text]<RAINBOW>` | `look at this [rainbow]<RAINBOW>`                             | ![Color](https://github.com/hanhy06/embellish-chat/blob/v2.3.0/%2B1.21.9/docs/images/Color_Rainbow.png?raw=true)  |
+| Link            | `[Text](URL)`     | `Download it [here](https://modrinth.com/mod/embellish-chat)` | ![Link](https://github.com/hanhy06/embellish-chat/blob/v2.3.0/%2B1.21.9/docs/images/Link.gif?raw=true)            |
+| Font            | `[Text]{path}`    | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://github.com/hanhy06/embellish-chat/blob/v2.3.0/%2B1.21.9/docs/images/Font.png?raw=true)            |
+| Mention         | `@PlayerName`     | `Hello, @User`                                                | ![Mention](https://github.com/hanhy06/embellish-chat/blob/v2.3.0/%2B1.21.9/docs/images/Mention.png?raw=true)      |
 
 > **Notes**
 >
@@ -36,7 +36,7 @@ Use the following patterns directly in the chat window:
 > * *Preset* values depend on the mod's configuration (e.g., `pink`, `blue`, etc.).
 > * `path` for **Font** accepts a namespaced ID such as `minecraft:alt`.
 > * If multiple style types exist and no preset is configured, the user can enter one manually. The separator can be checked through /ec help style.
-> * The table above shows only the most common styles. Embellish Chat supports many additional style types. For more details, please refer to [StyleWiki.md](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/wiki/StyleWiki.md)
+> * The table above shows only the most common styles. Embellish Chat supports many additional style types. For more details, please refer to [StyleWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.3.0/%2B1.21.9/docs/wiki/StyleWiki.md)
 
 ---
 
@@ -51,7 +51,7 @@ Use the following patterns directly in the chat window:
 | `@here`         | Mentions all players within a configurable radius in the same world as the sender. The default radius is **64 blocks**, adjustable in the configuration. Uses the **default mention color**.                                                                            |
 
 > **Notes**
-> 
+>
 > * Online mention targets receive a notification, and the message is automatically styled using the appropriate color and formatting based on the target’s team, display name, or default rules.
 > * The mention notification sound uses the **UI** sound category by default. On **Minecraft 1.21.5 and earlier**, it falls back to the **PLAYER** category.
 > * `@group(name)` requires LuckPerms. Without it, the mention resolves to no players.
@@ -180,7 +180,7 @@ Each rule consists of a regular expression (`pattern`) and a style action list(`
 * **pattern** Must contain **two capturing groups**: pattern must contain two capturing groups: 1) the text to apply the style to, 2) an optional captured value that can be passed as an argument.
 * **styles** This is a list of style actions. Each action consists of a style type (`styleType`) and style option preset(`preset`).
 
-you can see more detail in [StyleWiki.md](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/wiki/StyleWiki.md)
+you can see more detail in [StyleWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.3.0/%2B1.21.9/docs/wiki/StyleWiki.md)
 
 ---
 
@@ -221,7 +221,7 @@ Each rule consists of a regular expression (`pattern`), mention action list(`men
 * **mentions** The mentions field is a list of mention actions. Each action specifies a mentionType and an optional preset.
 * **styles** The styles field works the same way as in the styling rules section.
 
-you can see more detail in [MentionWiki.md](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/wiki/MentionWiki.md)
+you can see more detail in [MentionWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.3.0/%2B1.21.9/docs/wiki/MentionWiki.md)
 
 ---
 
@@ -266,7 +266,7 @@ Each test message contained either 230 or 50 characters, and the system was stre
 * ```execute as @a run embellish-chat test stress n "@hanhy ~~[Test]<RAINBOW>__ 100% working!__||50||~~"```
 * ```execute as @a run embellish-chat test stress n "@everyone @here **Check out this new [update]<green> __news__** right [here](https://github.com/hanhy06/embellish-chat)! _First come, first served — join now for an exclusive ||special|| gift!_ ~~If you come late, there won't be any left~~"```
 
-![Latency](https://github.com/hanhy06/embellish-chat/blob/1.21.9/docs/images/Latency2.3.0.png?raw=true)
+![Latency](https://github.com/hanhy06/embellish-chat/blob/v2.3.0/%2B1.21.9/docs/images/Latency2.3.0.png?raw=true)
 
 ---
 
