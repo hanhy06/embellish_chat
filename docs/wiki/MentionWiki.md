@@ -9,7 +9,7 @@
 | `LUCK_PERMS_GROUP` | Mentions **all players in a specific LuckPerms group**. Requires LuckPerms to be installed.                         | LuckPerms group name |
 
 > **Notes**
-> 
+>
 > * All mentions use the mentionColor defined in the configuration by default.
 > * The TEAM and PLAYER types follow the style of the team they belong to.
 > * You can modify the mention styles in the config.json file.
@@ -49,6 +49,7 @@ This is the most basic way to use it.
   "pattern": "@red-team-here()",
   "sound": "entity.experience_orb.pickup",
   "pitch": 1.75,
+  "title": "%player:displayname% mentioned you",
   "mentions": [
     {
       "mentionType": "INSIDE",
@@ -81,6 +82,7 @@ Mentions any red-team player within a 64-block radius.
   "pattern": "[notification]()",
   "sound": "entity.experience_orb.pickup",
   "pitch": 1.75,
+  "title": "%player:displayname% mentioned you",
   "mentions": [
     {
       "mentionType": "EVERYONE",
@@ -109,6 +111,7 @@ Typing `[notification]` will send an alert to everyone.
   "pattern": "@admin()",
   "sound": "entity.experience_orb.pickup",
   "pitch": 1.75,
+  "title": "%player:displayname% mentioned you",
   "mentions": [
     {
       "mentionType": "LUCK_PERMS_GROUP",
