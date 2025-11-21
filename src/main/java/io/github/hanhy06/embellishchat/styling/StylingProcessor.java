@@ -40,15 +40,19 @@ public class StylingProcessor implements ConfigListener {
 
     public MutableText handleStyling(MutableText text,ServerPlayerEntity player,List<String> keys){
         List<StylingRule> rules = new ArrayList<>();
-        keys.forEach(key -> rules.addAll(stylingRules.get(key)));
+        keys.forEach(key -> rules.addAll(stylingRules.getOrDefault(key,List.of())));
+        if (rules.isEmpty()) return text;
 
         String string = text.getString();
-
+        List<StyleNode> nodes = new ArrayList<>();
+        for (int i=0;i<rules.size();i++){
+            nodes.addAll(parseStyles(string,rules.get(i),player,i));
+        }
 
         return text;
     }
 
-    private List<StyleNode> parsedStyle(String text,StylingRule rule,ServerPlayerEntity player,int level){
+    private List<StyleNode> parseStyles(String text,StylingRule rule,ServerPlayerEntity player,int level){
         Matcher matcher = rule.pattern().matcher(text);
         List<StyleNode> result = new ArrayList<>();
         if (!matcher.find()) return result;
@@ -67,6 +71,7 @@ public class StylingProcessor implements ConfigListener {
             options = OptionUtil.parseOption(options,presets,player);
 
             StyleNode node = new StyleNode(begin,end,options,functions,level);
+            result.add(node);
         } while (matcher.find());
 
         return result;
