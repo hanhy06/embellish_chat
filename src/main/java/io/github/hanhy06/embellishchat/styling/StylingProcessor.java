@@ -3,16 +3,14 @@ package io.github.hanhy06.embellishchat.styling;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
 import io.github.hanhy06.embellishchat.mention.data.MentionSegment;
-import io.github.hanhy06.embellishchat.styling.rule.StyleAction;
-import io.github.hanhy06.embellishchat.styling.rule.StyleParameter;
-import io.github.hanhy06.embellishchat.styling.rule.StyleRegistry;
-import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
+import io.github.hanhy06.embellishchat.styling.rule.*;
 import io.github.hanhy06.embellishchat.styling.util.Runs;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -40,56 +38,49 @@ public class StylingProcessor implements ConfigListener {
         this.registry = new StyleRegistry(newConfig);
     }
 
-    public MutableText applyStylingRule(MutableText text, String key, ServerPlayerEntity player){
-        if (text.getString().isBlank() || !stylingRules.containsKey(key)) return text;
+    public MutableText handleStyling(MutableText text,ServerPlayerEntity player,List<String> keys){
+        List<StylingRule> rules = new ArrayList<>();
+        keys.forEach(key -> rules.addAll(stylingRules.get(key)));
 
-        MutableText result = text;
-        for (StylingRule style : stylingRules.get(key)){
-            result = applyStyles(result,style,player);
-        }
+        String string = text.getString();
 
-        return result;
+
+        return text;
     }
 
-    private MutableText applyStyles(MutableText text,StylingRule style,ServerPlayerEntity player){
-        Matcher matcher = style.pattern().matcher(text.getString());
-        if (!matcher.find()) return text;
+    private List<StyleNode> parsedStyle(String text,StylingRule rule,ServerPlayerEntity player,int level){
+        Matcher matcher = rule.pattern().matcher(text);
+        List<StyleNode> result = new ArrayList<>();
+        if (!matcher.find()) return result;
 
-        Runs runs = flatten(text);
-        MutableText result = Text.empty();
-        int lastEnd = 0;
+        List<String> presets = new ArrayList<>();
+        List<Function<StyleParameter, MutableText>> functions = new ArrayList<>();
+        rule.styles().forEach(action ->{
+            presets.add(action.preset());
+            functions.add(registry.get(action.styleType()));
+        });
 
         do {
-            result.append(slice(runs, lastEnd, matcher.start()));
+            int begin = matcher.start(1);
+            int end = matcher.end(1);
+            List<String> options = OptionUtil.split(matcher.group(2),config.delimiter());
+            options = OptionUtil.parseOption(options,presets,player);
 
-            MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
-            String option = matcher.group(2);
-            List<String> options = OptionUtil.split(option,config.delimiter());
-
-            result.append(applyStyle(segment, style.styles(), options,player));
-            lastEnd = matcher.end();
+            StyleNode node = new StyleNode(begin,end,options,functions,level);
         } while (matcher.find());
-        result.append(slice(runs, lastEnd, runs.full().length()));
 
         return result;
     }
 
-    private MutableText applyStyle(MutableText text, List<StyleAction> actions, List<String> options,ServerPlayerEntity player){
-        MutableText result = text;
-        List<String> option = OptionUtil.parseOption(
-                options,
-                actions.stream().map(StyleAction::preset).toList(),
-                player
-        );
 
-        for (int i=0;i<actions.size();i++){
-            StyleAction action = actions.get(i);
-            Function<StyleParameter, MutableText> function = registry.get(action.styleType());
-            result = function.apply(StyleParameter.of(result, option.get(i)));
-        }
 
-        return result;
-    }
+
+
+
+
+
+
+
 
     public MutableText applyMention(MutableText text, List<MentionSegment> mentionSegments){
         if (mentionSegments.isEmpty()) return text;
