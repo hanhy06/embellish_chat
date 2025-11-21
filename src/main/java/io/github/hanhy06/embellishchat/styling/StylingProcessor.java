@@ -36,26 +36,19 @@ public class StylingProcessor implements ConfigListener {
         this.registry = new StyleRegistry(newConfig);
     }
 
-    //    TODO: 겹치면 범위 에러 해결
-//    TODO: 노드가 전체 범위를 저장하도록 해서 **test** 에서 *들을 모두 제거 해야함
     public MutableText handleStyling(MutableText text,ServerPlayerEntity player,List<String> keys){
         List<StylingRule> rules = new ArrayList<>();
         keys.forEach(key -> rules.addAll(stylingRules.getOrDefault(key,List.of())));
         if (rules.isEmpty()) return text;
 
-        String string = text.getString();
-        Set<StyleNode> nodeSet = new TreeSet<>(Comparator
-                .comparing(StyleNode::begin)
-                .thenComparing(StyleNode::level)
-                .thenComparing(StyleNode::end)
-        );
+        String content = text.getString();
+        List<StyleNode> nodes = new ArrayList<>();
         for (int i=0;i<rules.size();i++){
-            nodeSet.addAll(parseStyles(string,rules.get(i),player,i));
+            nodes.addAll(parseStyles(content,rules.get(i),player,i));
         }
+        nodes = parseNodes(nodes.stream().toList(),content);
 
-        List<StyleNode> nodeList = parseNodes(nodeSet.stream().toList());
-
-        return applyStyle(text,nodeList,player);
+        return applyStyle(text,nodes,player);
     }
 
     private List<StyleNode> parseStyles(String text,StylingRule rule,ServerPlayerEntity player,int level){
@@ -83,53 +76,59 @@ public class StylingProcessor implements ConfigListener {
         return result;
     }
 
-    private List<StyleNode> parseNodes(List<StyleNode> nodes) {
+    private List<StyleNode> parseNodes(List<StyleNode> nodes,String text) {
         if (nodes.isEmpty()) return nodes;
         List<StyleNode> result = new ArrayList<>();
 
-        int index;
-        for (index = 0; index < nodes.size() - 1; index++) {
-            StyleNode current = nodes.get(index);
-            StyleNode next = nodes.get(index + 1);
-
-            if (current.begin() == next.begin() && current.end() == next.end()) {
-                current.options().addAll(next.options());
-                current.functions().addAll(next.functions());
-                result.add(current);
-                index++;
-            } else if (next.begin() < current.end()) {
-                StyleNode beforeOverlap = new StyleNode(
-                        current.matchStart(),next.matchStart(),
-                        current.begin(), next.begin(),
-                        current.options(), current.functions(),
-                        current.level()
-                );
-                result.add(beforeOverlap);
-
-                current.options().addAll(next.options());
-                current.functions().addAll(next.functions());
-                StyleNode overlap = new StyleNode(
-                        next.matchStart(),current.end(),
-                        next.begin(), current.end(),
-                        current.options(), current.functions(),
-                        current.level()
-                );
-                result.add(overlap);
-
-                StyleNode afterOverlap = new StyleNode(
-                        current.matchEnd(),next.end(),
-                        current.end(), next.end(),
-                        next.options(), next.functions(),
-                        next.level()
-                );
-                result.add(afterOverlap);
-                index++;
-            } else {
-                result.add(current);
-            }
+        List<Integer> points = new ArrayList<>();
+        points.add(0); points.add(text.length());
+        for (StyleNode node : nodes) {
+            points.add(node.matchStart());
+            points.add(node.begin());
+            points.add(node.end());
+            points.add(node.matchEnd());
         }
-        if (index <= nodes.size()){
-            result.addAll(nodes.subList(index,nodes.size()));
+        points = points.stream().distinct().sorted().toList();
+
+        for (int i=0;i<points.size()-1;i++){
+            int start = points.get(i);
+            int end = points.get(i+1);
+            int mid = (start + end) / 2;
+
+            boolean isDelimiter = false;
+            for (StyleNode node : nodes){
+                if (
+                        (mid >= node.matchStart() && mid < node.begin()) ||
+                        (mid >= node.end() && mid < node.matchEnd())
+                )
+                {
+                    isDelimiter = true;
+                    break;
+                }
+            }
+            if (isDelimiter) continue;
+
+            TreeSet<StyleNode> styles = new TreeSet<>(Comparator.comparing(StyleNode::level));
+            for (StyleNode node : nodes) {
+                if (mid >= node.begin() && mid < node.end()) {
+                    styles.add(node);
+                }
+            }
+
+            StyleNode active = new StyleNode(
+                    start,end,
+                    start,end,
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    0
+            );
+
+            for (StyleNode style : styles) {
+                active.options().addAll(style.options());
+                active.functions().addAll(style.functions());
+            }
+
+            result.add(active);
         }
 
         return result;
