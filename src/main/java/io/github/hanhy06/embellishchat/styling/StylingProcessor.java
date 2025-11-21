@@ -82,45 +82,50 @@ public class StylingProcessor implements ConfigListener {
         return result;
     }
 
-    private List<StyleNode> parseNodes(List<StyleNode> nodes){
+    private List<StyleNode> parseNodes(List<StyleNode> nodes) {
         List<StyleNode> result = new ArrayList<>();
 
-        for (int i=0;i<nodes.size()-1;i++){
+        for (int i = 0; i < nodes.size() - 1; i++) {
             StyleNode current = nodes.get(i);
-            StyleNode next = nodes.get(i++);
+            StyleNode next = nodes.get(i + 1);
 
-            if (current.begin() == next.begin() && current.end() == next.end()){
+            if (current.begin() == next.begin() && current.end() == next.end()) {
                 current.options().addAll(next.options());
                 current.functions().addAll(next.functions());
                 result.add(current);
-                i+=2;
+                i++;
             } else if (next.begin() < current.end()) {
-                StyleNode node1 = new StyleNode(
-                        current.begin(),next.begin(),
-                        current.options(),current.functions(),
+                StyleNode beforeOverlap = new StyleNode(
+                        current.begin(), next.begin(),
+                        current.options(), current.functions(),
                         current.level()
                 );
-                result.add(node1);
+                result.add(beforeOverlap);
 
                 current.options().addAll(next.options());
                 current.functions().addAll(next.functions());
-                StyleNode node2 = new StyleNode(
-                        next.begin(),current.end(),
-                        current.options(),current.functions(),
+                StyleNode overlap = new StyleNode(
+                        next.begin(), current.end(),
+                        current.options(), current.functions(),
                         current.level()
                 );
-                result.add(node2);
+                result.add(overlap);
 
-                StyleNode node3 = new StyleNode(
-                        current.end(),next.end(),
-                        next.options(),next.functions(),
+                StyleNode afterOverlap = new StyleNode(
+                        current.end(), next.end(),
+                        next.options(), next.functions(),
                         next.level()
                 );
-                result.add(node3);
-                i+=2;
-            }else {
+                result.add(afterOverlap);
+                i++;
+            } else {
                 result.add(current);
             }
+        }
+
+        if (!nodes.isEmpty() && result.isEmpty() ||
+                (result.size() < nodes.size() && nodes.get(nodes.size() - 1) != result.get(result.size() - 1))) {
+            result.add(nodes.get(nodes.size() - 1));
         }
 
         return result;
