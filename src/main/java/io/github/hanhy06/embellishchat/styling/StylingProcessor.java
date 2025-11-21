@@ -83,17 +83,19 @@ public class StylingProcessor implements ConfigListener {
     }
 
     private List<StyleNode> parseNodes(List<StyleNode> nodes) {
+        if (nodes.isEmpty()) return nodes;
         List<StyleNode> result = new ArrayList<>();
 
-        for (int i = 0; i < nodes.size() - 1; i++) {
-            StyleNode current = nodes.get(i);
-            StyleNode next = nodes.get(i + 1);
+        int index;
+        for (index = 0; index < nodes.size() - 1; index++) {
+            StyleNode current = nodes.get(index);
+            StyleNode next = nodes.get(index + 1);
 
             if (current.begin() == next.begin() && current.end() == next.end()) {
                 current.options().addAll(next.options());
                 current.functions().addAll(next.functions());
                 result.add(current);
-                i++;
+                index++;
             } else if (next.begin() < current.end()) {
                 StyleNode beforeOverlap = new StyleNode(
                         current.begin(), next.begin(),
@@ -117,15 +119,13 @@ public class StylingProcessor implements ConfigListener {
                         next.level()
                 );
                 result.add(afterOverlap);
-                i++;
+                index++;
             } else {
                 result.add(current);
             }
         }
-
-        if (!nodes.isEmpty() && result.isEmpty() ||
-                (result.size() < nodes.size() && nodes.get(nodes.size() - 1) != result.get(result.size() - 1))) {
-            result.add(nodes.get(nodes.size() - 1));
+        if (index <= nodes.size()){
+            result.addAll(nodes.subList(index,nodes.size()));
         }
 
         return result;
