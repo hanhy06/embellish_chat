@@ -54,7 +54,7 @@ public class StylingProcessor implements ConfigListener {
 
         List<StyleNode> nodeList = parseNodes(nodeSet.stream().toList());
 
-        return text;
+        return applyStyle(text,nodeList,player);
     }
 
     private List<StyleNode> parseStyles(String text,StylingRule rule,ServerPlayerEntity player,int level){
@@ -131,7 +131,34 @@ public class StylingProcessor implements ConfigListener {
         return result;
     }
 
-    public MutableText applyMention(MutableText text, List<MentionSegment> mentionSegments){
+    private MutableText applyStyle(MutableText text,List<StyleNode> nodes,ServerPlayerEntity player){
+        if (nodes.isEmpty()) return text;
+
+        Runs runs = flatten(text);
+        MutableText result = Text.empty();
+
+        int lastEnd = 0;
+        for (StyleNode node:nodes){
+            List<String> options = node.options();
+            List<Function<StyleParameter, MutableText>> functions = node.functions();
+
+            result.append(slice(runs,lastEnd,node.begin()));
+
+            MutableText segment = slice(runs,node.begin(),node.end());
+            for (int i=0;i<functions.size();i++){
+                segment = functions.get(i).apply(StyleParameter.of(
+                        segment,options.get(i),player
+                ));
+            }
+            result.append(segment);
+            lastEnd = node.end();
+        }
+        result.append(slice(runs,lastEnd,runs.full().length()));
+
+        return result;
+    }
+
+    public MutableText applyMention(MutableText text, List<MentionSegment> mentionSegments,ServerPlayerEntity player){
         if (mentionSegments.isEmpty()) return text;
 
         Runs runs = flatten(text);
@@ -146,7 +173,7 @@ public class StylingProcessor implements ConfigListener {
             for (StyleAction action : mentionSegment.styles()){
                 segment = registry
                         .get(action.styleType())
-                        .apply(StyleParameter.of(segment,action.preset()));
+                        .apply(StyleParameter.of(segment,action.preset(),player));
             }
 
             result.append(segment);

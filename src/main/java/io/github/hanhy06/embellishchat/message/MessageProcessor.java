@@ -55,7 +55,7 @@ public class MessageProcessor implements ConfigListener {
         String stringMessage = message.getContent().getString();
 
         List<MentionSegment> mentionSegments = handleMention(sender, stringMessage);
-        textMessage = stylingProcessor.applyMention(textMessage, mentionSegments);
+        textMessage = stylingProcessor.applyMention(textMessage, mentionSegments,sender);
 
         for (String key : getPermissions(sender, config.stylingRules().keySet())) {
 //            textMessage = stylingProcessor.applyStylingRule(textMessage, key,sender);
