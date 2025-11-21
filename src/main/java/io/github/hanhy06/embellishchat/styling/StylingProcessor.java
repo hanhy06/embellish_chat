@@ -116,7 +116,7 @@ public class StylingProcessor implements ConfigListener {
             }
 
             StyleNode active = new StyleNode(
-                    start,end,
+                    0,0,
                     start,end,
                     new ArrayList<>(),
                     new ArrayList<>(),
@@ -140,12 +140,9 @@ public class StylingProcessor implements ConfigListener {
         Runs runs = flatten(text);
         MutableText result = Text.empty();
 
-        int lastEnd = 0;
         for (StyleNode node:nodes){
             List<String> options = node.options();
             List<Function<StyleParameter, MutableText>> functions = node.functions();
-
-            result.append(slice(runs,lastEnd,node.begin()));
 
             MutableText segment = slice(runs,node.begin(),node.end());
             for (int i=0;i<functions.size();i++){
@@ -154,9 +151,7 @@ public class StylingProcessor implements ConfigListener {
                 ));
             }
             result.append(segment);
-            lastEnd = node.end();
         }
-        result.append(slice(runs,lastEnd,runs.full().length()));
 
         return result;
     }
