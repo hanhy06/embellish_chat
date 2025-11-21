@@ -21,159 +21,163 @@ public class StylingProcessor implements ConfigListener {
     public static StylingProcessor INSTANCE;
 
     private Config config;
-    private Map<String, List<StylingRule>> stylingRules;
+    private Map<String,List<StylingRule>> stylingRules;
     private StyleRegistry registry;
 
-    public StylingProcessor() {
+    public StylingProcessor(){
         INSTANCE = this;
     }
 
     @Override
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
+
         this.stylingRules = newConfig.stylingRules();
         this.registry = new StyleRegistry(newConfig);
     }
 
-    public MutableText handleStyling(MutableText text, ServerPlayerEntity player, List<String> keys) {
+    //    TODO: 겹치면 범위 에러 해결
+//    TODO: 노드가 전체 범위를 저장하도록 해서 **test** 에서 *들을 모두 제거 해야함
+    public MutableText handleStyling(MutableText text,ServerPlayerEntity player,List<String> keys){
         List<StylingRule> rules = new ArrayList<>();
-        keys.forEach(key -> rules.addAll(stylingRules.getOrDefault(key, List.of())));
+        keys.forEach(key -> rules.addAll(stylingRules.getOrDefault(key,List.of())));
         if (rules.isEmpty()) return text;
 
-        String content = text.getString();
-        List<StyleNode> rawNodes = new ArrayList<>();
-
-        // 1. 정규식 매칭을 통해 모든 Raw Node 수집
-        for (int level = 0; level < rules.size(); level++) {
-            rawNodes.addAll(parseStyles(content, rules.get(level), player, level));
-        }
-        if (rawNodes.isEmpty()) return text;
-
-        List<Integer> points = new ArrayList<>();
-        points.add(0);
-        points.add(content.length());
-        for (StyleNode node : rawNodes) {
-            points.add(node.begin());
-            points.add(node.end());
-        }
-        points = points.stream()
-                .distinct()
-                .sorted()
-                .toList();
-
-        // 3. 각 원자적 구간(Atomic Interval)별로 스타일 병합
-        List<StyleNode> nodes = new ArrayList<>();
-        for (int i = 0; i < points.size() - 1; i++) {
-            int start = points.get(i);
-            int end = points.get(i + 1);
-
-            // 현재 구간(start ~ end)을 완전히 포함하는 모든 Raw Node 찾기
-            List<StyleNode> activeNodes = new ArrayList<>();
-            for (StyleNode raw : rawNodes) {
-                if (raw.begin() <= start && raw.end() >= end) {
-                    activeNodes.add(raw);
-                }
-            }
-
-            if (activeNodes.isEmpty()) continue;
-
-            // Config 순서(level)대로 정렬하여 스타일 적용 순서 보장
-            activeNodes.sort(Comparator.comparingInt(StyleNode::level));
-
-            // 해당 구간에 적용될 옵션과 함수 병합
-            List<String> mergedOptions = new ArrayList<>();
-            List<Function<StyleParameter, MutableText>> mergedFunctions = new ArrayList<>();
-
-            for (StyleNode active : activeNodes) {
-                mergedOptions.addAll(active.options());
-                mergedFunctions.addAll(active.functions());
-            }
-
-            nodes.add(new StyleNode(
-                    start, end, // matchStart/End는 applyStyle에서 사용되지 않으므로 범위와 동일하게 설정
-                    start, end,
-                    mergedOptions,
-                    mergedFunctions,
-                    0
-            ));
+        String string = text.getString();
+        Set<StyleNode> nodeSet = new TreeSet<>(Comparator
+                .comparing(StyleNode::begin)
+                .thenComparing(StyleNode::level)
+                .thenComparing(StyleNode::end)
+        );
+        for (int i=0;i<rules.size();i++){
+            nodeSet.addAll(parseStyles(string,rules.get(i),player,i));
         }
 
-        return applyStyle(text, nodes, player);
+        List<StyleNode> nodeList = parseNodes(nodeSet.stream().toList());
+
+        return applyStyle(text,nodeList,player);
     }
 
-    private List<StyleNode> parseStyles(String text, StylingRule rule, ServerPlayerEntity player, int level) {
+    private List<StyleNode> parseStyles(String text,StylingRule rule,ServerPlayerEntity player,int level){
         Matcher matcher = rule.pattern().matcher(text);
         List<StyleNode> result = new ArrayList<>();
+        if (!matcher.find()) return result;
 
-        while (matcher.find()) {
+        List<String> presets = new ArrayList<>();
+        List<Function<StyleParameter, MutableText>> functions = new ArrayList<>();
+        rule.styles().forEach(action ->{
+            presets.add(action.preset());
+            functions.add(registry.get(action.styleType()));
+        });
+
+        do {
             int begin = matcher.start(1);
             int end = matcher.end(1);
+            List<String> options = OptionUtil.split(matcher.group(2),config.delimiter());
+            options = OptionUtil.parseOption(options,presets,player);
 
-            List<String> presets = new ArrayList<>();
-            List<Function<StyleParameter, MutableText>> functions = new ArrayList<>();
-            rule.styles().forEach(action -> {
-                presets.add(action.preset());
-                functions.add(registry.get(action.styleType()));
-            });
-
-            List<String> options = OptionUtil.split(matcher.group(2), config.delimiter());
-            options = OptionUtil.parseOption(options, presets, player);
-
-            StyleNode node = new StyleNode(matcher.start(), matcher.end(), begin, end, options, functions, level);
+            StyleNode node = new StyleNode(matcher.start(),matcher.end(),begin,end,options,functions,level);
             result.add(node);
+        } while (matcher.find());
+
+        return result;
+    }
+
+    private List<StyleNode> parseNodes(List<StyleNode> nodes) {
+        if (nodes.isEmpty()) return nodes;
+        List<StyleNode> result = new ArrayList<>();
+
+        int index;
+        for (index = 0; index < nodes.size() - 1; index++) {
+            StyleNode current = nodes.get(index);
+            StyleNode next = nodes.get(index + 1);
+
+            if (current.begin() == next.begin() && current.end() == next.end()) {
+                current.options().addAll(next.options());
+                current.functions().addAll(next.functions());
+                result.add(current);
+                index++;
+            } else if (next.begin() < current.end()) {
+                StyleNode beforeOverlap = new StyleNode(
+                        current.matchStart(),next.matchStart(),
+                        current.begin(), next.begin(),
+                        current.options(), current.functions(),
+                        current.level()
+                );
+                result.add(beforeOverlap);
+
+                current.options().addAll(next.options());
+                current.functions().addAll(next.functions());
+                StyleNode overlap = new StyleNode(
+                        next.matchStart(),current.end(),
+                        next.begin(), current.end(),
+                        current.options(), current.functions(),
+                        current.level()
+                );
+                result.add(overlap);
+
+                StyleNode afterOverlap = new StyleNode(
+                        current.matchEnd(),next.end(),
+                        current.end(), next.end(),
+                        next.options(), next.functions(),
+                        next.level()
+                );
+                result.add(afterOverlap);
+                index++;
+            } else {
+                result.add(current);
+            }
+        }
+        if (index <= nodes.size()){
+            result.addAll(nodes.subList(index,nodes.size()));
         }
 
         return result;
     }
 
-    // parseNodes 메서드는 삭제됨 (handleStyling 내의 Sweep Line 로직으로 대체)
-
-    private MutableText applyStyle(MutableText text, List<StyleNode> nodes, ServerPlayerEntity player) {
+    private MutableText applyStyle(MutableText text,List<StyleNode> nodes,ServerPlayerEntity player){
         if (nodes.isEmpty()) return text;
 
         Runs runs = flatten(text);
         MutableText result = Text.empty();
 
         int lastEnd = 0;
-        for (StyleNode node : nodes) {
+        for (StyleNode node:nodes){
             List<String> options = node.options();
             List<Function<StyleParameter, MutableText>> functions = node.functions();
 
-            // 스타일 적용 전 일반 텍스트 추가
-            result.append(slice(runs, lastEnd, node.begin()));
+            result.append(slice(runs,lastEnd,node.begin()));
 
-            // 스타일 적용 구간 처리
-            MutableText segment = slice(runs, node.begin(), node.end());
-            for (int i = 0; i < functions.size(); i++) {
+            MutableText segment = slice(runs,node.begin(),node.end());
+            for (int i=0;i<functions.size();i++){
                 segment = functions.get(i).apply(StyleParameter.of(
-                        segment, options.get(i), player
+                        segment,options.get(i),player
                 ));
             }
             result.append(segment);
             lastEnd = node.end();
         }
-        // 남은 뒷부분 텍스트 추가
-        result.append(slice(runs, lastEnd, runs.full().length()));
+        result.append(slice(runs,lastEnd,runs.full().length()));
 
         return result;
     }
 
-    public MutableText applyMention(MutableText text, List<MentionSegment> mentionSegments, ServerPlayerEntity player) {
+    public MutableText applyMention(MutableText text, List<MentionSegment> mentionSegments,ServerPlayerEntity player){
         if (mentionSegments.isEmpty()) return text;
 
         Runs runs = flatten(text);
         MutableText result = Text.empty();
 
         int lastEnd = 0;
-        for (MentionSegment mentionSegment : mentionSegments) {
-            result.append(slice(runs, lastEnd, mentionSegment.begin()));
+        for (MentionSegment mentionSegment : mentionSegments){
+            result.append(slice(runs,lastEnd, mentionSegment.begin()));
 
             MutableText segment = slice(runs, mentionSegment.begin(), mentionSegment.end());
             segment.fillStyle(mentionSegment.style());
-            for (StyleAction action : mentionSegment.styles()) {
+            for (StyleAction action : mentionSegment.styles()){
                 segment = registry
                         .get(action.styleType())
-                        .apply(StyleParameter.of(segment, action.preset(), player));
+                        .apply(StyleParameter.of(segment,action.preset(),player));
             }
 
             result.append(segment);
