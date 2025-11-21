@@ -36,6 +36,8 @@ public class StylingProcessor implements ConfigListener {
         this.registry = new StyleRegistry(newConfig);
     }
 
+//    TODO: 겹치면 범위 에러 해결
+//    TODO: 노드가 전체 범위를 저장하도록 해서 **test** 에서 *들을 모두 제거 해야함
     public MutableText handleStyling(MutableText text,ServerPlayerEntity player,List<String> keys){
         List<StylingRule> rules = new ArrayList<>();
         keys.forEach(key -> rules.addAll(stylingRules.getOrDefault(key,List.of())));
@@ -74,7 +76,7 @@ public class StylingProcessor implements ConfigListener {
             List<String> options = OptionUtil.split(matcher.group(2),config.delimiter());
             options = OptionUtil.parseOption(options,presets,player);
 
-            StyleNode node = new StyleNode(begin,end,options,functions,level);
+            StyleNode node = new StyleNode(matcher.start(),matcher.end(),begin,end,options,functions,level);
             result.add(node);
         } while (matcher.find());
 
@@ -97,6 +99,7 @@ public class StylingProcessor implements ConfigListener {
                 index++;
             } else if (next.begin() < current.end()) {
                 StyleNode beforeOverlap = new StyleNode(
+                        current.matchStart(),next.matchStart(),
                         current.begin(), next.begin(),
                         current.options(), current.functions(),
                         current.level()
@@ -106,6 +109,7 @@ public class StylingProcessor implements ConfigListener {
                 current.options().addAll(next.options());
                 current.functions().addAll(next.functions());
                 StyleNode overlap = new StyleNode(
+                        next.matchStart(),current.end(),
                         next.begin(), current.end(),
                         current.options(), current.functions(),
                         current.level()
@@ -113,6 +117,7 @@ public class StylingProcessor implements ConfigListener {
                 result.add(overlap);
 
                 StyleNode afterOverlap = new StyleNode(
+                        current.matchEnd(),next.end(),
                         current.end(), next.end(),
                         next.options(), next.functions(),
                         next.level()

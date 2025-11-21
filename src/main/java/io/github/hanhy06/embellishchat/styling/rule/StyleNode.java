@@ -5,5 +5,10 @@ import net.minecraft.text.MutableText;
 import java.util.List;
 import java.util.function.Function;
 
-public record StyleNode(int begin, int end,List<String> options, List<Function<StyleParameter, MutableText>> functions,int level) {
+public record StyleNode(
+        int matchStart, int matchEnd,
+        int begin, int end,
+        List<String> options,
+        List<Function<StyleParameter, MutableText>> functions,
+        int level) {
 }
