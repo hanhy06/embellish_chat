@@ -10,9 +10,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Array;
+import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 
@@ -44,10 +43,16 @@ public class StylingProcessor implements ConfigListener {
         if (rules.isEmpty()) return text;
 
         String string = text.getString();
-        List<StyleNode> nodes = new ArrayList<>();
+        Set<StyleNode> nodeSet = new TreeSet<>(Comparator
+                .comparing(StyleNode::begin)
+                .thenComparing(StyleNode::level)
+                .thenComparing(StyleNode::end)
+        );
         for (int i=0;i<rules.size();i++){
-            nodes.addAll(parseStyles(string,rules.get(i),player,i));
+            nodeSet.addAll(parseStyles(string,rules.get(i),player,i));
         }
+
+        List<StyleNode> nodeList = parseNodes(nodeSet.stream().toList());
 
         return text;
     }
@@ -77,15 +82,49 @@ public class StylingProcessor implements ConfigListener {
         return result;
     }
 
+    private List<StyleNode> parseNodes(List<StyleNode> nodes){
+        List<StyleNode> result = new ArrayList<>();
 
+        for (int i=0;i<nodes.size()-1;i++){
+            StyleNode current = nodes.get(i);
+            StyleNode next = nodes.get(i++);
 
+            if (current.begin() == next.begin() && current.end() == next.end()){
+                current.options().addAll(next.options());
+                current.functions().addAll(next.functions());
+                result.add(current);
+                i+=2;
+            } else if (next.begin() < current.end()) {
+                StyleNode node1 = new StyleNode(
+                        current.begin(),next.begin(),
+                        current.options(),current.functions(),
+                        current.level()
+                );
+                result.add(node1);
 
+                current.options().addAll(next.options());
+                current.functions().addAll(next.functions());
+                StyleNode node2 = new StyleNode(
+                        next.begin(),current.end(),
+                        current.options(),current.functions(),
+                        current.level()
+                );
+                result.add(node2);
 
+                StyleNode node3 = new StyleNode(
+                        current.end(),next.end(),
+                        next.options(),next.functions(),
+                        next.level()
+                );
+                result.add(node3);
+                i+=2;
+            }else {
+                result.add(current);
+            }
+        }
 
-
-
-
-
+        return result;
+    }
 
     public MutableText applyMention(MutableText text, List<MentionSegment> mentionSegments){
         if (mentionSegments.isEmpty()) return text;
