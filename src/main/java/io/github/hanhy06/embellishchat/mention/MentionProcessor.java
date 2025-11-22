@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 
@@ -50,7 +51,7 @@ public class MentionProcessor implements ConfigListener {
         List<MentionRule> rules = new ArrayList<>();
         keys.forEach(key -> rules.addAll(mentionRules.get(key)));
 
-        List<Mention> mentions = new ArrayList<>();
+        Set<Mention> mentions = new HashSet<>();
         for (MentionRule rule:rules){
             mentions.addAll(parseMention(text,rule,player));
         }
@@ -58,11 +59,11 @@ public class MentionProcessor implements ConfigListener {
 
         mentionBroadcast(mentions,player);
 
-        return mentions;
+        return new ArrayList<>(mentions);
     }
 
-    private List<Mention> parseTarget(List<Mention> mentions, ServerPlayerEntity player) {
-        List<Mention> result = new ArrayList<>();
+    private Set<Mention> parseTarget(Set<Mention> mentions, ServerPlayerEntity player) {
+        Set<Mention> result = new HashSet<>();
 
         for (Mention mention : mentions) {
             List<Function<MentionParameter, Target>> functions = new ArrayList<>();
@@ -93,8 +94,8 @@ public class MentionProcessor implements ConfigListener {
         return result;
     }
 
-    private List<Mention> parseMention(String text,MentionRule rule,ServerPlayerEntity player){
-        List<Mention> mentions = new ArrayList<>();
+    private Set<Mention> parseMention(String text,MentionRule rule,ServerPlayerEntity player){
+        Set<Mention> mentions = new HashSet<>();
         Matcher matcher = rule.pattern().matcher(text);
 
         List<String> presets = new ArrayList<>();
@@ -113,7 +114,7 @@ public class MentionProcessor implements ConfigListener {
         return mentions;
     }
 
-    private void mentionBroadcast(List<Mention> mentions,ServerPlayerEntity player){
+    private void mentionBroadcast(Set<Mention> mentions,ServerPlayerEntity player){
         for (Mention mention:mentions){
             Text title = PlaceHolderUtil.getParedOption(mention.rule().title(),player);
             SoundEvent sound = SoundEvent.of(mention.rule().sound());
@@ -123,7 +124,6 @@ public class MentionProcessor implements ConfigListener {
                 target.sendMessage(title,true);
                 target.playSoundToPlayer(sound, SoundCategory.UI,1,pitch);
             });
-
         }
     }
 }

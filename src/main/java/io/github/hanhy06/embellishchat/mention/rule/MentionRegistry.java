@@ -51,7 +51,7 @@ public class MentionRegistry {
     private Target EVERYONE(MentionParameter parameter){
         List<ServerPlayerEntity> players = manager.getPlayerList();
         
-        return new Target(players,stylePreset);
+        return Target.of(players,stylePreset);
     }
 
     private Target INSIDE(MentionParameter parameter){
@@ -61,7 +61,7 @@ public class MentionRegistry {
                 Float.parseFloat(parameter.option())
         ).stream().toList();
 
-        return new Target(players,stylePreset);
+        return Target.of(players,stylePreset);
     }
 
     private Target TEAM(MentionParameter parameter){
@@ -82,7 +82,7 @@ public class MentionRegistry {
                     .withParent(style);
         }
 
-        return new Target(players, style);
+        return Target.of(players,style);
     }
 
 
@@ -107,7 +107,7 @@ public class MentionRegistry {
                     ));
         }
 
-        return new Target(players, style);
+        return Target.of(players,style);
     }
 
     private Target LUCK_PERMS_GROUP(MentionParameter parameter){
@@ -115,12 +115,12 @@ public class MentionRegistry {
 
         if (!FabricLoader.getInstance().isModLoaded("luckperms")) {
             EmbellishChat.LOGGER.info("LuckPerms not found. @group mentions will be ignored.");
-            return new Target(players, stylePreset);
+            return Target.of(players,stylePreset);
         }
 
         players = LuckPermsUtil.getGroupPlayers(parameter.option(),manager.getPlayerList());
 
-        return new Target(players, stylePreset);
+        return Target.of(players,stylePreset);
     }
 
     private Target WORLD(MentionParameter parameter){
@@ -144,6 +144,6 @@ public class MentionRegistry {
             EmbellishChat.LOGGER.info("World " + worldName + " not found. @world mention ignored.");
         }
 
-        return new Target(players, stylePreset);
+        return Target.of(players,stylePreset);
     }
 }

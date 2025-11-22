@@ -11,6 +11,7 @@ import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -54,6 +55,8 @@ public class MessageProcessor implements ConfigListener {
         String stringMessage = message.getContent().getString();
 
         List<Mention> mentions = mentionProcessor.handleMention(stringMessage,getPermissions(sender, config.mentionRules().keySet()),sender);
+        mentions.sort(Comparator.comparing(Mention::begin));
+
         textMessage = stylingProcessor.applyMention(textMessage,mentions,sender);
         textMessage = stylingProcessor.handleStyle(textMessage,getPermissions(sender, config.stylingRules().keySet()),sender);
 
