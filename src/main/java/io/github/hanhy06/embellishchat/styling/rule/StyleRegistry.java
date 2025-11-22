@@ -3,6 +3,7 @@ package io.github.hanhy06.embellishchat.styling.rule;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.styling.util.Runs;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -163,8 +164,14 @@ public class StyleRegistry {
     }
 
     public MutableText HOVER_ITEM(StyleParameter parameter){
-        HoverEvent hoverEvent = new HoverEvent.ShowItem(parameter.player().getActiveItem());
-        return parameter.text().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
+        ItemStack handItem = parameter.player().getMainHandStack();
+
+        if (handItem.isEmpty()){
+            return parameter.text();
+        }else {
+            HoverEvent hoverEvent = new HoverEvent.ShowItem(handItem);
+            return parameter.text().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
+        }
     }
 
     public MutableText FONT(StyleParameter parameter) {
