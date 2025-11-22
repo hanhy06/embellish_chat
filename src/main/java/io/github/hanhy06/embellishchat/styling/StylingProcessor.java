@@ -13,6 +13,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -40,15 +41,18 @@ public class StylingProcessor implements ConfigListener {
         this.registry = new StyleRegistry(newConfig);
     }
 
-    public MutableText applyStylingRule(MutableText text, String key, ServerPlayerEntity player){
-        if (text.getString().isBlank() || !stylingRules.containsKey(key)) return text;
+    public MutableText handleStyle(MutableText text,List<String> keys,ServerPlayerEntity player){
+        if (text.getString().isBlank()) return text;
 
+        List<StylingRule> rules = new ArrayList<>();
+        keys.forEach(key -> rules.addAll(stylingRules.get(key)));
         MutableText result = text;
-        for (StylingRule style : stylingRules.get(key)){
-            result = applyStyles(result,style,player);
+
+        for (StylingRule rule : rules) {
+            result = applyStyles(result,rule,player);
         }
 
-        return result;
+        return text;
     }
 
     private MutableText applyStyles(MutableText text,StylingRule style,ServerPlayerEntity player){
@@ -63,10 +67,9 @@ public class StylingProcessor implements ConfigListener {
             result.append(slice(runs, lastEnd, matcher.start()));
 
             MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
-            String option = matcher.group(2);
-            List<String> options = OptionUtil.split(option,config.delimiter());
-
+            List<String> options = OptionUtil.split(matcher.group(2),config.delimiter());
             result.append(applyStyle(segment, style.styles(), options,player));
+
             lastEnd = matcher.end();
         } while (matcher.find());
         result.append(slice(runs, lastEnd, runs.full().length()));
@@ -76,6 +79,7 @@ public class StylingProcessor implements ConfigListener {
 
     private MutableText applyStyle(MutableText text, List<StyleAction> actions, List<String> options,ServerPlayerEntity player){
         MutableText result = text;
+
         List<String> option = OptionUtil.parseOption(
                 options,
                 actions.stream().map(StyleAction::preset).toList(),
