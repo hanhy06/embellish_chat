@@ -9,8 +9,10 @@ import io.github.hanhy06.embellishchat.util.OptionUtil;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Style;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -48,12 +50,33 @@ public class MentionProcessor implements ConfigListener {
         return mentions;
     }
 
-    private List<Mention> parseTarget(List<Mention> mentions,ServerPlayerEntity player){
-        for (Mention mention:mentions){
+    private List<Mention> parseTarget(List<Mention> mentions, ServerPlayerEntity player) {
+        for (int i=0;i<mentions.size();i++) {
+            Mention mention = mentions.get(i);
             List<Function<MentionParameter, Target>> functions = new ArrayList<>();
+            List<String> options = mention.options();
             mention.rule().mentions().forEach(action -> functions.add(registries.get(action.mentionType())));
 
+            HashSet<ServerPlayerEntity> target = new HashSet<>();
+            Style style = Style.EMPTY;
 
+            for (int j = 0; j < functions.size(); j++) {
+                MentionParameter parameter = MentionParameter.of(player, options.get(j));
+                Target targets = functions.get(j).apply(parameter);
+
+                if (target.isEmpty()) {
+                    target.addAll(targets.targets());
+                    style = targets.style();
+                } else if (target.size() > targets.targets().size()) {
+                    targets.targets().retainAll(target);
+                    target = new HashSet<>(targets.targets());
+                } else {
+                    target.retainAll(targets.targets());
+                }
+            }
+
+            mention.targets().addAll(target);
+            mention.style().withParent(style);
         }
 
         return mentions;
