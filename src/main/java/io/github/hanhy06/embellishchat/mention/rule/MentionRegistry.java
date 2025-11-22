@@ -2,8 +2,7 @@ package io.github.hanhy06.embellishchat.mention.rule;
 
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
-import io.github.hanhy06.embellishchat.mention.data.ParsedMention;
-import io.github.hanhy06.embellishchat.mention.data.ParsedTarget;
+import io.github.hanhy06.embellishchat.mention.data.Target;
 import io.github.hanhy06.embellishchat.util.LuckPermsUtil;
 import io.github.hanhy06.embellishchat.util.TeamColorUtil;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -27,7 +26,7 @@ public class MentionRegistry {
 
     private final Config config;
     private final Style stylePreset;
-    private final EnumMap<MentionType, Function<MentionParameter,ParsedTarget>> registries;
+    private final EnumMap<MentionType, Function<MentionParameter, Target>> registries;
 
     public MentionRegistry(Config config, PlayerManager manager, Scoreboard scoreboard) {
         this.manager = manager;
@@ -45,39 +44,28 @@ public class MentionRegistry {
         ));
     }
 
-    public Function<MentionParameter,ParsedTarget> get(MentionType key){
+    public Function<MentionParameter, Target> get(MentionType key){
         return registries.get(key);
     }
 
-    private ParsedTarget EVERYONE(MentionParameter parameter){
-        ParsedMention mention = parameter.parsedMention();
+    private Target EVERYONE(MentionParameter parameter){
         List<ServerPlayerEntity> players = manager.getPlayerList();
-
-        return ParsedTarget.of(
-                mention,
-                players,
-                stylePreset
-        );
+        
+        return new Target(players,stylePreset);
     }
 
-    private ParsedTarget INSIDE(MentionParameter parameter){
-        ParsedMention mention = parameter.parsedMention();
+    private Target INSIDE(MentionParameter parameter){
         List<ServerPlayerEntity> players = PlayerLookup.around(
                 parameter.sender().getEntityWorld(),
                 parameter.sender().getEntityPos(),
                 Float.parseFloat(parameter.option())
         ).stream().toList();
 
-        return ParsedTarget.of(
-                mention,
-                players,
-                stylePreset
-        );
+        return new Target(players,stylePreset);
     }
 
-    private ParsedTarget TEAM(MentionParameter parameter){
+    private Target TEAM(MentionParameter parameter){
         Team team = scoreboard.getTeam(parameter.option());
-        ParsedMention parsedMention = parameter.parsedMention();
         List<ServerPlayerEntity> players = new ArrayList<>();
         Style style = stylePreset;
 
@@ -94,16 +82,11 @@ public class MentionRegistry {
                     .withParent(style);
         }
 
-        return ParsedTarget.of(
-                parsedMention,
-                players,
-                style
-        );
+        return new Target(players, style);
     }
 
 
-    private ParsedTarget PLAYER(MentionParameter parameter){
-        ParsedMention parsedMention = parameter.parsedMention();
+    private Target PLAYER(MentionParameter parameter){
         ServerPlayerEntity target = manager.getPlayer(parameter.option());
         Style style = stylePreset;
         List<ServerPlayerEntity> players = new ArrayList<>();
@@ -124,28 +107,23 @@ public class MentionRegistry {
                     ));
         }
 
-        return ParsedTarget.of(
-                parsedMention,
-                players,
-                style
-        );
+        return new Target(players, style);
     }
 
-    private ParsedTarget LUCK_PERMS_GROUP(MentionParameter parameter){
-        ParsedMention parsedMention = parameter.parsedMention();
+    private Target LUCK_PERMS_GROUP(MentionParameter parameter){
         List<ServerPlayerEntity> players = new ArrayList<>();
 
         if (!FabricLoader.getInstance().isModLoaded("luckperms")) {
             EmbellishChat.LOGGER.info("LuckPerms not found. @group mentions will be ignored.");
-            return ParsedTarget.of(parsedMention, players, stylePreset);
+            return new Target(players, stylePreset);
         }
 
         players = LuckPermsUtil.getGroupPlayers(parameter.option(),manager.getPlayerList());
 
-        return ParsedTarget.of(parsedMention, players, stylePreset);
+        return new Target(players, stylePreset);
     }
 
-    private ParsedTarget WORLD(MentionParameter parameter){
+    private Target WORLD(MentionParameter parameter){
         String worldName = parameter.option();
         MinecraftServer server = parameter.sender().getEntityWorld().getServer();
         ServerWorld targetWorld = null;
@@ -158,7 +136,6 @@ public class MentionRegistry {
             }
         }
 
-        ParsedMention parsedMention = parameter.parsedMention();
         List<ServerPlayerEntity> players = new ArrayList<>();
 
         if (targetWorld != null) {
@@ -167,6 +144,6 @@ public class MentionRegistry {
             EmbellishChat.LOGGER.info("World " + worldName + " not found. @world mention ignored.");
         }
 
-        return ParsedTarget.of(parsedMention, players, stylePreset);
+        return new Target(players, stylePreset);
     }
 }

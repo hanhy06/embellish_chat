@@ -2,21 +2,18 @@ package io.github.hanhy06.embellishchat.mention;
 
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
-import io.github.hanhy06.embellishchat.mention.data.MentionTarget;
-import io.github.hanhy06.embellishchat.mention.data.ParsedMention;
-import io.github.hanhy06.embellishchat.mention.data.ParsedTarget;
-import io.github.hanhy06.embellishchat.mention.rule.MentionAction;
-import io.github.hanhy06.embellishchat.mention.rule.MentionParameter;
-import io.github.hanhy06.embellishchat.mention.rule.MentionRegistry;
-import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
+import io.github.hanhy06.embellishchat.mention.data.Mention;
+import io.github.hanhy06.embellishchat.mention.data.Target;
+import io.github.hanhy06.embellishchat.mention.rule.*;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.Style;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 
 public class MentionProcessor implements ConfigListener {
@@ -39,76 +36,46 @@ public class MentionProcessor implements ConfigListener {
         this.registries = new MentionRegistry(newConfig, manager, scoreboard);
     }
 
-    public Set<ParsedMention> parseMentions(String message, String key) {
-        Set<ParsedMention> parsedMentions = new HashSet<>();
-        if (!mentionRules.containsKey(key)) return parsedMentions;
+    public List<Mention> handleMention(String text, List<String> keys, ServerPlayerEntity player){
+        List<MentionRule> rules = new ArrayList<>();
+        keys.forEach(key -> rules.addAll(mentionRules.get(key)));
 
-        List<MentionRule> rules = mentionRules.get(key);
-        for (MentionRule rule : rules) {
-            parsedMentions.addAll(parseMention(rule, message));
+        List<Mention> mentions = new ArrayList<>();
+        for (MentionRule rule:rules){
+            mentions.addAll(parseMention(text,rule,player));
         }
 
-        return parsedMentions;
+        return mentions;
     }
 
-    private List<ParsedMention> parseMention(MentionRule rule, String message) {
-        Matcher matcher = rule.pattern().matcher(message);
-        List<ParsedMention> parsedMentions = new ArrayList<>();
+    private List<Mention> parseTarget(List<Mention> mentions,ServerPlayerEntity player){
+        for (Mention mention:mentions){
+            List<Function<MentionParameter, Target>> functions = new ArrayList<>();
+            mention.rule().mentions().forEach(action -> functions.add(registries.get(action.mentionType())));
 
-        while (matcher.find()) {
-            List<String> mentions = OptionUtil.split(matcher.group(1),config.delimiter());
-            parsedMentions.add(ParsedMention.of(rule, mentions, matcher.start(), matcher.end()));
+
         }
 
-        return parsedMentions;
+        return mentions;
     }
 
-    public List<ParsedTarget> parseTargets(ServerPlayerEntity sender, Set<ParsedMention> parsedMentions) {
-        List<ParsedTarget> parsedTargets = new ArrayList<>();
+    private List<Mention> parseMention(String text,MentionRule rule,ServerPlayerEntity player){
+        List<Mention> mentions = new ArrayList<>();
+        Matcher matcher = rule.pattern().matcher(text);
 
-        for (ParsedMention mention : parsedMentions) {
-            ParsedTarget target = parseTarget(sender, mention);
-            parsedTargets.add(target);
+        List<String> presets = new ArrayList<>();
+        rule.mentions().forEach(action -> presets.add(action.preset()));
+
+        while (matcher.find()){
+            int begin = matcher.start();
+            int end = matcher.end();
+            List<String> options = OptionUtil.split(matcher.group(1),config.delimiter());
+            options = OptionUtil.parseOption(options,presets,player);
+
+            Mention mention = Mention.of(begin,end, options,rule);
+            mentions.add(mention);
         }
 
-        return parsedTargets;
-    }
-
-    private ParsedTarget parseTarget(ServerPlayerEntity sender, ParsedMention mention) {
-        List<ParsedTarget> targets = new ArrayList<>();
-
-        List<MentionAction> actions = mention.rule().mentions();
-        List<String> mentions = mention.mentions();
-
-        for (int i = 0; i < actions.size();i++){
-            MentionAction action = actions.get(i);
-            String option = OptionUtil.parseOption(
-                    i < mentions.size() ? mentions.get(i) : "",
-                    action.preset(),sender
-            );
-
-            ParsedTarget target = registries.get(action.mentionType())
-                    .apply(MentionParameter.of(mention, sender, option));
-            targets.add(target);
-        }
-
-        if (targets.isEmpty()){
-            return new ParsedTarget(mention,List.of(), Style.EMPTY);
-        }
-        ParsedTarget first = targets.getFirst();
-        for (int i = 1; i < targets.size(); i++) {
-            first.targets().retainAll(targets.get(i).targets());
-            if (first.targets().isEmpty()) {
-                break;
-            }
-        }
-        return first;
-    }
-
-    public void broadcastMentions(Set<MentionTarget> targets) {
-        for (MentionTarget target : targets) {
-            target.player().sendMessage(target.title(), true);
-            target.player().playSoundToPlayer(target.sound(), SoundCategory.UI,1,target.pitch());
-        }
+        return mentions;
     }
 }
