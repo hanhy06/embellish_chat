@@ -22,5 +22,5 @@ public enum StyleType {
     MASK,
     UPPER,
     LOWER,
-    ATLAS
+    JSON
 }

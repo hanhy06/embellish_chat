@@ -1,5 +1,8 @@
 package io.github.hanhy06.embellishchat.styling.rule;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.mojang.serialization.JsonOps;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.styling.util.Runs;
@@ -55,7 +58,7 @@ public class StyleRegistry {
                 entry(StyleType.MASK, this::MASK),
                 entry(StyleType.UPPER, this::UPPER),
                 entry(StyleType.LOWER, this::LOWER),
-                entry(StyleType.ATLAS, this::ATLAS)
+                entry(StyleType.JSON, this::JSON)
         ));
     }
 
@@ -232,7 +235,9 @@ public class StyleRegistry {
         return Text.of(string.toLowerCase()).copy().fillStyle(parameter.text().getStyle());
     }
 
-    public MutableText ATLAS(StyleParameter parameter){
-        return parameter.text();
+    public MutableText JSON(StyleParameter parameter){
+        JsonElement element = JsonParser.parseString(parameter.option());
+        Text text = TextCodecs.CODEC.parse(JsonOps.INSTANCE,element).getOrThrow();
+        return text.copy();
     }
 }
