@@ -3,6 +3,7 @@ package io.github.hanhy06.embellishchat.message;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
 import io.github.hanhy06.embellishchat.mention.MentionProcessor;
+import io.github.hanhy06.embellishchat.mention.data.Mention;
 import io.github.hanhy06.embellishchat.styling.StylingProcessor;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.message.SignedMessage;
@@ -10,6 +11,7 @@ import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -51,8 +53,8 @@ public class MessageProcessor implements ConfigListener {
         MutableText textMessage = message.getContent().copy();
         String stringMessage = message.getContent().getString();
 
-//        List<MentionSegment> mentionSegments = handleMention(sender, stringMessage);
-//        textMessage = stylingProcessor.applyMention(textMessage, mentionSegments,sender);
+        List<Mention> mentions = mentionProcessor.handleMention(stringMessage,getPermissions(sender, config.stylingRules().keySet()),sender);
+        textMessage = stylingProcessor.applyMention(textMessage,mentions,sender);
         textMessage = stylingProcessor.handleStyle(textMessage,getPermissions(sender, config.stylingRules().keySet()),sender);
 
         return message.withUnsignedContent(textMessage);
