@@ -139,7 +139,7 @@ For example, if you put ((red)) in the preset, every red will be displayed in re
 
 If you use the JSON type, you can replace the matched string with JSON.
 The example above shows how to use the JSON type to replace `:diamond:` with a diamond icon.
-You can read about Minecraft’s atlas [here](https://minecraft.wiki/w/Text_component_format#Atlas_Object_Type).
+You can read about Minecraft’s atlas [Text component format wiki](https://minecraft.wiki/w/Text_component_format#Atlas_Object_Type) and [Atlas wiki](https://minecraft.wiki/w/Atlas).
 
 
 ## Applying It – Text Placeholder API
