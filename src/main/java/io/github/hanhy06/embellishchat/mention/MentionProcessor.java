@@ -7,10 +7,8 @@ import io.github.hanhy06.embellishchat.mention.data.Target;
 import io.github.hanhy06.embellishchat.mention.rule.MentionParameter;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRegistry;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
-import io.github.hanhy06.embellishchat.util.LuckPermsUtil;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -31,8 +29,8 @@ public class MentionProcessor implements ConfigListener {
     private Map<String, List<MentionRule>> mentionRules;
     private MentionRegistry registries;
 
+    private HashSet<UUID> notificationOffPlayerList;
     private boolean notification;
-    private boolean isLuckperms;
 
     public MentionProcessor(PlayerManager manager, Scoreboard scoreboard) {
         this.manager = manager;
@@ -45,8 +43,8 @@ public class MentionProcessor implements ConfigListener {
         this.mentionRules = config.mentionRules();
         this.registries = new MentionRegistry(newConfig, manager, scoreboard);
 
+        this.notificationOffPlayerList = config.notificationOffPlayerList();
         this.notification = config.notificationCommandEnable();
-        this.isLuckperms = FabricLoader.getInstance().isModLoaded("luckperms");
     }
 
     public List<Mention> handleMention(String text, List<String> keys, ServerPlayerEntity player){
@@ -126,8 +124,8 @@ public class MentionProcessor implements ConfigListener {
             float pitch = mention.rule().pitch();
 
             mention.targets().forEach(target ->{
-                if (isLuckperms && notification){
-                    if (LuckPermsUtil.getNotification(target)) {
+                if (notification){
+                    if (notificationOffPlayerList.contains(target.getUuid())) {
                         target.sendMessage(title,true);
                         target.playSoundToPlayer(sound, SoundCategory.UI,1,pitch);
                     }

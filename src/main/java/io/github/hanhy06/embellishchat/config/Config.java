@@ -31,8 +31,9 @@ public record Config(
         boolean notificationCommandEnable,
         Color mentionColor,
 
-        //banned player list
-        HashSet<UUID> bannedPlayerList
+        //player list
+        HashSet<UUID> bannedPlayerList,
+        HashSet<UUID> notificationOffPlayerList
 )
 {
     public static Config createDefault(){
@@ -225,7 +226,8 @@ public record Config(
                 true,
                 new Color(0xff55ff),
 
-                //banned player list
+                //player list
+                new HashSet<>(),
                 new HashSet<>()
         );
     }

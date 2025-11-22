@@ -8,17 +8,17 @@ import io.github.hanhy06.embellishchat.mention.rule.MentionType;
 import io.github.hanhy06.embellishchat.styling.rule.StyleAction;
 import io.github.hanhy06.embellishchat.styling.rule.StyleType;
 import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
-import io.github.hanhy06.embellishchat.util.LuckPermsUtil;
 import io.github.hanhy06.embellishchat.util.PermissionUtil;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class EcCommand {
@@ -119,17 +119,17 @@ public class EcCommand {
             return 1;
         }
 
-        if (!FabricLoader.getInstance().isModLoaded("luckperms")) {
-            context.getSource().sendFeedback(() ->
-                            Text.literal("LuckPerms is not installed. Notification settings are unavailable."),
-                    false
-            );
-            return 1;
+        HashSet<UUID> players = ConfigManager.getConfig().notificationOffPlayerList();
+        UUID uuid = player.getUuid();
+
+        boolean notification = players.contains(uuid);
+        if (notification){
+            players.remove(uuid);
+        }else {
+            players.add(uuid);
         }
 
-        boolean notification = !LuckPermsUtil.getNotification(player);
-        LuckPermsUtil.setNotification(player, notification);
-        String result = String.format("Mention notifications set to: %s", (notification ? "ON" : "OFF"));
+        String result = String.format("Mention notifications set to: %s", (!notification ? "ON" : "OFF"));
         context.getSource().sendFeedback(() ->
                         Text.literal(result),
                 false
