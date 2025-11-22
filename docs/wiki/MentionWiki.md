@@ -7,7 +7,7 @@
 | `TEAM`             | Mentions **all players on the sender’s team**.                                                                      | Team name            |
 | `PLAYER`           | Mentions a **specific player** by name.                                                                             | Player name          |
 | `LUCK_PERMS_GROUP` | Mentions **all players in a specific LuckPerms group**. Requires LuckPerms to be installed.                         | LuckPerms group name |
-
+| `WORLD`            | Mentions all players in a **specific world**.                                                                       | World name           |
 > **Notes**
 >
 > * All mentions use the mentionColor defined in the configuration by default.
