@@ -49,6 +49,7 @@ Use the following patterns directly in the chat window:
 | `@group(name)`  | Mentions all players in the specified LuckPerms group.                                                                                                                                                                                                                  |
 | `@everyone`     | Mentions all players on the server. Always uses the **default mention color**.                                                                                                                                                                                          |
 | `@here`         | Mentions all players within a configurable radius in the same world as the sender. The default radius is **64 blocks**, adjustable in the configuration. Uses the **default mention color**.                                                                            |
+| `@world(name)`  | Mentions all players in the specified world.                                                                                                                                                                                                                            |
 
 > **Notes**
 >
