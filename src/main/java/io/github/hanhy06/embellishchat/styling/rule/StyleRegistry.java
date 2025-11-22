@@ -54,7 +54,8 @@ public class StyleRegistry {
                 entry(StyleType.REPLACE, this::REPLACE),
                 entry(StyleType.MASK, this::MASK),
                 entry(StyleType.UPPER, this::UPPER),
-                entry(StyleType.LOWER, this::LOWER)
+                entry(StyleType.LOWER, this::LOWER),
+                entry(StyleType.ATLAS, this::ATLAS)
         ));
     }
 
@@ -229,5 +230,9 @@ public class StyleRegistry {
     public MutableText LOWER(StyleParameter parameter) {
         String string = parameter.text().getString();
         return Text.of(string.toLowerCase()).copy().fillStyle(parameter.text().getStyle());
+    }
+
+    public MutableText ATLAS(StyleParameter parameter){
+        return parameter.text();
     }
 }

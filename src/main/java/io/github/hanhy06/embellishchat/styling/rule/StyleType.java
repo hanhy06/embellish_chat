@@ -21,5 +21,6 @@ public enum StyleType {
     REPLACE,
     MASK,
     UPPER,
-    LOWER
+    LOWER,
+    ATLAS
 }
