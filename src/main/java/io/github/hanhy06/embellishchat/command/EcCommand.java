@@ -135,6 +135,7 @@ public class EcCommand {
                 false
         );
 
+        ConfigManager.INSTANCE.writeConfig();
         return 1;
     }
 }
