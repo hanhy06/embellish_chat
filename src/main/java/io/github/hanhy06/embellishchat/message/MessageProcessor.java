@@ -27,8 +27,6 @@ public class MessageProcessor implements ConfigListener {
 
     private Config config;
     private Set<UUID> bannedPlayerList;
-    private boolean notification;
-    private boolean permission;
 
     public MessageProcessor(MentionProcessor mentionProcessor, StylingProcessor stylingProcessor, PlayerManager playerManager) {
         INSTANCE = this;
@@ -41,8 +39,6 @@ public class MessageProcessor implements ConfigListener {
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
         this.bannedPlayerList = config.bannedPlayerList();
-        this.notification = config.notificationCommandEnable();
-        this.permission = FabricLoader.getInstance().isModLoaded("luckperms");
     }
 
     public SignedMessage handleMessage(SignedMessage message) {
