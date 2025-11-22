@@ -47,12 +47,13 @@ public class MentionProcessor implements ConfigListener {
             mentions.addAll(parseMention(text,rule,player));
         }
 
-        return mentions;
+        return parseTarget(mentions,player);
     }
 
     private List<Mention> parseTarget(List<Mention> mentions, ServerPlayerEntity player) {
-        for (int i=0;i<mentions.size();i++) {
-            Mention mention = mentions.get(i);
+        List<Mention> result = new ArrayList<>();
+
+        for (Mention mention : mentions) {
             List<Function<MentionParameter, Target>> functions = new ArrayList<>();
             List<String> options = mention.options();
             mention.rule().mentions().forEach(action -> functions.add(registries.get(action.mentionType())));
@@ -60,9 +61,9 @@ public class MentionProcessor implements ConfigListener {
             HashSet<ServerPlayerEntity> target = new HashSet<>();
             Style style = Style.EMPTY;
 
-            for (int j = 0; j < functions.size(); j++) {
-                MentionParameter parameter = MentionParameter.of(player, options.get(j));
-                Target targets = functions.get(j).apply(parameter);
+            for (int i = 0; i < functions.size(); i++) {
+                MentionParameter parameter = MentionParameter.of(player, options.get(i));
+                Target targets = functions.get(i).apply(parameter);
 
                 if (target.isEmpty()) {
                     target.addAll(targets.targets());
@@ -75,11 +76,13 @@ public class MentionProcessor implements ConfigListener {
                 }
             }
 
-            mention.targets().addAll(target);
-            mention.style().withParent(style);
+            Mention newMention = new Mention(
+                    mention.begin(),mention.end(),List.of(),target,style,mention.rule()
+            );
+            result.add(newMention);
         }
 
-        return mentions;
+        return result;
     }
 
     private List<Mention> parseMention(String text,MentionRule rule,ServerPlayerEntity player){
