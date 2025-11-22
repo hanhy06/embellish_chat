@@ -1,5 +1,4 @@
 # Available Style Types
-
 | Type                    | Description                                                                                                                                                                      | Option                  |
 |-------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------|
 | `METADATA`              | When the mouse hovers over the text, display the time the server received it, and when clicked, copy it to the clipboard.                                                        | No options are required |
@@ -7,9 +6,11 @@
 | `COLOR_RAINBOW`         | Cycles through rainbow colors                                                                                                                                                    | saturation              |
 | `COLOR_PRESET`          | Uses a predefined color name from the `colorPreset` section                                                                                                                      | color preset            |
 | `COLOR_SHADOW`          | Applies the HEX code color provided as an option to the shadow.                                                                                                                  | HEX code                |
+| `COMMAND_RUN`           | Immediately executes the command supplied via the option when the text is processed.                                                                                             | command                 |
 | `CLICK_COMMAND_RUN`     | Runs the command supplied via the option when the text is clicked.                                                                                                               | command                 |
 | `CLICK_COMMAND_SUGGEST` | Suggests the command supplied via the option when the text is clicked. The suggested command is placed into the chat input field but not executed automatically.                 | command                 |
 | `HOVER_TEXT`            | Displays the text supplied via the option when the mouse hovers over it.                                                                                                         | text                    |
+| `HOVER_ITEM`            | Displays the item currently held in the player's main hand when the mouse hovers over it.                                                                                        | No options are required |
 | `FONT`                  | Changes the font style                                                                                                                                                           | font id                 |
 | `URL`                   | Allows opening the URL provided as an option when clicked.                                                                                                                       | url                     |
 | `BOLD`                  | Bold text                                                                                                                                                                        | No options are required |
@@ -21,6 +22,7 @@
 | `MASK`                  | Replaces the original string with the characters supplied via options, adjusting to match the original length.                                                                   | Replacement character   |
 | `UPPER`                 | Transforms every matched substring into uppercase characters.                                                                                                                    | No options are required |
 | `LOWER`                 | Transforms every matched substring into lowercase characters.                                                                                                                    | No options are required |
+| `JSON`                  | Parses the JSON string supplied via the option and displays it as a text component.                                                                                              | JSON string             |
 
 > **Notes**
 >
@@ -119,6 +121,25 @@ In regular expressions, .+ means all characters. Using this method, you can appl
 
 If you write it like ((text)), you can make capture group 1 and 2 have the same content in the regular expression.
 For example, if you put ((red)) in the preset, every red will be displayed in red.
+
+
+## Applying It – Creating an Emoticon
+
+```
+{
+  "pattern": "(:diamond:)()",
+  "styles": [
+    {
+      "styleType": "JSON",
+      "preset": "{\"type\": \"object\", \"atlas\": \"minecraft:blocks\", \"sprite\": \"item/diamond\"}"
+    }
+  ]
+}
+```
+
+If you use the JSON type, you can replace the matched string with JSON.
+The example above shows how to use the JSON type to replace `:diamond:` with a diamond icon.
+You can read about Minecraft’s atlas [here](https://minecraft.wiki/w/Text_component_format#Atlas_Object_Type).
 
 
 ## Applying It – Text Placeholder API
