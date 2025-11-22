@@ -55,13 +55,13 @@ public class MentionRegistry {
     }
 
     private Target INSIDE(MentionParameter parameter){
-        List<ServerPlayerEntity> players = PlayerLookup.around(
+        HashSet<ServerPlayerEntity> players = new HashSet<>(PlayerLookup.around(
                 parameter.sender().getEntityWorld(),
                 parameter.sender().getEntityPos(),
                 Float.parseFloat(parameter.option())
-        ).stream().toList();
+        ));
 
-        return Target.of(players,stylePreset);
+        return new Target(players,stylePreset);
     }
 
     private Target TEAM(MentionParameter parameter){
@@ -89,7 +89,7 @@ public class MentionRegistry {
     private Target PLAYER(MentionParameter parameter){
         ServerPlayerEntity target = manager.getPlayer(parameter.option());
         Style style = stylePreset;
-        List<ServerPlayerEntity> players = new ArrayList<>();
+        HashSet<ServerPlayerEntity> players = new HashSet<>();
 
         if (target!=null){
             style = target
@@ -107,7 +107,7 @@ public class MentionRegistry {
                     ));
         }
 
-        return Target.of(players,style);
+        return new Target(players,style);
     }
 
     private Target LUCK_PERMS_GROUP(MentionParameter parameter){

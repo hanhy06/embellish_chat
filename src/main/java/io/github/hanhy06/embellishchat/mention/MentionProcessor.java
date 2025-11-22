@@ -67,8 +67,15 @@ public class MentionProcessor implements ConfigListener {
 
         for (Mention mention : mentions) {
             List<Function<MentionParameter, Target>> functions = new ArrayList<>();
+            List<String> presets = new ArrayList<>();
+
+            mention.rule().mentions().forEach(action -> {
+                functions.add(registries.get(action.mentionType()));
+                presets.add(action.preset());
+            });
+
             List<String> options = mention.options();
-            mention.rule().mentions().forEach(action -> functions.add(registries.get(action.mentionType())));
+            options = OptionUtil.parseOption(options,presets,player);
 
             HashSet<ServerPlayerEntity> target = new HashSet<>();
             Style style = Style.EMPTY;
@@ -98,14 +105,10 @@ public class MentionProcessor implements ConfigListener {
         Set<Mention> mentions = new HashSet<>();
         Matcher matcher = rule.pattern().matcher(text);
 
-        List<String> presets = new ArrayList<>();
-        rule.mentions().forEach(action -> presets.add(action.preset()));
-
         while (matcher.find()){
             int begin = matcher.start();
             int end = matcher.end();
             List<String> options = OptionUtil.split(matcher.group(1),config.delimiter());
-            options = OptionUtil.parseOption(options,presets,player);
 
             Mention mention = Mention.of(begin,end, options,rule);
             mentions.add(mention);
