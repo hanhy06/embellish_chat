@@ -3,6 +3,9 @@ package io.github.hanhy06.embellishchat.styling.rule;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.styling.util.Runs;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.*;
 import net.minecraft.util.Identifier;
 
@@ -35,9 +38,11 @@ public class StyleRegistry {
                 entry(StyleType.COLOR_RAINBOW, this::COLOR_RAINBOW),
                 entry(StyleType.COLOR_PRESET, this::COLOR_PRESET),
                 entry(StyleType.COLOR_SHADOW, this::COLOR_SHADOW),
+                entry(StyleType.COMMAND_RUN, this::COMMAND_RUN),
                 entry(StyleType.CLICK_COMMAND_RUN, this::CLICK_COMMAND_RUN),
                 entry(StyleType.CLICK_COMMAND_SUGGEST, this::CLICK_COMMAND_SUGGEST),
-                entry(StyleType.HOVER_TEXT,this::CLICK_HOVER),
+                entry(StyleType.HOVER_TEXT,this::HOVER_TEXT),
+                entry(StyleType.HOVER_ITEM,this::HOVER_ITEM),
                 entry(StyleType.FONT, this::FONT),
                 entry(StyleType.URL, this::URL),
                 entry(StyleType.BOLD, this::BOLD),
@@ -124,6 +129,24 @@ public class StyleRegistry {
         return parameter.text().fillStyle(Style.EMPTY.withShadowColor(color));
     }
 
+    public MutableText COMMAND_RUN(StyleParameter parameter){
+        ServerPlayerEntity player = parameter.player();
+        MinecraftServer server = player.getCommandSource().getServer();
+        String command = parameter.option();
+        if (command.startsWith("/")) command = command.substring(1);
+
+        if (server != null) {
+            ServerCommandSource commandSource = player.getCommandSource();
+            try {
+                server.getCommandManager().getDispatcher().execute(command, commandSource);
+            } catch (Exception e) {
+                EmbellishChat.LOGGER.error("Failed to execute command: {}", command, e);
+            }
+        }
+
+        return parameter.text();
+    }
+
     public MutableText CLICK_COMMAND_RUN(StyleParameter parameter){
         ClickEvent clickEvent = new ClickEvent.RunCommand(parameter.option());
         return parameter.text().fillStyle(Style.EMPTY.withClickEvent(clickEvent));
@@ -134,8 +157,13 @@ public class StyleRegistry {
         return parameter.text().fillStyle(Style.EMPTY.withClickEvent(clickEvent));
     }
 
-    public MutableText CLICK_HOVER(StyleParameter parameter){
+    public MutableText HOVER_TEXT(StyleParameter parameter){
         HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(parameter.option()));
+        return parameter.text().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
+    }
+
+    public MutableText HOVER_ITEM(StyleParameter parameter){
+        HoverEvent hoverEvent = new HoverEvent.ShowItem(parameter.player().getActiveItem());
         return parameter.text().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
     }
 
