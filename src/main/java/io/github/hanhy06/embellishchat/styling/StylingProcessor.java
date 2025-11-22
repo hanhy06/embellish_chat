@@ -50,7 +50,7 @@ public class StylingProcessor implements ConfigListener {
             result = applyStyles(result,rule,player);
         }
 
-        return text;
+        return result;
     }
 
     private MutableText applyStyles(MutableText text,StylingRule style,ServerPlayerEntity player){

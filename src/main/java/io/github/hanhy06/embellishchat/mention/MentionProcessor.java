@@ -8,10 +8,16 @@ import io.github.hanhy06.embellishchat.mention.rule.MentionParameter;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRegistry;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
+import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -48,8 +54,11 @@ public class MentionProcessor implements ConfigListener {
         for (MentionRule rule:rules){
             mentions.addAll(parseMention(text,rule,player));
         }
+        mentions = parseTarget(mentions,player);
 
-        return parseTarget(mentions,player);
+        mentionBroadcast(mentions,player);
+
+        return mentions;
     }
 
     private List<Mention> parseTarget(List<Mention> mentions, ServerPlayerEntity player) {
@@ -102,5 +111,19 @@ public class MentionProcessor implements ConfigListener {
         }
 
         return mentions;
+    }
+
+    private void mentionBroadcast(List<Mention> mentions,ServerPlayerEntity player){
+        for (Mention mention:mentions){
+            Text title = PlaceHolderUtil.getParedOption(mention.rule().title(),player);
+            SoundEvent sound = SoundEvent.of(mention.rule().sound());
+            float pitch = mention.rule().pitch();
+
+            mention.targets().forEach(target ->{
+                target.sendMessage(title,true);
+                target.playSoundToPlayer(sound, SoundCategory.UI,1,pitch);
+            });
+
+        }
     }
 }

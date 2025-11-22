@@ -53,7 +53,7 @@ public class MessageProcessor implements ConfigListener {
         MutableText textMessage = message.getContent().copy();
         String stringMessage = message.getContent().getString();
 
-        List<Mention> mentions = mentionProcessor.handleMention(stringMessage,getPermissions(sender, config.stylingRules().keySet()),sender);
+        List<Mention> mentions = mentionProcessor.handleMention(stringMessage,getPermissions(sender, config.mentionRules().keySet()),sender);
         textMessage = stylingProcessor.applyMention(textMessage,mentions,sender);
         textMessage = stylingProcessor.handleStyle(textMessage,getPermissions(sender, config.stylingRules().keySet()),sender);
 
