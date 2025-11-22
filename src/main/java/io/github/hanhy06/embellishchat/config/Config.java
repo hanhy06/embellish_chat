@@ -165,6 +165,22 @@ public record Config(
                                             )
                                     ),
                                     MentionRule.of(
+                                            "@world\\((.+?)\\)",
+                                            Identifier.of("minecraft:entity.experience_orb.pickup"),
+                                            1.75f,
+                                            "%player:displayname% mentioned you",
+                                            List.of(
+                                                    MentionAction.of(
+                                                            MentionType.WORLD,""
+                                                    )
+                                            ),
+                                            List.of(
+                                                    StyleAction.of(
+                                                            StyleType.BOLD,""
+                                                    )
+                                            )
+                                    ),
+                                    MentionRule.of(
                                             "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
                                             Identifier.of("minecraft:entity.experience_orb.pickup"),
                                             1.75f,
