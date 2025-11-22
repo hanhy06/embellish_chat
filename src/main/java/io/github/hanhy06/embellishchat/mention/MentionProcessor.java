@@ -68,9 +68,6 @@ public class MentionProcessor implements ConfigListener {
                 if (target.isEmpty()) {
                     target.addAll(targets.targets());
                     style = targets.style();
-                } else if (target.size() > targets.targets().size()) {
-                    targets.targets().retainAll(target);
-                    target = new HashSet<>(targets.targets());
                 } else {
                     target.retainAll(targets.targets());
                 }
