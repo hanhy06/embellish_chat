@@ -16,19 +16,19 @@
 
 Use the following patterns directly in the chat window:
 
-| Feature         | Syntax            | Example                                                       | Preview                                                                                                 |
-|-----------------| ----------------- |---------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
-| Bold            | `**Text**`        | `**You really need to read this!**`                           | ![Bold](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Bold.png?raw=true)            |
-| Italic          | `_Text_`          | `_This is top secret..._`                                     | ![Italic](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Italic.png?raw=true)        |
-| Underline       | `__Text__`        | `__Check this out__`                                          | ![Underline](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Underline.png?raw=true)  |
-| Strikethrough   | `~~Text~~`        | `~~We don’t talk about this anymore~~`                        | ![Strike](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Strikethrough.png?raw=true) |
+| Feature         | Syntax            | Example                                                       | Preview                                                                                                            |
+|-----------------| ----------------- |---------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| Bold            | `**Text**`        | `**You really need to read this!**`                           | ![Bold](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Bold.png?raw=true)             |
+| Italic          | `_Text_`          | `_This is top secret..._`                                     | ![Italic](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Italic.png?raw=true)         |
+| Underline       | `__Text__`        | `__Check this out__`                                          | ![Underline](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Underline.png?raw=true)   |
+| Strikethrough   | `~~Text~~`        | `~~We don’t talk about this anymore~~`                        | ![Strike](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Strikethrough.png?raw=true)  |
 | Obfuscated      | `\|\|Text\|\|`    | `\|\|Unreadable text\|\|`                                     | ![Obfuscated](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Obfuscated.gif?raw=true) |
-| Color (Hex)     | `[Text]<#RRGGBB>` | `[Blue]<#0000FF> like the deep ocean`                         | ![Color](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Color_Hex.png?raw=true)      |
-| Color (Preset)  | `[Text]<preset>`  | `[pink]<pink> pig`                                            | ![Color](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Color_Preset.png?raw=true)   |
-| Color (Rainbow) | `[Text]<RAINBOW>` | `look at this [rainbow]<RAINBOW>`                             | ![Color](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Color_Rainbow.png?raw=true)  |
-| Link            | `[Text](URL)`     | `Download it [here](https://modrinth.com/mod/embellish-chat)` | ![Link](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Link.gif?raw=true)            |
-| Font            | `[Text]{path}`    | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Font.png?raw=true)            |
-| Mention         | `@PlayerName`     | `Hello, @User`                                                | ![Mention](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Mention.png?raw=true)      |
+| Color (Hex)     | `[Text]<#RRGGBB>` | `[Blue]<#0000FF> like the deep ocean`                         | ![Color](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Color_Hex.png?raw=true)       |
+| Color (Preset)  | `[Text]<preset>`  | `[pink]<pink> pig`                                            | ![Color](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Color_Preset.png?raw=true)    |
+| Color (Rainbow) | `[Text]<RAINBOW>` | `look at this [rainbow]<RAINBOW>`                             | ![Color](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Color_Rainbow.png?raw=true)   |
+| Link            | `[Text](URL)`     | `Download it [here](https://modrinth.com/mod/embellish-chat)` | ![Link](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Link.gif?raw=true)             |
+| Font            | `[Text]{path}`    | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Font.png?raw=true)             |
+| Mention         | `@PlayerName`     | `Hello, @User`                                                | ![Mention](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Mention.png?raw=true)       |
 
 > **Notes**
 >
@@ -262,16 +262,16 @@ The Text Placeholder API applies to the mention title, all presets used in rules
 
 The graph below shows the TPS (Ticks Per Second) latency measurements for this mod. Each test message contained approximately 200 or 50 characters, and the system was stressed by sending up to 10,000 (500 × 20) chat messages per second.
 
-| Type         | Length | Test String                                                                                                                                                                                            |
-|--------------|--------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Plain Text   | 50     | `This is a simple plain text message for latency test. `                                                                                                                                               |
-| Plain Text   | 200    | `This is a standard long message designed to test the baseline performance of the chat system. It contains simple alphanumeric characters and basic punctuation only, without any markdown triggers.`  |
-| Styling Only | 50     | `**Bold** _Italic_ [Red]<red> [Blue]<blue> ~~Strike~~`                                                                                                                                                 |
-| Styling Only | 200    | `Here is Bold Text and Italic. We use [Red Color], [Green], and [Blue]. Don't forget ~~Strikethrough~~ and`                                                                                            |
-| Mention Only | 50     | `Hello @everyone is anyone @here? calling @PlayerName`                                                                                                                                                 |
-| Mention Only | 200    | `Attention @everyone on the server. We are gathering @here now. If you are in @team(red) or @team(blue), please report to @PlayerOne. @group(admin) and @world(overworld) players should attend too.`  |
-| Mixed        | 50     | `**Hey** @everyone! Look at [this]<red> _cool_ @here.`                                                                                                                                                  |
-| Mixed        | 200    | `Attention @everyone! Please gather @here immediately. [Red Team] go to @team(red) and [Blue Team] go to @team(blue). Contact @admin if you have any questions about the`                               |
+| Type         | Length | Test String                                                                                                                                                                                                                  |
+|--------------|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Plain Text   | 50     | `This is a simple plain text message for latency test.`                                                                                                                                                                      |
+| Plain Text   | 200    | `This is a standard long message designed to test the baseline performance of the chat system. It contains simple alphanumeric characters and basic punctuation only, without any markdown triggers.`                        |
+| Styling Only | 50     | `**Bold** _Italic_ [Red]<red> [Blue]<blue> ~~Strike~~`                                                                                                                                                                       |
+| Styling Only | 200    | `**Welcome** to the server! Please read the [rules]<#FF5555> at spawn. _Need help?_ Ask an admin! There is a **secret event** starting soon at the arena. Don't miss the [LEGENDARY PRIZES]<RAINBOW>!`                       |
+| Mention Only | 50     | `Hello @everyone is anyone @here? calling @PlayerName`                                                                                                                                                                       |
+| Mention Only | 200    | `Attention @everyone on the server. We are gathering @here now. If you are in @team(red) or @team(blue), please report to @PlayerOne. @group(admin) and @world(overworld) players should attend too.`                        |
+| Mixed        | 50     | `**Hey** @everyone! Look at [this]<red> _cool_ @here.`                                                                                                                                                                       |
+| Mixed        | 200    | `Attention @everyone! The **Boss Raid** is starting. @team(Red) please defend the [Core]<#FF0000>. @here gather at the gate! Watch out for the **hidden assassin**. The prize is [GOD SWORD]<RAINBOW>. Msg @Admin if stuck.` |
 
 
 ![Latency](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Latency2.4.0-50.png?raw=true)
