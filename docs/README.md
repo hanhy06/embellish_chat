@@ -250,7 +250,7 @@ The Text Placeholder API applies to the mention title, all presets used in rules
 
 **Test Environment**
 
-* Version: Embellish Chat 2.3.0 (DEV)
+* Version: Embellish Chat 2.4.0 (DEV)
 * CPU: 13th Gen Intel(R) Core(TM) i7-1360P
 * RAM: 2GB max
 * System: Windows 11
@@ -262,12 +262,22 @@ The Text Placeholder API applies to the mention title, all presets used in rules
 
 The graph below shows TPS (Ticks Per Second) latency measurements for this mod.
 
-Each test message contained either 230 or 50 characters, and the system was stressed by sending up to **400 × 20 chat messages per second**.
+Each test message contained either about 200 or 50 characters, and the system was stressed by sending up to **500 × 20 chat messages per second**.
+
+| Type         | Length | Test String                                                                                                                                                                                            |
+|--------------|--------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Plain Text   | 50     | `This is a simple plain text message for latency test. `                                                                                                                                               |
+| Plain Text   | 200    | `This is a standard long message designed to test the baseline performance of the chat system. It contains simple alphanumeric characters and basic punctuation only, without any markdown triggers.`  |
+| Styling Only | 50     | `**Bold** _Italic_ [Red]<red> [Blue]<blue> ~~Strike~~`                                                                                                                                                 |
+| Styling Only | 200    | `Here is Bold Text and Italic. We use [Red Color], [Green], and [Blue]. Don't forget ~~Strikethrough~~ and`                                                                                            |
+| Mention Only | 50     | `Hello @everyone is anyone @here? calling @PlayerName`                                                                                                                                                 |
+| Mention Only | 200    | `Attention @everyone on the server. We are gathering @here now. If you are in @team(red) or @team(blue), please report to @PlayerOne. @group(admin) and @world(overworld) players should attend too.`  |
+| Mixed        | 50     | `**Hey** @everyone! Look at [this]<red> _cool_ @here.`                                                                                                                                                  |
+| Mixed        | 200    | `Attention @everyone! Please gather @here immediately. [Red Team] go to @team(red) and [Blue Team] go to @team(blue). Contact @admin if you have any questions about the`                               |
 
 
-
-![Latency](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Latency2.3.0.png?raw=true)
-
+![Latency](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Latency2.4.0-50.png?raw=true)
+![Latency](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Latency2.4.0-200.png?raw=true)
 ---
 
 ## 📜 License & Links
