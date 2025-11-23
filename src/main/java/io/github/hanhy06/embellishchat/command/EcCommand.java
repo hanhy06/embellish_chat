@@ -129,7 +129,7 @@ public class EcCommand {
             players.add(uuid);
         }
 
-        String result = String.format("Mention notifications set to: %s", (!notification ? "ON" : "OFF"));
+        String result = String.format("Mention notifications set to: %s", (notification ? "ON" : "OFF"));
         context.getSource().sendFeedback(() ->
                         Text.literal(result),
                 false

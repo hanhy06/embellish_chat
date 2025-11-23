@@ -51,7 +51,7 @@ This is the most basic way to use it.
 
 ```
 {
-  "pattern": "_*(.+?)*_()",
+  "pattern": "_\\*(.+?)\\*_()",
   "styles": [
     {
       "styleType": "UNDERLINE",

@@ -79,7 +79,7 @@ Mentions any red-team player within a 64-block radius.
 
 ```
 {
-  "pattern": "[notification]()",
+  "pattern": "\\[notification\\]()",
   "sound": "entity.experience_orb.pickup",
   "pitch": 1.75,
   "title": "%player:displayname% mentioned you",
