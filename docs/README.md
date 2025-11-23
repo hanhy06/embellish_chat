@@ -234,7 +234,7 @@ The keys in stylingRules and mentionRules represent each permission (such as cha
 
 The mod checks from top to bottom and applies the rules registered for each permission.
 
-Both the `LUCK_PERMS_GROUP` mention type and `/ec notification` require LuckPerms.
+The `LUCK_PERMS_GROUP` mention type requires LuckPerms.
 If it’s not installed, these features have no effect.
 
 
@@ -264,8 +264,7 @@ The graph below shows TPS (Ticks Per Second) latency measurements for this mod.
 
 Each test message contained either 230 or 50 characters, and the system was stressed by sending up to **400 × 20 chat messages per second**.
 
-* ```execute as @a run embellish-chat test stress n "@hanhy ~~[Test]<RAINBOW>__ 100% working!__||50||~~"```
-* ```execute as @a run embellish-chat test stress n "@everyone @here **Check out this new [update]<green> __news__** right [here](https://github.com/hanhy06/embellish-chat)! _First come, first served — join now for an exclusive ||special|| gift!_ ~~If you come late, there won't be any left~~"```
+
 
 ![Latency](https://github.com/hanhy06/embellish-chat/blob/v2.4.0/%2B1.21.9/docs/images/Latency2.3.0.png?raw=true)
 
