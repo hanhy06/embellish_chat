@@ -260,9 +260,7 @@ The Text Placeholder API applies to the mention title, all presets used in rules
 
 **These results demonstrate general performance characteristics rather than a strict scientific benchmark, as the testing environment does not fully replicate real server conditions.**
 
-The graph below shows TPS (Ticks Per Second) latency measurements for this mod.
-
-Each test message contained either about 200 or 50 characters, and the system was stressed by sending up to **500 × 20 chat messages per second**.
+The graph below shows the TPS (Ticks Per Second) latency measurements for this mod. Each test message contained approximately 200 or 50 characters, and the system was stressed by sending up to 10,000 (500 × 20) chat messages per second.
 
 | Type         | Length | Test String                                                                                                                                                                                            |
 |--------------|--------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
