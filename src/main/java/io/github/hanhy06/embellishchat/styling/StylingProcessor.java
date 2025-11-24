@@ -61,7 +61,7 @@ public class StylingProcessor implements ConfigListener {
      * @param pattern This is the compiled regular expression for finding the parts where styling should be applied.
      * @param functions These are the functions that apply styling.
      * @param presets These are the presets to be used in the functions. Their length must match that of the functions.
-     * @param player This is the ServerPlayerEntity required for the Placeholder API.
+     * @param player This is the ServerPlayerEntity required for the Placeholder API and styling.
      * @return This is the text with styling applied.
      */
     public MutableText applyStyleAPI(MutableText text, Pattern pattern,List<Function<StyleParameter,MutableText>> functions,List<String> presets,ServerPlayerEntity player){
