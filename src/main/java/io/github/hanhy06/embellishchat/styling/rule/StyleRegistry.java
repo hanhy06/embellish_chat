@@ -126,18 +126,14 @@ public class StyleRegistry {
         }
 
         List<Color> colors = new ArrayList<>();
+        String string = parameter.text().getString();
+        int length = string.length();
+
         do {
             colors.add(Color.decode(matcher.group()));
         } while (matcher.find());
 
-        if (colors.size() < 2) {
-            return parameter.text().fillStyle(Style.EMPTY.withColor(colors.getFirst().getRGB()));
-        }
-
-        String string = parameter.text().getString();
-        int length = string.length();
-
-        if (length < colors.size()) {
+        if (colors.size() < 2 || length < colors.size()) {
             return parameter.text().fillStyle(Style.EMPTY.withColor(colors.getFirst().getRGB()));
         }
 
