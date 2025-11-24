@@ -55,7 +55,6 @@ public class StylingProcessor implements ConfigListener {
         return result;
     }
 
-
     /**
      * @param text This is the full text to apply the style to.
      * @param pattern This is the compiled regular expression for finding the parts where styling should be applied.
