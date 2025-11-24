@@ -30,7 +30,7 @@
 
 > **Notes**
 >
-> * `COLOR_SHADOW` is not available in versions earlier than 1.21.1.
+> * `COLOR_SHADOW` is not available in versions earlier than 1.21.2.
 > * The COLOR_GRADIENT type also supports three or more colors.
 
 ---
