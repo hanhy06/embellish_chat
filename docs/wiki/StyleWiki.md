@@ -1,5 +1,5 @@
 # Available Style Types
-# Available Style Types
+
 | Type                    | Description                                                                                                                                                                      | Option                  |
 |-------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------|
 | `METADATA`              | When the mouse hovers over the text, display the time the server received it, and when clicked, copy it to the clipboard.                                                        | No options are required |
