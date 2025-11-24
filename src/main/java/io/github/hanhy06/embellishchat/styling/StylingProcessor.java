@@ -9,6 +9,7 @@ import io.github.hanhy06.embellishchat.styling.rule.StyleRegistry;
 import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
 import io.github.hanhy06.embellishchat.styling.util.Runs;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
+import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -103,11 +104,18 @@ public class StylingProcessor implements ConfigListener {
 
             MutableText segment = slice(runs, mention.begin(), mention.end());
             segment.fillStyle(mention.style());
-            for (StyleAction action : mention.rule().styles()){
+            for (StyleAction action : mention.rule().styles()) {
+                String preset = PlaceHolderUtil
+                        .getParedOption(action.preset(), player)
+                        .getString();
+
+                StyleParameter parameter = StyleParameter.of(segment, preset, player);
+
                 segment = registry
                         .get(action.styleType())
-                        .apply(StyleParameter.of(segment,action.preset(),player));
+                        .apply(parameter);
             }
+
 
             result.append(segment);
             lastEnd = mention.end();

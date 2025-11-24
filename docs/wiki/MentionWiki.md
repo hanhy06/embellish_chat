@@ -108,27 +108,32 @@ Typing `[notification]` will send an alert to everyone.
 
 ```
 {
-  "pattern": "@admin()",
-  "sound": "entity.experience_orb.pickup",
-  "pitch": 1.75,
-  "title": "%player:displayname% mentioned you",
-  "mentions": [
-    {
-      "mentionType": "LUCK_PERMS_GROUP",
-      "preset": "admin"
-    }
-  ],
-  "styles": [
-    {
-      "styleType": "BOLD",
-      "preset": ""
-    },
-    {
-      "styleType": "COLOR_HEX",
-      "preset": "#FFAAAA"
-    }
-  ]
-}
+        "pattern": "@admin()",
+        "sound": "entity.experience_orb.pickup",
+        "pitch": 1.75,
+        "title": "%player:displayname% mentioned you",
+        "mentions": [
+          {
+            "mentionType": "LUCK_PERMS_GROUP",
+            "preset": "admin"
+          }
+        ],
+        "styles": [
+          {
+            "styleType": "BOLD",
+            "preset": ""
+          },
+          {
+            "styleType": "COLOR_HEX",
+            "preset": "#FFAAAA"
+          },
+          {
+            "styleType": "CLICK_COMMAND_RUN",
+            "preset": "execute in %world:id% run tp %player:pos_x% %player:pos_y% %player:pos_z%"
+          }
+        ]
+      }
 ```
 
-You can put any value accepted as an option into the preset. Used this way, you can always trigger the administrator simply by using `@admin`.
+You can put any value accepted as an option into the preset. Used this way, you can always trigger the administrator simply by using @admin.
+Additionally, by using CLICK_COMMAND_RUN in the styles section, the summoned administrator can easily teleport to the location.
