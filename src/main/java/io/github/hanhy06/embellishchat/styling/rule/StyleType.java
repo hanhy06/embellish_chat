@@ -2,6 +2,7 @@ package io.github.hanhy06.embellishchat.styling.rule;
 
 public enum StyleType {
     METADATA,
+    LOG,
     COLOR_HEX,
     COLOR_RAINBOW,
     COLOR_GRADIENT,
@@ -10,6 +11,7 @@ public enum StyleType {
     COMMAND_RUN,
     CLICK_COMMAND_RUN,
     CLICK_COMMAND_SUGGEST,
+    CLICK_COPY,
     HOVER_TEXT,
     HOVER_ITEM,
     FONT,

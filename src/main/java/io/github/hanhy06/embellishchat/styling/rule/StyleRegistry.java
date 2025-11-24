@@ -41,6 +41,7 @@ public class StyleRegistry {
         this.colorPreset = config.colorPreset();
         this.registers = new EnumMap<>(Map.ofEntries(
                 entry(StyleType.METADATA, this::METADATA),
+                entry(StyleType.LOG, this::LOG),
                 entry(StyleType.COLOR_HEX, this::COLOR_HEX),
                 entry(StyleType.COLOR_RAINBOW, this::COLOR_RAINBOW),
                 entry(StyleType.COLOR_GRADIENT, this::COLOR_GRADIENT),
@@ -49,6 +50,7 @@ public class StyleRegistry {
                 entry(StyleType.COMMAND_RUN, this::COMMAND_RUN),
                 entry(StyleType.CLICK_COMMAND_RUN, this::CLICK_COMMAND_RUN),
                 entry(StyleType.CLICK_COMMAND_SUGGEST, this::CLICK_COMMAND_SUGGEST),
+                entry(StyleType.CLICK_COPY, this::CLICK_COPY),
                 entry(StyleType.HOVER_TEXT,this::HOVER_TEXT),
                 entry(StyleType.HOVER_ITEM,this::HOVER_ITEM),
                 entry(StyleType.FONT, this::FONT),
@@ -80,6 +82,11 @@ public class StyleRegistry {
         return text.fillStyle(Style.EMPTY
                 .withHoverEvent(hoverEvent)
                 .withClickEvent(clickEvent));
+    }
+
+    public MutableText LOG(StyleParameter parameter){
+        EmbellishChat.LOGGER.info("Log StyleType text: {}, sender: {}",parameter.text().getString(),parameter.player());
+        return parameter.text();
     }
 
     public MutableText COLOR_HEX(StyleParameter parameter) {
@@ -202,6 +209,11 @@ public class StyleRegistry {
 
     public MutableText CLICK_COMMAND_SUGGEST(StyleParameter parameter){
         ClickEvent clickEvent = new ClickEvent.SuggestCommand(parameter.option());
+        return parameter.text().fillStyle(Style.EMPTY.withClickEvent(clickEvent));
+    }
+
+    public MutableText CLICK_COPY(StyleParameter parameter){
+        ClickEvent clickEvent = new ClickEvent.CopyToClipboard(parameter.option());
         return parameter.text().fillStyle(Style.EMPTY.withClickEvent(clickEvent));
     }
 
