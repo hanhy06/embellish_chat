@@ -147,11 +147,12 @@ public class StyleRegistry {
         Runs runs = flatten(parameter.text());
         MutableText result = Text.empty();
         int colorCount = colors.size();
-        int segmentLength = length / (colorCount - 1);
 
         for (int i = 0; i < length; i++) {
-            int segmentIndex = Math.min(i / segmentLength, colorCount - 2);
-            float t = (float) (i % segmentLength) / segmentLength;
+            float position = (float) i / (length - 1);
+            float scaledPosition = position * (colorCount - 1);
+            int segmentIndex = Math.min((int) scaledPosition, colorCount - 2);
+            float t = scaledPosition - segmentIndex;
 
             Color interpolated = ColorUtil.lerpColor(
                     colors.get(segmentIndex),
