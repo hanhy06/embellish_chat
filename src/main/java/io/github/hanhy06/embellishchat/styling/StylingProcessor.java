@@ -152,7 +152,6 @@ public class StylingProcessor implements ConfigListener {
                         .apply(parameter);
             }
 
-
             result.append(segment);
             lastEnd = mention.end();
         }
