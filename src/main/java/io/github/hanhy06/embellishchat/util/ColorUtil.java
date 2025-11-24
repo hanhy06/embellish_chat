@@ -2,25 +2,12 @@ package io.github.hanhy06.embellishchat.util;
 
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.Team;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Formatting;
 
-public class TeamColorUtil {
-    public static Integer getPlayerColor(ServerPlayerEntity player,Integer preset){
-        if (player != null) {
-            Team team = player.getScoreboardTeam();
-            if (team != null) {
-                Formatting formatting = team.getColor();
-                if (formatting != null && formatting.isColor() && formatting != Formatting.RESET) {
-                    return formatting.getColorValue();
-                }
-            }
-        }
+import java.awt.*;
 
-        return preset;
-    }
-
-    public static Integer getPlayerColor(Scoreboard scoreboard,String name, Integer preset){
+public class ColorUtil {
+    public static Integer getTeamColor(Scoreboard scoreboard, String name, Integer preset){
         for (String teamName : scoreboard.getTeamNames()){
             Team team = scoreboard.getTeam(teamName);
             if (team != null) {
@@ -35,5 +22,15 @@ public class TeamColorUtil {
         }
 
         return preset;
+    }
+
+    public static Color lerpColor(Color start, Color end, double rate) {
+        rate = Math.max(0, Math.min(1, rate));
+
+        int r = (int) (start.getRed()   + (end.getRed()   - start.getRed())   * rate);
+        int g = (int) (start.getGreen() + (end.getGreen() - start.getGreen()) * rate);
+        int b = (int) (start.getBlue()  + (end.getBlue()  - start.getBlue())  * rate);
+
+        return new Color(r, g, b);
     }
 }

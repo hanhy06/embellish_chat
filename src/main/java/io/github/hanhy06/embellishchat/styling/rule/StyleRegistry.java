@@ -6,6 +6,7 @@ import com.mojang.serialization.JsonOps;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.styling.util.Runs;
+import io.github.hanhy06.embellishchat.util.ColorUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
@@ -17,10 +18,11 @@ import java.awt.*;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static io.github.hanhy06.embellishchat.styling.util.TextSliceUtil.flatten;
 import static io.github.hanhy06.embellishchat.styling.util.TextSliceUtil.slice;
@@ -31,6 +33,7 @@ public class StyleRegistry {
     private final DateTimeFormatter timestamp;
     private final HashMap<String, Color> colorPreset;
     private final EnumMap<StyleType, Function<StyleParameter, MutableText>> registers;
+    private final Pattern HEX_CODE = Pattern.compile("#[A-Fa-f0-9]{6}");
 
     public StyleRegistry(Config config) {
         this.config = config;
@@ -40,6 +43,7 @@ public class StyleRegistry {
                 entry(StyleType.METADATA, this::METADATA),
                 entry(StyleType.COLOR_HEX, this::COLOR_HEX),
                 entry(StyleType.COLOR_RAINBOW, this::COLOR_RAINBOW),
+                entry(StyleType.COLOR_GRADIENT, this::COLOR_GRADIENT),
                 entry(StyleType.COLOR_PRESET, this::COLOR_PRESET),
                 entry(StyleType.COLOR_SHADOW, this::COLOR_SHADOW),
                 entry(StyleType.COMMAND_RUN, this::COMMAND_RUN),
@@ -112,6 +116,49 @@ public class StyleRegistry {
             int rgb = Color.HSBtoRGB(hue, saturation, 1f);
             result.append(slice(runs, i, i + 1).fillStyle(Style.EMPTY.withColor(rgb)));
         }
+        return result;
+    }
+
+    public MutableText COLOR_GRADIENT(StyleParameter parameter) {
+        Matcher matcher = HEX_CODE.matcher(parameter.option());
+        if (!matcher.find()) {
+            return parameter.text();
+        }
+
+        List<Color> colors = new ArrayList<>();
+        do {
+            colors.add(Color.decode(matcher.group()));
+        } while (matcher.find());
+
+        if (colors.size() < 2) {
+            return parameter.text().fillStyle(Style.EMPTY.withColor(colors.getFirst().getRGB()));
+        }
+
+        String string = parameter.text().getString();
+        int length = string.length();
+
+        if (length < colors.size()) {
+            return parameter.text().fillStyle(Style.EMPTY.withColor(colors.getFirst().getRGB()));
+        }
+
+        Runs runs = flatten(parameter.text());
+        MutableText result = Text.empty();
+        int colorCount = colors.size();
+        int segmentLength = length / (colorCount - 1);
+
+        for (int i = 0; i < length; i++) {
+            int segmentIndex = Math.min(i / segmentLength, colorCount - 2);
+            float t = (float) (i % segmentLength) / segmentLength;
+
+            Color interpolated = ColorUtil.lerpColor(
+                    colors.get(segmentIndex),
+                    colors.get(segmentIndex + 1),
+                    t
+            );
+
+            result.append(slice(runs, i, i + 1).fillStyle(Style.EMPTY.withColor(interpolated.getRGB())));
+        }
+
         return result;
     }
 

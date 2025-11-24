@@ -4,6 +4,7 @@ public enum StyleType {
     METADATA,
     COLOR_HEX,
     COLOR_RAINBOW,
+    COLOR_GRADIENT,
     COLOR_PRESET,
     COLOR_SHADOW,
     COMMAND_RUN,
