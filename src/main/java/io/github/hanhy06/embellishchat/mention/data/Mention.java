@@ -2,8 +2,10 @@ package io.github.hanhy06.embellishchat.mention.data;
 
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Style;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
