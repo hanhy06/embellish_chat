@@ -149,6 +149,9 @@ public record Config(
                                             List.of(
                                                     StyleAction.of(
                                                             StyleType.BOLD,""
+                                                    ),
+                                                    StyleAction.of(
+                                                            StyleType.COLOR_TEAM,""
                                                     )
                                             )
                                     ),
@@ -197,6 +200,9 @@ public record Config(
                                             List.of(
                                                     StyleAction.of(
                                                             StyleType.BOLD,""
+                                                    ),
+                                                    StyleAction.of(
+                                                            StyleType.COLOR_TEAM,""
                                                     )
                                             )
                                     )
