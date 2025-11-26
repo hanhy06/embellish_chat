@@ -75,7 +75,7 @@ public class MentionProcessor implements ConfigListener {
             List<String> options = mention.options();
             options = OptionUtil.parseOption(options,presets,player);
 
-            HashSet<ServerPlayerEntity> targets = new HashSet<>();
+            List<ServerPlayerEntity> targets = new ArrayList<>();
             ServerPlayerEntity target = null;
 
             for (int i = 0; i < functions.size(); i++) {
@@ -86,8 +86,7 @@ public class MentionProcessor implements ConfigListener {
                     targets.addAll(players);
                     target = players.getFirst();
                 } else {
-                    players.retainAll(targets);
-                    targets = new HashSet<>(players);
+                    targets.retainAll(new HashSet<>(players));
                 }
             }
 
