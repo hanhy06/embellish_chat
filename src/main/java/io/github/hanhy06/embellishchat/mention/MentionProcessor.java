@@ -66,7 +66,7 @@ public class MentionProcessor implements ConfigListener {
         Set<Mention> result = new HashSet<>();
 
         for (Mention mention : mentions) {
-            List<Function<MentionParameter, Target>> functions = new ArrayList<>();
+            List<Function<MentionParameter, List<ServerPlayerEntity>>> functions = new ArrayList<>();
             List<String> presets = new ArrayList<>();
 
             mention.rule().mentions().forEach(action -> {
@@ -77,25 +77,23 @@ public class MentionProcessor implements ConfigListener {
             List<String> options = mention.options();
             options = OptionUtil.parseOption(options,presets,player);
 
-            HashSet<ServerPlayerEntity> target = new HashSet<>();
-            Style style = Style.EMPTY;
+            HashSet<ServerPlayerEntity> targets = new HashSet<>();
+            ServerPlayerEntity target = null;
 
             for (int i = 0; i < functions.size(); i++) {
                 MentionParameter parameter = MentionParameter.of(player, options.get(i));
-                Target targets = functions.get(i).apply(parameter);
+                List<ServerPlayerEntity> players = functions.get(i).apply(parameter);
 
-                if (target.isEmpty()) {
-                    target.addAll(targets.targets());
-                    style = targets.style();
+                if (targets.isEmpty()) {
+                    targets.addAll(players);
+                    target = players.getFirst();
                 } else {
-                    target.retainAll(targets.targets());
+                    players.retainAll(targets);
+                    targets = new HashSet<>(players);
                 }
             }
 
-            Mention newMention = new Mention(
-                    mention.begin(),mention.end(),List.of(),target,style,mention.rule()
-            );
-            result.add(newMention);
+            result.add(mention.parent(targets,target));
         }
 
         return result;

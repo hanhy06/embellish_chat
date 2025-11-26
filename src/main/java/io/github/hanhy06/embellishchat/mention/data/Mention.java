@@ -11,11 +11,22 @@ import java.util.Objects;
 public record Mention(
         int begin,int end,List<String> options,
         HashSet<ServerPlayerEntity> targets,
-         Style style,
+        ServerPlayerEntity player,
         MentionRule rule
 ) {
     public static Mention of(int begin,int end,List<String> options,MentionRule rule){
-        return new Mention(begin,end,options,new HashSet<>(),Style.EMPTY,rule);
+        return new Mention(begin,end,options,new HashSet<>(),null,rule);
+    }
+
+    public Mention parent(HashSet<ServerPlayerEntity> targets,ServerPlayerEntity player){
+        return new Mention(
+                this.begin(),
+                this.end(),
+                this.options(),
+                targets,
+                player,
+                this.rule()
+        );
     }
 
     @Override

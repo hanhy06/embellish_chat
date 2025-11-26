@@ -25,15 +25,13 @@ public class MentionRegistry {
     private final Scoreboard scoreboard;
 
     private final Config config;
-    private final Style stylePreset;
-    private final EnumMap<MentionType, Function<MentionParameter, Target>> registries;
+    private final EnumMap<MentionType, Function<MentionParameter, List<ServerPlayerEntity>>> registries;
 
     public MentionRegistry(Config config, PlayerManager manager, Scoreboard scoreboard) {
         this.manager = manager;
         this.scoreboard = scoreboard;
 
         this.config = config;
-        this.stylePreset = Style.EMPTY.withColor(config.mentionColor().getRGB());
         this.registries = new EnumMap<>(Map.ofEntries(
                 entry(MentionType.EVERYONE,this::EVERYONE),
                 entry(MentionType.INSIDE,this::INSIDE),
@@ -44,30 +42,25 @@ public class MentionRegistry {
         ));
     }
 
-    public Function<MentionParameter, Target> get(MentionType key){
+    public Function<MentionParameter, List<ServerPlayerEntity>> get(MentionType key){
         return registries.get(key);
     }
 
-    private Target EVERYONE(MentionParameter parameter){
-        List<ServerPlayerEntity> players = manager.getPlayerList();
-        
-        return Target.of(players,stylePreset);
+    private List<ServerPlayerEntity> EVERYONE(MentionParameter parameter){
+        return manager.getPlayerList();
     }
 
-    private Target INSIDE(MentionParameter parameter){
-        HashSet<ServerPlayerEntity> players = new HashSet<>(PlayerLookup.around(
+    private List<ServerPlayerEntity> INSIDE(MentionParameter parameter){
+        return PlayerLookup.around(
                 parameter.sender().getEntityWorld(),
                 parameter.sender().getEntityPos(),
                 Float.parseFloat(parameter.option())
-        ));
-
-        return new Target(players,stylePreset);
+        ).stream().toList();
     }
 
-    private Target TEAM(MentionParameter parameter){
+    private List<ServerPlayerEntity> TEAM(MentionParameter parameter){
         Team team = scoreboard.getTeam(parameter.option());
         List<ServerPlayerEntity> players = new ArrayList<>();
-        Style style = stylePreset;
 
         if (team != null){
             players = team
@@ -76,54 +69,28 @@ public class MentionRegistry {
                     .map(manager::getPlayer)
                     .filter(Objects::nonNull)
                     .toList();
-            style = team
-                    .getFormattedName()
-                    .getStyle()
-                    .withParent(style);
         }
 
-        return Target.of(players,style);
+        return players;
     }
 
 
-    private Target PLAYER(MentionParameter parameter){
+    private List<ServerPlayerEntity> PLAYER(MentionParameter parameter){
         ServerPlayerEntity target = manager.getPlayer(parameter.option());
-        Style style = stylePreset;
-        HashSet<ServerPlayerEntity> players = new HashSet<>();
 
-        if (target!=null){
-            style = target
-                    .getDisplayName()
-                    .getStyle()
-                    .withParent(style);
-            players.add(target);
-        }else {
-            style = Style.EMPTY
-                    .withParent(stylePreset)
-                    .withColor(ColorUtil.getTeamColor(
-                            scoreboard,
-                            parameter.option(),
-                            config.mentionColor().getRGB()
-                    ));
-        }
-
-        return new Target(players,style);
+        return target == null ? new ArrayList<>() : List.of(target);
     }
 
-    private Target LUCK_PERMS_GROUP(MentionParameter parameter){
-        List<ServerPlayerEntity> players = new ArrayList<>();
-
+    private List<ServerPlayerEntity> LUCK_PERMS_GROUP(MentionParameter parameter){
         if (!FabricLoader.getInstance().isModLoaded("luckperms")) {
             EmbellishChat.LOGGER.info("LuckPerms not found. @group mentions will be ignored.");
-            return Target.of(players,stylePreset);
+            return List.of();
         }
 
-        players = LuckPermsUtil.getGroupPlayers(parameter.option(),manager.getPlayerList());
-
-        return Target.of(players,stylePreset);
+        return LuckPermsUtil.getGroupPlayers(parameter.option(),manager.getPlayerList());
     }
 
-    private Target WORLD(MentionParameter parameter){
+    private List<ServerPlayerEntity> WORLD(MentionParameter parameter){
         String worldName = parameter.option();
         MinecraftServer server = parameter.sender().getEntityWorld().getServer();
         ServerWorld targetWorld = null;
@@ -144,6 +111,6 @@ public class MentionRegistry {
             EmbellishChat.LOGGER.info("World " + worldName + " not found. @world mention ignored.");
         }
 
-        return Target.of(players,stylePreset);
+        return players;
     }
 }

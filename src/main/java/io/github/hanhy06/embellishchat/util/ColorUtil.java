@@ -7,13 +7,13 @@ import net.minecraft.util.Formatting;
 import java.awt.*;
 
 public class ColorUtil {
-    public static Integer getTeamColor(Scoreboard scoreboard, String name, Integer preset){
+    public static Integer getTeamColor(Scoreboard scoreboard, String name){
         for (String teamName : scoreboard.getTeamNames()){
             Team team = scoreboard.getTeam(teamName);
             if (team != null) {
                 Formatting formatting = team.getColor();
                 boolean belongTeam = team.getPlayerList().contains(name);
-                if (formatting != null && formatting.isColor() && formatting != Formatting.RESET && belongTeam) {
+                if (formatting != null && formatting.isColor() && belongTeam) {
                     return formatting.getColorValue();
                 } else if (belongTeam) {
                     break;
@@ -21,7 +21,7 @@ public class ColorUtil {
             }
         }
 
-        return preset;
+        return null;
     }
 
     public static Color lerpColor(Color start, Color end, double rate) {

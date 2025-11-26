@@ -29,7 +29,6 @@ public record Config(
         Color urlColor,
         HashMap<String, Color> colorPreset,
         boolean notificationCommandEnable,
-        Color mentionColor,
 
         //player list
         HashSet<UUID> bannedPlayerList,
@@ -228,7 +227,6 @@ public record Config(
                         entry("white", new Color(0xFFFFFF))
                 )),
                 true,
-                new Color(0xff55ff),
 
                 //player list
                 new HashSet<>(),

@@ -8,10 +8,12 @@ import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.styling.util.Runs;
 import io.github.hanhy06.embellishchat.util.ColorUtil;
 import net.minecraft.item.ItemStack;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.*;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import java.awt.*;
@@ -47,6 +49,7 @@ public class StyleRegistry {
                 entry(StyleType.COLOR_GRADIENT, this::COLOR_GRADIENT),
                 entry(StyleType.COLOR_PRESET, this::COLOR_PRESET),
                 entry(StyleType.COLOR_SHADOW, this::COLOR_SHADOW),
+                entry(StyleType.COLOR_TEAM, this::COLOR_TEAM),
                 entry(StyleType.COMMAND_RUN, this::COMMAND_RUN),
                 entry(StyleType.CLICK_COMMAND_RUN, this::CLICK_COMMAND_RUN),
                 entry(StyleType.CLICK_COMMAND_SUGGEST, this::CLICK_COMMAND_SUGGEST),
@@ -183,6 +186,20 @@ public class StyleRegistry {
         }
 
         return parameter.text().fillStyle(Style.EMPTY.withShadowColor(color));
+    }
+
+    public MutableText COLOR_TEAM(StyleParameter parameter){
+        ServerPlayerEntity player = parameter.player();
+        Team team = player.getScoreboardTeam();
+
+        if (team == null) return parameter.text();
+
+        Formatting formatting = team.getColor();
+        if (formatting != null && formatting.isColor()){
+            return parameter.text().fillStyle(Style.EMPTY.withColor(formatting));
+        }
+
+        return parameter.text();
     }
 
     public MutableText COMMAND_RUN(StyleParameter parameter){
