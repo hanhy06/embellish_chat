@@ -55,41 +55,6 @@ public class StylingProcessor implements ConfigListener {
         return result;
     }
 
-    /**
-     * @param text This is the full text to apply the style to.
-     * @param pattern This is the compiled regular expression for finding the parts where styling should be applied.
-     * @param functions These are the functions that apply styling.
-     * @param presets These are the presets to be used in the functions. Their length must match that of the functions.
-     * @param player This is the ServerPlayerEntity required for the Placeholder API and styling.
-     * @return This is the text with styling applied.
-     */
-    public MutableText applyStyleAPI(MutableText text, Pattern pattern,List<Function<StyleParameter,MutableText>> functions,List<String> presets,ServerPlayerEntity player){
-        Matcher matcher = pattern.matcher(text.getString());
-        if (!matcher.find()) return text;
-
-        Runs runs = flatten(text);
-        MutableText result = Text.empty();
-        int lastEnd = 0;
-
-        do {
-            result.append(slice(runs,lastEnd,matcher.start()));
-
-            MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
-            List<String> options = OptionUtil.split(matcher.group(2),config.delimiter());
-            options = OptionUtil.parseOption(options,presets,player);
-            for (int i=0;i<functions.size();i++){
-                StyleParameter parameter = StyleParameter.of(segment,options.get(i),player);
-                segment = functions.get(i).apply(parameter);
-            }
-
-            result.append(segment);
-            lastEnd = matcher.end();
-        }while (matcher.find());
-        result.append(slice(runs, lastEnd, runs.full().length()));
-
-        return result;
-    }
-
     private MutableText applyStyles(MutableText text,StylingRule style,ServerPlayerEntity player){
         Matcher matcher = style.pattern().matcher(text.getString());
         if (!matcher.find()) return text;
@@ -154,6 +119,41 @@ public class StylingProcessor implements ConfigListener {
             result.append(segment);
             lastEnd = mention.end();
         }
+        result.append(slice(runs, lastEnd, runs.full().length()));
+
+        return result;
+    }
+
+    /**
+     * @param text This is the full text to apply the style to.
+     * @param pattern This is the compiled regular expression for finding the parts where styling should be applied.
+     * @param functions These are the functions that apply styling.
+     * @param presets These are the presets to be used in the functions. Their length must match that of the functions.
+     * @param player This is the ServerPlayerEntity required for the Placeholder API and styling.
+     * @return This is the text with styling applied.
+     */
+    public MutableText applyStyleAPI(MutableText text, Pattern pattern,List<Function<StyleParameter,MutableText>> functions,List<String> presets,ServerPlayerEntity player){
+        Matcher matcher = pattern.matcher(text.getString());
+        if (!matcher.find()) return text;
+
+        Runs runs = flatten(text);
+        MutableText result = Text.empty();
+        int lastEnd = 0;
+
+        do {
+            result.append(slice(runs,lastEnd,matcher.start()));
+
+            MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
+            List<String> options = OptionUtil.split(matcher.group(2),config.delimiter());
+            options = OptionUtil.parseOption(options,presets,player);
+            for (int i=0;i<functions.size();i++){
+                StyleParameter parameter = StyleParameter.of(segment,options.get(i),player);
+                segment = functions.get(i).apply(parameter);
+            }
+
+            result.append(segment);
+            lastEnd = matcher.end();
+        }while (matcher.find());
         result.append(slice(runs, lastEnd, runs.full().length()));
 
         return result;

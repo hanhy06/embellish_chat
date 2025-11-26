@@ -3,7 +3,6 @@ package io.github.hanhy06.embellishchat.mention;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
 import io.github.hanhy06.embellishchat.mention.data.Mention;
-import io.github.hanhy06.embellishchat.mention.data.Target;
 import io.github.hanhy06.embellishchat.mention.rule.MentionParameter;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRegistry;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
@@ -14,7 +13,6 @@ import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
 import java.util.*;
