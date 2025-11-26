@@ -3,6 +3,7 @@ package io.github.hanhy06.embellishchat.mention;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
 import io.github.hanhy06.embellishchat.mention.data.Mention;
+import io.github.hanhy06.embellishchat.mention.data.Target;
 import io.github.hanhy06.embellishchat.mention.rule.MentionParameter;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRegistry;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
@@ -13,6 +14,7 @@ import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
 import java.util.*;
@@ -64,7 +66,7 @@ public class MentionProcessor implements ConfigListener {
         Set<Mention> result = new HashSet<>();
 
         for (Mention mention : mentions) {
-            List<Function<MentionParameter, List<ServerPlayerEntity>>> functions = new ArrayList<>();
+            List<Function<MentionParameter, Target>> functions = new ArrayList<>();
             List<String> presets = new ArrayList<>();
 
             mention.rule().mentions().forEach(action -> {
@@ -75,22 +77,25 @@ public class MentionProcessor implements ConfigListener {
             List<String> options = mention.options();
             options = OptionUtil.parseOption(options,presets,player);
 
-            List<ServerPlayerEntity> targets = new ArrayList<>();
-            ServerPlayerEntity target = null;
+            HashSet<ServerPlayerEntity> targets = new HashSet<>();
+            Style style = Style.EMPTY;
 
             for (int i = 0; i < functions.size(); i++) {
                 MentionParameter parameter = MentionParameter.of(player, options.get(i));
-                List<ServerPlayerEntity> players = functions.get(i).apply(parameter);
+                Target target = functions.get(i).apply(parameter);
 
                 if (targets.isEmpty()) {
-                    targets.addAll(players);
-                    target = players.getFirst();
+                    targets.addAll(target.targets());
+                    style = target.style();
                 } else {
-                    targets.retainAll(new HashSet<>(players));
+                    targets.retainAll(target.targets());
                 }
             }
 
-            result.add(mention.parent(targets,target));
+            Mention newMention = new Mention(
+                    mention.begin(),mention.end(),List.of(),targets,style,mention.rule()
+            );
+            result.add(newMention);
         }
 
         return result;
