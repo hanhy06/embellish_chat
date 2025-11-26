@@ -109,11 +109,7 @@ public class StylingProcessor implements ConfigListener {
                         .getParedOption(action.preset(), player)
                         .getString();
 
-                StyleParameter parameter = StyleParameter.of(
-                        segment,
-                        preset,
-                        mention.player() == null ? player : mention.player()
-                        );
+                StyleParameter parameter = StyleParameter.of(segment, preset, mention.player());
 
                 segment = registry
                         .get(action.styleType())
