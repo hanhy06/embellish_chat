@@ -159,9 +159,6 @@ public record Config(
                                             List.of(
                                                     StyleAction.of(
                                                             StyleType.BOLD,""
-                                                    ),
-                                                    StyleAction.of(
-                                                            StyleType.COLOR_PRESET,"light purple"
                                                     )
                                             )
                                     ),
@@ -219,9 +216,6 @@ public record Config(
                                             List.of(
                                                     StyleAction.of(
                                                             StyleType.BOLD,""
-                                                    ),
-                                                    StyleAction.of(
-                                                            StyleType.COLOR_PRESET,"light purple"
                                                     )
                                             )
                                     )
