@@ -114,6 +114,7 @@ The configuration file is located at: `config/embellish-chat.json`.
         "sound": "entity.experience_orb.pickup",
         "pitch": 1.75,
         "title": "%player:displayname% mentioned you",
+        "cooldown": 0,
         "mentions": [
           {
             "mentionType": "INSIDE",
@@ -201,6 +202,7 @@ Each rule consists of a regular expression (`pattern`), mention action list(`men
   "sound": "entity.experience_orb.pickup",
   "pitch": 1.75,
   "title": "%player:displayname% mentioned you",
+  "cooldown": 0,
   "mentions": [
     {
       "mentionType": "INSIDE",
@@ -220,6 +222,7 @@ Each rule consists of a regular expression (`pattern`), mention action list(`men
 * **sound** sound is the ID of the sound that the mentioned player hears.
 * **pitch** pitch is the pitch of the sound that the mentioned player hears.
 * **title** title is the title that appears on the mentioned player’s screen. It supports the Text Placeholder API, and %player:displayname% is the name of the player who was mentioned.
+* **cooldown** The cooldown is a mention cooldown, and the unit is seconds.
 * **mentions** The mentions field is a list of mention actions. Each action specifies a mentionType and an optional preset.
 * **styles** The styles field works the same way as in the styling rules section.
 
