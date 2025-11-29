@@ -26,8 +26,7 @@ public class ColorTypeAdapter extends TypeAdapter<Color> {
         JsonToken token = jsonReader.peek();
 
         if (token == JsonToken.NULL){
-            jsonReader.nextNull();
-            throw new JsonSyntaxException("Color value is null. Please enter a valid color value.");
+            return null;
         }
 
         if (token != JsonToken.STRING){
