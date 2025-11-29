@@ -118,6 +118,9 @@ public record Config(
                                             List.of(
                                                     StyleAction.of(
                                                             StyleType.BOLD,""
+                                                    ),
+                                                    StyleAction.of(
+                                                            StyleType.COLOR_PRESET,"light purple"
                                                     )
                                             )
                                     ),
@@ -135,6 +138,9 @@ public record Config(
                                             List.of(
                                                     StyleAction.of(
                                                             StyleType.BOLD,""
+                                                    ),
+                                                    StyleAction.of(
+                                                            StyleType.COLOR_PRESET,"light purple"
                                                     )
                                             )
                                     ),
@@ -154,7 +160,7 @@ public record Config(
                                                             StyleType.BOLD,""
                                                     ),
                                                     StyleAction.of(
-                                                            StyleType.COLOR_TEAM,""
+                                                            StyleType.COLOR_PRESET,"light purple"
                                                     )
                                             )
                                     ),
@@ -172,6 +178,9 @@ public record Config(
                                             List.of(
                                                     StyleAction.of(
                                                             StyleType.BOLD,""
+                                                    ),
+                                                    StyleAction.of(
+                                                            StyleType.COLOR_PRESET,"light purple"
                                                     )
                                             )
                                     ),
@@ -189,6 +198,9 @@ public record Config(
                                             List.of(
                                                     StyleAction.of(
                                                             StyleType.BOLD,""
+                                                    ),
+                                                    StyleAction.of(
+                                                            StyleType.COLOR_PRESET,"light purple"
                                                     )
                                             )
                                     ),
@@ -208,7 +220,7 @@ public record Config(
                                                             StyleType.BOLD,""
                                                     ),
                                                     StyleAction.of(
-                                                            StyleType.COLOR_TEAM,""
+                                                            StyleType.COLOR_PRESET,"light purple"
                                                     )
                                             )
                                     )
