@@ -51,9 +51,7 @@ public class MentionProcessor implements ConfigListener {
         ServerTickEvents.START_SERVER_TICK.register(tick ->{
             Instant now = Instant.now();
 
-            cooldowns.forEach(cooldown -> {
-                if (now.isAfter(cooldown.end())) cooldowns.remove(cooldown);
-            });
+            cooldowns.removeIf(cooldown -> now.isAfter(cooldown.end()));
         });
 
         this.notificationOffPlayerList = config.notificationOffPlayerList();
