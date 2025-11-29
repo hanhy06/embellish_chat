@@ -45,7 +45,7 @@ public class MentionProcessor implements ConfigListener {
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
         this.mentionRules = config.mentionRules();
-        this.registries = new MentionRegistry(manager, scoreboard);
+        this.registries = new MentionRegistry(newConfig,manager, scoreboard);
 
         this.cooldowns = new HashSet<>();
         ServerTickEvents.START_SERVER_TICK.register(tick ->{

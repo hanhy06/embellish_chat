@@ -28,6 +28,7 @@ public record Config(
         String timestamp,
         Color urlColor,
         HashMap<String, Color> colorPreset,
+        Color colorTeam,
         boolean notificationCommandEnable,
 
         //player list
@@ -250,6 +251,7 @@ public record Config(
                         entry("yellow", new Color(0xFFFF55)),
                         entry("white", new Color(0xFFFFFF))
                 )),
+                new Color(0xFF55FF),
                 true,
 
                 //player list

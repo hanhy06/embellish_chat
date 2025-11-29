@@ -15,7 +15,9 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Style;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.function.Function;
 
 import static java.util.Map.entry;
@@ -23,12 +25,19 @@ import static java.util.Map.entry;
 public class MentionRegistry {
     private final PlayerManager manager;
     private final Scoreboard scoreboard;
+    private final Style colorTeam;
 
     private final EnumMap<MentionType, Function<MentionParameter, Target>> registries;
 
-    public MentionRegistry(PlayerManager manager, Scoreboard scoreboard) {
+    public MentionRegistry(Config config,PlayerManager manager, Scoreboard scoreboard) {
         this.manager = manager;
         this.scoreboard = scoreboard;
+
+        if (config.colorTeam() != null){
+            colorTeam = Style.EMPTY.withColor(config.colorTeam().getRGB());
+        }else {
+            colorTeam = null;
+        }
 
         this.registries = new EnumMap<>(Map.ofEntries(
                 entry(MentionType.EVERYONE,this::EVERYONE),
@@ -61,7 +70,7 @@ public class MentionRegistry {
     private Target TEAM(MentionParameter parameter){
         Team team = scoreboard.getTeam(parameter.option());
         List<ServerPlayerEntity> players = new ArrayList<>();
-        Style style = null;
+        Style style = colorTeam;
 
         if (team != null){
             players = team
@@ -82,7 +91,7 @@ public class MentionRegistry {
 
     private Target PLAYER(MentionParameter parameter){
         ServerPlayerEntity target = manager.getPlayer(parameter.option());
-        Style style = null;
+        Style style = colorTeam;
         HashSet<ServerPlayerEntity> players = new HashSet<>();
 
         if (target!=null){
