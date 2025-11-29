@@ -70,7 +70,8 @@ public class MentionProcessor implements ConfigListener {
 
             if (cooldowns.contains(cooldown)) {
                 continue;
-            }else {
+            }
+            else if (rule.cooldown() > 0) {
                 cooldowns.add(cooldown);
             }
 
