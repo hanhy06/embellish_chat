@@ -14,7 +14,6 @@ import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Style;
-import net.minecraft.util.Formatting;
 
 import java.util.*;
 import java.util.function.Function;
@@ -27,7 +26,7 @@ public class MentionRegistry {
 
     private final EnumMap<MentionType, Function<MentionParameter, Target>> registries;
 
-    public MentionRegistry(Config config, PlayerManager manager, Scoreboard scoreboard) {
+    public MentionRegistry(PlayerManager manager, Scoreboard scoreboard) {
         this.manager = manager;
         this.scoreboard = scoreboard;
 
