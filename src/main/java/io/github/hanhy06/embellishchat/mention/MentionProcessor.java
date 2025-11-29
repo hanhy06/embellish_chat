@@ -124,15 +124,12 @@ public class MentionProcessor implements ConfigListener {
             float pitch = mention.rule().pitch();
 
             mention.targets().forEach(target ->{
-                if (notification){
-                    if (!notificationOffPlayerList.contains(target.getUuid())) {
-                        target.sendMessage(title,true);
-                        target.playSoundToPlayer(sound, SoundCategory.UI,1,pitch);
-                    }
-                }else {
-                    target.sendMessage(title,true);
-                    target.playSoundToPlayer(sound, SoundCategory.UI,1,pitch);
+                if (notification && notificationOffPlayerList.contains(target.getUuid())) {
+                    return;
                 }
+
+                target.sendMessage(title, true);
+                target.playSoundToPlayer(sound, SoundCategory.UI, 1, pitch);
             });
         }
     }
