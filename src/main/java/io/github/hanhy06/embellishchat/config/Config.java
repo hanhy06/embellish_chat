@@ -109,6 +109,7 @@ public record Config(
                                             Identifier.of("minecraft:entity.experience_orb.pickup"),
                                             1.75f,
                                             "%player:displayname% mentioned you",
+                                            0,
                                             List.of(
                                                     MentionAction.of(
                                                             MentionType.INSIDE,"64"
@@ -125,6 +126,7 @@ public record Config(
                                             Identifier.of("minecraft:entity.experience_orb.pickup"),
                                             1.75f,
                                             "%player:displayname% mentioned you",
+                                            0,
                                             List.of(
                                                     MentionAction.of(
                                                             MentionType.EVERYONE,""
@@ -141,6 +143,7 @@ public record Config(
                                             Identifier.of("minecraft:entity.experience_orb.pickup"),
                                             1.75f,
                                             "%player:displayname% mentioned you",
+                                            0,
                                             List.of(
                                                     MentionAction.of(
                                                             MentionType.TEAM,""
@@ -160,6 +163,7 @@ public record Config(
                                             Identifier.of("minecraft:entity.experience_orb.pickup"),
                                             1.75f,
                                             "%player:displayname% mentioned you",
+                                            0,
                                             List.of(
                                                     MentionAction.of(
                                                             MentionType.LUCK_PERMS_GROUP,""
@@ -176,6 +180,7 @@ public record Config(
                                             Identifier.of("minecraft:entity.experience_orb.pickup"),
                                             1.75f,
                                             "%player:displayname% mentioned you",
+                                            0,
                                             List.of(
                                                     MentionAction.of(
                                                             MentionType.WORLD,""
@@ -192,6 +197,7 @@ public record Config(
                                             Identifier.of("minecraft:entity.experience_orb.pickup"),
                                             1.75f,
                                             "%player:displayname% mentioned you",
+                                            0,
                                             List.of(
                                                     MentionAction.of(
                                                             MentionType.PLAYER,""

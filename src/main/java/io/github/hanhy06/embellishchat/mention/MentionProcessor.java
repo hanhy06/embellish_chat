@@ -2,6 +2,7 @@ package io.github.hanhy06.embellishchat.mention;
 
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
+import io.github.hanhy06.embellishchat.mention.data.Cooldown;
 import io.github.hanhy06.embellishchat.mention.data.Mention;
 import io.github.hanhy06.embellishchat.mention.data.Target;
 import io.github.hanhy06.embellishchat.mention.rule.MentionParameter;
@@ -9,6 +10,7 @@ import io.github.hanhy06.embellishchat.mention.rule.MentionRegistry;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -17,6 +19,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
+import java.time.Instant;
 import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -29,6 +32,7 @@ public class MentionProcessor implements ConfigListener {
     private Map<String, List<MentionRule>> mentionRules;
     private MentionRegistry registries;
 
+    private HashSet<Cooldown> cooldowns;
     private HashSet<UUID> notificationOffPlayerList;
     private boolean notification;
 
@@ -43,6 +47,15 @@ public class MentionProcessor implements ConfigListener {
         this.mentionRules = config.mentionRules();
         this.registries = new MentionRegistry(newConfig, manager, scoreboard);
 
+        this.cooldowns = new HashSet<>();
+        ServerTickEvents.START_SERVER_TICK.register(tick ->{
+            Instant now = Instant.now();
+
+            cooldowns.forEach(cooldown -> {
+                if (now.isAfter(cooldown.end())) cooldowns.remove(cooldown);
+            });
+        });
+
         this.notificationOffPlayerList = config.notificationOffPlayerList();
         this.notification = config.notificationCommandEnable();
     }
@@ -53,6 +66,14 @@ public class MentionProcessor implements ConfigListener {
 
         Set<Mention> mentions = new HashSet<>();
         for (MentionRule rule:rules){
+            Cooldown cooldown = new Cooldown(player,Instant.now().plusSeconds(rule.cooldown()),rule);
+
+            if (cooldowns.contains(cooldown)) {
+                continue;
+            }else {
+                cooldowns.add(cooldown);
+            }
+
             mentions.addAll(parseMention(text,rule));
         }
         mentions = parseTarget(mentions,player);
