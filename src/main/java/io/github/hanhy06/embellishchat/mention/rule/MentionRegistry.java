@@ -79,10 +79,13 @@ public class MentionRegistry {
                     .map(manager::getPlayer)
                     .filter(Objects::nonNull)
                     .toList();
-            style = team
-                    .getFormattedName()
-                    .getStyle()
-                    .withParent(style);
+
+            if (style != null) {
+                style = team
+                        .getFormattedName()
+                        .getStyle()
+                        .withParent(style);
+            }
         }
 
         return Target.of(players,style);
@@ -95,13 +98,16 @@ public class MentionRegistry {
         HashSet<ServerPlayerEntity> players = new HashSet<>();
 
         if (target!=null){
-            style = target
-                    .getDisplayName()
-                    .getStyle();
             players.add(target);
+
+            if (style != null){
+                style = target
+                        .getDisplayName()
+                        .getStyle();
+            }
         }else {
             Integer integer = ColorUtil.getTeamColor(scoreboard, parameter.option());
-            if (integer != null) style = Style.EMPTY.withColor(integer);
+            if (integer != null && style != null) style = Style.EMPTY.withColor(integer);
         }
 
         return new Target(players,style);
