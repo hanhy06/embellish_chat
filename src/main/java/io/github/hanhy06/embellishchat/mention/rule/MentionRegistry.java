@@ -80,12 +80,7 @@ public class MentionRegistry {
                     .filter(Objects::nonNull)
                     .toList();
 
-            if (style != null) {
-                style = team
-                        .getFormattedName()
-                        .getStyle()
-                        .withParent(style);
-            }
+            if (style != null) style = team.getFormattedName().getStyle();
         }
 
         return Target.of(players,style);
@@ -100,11 +95,7 @@ public class MentionRegistry {
         if (target!=null){
             players.add(target);
 
-            if (style != null){
-                style = target
-                        .getDisplayName()
-                        .getStyle();
-            }
+            if (style != null) style = target.getDisplayName().getStyle();
         }else {
             Integer integer = ColorUtil.getTeamColor(scoreboard, parameter.option());
             if (integer != null && style != null) style = Style.EMPTY.withColor(integer);
