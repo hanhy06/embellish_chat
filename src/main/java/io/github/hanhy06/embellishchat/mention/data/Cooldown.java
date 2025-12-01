@@ -5,17 +5,18 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.time.Instant;
 import java.util.Objects;
+import java.util.UUID;
 
-public record Cooldown(ServerPlayerEntity player, Instant end, MentionRule rule) {
+public record Cooldown(UUID uuid, Instant end, MentionRule rule) {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Cooldown cooldown = (Cooldown) o;
-        return Objects.equals(rule, cooldown.rule) && Objects.equals(player, cooldown.player);
+        return Objects.equals(rule, cooldown.rule) && Objects.equals(uuid, cooldown.uuid);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(player, rule);
+        return Objects.hash(uuid, rule);
     }
 }

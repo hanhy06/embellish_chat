@@ -39,6 +39,12 @@ public class MentionProcessor implements ConfigListener {
     public MentionProcessor(PlayerManager manager, Scoreboard scoreboard) {
         this.manager = manager;
         this.scoreboard = scoreboard;
+
+        ServerTickEvents.START_SERVER_TICK.register(tick ->{
+            Instant now = Instant.now();
+
+            cooldowns.removeIf(cooldown -> now.isAfter(cooldown.end()));
+        });
     }
 
     @Override
@@ -48,11 +54,6 @@ public class MentionProcessor implements ConfigListener {
         this.registries = new MentionRegistry(newConfig,manager, scoreboard);
 
         this.cooldowns = new HashSet<>();
-        ServerTickEvents.START_SERVER_TICK.register(tick ->{
-            Instant now = Instant.now();
-
-            cooldowns.removeIf(cooldown -> now.isAfter(cooldown.end()));
-        });
 
         this.notificationOffPlayerList = config.notificationOffPlayerList();
         this.notification = config.notificationCommandEnable();
@@ -64,7 +65,7 @@ public class MentionProcessor implements ConfigListener {
 
         Set<Mention> mentions = new HashSet<>();
         for (MentionRule rule:rules){
-            Cooldown cooldown = new Cooldown(player,Instant.now().plusSeconds(rule.cooldown()),rule);
+            Cooldown cooldown = new Cooldown(player.getUuid(),Instant.now().plusSeconds(rule.cooldown()),rule);
 
             if (cooldowns.contains(cooldown)) {
                 continue;
