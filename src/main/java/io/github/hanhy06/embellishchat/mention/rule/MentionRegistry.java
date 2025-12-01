@@ -15,7 +15,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Style;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.function.Function;
@@ -33,8 +32,8 @@ public class MentionRegistry {
         this.manager = manager;
         this.scoreboard = scoreboard;
 
-        if (config.colorTeam() != null){
-            colorTeam = Style.EMPTY.withColor(config.colorTeam().getRGB());
+        if (config.defaultTeamColor() != null){
+            colorTeam = Style.EMPTY.withColor(config.defaultTeamColor().getRGB());
         }else {
             colorTeam = null;
         }
@@ -80,13 +79,14 @@ public class MentionRegistry {
                     .filter(Objects::nonNull)
                     .toList();
 
-            Style name = team.getFormattedName().getStyle();
-            if (style != null) style = name.withParent(style);
+            if (style != null) {
+                Style name = team.getFormattedName().getStyle();
+                style = name.withParent(style);
+            }
         }
 
         return Target.of(players,style);
     }
-
 
     private Target PLAYER(MentionParameter parameter){
         ServerPlayerEntity target = manager.getPlayer(parameter.option());
@@ -96,11 +96,13 @@ public class MentionRegistry {
         if (target!=null){
             players.add(target);
 
-            Style name = target.getDisplayName().getStyle();
-            if (style != null) style = name.withParent(style);
-        }else {
+            if (style != null) {
+                Style name = target.getDisplayName().getStyle();
+                style = name.withParent(style);
+            }
+        }else if(style != null){
             Integer integer = ColorUtil.getTeamColor(scoreboard, parameter.option());
-            if (integer != null && style != null) style = Style.EMPTY.withColor(integer);
+            if (integer != null) style = Style.EMPTY.withColor(integer);
         }
 
         return new Target(players,style);

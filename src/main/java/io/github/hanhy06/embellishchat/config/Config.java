@@ -28,7 +28,7 @@ public record Config(
         String timestamp,
         Color urlColor,
         HashMap<String, Color> colorPreset,
-        Color colorTeam,
+        Color defaultTeamColor,
         boolean notificationCommandEnable,
 
         //player list
