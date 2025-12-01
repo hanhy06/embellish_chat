@@ -64,6 +64,7 @@ public class StylingProcessor implements ConfigListener {
         int lastEnd = 0;
 
         do {
+            if (matcher.start() < lastEnd) continue;
             result.append(slice(runs, lastEnd, matcher.start()));
 
             MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
@@ -101,6 +102,7 @@ public class StylingProcessor implements ConfigListener {
 
         int lastEnd = 0;
         for (Mention mention: mentions){
+            if (mention.begin() < lastEnd) continue;
             result.append(slice(runs,lastEnd, mention.begin()));
 
             MutableText segment = slice(runs, mention.begin(), mention.end());
