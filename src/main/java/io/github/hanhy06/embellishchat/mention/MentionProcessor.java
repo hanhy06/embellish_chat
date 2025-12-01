@@ -27,12 +27,12 @@ import java.util.regex.Matcher;
 public class MentionProcessor implements ConfigListener {
     private final PlayerManager manager;
     private final Scoreboard scoreboard;
+    private final HashSet<Cooldown> cooldowns;
 
     private Config config;
     private Map<String, List<MentionRule>> mentionRules;
     private MentionRegistry registries;
 
-    private HashSet<Cooldown> cooldowns;
     private HashSet<UUID> notificationOffPlayerList;
     private boolean notification;
 
@@ -54,8 +54,7 @@ public class MentionProcessor implements ConfigListener {
         this.mentionRules = config.mentionRules();
         this.registries = new MentionRegistry(newConfig,manager, scoreboard);
 
-        this.cooldowns = new HashSet<>();
-
+        this.cooldowns.clear();
         this.notificationOffPlayerList = config.notificationOffPlayerList();
         this.notification = config.notificationCommandEnable();
     }
