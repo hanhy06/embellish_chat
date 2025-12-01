@@ -45,18 +45,20 @@ Use the following patterns directly in the chat window:
 
 | Target          | Behavior                                                                                                                                                                                                                                                                |
 |-----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `@Player`       | Mentions a specific player. If the player is online, the mention adopts the player’s display name style (including team color). If the player is offline or does not exist, the mention uses the player’s team color if available, otherwise the default mention color. |
-| `@team(name)`   | Mentions all players in the specified team. If the team has a color, the mention is displayed in that color; otherwise it falls back to the default mention color.                                                                                                      |
+| `@Player`       | Mentions a specific player. If the player is online, the mention adopts the player’s display name style. If the player is offline or does not exist, it still follows the player's team style if available.                                                              |
+| `@team(name)`   | Mentions all players in the specified team.                                                                                                                                                                                                                             |
 | `@group(name)`  | Mentions all players in the specified LuckPerms group.                                                                                                                                                                                                                  |
-| `@everyone`     | Mentions all players on the server. Always uses the **default mention color**.                                                                                                                                                                                          |
-| `@here`         | Mentions all players within a configurable radius in the same world as the sender. The default radius is **64 blocks**, adjustable in the configuration. Uses the **default mention color**.                                                                            |
+| `@everyone`     | Mentions all players on the server.                                                                                                                                                                                                                                     |
+| `@here`         | Mentions all players within a configurable radius in the same world as the sender. The default radius is **64 blocks**, adjustable in the configuration.                                                                          |
 | `@world(name)`  | Mentions all players in the specified world.                                                                                                                                                                                                                            |
 
 > **Notes**
 >
-> * Online mention targets receive a notification, and the message is automatically styled using the appropriate color and formatting based on the target’s team, display name, or default rules.
+> * Online mention targets receive a notification, and the message is automatically styled using the appropriate formatting rules.
 > * The mention notification sound uses the **UI** sound category by default. On **Minecraft 1.21.5 and earlier**, it falls back to the **PLAYER** category.
 > * `@group(name)` requires LuckPerms. Without it, the mention resolves to no players.
+> * `@team` and `@Player` mentions follow the color of their respective team. If the team has no color, the `colorTeam` value is used.
+> * Other mention types can have their color customized by modifying the `styleRule` value.
 
 ---
 
