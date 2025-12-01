@@ -67,12 +67,8 @@ public class MentionProcessor implements ConfigListener {
         for (MentionRule rule:rules){
             Cooldown cooldown = new Cooldown(player.getUuid(),Instant.now().plusSeconds(rule.cooldown()),rule);
 
-            if (cooldowns.contains(cooldown)) {
-                continue;
-            }
-            else if (rule.cooldown() > 0) {
-                cooldowns.add(cooldown);
-            }
+            if (cooldowns.contains(cooldown)) continue;
+            else if (rule.cooldown() > 0) cooldowns.add(cooldown);
 
             mentions.addAll(parseMention(text,rule));
         }
