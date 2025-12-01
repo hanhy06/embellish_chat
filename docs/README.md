@@ -59,8 +59,6 @@ Use the following patterns directly in the chat window:
 > * `@group(name)` requires LuckPerms. Without it, the mention resolves to no players.
 > * `@team` and `@Player` mentions follow the color of their respective team. If the team has no color, the `defaultTeamColor` value is used.
 > * Other mention types can have their color customized by modifying the `styleRule` value.
-> * If the `defaultTeamColor` value is missing or `null`, it will not be automatically colored.
-> * You can specify the mention cooldown time (in seconds) through the config. When the cooldown time is set to 0, there are no restrictions.
 
 ---
 
@@ -152,6 +150,12 @@ The configuration file is located at: `config/embellish-chat.json`.
   "notificationOffPlayerList": []
 }
 ```
+
+> **Notes**
+> * The `delimiter` is internally processed using a regular expression. If you want to use a special character like `|` as a separator, please enter the escaped version of the delimiter.
+> * If the `defaultTeamColor` value is missing or `null`, it will not be automatically colored.
+> * You can specify the mention cooldown time (in seconds) through the config. When the cooldown time is set to 0, there are no restrictions.
+
 
 ---
 

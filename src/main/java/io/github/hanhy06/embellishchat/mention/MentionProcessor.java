@@ -40,6 +40,7 @@ public class MentionProcessor implements ConfigListener {
         this.manager = manager;
         this.scoreboard = scoreboard;
 
+        this.cooldowns = new HashSet<>();
         ServerTickEvents.START_SERVER_TICK.register(tick ->{
             Instant now = Instant.now();
 
