@@ -292,15 +292,16 @@ The graph below shows the TPS (Ticks Per Second) latency measurements for this m
 
 ## 📜 Compatibility
 
-✅ fabric-permissions-api(embedded)
+### Supported
+* ✅ **fabric-permissions-api** (Embedded)
+* ✅ **placeholder-api** (Embedded)
+* ✅ **LuckPerms**
+* ✅ **Advanced Chat** (by Wesley1808)
+* ✅ **Chat Heads**
+* ✅ **No Chat Reports**
 
-✅ placeholder-api(embedded)
-
-✅ luckperms
-
-✅ advanced-chat(by Wesley1808)
-
-❗ styled-chat (Mentions work, but styling does not)
+### Incompatible / Issues
+❗ **Styled Chat** (Mentions work, but styling does not apply)
 
 ---
 
