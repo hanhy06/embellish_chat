@@ -298,9 +298,9 @@ The graph below shows the TPS (Ticks Per Second) latency measurements for this m
 
 ✅ luckperms
 
-✅ advanced-chat
+✅ advanced-chat(by Wesley1808)
 
-❗ styled-chat(mention is work but styling is not work)
+❗ styled-chat (Mentions work, but styling does not)
 
 ---
 
