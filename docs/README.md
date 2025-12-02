@@ -300,7 +300,7 @@ The graph below shows the TPS (Ticks Per Second) latency measurements for this m
 
 ✅ advanced-chat
 
-❌ styled-chat
+❗ styled-chat(mention is work but styling is not work)
 
 ---
 
