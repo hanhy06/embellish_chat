@@ -1,6 +1,6 @@
 # Embellish Chat for Fabric
 
-**Embellish Chat** is a Fabric mod that enhances the chat experience on Minecraft servers. It makes player communication more expressive and convenient with Markdown‑style formatting, mentions, clickable links, and mention notifications.
+**Embellish Chat** is a Fabric mod that enhances the chat experience on Minecraft servers. It makes player communication more expressive and convenient with discord like Markdown-style formatting, mentions, clickable links, and mention notifications.
 
 ---
 
@@ -288,6 +288,20 @@ The graph below shows the TPS (Ticks Per Second) latency measurements for this m
 
 ![Latency](https://github.com/hanhy06/embellish-chat/blob/v2.4.1/%2B1.21.9/docs/images/Latency2.4.0-50.png?raw=true)
 ![Latency](https://github.com/hanhy06/embellish-chat/blob/v2.4.1/%2B1.21.9/docs/images/Latency2.4.0-200.png?raw=true)
+---
+
+## 📜 Compatibility
+
+✅ fabric-permissions-api(embedded)
+
+✅ placeholder-api(embedded)
+
+✅ luckperms
+
+✅ advanced-chat
+
+❌ styled-chat
+
 ---
 
 ## 📜 License & Links
