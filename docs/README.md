@@ -296,7 +296,7 @@ The graph below shows the TPS (Ticks Per Second) latency measurements for this m
 * ✅ **fabric-permissions-api** (Embedded)
 * ✅ **placeholder-api** (Embedded)
 * ✅ **LuckPerms**
-* ✅ **Advanced Chat** (by Wesley1808/It is **not part of DarkKronicle’s AdvancedChatCore, Ad... series.**)
+* ✅ **Advanced Chat** ([by Wesley1808](https://modrinth.com/mod/advanced-chat)/It adds channels and other features different from DarkKronicle’s **AdvancedChatCore series**.)
 * ✅ **Chat Heads**
 * ✅ **No Chat Reports**
 
