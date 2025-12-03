@@ -79,7 +79,7 @@ public class StyleRegistry {
         MutableText text = parameter.text();
         String now = LocalDateTime.now().format(timestamp);
 
-        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(now + "\nClick to copy to clipboard"));
+        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(now + "\nClick to copy to clipboard").formatted(Formatting.GRAY));
         ClickEvent clickEvent = new ClickEvent.CopyToClipboard(now + " " + text.getString());
 
         return text.fillStyle(Style.EMPTY
