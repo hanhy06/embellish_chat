@@ -155,7 +155,7 @@ The configuration file is located at: `config/embellish-chat.json`.
 > * The `delimiter` is internally processed using a regular expression. If you want to use a special character like `|` as a separator, please enter the escaped version of the delimiter.
 > * If the `defaultTeamColor` value is missing or `null`, it will not be automatically colored.
 > * You can specify the mention cooldown time (in seconds) through the config. When the cooldown time is set to 0, there are no restrictions.
-> * [embellish-chat.kro.kr](embellish-chat.kro.kr) is a web configuration generator site for Embellish Chat. It was created using Gemini, so it may not be perfect.
+> * [embellish-chat.kro.kr](http://embellish-chat.kro.kr) is a web configuration generator site for Embellish Chat. It was created using Gemini, so it may not be perfect.
 
 
 ---
