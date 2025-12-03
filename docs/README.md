@@ -290,20 +290,29 @@ The graph below shows the TPS (Ticks Per Second) latency measurements for this m
 ![Latency](https://github.com/hanhy06/embellish-chat/blob/v2.5.0/%2B1.21.9/docs/images/Latency2.4.0-200.png?raw=true)
 ---
 
-## 📜 Compatibility
+[//]: # (## 📜 Compatibility)
 
-### Supported
-* ✅ **fabric-permissions-api** (Embedded)
-* ✅ **placeholder-api** (Embedded)
-* ✅ **LuckPerms**
-* ✅ **Advanced Chat** ([by Wesley1808](https://modrinth.com/mod/advanced-chat)/It adds channels and other features different from DarkKronicle’s **AdvancedChatCore series**.)
-* ✅ **Chat Heads**
-* ✅ **No Chat Reports**
+[//]: # ()
+[//]: # (### Supported)
 
-### Incompatible / Issues
-❗ **Styled Chat** (Mentions work, but styling does not apply)
+[//]: # (* ✅ **fabric-permissions-api** &#40;Embedded&#41;)
 
----
+[//]: # (* ✅ **placeholder-api** &#40;Embedded&#41;)
+
+[//]: # (* ✅ **LuckPerms**)
+
+[//]: # (* ✅ **Advanced Chat** &#40;[by Wesley1808]&#40;https://modrinth.com/mod/advanced-chat&#41;/It adds channels and other features different from DarkKronicle’s **AdvancedChatCore series**.&#41;)
+
+[//]: # (* ✅ **Chat Heads**)
+
+[//]: # (* ✅ **No Chat Reports**)
+
+[//]: # ()
+[//]: # (### Incompatible / Issues)
+
+[//]: # (❗ **Styled Chat** &#40;Mentions work, but styling does not apply&#41;)
+
+[//]: # (---)
 
 ## 📜 License & Links
 
