@@ -16,7 +16,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Style;
 
 import java.util.*;
-import java.util.List;
 import java.util.function.Function;
 
 import static java.util.Map.entry;

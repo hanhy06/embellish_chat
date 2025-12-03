@@ -1,7 +1,6 @@
 package io.github.hanhy06.embellishchat.mention.data;
 
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
-import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.time.Instant;
 import java.util.Objects;
