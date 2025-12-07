@@ -65,14 +65,11 @@ public class MentionProcessor implements ConfigListener {
 
         Set<Mention> mentions = new HashSet<>();
         for (MentionRule rule:rules){
-            Cooldown cooldown = new Cooldown(player.getUuid(),Instant.now().plusSeconds(rule.cooldown()),rule);
+            if (rule.cooldown() > 0){
+                Cooldown cooldown = new Cooldown(player.getUuid(),Instant.now().plusSeconds(rule.cooldown()),rule);
 
-            if (cooldowns.contains(cooldown)) {
-                player.sendMessage(Text.literal("mention cooldown"),true);
-                continue;
-            }
-            else if (rule.cooldown() > 0) {
-                cooldowns.add(cooldown);
+                if (cooldowns.contains(cooldown)) continue;
+                else cooldowns.add(cooldown);
             }
 
             mentions.addAll(parseMention(text,rule));
