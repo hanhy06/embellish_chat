@@ -279,7 +279,7 @@ For each test:
 
 - The server was stressed with up to **500 chat messages per tick**  
   (≈ **10,000 messages per second**).
-- Each message was ~**50** or **200** characters long.
+- Each message was about **50** or **200** characters long.
 - The server was kept under continuous load while sending these messages every tick.Once the TPS and latency values stabilized, the average was calculated over that steady-state period.
 - The reported value is the **average TPS latency** during that period.
 
