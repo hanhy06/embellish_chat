@@ -259,35 +259,31 @@ This mod supports dynamic data through the Text Placeholder API.
 The Text Placeholder API applies to the mention title, all presets used in rules, and any options that users can configure.
 
 ---
-## 📊 TPS Latency Test
+## 📊 Performance: TPS & Latency
 
-**Test Environment**
+### Test Setup
 
-* Version: Embellish Chat 2.5.1 (DEV)
-* CPU: 13th Gen Intel(R) Core(TM) i7-1360P
-* RAM: 2GB max
-* System: Windows 11
+These tests were performed in a synthetic stress environment to measure **worst-case** performance.  
+They do **not** represent normal server conditions.
 
-* Minecraft: 1.21.10
-* World: Single Play / Superflat
+- Embellish Chat: **2.5.1 (DEV)**
+- Minecraft: **1.21.10**
+- World: **Singleplayer, Superflat**
+- CPU: **13th Gen Intel(R) Core(TM) i7-1360P**
+- Max RAM for JVM: **2 GB**
+- System: **Windows 11**
 
-**These results demonstrate general performance characteristics rather than a strict scientific benchmark, as the testing environment does not fully replicate real server conditions.**
+### Test Scenario
 
-The graph below shows the TPS (Ticks Per Second) latency measurements for this mod. Each test message contained approximately 200 or 50 characters, and the system was stressed by sending up to 10,000 (500 × 20) chat messages per second.
+For each test:
 
-The latency was measured over approximately **10 seconds**, with the **command executed on every tick**, and the average value was calculated from those measurements.
+- The server was stressed with up to **500 chat messages per tick**  
+  (≈ **10,000 messages per second**).
+- Each message was ~**50** or **200** characters long.
+- The server was kept under continuous load while sending these messages every tick.Once the TPS and latency values stabilized, the average was calculated over that steady-state period.
+- The reported value is the **average TPS latency** during that period.
 
-### 📝 Note on Mention Latency Analysis (v2.5.1)
-
-In previous measurements (v2.4.0), the *Mention Only* test showed an average latency of ~33ms because it was conducted with **notifications muted**, skipping the packet transmission process.
-
-In **v2.5.1**, we conducted a detailed analysis to isolate the performance cost:
-
-* **Logic Only (Notification OFF):** ~35ms avg. (Pure computational lookup is fast.)
-* **Full Processing (Notification ON):** ~60ms+ avg. (Includes Packet I/O for Sounds/Actionbar)
-
-**Conclusion:** The increased latency at extreme loads (500 msgs/tick) is caused by the **Vanilla Minecraft Packet I/O bottleneck** (sending 500 sound & text packets per tick), not the mod's internal logic.
-*In a real-world environment, this volume is impossible. To prevent abuse, use the newly added **Mention Cooldown** feature.*
+The messages used in the tests are:
 
 | Type         | Length | Test String                                                                                                                                                                                                                  |
 |--------------|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -302,6 +298,27 @@ In **v2.5.1**, we conducted a detailed analysis to isolate the performance cost:
 
 ![Latency](https://github.com/hanhy06/embellish-chat/blob/v2.5.0/%2B1.21.9/docs/images/Latency2.4.0-50.png?raw=true)
 ![Latency](https://github.com/hanhy06/embellish-chat/blob/v2.5.0/%2B1.21.9/docs/images/Latency2.4.0-200.png?raw=true)
+
+### 📝 Mention Latency Analysis (v2.5.1)
+
+In previous measurements (v2.4.0), the *Mention Only* test showed an average latency of **≈ 33 ms** because notifications were **muted**, so the game skipped sending sound/actionbar packets.
+
+In **v2.5.1**, we separated the cost into two parts:
+
+- **Logic Only (Notification OFF)**
+    - ~**35 ms** avg. at 500 mention messages per tick
+    - This is the pure lookup & processing cost, without any notification packets.
+- **Full Processing (Notification ON)**
+    - ~**60 ms+** avg. at 500 mention messages per tick
+    - This includes Vanilla packet I/O (sound + actionbar text) for every mention.
+
+> 🔍 **Conclusion**  
+> Under extreme artificial load (500 messages per tick), the main bottleneck is  
+> **Vanilla Minecraft’s packet I/O**, *not* Embellish Chat’s internal logic.
+
+In a real server environment, this volume of messages per tick is practically impossible.  
+To further protect against abuse, use the **Mention Cooldown** feature added in v2.5.1.
+
 ---
 
 [//]: # (## 📜 Compatibility)
