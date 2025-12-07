@@ -317,7 +317,7 @@ In **v2.5.1**, we separated the cost into two parts:
 > **Vanilla Minecraft’s packet I/O**, *not* Embellish Chat’s internal logic.
 
 In a real server environment, this volume of messages per tick is practically impossible.  
-To further protect against abuse, use the **Mention Cooldown** feature added in v2.5.1.
+To further protect against abuse, use the **Mention Cooldown** feature added in v2.5.0.
 
 ---
 
