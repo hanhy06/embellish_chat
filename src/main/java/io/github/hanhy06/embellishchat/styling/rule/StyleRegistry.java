@@ -88,7 +88,7 @@ public class StyleRegistry {
     }
 
     public MutableText LOG(StyleParameter parameter){
-        EmbellishChat.LOGGER.info("Log StyleType text: {}, sender: {}",parameter.text().getString(),parameter.player());
+        EmbellishChat.LOGGER.info("Log StyleType text: {}, open text:{}, sender: {}",parameter.text().getString(),parameter.option(),parameter.player());
         return parameter.text();
     }
 
