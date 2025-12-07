@@ -54,10 +54,6 @@ public record Config(
                                                 List.of(StyleAction.of(StyleType.URL,""))
                                         ),
                                         StylingRule.of(
-                                                "((https://\\S+))",
-                                                List.of(StyleAction.of(StyleType.URL,""))
-                                        ),
-                                        StylingRule.of(
                                                 "\\[([^\\]]+?)]\\{(.*?)}",
                                                 List.of(StyleAction.of(StyleType.FONT,""))
                                         ),
