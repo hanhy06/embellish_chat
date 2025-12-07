@@ -305,7 +305,7 @@ In previous measurements (v2.4.0), the *Mention Only* test showed an average lat
 
 In **v2.5.1**, we separated the cost into two parts:
 
-- **Logic Only (Notification OFF)**
+- **Mention Logic Only (Notification OFF)**
     - ~**35 ms** avg. at 500 mention messages per tick
     - This is the pure lookup & processing cost, without any notification packets.
 - **Full Processing (Notification ON)**
