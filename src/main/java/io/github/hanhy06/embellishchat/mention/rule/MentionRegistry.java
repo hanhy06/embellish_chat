@@ -72,11 +72,10 @@ public class MentionRegistry {
 
     private Target TEAM(MentionParameter parameter){
         Team team = scoreboard.getTeam(parameter.option());
-        List<ServerPlayerEntity> players = new ArrayList<>();
         Style style = colorTeam;
 
         if (team != null){
-            players = team
+            List<ServerPlayerEntity> players = team
                     .getPlayerList()
                     .stream()
                     .map(manager::getPlayer)
@@ -87,9 +86,11 @@ public class MentionRegistry {
                 Style name = team.getFormattedName().getStyle();
                 style = name.withParent(style);
             }
-        }
 
-        return Target.of(players,style);
+            return Target.of(players,style);
+        }else {
+            return Target.of(new HashSet<>(),style);
+        }
     }
 
     private Target PLAYER(MentionParameter parameter){
@@ -113,16 +114,13 @@ public class MentionRegistry {
     }
 
     private Target LUCK_PERMS_GROUP(MentionParameter parameter){
-        List<ServerPlayerEntity> players = new ArrayList<>();
-
         if (!FabricLoader.getInstance().isModLoaded("luckperms")) {
             EmbellishChat.LOGGER.info("LuckPerms not found. @group mentions will be ignored.");
+            return Target.of(new HashSet<>(),null);
+        }else {
+            List<ServerPlayerEntity> players = LuckPermsUtil.getGroupPlayers(parameter.option(),manager.getPlayerList());
             return Target.of(players,null);
         }
-
-        players = LuckPermsUtil.getGroupPlayers(parameter.option(),manager.getPlayerList());
-
-        return Target.of(players,null);
     }
 
     private Target WORLD(MentionParameter parameter){
@@ -138,30 +136,27 @@ public class MentionRegistry {
             }
         }
 
-        List<ServerPlayerEntity> players = new ArrayList<>();
-
         if (targetWorld != null) {
-            players = PlayerLookup.world(targetWorld).stream().toList();
+            List<ServerPlayerEntity> players = PlayerLookup.world(targetWorld).stream().toList();
+            return Target.of(players,null);
         } else {
             EmbellishChat.LOGGER.info("World {} not found. @world mention ignored.", worldName);
+            return Target.of(new HashSet<>(), null);
         }
-
-        return Target.of(players,null);
     }
 
     private Target CUSTOM(MentionParameter parameter){
         ServerPlayerEntity sender = parameter.sender();
         StringReader selector = new StringReader(parameter.option());
-        List<ServerPlayerEntity> players = new ArrayList<>();
 
         try {
             EntitySelectorReader reader = new EntitySelectorReader(selector, true);
             EntitySelector entitySelector = reader.read();
-            players = entitySelector.getPlayers(sender.getCommandSource());
+            List<ServerPlayerEntity> players = entitySelector.getPlayers(sender.getCommandSource());
+            return Target.of(players, null);
         } catch (CommandSyntaxException e) {
             EmbellishChat.LOGGER.warn("Invalid selector: {}", selector);
+            return Target.of(new HashSet<>(), null);
         }
-
-        return Target.of(players, null);
     }
 }
