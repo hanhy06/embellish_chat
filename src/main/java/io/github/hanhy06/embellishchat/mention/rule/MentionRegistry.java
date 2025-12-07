@@ -143,7 +143,7 @@ public class MentionRegistry {
         if (targetWorld != null) {
             players = PlayerLookup.world(targetWorld).stream().toList();
         } else {
-            EmbellishChat.LOGGER.info("World " + worldName + " not found. @world mention ignored.");
+            EmbellishChat.LOGGER.info("World {} not found. @world mention ignored.", worldName);
         }
 
         return Target.of(players,null);
@@ -159,7 +159,7 @@ public class MentionRegistry {
             EntitySelector entitySelector = reader.read();
             players = entitySelector.getPlayers(sender.getCommandSource());
         } catch (CommandSyntaxException e) {
-            EmbellishChat.LOGGER.warn("Invalid selector: " + selector);
+            EmbellishChat.LOGGER.warn("Invalid selector: {}", selector);
         }
 
         return Target.of(players, null);
