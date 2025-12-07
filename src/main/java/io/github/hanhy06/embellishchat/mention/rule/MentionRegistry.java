@@ -150,14 +150,14 @@ public class MentionRegistry {
     }
 
     private Target CUSTOM(MentionParameter parameter){
+        ServerPlayerEntity sender = parameter.sender();
         StringReader selector = new StringReader(parameter.option());
-        ServerPlayerEntity player = parameter.sender();
         List<ServerPlayerEntity> players = new ArrayList<>();
 
         try {
             EntitySelectorReader reader = new EntitySelectorReader(selector, true);
             EntitySelector entitySelector = reader.read();
-            players = entitySelector.getPlayers(player.getCommandSource());
+            players = entitySelector.getPlayers(sender.getCommandSource());
         } catch (CommandSyntaxException e) {
             EmbellishChat.LOGGER.warn("Invalid selector: " + selector);
         }
