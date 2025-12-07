@@ -307,8 +307,8 @@ public class StyleRegistry {
         String string = parameter.text().getString();
         return Text.of(string.toLowerCase()).copy().fillStyle(parameter.text().getStyle());
     }
-
-    public MutableText WAVE(StyleParameter parameter) {
+//  TODO:아틀라스로 택스트 좌표 바꿔가며 구현 근데 택스트 택스쳐를 불러올수 있을지 없을지 모름
+    public MutableText WAVES(StyleParameter parameter) {
         return parameter.text();
     }
 
