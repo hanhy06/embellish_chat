@@ -308,6 +308,10 @@ public class StyleRegistry {
         return Text.of(string.toLowerCase()).copy().fillStyle(parameter.text().getStyle());
     }
 
+    public MutableText WAVE(StyleParameter parameter) {
+        return parameter.text();
+    }
+
     public MutableText JSON(StyleParameter parameter){
         JsonElement element = JsonParser.parseString(parameter.option());
         Text text = TextCodecs.CODEC.parse(JsonOps.INSTANCE,element).getOrThrow();

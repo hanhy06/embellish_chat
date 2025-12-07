@@ -1,5 +1,7 @@
 package io.github.hanhy06.embellishchat.mention.rule;
 
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.mention.data.Target;
@@ -7,6 +9,8 @@ import io.github.hanhy06.embellishchat.util.ColorUtil;
 import io.github.hanhy06.embellishchat.util.LuckPermsUtil;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.command.EntitySelector;
+import net.minecraft.command.EntitySelectorReader;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
@@ -43,7 +47,8 @@ public class MentionRegistry {
                 entry(MentionType.TEAM,this::TEAM),
                 entry(MentionType.PLAYER,this::PLAYER),
                 entry(MentionType.LUCK_PERMS_GROUP,this::LUCK_PERMS_GROUP),
-                entry(MentionType.WORLD,this::WORLD)
+                entry(MentionType.WORLD,this::WORLD),
+                entry(MentionType.CUSTOM,this::CUSTOM)
         ));
     }
 
@@ -142,5 +147,21 @@ public class MentionRegistry {
         }
 
         return Target.of(players,null);
+    }
+
+    private Target CUSTOM(MentionParameter parameter){
+        StringReader selector = new StringReader(parameter.option());
+        ServerPlayerEntity player = parameter.sender();
+        List<ServerPlayerEntity> players = new ArrayList<>();
+
+        try {
+            EntitySelectorReader reader = new EntitySelectorReader(selector, true);
+            EntitySelector entitySelector = reader.read();
+            players = entitySelector.getPlayers(player.getCommandSource());
+        } catch (CommandSyntaxException e) {
+            EmbellishChat.LOGGER.warn("Invalid selector: " + selector);
+        }
+
+        return Target.of(players, null);
     }
 }
