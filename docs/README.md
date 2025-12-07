@@ -263,7 +263,7 @@ The Text Placeholder API applies to the mention title, all presets used in rules
 
 **Test Environment**
 
-* Version: Embellish Chat 2.4.0 (DEV)
+* Version: Embellish Chat 2.5.1 (DEV)
 * CPU: 13th Gen Intel(R) Core(TM) i7-1360P
 * RAM: 2GB max
 * System: Windows 11
@@ -275,6 +275,20 @@ The Text Placeholder API applies to the mention title, all presets used in rules
 
 The graph below shows the TPS (Ticks Per Second) latency measurements for this mod. Each test message contained approximately 200 or 50 characters, and the system was stressed by sending up to 10,000 (500 × 20) chat messages per second.
 
+The latency was measured over approximately **10 seconds**, with the **command executed on every tick**, and the average value was calculated from those measurements.
+
+### 📝 Note on Mention Latency Analysis (v2.5.1)
+
+In previous measurements (v2.4.0), the *Mention Only* test showed an average latency of ~33ms because it was conducted with **notifications muted**, skipping the packet transmission process.
+
+In **v2.5.1**, we conducted a detailed analysis to isolate the performance cost:
+
+* **Logic Only (Notification OFF):** ~35ms avg. (Pure computational lookup is fast.)
+* **Full Processing (Notification ON):** ~60ms+ avg. (Includes Packet I/O for Sounds/Actionbar)
+
+**Conclusion:** The increased latency at extreme loads (500 msgs/tick) is caused by the **Vanilla Minecraft Packet I/O bottleneck** (sending 500 sound & text packets per tick), not the mod's internal logic.
+*In a real-world environment, this volume is impossible. To prevent abuse, use the newly added **Mention Cooldown** feature.*
+
 | Type         | Length | Test String                                                                                                                                                                                                                  |
 |--------------|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Plain Text   | 50     | `This is a simple plain text message for latency test.`                                                                                                                                                                      |
@@ -285,7 +299,6 @@ The graph below shows the TPS (Ticks Per Second) latency measurements for this m
 | Mention Only | 200    | `Attention @everyone on the server. We are gathering @here now. If you are in @team(red) or @team(blue), please report to @PlayerOne. @group(admin) and @world(overworld) players should attend too.`                        |
 | Mixed        | 50     | `**Hey** @everyone! Look at [this]<red> _cool_ @here.`                                                                                                                                                                       |
 | Mixed        | 200    | `Attention @everyone! The **Boss Raid** is starting. @team(Red) please defend the [Core]<#FF0000>. @here gather at the gate! Watch out for the **hidden assassin**. The prize is [GOD SWORD]<RAINBOW>. Msg @Admin if stuck.` |
-
 
 ![Latency](https://github.com/hanhy06/embellish-chat/blob/v2.5.0/%2B1.21.9/docs/images/Latency2.4.0-50.png?raw=true)
 ![Latency](https://github.com/hanhy06/embellish-chat/blob/v2.5.0/%2B1.21.9/docs/images/Latency2.4.0-200.png?raw=true)
