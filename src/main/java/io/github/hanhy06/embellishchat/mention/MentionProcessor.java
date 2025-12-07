@@ -35,6 +35,7 @@ public class MentionProcessor implements ConfigListener {
 
     private HashSet<UUID> notificationOffPlayerList;
     private boolean notification;
+    private boolean broadcast;
 
     public MentionProcessor(PlayerManager manager, Scoreboard scoreboard) {
         this.manager = manager;
@@ -57,6 +58,7 @@ public class MentionProcessor implements ConfigListener {
         this.cooldowns.clear();
         this.notificationOffPlayerList = config.notificationOffPlayerList();
         this.notification = config.notificationCommandEnable();
+        this.broadcast = config.mentionBroadcast();
     }
 
     public List<Mention> handleMention(String text, List<String> keys, ServerPlayerEntity player){
@@ -76,7 +78,7 @@ public class MentionProcessor implements ConfigListener {
         }
         mentions = parseTarget(mentions,player);
 
-        mentionBroadcast(mentions,player);
+        if(broadcast) mentionBroadcast(mentions,player);
 
         return new ArrayList<>(mentions);
     }
