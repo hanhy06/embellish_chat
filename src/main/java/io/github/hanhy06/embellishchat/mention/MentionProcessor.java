@@ -46,7 +46,7 @@ public class MentionProcessor implements ConfigListener {
         this.cooldowns = new HashSet<>();
         this.counter =0;
         ServerTickEvents.START_SERVER_TICK.register(tick ->{
-            if (counter++ >= 5){
+            if (++counter >= 5){
                 Instant now = Instant.now();
                 cooldowns.removeIf(cooldown -> now.isAfter(cooldown.end()));
                 counter = 0;
