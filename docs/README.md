@@ -59,6 +59,7 @@ Use the following patterns directly in the chat window:
 > * `@group(name)` requires LuckPerms. Without it, the mention resolves to no players.
 > * `@team` and `@Player` mentions follow the color of their respective team. If the team has no color, the `defaultTeamColor` value is used.
 > * Other mention types can have their color customized by modifying the `styleRule` value.
+> * The table above shows only the most common mentions. Embellish Chat supports many additional mentions types. For more details, please refer to [MentionWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.5.0/%2B1.21.9/docs/wiki/MentionWiki.md)
 
 ---
 
@@ -259,7 +260,7 @@ This mod supports dynamic data through the Text Placeholder API.
 The Text Placeholder API applies to the mention title, all presets used in rules, and any options that users can configure.
 
 ---
-## 📊 Performance: TPS & Latency
+## 📊 Performance: Processing Time per Tick
 
 ### Test Setup
 
@@ -280,8 +281,8 @@ For each test:
 - The server was stressed with up to **500 chat messages per tick**  
   (≈ **10,000 messages per second**).
 - Each message was about **50** or **200** characters long.
-- The server was kept under continuous load while sending these messages every tick.Once the TPS and latency values stabilized, the average was calculated over that steady-state period.
-- The reported value is the **average TPS latency** during that period.
+- The server was kept under continuous load while sending these messages every tick.Once the MSPT(Milliseconds Per Tick) value stabilized, the average was calculated over that steady-state period.
+- The reported value is the **average MSPT** during that period.
 
 The messages used in the tests are:
 
@@ -299,9 +300,9 @@ The messages used in the tests are:
 ![Latency](https://github.com/hanhy06/embellish-chat/blob/v2.5.0/%2B1.21.9/docs/images/Latency2.4.0-50.png?raw=true)
 ![Latency](https://github.com/hanhy06/embellish-chat/blob/v2.5.0/%2B1.21.9/docs/images/Latency2.4.0-200.png?raw=true)
 
-### 📝 Mention Latency Analysis (v2.5.1)
+### 📝 Mention MSPT Analysis (v2.5.1)
 
-In previous measurements (v2.4.0), the *Mention Only* test showed an average latency of **≈ 33 ms** because notifications were **muted**, so the game skipped sending sound/actionbar packets.
+In previous measurements (v2.4.0), the *Mention Only* test showed an average MSPT of **≈ 33 ms** because notifications were **muted**, so the game skipped sending sound/actionbar packets.
 
 In **v2.5.1**, we separated the cost into two parts:
 
