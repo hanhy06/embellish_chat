@@ -297,8 +297,8 @@ The messages used in the tests are:
 | Mixed        | 50     | `**Hey** @everyone! Look at [this]<red> _cool_ @here.`                                                                                                                                                                       |
 | Mixed        | 200    | `Attention @everyone! The **Boss Raid** is starting. @team(Red) please defend the [Core]<#FF0000>. @here gather at the gate! Watch out for the **hidden assassin**. The prize is [GOD SWORD]<RAINBOW>. Msg @Admin if stuck.` |
 
-![Latency](https://github.com/hanhy06/embellish-chat/blob/v2.5.0/%2B1.21.9/docs/images/Latency2.4.0-50.png?raw=true)
-![Latency](https://github.com/hanhy06/embellish-chat/blob/v2.5.0/%2B1.21.9/docs/images/Latency2.4.0-200.png?raw=true)
+![MSPT-50](https://github.com/hanhy06/embellish-chat/blob/v2.5.0/%2B1.21.9/docs/images/Latency2.4.0-50.png?raw=true)
+![MSPT-200](https://github.com/hanhy06/embellish-chat/blob/v2.5.0/%2B1.21.9/docs/images/Latency2.4.0-200.png?raw=true)
 
 ### 📝 Mention MSPT Analysis (v2.5.1)
 
