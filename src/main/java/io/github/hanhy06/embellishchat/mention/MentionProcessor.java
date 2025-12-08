@@ -37,15 +37,20 @@ public class MentionProcessor implements ConfigListener {
     private boolean notification;
     private boolean broadcast;
 
+    private int counter;
+
     public MentionProcessor(PlayerManager manager, Scoreboard scoreboard) {
         this.manager = manager;
         this.scoreboard = scoreboard;
 
         this.cooldowns = new HashSet<>();
+        this.counter =0;
         ServerTickEvents.START_SERVER_TICK.register(tick ->{
-            Instant now = Instant.now();
-
-            cooldowns.removeIf(cooldown -> now.isAfter(cooldown.end()));
+            if (counter++ >= 5){
+                Instant now = Instant.now();
+                cooldowns.removeIf(cooldown -> now.isAfter(cooldown.end()));
+                counter = 0;
+            }
         });
     }
 
