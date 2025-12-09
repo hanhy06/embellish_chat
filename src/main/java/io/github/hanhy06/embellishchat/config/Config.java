@@ -254,7 +254,6 @@ public record Config(
                 true,
                 true,
 
-
                 //player list
                 new HashSet<>(),
                 new HashSet<>()

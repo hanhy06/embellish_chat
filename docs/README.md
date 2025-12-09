@@ -92,7 +92,7 @@ The configuration file is located at: `config/embellish-chat.json`.
 ```
 {
   // version
-  "version": "2.5.0",
+  "version": "2.6.0",
   
   //rules
   "stylingRules": {
@@ -143,8 +143,9 @@ The configuration file is located at: `config/embellish-chat.json`.
     "dark green": "#00AA00",
     ...
   },
-  "notificationCommandEnable": true,
   "defaultTeamColor": "#FF55FF",
+  "notificationCommandEnable": true,
+  "mentionBroadcast": true
   
   //player list
   "bannedPlayerList": [],
