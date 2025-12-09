@@ -308,7 +308,7 @@ In previous measurements (v2.4.0), the *Mention Only* test showed an average MSP
 In **v2.6.0**, we separated the cost into two parts:
 
 - **Mention Logic Only (Notification OFF)**
-    - about **37 ms** avg. at 500 mention messages per tick
+    - about **35 ms** avg. at 500 mention messages per tick
     - This is the pure lookup & processing cost, without any notification packets.
 - **Full Processing (Notification ON)**
     - about **55 ms** avg. at 500 mention messages per tick
