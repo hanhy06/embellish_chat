@@ -23,7 +23,7 @@ public class OptionUtil {
 
     public static String parseOption(String option, String preset, ServerPlayerEntity player){
         String value = preset.isBlank() ? option : preset;
-        if (value == null) value = "";
+        if (value.isBlank()) return "";
         return PlaceHolderUtil.getParedOption(value,player).getString();
     }
 

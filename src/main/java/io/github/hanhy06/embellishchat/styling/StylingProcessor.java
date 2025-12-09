@@ -96,6 +96,8 @@ public class StylingProcessor implements ConfigListener {
     }
 
     public MutableText applyMention(MutableText text, List<Mention> mentions, ServerPlayerEntity player){
+        if (mentions.isEmpty()) return text;
+
         Runs runs = flatten(text);
         MutableText result = Text.empty();
 
