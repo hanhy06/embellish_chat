@@ -268,7 +268,7 @@ The Text Placeholder API applies to the mention title, all presets used in rules
 These tests were performed in a synthetic stress environment to measure **worst-case** performance.  
 They do **not** represent normal server conditions.
 
-- Embellish Chat: **2.5.1 (DEV)**
+- Embellish Chat: **2.6.0 (DEV)**
 - Minecraft: **1.21.10**
 - World: **Singleplayer, Superflat**
 - CPU: **13th Gen Intel(R) Core(TM) i7-1360P**
