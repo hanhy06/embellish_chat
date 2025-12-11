@@ -67,6 +67,7 @@ public class StyleRegistry {
                 entry(StyleType.MASK, this::MASK),
                 entry(StyleType.UPPER, this::UPPER),
                 entry(StyleType.LOWER, this::LOWER),
+                entry(StyleType.CLEAR, this::CLEAR),
                 entry(StyleType.JSON, this::JSON)
         ));
     }
@@ -241,14 +242,20 @@ public class StyleRegistry {
     }
 
     public MutableText HOVER_ITEM(StyleParameter parameter){
-        ItemStack handItem = parameter.player().getMainHandStack();
+        ItemStack item = null;
+        ServerPlayerEntity player = parameter.player();
+        int slot = Integer.decode(parameter.option());
 
-        if (handItem.isEmpty()){
-            return parameter.text();
-        }else {
-            HoverEvent hoverEvent = new HoverEvent.ShowItem(handItem);
-            return parameter.text().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
+        if (slot == -1){
+            item = player.getMainHandStack();
+        } else if (slot == -2) {
+            item = player.getOffHandStack();
+        } else {
+            item = player.getInventory().getStack(slot);
         }
+
+        HoverEvent hoverEvent = new HoverEvent.ShowItem(item);
+        return parameter.text().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
     }
 
     public MutableText FONT(StyleParameter parameter) {
@@ -310,6 +317,16 @@ public class StyleRegistry {
 //  TODO:아틀라스로 택스트 좌표 바꿔가며 구현 근데 택스트 택스쳐를 불러올수 있을지 없을지 모름
     public MutableText WAVES(StyleParameter parameter) {
         return parameter.text();
+    }
+
+//  TODO: 아직은 고려중인 기능
+//  TODO: LuaJ 같은거 써서 루아 스크립트 쓸수 있게 함 파라미터 통째로 넘기고 샌드박스,화이트 리스트 환경으로 해야함
+    public MutableText LUA(StyleParameter parameter) {
+        return parameter.text();
+    }
+
+    public MutableText CLEAR(StyleParameter parameter) {
+        return Text.literal(parameter.text().getString());
     }
 
     public MutableText JSON(StyleParameter parameter){
