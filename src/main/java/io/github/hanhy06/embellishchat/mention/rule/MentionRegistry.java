@@ -61,10 +61,18 @@ public class MentionRegistry {
     }
 
     private Target INSIDE(MentionParameter parameter){
+        float round;
+
+        try {
+            round = Float.parseFloat(parameter.option());
+        } catch (NumberFormatException e) {
+            round = 64;
+        }
+
         HashSet<ServerPlayerEntity> players = new HashSet<>(PlayerLookup.around(
                 parameter.sender().getEntityWorld(),
                 parameter.sender().getEntityPos(),
-                Float.parseFloat(parameter.option())
+                round
         ));
 
         return Target.of(players,null);

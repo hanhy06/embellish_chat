@@ -20,8 +20,8 @@ public record Config(
         String version,
 
         //rules
-        TreeMap<String,List<StylingRule>> stylingRules,
-        TreeMap<String,List<MentionRule>> mentionRules,
+        LinkedHashMap<String,List<StylingRule>> stylingRules,
+        LinkedHashMap<String,List<MentionRule>> mentionRules,
 
         //preset
         String delimiter,
@@ -47,7 +47,7 @@ public record Config(
                         .getFriendlyString(),
 
                 //style
-                new TreeMap<>(Map.ofEntries(
+                new LinkedHashMap<>(Map.ofEntries(
                         entry("embellish-chat.chat",
                                 List.of(
                                         StylingRule.of(
@@ -106,7 +106,7 @@ public record Config(
                         ),
                         entry("embellish-chat.command_argument", List.of())
                 )),
-                new TreeMap<>(Map.ofEntries(
+                new LinkedHashMap<>(Map.ofEntries(
                     entry(
                             "embellish-chat.mention",
                             List.of(
