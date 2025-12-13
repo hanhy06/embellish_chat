@@ -6,7 +6,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
 public class PlaceHolderUtil {
-    public static Text getParedOption(String option, ServerPlayerEntity player){
+    public static Text getParsedOption(String option, ServerPlayerEntity player){
         if (player == null) return Text.literal(option);
         return Placeholders.parseText(Text.literal(option), PlaceholderContext.of(player));
     }

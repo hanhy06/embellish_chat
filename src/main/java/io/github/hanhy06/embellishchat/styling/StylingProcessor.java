@@ -110,7 +110,7 @@ public class StylingProcessor implements ConfigListener {
             if (mention.style() != null) segment.fillStyle(mention.style());
             for (StyleAction action : mention.rule().styles()) {
                 String preset = PlaceHolderUtil
-                        .getParedOption(action.preset(), player)
+                        .getParsedOption(action.preset(), player)
                         .getString();
 
                 StyleParameter parameter = StyleParameter.of(segment, preset, player);

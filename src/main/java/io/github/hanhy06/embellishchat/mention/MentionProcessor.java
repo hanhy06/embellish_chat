@@ -72,14 +72,17 @@ public class MentionProcessor implements ConfigListener {
 
         Set<Mention> mentions = new HashSet<>();
         for (MentionRule rule:rules){
-            if (rule.cooldown() > 0){
-                Cooldown cooldown = new Cooldown(player.getUuid(),Instant.now().plusSeconds(rule.cooldown()),rule);
+            Cooldown cooldown = null;
+            Set<Mention> buffer;
 
+            if (rule.cooldown() > 0){
+                cooldown = new Cooldown(player.getUuid(),Instant.now().plusSeconds(rule.cooldown()),rule);
                 if (cooldowns.contains(cooldown)) continue;
-                else cooldowns.add(cooldown);
             }
 
-            mentions.addAll(parseMention(text,rule));
+            buffer = parseMention(text,rule);
+            if (!buffer.isEmpty() && cooldown != null) cooldowns.add(cooldown);
+            mentions.addAll(buffer);
         }
         mentions = parseTarget(mentions,player);
 
@@ -103,15 +106,15 @@ public class MentionProcessor implements ConfigListener {
             List<String> options = mention.options();
             options = OptionUtil.parseOption(options,presets,player);
 
-            HashSet<ServerPlayerEntity> targets = new HashSet<>();
+            HashSet<ServerPlayerEntity> targets = null;
             Style style = Style.EMPTY;
 
             for (int i = 0; i < functions.size(); i++) {
                 MentionParameter parameter = MentionParameter.of(player, options.get(i));
                 Target target = functions.get(i).apply(parameter);
 
-                if (targets.isEmpty()) {
-                    targets.addAll(target.targets());
+                if (targets == null) {
+                    targets = new HashSet<>(target.targets());
                     style = target.style();
                 } else {
                     targets.retainAll(target.targets());
@@ -145,7 +148,7 @@ public class MentionProcessor implements ConfigListener {
 
     private void mentionBroadcast(Set<Mention> mentions,ServerPlayerEntity player){
         for (Mention mention:mentions){
-            Text title = PlaceHolderUtil.getParedOption(mention.rule().title(),player);
+            Text title = PlaceHolderUtil.getParsedOption(mention.rule().title(),player);
             SoundEvent sound = SoundEvent.of(mention.rule().sound());
             float pitch = mention.rule().pitch();
 
