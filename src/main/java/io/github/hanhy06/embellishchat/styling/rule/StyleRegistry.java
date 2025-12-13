@@ -244,7 +244,13 @@ public class StyleRegistry {
     public MutableText HOVER_ITEM(StyleParameter parameter){
         ItemStack item = null;
         ServerPlayerEntity player = parameter.player();
-        int slot = Integer.decode(parameter.option());
+        int slot;
+
+        try {
+            slot = Integer.decode(parameter.option());
+        } catch (NumberFormatException e) {
+            slot = -1;
+        }
 
         if (slot == -1){
             item = player.getMainHandStack();
@@ -314,6 +320,7 @@ public class StyleRegistry {
         String string = parameter.text().getString();
         return Text.of(string.toLowerCase()).copy().fillStyle(parameter.text().getStyle());
     }
+
 //  TODO:아틀라스로 택스트 좌표 바꿔가며 구현 근데 택스트 택스쳐를 불러올수 있을지 없을지 모름
     public MutableText WAVES(StyleParameter parameter) {
         return parameter.text();
