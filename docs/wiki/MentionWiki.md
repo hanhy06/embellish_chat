@@ -11,10 +11,9 @@
 | `CUSTOM`           | Mentions all players in a **target selectors**.                                                                    | vanilla target selectors |
 > **Notes**
 >
-> * All mentions use the mentionColor defined in the configuration by default.
-> * The TEAM and PLAYER types follow the style of the team they belong to.
+> * `TEAM` and `PLAYER` types follow the color of their respective team. If the team has no color, the `defaultTeamColor` value is used.
 > * You can modify the mention styles in the config.json file.
-> * You can find more details about target selectors on the [Minecraft Wiki](https://minecraft.wiki/w/Target_selectors)
+> * You can find more details about target selectors on the [Target selectors wiki](https://minecraft.wiki/w/Target_selectors)
 
 ---
 
