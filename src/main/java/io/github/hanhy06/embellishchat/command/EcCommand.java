@@ -119,6 +119,11 @@ public class EcCommand {
             return 1;
         }
 
+        if (!ConfigManager.getConfig().notificationCommandEnable()) {
+            player.sendMessage(Text.literal("Notification command is disabled."));
+            return 1;
+        }
+
         HashSet<UUID> players = ConfigManager.getConfig().notificationOffPlayerList();
         UUID uuid = player.getUuid();
 
