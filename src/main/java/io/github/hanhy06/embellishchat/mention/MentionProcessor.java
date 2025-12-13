@@ -81,7 +81,7 @@ public class MentionProcessor implements ConfigListener {
             }
 
             buffer = parseMention(text,rule);
-            if (!buffer.isEmpty() && cooldown != null) cooldowns.add(cooldown);
+            if (cooldown != null && !buffer.isEmpty()) cooldowns.add(cooldown);
             mentions.addAll(buffer);
         }
         mentions = parseTarget(mentions,player);
