@@ -86,7 +86,7 @@ public class MentionProcessor implements ConfigListener {
         }
         mentions = parseTarget(mentions,player);
 
-        if(broadcast) mentionBroadcast(mentions,player);
+        mentionBroadcast(mentions,player);
 
         return new ArrayList<>(mentions);
     }
@@ -147,6 +147,8 @@ public class MentionProcessor implements ConfigListener {
     }
 
     private void mentionBroadcast(Set<Mention> mentions,ServerPlayerEntity player){
+        if(!broadcast) return;
+
         for (Mention mention:mentions){
             Text title = PlaceHolderUtil.getParsedOption(mention.rule().title(),player);
             SoundEvent sound = SoundEvent.of(mention.rule().sound());
