@@ -5,22 +5,25 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
 import java.io.IOException;
 
-public class IdentifierTypeAdapter extends TypeAdapter<Identifier> {
+public class SoundEventTypeAdapter extends TypeAdapter<SoundEvent> {
     @Override
-    public void write(JsonWriter jsonWriter, Identifier identifier) throws IOException {
-        if (identifier == null){
+    public void write(JsonWriter jsonWriter, SoundEvent event) throws IOException {
+        if (event == null) {
             jsonWriter.nullValue();
             return;
         }
-        jsonWriter.value(identifier.toString());
+
+        jsonWriter.name("id");
+        jsonWriter.value(event.id().toString());
     }
 
     @Override
-    public Identifier read(JsonReader jsonReader) throws IOException {
+    public SoundEvent read(JsonReader jsonReader) throws IOException {
         JsonToken token = jsonReader.peek();
 
         if (token == JsonToken.NULL){
@@ -32,6 +35,6 @@ public class IdentifierTypeAdapter extends TypeAdapter<Identifier> {
             throw new JsonSyntaxException("Mention sound ID is not a string. Please write it in the format namespace:id.");
         }
 
-        return Identifier.tryParse(jsonReader.nextString());
+        return SoundEvent.of(Identifier.tryParse(jsonReader.nextString()));
     }
 }

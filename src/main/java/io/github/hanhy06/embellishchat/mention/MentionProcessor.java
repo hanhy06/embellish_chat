@@ -10,6 +10,7 @@ import io.github.hanhy06.embellishchat.mention.rule.MentionRegistry;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
+import io.github.hanhy06.embellishchat.mention.data.Sound;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.PlayerManager;
@@ -152,8 +153,6 @@ public class MentionProcessor implements ConfigListener {
 
         for (Mention mention:mentions){
             Text title = PlaceHolderUtil.getParsedOption(mention.rule().title(),player);
-            SoundEvent sound = SoundEvent.of(mention.rule().sound());
-            float pitch = mention.rule().pitch();
 
             mention.targets().forEach(target ->{
                 if (notification && notificationOffPlayerList.contains(target.getUuid())) {
@@ -161,7 +160,7 @@ public class MentionProcessor implements ConfigListener {
                 }
 
                 target.sendMessage(title, true);
-                target.playSound(sound,1,pitch);
+                Sound.playSoundToPlayer(player,mention.rule().sound());
             });
         }
     }

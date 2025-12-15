@@ -1,6 +1,7 @@
 package io.github.hanhy06.embellishchat.config;
 
 import io.github.hanhy06.embellishchat.EmbellishChat;
+import io.github.hanhy06.embellishchat.mention.data.Sound;
 import io.github.hanhy06.embellishchat.mention.rule.MentionAction;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
 import io.github.hanhy06.embellishchat.mention.rule.MentionType;
@@ -8,6 +9,7 @@ import io.github.hanhy06.embellishchat.styling.rule.StyleAction;
 import io.github.hanhy06.embellishchat.styling.rule.StyleType;
 import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 
 import java.awt.*;
@@ -112,10 +114,12 @@ public record Config(
                             List.of(
                                     MentionRule.of(
                                             "@here()",
-                                            Identifier.of("minecraft:entity.experience_orb.pickup"),
-                                            1.75f,
                                             "%player:displayname% mentioned you",
                                             0,
+                                            Sound.of(
+                                                    "minecraft:entity.experience_orb.pickup",
+                                                    SoundCategory.UI,1,1.75f
+                                            ),
                                             List.of(
                                                     MentionAction.of(
                                                             MentionType.INSIDE,"64"
@@ -132,10 +136,12 @@ public record Config(
                                     ),
                                     MentionRule.of(
                                             "@everyone()",
-                                            Identifier.of("minecraft:entity.experience_orb.pickup"),
-                                            1.75f,
                                             "%player:displayname% mentioned you",
                                             0,
+                                            Sound.of(
+                                                    "minecraft:entity.experience_orb.pickup",
+                                                    SoundCategory.UI,1,1.75f
+                                            ),
                                             List.of(
                                                     MentionAction.of(
                                                             MentionType.EVERYONE,""
@@ -152,10 +158,12 @@ public record Config(
                                     ),
                                     MentionRule.of(
                                             "@team\\((.+?)\\)",
-                                            Identifier.of("minecraft:entity.experience_orb.pickup"),
-                                            1.75f,
                                             "%player:displayname% mentioned you",
                                             0,
+                                            Sound.of(
+                                                    "minecraft:entity.experience_orb.pickup",
+                                                    SoundCategory.UI,1,1.75f
+                                            ),
                                             List.of(
                                                     MentionAction.of(
                                                             MentionType.TEAM,""
@@ -169,10 +177,12 @@ public record Config(
                                     ),
                                     MentionRule.of(
                                             "@group\\((.+?)\\)",
-                                            Identifier.of("minecraft:entity.experience_orb.pickup"),
-                                            1.75f,
                                             "%player:displayname% mentioned you",
                                             0,
+                                            Sound.of(
+                                                    "minecraft:entity.experience_orb.pickup",
+                                                    SoundCategory.UI,1,1.75f
+                                            ),
                                             List.of(
                                                     MentionAction.of(
                                                             MentionType.LUCK_PERMS_GROUP,""
@@ -189,10 +199,12 @@ public record Config(
                                     ),
                                     MentionRule.of(
                                             "@world\\((.+?)\\)",
-                                            Identifier.of("minecraft:entity.experience_orb.pickup"),
-                                            1.75f,
                                             "%player:displayname% mentioned you",
                                             0,
+                                            Sound.of(
+                                                    "minecraft:entity.experience_orb.pickup",
+                                                    SoundCategory.UI,1,1.75f
+                                            ),
                                             List.of(
                                                     MentionAction.of(
                                                             MentionType.WORLD,""
@@ -209,10 +221,12 @@ public record Config(
                                     ),
                                     MentionRule.of(
                                             "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
-                                            Identifier.of("minecraft:entity.experience_orb.pickup"),
-                                            1.75f,
                                             "%player:displayname% mentioned you",
                                             0,
+                                            Sound.of(
+                                                    "minecraft:entity.experience_orb.pickup",
+                                                    SoundCategory.UI,1,1.75f
+                                            ),
                                             List.of(
                                                     MentionAction.of(
                                                             MentionType.PLAYER,""
