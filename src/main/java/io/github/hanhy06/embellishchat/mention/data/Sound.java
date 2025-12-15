@@ -1,5 +1,6 @@
 package io.github.hanhy06.embellishchat.mention.data;
 
+import com.google.gson.annotations.SerializedName;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -8,6 +9,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
 public record Sound(
+        @SerializedName("id")
         SoundEvent event,
         SoundCategory category,
         float volume,

@@ -17,8 +17,7 @@ public class SoundEventTypeAdapter extends TypeAdapter<SoundEvent> {
             jsonWriter.nullValue();
             return;
         }
-
-        jsonWriter.name("id");
+        
         jsonWriter.value(event.id().toString());
     }
 
