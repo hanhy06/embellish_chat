@@ -9,7 +9,6 @@ import io.github.hanhy06.embellishchat.config.adapter.ColorTypeAdapter;
 import io.github.hanhy06.embellishchat.config.adapter.PatternTypeAdapter;
 import io.github.hanhy06.embellishchat.config.adapter.SoundEventTypeAdapter;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
 
 import java.awt.*;
 import java.io.BufferedReader;

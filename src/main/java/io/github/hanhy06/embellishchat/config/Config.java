@@ -10,7 +10,6 @@ import io.github.hanhy06.embellishchat.styling.rule.StyleType;
 import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.Identifier;
 
 import java.awt.*;
 import java.util.*;

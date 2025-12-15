@@ -3,6 +3,7 @@ package io.github.hanhy06.embellishchat.util;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 import net.minecraft.server.network.ServerPlayerEntity;
 
@@ -16,13 +17,17 @@ public class LuckPermsUtil {
         try {
             LuckPerms luckPerms = LuckPermsProvider.get();
 
-            result = players.stream()
-                    .filter(player -> {
-                        User user = luckPerms.getUserManager().getUser(player.getUuid());
-                        return user != null && targetGroup.equals(user.getPrimaryGroup());
-                    })
-                    .toList();
+            for (ServerPlayerEntity player : players) {
+                User user = luckPerms.getUserManager().getUser(player.getUuid());
+                if (user == null) continue;
 
+                for (Group group : user.getInheritedGroups(user.getQueryOptions())) {
+                    if (group.getName().equals(targetGroup)) {
+                        result.add(player);
+                        break;
+                    }
+                }
+            }
         } catch (IllegalStateException exception) {
             EmbellishChat.LOGGER.warn("LuckPerms API is not ready. Failed to process @group mention.", exception);
         }

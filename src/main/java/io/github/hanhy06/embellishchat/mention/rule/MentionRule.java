@@ -1,7 +1,7 @@
 package io.github.hanhy06.embellishchat.mention.rule;
 
-import io.github.hanhy06.embellishchat.styling.rule.StyleAction;
 import io.github.hanhy06.embellishchat.mention.data.Sound;
+import io.github.hanhy06.embellishchat.styling.rule.StyleAction;
 
 import java.util.List;
 import java.util.regex.Pattern;
