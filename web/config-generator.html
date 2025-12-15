@@ -20,10 +20,36 @@
 <script type="text/babel">
     const { useState, useEffect } = React;
 
-    // Lucide Icons Wrapper
+    // [Fixed] IconWrapper using lucide.createElement
+    // Resolves TypeError: window.lucide.icons[iconKey].toSvg is not a function
     const IconWrapper = ({ name, size, className }) => {
-         const iconName = name.charAt(0).toLowerCase() + name.slice(1);
-         return <i data-lucide={name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()} className={className} width={size} height={size}></i>;
+        // kebab-case (rotate-ccw) -> PascalCase (RotateCcw)
+        const iconKey = name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('');
+
+        // Safety check for Lucide availability
+        if (!window.lucide || !window.lucide.icons || !window.lucide.icons[iconKey]) {
+            return <span style={{ width: size, height: size, display: 'inline-block' }} />; // Placeholder to prevent layout shift
+        }
+
+        try {
+            // Use lucide.createElement to generate the SVG DOM element
+            if (typeof window.lucide.createElement === 'function') {
+                const element = window.lucide.createElement(window.lucide.icons[iconKey]);
+
+                // Apply attributes
+                element.setAttribute('width', size);
+                element.setAttribute('height', size);
+                if (className) element.setAttribute('class', className);
+                element.setAttribute('stroke-width', '2');
+
+                // Render via dangerouslySetInnerHTML
+                return <span dangerouslySetInnerHTML={{ __html: element.outerHTML }} style={{ display: 'inline-flex', verticalAlign: 'middle' }} />;
+            }
+        } catch (e) {
+            console.error("Lucide rendering error:", e);
+        }
+
+        return null;
     };
 
     const STYLE_TYPES = [
@@ -1135,10 +1161,6 @@
             { id: "mention", label: "Mention Rules", icon: "at-sign" },
             { id: "json", label: "Import / Export", icon: "file-json" },
         ];
-
-        useEffect(() => {
-            lucide.createIcons();
-        });
 
         return (
             <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans">
