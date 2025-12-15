@@ -205,7 +205,7 @@ A mention rule is applied only when the message satisfies all targets specified 
 ### Mention Rule Structure
 
 This section defines the mention rules.<br>
-Each rule consists of a regular expression (`pattern`), mention action list(`mentions`) and style action list(`styles`).
+regular expression (`pattern`), notification settings (`title`, `cooldown`, `sound`), mention action list(`mentions`) and style action list(`styles`).
 
 ```
 {
