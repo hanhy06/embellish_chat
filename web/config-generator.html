@@ -39,161 +39,318 @@
         "PLAYER", "TEAM", "INSIDE", "EVERYONE", "LUCK_PERMS_GROUP", "WORLD","CUSTOM"
     ];
 
+    const SOUND_CATEGORIES = [
+        "MASTER", "MUSIC", "RECORDS", "WEATHER", "BLOCKS", "HOSTILE", "NEUTRAL", "PLAYERS", "AMBIENT", "VOICE", "UI"
+    ];
+
     const DEFAULT_CONFIG = {
-        version: "2.6.0",
-        stylingRules: {
-            "embellish-chat.chat": [
-                {
-                    pattern: "\\[([^\\]]+?)]\\((https://.*?)\\)",
-                    styles: [{ styleType: "URL", preset: "" }]
-                },
-                {
-                    pattern: "((https://\\S+))",
-                    styles: [{ styleType: "URL", preset: "" }]
-                },
-                {
-                    pattern: "\\[([^\\]]+?)]\\{(.*?)}",
-                    styles: [{ styleType: "FONT", preset: "" }]
-                },
-                {
-                    pattern: "\\[([^\\]]+?)]<(#.{6})>",
-                    styles: [{ styleType: "COLOR_HEX", preset: "" }]
-                },
-                {
-                    pattern: "\\[([^\\]]+?)]<(#.{6,})>",
-                    styles: [{ styleType: "COLOR_GRADIENT", preset: "" }]
-                },
-                {
-                    pattern: "\\[([^\\]]+?)]<([a-z\\s]+?)>",
-                    styles: [{ styleType: "COLOR_PRESET", preset: "" }]
-                },
-                {
-                    pattern: "\\*\\*(.+?)\\*\\*()",
-                    styles: [{ styleType: "BOLD", preset: "" }]
-                },
-                {
-                    pattern: "__(.+?)__()",
-                    styles: [{ styleType: "UNDERLINE", preset: "" }]
-                },
-                {
-                    pattern: "_(.+?)_()",
-                    styles: [{ styleType: "ITALIC", preset: "" }]
-                },
-                {
-                    pattern: "~~(.+?)~~()",
-                    styles: [{ styleType: "STRIKETHROUGH", preset: "" }]
-                },
-                {
-                    pattern: "\\|\\|(.+?)\\|\\|()",
-                    styles: [{ styleType: "OBFUSCATED", preset: "" }]
-                },
-                {
-                    pattern: "\\[([^\\]]+?)]<(RAINBOW)>",
-                    styles: [{ styleType: "COLOR_RAINBOW", preset: "0.7" }]
-                },
-                {
-                    pattern: "(.+)()",
-                    styles: [{ styleType: "METADATA", preset: "" }]
-                }
-            ],
-            "embellish-chat.command_argument": []
-        },
-        mentionRules: {
-            "embellish-chat.mention": [
-                {
-                    pattern: "@here()",
-                    sound: "minecraft:entity.experience_orb.pickup",
-                    pitch: 1.75,
-                    title: "%player:displayname% mentioned you",
-                    cooldown: 0,
-                    mentions: [{ mentionType: "INSIDE", preset: "64" }],
-                    styles: [
-                        { styleType: "BOLD", preset: "" },
-                        { styleType: "COLOR_PRESET", preset: "light purple" }
-                    ]
-                },
-                {
-                    pattern: "@everyone()",
-                    sound: "minecraft:entity.experience_orb.pickup",
-                    pitch: 1.75,
-                    title: "%player:displayname% mentioned you",
-                    cooldown: 0,
-                    mentions: [{ mentionType: "EVERYONE", preset: "" }],
-                    styles: [
-                        { styleType: "BOLD", preset: "" },
-                        { styleType: "COLOR_PRESET", preset: "light purple" }
-                    ]
-                },
-                {
-                    pattern: "@team\\((.+?)\\)",
-                    sound: "minecraft:entity.experience_orb.pickup",
-                    pitch: 1.75,
-                    title: "%player:displayname% mentioned you",
-                    cooldown: 0,
-                    mentions: [{ mentionType: "TEAM", preset: "" }],
-                    styles: [{ styleType: "BOLD", preset: "" }]
-                },
-                {
-                    pattern: "@group\\((.+?)\\)",
-                    sound: "minecraft:entity.experience_orb.pickup",
-                    pitch: 1.75,
-                    title: "%player:displayname% mentioned you",
-                    cooldown: 0,
-                    mentions: [{ mentionType: "LUCK_PERMS_GROUP", preset: "" }],
-                    styles: [
-                        { styleType: "BOLD", preset: "" },
-                        { styleType: "COLOR_PRESET", preset: "light purple" }
-                    ]
-                },
-                {
-                    pattern: "@world\\((.+?)\\)",
-                    sound: "minecraft:entity.experience_orb.pickup",
-                    pitch: 1.75,
-                    title: "%player:displayname% mentioned you",
-                    cooldown: 0,
-                    mentions: [{ mentionType: "WORLD", preset: "" }],
-                    styles: [
-                        { styleType: "BOLD", preset: "" },
-                        { styleType: "COLOR_PRESET", preset: "light purple" }
-                    ]
-                },
-                {
-                    pattern: "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
-                    sound: "minecraft:entity.experience_orb.pickup",
-                    pitch: 1.75,
-                    title: "%player:displayname% mentioned you",
-                    cooldown: 0,
-                    mentions: [{ mentionType: "PLAYER", preset: "" }],
-                    styles: [{ styleType: "BOLD", preset: "" }]
-                }
+      "version": "2.6.0",
+      "stylingRules": {
+        "embellish-chat.chat": [
+          {
+            "pattern": "\\[([^\\]]+?)]\\((https://.*?)\\)",
+            "styles": [
+              {
+                "styleType": "URL",
+                "preset": ""
+              }
             ]
-        },
-        delimiter: ",",
-        timestamp: "yyyy-MM-dd HH:mm:ss",
-        urlColor: "#0000EE",
-        colorPreset: {
-            "green": "#55FF55",
-            "dark green": "#00AA00",
-            "black": "#000000",
-            "yellow": "#FFFF55",
-            "dark red": "#AA0000",
-            "dark purple": "#AA00AA",
-            "light purple": "#FF55FF",
-            "gold": "#FFAA00",
-            "dark gray": "#555555",
-            "red": "#FF5555",
-            "aqua": "#55FFFF",
-            "gray": "#AAAAAA",
-            "white": "#FFFFFF",
-            "blue": "#5555FF",
-            "dark aqua": "#00AAAA",
-            "dark blue": "#0000AA"
-        },
-        defaultTeamColor: "#FF55FF",
-        notificationCommandEnable: true,
-        mentionBroadcast: true,
-        bannedPlayerList: [],
-        notificationOffPlayerList: []
+          },
+          {
+            "pattern": "((https://\\S+))",
+            "styles": [
+              {
+                "styleType": "URL",
+                "preset": ""
+              }
+            ]
+          },
+          {
+            "pattern": "\\[([^\\]]+?)]\\{(.*?)}",
+            "styles": [
+              {
+                "styleType": "FONT",
+                "preset": ""
+              }
+            ]
+          },
+          {
+            "pattern": "\\[([^\\]]+?)]<(#.{6})>",
+            "styles": [
+              {
+                "styleType": "COLOR_HEX",
+                "preset": ""
+              }
+            ]
+          },
+          {
+            "pattern": "\\[([^\\]]+?)]<(#.{6,})>",
+            "styles": [
+              {
+                "styleType": "COLOR_GRADIENT",
+                "preset": ""
+              }
+            ]
+          },
+          {
+            "pattern": "\\[([^\\]]+?)]<([a-z\\s]+?)>",
+            "styles": [
+              {
+                "styleType": "COLOR_PRESET",
+                "preset": ""
+              }
+            ]
+          },
+          {
+            "pattern": "\\*\\*(.+?)\\*\\*()",
+            "styles": [
+              {
+                "styleType": "BOLD",
+                "preset": ""
+              }
+            ]
+          },
+          {
+            "pattern": "__(.+?)__()",
+            "styles": [
+              {
+                "styleType": "UNDERLINE",
+                "preset": ""
+              }
+            ]
+          },
+          {
+            "pattern": "_(.+?)_()",
+            "styles": [
+              {
+                "styleType": "ITALIC",
+                "preset": ""
+              }
+            ]
+          },
+          {
+            "pattern": "~~(.+?)~~()",
+            "styles": [
+              {
+                "styleType": "STRIKETHROUGH",
+                "preset": ""
+              }
+            ]
+          },
+          {
+            "pattern": "\\|\\|(.+?)\\|\\|()",
+            "styles": [
+              {
+                "styleType": "OBFUSCATED",
+                "preset": ""
+              }
+            ]
+          },
+          {
+            "pattern": "\\[([^\\]]+?)]<(RAINBOW)>",
+            "styles": [
+              {
+                "styleType": "COLOR_RAINBOW",
+                "preset": "0.7"
+              }
+            ]
+          },
+          {
+            "pattern": "(.+)()",
+            "styles": [
+              {
+                "styleType": "METADATA",
+                "preset": ""
+              }
+            ]
+          }
+        ],
+        "embellish-chat.command_argument": []
+      },
+      "mentionRules": {
+        "embellish-chat.mention": [
+          {
+            "pattern": "@here()",
+            "title": "%player:displayname% mentioned you",
+            "cooldown": 0,
+            "sound": {
+              "id": "minecraft:entity.experience_orb.pickup",
+              "category": "UI",
+              "volume": 1.0,
+              "pitch": 1.75
+            },
+            "mentions": [
+              {
+                "mentionType": "INSIDE",
+                "preset": "64"
+              }
+            ],
+            "styles": [
+              {
+                "styleType": "BOLD",
+                "preset": ""
+              },
+              {
+                "styleType": "COLOR_PRESET",
+                "preset": "light purple"
+              }
+            ]
+          },
+          {
+            "pattern": "@everyone()",
+            "title": "%player:displayname% mentioned you",
+            "cooldown": 0,
+            "sound": {
+              "id": "minecraft:entity.experience_orb.pickup",
+              "category": "UI",
+              "volume": 1.0,
+              "pitch": 1.75
+            },
+            "mentions": [
+              {
+                "mentionType": "EVERYONE",
+                "preset": ""
+              }
+            ],
+            "styles": [
+              {
+                "styleType": "BOLD",
+                "preset": ""
+              },
+              {
+                "styleType": "COLOR_PRESET",
+                "preset": "light purple"
+              }
+            ]
+          },
+          {
+            "pattern": "@team\\((.+?)\\)",
+            "title": "%player:displayname% mentioned you",
+            "cooldown": 0,
+            "sound": {
+              "id": "minecraft:entity.experience_orb.pickup",
+              "category": "UI",
+              "volume": 1.0,
+              "pitch": 1.75
+            },
+            "mentions": [
+              {
+                "mentionType": "TEAM",
+                "preset": ""
+              }
+            ],
+            "styles": [
+              {
+                "styleType": "BOLD",
+                "preset": ""
+              }
+            ]
+          },
+          {
+            "pattern": "@group\\((.+?)\\)",
+            "title": "%player:displayname% mentioned you",
+            "cooldown": 0,
+            "sound": {
+              "id": "minecraft:entity.experience_orb.pickup",
+              "category": "UI",
+              "volume": 1.0,
+              "pitch": 1.75
+            },
+            "mentions": [
+              {
+                "mentionType": "LUCK_PERMS_GROUP",
+                "preset": ""
+              }
+            ],
+            "styles": [
+              {
+                "styleType": "BOLD",
+                "preset": ""
+              },
+              {
+                "styleType": "COLOR_PRESET",
+                "preset": "light purple"
+              }
+            ]
+          },
+          {
+            "pattern": "@world\\((.+?)\\)",
+            "title": "%player:displayname% mentioned you",
+            "cooldown": 0,
+            "sound": {
+              "id": "minecraft:entity.experience_orb.pickup",
+              "category": "UI",
+              "volume": 1.0,
+              "pitch": 1.75
+            },
+            "mentions": [
+              {
+                "mentionType": "WORLD",
+                "preset": ""
+              }
+            ],
+            "styles": [
+              {
+                "styleType": "BOLD",
+                "preset": ""
+              },
+              {
+                "styleType": "COLOR_PRESET",
+                "preset": "light purple"
+              }
+            ]
+          },
+          {
+            "pattern": "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
+            "title": "%player:displayname% mentioned you",
+            "cooldown": 0,
+            "sound": {
+              "id": "minecraft:entity.experience_orb.pickup",
+              "category": "UI",
+              "volume": 1.0,
+              "pitch": 1.75
+            },
+            "mentions": [
+              {
+                "mentionType": "PLAYER",
+                "preset": ""
+              }
+            ],
+            "styles": [
+              {
+                "styleType": "BOLD",
+                "preset": ""
+              }
+            ]
+          }
+        ]
+      },
+      "delimiter": ",",
+      "timestamp": "yyyy-MM-dd HH:mm:ss",
+      "urlColor": "#0000EE",
+      "colorPreset": {
+        "dark green": "#00AA00",
+        "green": "#55FF55",
+        "yellow": "#FFFF55",
+        "black": "#000000",
+        "dark red": "#AA0000",
+        "dark purple": "#AA00AA",
+        "light purple": "#FF55FF",
+        "dark gray": "#555555",
+        "red": "#FF5555",
+        "gold": "#FFAA00",
+        "aqua": "#55FFFF",
+        "gray": "#AAAAAA",
+        "white": "#FFFFFF",
+        "blue": "#5555FF",
+        "dark aqua": "#00AAAA",
+        "dark blue": "#0000AA"
+      },
+      "defaultTeamColor": "#FF55FF",
+      "notificationCommandEnable": true,
+      "mentionBroadcast": true,
+      "bannedPlayerList": [],
+      "notificationOffPlayerList": []
     };
 
     const Card = ({ children, className = "" }) => (
@@ -642,142 +799,185 @@
         </div>
     );
 
-    const MentionView = ({ config, addPermissionGroup, removePermissionGroup, updateRuleList }) => (
-        <div className="space-y-6">
-            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-                <h2 className="text-xl font-bold dark:text-white">Mention Rules</h2>
-                <AddGroupInput
-                    onAdd={(name) => addPermissionGroup('mentionRules', name)}
-                    placeholder="Permission Node (e.g. embellish-chat.vip)"
-                />
-            </div>
+    const MentionView = ({ config, addPermissionGroup, removePermissionGroup, updateRuleList }) => {
 
-            {Object.entries(config.mentionRules).map(([permKey, rules]) => (
-                <Card key={permKey} className="p-4">
-                    <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-100 dark:border-slate-700">
-                        <h3 className="font-mono text-sm font-bold text-indigo-600 dark:text-indigo-400 break-all">{permKey}</h3>
-                        <DeleteButton
-                            onDelete={() => removePermissionGroup('mentionRules', permKey)}
-                            label="Delete Group"
-                        />
-                    </div>
+        const updateSound = (rules, idx, field, value) => {
+            const newRules = [...rules];
+            const currentSound = newRules[idx].sound || { id: "", category: "UI", volume: 1.0, pitch: 1.0 };
+            newRules[idx] = {
+                ...newRules[idx],
+                sound: { ...currentSound, [field]: value }
+            };
+            return newRules;
+        };
 
-                    <div className="space-y-4">
-                        {rules.map((rule, idx) => (
-                            <Accordion
-                                key={idx}
-                                title={`Rule #${idx + 1}: ${rule.pattern || '(Empty Pattern)'}`}
-                                onDelete={() => {
-                                    const newRules = rules.filter((_, i) => i !== idx);
+        return (
+            <div className="space-y-6">
+                <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+                    <h2 className="text-xl font-bold dark:text-white">Mention Rules</h2>
+                    <AddGroupInput
+                        onAdd={(name) => addPermissionGroup('mentionRules', name)}
+                        placeholder="Permission Node (e.g. embellish-chat.vip)"
+                    />
+                </div>
+
+                {Object.entries(config.mentionRules).map(([permKey, rules]) => (
+                    <Card key={permKey} className="p-4">
+                        <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-100 dark:border-slate-700">
+                            <h3 className="font-mono text-sm font-bold text-indigo-600 dark:text-indigo-400 break-all">{permKey}</h3>
+                            <DeleteButton
+                                onDelete={() => removePermissionGroup('mentionRules', permKey)}
+                                label="Delete Group"
+                            />
+                        </div>
+
+                        <div className="space-y-4">
+                            {rules.map((rule, idx) => (
+                                <Accordion
+                                    key={idx}
+                                    title={`Rule #${idx + 1}: ${rule.pattern || '(Empty Pattern)'}`}
+                                    onDelete={() => {
+                                        const newRules = rules.filter((_, i) => i !== idx);
+                                        updateRuleList('mentionRules', permKey, newRules);
+                                    }}
+                                >
+                                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+                                        <Input
+                                            label="Regex Pattern"
+                                            value={rule.pattern}
+                                            onChange={(v) => {
+                                                const newRules = [...rules];
+                                                newRules[idx] = { ...newRules[idx], pattern: v };
+                                                updateRuleList('mentionRules', permKey, newRules);
+                                            }}
+                                            className="md:col-span-12 font-mono"
+                                            placeholder="e.g. @everyone()"
+                                        />
+
+                                        {/* Sound Settings Block */}
+                                        <div className="md:col-span-12 grid grid-cols-1 md:grid-cols-12 gap-4 bg-slate-50 dark:bg-slate-900/30 p-3 rounded">
+                                            <div className="md:col-span-12 text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 mb-[-8px]">Notification Sound</div>
+                                            <Input
+                                                label="Sound ID"
+                                                value={rule.sound?.id}
+                                                onChange={(v) => {
+                                                    const newRules = updateSound(rules, idx, 'id', v);
+                                                    updateRuleList('mentionRules', permKey, newRules);
+                                                }}
+                                                className="md:col-span-4"
+                                                placeholder="minecraft:entity.experience_orb.pickup"
+                                            />
+                                            <Combobox
+                                                label="Category"
+                                                value={rule.sound?.category}
+                                                options={SOUND_CATEGORIES}
+                                                onChange={(v) => {
+                                                    const newRules = updateSound(rules, idx, 'category', v);
+                                                    updateRuleList('mentionRules', permKey, newRules);
+                                                }}
+                                                className="md:col-span-3"
+                                            />
+                                            <Input
+                                                label="Volume"
+                                                type="number"
+                                                step="0.1"
+                                                value={rule.sound?.volume}
+                                                onChange={(v) => {
+                                                    const newRules = updateSound(rules, idx, 'volume', parseFloat(v));
+                                                    updateRuleList('mentionRules', permKey, newRules);
+                                                }}
+                                                className="md:col-span-2"
+                                            />
+                                            <Input
+                                                label="Pitch"
+                                                type="number"
+                                                step="0.1"
+                                                value={rule.sound?.pitch}
+                                                onChange={(v) => {
+                                                    const newRules = updateSound(rules, idx, 'pitch', parseFloat(v));
+                                                    updateRuleList('mentionRules', permKey, newRules);
+                                                }}
+                                                className="md:col-span-3"
+                                            />
+                                        </div>
+
+                                        <div className="md:col-span-3">
+                                            <Input
+                                                label="Cooldown (sec)"
+                                                type="number"
+                                                step="1"
+                                                value={rule.cooldown !== undefined ? rule.cooldown : 0}
+                                                onChange={(v) => {
+                                                    const newRules = [...rules];
+                                                    newRules[idx] = { ...newRules[idx], cooldown: parseInt(v) || 0 };
+                                                    updateRuleList('mentionRules', permKey, newRules);
+                                                }}
+                                            />
+                                        </div>
+
+                                        <Input
+                                            label="Title (Placeholder API Supported)"
+                                            value={rule.title}
+                                            onChange={(v) => {
+                                                const newRules = [...rules];
+                                                newRules[idx] = { ...newRules[idx], title: v };
+                                                updateRuleList('mentionRules', permKey, newRules);
+                                            }}
+                                            className="md:col-span-9"
+                                        />
+
+                                        <div className="md:col-span-12 bg-slate-50 dark:bg-slate-900/30 p-3 rounded">
+                                            <MentionActionsEditor
+                                                actions={rule.mentions}
+                                                onChange={(newActions) => {
+                                                    const newRules = [...rules];
+                                                    newRules[idx] = { ...newRules[idx], mentions: newActions };
+                                                    updateRuleList('mentionRules', permKey, newRules);
+                                                }}
+                                            />
+                                        </div>
+
+                                        <div className="md:col-span-12 bg-slate-50 dark:bg-slate-900/30 p-3 rounded">
+                                            <StyleActionsEditor
+                                                actions={rule.styles}
+                                                onChange={(newActions) => {
+                                                    const newRules = [...rules];
+                                                    newRules[idx] = { ...newRules[idx], styles: newActions };
+                                                    updateRuleList('mentionRules', permKey, newRules);
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                </Accordion>
+                            ))}
+                            <Button
+                                className="w-full mt-4"
+                                variant="secondary"
+                                onClick={() => {
+                                    const newRules = [...rules, {
+                                        pattern: "",
+                                        sound: {
+                                            id: "minecraft:entity.experience_orb.pickup",
+                                            category: "UI",
+                                            volume: 1.0,
+                                            pitch: 1.0
+                                        },
+                                        title: "",
+                                        cooldown: 0,
+                                        mentions: [],
+                                        styles: []
+                                    }];
                                     updateRuleList('mentionRules', permKey, newRules);
                                 }}
                             >
-                                <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-                                    <Input
-                                        label="Regex Pattern"
-                                        value={rule.pattern}
-                                        onChange={(v) => {
-                                            const newRules = [...rules];
-                                            newRules[idx] = { ...newRules[idx], pattern: v };
-                                            updateRuleList('mentionRules', permKey, newRules);
-                                        }}
-                                        className="md:col-span-12 font-mono"
-                                        placeholder="e.g. @everyone()"
-                                    />
-                                    <Input
-                                        label="Sound ID"
-                                        value={rule.sound}
-                                        onChange={(v) => {
-                                            const newRules = [...rules];
-                                            newRules[idx] = { ...newRules[idx], sound: v };
-                                            updateRuleList('mentionRules', permKey, newRules);
-                                        }}
-                                        className="md:col-span-6"
-                                    />
-                                    <Input
-                                        label="Pitch"
-                                        type="number"
-                                        step="0.1"
-                                        value={rule.pitch}
-                                        onChange={(v) => {
-                                            const newRules = [...rules];
-                                            newRules[idx] = { ...newRules[idx], pitch: parseFloat(v) };
-                                            updateRuleList('mentionRules', permKey, newRules);
-                                        }}
-                                        className="md:col-span-3"
-                                    />
-                                    <div className="md:col-span-3">
-                                        <Input
-                                            label="Cooldown (sec)"
-                                            type="number"
-                                            step="1"
-                                            value={rule.cooldown !== undefined ? rule.cooldown : 0}
-                                            onChange={(v) => {
-                                                const newRules = [...rules];
-                                                newRules[idx] = { ...newRules[idx], cooldown: parseInt(v) || 0 };
-                                                updateRuleList('mentionRules', permKey, newRules);
-                                            }}
-                                        />
-                                    </div>
-
-                                    <Input
-                                        label="Title (Placeholder API Supported)"
-                                        value={rule.title}
-                                        onChange={(v) => {
-                                            const newRules = [...rules];
-                                            newRules[idx] = { ...newRules[idx], title: v };
-                                            updateRuleList('mentionRules', permKey, newRules);
-                                        }}
-                                        className="md:col-span-12"
-                                    />
-
-                                    <div className="md:col-span-12 bg-slate-50 dark:bg-slate-900/30 p-3 rounded">
-                                        <MentionActionsEditor
-                                            actions={rule.mentions}
-                                            onChange={(newActions) => {
-                                                const newRules = [...rules];
-                                                newRules[idx] = { ...newRules[idx], mentions: newActions };
-                                                updateRuleList('mentionRules', permKey, newRules);
-                                            }}
-                                        />
-                                    </div>
-
-                                    <div className="md:col-span-12 bg-slate-50 dark:bg-slate-900/30 p-3 rounded">
-                                        <StyleActionsEditor
-                                            actions={rule.styles}
-                                            onChange={(newActions) => {
-                                                const newRules = [...rules];
-                                                newRules[idx] = { ...newRules[idx], styles: newActions };
-                                                updateRuleList('mentionRules', permKey, newRules);
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                            </Accordion>
-                        ))}
-                        <Button
-                            className="w-full mt-4"
-                            variant="secondary"
-                            onClick={() => {
-                                const newRules = [...rules, {
-                                    pattern: "",
-                                    sound: "minecraft:entity.experience_orb.pickup",
-                                    pitch: 1.0,
-                                    title: "",
-                                    cooldown: 0,
-                                    mentions: [],
-                                    styles: []
-                                }];
-                                updateRuleList('mentionRules', permKey, newRules);
-                            }}
-                        >
-                            <IconWrapper name="plus" size={16} className="mr-2" /> Add Mention Rule
-                        </Button>
-                    </div>
-                </Card>
-            ))}
-        </div>
-    );
+                                <IconWrapper name="plus" size={16} className="mr-2" /> Add Mention Rule
+                            </Button>
+                        </div>
+                    </Card>
+                ))}
+            </div>
+        );
+    };
 
     const JsonView = ({ jsonInput, setJsonInput, handleImport, copyToClipboard, copySuccess, error, onReset }) => (
         <div className="flex flex-col">
@@ -842,6 +1042,11 @@
                     Object.keys(parsed.mentionRules).forEach(key => {
                         parsed.mentionRules[key].forEach(rule => {
                             if (rule.cooldown === undefined) rule.cooldown = 0;
+                            // Ensure sound object exists
+                            if (rule.sound && typeof rule.sound === 'string') {
+                                rule.sound = { id: rule.sound, category: "UI", volume: 1.0, pitch: rule.pitch || 1.0 };
+                                delete rule.pitch; // remove old root level pitch if exists
+                            }
                         });
                     });
                 }
