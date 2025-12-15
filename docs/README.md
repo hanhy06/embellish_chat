@@ -77,7 +77,7 @@ Use the following patterns directly in the chat window:
 
 > **Notes**
 >
-> * All commands in the /embellish-chat family require OP level 2.
+> * All commands in the /embellish-chat family require OP level 2 (or higher 1.21.11 GAMEMASTERS_CHECK).
 > * Commands in the /ec family do not require any OP level and can be used by all users.
 > * Through ```notificationCommandEnable```, you can configure whether users are allowed to set their notification preferences using /ec notification. If ```notificationCommandEnable``` is false, the user’s preference is ignored and notifications are sent for all mentions.
 
@@ -323,7 +323,7 @@ In **v2.6.0**, we separated the cost into two parts:
 > **Vanilla Minecraft’s packet I/O**, *not* Embellish Chat’s internal logic.
 
 In a real server environment, this volume of messages per tick is practically impossible.  
-To further protect against abuse, use the **Mention Cooldown** feature.
+To further protect against abuse, use the **Mention Cooldown** feature or `mentionBroadcast`.
 
 ---
 
