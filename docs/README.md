@@ -210,10 +210,14 @@ Each rule consists of a regular expression (`pattern`), mention action list(`men
 ```
 {
   "pattern": "@here()",
-  "sound": "entity.experience_orb.pickup",
-  "pitch": 1.75,
   "title": "%player:displayname% mentioned you",
   "cooldown": 0,
+  "sound": {
+    "id": "minecraft:entity.experience_orb.pickup",
+    "category": "UI",
+    "volume": 1.0,
+    "pitch": 1.75
+  },
   "mentions": [
     {
       "mentionType": "INSIDE",
@@ -224,18 +228,21 @@ Each rule consists of a regular expression (`pattern`), mention action list(`men
     {
       "styleType": "BOLD",
       "preset": ""
+    },
+    {
+      "styleType": "COLOR_PRESET",
+      "preset": "light purple"
     }
   ]
 }
 ```
 
-* **pattern** The pattern must contain one capturing group, which represents the mention option. For example, this could be a team name or a LuckPerms group name.
-* **sound** sound is the ID of the sound that the mentioned player hears.
-* **pitch** pitch is the pitch of the sound that the mentioned player hears.
-* **title** title is the title that appears on the mentioned player’s screen. It supports the Text Placeholder API, and %player:displayname% is the name of the player who was mentioned.
-* **cooldown** The cooldown is a mention cooldown, and the unit is seconds.
-* **mentions** The mentions field is a list of mention actions. Each action specifies a mentionType and an optional preset.
-* **styles** The styles field works the same way as in the styling rules section.
+* **pattern** must contain one capturing group, which represents the mention option. For example, this could be a team name or a LuckPerms group name.
+* **title** The title that appears on the mentioned player's screen. Supports the Text Placeholder API, where %player:displayname% is the name of the player who sent the mention.
+* **cooldown** Mention cooldown time in seconds. Set to 0 for no cooldown.
+* **sound** Defines the notification sound settings. Contains `id` (sound identifier), `category` (sound category), `volume`, and `pitch`.
+* **mentions** A list of mention actions. Each action specifies a `mentionType` and an optional `preset`.
+* **styles** A list of style actions. Works the same way as in the styling rules section.
 
 you can see more detail in [MentionWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.9/docs/wiki/MentionWiki.md)
 
