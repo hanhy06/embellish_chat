@@ -44,7 +44,6 @@
 > | 40                   | Uses the off-hand slot    |
 > | 41                   | Uses the horse armor slot |
 > | 42                   | Uses the saddle slot      |
-> | else                 | Uses the main-hand item   |
 
 ---
 
