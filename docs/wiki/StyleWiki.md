@@ -35,15 +35,16 @@
 > * `COLOR_SHADOW` is not available in versions earlier than 1.21.2.
 > * The COLOR_GRADIENT type also supports three or more colors.
 >
-> | **HOVER_ITEM Value**  | **Description**              |
-> |-----------------------|------------------------------|
-> | -1                    | Uses the main-hand item      |
-> | 0 ~ 8                 | Uses the hotbar slot         |
-> | 9 ~ 35                | Uses the inventory slot      |
-> | 36 ~ 39               | Uses the armor slot          |
-> | 40                    | Uses the off-hand slot       |
-> | 41                    | Uses the horse armor slot    |
-> | 42                    | Uses the saddle slot         |
+> | **HOVER_ITEM Value** | **Description**           |
+> |----------------------|---------------------------|
+> | -1                   | Uses the main-hand item   |
+> | 0 ~ 8                | Uses the hotbar slot      |
+> | 9 ~ 35               | Uses the inventory slot   |
+> | 36 ~ 39              | Uses the armor slot       |
+> | 40                   | Uses the off-hand slot    |
+> | 41                   | Uses the horse armor slot |
+> | 42                   | Uses the saddle slot      |
+> | else                 | Uses the main-hand item   |
 
 ---
 
