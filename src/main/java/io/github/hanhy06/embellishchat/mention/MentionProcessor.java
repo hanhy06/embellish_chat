@@ -160,7 +160,7 @@ public class MentionProcessor implements ConfigListener {
                 }
 
                 target.sendMessage(title, true);
-                Sound.playSoundToPlayer(player,mention.rule().sound());
+                Sound.playSoundToPlayer(target,mention.rule().sound());
             });
         }
     }
