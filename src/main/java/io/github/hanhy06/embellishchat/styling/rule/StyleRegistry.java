@@ -252,13 +252,13 @@ public class StyleRegistry {
             slot = -1;
         }
 
-        if (slot == -1){
+        if (slot < 0 || 42 < slot){
             item = player.getMainHandStack();
-        } else if (slot == -2) {
-            item = player.getOffHandStack();
         } else {
             item = player.getInventory().getStack(slot);
         }
+
+        if (item.isEmpty()) return parameter.text();
 
         HoverEvent hoverEvent = new HoverEvent.ShowItem(item);
         return parameter.text().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
