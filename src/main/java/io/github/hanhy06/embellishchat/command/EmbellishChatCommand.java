@@ -26,7 +26,7 @@ public class EmbellishChatCommand {
                 (commandDispatcher, commandRegistryAccess, registrationEnvironment) ->
                         commandDispatcher.register(
                                 CommandManager.literal("embellish-chat")
-                                        .requires(src -> src.hasPermissionLevel(2))
+                                        .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
                                         .then(CommandManager.literal("reload")
                                                 .executes(EmbellishChatCommand::executeReloadConfig))
                                         .then(CommandManager.literal("ban")
