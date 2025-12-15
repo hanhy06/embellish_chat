@@ -70,13 +70,14 @@ public class MentionProcessor implements ConfigListener {
         List<MentionRule> rules = new ArrayList<>();
         keys.forEach(key -> rules.addAll(mentionRules.get(key)));
 
+        UUID uuid = player.getUuid();
         Set<Mention> mentions = new HashSet<>();
         for (MentionRule rule:rules){
             Cooldown cooldown = null;
             Set<Mention> buffer;
 
             if (rule.cooldown() > 0){
-                cooldown = new Cooldown(player.getUuid(),Instant.now().plusSeconds(rule.cooldown()),rule);
+                cooldown = new Cooldown(uuid,Instant.now().plusSeconds(rule.cooldown()),rule);
                 if (cooldowns.contains(cooldown)) continue;
             }
 
