@@ -5,7 +5,6 @@ import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
 
-import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -49,14 +48,15 @@ public class DiscordMessenger implements ConfigListener {
                 .POST(HttpRequest.BodyPublishers.ofString(content))
                 .build();
 
-        try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() != 204) {
-                EmbellishChat.LOGGER.error("Failed to send a message to Discord: {}",response.statusCode());
-            }
-        }catch (IOException | InterruptedException exception){
-            EmbellishChat.LOGGER.error("Failed due to an I/O or interruption error (IOException | InterruptedException): {}",exception.getMessage());
-        }
+        client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenAccept(response -> {
+                    if (response.statusCode() != 204) {
+                        EmbellishChat.LOGGER.error("Failed to send a message to Discord: {}", response.statusCode());
+                    }
+                })
+                .exceptionally(exception -> {
+                    EmbellishChat.LOGGER.error("Failed due to an error: {}", exception.getMessage());
+                    return null;
+                });
     }
 }
