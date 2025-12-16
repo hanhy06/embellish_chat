@@ -1,6 +1,7 @@
 package io.github.hanhy06.embellishchat.config;
 
 import io.github.hanhy06.embellishchat.EmbellishChat;
+import io.github.hanhy06.embellishchat.discord.Discord;
 import io.github.hanhy06.embellishchat.mention.data.Sound;
 import io.github.hanhy06.embellishchat.mention.rule.MentionAction;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
@@ -35,7 +36,10 @@ public record Config(
 
         //player list
         HashSet<UUID> bannedPlayerList,
-        HashSet<UUID> notificationOffPlayerList
+        HashSet<UUID> notificationOffPlayerList,
+
+        //discord
+        Discord discord
 )
 {
     public static Config createDefault(){
@@ -269,7 +273,9 @@ public record Config(
 
                 //player list
                 new HashSet<>(),
-                new HashSet<>()
+                new HashSet<>(),
+
+                null
         );
     }
 }

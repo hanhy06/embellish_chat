@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
+import io.github.hanhy06.embellishchat.discord.DiscordMessenger;
 import io.github.hanhy06.embellishchat.styling.util.Runs;
 import io.github.hanhy06.embellishchat.util.ColorUtil;
 import net.minecraft.item.ItemStack;
@@ -68,7 +69,9 @@ public class StyleRegistry {
                 entry(StyleType.UPPER, this::UPPER),
                 entry(StyleType.LOWER, this::LOWER),
                 entry(StyleType.CLEAR, this::CLEAR),
-                entry(StyleType.JSON, this::JSON)
+                entry(StyleType.JSON, this::JSON),
+                entry(StyleType.DISCORD_JSON, this::DISCORD_JSON),
+                entry(StyleType.DISCORD_TEXT, this::DISCORD_TEXT)
         ));
     }
 
@@ -340,5 +343,15 @@ public class StyleRegistry {
         JsonElement element = JsonParser.parseString(parameter.option());
         Text text = TextCodecs.CODEC.parse(JsonOps.INSTANCE,element).getOrThrow();
         return text.copy();
+    }
+
+    public MutableText DISCORD_JSON(StyleParameter parameter){
+        DiscordMessenger.INSTANCE.sendJson(parameter.option());
+        return parameter.text();
+    }
+
+    public MutableText DISCORD_TEXT(StyleParameter parameter){
+        DiscordMessenger.INSTANCE.sendMessage(parameter.text().getString());
+        return parameter.text();
     }
 }
