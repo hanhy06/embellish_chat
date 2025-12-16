@@ -38,6 +38,11 @@ public class DiscordMessenger implements ConfigListener {
     }
 
     private void send(String content){
+        if (discord == null || discord.webhook() == null) {
+            EmbellishChat.LOGGER.warn("The registered Discord (or webhook) does not exist");
+            return;
+        }
+
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(discord.webhook())
                 .header("Content-Type", "application/json")
