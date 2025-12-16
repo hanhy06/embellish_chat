@@ -11,6 +11,7 @@ import java.net.http.HttpResponse;
 
 public class DiscordMessenger implements ConfigListener {
     public static DiscordMessenger INSTANCE;
+
     private final HttpClient client;
     private final Gson gson = new Gson();
 
