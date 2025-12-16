@@ -26,7 +26,7 @@ public class DiscordMessenger implements ConfigListener {
 
     @Override
     public void onConfigReload(Config newConfig) {
-        this.discordProfile = newConfig.discordProfile();
+        this.discordProfile = newConfig.discord();
     }
 
     public void sendJson(String json){
