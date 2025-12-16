@@ -13,7 +13,7 @@ public class DiscordMessenger implements ConfigListener {
     public static DiscordMessenger INSTANCE;
 
     private final HttpClient client;
-    private final Gson gson = new Gson();
+    private final Gson gson;
 
     private Discord discord;
 
@@ -21,6 +21,7 @@ public class DiscordMessenger implements ConfigListener {
         INSTANCE = this;
 
         this.client = HttpClient.newHttpClient();
+        this.gson = new Gson();
     }
 
     @Override
