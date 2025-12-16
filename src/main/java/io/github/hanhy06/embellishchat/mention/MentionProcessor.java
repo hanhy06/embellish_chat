@@ -151,6 +151,7 @@ public class MentionProcessor implements ConfigListener {
 
         for (Mention mention:mentions){
             Text title = PlaceHolderUtil.getParsedOption(mention.rule().title(),player);
+            Sound sound = mention.rule().sound();
 
             mention.targets().forEach(target ->{
                 if (notification && notificationOffPlayerList.contains(target.getUuid())) {
@@ -158,7 +159,7 @@ public class MentionProcessor implements ConfigListener {
                 }
 
                 target.sendMessage(title, true);
-                Sound.playSoundToPlayer(target,mention.rule().sound());
+                sound.playSoundToPlayer(target);
             });
         }
     }

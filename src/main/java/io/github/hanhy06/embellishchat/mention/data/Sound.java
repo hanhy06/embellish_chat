@@ -19,14 +19,14 @@ public record Sound(
         return new Sound(SoundEvent.of(Identifier.of(id)),category,volume,pitch);
     }
 
-    public static void playSoundToPlayer(ServerPlayerEntity player,Sound sound) {
+    public void playSoundToPlayer(ServerPlayerEntity player) {
         player.networkHandler.sendPacket(new PlaySoundS2CPacket(
-                Registries.SOUND_EVENT.getEntry(sound.event),
-                sound.category,
+                Registries.SOUND_EVENT.getEntry(this.event),
+                this.category,
                 player.getX(),
                 player.getY(),
                 player.getZ(),
-                sound.volume, sound.pitch,
+                this.volume, this.pitch,
                 player.getRandom().nextLong()
         ));
     }
