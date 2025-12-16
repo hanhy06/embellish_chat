@@ -34,8 +34,7 @@ public class DiscordMessenger implements ConfigListener {
 
     public void sendMessage(String content){
         DiscordPayload payload = DiscordPayload.of(discord,content);
-        String jsonPayload = gson.toJson(payload);
-        send(jsonPayload);
+        send(gson.toJson(payload));
     }
 
     private void send(String content){
