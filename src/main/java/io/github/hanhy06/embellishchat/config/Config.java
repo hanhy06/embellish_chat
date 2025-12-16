@@ -1,7 +1,7 @@
 package io.github.hanhy06.embellishchat.config;
 
 import io.github.hanhy06.embellishchat.EmbellishChat;
-import io.github.hanhy06.embellishchat.discord.Discord;
+import io.github.hanhy06.embellishchat.discord.DiscordProfile;
 import io.github.hanhy06.embellishchat.mention.data.Sound;
 import io.github.hanhy06.embellishchat.mention.rule.MentionAction;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
@@ -39,7 +39,7 @@ public record Config(
         HashSet<UUID> notificationOffPlayerList,
 
         //discord
-        Discord discord
+        DiscordProfile discord
 )
 {
     public static Config createDefault(){

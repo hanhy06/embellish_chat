@@ -6,7 +6,7 @@ public record DiscordPayload(
         String avatar,
         String content
 ) {
-    public static DiscordPayload of(Discord discord,String content){
-        return new DiscordPayload(3,discord.name(), discord.avatar_url(), content);
+    public static DiscordPayload of(DiscordProfile discordProfile, String content){
+        return new DiscordPayload(3, discordProfile.name(), discordProfile.avatar(), content);
     }
 }
