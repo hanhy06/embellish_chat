@@ -24,8 +24,14 @@
 ```
 {
   "pattern": "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
-  "sound": "entity.experience_orb.pickup",
-  "pitch": 1.75,
+  "title": "%player:displayname% mentioned you",
+  "cooldown": 0,
+  "sound": {
+    "id": "minecraft:entity.experience_orb.pickup",
+    "category": "UI",
+    "volume": 1.0,
+    "pitch": 1.75
+  },
   "mentions": [
     {
       "mentionType": "PLAYER",
@@ -39,6 +45,7 @@
     }
   ]
 }
+
 ```
 
 This is the most basic way to use it.
@@ -48,9 +55,14 @@ This is the most basic way to use it.
 ```
 {
   "pattern": "@red-team-here()",
-  "sound": "entity.experience_orb.pickup",
-  "pitch": 1.75,
   "title": "%player:displayname% mentioned you",
+  "cooldown": 0,
+  "sound": {
+    "id": "minecraft:entity.experience_orb.pickup",
+    "category": "UI",
+    "volume": 1.0,
+    "pitch": 1.75
+  },
   "mentions": [
     {
       "mentionType": "INSIDE",
@@ -81,9 +93,14 @@ Mentions any red-team player within a 64-block radius.
 ```
 {
   "pattern": "\\[notification\\]()",
-  "sound": "entity.experience_orb.pickup",
-  "pitch": 1.75,
   "title": "%player:displayname% mentioned you",
+  "cooldown": 0,
+  "sound": {
+    "id": "minecraft:entity.experience_orb.pickup",
+    "category": "UI",
+    "volume": 1.0,
+    "pitch": 1.75
+  },
   "mentions": [
     {
       "mentionType": "EVERYONE",
@@ -109,32 +126,44 @@ Typing `[notification]` will send an alert to everyone.
 
 ```
 {
-        "pattern": "@admin()",
-        "sound": "entity.experience_orb.pickup",
-        "pitch": 1.75,
-        "title": "%player:displayname% mentioned you",
-        "mentions": [
-          {
-            "mentionType": "LUCK_PERMS_GROUP",
-            "preset": "admin"
-          }
-        ],
-        "styles": [
-          {
-            "styleType": "BOLD",
-            "preset": ""
-          },
-          {
-            "styleType": "COLOR_HEX",
-            "preset": "#FFAAAA"
-          },
-          {
-            "styleType": "CLICK_COMMAND_RUN",
-            "preset": "execute in %world:id% run tp %player:pos_x% %player:pos_y% %player:pos_z%"
-          }
-        ]
-      }
+  "pattern": "@admin()",
+  "title": "%player:displayname% mentioned you",
+  "cooldown": 0,
+  "sound": {
+    "id": "minecraft:entity.experience_orb.pickup",
+    "category": "UI",
+    "volume": 1.0,
+    "pitch": 1.75
+  },
+  "mentions": [
+    {
+      "mentionType": "LUCK_PERMS_GROUP",
+      "preset": "admin"
+    }
+  ],
+  "styles": [
+    {
+      "styleType": "BOLD",
+      "preset": ""
+    },
+    {
+      "styleType": "COLOR_GRADIENT",
+      "preset": "#FF5555#C77DFF"
+    },
+    {
+      "styleType": "CLICK_COMMAND_RUN",
+      "preset": "execute in %world:id% run tp %player:pos_x% %player:pos_y% %player:pos_z%"
+    },
+    {
+      "styleType": "DISCORD_JSON",
+      "preset": "{\"embeds\":[{\"title\":\"%player:name_unformatted% mentioned admins\",\"color\":16753920,\"description\":\"TP command\\n```mcfunction\\nexecute in %world:id% run tp %player:pos_x% %player:pos_y% %player:pos_z%\\n```\",\"fields\":[{\"name\":\"Player\",\"value\":\"`%player:name_unformatted%`\",\"inline\":true},{\"name\":\"UUID\",\"value\":\"`%player:uuid%`\",\"inline\":true},{\"name\":\"World\",\"value\":\"`%world:id%` (`%world:name%`)\",\"inline\":true},{\"name\":\"Position\",\"value\":\"`%player:pos_x% %player:pos_y% %player:pos_z%`\",\"inline\":true},{\"name\":\"Ping\",\"value\":\"`%player:ping% ms`\",\"inline\":true},{\"name\":\"Server\",\"value\":\"`%server:name%`  `TPS:%server:tps%`  `MSPT:%server:mspt%`\",\"inline\":false},{\"name\":\"Time\",\"value\":\"`%server:time%`\",\"inline\":false}]}]}"
+    }
+  ]
+}
+
 ```
 
-You can put any value accepted as an option into the preset. Used this way, you can always trigger the administrator simply by using @admin.
-Additionally, by using CLICK_COMMAND_RUN in the styles section, the summoned administrator can easily teleport to the location.
+![Mention](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/images/Mention.gif?raw=true)
+
+You can put any value accepted as an option into the preset. Used this way, you can always trigger the administrator simply by using @admin. Additionally, by using CLICK_COMMAND_RUN in the styles section, the summoned administrator can easily teleport to the location.
+If you also use DISCORD_JSON, the administrator will receive a notification on Discord when they are mentioned.

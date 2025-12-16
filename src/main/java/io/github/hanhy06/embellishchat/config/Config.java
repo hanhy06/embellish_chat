@@ -13,6 +13,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.sound.SoundCategory;
 
 import java.awt.*;
+import java.net.URI;
 import java.util.*;
 import java.util.List;
 
@@ -275,7 +276,7 @@ public record Config(
                 new HashSet<>(),
                 new HashSet<>(),
 
-                null
+                new DiscordProfile(URI.create(""),"Explain","")
         );
     }
 }
