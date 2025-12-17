@@ -1,6 +1,6 @@
 # Embellish Chat for Fabric
 
-**Embellish Chat** is a Fabric mod that enhances the chat experience on Minecraft servers. It makes player communication more expressive and convenient with discordSetting like Markdown-style formatting, mentions, clickable links, and mention notifications.
+**Embellish Chat** is a Fabric mod that enhances the chat experience on Minecraft servers. It makes player communication more expressive and convenient with Discord-like Markdown-style formatting, mentions, clickable links, and mention notifications.
 
 ---
 
@@ -59,7 +59,7 @@ Use the following patterns directly in the chat window:
 > * `@group(name)` requires LuckPerms. Without it, the mention resolves to no players.
 > * `@team` and `@Player` mentions follow the color of their respective team. If the team has no color, the `defaultTeamColor` value is used.
 > * Other mention types can have their color customized by modifying the `styleRule` value.
-> * The table above shows only the most common mentions. Embellish Chat supports many additional mentions types. For more details, please refer to [MentionWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/wiki/MentionWiki.md)
+> * The table above shows only the most common mentions. Embellish Chat supports many additional mention types. For more details, please refer to [MentionWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/wiki/MentionWiki.md)
 
 ---
 
@@ -77,7 +77,7 @@ Use the following patterns directly in the chat window:
 
 > **Notes**
 >
-> * All commands in the /embellish-chat family require OP level 2 (or higher 1.21.11 GAMEMASTERS_CHECK).
+> * All commands in the /embellish-chat family require OP level 2. On Minecraft 1.21.11 and later, this is checked using GAMEMASTERS_CHECK instead.
 > * Commands in the /ec family do not require any OP level and can be used by all users.
 > * Through ```notificationCommandEnable```, you can configure whether users are allowed to set their notification preferences using /ec notification. If ```notificationCommandEnable``` is false, the user’s preference is ignored and notifications are sent for all mentions.
 
@@ -145,7 +145,7 @@ The configuration file is located at: `config/embellish-chat.json`.
   },
   "defaultTeamColor": "#FF55FF",
   "notificationCommandEnable": true,
-  "mentionBroadcast": true
+  "mentionBroadcast": true,
   
   //player list
   "bannedPlayerList": [],
@@ -191,7 +191,9 @@ Each rule consists of a regular expression (`pattern`) and a style action list(`
 }
 ```
 
-* **pattern** Must contain **two capturing groups**: pattern must contain two capturing groups: 1) the text to apply the style to, 2) an optional captured value that can be passed as an argument.
+* **pattern** Must contain **two capturing groups**:
+    1) the text to apply the style to
+    2) an optional captured value that can be passed as an argument.
 * **styles** This is a list of style actions. Each action consists of a style type (`styleType`) and style option preset(`preset`).
 
 you can see more detail in [StyleWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/wiki/StyleWiki.md)

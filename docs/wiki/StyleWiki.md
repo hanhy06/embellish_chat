@@ -35,7 +35,7 @@
 >
 > * `COLOR_SHADOW` is not available in versions earlier than 1.21.2.
 > * The `COLOR_GRADIENT` type also supports three or more colors.
-> * The `DISCORD_JSON` type need `webhook`
+> * The `DISCORD_JSON` type requires a [Discord webhook](https://discord.com/safety/using-webhooks-and-embeds).
 >
 > | **HOVER_ITEM Value** | **Description**           |
 > |----------------------|---------------------------|

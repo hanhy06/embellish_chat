@@ -165,5 +165,7 @@ Typing `[notification]` will send an alert to everyone.
 
 ![Mention](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/images/Mention.gif?raw=true)
 
-You can put any value accepted as an option into the preset. Used this way, you can always trigger the administrator simply by using @admin. Additionally, by using CLICK_COMMAND_RUN in the styles section, the summoned administrator can easily teleport to the location.
-If you also use DISCORD_JSON, the administrator will receive a notification on Discord when they are mentioned.
+You can put any value accepted as an option into the preset. 
+When used this way, you can always trigger an admin mention simply by using `@admin`. 
+Additionally, by using `CLICK_COMMAND_RUN` in the styles section, the mentioned administrator can easily teleport to the sender’s location. 
+If you also use `DISCORD_JSON`, the administrator will receive a notification in Discord when they are mentioned.
