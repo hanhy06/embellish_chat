@@ -267,7 +267,7 @@ If it’s not installed, these features have no effect.
 This mod supports dynamic data through the Text Placeholder API.
 The Text Placeholder API applies to the mention title, all presets used in rules, and any options that users can configure.
 
-[//]: # (또한 플레이스 홀더 api로 %embellish-chat:argument1% %embellish-chat:argument2% %embellish-chat:all% 를 사용할수 있습니다&#40;만들어야함&#41;)
+[//]: # (또한 플레이스 홀더 api로 %embellish-chat:segment% %embellish-chat:option% %embellish-chat:all% 를 사용할수 있습니다&#40;만들어야함&#41;)
 
 ---
 ## 📊 Performance: Processing Time per Tick

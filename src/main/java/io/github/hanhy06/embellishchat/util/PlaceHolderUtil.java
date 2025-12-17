@@ -10,13 +10,13 @@ import net.minecraft.util.Identifier;
 
 public class PlaceHolderUtil {
     public static void registerPlaceHolder(){
-        Placeholders.register(Identifier.of(EmbellishChat.MOD_ID,"argument1"),(context,argument) -> {
+        Placeholders.register(Identifier.of(EmbellishChat.MOD_ID,"segment"),(context,argument) -> {
             if (!context.hasPlayer()) return PlaceholderResult.invalid("No player!");
 
             return PlaceholderResult.value("");
         });
 
-        Placeholders.register(Identifier.of(EmbellishChat.MOD_ID,"argument2"),(context,argument) -> {
+        Placeholders.register(Identifier.of(EmbellishChat.MOD_ID,"option"),(context,argument) -> {
             if (!context.hasPlayer()) return PlaceholderResult.invalid("No player!");
 
             return PlaceholderResult.value("");
