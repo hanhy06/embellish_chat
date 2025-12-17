@@ -36,8 +36,6 @@ public class EmbellishChat implements ModInitializer {
         Path fabricConfigDirPath = FabricLoader.getInstance().getConfigDir();
         ConfigManager manager = new ConfigManager(fabricConfigDirPath);
 
-        DiscordMessenger discord = new DiscordMessenger();
-
         StylingProcessor styler = new StylingProcessor();
         MentionProcessor mention = new MentionProcessor(server.getPlayerManager(),server.getScoreboard());
         MessageProcessor message = new MessageProcessor(mention,styler, server.getPlayerManager());
@@ -45,7 +43,6 @@ public class EmbellishChat implements ModInitializer {
         manager.addListener(styler);
         manager.addListener(mention);
         manager.addListener(message);
-        manager.addListener(discord);
 		manager.readConfig();
 
 		LOGGER.info("{} initialized successfully.", MOD_ID);

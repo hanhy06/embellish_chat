@@ -3,49 +3,29 @@ package io.github.hanhy06.embellishchat.discord;
 import com.google.gson.Gson;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
-import io.github.hanhy06.embellishchat.config.ConfigListener;
 
+import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-public class DiscordMessenger implements ConfigListener {
-    public static DiscordMessenger INSTANCE;
-
+public class DiscordMessenger {
     private final HttpClient client;
-    private final Gson gson;
+    private URI webhook;
 
-    private DiscordSetting discordSetting;
-
-    public DiscordMessenger() {
-        INSTANCE = this;
-
+    public DiscordMessenger(Config config) {
         this.client = HttpClient.newHttpClient();
-        this.gson = new Gson();
+        this.webhook = config.discord();
     }
 
-    @Override
-    public void onConfigReload(Config newConfig) {
-        this.discordSetting = newConfig.discord();
-    }
-
-    public void sendJson(String json){
-        send(json);
-    }
-
-    public void sendMessage(String content){
-        DiscordPayload payload = DiscordPayload.of(discordSetting,content);
-        send(gson.toJson(payload));
-    }
-
-    private void send(String content){
-        if (discordSetting == null || discordSetting.webhook() == null) {
-            EmbellishChat.LOGGER.warn("The registered Discord (or webhook) does not exist");
+    public void send(String content){
+        if (webhook == null) {
+            EmbellishChat.LOGGER.warn("The registered Discord webhook does not exist");
             return;
         }
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(discordSetting.webhook())
+                .uri(webhook)
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(content))
                 .build();

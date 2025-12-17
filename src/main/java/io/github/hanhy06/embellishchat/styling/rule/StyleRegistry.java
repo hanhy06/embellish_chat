@@ -37,6 +37,7 @@ public class StyleRegistry {
     private final HashMap<String, Color> colorPreset;
     private final EnumMap<StyleType, Function<StyleParameter, MutableText>> registers;
     private final Pattern HEX_CODE = Pattern.compile("#[A-Fa-f0-9]{6}");
+    private final DiscordMessenger messenger;
 
     public StyleRegistry(Config config) {
         this.config = config;
@@ -70,9 +71,9 @@ public class StyleRegistry {
                 entry(StyleType.LOWER, this::LOWER),
                 entry(StyleType.CLEAR, this::CLEAR),
                 entry(StyleType.JSON, this::JSON),
-                entry(StyleType.DISCORD_JSON, this::DISCORD_JSON),
-                entry(StyleType.DISCORD_TEXT, this::DISCORD_TEXT)
+                entry(StyleType.DISCORD_JSON, this::DISCORD_JSON)
         ));
+        this.messenger = new DiscordMessenger(config);
     }
 
     public Function<StyleParameter, MutableText> get(StyleType styleType) {
@@ -346,12 +347,7 @@ public class StyleRegistry {
     }
 
     public MutableText DISCORD_JSON(StyleParameter parameter){
-        DiscordMessenger.INSTANCE.sendJson(parameter.option());
-        return parameter.text();
-    }
-
-    public MutableText DISCORD_TEXT(StyleParameter parameter){
-        DiscordMessenger.INSTANCE.sendMessage(parameter.text().getString());
+        messenger.send(parameter.option());
         return parameter.text();
     }
 }
