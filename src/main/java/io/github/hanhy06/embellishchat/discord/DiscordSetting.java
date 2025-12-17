@@ -5,21 +5,6 @@ import java.net.URI;
 public record DiscordSetting(
         URI webhook,
         String name,
-        String avatar,
-        String format
+        String avatar
 ) {
-    public static DiscordSetting createDefault(){
-        return new DiscordSetting(
-                URI.create(""),
-                "",
-                "",
-                """
-                        {
-                            "name":"%player:name"
-                            "avatar:"https://crafatar.com/avatars/%player:uuid%?size=512"
-                            "content":"%embellish-chat:all%"
-                        }
-                        """
-        );
-    }
 }
