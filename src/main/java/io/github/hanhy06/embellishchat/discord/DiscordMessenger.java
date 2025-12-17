@@ -1,6 +1,5 @@
 package io.github.hanhy06.embellishchat.discord;
 
-import com.google.gson.Gson;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
 

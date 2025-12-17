@@ -30,7 +30,6 @@
 | `CLEAR`                 | Removes all styles.                                                                                                                                              | No options are required    |
 | `JSON`                  | Parses the JSON string supplied via the option and displays it as a text component.                                                                              | JSON string                |
 | `DISCORD_JSON`          | The provided options are sent to Discord through a registered webhook                                                                                            | JSON string                |
-| `DISCORD_TEXT`          | Sends the provided text to Discord via a registered webhook using the registered avatar and name                                                                 | No options are required    |
 
 > **Notes**
 >

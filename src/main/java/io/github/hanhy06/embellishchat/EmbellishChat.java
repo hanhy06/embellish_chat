@@ -3,7 +3,6 @@ package io.github.hanhy06.embellishchat;
 import io.github.hanhy06.embellishchat.command.EcCommand;
 import io.github.hanhy06.embellishchat.command.EmbellishChatCommand;
 import io.github.hanhy06.embellishchat.config.ConfigManager;
-import io.github.hanhy06.embellishchat.discord.DiscordMessenger;
 import io.github.hanhy06.embellishchat.mention.MentionProcessor;
 import io.github.hanhy06.embellishchat.message.MessageProcessor;
 import io.github.hanhy06.embellishchat.styling.StylingProcessor;
