@@ -15,7 +15,7 @@ public class DiscordMessenger implements ConfigListener {
     private final HttpClient client;
     private final Gson gson;
 
-    private DiscordProfile discordProfile;
+    private DiscordSetting discordSetting;
 
     public DiscordMessenger() {
         INSTANCE = this;
@@ -26,7 +26,7 @@ public class DiscordMessenger implements ConfigListener {
 
     @Override
     public void onConfigReload(Config newConfig) {
-        this.discordProfile = newConfig.discord();
+        this.discordSetting = newConfig.discord();
     }
 
     public void sendJson(String json){
@@ -34,18 +34,18 @@ public class DiscordMessenger implements ConfigListener {
     }
 
     public void sendMessage(String content){
-        DiscordPayload payload = DiscordPayload.of(discordProfile,content);
+        DiscordPayload payload = DiscordPayload.of(discordSetting,content);
         send(gson.toJson(payload));
     }
 
     private void send(String content){
-        if (discordProfile == null || discordProfile.webhook() == null) {
+        if (discordSetting == null || discordSetting.webhook() == null) {
             EmbellishChat.LOGGER.warn("The registered Discord (or webhook) does not exist");
             return;
         }
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(discordProfile.webhook())
+                .uri(discordSetting.webhook())
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(content))
                 .build();
