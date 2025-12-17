@@ -276,7 +276,7 @@ public record Config(
                 new HashSet<>(),
                 new HashSet<>(),
 
-                new DiscordProfile(URI.create(""),"Explain","")
+                new DiscordProfile(URI.create(""),"","")
         );
     }
 }
