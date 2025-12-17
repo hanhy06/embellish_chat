@@ -10,11 +10,11 @@ import java.net.http.HttpResponse;
 
 public class DiscordMessenger {
     private final HttpClient client;
-    private URI webhook;
+    private final URI webhook;
 
     public DiscordMessenger(Config config) {
         this.client = HttpClient.newHttpClient();
-        this.webhook = config.discord();
+        this.webhook = config.webhook();
     }
 
     public void send(String content){
