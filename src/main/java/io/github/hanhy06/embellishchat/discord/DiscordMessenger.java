@@ -18,7 +18,7 @@ public class DiscordMessenger {
     }
 
     public void send(String content){
-        if (webhook == null) {
+        if (webhook == null || webhook.toString().isBlank()) {
             EmbellishChat.LOGGER.warn("The registered Discord webhook does not exist");
             return;
         }
