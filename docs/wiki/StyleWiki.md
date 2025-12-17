@@ -34,7 +34,8 @@
 > **Notes**
 >
 > * `COLOR_SHADOW` is not available in versions earlier than 1.21.2.
-> * The COLOR_GRADIENT type also supports three or more colors.
+> * The `COLOR_GRADIENT` type also supports three or more colors.
+> * The `DISCORD_JSON` type need `webhook`
 >
 > | **HOVER_ITEM Value** | **Description**           |
 > |----------------------|---------------------------|

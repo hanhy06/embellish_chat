@@ -39,7 +39,7 @@ public record Config(
         HashSet<UUID> notificationOffPlayerList,
 
         //discord
-        URI discord
+        URI webhook
 )
 {
     public static Config createDefault(){
@@ -275,6 +275,7 @@ public record Config(
                 new HashSet<>(),
                 new HashSet<>(),
 
+                //discord
                 URI.create("")
         );
     }
