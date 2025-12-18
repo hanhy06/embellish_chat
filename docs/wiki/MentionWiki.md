@@ -156,7 +156,7 @@ Typing `[notification]` will send an alert to everyone.
     },
     {
       "styleType": "DISCORD_JSON",
-      "preset": "{\"embeds\":[{\"title\":\"%player:name_unformatted% mentioned admins\",\"color\":16753920,\"description\":\"TP command\\n```mcfunction\\nexecute in %world:id% run tp %player:pos_x% %player:pos_y% %player:pos_z%\\n```\",\"fields\":[{\"name\":\"Player\",\"value\":\"`%player:name_unformatted%`\",\"inline\":true},{\"name\":\"UUID\",\"value\":\"`%player:uuid%`\",\"inline\":true},{\"name\":\"World\",\"value\":\"`%world:id%` (`%world:name%`)\",\"inline\":true},{\"name\":\"Position\",\"value\":\"`%player:pos_x% %player:pos_y% %player:pos_z%`\",\"inline\":true},{\"name\":\"Ping\",\"value\":\"`%player:ping% ms`\",\"inline\":true},{\"name\":\"Server\",\"value\":\"`%server:name%`  `TPS:%server:tps%`  `MSPT:%server:mspt%`\",\"inline\":false},{\"name\":\"Time\",\"value\":\"`%server:time%`\",\"inline\":false}]}]}"
+      "preset": "{\"embeds\":[{\"title\":\"%player:name_unformatted% mentioned admins\",\"color\":16753920,\"description\":\"TP command\\n```mcfunction\\nexecute in %world:id% run tp %player:pos_x% %player:pos_y% %player:pos_z%\\n```\",\"fields\":[{\"name\":\"UUID\",\"value\":\"`%player:uuid%`\",\"inline\":false},{\"name\":\"Player\",\"value\":\"`%player:name_unformatted%`\",\"inline\":true},{\"name\":\"Ping\",\"value\":\"`%player:ping% ms`\",\"inline\":true},{\"name\":\"\\u200b\",\"value\":\"\\u200b\",\"inline\":true},{\"name\":\"Position\",\"value\":\"`%player:pos_x% %player:pos_y% %player:pos_z%`\",\"inline\":true},{\"name\":\"World\",\"value\":\"`%world:id%`\",\"inline\":true},{\"name\":\"\\u200b\",\"value\":\"\\u200b\",\"inline\":true},{\"name\":\"Server\",\"value\":\"`%server:name%`\",\"inline\":true},{\"name\":\"Time\",\"value\":\"`%server:time%`\",\"inline\":true},{\"name\":\"Status\",\"value\":\"`TPS:%server:tps%` `MSPT:%server:mspt%`\",\"inline\":true}]}]}"
     }
   ]
 }
@@ -164,6 +164,10 @@ Typing `[notification]` will send an alert to everyone.
 ```
 
 ![Mention](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/images/Mention.gif?raw=true)
+> **Notes**
+>
+> * The UUID was intentionally excluded in the image above; in the actual version, it is displayed correctly.
+> * The image shown is from an older version, and in the current version all data fields are properly aligned.
 
 You can put any value accepted as an option into the preset. 
 When used this way, you can always trigger an admin mention simply by using `@admin`. 
