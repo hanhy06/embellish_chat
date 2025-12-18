@@ -10,21 +10,13 @@ public class OptionUtil {
         List<String> result = new ArrayList<>();
 
         for (int i = 0; i<presets.size();i++){
-            String option = parseOption(
-                    i < options.size() ? options.get(i) : "",
-                    presets.get(i),
-                    player
-            );
+            String option = presets.get(i);
+            if (option.isBlank()) option = options.get(i);
+            option = PlaceHolderUtil.parsedText(option,player).getString();
             result.add(option);
         }
 
         return result;
-    }
-
-    public static String parseOption(String option, String preset, ServerPlayerEntity player){
-        String value = preset.isBlank() ? option : preset;
-        if (value.isEmpty()) return "";
-        return PlaceHolderUtil.getParsedOption(value,player).getString();
     }
 
     public static List<String> split(String option, String  delimiter){
