@@ -4,14 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Embellish Chat Config Editor</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- React & ReactDOM -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <!-- Babel for JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
@@ -376,7 +372,8 @@
       "notificationCommandEnable": true,
       "mentionBroadcast": true,
       "bannedPlayerList": [],
-      "notificationOffPlayerList": []
+      "notificationOffPlayerList": [],
+      "webhook": ""
     };
 
     const Card = ({ children, className = "" }) => (
@@ -706,6 +703,15 @@
                             Broadcast Mentions globally
                         </label>
                     </div>
+                </div>
+
+                <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
+                    <Input
+                        label="Discord Webhook URL"
+                        value={config.webhook}
+                        onChange={(v) => updateGlobal('webhook', v)}
+                        placeholder="Leave empty to disable"
+                    />
                 </div>
             </Card>
 
@@ -1063,6 +1069,7 @@
 
                 // Add default for new setting
                 if (parsed.mentionBroadcast === undefined) parsed.mentionBroadcast = true;
+                if (parsed.webhook === undefined) parsed.webhook = "";
 
                 if (parsed.mentionRules) {
                     Object.keys(parsed.mentionRules).forEach(key => {
