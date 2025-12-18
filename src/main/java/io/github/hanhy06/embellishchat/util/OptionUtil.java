@@ -11,7 +11,7 @@ public class OptionUtil {
 
         for (int i = 0; i<presets.size();i++){
             String option = presets.get(i);
-            if (option.isBlank() && options.size() >= i) option = options.get(i);
+            if (option.isBlank() && options.size() > i) option = options.get(i);
             option = PlaceHolderUtil.parsedText(option,player).getString();
             result.add(option);
         }
