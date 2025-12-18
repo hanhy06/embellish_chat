@@ -107,15 +107,10 @@ public class StylingProcessor implements ConfigListener {
             MutableText segment = slice(runs, mention.begin(), mention.end());
             if (mention.style() != null) segment.fillStyle(mention.style());
             for (StyleAction style : mention.rule().styles()) {
-                String preset = PlaceHolderUtil
-                        .parsedText(style.preset(), player)
-                        .getString();
+                String preset = PlaceHolderUtil.parsedText(style.preset(), player).getString();
 
                 StyleParameter parameter = StyleParameter.of(segment, preset, player);
-
-                segment = registry
-                        .get(style.styleType())
-                        .apply(parameter);
+                segment = registry.get(style.styleType()).apply(parameter);
             }
 
             result.append(segment);
