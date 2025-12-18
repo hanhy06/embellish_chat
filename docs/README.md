@@ -114,10 +114,14 @@ The configuration file is located at: `config/embellish-chat.json`.
     "embellish-chat.mention": [
       {
         "pattern": "@here()",
-        "sound": "entity.experience_orb.pickup",
-        "pitch": 1.75,
         "title": "%player:displayname% mentioned you",
         "cooldown": 0,
+        "sound": {
+          "id": "minecraft:entity.experience_orb.pickup",
+          "category": "UI",
+          "volume": 1.0,
+          "pitch": 1.75
+        },
         "mentions": [
           {
             "mentionType": "INSIDE",
@@ -150,6 +154,9 @@ The configuration file is located at: `config/embellish-chat.json`.
   //player list
   "bannedPlayerList": [],
   "notificationOffPlayerList": []
+  
+  //discord
+  "webhook": ""
 }
 ```
 
