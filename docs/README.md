@@ -341,16 +341,21 @@ To further protect against abuse, use the **Mention Cooldown** feature or `menti
 
 ---
 
-[//]: # (## 📜 Compatibility)
+## 📜 Compatibility
 
-[//]: # ()
-[//]: # (### Supported)
 
-[//]: # (* ✅ **fabric-permissions-api** &#40;Embedded&#41;)
+### Supported
 
-[//]: # (* ✅ **placeholder-api** &#40;Embedded&#41;)
+* ✅ **fabric-permissions-api** (Embedded)
 
-[//]: # (* ✅ **LuckPerms**)
+* ✅ **placeholder-api** (Embedded)
+
+* ✅ **LuckPerms**
+
+* ✅ **Geyser**
+    - Supports be → je mentions
+    - Supports je → be mentions
+    - Supports chat styling (color, hover, and click events are not fully rendered on be)
 
 [//]: # (* ✅ **Advanced Chat** &#40;[by Wesley1808]&#40;https://modrinth.com/mod/advanced-chat&#41;/It adds channels and other features different from DarkKronicle’s **AdvancedChatCore series**.&#41;)
 
@@ -361,9 +366,9 @@ To further protect against abuse, use the **Mention Cooldown** feature or `menti
 [//]: # ()
 [//]: # (### Incompatible / Issues)
 
-[//]: # (❗ **Styled Chat** &#40;Mentions work, but styling does not apply&#41;)
+❗ **Styled Chat** (Mentions work, but styling does not apply)
 
-[//]: # (---)
+---
 
 ## 📜 License & Links
 
