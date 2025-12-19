@@ -7,6 +7,7 @@ import io.github.hanhy06.embellishchat.mention.MentionProcessor;
 import io.github.hanhy06.embellishchat.message.MessageProcessor;
 import io.github.hanhy06.embellishchat.styling.StylingProcessor;
 import io.github.hanhy06.embellishchat.util.PermissionUtil;
+import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
@@ -34,6 +35,9 @@ public class EmbellishChat implements ModInitializer {
 	private static void handleServerStart(MinecraftServer server) {
         Path fabricConfigDirPath = FabricLoader.getInstance().getConfigDir();
         ConfigManager manager = new ConfigManager(fabricConfigDirPath);
+
+        PlaceHolderUtil.clear();
+        PlaceHolderUtil.register();
 
         StylingProcessor styler = new StylingProcessor();
         MentionProcessor mention = new MentionProcessor(server.getPlayerManager(),server.getScoreboard());

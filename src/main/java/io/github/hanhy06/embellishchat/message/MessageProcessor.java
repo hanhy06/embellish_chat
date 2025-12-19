@@ -5,6 +5,7 @@ import io.github.hanhy06.embellishchat.config.ConfigListener;
 import io.github.hanhy06.embellishchat.mention.MentionProcessor;
 import io.github.hanhy06.embellishchat.mention.data.Mention;
 import io.github.hanhy06.embellishchat.styling.StylingProcessor;
+import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -49,11 +50,15 @@ public class MessageProcessor implements ConfigListener {
         MutableText textMessage = message.getContent().copy();
         String stringMessage = message.getContent().getString();
 
+        PlaceHolderUtil.put(sender,stringMessage);
+
         List<Mention> mentions = mentionProcessor.handleMention(stringMessage,getPermissions(sender, config.mentionRules().keySet()),sender);
         mentions.sort(Comparator.comparing(Mention::begin));
 
         textMessage = stylingProcessor.applyMention(textMessage,mentions,sender);
         textMessage = stylingProcessor.handleStyle(textMessage,getPermissions(sender, config.stylingRules().keySet()),sender);
+
+        PlaceHolderUtil.remove(sender);
 
         return message.withUnsignedContent(textMessage);
     }
