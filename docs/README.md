@@ -366,7 +366,10 @@ To further protect against abuse, use the **Mention Cooldown** feature or `menti
 [//]: # ()
 [//]: # (### Incompatible / Issues)
 
-❗ **Styled Chat** (Mentions work, but styling does not apply)
+### Not Supported
+
+* ❗ **Styled Chat** (Mentions function correctly, but styling is not applied)
+
 
 ---
 
