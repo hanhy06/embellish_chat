@@ -25,7 +25,7 @@ public class PlaceHolderUtil {
     public static void register(){
         placeholders.clear();
 
-        Placeholders.register(Identifier.of(EmbellishChat.MOD_ID,"chat"),(context, string) -> {
+        Placeholders.register(Identifier.of(EmbellishChat.MOD_ID,"content"),(context, string) -> {
             if (!context.hasPlayer()) return PlaceholderResult.invalid("no player");
             return PlaceholderResult.value(placeholders.get(context.player()));
         });

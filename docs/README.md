@@ -276,6 +276,8 @@ If it’s not installed, these features have no effect.
 This mod supports dynamic data through the Text Placeholder API.
 The Text Placeholder API applies to the mention title, all presets used in rules, and any options that users can configure.
 
+A custom placeholder, %embellish-chat:content%, is available for accessing the raw, unparsed chat message.
+
 ---
 ## 📊 Performance: Processing Time per Tick
 
