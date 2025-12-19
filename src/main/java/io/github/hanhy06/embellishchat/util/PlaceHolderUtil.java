@@ -14,10 +14,6 @@ import java.util.Map;
 public class PlaceHolderUtil {
     private static final Map<ServerPlayerEntity,String> placeholders = new HashMap<>();
 
-    public static void clear(){
-        placeholders.clear();
-    }
-
     public static void put(ServerPlayerEntity player,String string){
         placeholders.put(player,string);
     }
@@ -27,6 +23,8 @@ public class PlaceHolderUtil {
     }
 
     public static void register(){
+        placeholders.clear();
+
         Placeholders.register(Identifier.of(EmbellishChat.MOD_ID,"chat"),(context, string) -> {
             if (!context.hasPlayer()) return PlaceholderResult.invalid("no player");
             return PlaceholderResult.value(placeholders.get(context.player()));
