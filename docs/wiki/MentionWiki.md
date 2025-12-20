@@ -163,11 +163,7 @@ Typing `[notification]` will send an alert to everyone.
 
 ```
 
-![Mention](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/images/Mention.gif?raw=true)
-> **Notes**
->
-> * The UUID was intentionally excluded in the image above; in the actual version, it is displayed correctly.
-> * The image shown is from an older version, and in the current version all data fields are properly aligned.
+![Mention](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/images/Mention.gif?raw=true)
 
 You can put any value accepted as an option into the preset. 
 When used this way, you can always trigger an admin mention simply by using `@admin`. 

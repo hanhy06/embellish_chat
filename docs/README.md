@@ -18,18 +18,18 @@ Use the following patterns directly in the chat window:
 
 | Feature           | Syntax                  | Example                                                       | Preview                                                                                                            |
 |-------------------|-------------------------|---------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| Bold              | `**Text**`              | `**You really need to read this!**`                           | ![Bold](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/images/Bold.png?raw=true)             |
-| Italic            | `_Text_`                | `_This is top secret..._`                                     | ![Italic](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/images/Italic.png?raw=true)         |
-| Underline         | `__Text__`              | `__Check this out__`                                          | ![Underline](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/images/Underline.png?raw=true)   |
-| Strikethrough     | `~~Text~~`              | `~~We don’t talk about this anymore~~`                        | ![Strike](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/images/Strikethrough.png?raw=true)  |
-| Obfuscated        | `\|\|Text\|\|`          | `\|\|Unreadable text\|\|`                                     | ![Obfuscated](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/images/Obfuscated.gif?raw=true) |
-| Color (Hex)       | `[Text]<#RRGGBB>`       | `[Blue]<#0000FF> like the deep ocean`                         | ![Color](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/images/Color_Hex.png?raw=true)       |
-| Color (Gradient)  | `[Text]<#RRGGBB #R...>` | `[Grraaaaaaadieeeeent]<#ffaaaa #aaaaff #aaffaa>`              | ![Color](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/images/Color_Gradient.png?raw=true)  |
-| Color (Preset)    | `[Text]<preset>`        | `[pink]<pink> pig`                                            | ![Color](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/images/Color_Preset.png?raw=true)    |
-| Color (Rainbow)   | `[Text]<RAINBOW>`       | `look at this [rainbow]<RAINBOW>`                             | ![Color](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/images/Color_Rainbow.png?raw=true)   |
-| Link              | `[Text](URL)`           | `Download it [here](https://modrinth.com/mod/embellish-chat)` | ![Link](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/images/Link.gif?raw=true)             |
-| Font              | `[Text]{path}`          | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/images/Font.png?raw=true)             |
-| Mention           | `@PlayerName`           | `Hello, @User`                                                | ![Mention](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/images/Mention.png?raw=true)       |
+| Bold              | `**Text**`              | `**You really need to read this!**`                           | ![Bold](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/images/Bold.png?raw=true)             |
+| Italic            | `_Text_`                | `_This is top secret..._`                                     | ![Italic](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/images/Italic.png?raw=true)         |
+| Underline         | `__Text__`              | `__Check this out__`                                          | ![Underline](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/images/Underline.png?raw=true)   |
+| Strikethrough     | `~~Text~~`              | `~~We don’t talk about this anymore~~`                        | ![Strike](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/images/Strikethrough.png?raw=true)  |
+| Obfuscated        | `\|\|Text\|\|`          | `\|\|Unreadable text\|\|`                                     | ![Obfuscated](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/images/Obfuscated.gif?raw=true) |
+| Color (Hex)       | `[Text]<#RRGGBB>`       | `[Blue]<#0000FF> like the deep ocean`                         | ![Color](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/images/Color_Hex.png?raw=true)       |
+| Color (Gradient)  | `[Text]<#RRGGBB #R...>` | `[Grraaaaaaadieeeeent]<#ffaaaa #aaaaff #aaffaa>`              | ![Color](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/images/Color_Gradient.png?raw=true)  |
+| Color (Preset)    | `[Text]<preset>`        | `[pink]<pink> pig`                                            | ![Color](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/images/Color_Preset.png?raw=true)    |
+| Color (Rainbow)   | `[Text]<RAINBOW>`       | `look at this [rainbow]<RAINBOW>`                             | ![Color](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/images/Color_Rainbow.png?raw=true)   |
+| Link              | `[Text](URL)`           | `Download it [here](https://modrinth.com/mod/embellish-chat)` | ![Link](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/images/Link.gif?raw=true)             |
+| Font              | `[Text]{path}`          | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/images/Font.png?raw=true)             |
+| Mention           | `@PlayerName`           | `Hello, @User`                                                | ![Mention](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/images/Mention.png?raw=true)       |
 
 > **Notes**
 >
@@ -37,7 +37,7 @@ Use the following patterns directly in the chat window:
 > * *Preset* values depend on the mod's configuration (e.g., `pink`, `blue`, etc.).
 > * `path` for **Font** accepts a namespaced ID such as `minecraft:alt`.
 > * If multiple style types exist and no preset is configured, the user can enter one manually. The separator can be checked through /ec help style.
-> * The table above shows only the most common styles. Embellish Chat supports many additional style types. For more details, please refer to [StyleWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/wiki/StyleWiki.md)
+> * The table above shows only the most common styles. Embellish Chat supports many additional style types. For more details, please refer to [StyleWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/wiki/StyleWiki.md)
 
 ---
 
@@ -59,7 +59,7 @@ Use the following patterns directly in the chat window:
 > * `@group(name)` requires LuckPerms. Without it, the mention resolves to no players.
 > * `@team` and `@Player` mentions follow the color of their respective team. If the team has no color, the `defaultTeamColor` value is used.
 > * Other mention types can have their color customized by modifying the `styleRule` value.
-> * The table above shows only the most common mentions. Embellish Chat supports many additional mention types. For more details, please refer to [MentionWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/wiki/MentionWiki.md)
+> * The table above shows only the most common mentions. Embellish Chat supports many additional mention types. For more details, please refer to [MentionWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/wiki/MentionWiki.md)
 
 ---
 
@@ -203,7 +203,7 @@ Each rule consists of a regular expression (`pattern`) and a style action list(`
     2) an optional captured value that can be passed as an argument.
 * **styles** This is a list of style actions. Each action consists of a style type (`styleType`) and style option preset(`preset`).
 
-you can see more detail in [StyleWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/wiki/StyleWiki.md)
+you can see more detail in [StyleWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/wiki/StyleWiki.md)
 
 ---
 
@@ -253,7 +253,7 @@ regular expression (`pattern`), notification settings (`title`, `cooldown`, `sou
 * **mentions** A list of mention actions. Each action specifies a `mentionType` and an optional `preset`.
 * **styles** A list of style actions. Works the same way as in the styling rules section.
 
-you can see more detail in [MentionWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/wiki/MentionWiki.md)
+you can see more detail in [MentionWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/wiki/MentionWiki.md)
 
 ---
 
@@ -318,14 +318,14 @@ The messages used in the tests are:
 | Mixed        | 50     | `**Hey** @everyone! Look at [this]<red> _cool_ @here.`                                                                                                                                                                       |
 | Mixed        | 200    | `Attention @everyone! The **Boss Raid** is starting. @team(Red) please defend the [Core]<#FF0000>. @here gather at the gate! Watch out for the **hidden assassin**. The prize is [GOD SWORD]<RAINBOW>. Msg @Admin if stuck.` |
 
-![MSPT-50](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/images/MSPT2.6.0-50.png?raw=true)
-![MSPT-200](https://github.com/hanhy06/embellish-chat/blob/v2.6.0/%2B1.21.11/docs/images/MSPT2.6.0-200.png?raw=true)
+![MSPT-50](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/images/MSPT2.6.0-50.png?raw=true)
+![MSPT-200](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/images/MSPT2.6.0-200.png?raw=true)
 
-### 📝 Mention MSPT Analysis (v2.6.0)
+### 📝 Mention MSPT Analysis (v2.6.1)
 
 In previous measurements (v2.4.0), the *Mention Only* test showed an average MSPT of **≈ 33 ms** because notifications were **muted**, so the game skipped sending sound/actionbar packets.
 
-In **v2.6.0**, we separated the cost into two parts:
+In **v2.6.1**, we separated the cost into two parts:
 
 - **Mention Logic Only (Notification OFF)**
     - about **35 ms** avg. at 500 mention messages per tick
@@ -364,9 +364,6 @@ To further protect against abuse, use the **Mention Cooldown** feature or `menti
 [//]: # (* ✅ **Chat Heads**)
 
 * ✅ **No Chat Reports**
-
-[//]: # ()
-[//]: # (### Incompatible / Issues)
 
 ### Not Supported
 
