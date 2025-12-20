@@ -363,7 +363,7 @@ To further protect against abuse, use the **Mention Cooldown** feature or `menti
 
 [//]: # (* ✅ **Chat Heads**)
 
-[//]: # (* ✅ **No Chat Reports**)
+* ✅ **No Chat Reports**
 
 [//]: # ()
 [//]: # (### Incompatible / Issues)
