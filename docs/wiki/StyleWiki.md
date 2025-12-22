@@ -142,7 +142,7 @@ If you write it like ((text)), you can make capture group 1 and 2 have the same 
 For example, if you put ((red)) in the preset, every red will be displayed in red.
 
 
-## Applying It – Creating an Emoticon
+## Applying It – Creating an Inline Icons
 
 ```
 {
