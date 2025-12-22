@@ -107,7 +107,7 @@ You can use multiple types in a single rule.
 You can set a preset by specifying it, and if the preset is empty, the option provided by the user will be used.
 
 
-## Applying It – Global Style
+## Application – Global Style
 
 ```
 {
@@ -124,7 +124,7 @@ You can set a preset by specifying it, and if the preset is empty, the option pr
 In regular expressions, .+ means all characters. Using this method, you can apply a subtle rainbow effect to all text.
 
 
-## Applying It – Using It Directly as an Argument
+## Application – Using It Directly as an Argument
 
 ```
 {
@@ -142,7 +142,7 @@ If you write it like ((text)), you can make capture group 1 and 2 have the same 
 For example, if you put ((red)) in the preset, every red will be displayed in red.
 
 
-## Applying It – Creating an Inline Icons
+## Application – Inline Icons
 
 ```
 {
@@ -164,7 +164,7 @@ The example above shows how to use the JSON type to replace `:fire:` with a fire
 You can read about Minecraft’s atlas [Text component format wiki](https://minecraft.wiki/w/Text_component_format#Atlas_Object_Type) and [Atlas wiki](https://minecraft.wiki/w/Atlas).
 
 
-## Applying It – Text Placeholder API
+## Application – Text Placeholder API
 
 ```
 {
