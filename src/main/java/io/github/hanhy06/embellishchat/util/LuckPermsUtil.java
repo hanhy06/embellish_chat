@@ -8,11 +8,12 @@ import net.luckperms.api.model.user.User;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class LuckPermsUtil {
-    public static List<ServerPlayerEntity> getGroupPlayers(String targetGroup, List<ServerPlayerEntity> players){
-        List<ServerPlayerEntity> result = new ArrayList<>();
+    public static HashSet<ServerPlayerEntity> getGroupPlayers(String targetGroup, List<ServerPlayerEntity> players){
+        HashSet<ServerPlayerEntity> result = new HashSet<>();
 
         try {
             LuckPerms luckPerms = LuckPermsProvider.get();
