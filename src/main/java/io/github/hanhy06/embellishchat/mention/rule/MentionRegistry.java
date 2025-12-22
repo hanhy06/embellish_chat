@@ -86,10 +86,10 @@ public class MentionRegistry {
         Style style = colorTeam;
 
         if (team != null){
-            team.getPlayerList().forEach(name ->{
+            for (String name:team.getPlayerList()){
                 ServerPlayerEntity player = manager.getPlayer(name);
                 if (player != null) players.add(player);
-            });
+            }
 
             if (style != null) {
                 Style name = team.getFormattedName().getStyle();
