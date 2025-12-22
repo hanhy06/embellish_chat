@@ -28,6 +28,5 @@ public enum StyleType {
     LOWER,
     CLEAR,
     JSON,
-    DISCORD_JSON,
-    DISCORD_TEXT
+    DISCORD_JSON
 }
