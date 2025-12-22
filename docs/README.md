@@ -291,7 +291,7 @@ They do **not** represent normal server conditions.
 - World: **Singleplayer, Superflat**
 - CPU: **13th Gen Intel(R) Core(TM) i7-1360P**
 
-- Max RAM for JVM: **4 GB**
+- Max RAM for JVM: **2 GB**
 - System: **Windows 11**
 - Config: **Default**
 
@@ -328,10 +328,10 @@ In previous measurements (v2.4.0), the *Mention Only* test showed an average MSP
 In **v2.6.1**, we separated the cost into two parts:
 
 - **Mention Logic Only (Notification OFF)**
-    - about **35 ms** avg. at 500 mention messages per tick
+    - about **32 ms** avg. at 500 mention messages per tick
     - This is the pure lookup & processing cost, without any notification packets.
 - **Full Processing (Notification ON)**
-    - about **55 ms** avg. at 500 mention messages per tick
+    - about **48 ms** avg. at 500 mention messages per tick
     - This includes Vanilla packet I/O (sound + actionbar text) for every mention.
 
 > 🔍 **Conclusion**  
