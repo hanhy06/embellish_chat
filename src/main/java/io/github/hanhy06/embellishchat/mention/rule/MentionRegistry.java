@@ -31,6 +31,7 @@ public class MentionRegistry {
     private final PlayerManager manager;
     private final Scoreboard scoreboard;
     private final Style colorTeam;
+    private final boolean isLuckPerms;
 
     private final EnumMap<MentionType, Function<MentionParameter, Target>> registries;
 
@@ -53,6 +54,8 @@ public class MentionRegistry {
                 entry(MentionType.WORLD,this::WORLD),
                 entry(MentionType.CUSTOM,this::CUSTOM)
         ));
+
+        this.isLuckPerms = FabricLoader.getInstance().isModLoaded("luckperms");
     }
 
     public Function<MentionParameter, Target> get(MentionType key){
@@ -122,12 +125,12 @@ public class MentionRegistry {
     }
 
     private Target LUCK_PERMS_GROUP(MentionParameter parameter){
-        if (!FabricLoader.getInstance().isModLoaded("luckperms")) {
-            EmbellishChat.LOGGER.info("LuckPerms not found. @group mentions will be ignored.");
-            return Target.of(new HashSet<>(),null);
-        }else {
+        if (isLuckPerms) {
             HashSet<ServerPlayerEntity> players = LuckPermsUtil.getGroupPlayers(parameter.option(),manager.getPlayerList());
             return Target.of(players,null);
+        }else {
+            EmbellishChat.LOGGER.info("LuckPerms not found. @group mentions will be ignored.");
+            return Target.of(new HashSet<>(),null);
         }
     }
 

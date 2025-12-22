@@ -118,6 +118,7 @@ public class MentionProcessor implements ConfigListener {
                     style = target.style();
                 } else {
                     targets.retainAll(target.targets());
+                    if (targets.isEmpty()) break;
                 }
             }
 
