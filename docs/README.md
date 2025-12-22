@@ -286,12 +286,12 @@ A custom placeholder, %embellish-chat:content%, is available for accessing the r
 These tests were performed in a synthetic stress environment to measure **worst-case** performance.  
 They do **not** represent normal server conditions.
 
-- Embellish Chat: **2.6.0 (DEV)**
-- Minecraft: **1.21.10**
+- Embellish Chat: **2.6.1 (DEV)**
+- Minecraft: **1.21.11**
 - World: **Singleplayer, Superflat**
 - CPU: **13th Gen Intel(R) Core(TM) i7-1360P**
 
-- Max RAM for JVM: **2 GB**
+- Max RAM for JVM: **4 GB**
 - System: **Windows 11**
 - Config: **Default**
 
@@ -318,8 +318,8 @@ The messages used in the tests are:
 | Mixed        | 50     | `**Hey** @everyone! Look at [this]<red> _cool_ @here.`                                                                                                                                                                       |
 | Mixed        | 200    | `Attention @everyone! The **Boss Raid** is starting. @team(Red) please defend the [Core]<#FF0000>. @here gather at the gate! Watch out for the **hidden assassin**. The prize is [GOD SWORD]<RAINBOW>. Msg @Admin if stuck.` |
 
-![MSPT-50](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/images/MSPT2.6.0-50.png?raw=true)
-![MSPT-200](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/images/MSPT2.6.0-200.png?raw=true)
+![MSPT-50](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/images/MSPT2.6.1-50.png?raw=true)
+![MSPT-200](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/images/MSPT2.6.1-200.png?raw=true)
 
 ### 📝 Mention MSPT Analysis (v2.6.1)
 
@@ -361,7 +361,7 @@ To further protect against abuse, use the **Mention Cooldown** feature or `menti
 
 [//]: # (* ✅ **Advanced Chat** &#40;[by Wesley1808]&#40;https://modrinth.com/mod/advanced-chat&#41;/It adds channels and other features different from DarkKronicle’s **AdvancedChatCore series**.&#41;)
 
-[//]: # (* ✅ **Chat Heads**)
+* ✅ **Chat Heads**
 
 * ✅ **No Chat Reports**
 
