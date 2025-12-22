@@ -7,7 +7,6 @@ import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.mention.data.Target;
 import io.github.hanhy06.embellishchat.util.ColorUtil;
 import io.github.hanhy06.embellishchat.util.LuckPermsUtil;
-import it.unimi.dsi.fastutil.Hash;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.EntitySelector;
@@ -20,9 +19,11 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Style;
 
-import java.util.*;
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static java.util.Map.entry;
 
