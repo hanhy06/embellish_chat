@@ -92,7 +92,7 @@ The configuration file is located at: `config/embellish-chat.json`.
 ```
 {
   // version
-  "version": "2.6.0",
+  "version": "2.6.1",
   
   //rules
   "stylingRules": {
