@@ -46,13 +46,13 @@ public class StylingProcessor implements ConfigListener {
         MutableText result = text;
 
         for (StylingRule rule : rules) {
-            result = applyStyles(result,rule,player);
+            result = applyStyleRule(result,rule,player);
         }
 
         return result;
     }
 
-    private MutableText applyStyles(MutableText text,StylingRule style,ServerPlayerEntity player){
+    private MutableText applyStyleRule(MutableText text, StylingRule style, ServerPlayerEntity player){
         Matcher matcher = style.pattern().matcher(text.getString());
         if (!matcher.find()) return text;
 
