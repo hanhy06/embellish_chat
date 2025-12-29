@@ -355,15 +355,14 @@ To further protect against abuse, use the **Mention Cooldown** feature or `menti
 * ✅ **LuckPerms**
 
 * ✅ **Geyser**
-    - Supports be → je mentions
-    - Supports je → be mentions
+    - Supports je - be mentions
     - Supports chat styling (color, hover, and click events are not fully rendered on be)
 
 [//]: # (* ✅ **Advanced Chat** &#40;[by Wesley1808]&#40;https://modrinth.com/mod/advanced-chat&#41;/It adds channels and other features different from DarkKronicle’s **AdvancedChatCore series**.&#41;)
 
 * ✅ **Chat Heads**
 
-* ✅ **No Chat Reports**
+[//]: # (* ✅ **No Chat Reports**)
 
 ### Not Supported
 
