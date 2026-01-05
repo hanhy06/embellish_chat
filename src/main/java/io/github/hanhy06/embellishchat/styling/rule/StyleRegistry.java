@@ -330,12 +330,6 @@ public class StyleRegistry {
         return parameter.segment();
     }
 
-//  TODO: 아직은 고려중인 기능
-//  TODO: LuaJ 같은거 써서 루아 스크립트 쓸수 있게 함 파라미터 통째로 넘기고 샌드박스,화이트 리스트 환경으로 해야함
-    public MutableText LUA(StyleParameter parameter) {
-        return parameter.segment();
-    }
-
     public MutableText CLEAR(StyleParameter parameter) {
         return Text.literal(parameter.segment().getString());
     }
