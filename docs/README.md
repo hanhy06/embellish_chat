@@ -257,26 +257,35 @@ you can see more detail in [MentionWiki.md](https://github.com/hanhy06/embellish
 
 ---
 
-### LuckPerms & Permission
+## 📜 Compatibility
 
-This mod supports the permission features of LuckPerms and the Fabric Permissions API.
+### Supported
 
-The keys in stylingRules and mentionRules represent each permission (such as chat, command, mention, etc.). These keys are default keys, and the system works even if they are not explicitly defined.
+* ✅ **fabric-permissions-api** (Embedded)
+    - Keys in `stylingRules` and `mentionRules` represent permissions (e.g., chat, command, mention).
+    - Checks rules from top to bottom and applies them based on the user's permissions.
 
-The mod checks from top to bottom and applies the rules registered for each permission.
+* ✅ **placeholder-api** (Embedded)
+    - Supports dynamic data in mention titles, all presets used in rules, and user-configurable options.
+    - Provides a custom placeholder `%embellish-chat:content%` for accessing the raw, unparsed chat message.
 
-The `LUCK_PERMS_GROUP` mention type requires LuckPerms.
-If it’s not installed, these features have no effect.
+* ✅ **LuckPerms**
+    - Required for the `@group` mention type (`LUCK_PERMS_GROUP`).
+    - Without LuckPerms, group mention features have no effect.
 
+* ✅ **Geyser**
+    - Supports je - be mentions
+    - Supports chat styling (color, hover, and click events are not fully rendered on be)
 
----
+[//]: # (* ✅ **Advanced Chat** &#40;[by Wesley1808]&#40;https://modrinth.com/mod/advanced-chat&#41;/It adds channels and other features different from DarkKronicle’s **AdvancedChatCore series**.&#41;)
 
-### Text Placeholder API
+* ✅ **Chat Heads**
 
-This mod supports dynamic data through the Text Placeholder API.
-The Text Placeholder API applies to the mention title, all presets used in rules, and any options that users can configure.
+[//]: # (* ✅ **No Chat Reports**)
 
-A custom placeholder, %embellish-chat:content%, is available for accessing the raw, unparsed chat message.
+### Not Supported
+
+* ❗ **Styled Chat** (Mentions function correctly, but styling is not applied)
 
 ---
 ## 📊 Performance: Processing Time per Tick
@@ -340,34 +349,6 @@ In **v2.6.1**, we separated the cost into two parts:
 
 In a real server environment, this volume of messages per tick is practically impossible.  
 To further protect against abuse, use the **Mention Cooldown** feature or `mentionBroadcast`.
-
----
-
-## 📜 Compatibility
-
-
-### Supported
-
-* ✅ **fabric-permissions-api** (Embedded)
-
-* ✅ **placeholder-api** (Embedded)
-
-* ✅ **LuckPerms**
-
-* ✅ **Geyser**
-    - Supports je - be mentions
-    - Supports chat styling (color, hover, and click events are not fully rendered on be)
-
-[//]: # (* ✅ **Advanced Chat** &#40;[by Wesley1808]&#40;https://modrinth.com/mod/advanced-chat&#41;/It adds channels and other features different from DarkKronicle’s **AdvancedChatCore series**.&#41;)
-
-* ✅ **Chat Heads**
-
-[//]: # (* ✅ **No Chat Reports**)
-
-### Not Supported
-
-* ❗ **Styled Chat** (Mentions function correctly, but styling is not applied)
-
 
 ---
 
