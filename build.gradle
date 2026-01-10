@@ -22,6 +22,14 @@ repositories {
         url "https://maven.nucleoid.xyz/"
         name "Nucleoid"
     }
+
+//    maven {
+//        name = "Modrinth"
+//        url = "https://api.modrinth.com/maven"
+//        content {
+//            includeGroup "maven.modrinth"
+//        }
+//    }
 }
 
 fabricApi {
@@ -40,6 +48,7 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     modCompileOnly "net.luckperms:api:5.4"
+//    modCompileOnly "maven.modrinth:styled-chat:2.11.0+1.21.11"
 
     include(modImplementation('me.lucko:fabric-permissions-api:0.6.1'))
     include(modImplementation('eu.pb4:placeholder-api:2.8.1+1.21.10'))
