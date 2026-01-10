@@ -165,6 +165,7 @@ If you use the `JSON` type, you can replace the matched string with JSON.
 The example above shows how to use the `JSON` type to replace `:fire:` with a fire atlas.<br>
 You can read about Minecraft’s atlas [Text component format wiki](https://minecraft.wiki/w/Text_component_format#Atlas_Object_Type) and [Atlas wiki](https://minecraft.wiki/w/Atlas).
 
+
 ## Application – Using chat as a macro
 
 ```
