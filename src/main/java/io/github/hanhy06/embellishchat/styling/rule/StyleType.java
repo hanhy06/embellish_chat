@@ -15,6 +15,7 @@ public enum StyleType {
     CLICK_COPY,
     HOVER_TEXT,
     HOVER_ITEM,
+    SHOW_ITEM,
     FONT,
     URL,
     BOLD,

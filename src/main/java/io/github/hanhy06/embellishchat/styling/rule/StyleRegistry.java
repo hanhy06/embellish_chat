@@ -1,6 +1,7 @@
 package io.github.hanhy06.embellishchat.styling.rule;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
 import io.github.hanhy06.embellishchat.EmbellishChat;
@@ -8,7 +9,12 @@ import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.discord.DiscordMessenger;
 import io.github.hanhy06.embellishchat.styling.util.Runs;
 import io.github.hanhy06.embellishchat.util.ColorUtil;
+import net.minecraft.component.ComponentType;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
@@ -58,6 +64,7 @@ public class StyleRegistry {
                 entry(StyleType.CLICK_COPY, this::CLICK_COPY),
                 entry(StyleType.HOVER_TEXT,this::HOVER_TEXT),
                 entry(StyleType.HOVER_ITEM,this::HOVER_ITEM),
+                entry(StyleType.SHOW_ITEM,this::SHOW_ITEM),
                 entry(StyleType.FONT, this::FONT),
                 entry(StyleType.URL, this::URL),
                 entry(StyleType.BOLD, this::BOLD),
@@ -268,6 +275,24 @@ public class StyleRegistry {
         return parameter.segment().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
     }
 
+    public MutableText SHOW_ITEM(StyleParameter parameter){
+        String atlas = "{\"type\": \"object\", \"atlas\": \"%s:items\", \"sprite\": \"item/%s\"}";
+        ItemStack item = parameter.player().getMainHandStack();
+        if (item == null || item.isEmpty()) return parameter.segment();
+
+        Identifier itemId = item.get(DataComponentTypes.ITEM_MODEL);
+        String namespace = itemId.getNamespace();
+        String path = itemId.getPath();
+
+        String json = String.format(atlas,namespace,path);
+        JsonElement element = JsonParser.parseString(json);
+        Text text = TextCodecs.CODEC.parse(JsonOps.INSTANCE,element).getOrThrow();
+
+        HoverEvent hoverEvent = new HoverEvent.ShowItem(item);
+
+        return text.copy().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
+    }
+
     public MutableText FONT(StyleParameter parameter) {
         StyleSpriteSource font = new StyleSpriteSource.Font(Identifier.tryParse(parameter.option()));
         return parameter.segment().fillStyle(Style.EMPTY.withFont(font));
@@ -299,7 +324,8 @@ public class StyleRegistry {
     }
 
     public MutableText OBFUSCATED(StyleParameter parameter) {
-        return parameter.segment().fillStyle(Style.EMPTY.withObfuscated(true));
+        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(parameter.segment().getString()));
+        return parameter.segment().fillStyle(Style.EMPTY.withObfuscated(true).withHoverEvent(hoverEvent));
     }
 
     public MutableText STRIKETHROUGH(StyleParameter parameter) {
