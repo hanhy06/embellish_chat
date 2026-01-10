@@ -159,7 +159,7 @@ For example, if you put ((red)) in the preset, every red will be displayed in re
 
 ```
 
-![Fire](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/images/Fire.gif?raw=true)
+![Fire](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/Fire.gif?raw=true)
 
 If you use the `JSON` type, you can replace the matched string with JSON.
 The example above shows how to use the `JSON` type to replace `:fire:` with a fire atlas.<br>

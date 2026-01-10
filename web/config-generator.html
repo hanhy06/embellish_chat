@@ -54,7 +54,7 @@
         "COMMAND_RUN", "CLICK_COMMAND_RUN", "CLICK_COMMAND_SUGGEST", "CLICK_COPY",
         "HOVER_TEXT", "HOVER_ITEM", "FONT", "URL",
         "BOLD", "ITALIC", "UNDERLINE", "STRIKETHROUGH", "OBFUSCATED",
-        "REPLACE", "MASK", "UPPER", "LOWER", "JSON","CLEAR", "DISCORD_JSON"
+        "REPLACE", "MASK", "UPPER", "LOWER", "JSON","CLEAR", "DISCORD_JSON","SHOW_ITEM"
     ];
 
     const MENTION_TYPES = [
@@ -66,7 +66,7 @@
     ];
 
     const DEFAULT_CONFIG = {
-      "version": "2.6.0",
+      "version": "2.6.2",
       "stylingRules": {
         "embellish-chat.chat": [
           {
@@ -1178,7 +1178,7 @@
                             <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">
                                 Embellish Chat
                             </h1>
-                            <p className="text-slate-500 dark:text-slate-400 mt-1">Config Editor v2.6.0</p>
+                            <p className="text-slate-500 dark:text-slate-400 mt-1">Config Editor v2.6.2</p>
                         </div>
                         <div className="flex gap-2 bg-white dark:bg-slate-900 p-1 rounded-lg shadow-sm border border-slate-200 dark:border-slate-800 overflow-x-auto">
                             {tabs.map(tab => (
