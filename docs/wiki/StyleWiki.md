@@ -37,7 +37,8 @@
 > * `COLOR_SHADOW` is not available in versions earlier than 1.21.2.
 > * The `COLOR_GRADIENT` type also supports three or more colors.
 > * The `DISCORD_JSON` type requires a [Discord webhook](https://discord.com/safety/using-webhooks-and-embeds).
->
+> * The SHOW_ITEM type Only supports item images. If a block or a custom resource pack is used, an error texture will be displayed. For custom resource packs, the item must be registered in the item atlas to work properly.
+> 
 > | **HOVER_ITEM Value** | **Description**           |
 > |----------------------|---------------------------|
 > | -1                   | Uses the main-hand item   |
@@ -160,10 +161,39 @@ For example, if you put ((red)) in the preset, every red will be displayed in re
 
 ![Fire](https://github.com/hanhy06/embellish-chat/blob/v2.6.1/%2B1.21.11/docs/images/Fire.gif?raw=true)
 
-If you use the JSON type, you can replace the matched string with JSON.
-The example above shows how to use the JSON type to replace `:fire:` with a fire atlas.<br>
+If you use the `JSON` type, you can replace the matched string with JSON.
+The example above shows how to use the `JSON` type to replace `:fire:` with a fire atlas.<br>
 You can read about Minecraft’s atlas [Text component format wiki](https://minecraft.wiki/w/Text_component_format#Atlas_Object_Type) and [Atlas wiki](https://minecraft.wiki/w/Atlas).
 
+## Application – Using chat as a macro
+
+```
+[
+  {
+    "pattern": "(sad)()",
+    "styles": [{ "styleType": "COMMAND_RUN", "preset": "/trigger ec.flag set 100" }]
+  },
+  {
+    "pattern": "(like|love)()",
+    "styles": [{ "styleType": "COMMAND_RUN", "preset": "/trigger ec.flag set 200" }]
+  },
+  {
+    "pattern": "(hate)()",
+    "styles": [{ "styleType": "COMMAND_RUN", "preset": "/trigger ec.flag set 300" }]
+  },
+  {
+    "pattern": "(oh|ah)()",
+    "styles": [{ "styleType": "COMMAND_RUN", "preset": "/trigger ec.flag set 400" }]
+  }
+]
+```
+
+![Command_Run](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/Command_Run.gif?raw=true)
+
+Triggers and the COMMAND_RUN type allow chat to function as a macro.
+The example above demonstrates a showcase datapack that enables expressions like crying or joy through chat.
+
+If you want, you can download it [here](https://modrinth.com/datapack/embellish-chat-showcase).
 
 ## Application – Text Placeholder API
 
