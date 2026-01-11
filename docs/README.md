@@ -285,7 +285,10 @@ you can see more detail in [MentionWiki.md](https://github.com/hanhy06/embellish
 
 ### Not Supported
 
-* ❗ **Styled Chat** (Mentions function correctly, but styling is not applied)
+* ❗ **Styled Chat**
+    - When **Styled Chat** and **Embellish Chat** are used together, **Styled Chat takes priority**, and **Embellish Chat styling is not applied**.
+    - However, **Embellish Chat’s mention (notification) feature still works**.
+    - If both mods must be used simultaneously, you should remove all contents within Embellish Chat’s stylingRules. Otherwise, Embellish Chat will continue to perform style calculations in the background, causing unnecessary performance overhead.
 
 ---
 ## 📊 Performance: Processing Time per Tick

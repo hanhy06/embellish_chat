@@ -50,6 +50,8 @@
 
 This is the most basic way to use it.
 
+
+
 ## Multiple Mention
 
 ```
@@ -88,6 +90,8 @@ This is the most basic way to use it.
 
 Mentions any red-team player within a 64-block radius.
 
+
+
 ## Application – Making an announcement
 
 ```
@@ -121,6 +125,8 @@ Mentions any red-team player within a 64-block radius.
 ```
 
 Typing `[notification]` will send an alert to everyone.
+
+
 
 ## Application - Admin Mention
 
