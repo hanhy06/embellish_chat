@@ -37,7 +37,8 @@
 > * `COLOR_SHADOW` is not available in versions earlier than 1.21.2.
 > * The `COLOR_GRADIENT` type also supports three or more colors.
 > * The `DISCORD_JSON` type requires a [Discord webhook](https://discord.com/safety/using-webhooks-and-embeds).
-> * The SHOW_ITEM type Only supports item images. If a block or a custom resource pack is used, an error texture will be displayed. For custom resource packs, the item must be registered in the item atlas to work properly.
+> * The `SHOW_ITEM` type Only supports item images. If a block or a custom resource pack is used, an error texture will be displayed. For custom resource packs, the item must be registered in the item atlas to work properly.
+> * Rules that use atlases, such as the `SHOW_ITEM` type, must be applied last.
 > 
 > | **HOVER_ITEM Value** | **Description**           |
 > |----------------------|---------------------------|
