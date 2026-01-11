@@ -27,6 +27,7 @@ public enum StyleType {
     MASK,
     UPPER,
     LOWER,
+    CAPITALIZE,
     CLEAR,
     JSON,
     DISCORD_JSON

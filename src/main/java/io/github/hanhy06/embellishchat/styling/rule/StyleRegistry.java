@@ -22,6 +22,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.net.URI;
@@ -76,6 +77,7 @@ public class StyleRegistry {
                 entry(StyleType.MASK, this::MASK),
                 entry(StyleType.UPPER, this::UPPER),
                 entry(StyleType.LOWER, this::LOWER),
+                entry(StyleType.CAPITALIZE,this::CAPITALIZE),
                 entry(StyleType.CLEAR, this::CLEAR),
                 entry(StyleType.JSON, this::JSON),
                 entry(StyleType.DISCORD_JSON, this::DISCORD_JSON)
@@ -349,6 +351,11 @@ public class StyleRegistry {
     public MutableText LOWER(StyleParameter parameter) {
         String string = parameter.segment().getString();
         return Text.of(string.toLowerCase()).copy().fillStyle(parameter.segment().getStyle());
+    }
+
+    public MutableText CAPITALIZE(StyleParameter parameter){
+        String string = parameter.segment().getString();
+        return Text.of(StringUtils.capitalize(string)).copy().fillStyle(parameter.segment().getStyle());
     }
 
     public MutableText CLEAR(StyleParameter parameter) {
