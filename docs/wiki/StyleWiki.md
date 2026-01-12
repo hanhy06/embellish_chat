@@ -196,7 +196,10 @@ You can read about Minecraft’s atlas [Text component format wiki](https://mine
 ![Show_Item](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/Show_Item.gif?raw=true)
 
 If you use the `SHOW_ITEM` type, you can show off not only the item’s description but also the image of the item you are holding.
-To use an absolute path, specify it in the following format: `[i minecraft:blocks;block/grass_block_side]`.
+
+To specify a custom texture path, use `[i minecraft:blocks;block/grass_block_side]`. Otherwise, simply using `[i]` will automatically infer the texture from the held item.
+
+
 
 
 
