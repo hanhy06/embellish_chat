@@ -1,7 +1,6 @@
 package io.github.hanhy06.embellishchat.styling.rule;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
 import io.github.hanhy06.embellishchat.EmbellishChat;
@@ -9,12 +8,10 @@ import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.discord.DiscordMessenger;
 import io.github.hanhy06.embellishchat.styling.util.Runs;
 import io.github.hanhy06.embellishchat.util.ColorUtil;
-import net.minecraft.component.ComponentType;
+import io.github.hanhy06.embellishchat.util.OptionUtil;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
@@ -46,8 +43,7 @@ public class StyleRegistry {
     private final Pattern HEX_CODE = Pattern.compile("#[A-Fa-f0-9]{6}");
     private final DiscordMessenger messenger;
 
-    private final String ATLAS_ITEM;
-    private final String ATLAS_BLOCK;
+    private final String ATLAS_JSON;
 
     public StyleRegistry(Config config) {
         this.config = config;
@@ -87,8 +83,7 @@ public class StyleRegistry {
         ));
         this.messenger = new DiscordMessenger(config);
 
-        this.ATLAS_ITEM = "{\"type\": \"object\", \"atlas\": \"%s:items\", \"sprite\": \"item/%s\"}";
-        this.ATLAS_BLOCK = "{\"type\": \"object\", \"atlas\": \"%s:blocks\", \"sprite\": \"block/%s\"}";
+        this.ATLAS_JSON = "{\"type\": \"object\", \"atlas\": \"%s\", \"sprite\": \"%s\"}";
     }
 
     public Function<StyleParameter, MutableText> get(StyleType styleType) {
@@ -289,21 +284,19 @@ public class StyleRegistry {
 
         String namespace;
         String path;
-        if (parameter.option().contains(":")){
-            String[] segments = parameter.option().replaceAll(" ","").split(":");
-            namespace = segments[0];
-            path = segments[1];
+        if (!parameter.option().isBlank()){
+            List<String> segments = OptionUtil.split(parameter.option().trim(),";");
+            namespace = segments.getFirst();
+            path = segments.getLast();
         }else {
-            Identifier itemId = item.get(DataComponentTypes.ITEM_MODEL);
-            namespace = itemId.getNamespace();
-            path = itemId.getPath();
+            String type = (item.getItem() instanceof BlockItem) ? "block" : "item";
+
+            Identifier modelId = item.get(DataComponentTypes.ITEM_MODEL);
+            namespace = String.format("%s:%ss",modelId.getNamespace(),type);
+            path = String.format("%s/%s",type,modelId.getPath());
         }
 
-        String atlas;
-        if (item.getItem() instanceof BlockItem) atlas = String.format(ATLAS_BLOCK,namespace,path);
-        else atlas = String.format(ATLAS_ITEM,namespace,path);
-
-        JsonElement element = JsonParser.parseString(atlas);
+        JsonElement element = JsonParser.parseString(String.format(ATLAS_JSON,namespace,path));
         Text text = TextCodecs.CODEC.parse(JsonOps.INSTANCE,element).getOrThrow();
 
         HoverEvent hoverEvent = new HoverEvent.ShowItem(item);
