@@ -46,6 +46,9 @@ public class StyleRegistry {
     private final Pattern HEX_CODE = Pattern.compile("#[A-Fa-f0-9]{6}");
     private final DiscordMessenger messenger;
 
+    private final String ATLAS_ITEM;
+    private final String ATLAS_BLOCK;
+
     public StyleRegistry(Config config) {
         this.config = config;
         this.timestamp = DateTimeFormatter.ofPattern(config.timestamp());
@@ -83,6 +86,9 @@ public class StyleRegistry {
                 entry(StyleType.DISCORD_JSON, this::DISCORD_JSON)
         ));
         this.messenger = new DiscordMessenger(config);
+
+        this.ATLAS_ITEM = "{\"type\": \"object\", \"atlas\": \"%s:items\", \"sprite\": \"item/%s\"}";
+        this.ATLAS_BLOCK = "{\"type\": \"object\", \"atlas\": \"%s:blocks\", \"sprite\": \"block/%s\"}";
     }
 
     public Function<StyleParameter, MutableText> get(StyleType styleType) {
@@ -278,16 +284,18 @@ public class StyleRegistry {
     }
 
     public MutableText SHOW_ITEM(StyleParameter parameter){
-        String atlas = "{\"type\": \"object\", \"atlas\": \"%s:items\", \"sprite\": \"item/%s\"}";
         ItemStack item = parameter.player().getMainHandStack();
         if (item == null || item.isEmpty()) return parameter.segment();
 
         Identifier itemId = item.get(DataComponentTypes.ITEM_MODEL);
         String namespace = itemId.getNamespace();
-        String path = itemId.getPath();
+        String path = itemId.getPath()+parameter.option();
 
-        String json = String.format(atlas,namespace,path);
-        JsonElement element = JsonParser.parseString(json);
+        String atlas;
+        if (item.getItem() instanceof BlockItem) atlas = String.format(ATLAS_BLOCK,namespace,path);
+        else atlas = String.format(ATLAS_ITEM,namespace,path);
+
+        JsonElement element = JsonParser.parseString(atlas);
         Text text = TextCodecs.CODEC.parse(JsonOps.INSTANCE,element).getOrThrow();
 
         HoverEvent hoverEvent = new HoverEvent.ShowItem(item);

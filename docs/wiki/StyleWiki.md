@@ -1,44 +1,47 @@
 # Available Style Types
 
-| Type                    | Description                                                                                                                                                      | Option                   |
-|-------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------|
-| `METADATA`              | When the mouse hovers over the text, display the time the server received it, and when clicked, copy it to the clipboard.                                        | No options are required  |
-| `LOG`                   | Logs the text and sender information to the server console when the message is processed.                                                                        | No options are required  |
-| `COLOR_HEX`             | Applies the color specified by the HEX code provided as an option.                                                                                               | HEX code                 |
-| `COLOR_RAINBOW`         | Cycles through rainbow colors.                                                                                                                                   | saturation               |
-| `COLOR_GRADIENT`        | Applies a color gradient using the provided HEX codes.                                                                                                           | HEX codes                |
-| `COLOR_PRESET`          | Uses a predefined color name from the `colorPreset` section.                                                                                                     | color preset             |
-| `COLOR_SHADOW`          | Applies the HEX code color provided as an option to the shadow.                                                                                                  | HEX code                 |
-| `COLOR_TEAM`            | Colors the text using the player’s team color.                                                                                                                   | No options are required  |
-| `COMMAND_RUN`           | Immediately executes the command supplied via the option when the text is processed.                                                                             | command                  |
-| `CLICK_COMMAND_RUN`     | Runs the command supplied via the option when the text is clicked.                                                                                               | command                  |
-| `CLICK_COMMAND_SUGGEST` | Suggests the command supplied via the option when the text is clicked. The suggested command is placed into the chat input field but not executed automatically. | command                  |
-| `CLICK_COPY`            | Copies the text supplied via the option to the clipboard when the text is clicked.                                                                               | text to copy             |
-| `HOVER_TEXT`            | Displays the text supplied via the option when the mouse hovers over it.                                                                                         | text                     |
-| `HOVER_ITEM`            | Displays the item description for a specified inventory slot when hovered over.                                                                                  | item slot                |
-| `SHOW_ITEM`             | Displays the description along with the texture of the item currently held by the player.                                                                        | No options are required  |
-| `FONT`                  | Changes the font style.                                                                                                                                          | font id                  |
-| `URL`                   | Allows opening the URL provided as an option when clicked.                                                                                                       | url                      |
-| `BOLD`                  | Bold text.                                                                                                                                                       | No options are required  |
-| `ITALIC`                | Italic text.                                                                                                                                                     | No options are required  |
-| `UNDERLINE`             | Underlined text.                                                                                                                                                 | No options are required  |
-| `STRIKETHROUGH`         | Strikethrough text.                                                                                                                                              | No options are required  |
-| `OBFUSCATED`            | Applies Minecraft style obfuscation to make the text unreadable.                                                                                                 | No options are required  |
-| `REPLACE`               | Replaces the matched text using the provided option string while preserving the original style.                                                                  | Replacement string       |
-| `MASK`                  | Replaces the original string with the characters supplied via options, adjusting to match the original length.                                                   | Replacement character    |
-| `UPPER`                 | Transforms every matched substring into uppercase characters.                                                                                                    | No options are required  |
-| `LOWER`                 | Transforms every matched substring into lowercase characters.                                                                                                    | No options are required  |
-| `CAPITALIZE`            | Creates a title by converting only the first character of the string to uppercase.                                                                               | No options are required  |                          
-| `CLEAR`                 | Removes all styles.                                                                                                                                              | No options are required  |
-| `JSON`                  | Parses the JSON string supplied via the option and displays it as a text component.                                                                              | JSON string              |
-| `DISCORD_JSON`          | The provided options are sent to Discord through a registered webhook                                                                                            | JSON string              |
+| Type                    | Description                                                                                                                                                      | Option                            |
+|-------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------|
+| `METADATA`              | When the mouse hovers over the text, display the time the server received it, and when clicked, copy it to the clipboard.                                        | No options are required           |
+| `LOG`                   | Logs the text and sender information to the server console when the message is processed.                                                                        | No options are required           |
+| `COLOR_HEX`             | Applies the color specified by the HEX code provided as an option.                                                                                               | HEX code                          |
+| `COLOR_RAINBOW`         | Cycles through rainbow colors.                                                                                                                                   | saturation                        |
+| `COLOR_GRADIENT`        | Applies a color gradient using the provided HEX codes.                                                                                                           | HEX codes                         |
+| `COLOR_PRESET`          | Uses a predefined color name from the `colorPreset` section.                                                                                                     | color preset                      |
+| `COLOR_SHADOW`          | Applies the HEX code color provided as an option to the shadow.                                                                                                  | HEX code                          |
+| `COLOR_TEAM`            | Colors the text using the player’s team color.                                                                                                                   | No options are required           |
+| `COMMAND_RUN`           | Immediately executes the command supplied via the option when the text is processed.                                                                             | command                           |
+| `CLICK_COMMAND_RUN`     | Runs the command supplied via the option when the text is clicked.                                                                                               | command                           |
+| `CLICK_COMMAND_SUGGEST` | Suggests the command supplied via the option when the text is clicked. The suggested command is placed into the chat input field but not executed automatically. | command                           |
+| `CLICK_COPY`            | Copies the text supplied via the option to the clipboard when the text is clicked.                                                                               | text to copy                      |
+| `HOVER_TEXT`            | Displays the text supplied via the option when the mouse hovers over it.                                                                                         | text                              |
+| `HOVER_ITEM`            | Displays the item description for a specified inventory slot when hovered over.                                                                                  | item slot                         |
+| `SHOW_ITEM`             | Displays the description along with the texture of the item and block currently held by the player.                                                              | Additional subpath after the path |
+| `FONT`                  | Changes the font style.                                                                                                                                          | font id                           |
+| `URL`                   | Allows opening the URL provided as an option when clicked.                                                                                                       | url                               |
+| `BOLD`                  | Bold text.                                                                                                                                                       | No options are required           |
+| `ITALIC`                | Italic text.                                                                                                                                                     | No options are required           |
+| `UNDERLINE`             | Underlined text.                                                                                                                                                 | No options are required           |
+| `STRIKETHROUGH`         | Strikethrough text.                                                                                                                                              | No options are required           |
+| `OBFUSCATED`            | Applies Minecraft style obfuscation to make the text unreadable.                                                                                                 | No options are required           |
+| `REPLACE`               | Replaces the matched text using the provided option string while preserving the original style.                                                                  | Replacement string                |
+| `MASK`                  | Replaces the original string with the characters supplied via options, adjusting to match the original length.                                                   | Replacement character             |
+| `UPPER`                 | Transforms every matched substring into uppercase characters.                                                                                                    | No options are required           |
+| `LOWER`                 | Transforms every matched substring into lowercase characters.                                                                                                    | No options are required           |
+| `CAPITALIZE`            | Creates a title by converting only the first character of the string to uppercase.                                                                               | No options are required           |                          
+| `CLEAR`                 | Removes all styles.                                                                                                                                              | No options are required           |
+| `JSON`                  | Parses the JSON string supplied via the option and displays it as a text component.                                                                              | JSON string                       |
+| `DISCORD_JSON`          | The provided options are sent to Discord through a registered webhook                                                                                            | JSON string                       |
 
 > **Notes**
 >
 > * `COLOR_SHADOW` is not available in versions earlier than 1.21.2.
 > * The `COLOR_GRADIENT` type also supports three or more colors.
 > * The `DISCORD_JSON` type requires a [Discord webhook](https://discord.com/safety/using-webhooks-and-embeds).
-> * The `SHOW_ITEM` type Only supports item images. If a block or a custom resource pack is used, an error texture will be displayed. For custom resource packs, the item must be registered in the item atlas to work properly.
+> * The `SHOW_ITEM` type supports both blocks and items. However, it may display an error texture or fail to work in the following cases:
+>  * The block or item texture does not match the item ID.
+>  * The atlas texture does not exist.
+>  * A custom resource pack uses a different texture path.
 > * Rules that use atlases, such as the `SHOW_ITEM` type, must be applied last.
 > 
 > | **HOVER_ITEM Value** | **Description**           |
@@ -180,7 +183,7 @@ You can read about Minecraft’s atlas [Text component format wiki](https://mine
 
 ```
 {
-  "pattern": "(\\[i\\])()",
+  "pattern": "(\\[i(.*?)\\])",
   "styles": [
     {
       "styleType": "SHOW_ITEM",
