@@ -287,9 +287,17 @@ public class StyleRegistry {
         ItemStack item = parameter.player().getMainHandStack();
         if (item == null || item.isEmpty()) return parameter.segment();
 
-        Identifier itemId = item.get(DataComponentTypes.ITEM_MODEL);
-        String namespace = itemId.getNamespace();
-        String path = itemId.getPath()+parameter.option();
+        String namespace;
+        String path;
+        if (parameter.option().contains(":")){
+            String[] segments = parameter.option().split(":");
+            namespace = segments[0];
+            path = segments[1];
+        }else {
+            Identifier itemId = item.get(DataComponentTypes.ITEM_MODEL);
+            namespace = itemId.getNamespace();
+            path = itemId.getPath();
+        }
 
         String atlas;
         if (item.getItem() instanceof BlockItem) atlas = String.format(ATLAS_BLOCK,namespace,path);
