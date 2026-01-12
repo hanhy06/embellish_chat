@@ -12,12 +12,12 @@
 
 ---
 
-## 🛠️ Markdown Usage
+## 🛠️ Styling System
 
 Use the following patterns directly in the chat window:
 
-| Feature           | Syntax                  | Example                                                       | Preview                                                                                                            |
-|-------------------|-------------------------|---------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| Feature           | Syntax                  | Example                                                       | Showcase                                                                                                            |
+|-------------------|-------------------------|---------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|
 | Bold              | `**Text**`              | `**You really need to read this!**`                           | ![Bold](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/Bold.png?raw=true)             |
 | Italic            | `_Text_`                | `_This is top secret..._`                                     | ![Italic](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/Italic.png?raw=true)         |
 | Underline         | `__Text__`              | `__Check this out__`                                          | ![Underline](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/Underline.png?raw=true)   |
@@ -43,14 +43,15 @@ Use the following patterns directly in the chat window:
 
 ## 🗣️ Mention System
 
-| Target          | Behavior                                                                                                                                                                                                                                                                |
-|-----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `@Player`       | Mentions a specific player. If the player is online, the mention adopts the player’s display name style. If the player is offline or does not exist, it still follows the player's team style if available.                                                              |
-| `@team(name)`   | Mentions all players in the specified team.                                                                                                                                                                                                                             |
-| `@group(name)`  | Mentions all players in the specified LuckPerms group.                                                                                                                                                                                                                  |
-| `@everyone`     | Mentions all players on the server.                                                                                                                                                                                                                                     |
-| `@here`         | Mentions all players within a configurable radius in the same world as the sender. The default radius is **64 blocks**, adjustable in the configuration.                                                                          |
-| `@world(name)`  | Mentions all players in the specified world.                                                                                                                                                                                                                            |
+| Target         | Behavior                                                                                                                                                                                                                                           |
+|----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `@PlayerName`  | Mentions a specific player. If the player is online, the mention adopts the player’s display name style. If the player is offline or does not exist, it still follows the player's team style if available.                                        |
+| `@team(name)`  | Mentions all players in the specified team.                                                                                                                                                                                                        |
+| `@group(name)` | Mentions all players in the specified LuckPerms group.                                                                                                                                                                                             |
+| `@world(name)` | Mentions all players in the specified world.                                                                                                                                                                                                       |
+| `@everyone`    | Mentions all players on the server.                                                                                                                                                                                                                |
+| `@here`        | Mentions all players within a configurable radius in the same world as the sender. The default radius is **64 blocks**, adjustable in the configuration.                                                                                           |
+
 
 > **Notes**
 >
@@ -60,6 +61,20 @@ Use the following patterns directly in the chat window:
 > * `@team` and `@Player` mentions follow the color of their respective team. If the team has no color, the `defaultTeamColor` value is used.
 > * Other mention types can have their color customized by modifying the `styleRule` value.
 > * The table above shows only the most common mentions. Embellish Chat supports many additional mention types. For more details, please refer to [MentionWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/wiki/MentionWiki.md)
+
+---
+
+## ✨ If you use your imagination!
+
+| Showcase                                                                                                              | Explanation                                                                |
+|-----------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| ![Admin Mention](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/Mention.gif?raw=true)   | Notifies admins on Discord and enables click-to-teleport.                  |
+| ![Show Item](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/Show_Item.gif?raw=true)     | Show off your item's icon and description, not just the name!              |
+| ![Run Command](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/Run_Command.gif?raw=true) | Bring chat to life! Type keywords to trigger sounds, particles, and more.  |
+
+> **Notes**
+>
+> * You can find these useful examples in [MentionWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/wiki/MentionWiki.md) and [StyleWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/wiki/StyleWiki.md)!
 
 ---
 
@@ -164,10 +179,15 @@ The configuration file is located at: `config/embellish-chat.json`.
 > * The `delimiter` is internally processed using a regular expression. If you want to use a special character like `|` as a separator, please enter the escaped version of the delimiter.
 > * If the `defaultTeamColor` value is missing or `null`, it will not be automatically colored.
 > * You can specify the mention cooldown time (in seconds) through the config. When the cooldown time is set to 0, there are no restrictions.
-> * [config-generator.html](https://hanhy06.github.io/embellish-chat/web/config-generator.html) is a web configuration generator site for Embellish Chat. It was created using Gemini, so it may not be perfect.
-
 
 ---
+
+## Configurations
+
+### This document dives into the detailed configuration structure. But hey, don’t forget — we have a web [config-generator.html](https://hanhy06.github.io/embellish-chat/web/config-generator.html)!
+
+<details>
+<summary> configuration </summary>
 
 ## Styling Configuration
 
@@ -201,7 +221,7 @@ Each rule consists of a regular expression (`pattern`) and a style action list(`
 * **pattern** Must contain **two capturing groups**:
     1) the text to apply the style to
     2) an optional captured value that can be passed as an argument.
-* **styles** This is a list of style actions. Each action consists of a style type (`styleType`) and style option preset(`preset`).
+  * **styles** This is a list of style actions. Each action consists of a style type (`styleType`) and style option preset(`preset`).
 
 you can see more detail in [StyleWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/wiki/StyleWiki.md)
 
@@ -247,13 +267,15 @@ regular expression (`pattern`), notification settings (`title`, `cooldown`, `sou
 ```
 
 * **pattern** must contain one capturing group, which represents the mention option. For example, this could be a team name or a LuckPerms group name.
-* **title** The title that appears on the mentioned player's screen. Supports the Text Placeholder API, where %player:displayname% is the name of the player who sent the mention.
-* **cooldown** Mention cooldown time in seconds. Set to 0 for no cooldown.
-* **sound** Defines the notification sound settings. Contains `id` (sound identifier), `category` (sound category), `volume`, and `pitch`.
-* **mentions** A list of mention actions. Each action specifies a `mentionType` and an optional `preset`.
-* **styles** A list of style actions. Works the same way as in the styling rules section.
+  * **title** The title that appears on the mentioned player's screen. Supports the Text Placeholder API, where %player:displayname% is the name of the player who sent the mention.
+  * **cooldown** Mention cooldown time in seconds. Set to 0 for no cooldown.
+  * **sound** Defines the notification sound settings. Contains `id` (sound identifier), `category` (sound category), `volume`, and `pitch`.
+  * **mentions** A list of mention actions. Each action specifies a `mentionType` and an optional `preset`.
+  * **styles** A list of style actions. Works the same way as in the styling rules section.
 
 you can see more detail in [MentionWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/wiki/MentionWiki.md)
+
+</details>
 
 ---
 
@@ -274,7 +296,7 @@ you can see more detail in [MentionWiki.md](https://github.com/hanhy06/embellish
     - Without LuckPerms, group mention features have no effect.
 
 * ✅ **Geyser**
-    - Supports je - be mentions
+    - Supports JE-BE mentions
     - Supports chat styling (color, hover, and click events are not fully rendered on be)
 
 [//]: # (* ✅ **Advanced Chat** &#40;[by Wesley1808]&#40;https://modrinth.com/mod/advanced-chat&#41;/It adds channels and other features different from DarkKronicle’s **AdvancedChatCore series**.&#41;)
@@ -330,8 +352,8 @@ The messages used in the tests are:
 | Mixed        | 50     | `**Hey** @everyone! Look at [this]<red> _cool_ @here.`                                                                                                                                                                       |
 | Mixed        | 200    | `Attention @everyone! The **Boss Raid** is starting. @team(Red) please defend the [Core]<#FF0000>. @here gather at the gate! Watch out for the **hidden assassin**. The prize is [GOD SWORD]<RAINBOW>. Msg @Admin if stuck.` |
 
-![MSPT-50](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/MSPT2.6.2-50.png?raw=true)
-![MSPT-200](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/MSPT2.6.2-200.png?raw=true)
+![MSPT-50](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/MSPT2.6.1-50.png?raw=true)
+![MSPT-200](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/MSPT2.6.1-200.png?raw=true)
 
 ---
 
