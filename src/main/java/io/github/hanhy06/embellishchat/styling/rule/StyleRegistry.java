@@ -290,7 +290,7 @@ public class StyleRegistry {
         String namespace;
         String path;
         if (parameter.option().contains(":")){
-            String[] segments = parameter.option().split(":");
+            String[] segments = parameter.option().replaceAll(" ","").split(":");
             namespace = segments[0];
             path = segments[1];
         }else {
