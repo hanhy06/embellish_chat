@@ -22,6 +22,10 @@ public class InventoryManager {
         inventories.put(player.getUuid(), inventory);
     }
 
+    public static SimpleInventory get(UUID uuid){
+        return inventories.get(uuid);
+    }
+
     private static SimpleInventory createInventoryLayout(ServerPlayerEntity player){
         SimpleInventory inventory = new SimpleInventory(54);
         PlayerInventory playerInventory = player.getInventory();
@@ -47,11 +51,6 @@ public class InventoryManager {
         }
 
         return inventory;
-    }
-
-
-    public static SimpleInventory get(UUID uuid){
-        return inventories.get(uuid);
     }
 
     public static void registryLeaveEvent(){

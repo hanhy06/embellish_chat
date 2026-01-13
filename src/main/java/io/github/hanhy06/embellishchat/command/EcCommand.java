@@ -1,5 +1,6 @@
 package io.github.hanhy06.embellishchat.command;
 
+import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.context.CommandContext;
 import io.github.hanhy06.embellishchat.config.ConfigManager;
 import io.github.hanhy06.embellishchat.inventory.InventoryScreenHandler;
@@ -15,6 +16,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.argument.UuidArgumentType;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
+import net.minecraft.server.GameProfileResolver;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -28,23 +30,21 @@ import java.util.stream.Collectors;
 
 public class EcCommand {
     public static void registerEc() {
-        CommandRegistrationCallback.EVENT.register((commandDispatcher, commandRegistryAccess, registrationEnvironment) -> {
-            commandDispatcher.register(
-                    CommandManager.literal("ec")
-                            .then(CommandManager.literal("help")
-                                    .then(CommandManager.literal("mention").executes(EcCommand::executeHelpMention))
-                                    .then(CommandManager.literal("style").executes(EcCommand::executeHelpStyle))
-                            )
-                            .then(CommandManager.literal("notification")
-                                    .executes(EcCommand::executeNotification)
-                            )
-                            .then(CommandManager.literal("open")
-                                    .then(CommandManager.argument("key", UuidArgumentType.uuid())
-                                            .executes(EcCommand::executeOpenInventory)
-                                    )
-                            )
-            );
-        });
+        CommandRegistrationCallback.EVENT.register((commandDispatcher, commandRegistryAccess, registrationEnvironment) -> commandDispatcher.register(
+                CommandManager.literal("ec")
+                        .then(CommandManager.literal("help")
+                                .then(CommandManager.literal("mention").executes(EcCommand::executeHelpMention))
+                                .then(CommandManager.literal("style").executes(EcCommand::executeHelpStyle))
+                        )
+                        .then(CommandManager.literal("notification")
+                                .executes(EcCommand::executeNotification)
+                        )
+                        .then(CommandManager.literal("open")
+                                .then(CommandManager.argument("key", UuidArgumentType.uuid())
+                                        .executes(EcCommand::executeOpenInventory)
+                                )
+                        )
+        ));
     }
 
     private static int executeHelpMention(CommandContext<ServerCommandSource> context) {
@@ -169,11 +169,14 @@ public class EcCommand {
             return 1;
         }
 
+        GameProfileResolver resolver = context.getSource().getServer().getApiServices().profileResolver();
+        GameProfile gameProfile = resolver.getProfileById(uuid).orElse(new GameProfile(uuid,"None"));
+        Text name = Text.literal(gameProfile.name()+"'s inventory");
+
         player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
-                (syncId, playerInventory, playerEntity) ->{
-                    return new InventoryScreenHandler(syncId,playerInventory,inventory);
-                },
-                Text.literal("test")
+                (syncId, playerInventory, playerEntity) ->
+                        new InventoryScreenHandler(syncId,playerInventory,inventory),
+                name
         ));
 
         return 1;
