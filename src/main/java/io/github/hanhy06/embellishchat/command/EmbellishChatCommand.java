@@ -63,12 +63,13 @@ public class EmbellishChatCommand {
 
     private static int executeBanOrPardon(CommandContext<ServerCommandSource> context, boolean ban) {
         String action = ban ? "banned" : "pardoned";
-        Collection<ServerPlayerEntity> players = null;
+        Collection<ServerPlayerEntity> players;
 
         try {
             players = EntityArgumentType.getPlayers(context, "target");
         } catch (CommandSyntaxException e) {
             EmbellishChat.LOGGER.error("Unable to perform {} due to an unknown error.",action);
+            return 1;
         }
 
         if (ban) {
