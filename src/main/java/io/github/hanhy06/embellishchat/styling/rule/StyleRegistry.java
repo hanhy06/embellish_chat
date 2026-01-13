@@ -258,7 +258,7 @@ public class StyleRegistry {
 
     public MutableText CLICK_OPEN_INVENTORY(StyleParameter parameter){
         ServerPlayerEntity player = parameter.player();
-        InventoryUtil.put(player.getUuid(),player.getInventory());
+        InventoryUtil.put(player,player.getInventory());
 
         ClickEvent clickEvent = new ClickEvent.RunCommand("/ec open "+player.getUuid());
         ProfileComponent component = ProfileComponent.ofStatic(player.getGameProfile());
@@ -283,12 +283,8 @@ public class StyleRegistry {
             slot = -1;
         }
 
-        if (slot < 0 || 42 < slot){
-            item = player.getMainHandStack();
-        } else {
-            item = player.getInventory().getStack(slot);
-        }
-
+        if (slot < 0 || 42 < slot) item = player.getMainHandStack();
+        else item = player.getInventory().getStack(slot);
         if (item.isEmpty()) return parameter.segment();
 
         HoverEvent hoverEvent = new HoverEvent.ShowItem(item);

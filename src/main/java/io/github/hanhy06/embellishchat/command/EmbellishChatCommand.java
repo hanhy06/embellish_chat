@@ -4,6 +4,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.ConfigManager;
 import io.github.hanhy06.embellishchat.message.MessageProcessor;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -60,8 +61,15 @@ public class EmbellishChatCommand {
         return 1;
     }
 
-    private static int executeBanOrPardon(CommandContext<ServerCommandSource> context, boolean ban) throws CommandSyntaxException {
-        Collection<ServerPlayerEntity> players = EntityArgumentType.getPlayers(context, "target");
+    private static int executeBanOrPardon(CommandContext<ServerCommandSource> context, boolean ban) {
+        String action = ban ? "banned" : "pardoned";
+        Collection<ServerPlayerEntity> players = null;
+
+        try {
+            players = EntityArgumentType.getPlayers(context, "target");
+        } catch (CommandSyntaxException e) {
+            EmbellishChat.LOGGER.error("Unable to perform {} due to an unknown error.",action);
+        }
 
         if (ban) {
             ConfigManager.getConfig().bannedPlayerList().addAll(
@@ -72,14 +80,12 @@ public class EmbellishChatCommand {
                     players.stream().map(ServerPlayerEntity::getUuid).toList()
             );
         }
-
         ConfigManager.INSTANCE.writeConfig();
 
         String playerNames = players.stream()
                 .map(ServerPlayerEntity::getName)
                 .map(Text::getString)
                 .collect(Collectors.joining(", "));
-        String action = ban ? "banned" : "pardoned";
         String result = String.format("Player(s) %s %s.", playerNames, action);
 
         context.getSource().sendFeedback(() -> Text.literal(result), true);

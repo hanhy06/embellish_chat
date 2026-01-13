@@ -10,7 +10,7 @@ import net.minecraft.screen.slot.SlotActionType;
 
 public class InventoryScreenHandler extends GenericContainerScreenHandler {
     public InventoryScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory) {
-        super(ScreenHandlerType.GENERIC_9X4, syncId, playerInventory, inventory, 6);
+        super(ScreenHandlerType.GENERIC_9X6, syncId, playerInventory, inventory, 6);
     }
 
     @Override
