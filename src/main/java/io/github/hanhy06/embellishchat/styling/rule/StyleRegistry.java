@@ -7,9 +7,9 @@ import com.mojang.serialization.JsonOps;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.discord.DiscordMessenger;
+import io.github.hanhy06.embellishchat.inventory.InventoryManager;
 import io.github.hanhy06.embellishchat.styling.util.Runs;
 import io.github.hanhy06.embellishchat.util.ColorUtil;
-import io.github.hanhy06.embellishchat.inventory.InventoryUtil;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ProfileComponent;
@@ -258,7 +258,7 @@ public class StyleRegistry {
 
     public MutableText CLICK_OPEN_INVENTORY(StyleParameter parameter){
         ServerPlayerEntity player = parameter.player();
-        InventoryUtil.put(player,player.getInventory());
+        InventoryManager.put(player);
 
         ClickEvent clickEvent = new ClickEvent.RunCommand("/ec open "+player.getUuid());
         ProfileComponent component = ProfileComponent.ofStatic(player.getGameProfile());
