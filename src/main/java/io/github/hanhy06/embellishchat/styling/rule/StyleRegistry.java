@@ -9,7 +9,7 @@ import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.discord.DiscordMessenger;
 import io.github.hanhy06.embellishchat.styling.util.Runs;
 import io.github.hanhy06.embellishchat.util.ColorUtil;
-import io.github.hanhy06.embellishchat.util.InventoryUtil;
+import io.github.hanhy06.embellishchat.inventory.InventoryUtil;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ProfileComponent;

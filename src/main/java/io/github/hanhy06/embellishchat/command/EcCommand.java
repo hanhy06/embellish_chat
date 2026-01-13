@@ -2,19 +2,19 @@ package io.github.hanhy06.embellishchat.command;
 
 import com.mojang.brigadier.context.CommandContext;
 import io.github.hanhy06.embellishchat.config.ConfigManager;
+import io.github.hanhy06.embellishchat.inventory.InventoryScreenHandler;
 import io.github.hanhy06.embellishchat.mention.rule.MentionAction;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
 import io.github.hanhy06.embellishchat.mention.rule.MentionType;
 import io.github.hanhy06.embellishchat.styling.rule.StyleAction;
 import io.github.hanhy06.embellishchat.styling.rule.StyleType;
 import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
-import io.github.hanhy06.embellishchat.util.InventoryUtil;
+import io.github.hanhy06.embellishchat.inventory.InventoryUtil;
 import io.github.hanhy06.embellishchat.util.PermissionUtil;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.argument.UuidArgumentType;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.screen.GenericContainerScreenHandler;
-import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -158,7 +158,12 @@ public class EcCommand {
     private static int executeOpenInventory(CommandContext<ServerCommandSource> context){
         UUID uuid = UuidArgumentType.getUuid(context,"key");
         ServerPlayerEntity player = context.getSource().getPlayer();
-        PlayerInventory inventory = InventoryUtil.get(uuid);
+        SimpleInventory inventory = InventoryUtil.get(uuid);
+
+        if (player == null){
+            context.getSource().sendError(Text.literal("Player not found."));
+            return 1;
+        }
 
         if (inventory == null) {
             context.getSource().sendError(Text.literal("Inventory not found."));
@@ -166,9 +171,10 @@ public class EcCommand {
         }
 
         player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
-                (syncId, playerInventory, playerEntity) ->
-                    GenericContainerScreenHandler.createGeneric9x4(syncId, playerInventory),
-                    Text.literal("Inventory View")
+                (syncId, playerInventory, playerEntity) ->{
+                    return new InventoryScreenHandler(syncId,playerInventory,inventory);
+                },
+                Text.literal("test")
         ));
 
         return 1;
