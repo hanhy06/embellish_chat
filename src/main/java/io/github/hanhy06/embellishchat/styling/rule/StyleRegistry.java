@@ -10,13 +10,17 @@ import io.github.hanhy06.embellishchat.styling.util.Runs;
 import io.github.hanhy06.embellishchat.util.ColorUtil;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ProfileComponent;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.*;
+import net.minecraft.text.object.PlayerTextObjectContents;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.StringUtils;
@@ -43,7 +47,8 @@ public class StyleRegistry {
     private final Pattern HEX_CODE = Pattern.compile("#[A-Fa-f0-9]{6}");
     private final DiscordMessenger messenger;
 
-    private final String ATLAS_JSON;
+    private final String ATLAS_ITEM;
+    private final String ATLAS_HEAD;
 
     public StyleRegistry(Config config) {
         this.config = config;
@@ -62,6 +67,7 @@ public class StyleRegistry {
                 entry(StyleType.CLICK_COMMAND_RUN, this::CLICK_COMMAND_RUN),
                 entry(StyleType.CLICK_COMMAND_SUGGEST, this::CLICK_COMMAND_SUGGEST),
                 entry(StyleType.CLICK_COPY, this::CLICK_COPY),
+                entry(StyleType.CLICK_OPEN_INVENTORY,this::CLICK_OPEN_INVENTORY),
                 entry(StyleType.HOVER_TEXT,this::HOVER_TEXT),
                 entry(StyleType.HOVER_ITEM,this::HOVER_ITEM),
                 entry(StyleType.SHOW_ITEM,this::SHOW_ITEM),
@@ -83,7 +89,8 @@ public class StyleRegistry {
         ));
         this.messenger = new DiscordMessenger(config);
 
-        this.ATLAS_JSON = "{\"type\": \"object\", \"atlas\": \"%s\", \"sprite\": \"%s\"}";
+        this.ATLAS_ITEM = "{\"type\": \"object\", \"atlas\": \"%s\", \"sprite\": \"%s\"}";
+        this.ATLAS_HEAD = "{\"type\": \"object\", \"player\": \"%s\", \"player\": \"%s\"}";
     }
 
     public Function<StyleParameter, MutableText> get(StyleType styleType) {
@@ -250,13 +257,19 @@ public class StyleRegistry {
         return parameter.segment().fillStyle(Style.EMPTY.withClickEvent(clickEvent));
     }
 
+    public MutableText CLICK_OPEN_INVENTORY(StyleParameter parameter){
+        ClickEvent clickEvent = new ClickEvent.RunCommand("/ec open");
+
+        ServerPlayerEntity player = parameter.player();
+        ProfileComponent component = ProfileComponent.ofStatic(player.getGameProfile());
+        MutableText text = Text.object(new PlayerTextObjectContents(component, true));
+
+        return text.fillStyle(Style.EMPTY.withClickEvent(clickEvent));
+    }
+
     public MutableText HOVER_TEXT(StyleParameter parameter){
         HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(parameter.option()));
         return parameter.segment().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
-    }
-
-    public MutableText OPEN_INVENTORY(StyleParameter parameter){
-        return parameter.segment();
     }
 
     public MutableText HOVER_ITEM(StyleParameter parameter){
@@ -300,7 +313,7 @@ public class StyleRegistry {
             path = String.format("%s/%s",type,modelId.getPath());
         }
 
-        JsonElement element = JsonParser.parseString(String.format(ATLAS_JSON,namespace,path));
+        JsonElement element = JsonParser.parseString(String.format(ATLAS_ITEM,namespace,path));
         Text text = TextCodecs.CODEC.parse(JsonOps.INSTANCE,element).getOrThrow();
 
         HoverEvent hoverEvent = new HoverEvent.ShowItem(item);
