@@ -255,6 +255,10 @@ public class StyleRegistry {
         return parameter.segment().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
     }
 
+    public MutableText OPEN_INVENTORY(StyleParameter parameter){
+        return parameter.segment();
+    }
+
     public MutableText HOVER_ITEM(StyleParameter parameter){
         ItemStack item = null;
         ServerPlayerEntity player = parameter.player();

@@ -121,8 +121,8 @@ public class MentionProcessor implements ConfigListener {
                 }
             }
 
-            Mention newMention = new Mention(
-                    mention.begin(),mention.end(),null,targets,style,mention.rule()
+            Mention newMention = Mention.of(
+                    mention.begin(),mention.end(),targets,style,mention.rule()
             );
             result.add(newMention);
         }

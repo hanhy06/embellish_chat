@@ -15,7 +15,11 @@ public record Mention(
         MentionRule rule
 ) {
     public static Mention of(int begin,int end,List<String> options,MentionRule rule){
-        return new Mention(begin,end,options,new HashSet<>(),Style.EMPTY,rule);
+        return new Mention(begin,end,options,null,null,rule);
+    }
+
+    public static Mention of(int begin,int end,HashSet<ServerPlayerEntity> targets,Style style,MentionRule rule){
+        return new Mention(begin,end,null,targets,style,rule);
     }
 
     @Override
