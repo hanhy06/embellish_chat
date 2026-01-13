@@ -273,7 +273,7 @@ public class StyleRegistry {
     }
 
     public MutableText HOVER_ITEM(StyleParameter parameter){
-        ItemStack item = null;
+        ItemStack item;
         ServerPlayerEntity player = parameter.player();
         int slot;
 
@@ -314,14 +314,6 @@ public class StyleRegistry {
         HoverEvent hoverEvent = new HoverEvent.ShowItem(item);
 
         return text.copy().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
-    }
-
-    public MutableText SHOW_HEAD(StyleParameter parameter){
-        ApiServices services = parameter.player().getEntityWorld().getServer().getApiServices();
-        GameProfile profile = services.profileResolver().getProfileByName(parameter.option()).get();
-        ProfileComponent component = ProfileComponent.ofStatic(profile);
-
-        return Text.object(new PlayerTextObjectContents(component, true));
     }
 
     public MutableText FONT(StyleParameter parameter) {
