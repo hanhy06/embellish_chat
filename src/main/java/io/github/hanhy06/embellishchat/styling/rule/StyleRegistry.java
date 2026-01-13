@@ -2,12 +2,14 @@ package io.github.hanhy06.embellishchat.styling.rule;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.mojang.authlib.GameProfile;
 import com.mojang.serialization.JsonOps;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.discord.DiscordMessenger;
 import io.github.hanhy06.embellishchat.styling.util.Runs;
 import io.github.hanhy06.embellishchat.util.ColorUtil;
+import io.github.hanhy06.embellishchat.util.InventoryUtil;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ProfileComponent;
@@ -19,6 +21,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.*;
 import net.minecraft.text.object.PlayerTextObjectContents;
+import net.minecraft.util.ApiServices;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.StringUtils;
@@ -255,8 +258,9 @@ public class StyleRegistry {
 
     public MutableText CLICK_OPEN_INVENTORY(StyleParameter parameter){
         ServerPlayerEntity player = parameter.player();
+        InventoryUtil.put(player.getUuid(),player.getInventory());
 
-        ClickEvent clickEvent = new ClickEvent.RunCommand("/ec open"+player.getUuid());
+        ClickEvent clickEvent = new ClickEvent.RunCommand("/ec open "+player.getUuid());
         ProfileComponent component = ProfileComponent.ofStatic(player.getGameProfile());
         MutableText text = Text.object(new PlayerTextObjectContents(component, true));
 
@@ -311,10 +315,17 @@ public class StyleRegistry {
 
         JsonElement element = JsonParser.parseString(String.format(ATLAS_ITEM,namespace,path));
         Text text = TextCodecs.CODEC.parse(JsonOps.INSTANCE,element).getOrThrow();
-
         HoverEvent hoverEvent = new HoverEvent.ShowItem(item);
 
         return text.copy().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
+    }
+
+    public MutableText SHOW_HEAD(StyleParameter parameter){
+        ApiServices services = parameter.player().getEntityWorld().getServer().getApiServices();
+        GameProfile profile = services.profileResolver().getProfileByName(parameter.option()).get();
+        ProfileComponent component = ProfileComponent.ofStatic(profile);
+
+        return Text.object(new PlayerTextObjectContents(component, true));
     }
 
     public MutableText FONT(StyleParameter parameter) {
