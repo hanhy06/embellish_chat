@@ -5,6 +5,7 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
@@ -15,7 +16,7 @@ public class InventoryUtil {
     private static final HashMap<UUID, SimpleInventory> inventories = new HashMap<>();
 
     public static void put(ServerPlayerEntity player, PlayerInventory playerInventory) {
-        ItemStack grayPane = new ItemStack(net.minecraft.item.Items.GRAY_STAINED_GLASS_PANE);
+        ItemStack grayPane = new ItemStack(Items.GRAY_STAINED_GLASS_PANE);
         grayPane.set(DataComponentTypes.CUSTOM_NAME, Text.empty());
 
         SimpleInventory simpleInventory = new SimpleInventory(54);
@@ -26,7 +27,7 @@ public class InventoryUtil {
         simpleInventory.setStack(0,player.getOffHandStack());
         simpleInventory.setStack(1,player.getMainHandStack());
         for (int i = 0; i < 4; i++) {
-            ItemStack item = playerInventory.getStack(i).copy();
+            ItemStack item = playerInventory.getStack(i+36).copy();
             simpleInventory.setStack(i + 5, item);
         }
         for (int i = 9; i < 36; i++) {
@@ -40,6 +41,8 @@ public class InventoryUtil {
 
         inventories.put(player.getUuid(), simpleInventory);
     }
+
+
 
     public static SimpleInventory get(UUID uuid){
         return inventories.get(uuid);
