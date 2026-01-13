@@ -29,6 +29,8 @@ public enum StyleType {
     UPPER,
     LOWER,
     CAPITALIZE,
+    PREFIX,
+    SUFFIX,
     CLEAR,
     JSON,
     DISCORD_JSON

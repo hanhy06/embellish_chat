@@ -83,6 +83,8 @@ public class StyleRegistry {
                 entry(StyleType.UPPER, this::UPPER),
                 entry(StyleType.LOWER, this::LOWER),
                 entry(StyleType.CAPITALIZE,this::CAPITALIZE),
+                entry(StyleType.PREFIX,this::PREFIX),
+                entry(StyleType.SUFFIX,this::SUFFIX),
                 entry(StyleType.CLEAR, this::CLEAR),
                 entry(StyleType.JSON, this::JSON),
                 entry(StyleType.DISCORD_JSON, this::DISCORD_JSON)
@@ -377,6 +379,16 @@ public class StyleRegistry {
     public MutableText CAPITALIZE(StyleParameter parameter){
         String string = parameter.segment().getString();
         return Text.of(StringUtils.capitalize(string)).copy().fillStyle(parameter.segment().getStyle());
+    }
+
+    public MutableText PREFIX(StyleParameter parameter){
+        MutableText prefix = Text.literal(parameter.option());
+        return prefix.append(parameter.segment());
+    }
+
+    public MutableText SUFFIX(StyleParameter parameter){
+        MutableText suffix = Text.literal(parameter.option());
+        return parameter.segment().append(suffix);
     }
 
     public MutableText CLEAR(StyleParameter parameter) {
