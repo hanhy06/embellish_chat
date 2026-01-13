@@ -10,6 +10,7 @@ import io.github.hanhy06.embellishchat.styling.rule.StyleType;
 import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
 import io.github.hanhy06.embellishchat.util.PermissionUtil;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.minecraft.command.argument.UuidArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -32,6 +33,11 @@ public class EcCommand {
                             )
                             .then(CommandManager.literal("notification")
                                     .executes(EcCommand::executeNotification)
+                            )
+                            .then(CommandManager.literal("open")
+                                    .then(CommandManager.argument("key", UuidArgumentType.uuid())
+                                            .executes(EcCommand::executeOpenInventory)
+                                    )
                             )
             );
         });
@@ -141,6 +147,10 @@ public class EcCommand {
         );
 
         ConfigManager.INSTANCE.writeConfig();
+        return 1;
+    }
+
+    private static int executeOpenInventory(CommandContext<ServerCommandSource> context){
         return 1;
     }
 }

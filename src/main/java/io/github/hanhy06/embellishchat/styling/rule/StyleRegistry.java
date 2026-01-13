@@ -13,8 +13,6 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ProfileComponent;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
@@ -48,7 +46,6 @@ public class StyleRegistry {
     private final DiscordMessenger messenger;
 
     private final String ATLAS_ITEM;
-    private final String ATLAS_HEAD;
 
     public StyleRegistry(Config config) {
         this.config = config;
@@ -90,7 +87,6 @@ public class StyleRegistry {
         this.messenger = new DiscordMessenger(config);
 
         this.ATLAS_ITEM = "{\"type\": \"object\", \"atlas\": \"%s\", \"sprite\": \"%s\"}";
-        this.ATLAS_HEAD = "{\"type\": \"object\", \"player\": \"%s\", \"player\": \"%s\"}";
     }
 
     public Function<StyleParameter, MutableText> get(StyleType styleType) {
@@ -258,9 +254,9 @@ public class StyleRegistry {
     }
 
     public MutableText CLICK_OPEN_INVENTORY(StyleParameter parameter){
-        ClickEvent clickEvent = new ClickEvent.RunCommand("/ec open");
-
         ServerPlayerEntity player = parameter.player();
+
+        ClickEvent clickEvent = new ClickEvent.RunCommand("/ec open"+player.getUuid());
         ProfileComponent component = ProfileComponent.ofStatic(player.getGameProfile());
         MutableText text = Text.object(new PlayerTextObjectContents(component, true));
 
