@@ -1,6 +1,6 @@
 # Embellish Chat
 
-**Embellish Chat** allows you to modernize your Minecraft server's chat experience. It introduces Markdown-style formatting, interactive message events, and a robust mention system, all powered by the Fabric API.
+Embellish Chat modernizes your Minecraft server’s chat experience with a fully server-side design. It introduces Markdown-style formatting, interactive message events, and a robust mention system—no client installation required.
 
 ## Documentation
 
