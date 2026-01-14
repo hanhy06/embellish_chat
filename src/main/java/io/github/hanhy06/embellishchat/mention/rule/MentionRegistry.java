@@ -7,6 +7,7 @@ import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.mention.data.Target;
 import io.github.hanhy06.embellishchat.util.ColorUtil;
 import io.github.hanhy06.embellishchat.util.LuckPermsUtil;
+import io.github.hanhy06.embellishchat.util.OpenPartyUtil;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.EntitySelector;
@@ -18,9 +19,6 @@ import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Style;
-import xaero.pac.common.server.api.OpenPACServerAPI;
-import xaero.pac.common.server.parties.party.IPartyManager;
-import xaero.pac.common.server.parties.party.api.IPartyManagerAPI;
 
 import java.util.EnumMap;
 import java.util.HashSet;
@@ -37,7 +35,7 @@ public class MentionRegistry {
     private final Style colorTeam;
 
     private final boolean isLuckPerms;
-    private final boolean isOpenParties;
+    private final boolean isOpenParty;
 
     private final EnumMap<MentionType, Function<MentionParameter, Target>> registries;
 
@@ -64,7 +62,7 @@ public class MentionRegistry {
         ));
 
         this.isLuckPerms = FabricLoader.getInstance().isModLoaded("luckperms");
-        this.isOpenParties = FabricLoader.getInstance().isModLoaded("openpartiesandclaims");
+        this.isOpenParty = FabricLoader.getInstance().isModLoaded("openpartiesandclaims");
     }
 
     public Function<MentionParameter, Target> get(MentionType key){
@@ -166,9 +164,13 @@ public class MentionRegistry {
     }
 
     private Target OPEN_PARTIES_AND_CLAIMS(MentionParameter parameter){
-        IPartyManagerAPI manager = OpenPACServerAPI.get(server).getPartyManager();
-
-        return null;
+        if (isOpenParty){
+            HashSet<ServerPlayerEntity> players = OpenPartyUtil.getPartyPlayers(server,parameter.sender());
+            return Target.of(players,null);
+        }else {
+            EmbellishChat.LOGGER.info("Open Party and Claims not found. @party mentions will be ignored.");
+            return Target.of(new HashSet<>(),null);
+        }
     }
 
     private Target CUSTOM(MentionParameter parameter){
