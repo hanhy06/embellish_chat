@@ -81,11 +81,38 @@ Requires OP Level 2 or appropriate permissions.
 
 The configuration file is located at `config/embellish-chat.json`.
 
+```
+{
+  "version": "2.6.3",
+  
+  "stylingRules": {
+    "embellish-chat.command_argument": [],
+    "embellish-chat.chat": [...]
+  },
+  "mentionRules": {
+    "embellish-chat.mention": [...]
+  },
+  
+  "delimiter": ",",
+  "timestamp": "yyyy-MM-dd HH:mm:ss",
+  "urlColor": "#0000EE",
+  "colorPreset": {...},
+  "defaultTeamColor": "#FF55FF",
+  "notificationCommandEnable": true,
+  "mentionBroadcast": true,
+  "bannedPlayerList": [],
+  "notificationOffPlayerList": [],
+  "webhook": ""
+```
+
 * **Version:** Do not modify the `version` field manually.
 * **Rules:** The core logic lies in `stylingRules` and `mentionRules`.
 * **Order Matters:** Rules are processed from **top to bottom**. Placing a catch-all rule at the top may override specific rules below it.
 
-> **Tip:** We strongly recommend using the **[Web Config Generator](https://hanhy06.github.io/embellish-chat/docs/wiki/config-generator.html)** to generate valid JSON configurations without syntax errors.
+> **Notes**
+> * The `delimiter` is internally processed using a regular expression. If you want to use a special character like `|` as a separator, please enter the escaped version of the delimiter.
+> * If the `defaultTeamColor` value is missing or `null`, it will not be automatically colored.
+> * We strongly recommend using the **[Web Config Generator](https://hanhy06.github.io/embellish-chat/docs/wiki/config-generator.html)** to generate valid JSON configurations without syntax errors.
 
 ---
 
