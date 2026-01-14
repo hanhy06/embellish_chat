@@ -57,7 +57,7 @@ Use these patterns directly in the chat window.
 ## Commands
 
 ### User Commands (`/ec`)
-Available to all players (permission optional).
+Available to all players.
 
 | Command            | Description                                                    |
 |:-------------------|:---------------------------------------------------------------|

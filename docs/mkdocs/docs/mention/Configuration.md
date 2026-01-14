@@ -33,7 +33,7 @@
 ```
 
 * **`pattern`**: This is a regular expression for scanning text. It must have one capture group.
-    * 1) This is the mention option (e.g. team name, LuckPerms group).
+    * This is the mention option (e.g. team name, LuckPerms group).
 * **`title`**: This is the title shown on the mentioned player's screen.
     * `%player:displayname%` is the display name of the player who sent the mention.
 * **`cooldown`**: This is the mention cooldown time in seconds.
