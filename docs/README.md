@@ -64,20 +64,6 @@ Use the following patterns directly in the chat window:
 
 ---
 
-## ✨ If you use your imagination!
-
-| Showcase                                                                                                              | Explanation                                                                |
-|-----------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
-| ![Admin Mention](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/Mention.gif?raw=true)   | Notifies admins on Discord and enables click-to-teleport.                  |
-| ![Show Item](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/Show_Item.gif?raw=true)     | Show off your item's icon and description, not just the name!              |
-| ![Run Command](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/Run_Command.gif?raw=true) | Bring chat to life! Type keywords to trigger sounds, particles, and more.  |
-
-> **Notes**
->
-> * You can find these useful examples in [MentionWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/wiki/MentionWiki.md) and [StyleWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/wiki/StyleWiki.md)!
-
----
-
 ## ⌨️ Commands
 
 * **`/embellish-chat reload`** — Reloads the configuration from `config/embellish-chat.json`.
@@ -186,9 +172,6 @@ The configuration file is located at: `config/embellish-chat.json`.
 
 ### This document dives into the detailed configuration structure. But hey, don’t forget — we have a web [config-generator.html](https://hanhy06.github.io/embellish-chat/web/config-generator.html)!
 
-<details>
-<summary> configuration </summary>
-
 ## Styling Configuration
 
 Embellish Chat, powered by regular expressions, provides highly flexible styling for nearly any chat pattern imaginable.
@@ -274,8 +257,6 @@ regular expression (`pattern`), notification settings (`title`, `cooldown`, `sou
   * **styles** A list of style actions. Works the same way as in the styling rules section.
 
 you can see more detail in [MentionWiki.md](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/wiki/MentionWiki.md)
-
-</details>
 
 ---
 
