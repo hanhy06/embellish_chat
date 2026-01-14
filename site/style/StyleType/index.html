@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../StyleSystem/">
+        <link rel="prev" href="../Configuration">
       
       
-        <link rel="next" href="../StyleType/">
+        <link rel="next" href="../Application">
       
       
         
@@ -23,7 +23,7 @@
     
     
       
-        <title>Configuration - Embellish Chat Wiki</title>
+        <title>Style Type - Embellish Chat Wiki</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#configuration" class="md-skip">
+        <a href="#style-type" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Configuration
+              Style Type
             
           </span>
         </div>
@@ -313,7 +313,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../StyleSystem/" class="md-nav__link">
+      <a href="../StyleSystem" class="md-nav__link">
         
   
   
@@ -321,6 +321,34 @@
     
   
     Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Configuration" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
   
 
     
@@ -357,7 +385,7 @@
   <span class="md-ellipsis">
     
   
-    Configuration
+    Style Type
   
 
     
@@ -368,14 +396,14 @@
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <a href="./" class="md-nav__link md-nav__link--active">
+      <a href="" class="md-nav__link md-nav__link--active">
         
   
   
   <span class="md-ellipsis">
     
   
-    Configuration
+    Style Type
   
 
     
@@ -401,10 +429,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#configuration-structure" class="md-nav__link">
+  <a href="#type-table" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Configuration Structure
+        Type Table
       
     </span>
   </a>
@@ -412,52 +440,57 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage-patterns" class="md-nav__link">
+  <a href="#color-styles" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Usage Patterns
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Usage Patterns">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#single-style" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Single Style
+        Color Styles
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#multiple-style" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#formatting-styles" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Multiple Style
+        Formatting Styles
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#preset" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#interaction" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Preset
+        Interaction
       
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#modification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced
+      
+    </span>
+  </a>
   
 </li>
       
@@ -477,35 +510,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../StyleType/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Style Type
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../Application/" class="md-nav__link">
+      <a href="../Application" class="md-nav__link">
         
   
   
@@ -604,7 +609,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../mention/MentionSystem/" class="md-nav__link">
+      <a href="../../mention/MentionSystem" class="md-nav__link">
         
   
   
@@ -632,7 +637,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../mention/Configuration/" class="md-nav__link">
+      <a href="../../mention/Configuration" class="md-nav__link">
         
   
   
@@ -660,7 +665,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../mention/MentionType/" class="md-nav__link">
+      <a href="../../mention/MentionType" class="md-nav__link">
         
   
   
@@ -688,7 +693,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../mention/Application/" class="md-nav__link">
+      <a href="../../mention/Application" class="md-nav__link">
         
   
   
@@ -733,71 +738,218 @@
 
 
 
-<h1 id="configuration">Configuration</h1>
-<h2 id="configuration-structure">Configuration Structure</h2>
-<pre><code>{
-  &quot;pattern&quot;: &quot;\\*\\*(.+?)\\*\\*()&quot;,
-  &quot;styles&quot;: [
-    {
-      &quot;styleType&quot;: &quot;BOLD&quot;,
-      &quot;preset&quot;: &quot;&quot;
-    }
-  ]
-}
-</code></pre>
+<h1 id="style-type">Style Type</h1>
+<h2 id="type-table">Type Table</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Color</strong></td>
+<td><code>COLOR_HEX</code>, <code>COLOR_RAINBOW</code>, <code>COLOR_GRADIENT</code>, <code>COLOR_PRESET</code>, <code>COLOR_SHADOW</code>, <code>COLOR_TEAM</code></td>
+</tr>
+<tr>
+<td><strong>Formatting</strong></td>
+<td><code>BOLD</code>, <code>ITALIC</code>, <code>UNDERLINE</code>, <code>STRIKETHROUGH</code>, <code>OBFUSCATED</code>, <code>FONT</code>, <code>CLEAR</code></td>
+</tr>
+<tr>
+<td><strong>Interaction</strong></td>
+<td><code>CLICK_COMMAND_RUN</code>, <code>CLICK_COMMAND_SUGGEST</code>, <code>CLICK_COPY</code>, <code>HOVER_TEXT</code>, <code>HOVER_ITEM</code>, <code>URL</code>, <code>METADATA</code></td>
+</tr>
+<tr>
+<td><strong>Modification</strong></td>
+<td><code>UPPER</code>, <code>LOWER</code>, <code>CAPITALIZE</code>, <code>REPLACE</code>, <code>MASK</code>, <code>PREFIX</code>, <code>SUFFIX</code></td>
+</tr>
+<tr>
+<td><strong>Advanced</strong></td>
+<td><code>SHOW_ITEM</code>,<code>SHOW_INVENTORY</code>,<code>JSON</code>, <code>DISCORD_JSON</code>, <code>COMMAND_RUN</code>, <code>LOG</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="color-styles">Color Styles</h2>
 <ul>
-<li><strong><code>pattern</code></strong>: This is a regular expression for scanning text. It must have two capture groups.<ul>
-<li>1) This is text to be styled.</li>
-<li>2) This is text passed as an option.</li>
+<li><code>COLOR_HEX</code><ul>
+<li>Applies the color specified by the HEX code.</li>
+<li><strong>Option:</strong> <code>Hex Code</code></li>
 </ul>
 </li>
-<li><strong><code>styles</code></strong>: Defines the styles to be applied to captured group 1.<ul>
-<li><code>styleType</code>: This is the style type. You can use all types listed in the table above.</li>
-<li><code>preset</code>: This is a preset value. If a value is provided, it is always used; if it is empty, the content of the user's captured group 2 is used instead.</li>
+<li><code>COLOR_RAINBOW</code><ul>
+<li>Cycles through rainbow colors.</li>
+<li><strong>Option:</strong> <code>Saturation</code></li>
+</ul>
+</li>
+<li><code>COLOR_GRADIENT</code><ul>
+<li>Applies a color gradient using the provided HEX codes. Supports two or more colors.</li>
+<li><strong>Option:</strong> <code>Hex Codes</code></li>
+</ul>
+</li>
+<li><code>COLOR_PRESET</code><ul>
+<li>Uses a predefined color name from the <code>colorPreset</code> section.</li>
+<li><strong>Option:</strong> <code>Preset Name</code></li>
+</ul>
+</li>
+<li><code>COLOR_SHADOW</code><ul>
+<li>Applies the HEX code color provided as an option to the shadow. (Available in 1.21.2+).</li>
+<li><strong>Option:</strong> <code>Hex Code</code></li>
+</ul>
+</li>
+<li><code>COLOR_TEAM</code><ul>
+<li>Colors the text using the player’s team color.</li>
+<li><strong>Option:</strong> <code>None</code></li>
 </ul>
 </li>
 </ul>
-<h2 id="usage-patterns">Usage Patterns</h2>
-<h3 id="single-style">Single Style</h3>
-<pre><code>{
-  &quot;pattern&quot;: &quot;__(.+?)__()&quot;,
-  &quot;styles&quot;: [
-    {
-      &quot;styleType&quot;: &quot;UNDERLINE&quot;,
-      &quot;preset&quot;: &quot;&quot;
-    }
-  ]
-}
-</code></pre>
-<p>This is the most basic way to use it.</p>
-<h3 id="multiple-style">Multiple Style</h3>
-<pre><code>{
-  &quot;pattern&quot;: &quot;_\\*(.+?)\\*_()&quot;,
-  &quot;styles&quot;: [
-    {
-      &quot;styleType&quot;: &quot;UNDERLINE&quot;,
-      &quot;preset&quot;: &quot;&quot;
-    },
-    {
-      &quot;styleType&quot;: &quot;BOLD&quot;,
-      &quot;preset&quot;: &quot;&quot;
-    }
-  ]
-}
-</code></pre>
-<p>You can use multiple types in a single rule.</p>
-<h3 id="preset">Preset</h3>
-<pre><code>{
-  &quot;pattern&quot;: &quot;\\[([^\\]]+?)]&lt;(RAINBOW)&gt;&quot;,
-  &quot;styles&quot;: [
-    {
-      &quot;styleType&quot;: &quot;COLOR_RAINBOW&quot;,
-      &quot;preset&quot;: &quot;0.7&quot;
-    }
-  ]
-}
-</code></pre>
-<p>You can set a preset by specifying it, and if the preset is empty, the option provided by the user will be used.</p>
+<h2 id="formatting-styles">Formatting Styles</h2>
+<ul>
+<li><code>BOLD</code><ul>
+<li>Makes the text bold.</li>
+<li><strong>Option:</strong> <code>None</code></li>
+</ul>
+</li>
+<li><code>ITALIC</code><ul>
+<li>Makes the text italic.</li>
+<li><strong>Option:</strong> <code>None</code></li>
+</ul>
+</li>
+<li><code>UNDERLINE</code><ul>
+<li>Underlines the text.</li>
+<li><strong>Option:</strong> <code>None</code></li>
+</ul>
+</li>
+<li><code>STRIKETHROUGH</code><ul>
+<li>Applies a strikethrough style to the text.</li>
+<li><strong>Option:</strong> <code>None</code></li>
+</ul>
+</li>
+<li><code>OBFUSCATED</code><ul>
+<li>Applies Minecraft-style obfuscation (magic text) to make the text unreadable.</li>
+<li><strong>Option:</strong> <code>None</code></li>
+</ul>
+</li>
+<li><code>FONT</code><ul>
+<li>Changes the font style to the specified font ID.</li>
+<li><strong>Option:</strong> <code>Font ID</code></li>
+</ul>
+</li>
+<li><code>CLEAR</code><ul>
+<li>Removes all applied styles.</li>
+<li><strong>Option:</strong> <code>None</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="interaction">Interaction</h2>
+<ul>
+<li><code>CLICK_COMMAND_RUN</code><ul>
+<li>Immediately executes the supplied command when the text is clicked.</li>
+<li><strong>Option:</strong> <code>Command</code></li>
+</ul>
+</li>
+<li><code>CLICK_COMMAND_SUGGEST</code><ul>
+<li>Places the supplied command into the chat input field when clicked (does not execute automatically).</li>
+<li><strong>Option:</strong> <code>Command</code></li>
+</ul>
+</li>
+<li><code>CLICK_COPY</code><ul>
+<li>Copies the supplied text to the clipboard when the text is clicked.</li>
+<li><strong>Option:</strong> <code>Text</code></li>
+</ul>
+</li>
+<li><code>HOVER_TEXT</code><ul>
+<li>Displays the supplied text when the mouse hovers over it.</li>
+<li><strong>Option:</strong> <code>Text</code></li>
+</ul>
+</li>
+<li><code>HOVER_ITEM</code><ul>
+<li>Displays the item description for a specified inventory slot when hovered over. (e.g., <code>-1</code> for main-hand, <code>40</code> for off-hand).</li>
+<li><strong>Option:</strong> <code>Slot ID</code></li>
+</ul>
+</li>
+<li><code>URL</code><ul>
+<li>Opens the provided URL in a browser when clicked.</li>
+<li><strong>Option:</strong> <code>URL</code></li>
+</ul>
+</li>
+<li><code>METADATA</code><ul>
+<li>Displays the server receipt time on hover and copies it to the clipboard on click.</li>
+<li><strong>Option:</strong> <code>None</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="modification">Modification</h2>
+<ul>
+<li><code>UPPER</code><ul>
+<li>Transforms every matched substring into uppercase characters.</li>
+<li><strong>Option:</strong> <code>None</code></li>
+</ul>
+</li>
+<li><code>LOWER</code><ul>
+<li>Transforms every matched substring into lowercase characters.</li>
+<li><strong>Option:</strong> <code>None</code></li>
+</ul>
+</li>
+<li><code>CAPITALIZE</code><ul>
+<li>Converts only the first character of the string to uppercase.</li>
+<li><strong>Option:</strong> <code>None</code></li>
+</ul>
+</li>
+<li><code>REPLACE</code><ul>
+<li>Replaces the matched text with the provided string while preserving the original style.</li>
+<li><strong>Option:</strong> <code>Text</code></li>
+</ul>
+</li>
+<li><code>MASK</code><ul>
+<li>Replaces the original string with the provided character(s), adjusting to match the original length.</li>
+<li><strong>Option:</strong> <code>Character</code></li>
+</ul>
+</li>
+<li><code>PREFIX</code><ul>
+<li>Attaches the provided text before the original text.</li>
+<li><strong>Option:</strong> <code>Text</code></li>
+</ul>
+</li>
+<li><code>SUFFIX</code><ul>
+<li>Attaches the provided text after the original text.</li>
+<li><strong>Option:</strong> <code>Text</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="advanced">Advanced</h2>
+<ul>
+<li><code>SHOW_ITEM</code><ul>
+<li>Displays the description and texture of the item/block held by the player.</li>
+<li><strong>Option:</strong> <code>Altas Path(atlas;sprite)</code></li>
+</ul>
+</li>
+<li><code>SHOW_INVENTORY</code><ul>
+<li>Displays the user’s face. Clicking it shows the user’s inventory snapshot.</li>
+<li><strong>Option:</strong> <code>None</code></li>
+</ul>
+</li>
+<li><code>JSON</code><ul>
+<li>Parses the provided JSON string and displays it as a text component.</li>
+<li><strong>Option:</strong> <code>JSON Data</code></li>
+</ul>
+</li>
+<li><code>DISCORD_JSON</code><ul>
+<li>Sends the provided JSON options to Discord via a registered webhook.</li>
+<li><strong>Option:</strong> <code>JSON Data</code></li>
+</ul>
+</li>
+<li><code>COMMAND_RUN</code><ul>
+<li>Immediately executes the supplied command when the text is processed (server-side trigger).</li>
+<li><strong>Option:</strong> <code>Command</code></li>
+</ul>
+</li>
+<li><code>LOG</code><ul>
+<li>Logs the text and sender information to the server console.</li>
+<li><strong>Option:</strong> <code>None</code></li>
+</ul>
+</li>
+</ul>
 
 
 

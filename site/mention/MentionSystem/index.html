@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../Configuration/">
+        <link rel="prev" href="../../style/Application">
       
       
-        <link rel="next" href="../Application/">
+        <link rel="next" href="../Configuration">
       
       
         
@@ -23,7 +23,7 @@
     
     
       
-        <title>mention Type - Embellish Chat Wiki</title>
+        <title>Introduction - Embellish Chat Wiki</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#mention-type" class="md-skip">
+        <a href="#mention-system" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              mention Type
+              Introduction
             
           </span>
         </div>
@@ -313,7 +313,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../style/StyleSystem/" class="md-nav__link">
+      <a href="../../style/StyleSystem" class="md-nav__link">
         
   
   
@@ -341,7 +341,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../style/Configuration/" class="md-nav__link">
+      <a href="../../style/Configuration" class="md-nav__link">
         
   
   
@@ -369,7 +369,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../style/StyleType/" class="md-nav__link">
+      <a href="../../style/StyleType" class="md-nav__link">
         
   
   
@@ -397,7 +397,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../style/Application/" class="md-nav__link">
+      <a href="../../style/Application" class="md-nav__link">
         
   
   
@@ -493,62 +493,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../MentionSystem/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Introduction
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../Configuration/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Configuration
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -568,7 +512,7 @@
   <span class="md-ellipsis">
     
   
-    mention Type
+    Introduction
   
 
     
@@ -579,14 +523,14 @@
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <a href="./" class="md-nav__link md-nav__link--active">
+      <a href="" class="md-nav__link md-nav__link--active">
         
   
   
   <span class="md-ellipsis">
     
   
-    mention Type
+    Introduction
   
 
     
@@ -612,10 +556,21 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#mention-types" class="md-nav__link">
+  <a href="#mechanism" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Mention Types
+        Mechanism
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation Structure
       
     </span>
   </a>
@@ -638,7 +593,63 @@
   
   
     <li class="md-nav__item">
-      <a href="../Application/" class="md-nav__link">
+      <a href="../Configuration" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MentionType" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mention Type
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Application" class="md-nav__link">
         
   
   
@@ -683,43 +694,30 @@
 
 
 
-<h1 id="mention-type">Mention Type</h1>
-<h2 id="mention-types">Mention Types</h2>
+<h1 id="mention-system">Mention System</h1>
+<p>The Mention system enhances communication on your server by allowing players to notify specific individuals or groups. It goes beyond simple name highlighting by supporting complex targeting rules like teams, radius, and permissions.</p>
+<h2 id="mechanism">Mechanism</h2>
+<p>The mention process operates in three stages:</p>
+<ol>
+<li><strong>Detection</strong>: The plugin identifies mention keywords (e.g., <code>@everyone</code>, <code>@player</code>) within the chat message.</li>
+<li><strong>Targeting</strong>: Based on the <strong>Mention Type</strong>, the plugin calculates the specific recipients (e.g., players within a 50-block radius).</li>
+<li><strong>Notification</strong>: The target players receive a distinct visual cue and an auditory alert to ensure the message is noticed.</li>
+</ol>
+<p>This system ensures that critical messages reach the right people without spamming the entire server.</p>
+<h2 id="documentation-structure">Documentation Structure</h2>
+<p>This section is divided into three parts to help you configure and use the mention system:</p>
 <ul>
-<li><code>EVERYONE</code><ul>
-<li>Mentions <strong>all players</strong> on the server.</li>
-<li><strong>Option:</strong> <code>None</code></li>
-</ul>
+<li>
+<p><strong><a href="../Configuration">Configuration</a></strong>
+  Explains how to customize the mention behavior in <code>config.json</code>. It covers setting up notification sounds, visual formats, and cooldowns.</p>
 </li>
-<li><code>INSIDE</code><ul>
-<li>Mentions players <strong>within a specific radius</strong> around the sender (same world only).</li>
-<li><strong>Option:</strong> <code>Radius</code></li>
-</ul>
+<li>
+<p><strong><a href="../MentionType">Type</a></strong>
+  A reference list of all available mention types. It details the logic for each type, such as targeting by team, world, or proximity.</p>
 </li>
-<li><code>TEAM</code><ul>
-<li>Mentions <strong>all players in the specified team</strong>.</li>
-<li><strong>Option:</strong> <code>Team Name</code></li>
-</ul>
-</li>
-<li><code>PLAYER</code><ul>
-<li>Mentions a <strong>specific player</strong> by name.</li>
-<li><strong>Option:</strong> <code>Player Name</code></li>
-</ul>
-</li>
-<li><code>LUCK_PERMS_GROUP</code><ul>
-<li>Mentions <strong>all players in a specific LuckPerms group</strong>. Requires LuckPerms to be installed.</li>
-<li><strong>Option:</strong> <code>Group Name</code></li>
-</ul>
-</li>
-<li><code>WORLD</code><ul>
-<li>Mentions all players in a <strong>specific world</strong>.</li>
-<li><strong>Option:</strong> <code>World Name</code></li>
-</ul>
-</li>
-<li><code>CUSTOM</code><ul>
-<li>Mentions all players matching the <strong>vanilla target selectors</strong>.</li>
-<li><strong>Option:</strong> <code>Target Selector</code></li>
-</ul>
+<li>
+<p><strong><a href="../Application">Application</a></strong>
+  Provides a guide on how players can use these mentions in-game, including required permissions and syntax examples.</p>
 </li>
 </ul>
 
