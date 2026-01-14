@@ -2,7 +2,6 @@ package io.github.hanhy06.embellishchat.styling.rule;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.mojang.authlib.GameProfile;
 import com.mojang.serialization.JsonOps;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
@@ -21,7 +20,6 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.*;
 import net.minecraft.text.object.PlayerTextObjectContents;
-import net.minecraft.util.ApiServices;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.StringUtils;
@@ -67,7 +65,7 @@ public class StyleRegistry {
                 entry(StyleType.CLICK_COMMAND_RUN, this::CLICK_COMMAND_RUN),
                 entry(StyleType.CLICK_COMMAND_SUGGEST, this::CLICK_COMMAND_SUGGEST),
                 entry(StyleType.CLICK_COPY, this::CLICK_COPY),
-                entry(StyleType.CLICK_OPEN_INVENTORY,this::CLICK_OPEN_INVENTORY),
+                entry(StyleType.CLICK_OPEN_INVENTORY,this::SHOW_INVENTORY),
                 entry(StyleType.HOVER_TEXT,this::HOVER_TEXT),
                 entry(StyleType.HOVER_ITEM,this::HOVER_ITEM),
                 entry(StyleType.SHOW_ITEM,this::SHOW_ITEM),
@@ -258,7 +256,7 @@ public class StyleRegistry {
         return parameter.segment().fillStyle(Style.EMPTY.withClickEvent(clickEvent));
     }
 
-    public MutableText CLICK_OPEN_INVENTORY(StyleParameter parameter){
+    public MutableText SHOW_INVENTORY(StyleParameter parameter){
         ServerPlayerEntity player = parameter.player();
         InventoryManager.put(player);
 

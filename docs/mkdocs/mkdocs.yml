@@ -1,0 +1,25 @@
+site_name: Embellish Chat Wiki
+
+nav:
+  - Home: index.md
+  - Style:
+      - Introduction: style/index.md
+      - Configuration: style/Configuration.md
+      - Style Type: style/StyleType.md
+      - Application: style/Application.md
+  - Mention: index.md
+
+theme:
+  name: material
+  palette:
+    - scheme: slate
+      primary: deep purple
+      accent: deep purple
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.indexes
+    - toc.integrate
+    - search.highlight
+    - search.suggest

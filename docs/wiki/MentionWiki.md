@@ -1,14 +1,14 @@
 # Available Mention Types
 
-| Type               | Description                                                                                                        | Option                   |
-|--------------------|--------------------------------------------------------------------------------------------------------------------|--------------------------|
-| `EVERYONE`         | Mentions **all players** on the server.                                                                            | No options required      |
+| Type               | Description                                                                                                         | Option                   |
+|--------------------|---------------------------------------------------------------------------------------------------------------------|--------------------------|
+| `EVERYONE`         | Mentions **all players** on the server.                                                                             | No options required      |
 | `INSIDE`           | Mentions players **within a specific radius** around the sender (same world only). Radius is taken from the option. | Radius                   |
-| `TEAM`             | Mentions **all players in the specified team**.                                                                      | Team name                |
-| `PLAYER`           | Mentions a **specific player** by name.                                                                            | Player name              |
-| `LUCK_PERMS_GROUP` | Mentions **all players in a specific LuckPerms group**. Requires LuckPerms to be installed.                        | LuckPerms group name     |
-| `WORLD`            | Mentions all players in a **specific world**.                                                                      | World name               |
-| `CUSTOM`           | Mentions all players in a **target selectors**.                                                                    | vanilla target selectors |
+| `TEAM`             | Mentions **all players in the specified team**.                                                                     | Team name                |
+| `PLAYER`           | Mentions a **specific player** by name.                                                                             | Player name              |
+| `LUCK_PERMS_GROUP` | Mentions **all players in a specific LuckPerms group**. Requires LuckPerms to be installed.                         | LuckPerms group name     |
+| `WORLD`            | Mentions all players in a **specific world**.                                                                       | World name               |
+| `CUSTOM`           | Mentions all players in a **target selectors**.                                                                     | vanilla target selectors |
 > **Notes**
 >
 > * `TEAM` and `PLAYER` types follow the color of their respective team. If the team has no color, the `defaultTeamColor` value is used.
