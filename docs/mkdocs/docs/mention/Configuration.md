@@ -154,4 +154,4 @@ Mentions any red-team player within a 64-block radius.
 }
 ```
 
-This way, only the red team will always be in the mansion
+This way, only the red team will always be in the mention
