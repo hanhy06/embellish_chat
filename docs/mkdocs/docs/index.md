@@ -8,7 +8,7 @@ Detailed guides for each system can be found below:
 
 * **[Configuration](#configuration)**
     * Learn how to set up `config.json`.
-    * Explore the [Web Config Generator](https://hanhy06.github.io/embellish-chat/docs/wiki/config-generator.html) for easy rule creation.
+    * Explore the [Web Config Generator](https://hanhy06.github.io/embellish-chat/site/config-generator.html) for easy rule creation.
 * **[Style System](style/StyleSystem.md)**
     * Comprehensive guide on text formatting, colors, and regex-based styling rules.
 * **[Mention System](mention/MentionSystem.md)**
