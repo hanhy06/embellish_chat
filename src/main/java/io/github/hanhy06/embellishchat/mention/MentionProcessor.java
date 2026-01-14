@@ -13,6 +13,7 @@ import io.github.hanhy06.embellishchat.util.OptionUtil;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Style;
@@ -24,6 +25,7 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 
 public class MentionProcessor implements ConfigListener {
+    private final MinecraftServer server;
     private final PlayerManager manager;
     private final Scoreboard scoreboard;
     private final HashSet<Cooldown> cooldowns;
@@ -38,7 +40,8 @@ public class MentionProcessor implements ConfigListener {
 
     private int counter;
 
-    public MentionProcessor(PlayerManager manager, Scoreboard scoreboard) {
+    public MentionProcessor(MinecraftServer server,PlayerManager manager, Scoreboard scoreboard) {
+        this.server =server;
         this.manager = manager;
         this.scoreboard = scoreboard;
 
@@ -57,7 +60,7 @@ public class MentionProcessor implements ConfigListener {
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
         this.mentionRules = config.mentionRules();
-        this.registries = new MentionRegistry(newConfig,manager, scoreboard);
+        this.registries = new MentionRegistry(newConfig,server,manager, scoreboard);
 
         this.cooldowns.clear();
         this.notificationOffPlayerList = config.notificationOffPlayerList();

@@ -18,6 +18,9 @@ import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Style;
+import xaero.pac.common.server.api.OpenPACServerAPI;
+import xaero.pac.common.server.parties.party.IPartyManager;
+import xaero.pac.common.server.parties.party.api.IPartyManagerAPI;
 
 import java.util.EnumMap;
 import java.util.HashSet;
@@ -28,14 +31,18 @@ import java.util.function.Function;
 import static java.util.Map.entry;
 
 public class MentionRegistry {
+    private final MinecraftServer server;
     private final PlayerManager manager;
     private final Scoreboard scoreboard;
     private final Style colorTeam;
+
     private final boolean isLuckPerms;
+    private final boolean isOpenParties;
 
     private final EnumMap<MentionType, Function<MentionParameter, Target>> registries;
 
-    public MentionRegistry(Config config,PlayerManager manager, Scoreboard scoreboard) {
+    public MentionRegistry(Config config,MinecraftServer server,PlayerManager manager, Scoreboard scoreboard) {
+        this.server = server;
         this.manager = manager;
         this.scoreboard = scoreboard;
 
@@ -50,12 +57,14 @@ public class MentionRegistry {
                 entry(MentionType.INSIDE,this::INSIDE),
                 entry(MentionType.TEAM,this::TEAM),
                 entry(MentionType.PLAYER,this::PLAYER),
-                entry(MentionType.LUCK_PERMS_GROUP,this::LUCK_PERMS_GROUP),
                 entry(MentionType.WORLD,this::WORLD),
+                entry(MentionType.LUCK_PERMS_GROUP,this::LUCK_PERMS_GROUP),
+                entry(MentionType.OPEN_PARTIES_AND_CLAIMS,this::OPEN_PARTIES_AND_CLAIMS),
                 entry(MentionType.CUSTOM,this::CUSTOM)
         ));
 
         this.isLuckPerms = FabricLoader.getInstance().isModLoaded("luckperms");
+        this.isOpenParties = FabricLoader.getInstance().isModLoaded("openpartiesandclaims");
     }
 
     public Function<MentionParameter, Target> get(MentionType key){
@@ -124,16 +133,6 @@ public class MentionRegistry {
         return new Target(players,style);
     }
 
-    private Target LUCK_PERMS_GROUP(MentionParameter parameter){
-        if (isLuckPerms) {
-            HashSet<ServerPlayerEntity> players = LuckPermsUtil.getGroupPlayers(parameter.option(),manager.getPlayerList());
-            return Target.of(players,null);
-        }else {
-            EmbellishChat.LOGGER.info("LuckPerms not found. @group mentions will be ignored.");
-            return Target.of(new HashSet<>(),null);
-        }
-    }
-
     private Target WORLD(MentionParameter parameter){
         String worldName = parameter.option();
         MinecraftServer server = parameter.sender().getEntityWorld().getServer();
@@ -154,6 +153,22 @@ public class MentionRegistry {
             EmbellishChat.LOGGER.info("World {} not found. @world mention ignored.", worldName);
             return Target.of(new HashSet<>(), null);
         }
+    }
+
+    private Target LUCK_PERMS_GROUP(MentionParameter parameter){
+        if (isLuckPerms) {
+            HashSet<ServerPlayerEntity> players = LuckPermsUtil.getGroupPlayers(parameter.option(),manager.getPlayerList());
+            return Target.of(players,null);
+        }else {
+            EmbellishChat.LOGGER.info("LuckPerms not found. @group mentions will be ignored.");
+            return Target.of(new HashSet<>(),null);
+        }
+    }
+
+    private Target OPEN_PARTIES_AND_CLAIMS(MentionParameter parameter){
+        IPartyManagerAPI manager = OpenPACServerAPI.get(server).getPartyManager();
+
+        return null;
     }
 
     private Target CUSTOM(MentionParameter parameter){
