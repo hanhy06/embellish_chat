@@ -3,12 +3,12 @@ site_name: Embellish Chat Wiki
 nav:
   - Home: index.md
   - Style:
-      - Introduction: style/index.md
+      - Introduction: style/StyleSystem.md
       - Configuration: style/Configuration.md
       - Style Type: style/StyleType.md
       - Application: style/Application.md
   - Mention:
-      - Introduction: mention/index.md
+      - Introduction: mention/MentionSystem.md
       - Configuration: mention/Configuration.md
       - mention Type: mention/MentionType.md
       - Application: mention/Application.md

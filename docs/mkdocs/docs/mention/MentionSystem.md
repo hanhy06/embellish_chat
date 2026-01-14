@@ -22,5 +22,5 @@ This section is divided into three parts to help you configure and use the menti
 * **[Type](MentionType.md)**
   A reference list of all available mention types. It details the logic for each type, such as targeting by team, world, or proximity.
 
-* **[Usage](Usage.md)**
+* **[Application](Application.md)**
   Provides a guide on how players can use these mentions in-game, including required permissions and syntax examples.
