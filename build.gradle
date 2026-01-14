@@ -23,6 +23,12 @@ repositories {
         name "Nucleoid"
     }
 
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 //    maven {
 //        name = "Modrinth"
 //        url = "https://api.modrinth.com/maven"
@@ -46,13 +52,16 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation('eu.pb4:placeholder-api:2.8.1+1.21.10')
 
     modCompileOnly "net.luckperms:api:5.4"
+    compileOnly "curse.maven:open-parties-and-claims-636608:7420726"
 //    modCompileOnly "maven.modrinth:styled-chat:2.11.0+1.21.11"
 
     include(modImplementation('me.lucko:fabric-permissions-api:0.6.1'))
-    include(modImplementation('eu.pb4:placeholder-api:2.8.1+1.21.10'))
+//    include(modImplementation('eu.pb4:placeholder-api:2.8.1+1.21.10'))
 }
+
 
 processResources {
 	inputs.property "version", project.version

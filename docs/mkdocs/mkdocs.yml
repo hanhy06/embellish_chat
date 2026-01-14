@@ -1,5 +1,8 @@
 site_name: Embellish Chat Wiki
 
+repo_url: https://github.com/hanhy06/embellish-chat
+repo_name: embellish chat
+
 nav:
   - Home: index.md
   - Style:
@@ -15,6 +18,7 @@ nav:
 
 theme:
   name: material
+  logo: null
   palette:
     - scheme: slate
       primary: deep purple
