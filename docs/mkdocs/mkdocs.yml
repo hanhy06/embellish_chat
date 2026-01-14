@@ -13,7 +13,7 @@ nav:
   - Mention:
       - Introduction: mention/MentionSystem.md
       - Configuration: mention/Configuration.md
-      - mention Type: mention/MentionType.md
+      - Mention Type: mention/MentionType.md
       - Application: mention/Application.md
 
 theme:
