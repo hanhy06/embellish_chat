@@ -84,7 +84,7 @@
 ```
 This is the most basic way to use it.
 
-## Multiple Mention
+### Multiple Mention
 
 ```
 {
