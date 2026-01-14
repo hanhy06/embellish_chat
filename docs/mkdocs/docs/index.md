@@ -105,14 +105,13 @@ The configuration file is located at `config/embellish-chat.json`.
   "webhook": ""
 ```
 
-* **Version:** Do not modify the `version` field manually.
-* **Rules:** The core logic lies in `stylingRules` and `mentionRules`.
-* **Order Matters:** Rules are processed from **top to bottom**. Placing a catch-all rule at the top may override specific rules below it.
-
-> **Notes**
-> * The `delimiter` is internally processed using a regular expression. If you want to use a special character like `|` as a separator, please enter the escaped version of the delimiter.
-> * If the `defaultTeamColor` value is missing or `null`, it will not be automatically colored.
-> * We strongly recommend using the **[Web Config Generator](https://hanhy06.github.io/embellish-chat/docs/wiki/config-generator.html)** to generate valid JSON configurations without syntax errors.
+* The `version` field must not be modified manually.
+* The core configuration logic is defined in `stylingRules` and `mentionRules`.
+* Rules are processed from top to bottom, so placing a catch-all rule earlier may override more specific rules defined below.
+* The `delimiter` value is internally handled as a regular expression; special characters such as `|` must be properly escaped.
+* If `defaultTeamColor` is missing or set to `null`, automatic coloring will not be applied.
+* To avoid JSON syntax errors and ensure valid configurations, using the [Web Config Generator](https://hanhy06.github.io/embellish-chat/site/config-generator.html) is strongly recommended:
+  
 
 ---
 

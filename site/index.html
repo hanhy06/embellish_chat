@@ -1072,16 +1072,13 @@
   &quot;webhook&quot;: &quot;&quot;
 </code></pre>
 <ul>
-<li><strong>Version:</strong> Do not modify the <code>version</code> field manually.</li>
-<li><strong>Rules:</strong> The core logic lies in <code>stylingRules</code> and <code>mentionRules</code>.</li>
-<li><strong>Order Matters:</strong> Rules are processed from <strong>top to bottom</strong>. Placing a catch-all rule at the top may override specific rules below it.</li>
+<li>The <code>version</code> field must not be modified manually.</li>
+<li>The core configuration logic is defined in <code>stylingRules</code> and <code>mentionRules</code>.</li>
+<li>Rules are processed from top to bottom, so placing a catch-all rule earlier may override more specific rules defined below.</li>
+<li>The <code>delimiter</code> value is internally handled as a regular expression; special characters such as <code>|</code> must be properly escaped.</li>
+<li>If <code>defaultTeamColor</code> is missing or set to <code>null</code>, automatic coloring will not be applied.</li>
+<li>To avoid JSON syntax errors and ensure valid configurations, using the <a href="https://hanhy06.github.io/embellish-chat/site/config-generator.html">Web Config Generator</a> is strongly recommended:</li>
 </ul>
-<blockquote>
-<p><strong>Notes</strong>
-* The <code>delimiter</code> is internally processed using a regular expression. If you want to use a special character like <code>|</code> as a separator, please enter the escaped version of the delimiter.
-* If the <code>defaultTeamColor</code> value is missing or <code>null</code>, it will not be automatically colored.
-* We strongly recommend using the <strong><a href="https://hanhy06.github.io/embellish-chat/docs/wiki/config-generator.html">Web Config Generator</a></strong> to generate valid JSON configurations without syntax errors.</p>
-</blockquote>
 <hr />
 <h2 id="compatibility">Compatibility</h2>
 <h3 id="supported">Supported</h3>
@@ -1089,6 +1086,11 @@
 <li><strong>Fabric Permissions API(Embedded):</strong> Full integration for permission-based rules.</li>
 <li><strong>Text Placeholder API:</strong> Supports placeholders in mention titles and presets.</li>
 <li><strong>LuckPerms:</strong> Required for <code>@group</code> mentions.</li>
+<li>
+<ul>
+<li><strong>Open Parties and Claims:</strong> Required for <code>@party</code> mentions.</li>
+</ul>
+</li>
 <li><strong>Geyser:</strong> Basic support (Mentions work; Click/Hover events are limited on Bedrock).</li>
 <li><strong>Chat Heads:</strong> Fully compatible.</li>
 </ul>
