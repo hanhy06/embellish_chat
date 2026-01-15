@@ -121,7 +121,7 @@ The configuration file is located at `config/embellish-chat.json`.
 * **Fabric Permissions API(Embedded):** Full integration for permission-based rules.
 * **Text Placeholder API:** Supports placeholders in mention titles and presets.
 * **LuckPerms:** Required for `@group` mentions.
-* * **Open Parties and Claims:** Required for `@party` mentions.
+* **Open Parties and Claims:** Required for `@party` mentions.
 * **Geyser:** Basic support (Mentions work; Click/Hover events are limited on Bedrock).
 * **Chat Heads:** Fully compatible.
 
@@ -170,8 +170,8 @@ The messages used in the tests are:
 | Mixed        | 50     | `**Hey** @everyone! Look at [this]<red> _cool_ @here.`                                                                                                                                                                       |
 | Mixed        | 200    | `Attention @everyone! The **Boss Raid** is starting. @team(Red) please defend the [Core]<#FF0000>. @here gather at the gate! Watch out for the **hidden assassin**. The prize is [GOD SWORD]<RAINBOW>. Msg @Admin if stuck.` |
 
-![MSPT-50](https://github.com/hanhy06/embellish-chat/blob/v2.6.3/%2B1.21.11/docs/images/MSPT2.6.1-50.png?raw=true)
-![MSPT-200](https://github.com/hanhy06/embellish-chat/blob/v2.6.3/%2B1.21.11/docs/images/MSPT2.6.1-200.png?raw=true)
+![MSPT-50](https://github.com/hanhy06/embellish-chat/blob/v2.7.0/%2B1.21.11/docs/images/MSPT2.6.1-50.png?raw=true)
+![MSPT-200](https://github.com/hanhy06/embellish-chat/blob/v2.7.0/%2B1.21.11/docs/images/MSPT2.6.1-200.png?raw=true)
 
 ---
 
