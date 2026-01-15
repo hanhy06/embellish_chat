@@ -443,6 +443,45 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-scenario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test Scenario
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#links" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -778,7 +817,7 @@
   <span class="md-ellipsis">
     
   
-    mention Type
+    Mention Type
   
 
     
@@ -848,7 +887,7 @@
 
 
 <h1 id="embellish-chat">Embellish Chat</h1>
-<p><strong>Embellish Chat</strong> allows you to modernize your Minecraft server's chat experience. It introduces Markdown-style formatting, interactive message events, and a robust mention system, all powered by the Fabric API.</p>
+<p>Embellish Chat modernizes your Minecraft server’s chat experience with a fully server-side design. It introduces Markdown-style formatting, interactive message events, and a robust mention system—no client installation required.</p>
 <h2 id="documentation">Documentation</h2>
 <p>Detailed guides for each system can be found below:</p>
 <ul>
@@ -1050,7 +1089,7 @@
 <h2 id="configuration">Configuration</h2>
 <p>The configuration file is located at <code>config/embellish-chat.json</code>.</p>
 <pre><code>{
-  &quot;version&quot;: &quot;2.6.3&quot;,
+  &quot;version&quot;: &quot;2.7.0&quot;,
 
   &quot;stylingRules&quot;: {
     &quot;embellish-chat.command_argument&quot;: [],
@@ -1101,6 +1140,87 @@
 </ul>
 </li>
 </ul>
+<hr />
+<h2 id="performance">Performance</h2>
+<h3 id="test-setup">Test Setup</h3>
+<p>These tests were performed in a synthetic stress environment to measure <strong>worst-case</strong> performance.<br />
+They do <strong>not</strong> represent normal server conditions.</p>
+<ul>
+<li>Embellish Chat: <strong>2.6.1 (DEV)</strong></li>
+<li>Minecraft: <strong>1.21.11</strong></li>
+<li>World: <strong>Singleplayer, Superflat</strong></li>
+<li>
+<p>CPU: <strong>13th Gen Intel(R) Core(TM) i7-1360P</strong></p>
+</li>
+<li>
+<p>Max RAM for JVM: <strong>2 GB</strong></p>
+</li>
+<li>System: <strong>Windows 11</strong></li>
+<li>Config: <strong>Default</strong></li>
+</ul>
+<h3 id="test-scenario">Test Scenario</h3>
+<p>For each test:</p>
+<ul>
+<li>The server was stressed with up to <strong>500 chat messages per tick</strong><br />
+  (≈ <strong>10,000 messages per second</strong>).</li>
+<li>Each message was about <strong>50</strong> or <strong>200</strong> characters long.</li>
+<li>The server was kept under continuous load while sending these messages every tick.Once the MSPT(Milliseconds Per Tick) value stabilized, the average was calculated over that steady-state period.</li>
+<li>The reported value is the <strong>average MSPT</strong> during that period.</li>
+</ul>
+<p>The messages used in the tests are:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Length</th>
+<th>Test String</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plain Text</td>
+<td>50</td>
+<td><code>This is a simple plain text message for latency test.</code></td>
+</tr>
+<tr>
+<td>Plain Text</td>
+<td>200</td>
+<td><code>This is a standard long message designed to test the baseline performance of the chat system. It contains simple alphanumeric characters and basic punctuation only, without any markdown triggers.</code></td>
+</tr>
+<tr>
+<td>Styling Only</td>
+<td>50</td>
+<td><code>**Bold** _Italic_ [Red]&lt;red&gt; [Blue]&lt;blue&gt; ~~Strike~~</code></td>
+</tr>
+<tr>
+<td>Styling Only</td>
+<td>200</td>
+<td><code>**Welcome** to the server! Please read the [rules]&lt;#FF5555&gt; at spawn. _Need help?_ Ask an admin! There is a **secret event** starting soon at the arena. Don't miss the [LEGENDARY PRIZES]&lt;RAINBOW&gt;!</code></td>
+</tr>
+<tr>
+<td>Mention Only</td>
+<td>50</td>
+<td><code>Hello @everyone is anyone @here? calling @PlayerName</code></td>
+</tr>
+<tr>
+<td>Mention Only</td>
+<td>200</td>
+<td><code>Attention @everyone on the server. We are gathering @here now. If you are in @team(red) or @team(blue), please report to @PlayerOne. @group(admin) and @world(overworld) players should attend too.</code></td>
+</tr>
+<tr>
+<td>Mixed</td>
+<td>50</td>
+<td><code>**Hey** @everyone! Look at [this]&lt;red&gt; _cool_ @here.</code></td>
+</tr>
+<tr>
+<td>Mixed</td>
+<td>200</td>
+<td><code>Attention @everyone! The **Boss Raid** is starting. @team(Red) please defend the [Core]&lt;#FF0000&gt;. @here gather at the gate! Watch out for the **hidden assassin**. The prize is [GOD SWORD]&lt;RAINBOW&gt;. Msg @Admin if stuck.</code></td>
+</tr>
+</tbody>
+</table>
+<p><img alt="MSPT-50" src="https://github.com/hanhy06/embellish-chat/blob/v2.6.3/%2B1.21.11/docs/images/MSPT2.6.1-50.png?raw=true" />
+<img alt="MSPT-200" src="https://github.com/hanhy06/embellish-chat/blob/v2.6.3/%2B1.21.11/docs/images/MSPT2.6.1-200.png?raw=true" /></p>
 <hr />
 <h2 id="links">Links</h2>
 <ul>
