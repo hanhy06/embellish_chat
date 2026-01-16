@@ -492,10 +492,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#showing-off-items" class="md-nav__link">
+  <a href="#text-formatting-text-placeholder-api" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Showing off items
+        Text Formatting &amp; Text Placeholder API
       
     </span>
   </a>
@@ -529,17 +529,6 @@
     <span class="md-ellipsis">
       
         Using It Directly as an Option
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#text-placeholder-api" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Text Placeholder API
       
     </span>
   </a>
@@ -778,24 +767,25 @@
 }
 
 </code></pre>
-<p><img alt="Fire" src="https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/Fire.gif?raw=true" /></p>
+<p><img alt="Fire" src="https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Fire.gif?raw=true" /></p>
 <p>If you use the <code>JSON</code> type, you can replace the matched string with JSON.
 The example above shows how to use the <code>JSON</code> type to replace <code>:fire:</code> with a fire atlas.<br>
 You can read about Minecraft’s atlas <a href="https://minecraft.wiki/w/Text_component_format#Atlas_Object_Type">Text component format wiki</a> and <a href="https://minecraft.wiki/w/Atlas">Atlas wiki</a>.</p>
-<h2 id="showing-off-items">Showing off items</h2>
+<h2 id="text-formatting-text-placeholder-api">Text Formatting &amp; Text Placeholder API</h2>
 <pre><code>{
-  &quot;pattern&quot;: &quot;(\\[i(.*?)\\])&quot;,
+  &quot;pattern&quot;: &quot;(.+)()&quot;,
   &quot;styles&quot;: [
     {
-      &quot;styleType&quot;: &quot;SHOW_ITEM&quot;,
-      &quot;preset&quot;: &quot;&quot;
+      &quot;styleType&quot;: &quot;REPLACE&quot;,
+      &quot;preset&quot;: &quot;[%player:displayname%] %embellish-chat:content%&quot;
     }
   ]
 }
+
 </code></pre>
-<p><img alt="Show_Item" src="https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/Show_Item.gif?raw=true" /></p>
-<p>If you use the <code>SHOW_ITEM</code> type, you can show off not only the item’s description but also the image of the item you are holding.</p>
-<p>To specify a custom texture path, use <code>[i minecraft:blocks;block/grass_block_side]</code>. Otherwise, simply using <code>[i]</code> will automatically infer the texture from the held item.</p>
+<p><img alt="Formatting" src="https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Formatting.png?raw=true" /></p>
+<p>You can format the chat by matching all rules from the first English styling set and applying them using the <code>REPLACE</code> type.
+If you use custom formatting, make sure to disable <code>useClearFormat</code>.</p>
 <h2 id="using-chat-as-a-macro">Using chat as a macro</h2>
 <pre><code>[
   {
@@ -816,7 +806,7 @@ You can read about Minecraft’s atlas <a href="https://minecraft.wiki/w/Text_co
   }
 ]
 </code></pre>
-<p><img alt="Command_Run" src="https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/Command_Run.gif?raw=true" /></p>
+<p><img alt="Command_Run" src="https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Command_Run.gif?raw=true" /></p>
 <p>Triggers and the COMMAND_RUN type allow chat to function as a macro.
 The example above demonstrates a showcase datapack that enables expressions like crying or joy through chat.</p>
 <p>If you want, you can download it <a href="https://modrinth.com/datapack/embellish-chat-showcase">here</a>.</p>
@@ -845,27 +835,6 @@ The example above demonstrates a showcase datapack that enables expressions like
 </code></pre>
 <p>If you write it like ((text)), you can make capture group 1 and 2 have the same content in the regular expression.
 For example, if you put ((red)) in the preset, every red will be displayed in red.</p>
-<h2 id="text-placeholder-api">Text Placeholder API</h2>
-<pre><code>{
-  &quot;pattern&quot;: &quot;(\\[shop])()&quot;,
-  &quot;styles&quot;: [
-    {
-      &quot;styleType&quot;: &quot;REPLACE&quot;,
-      &quot;preset&quot;: &quot;≫ This is %player:name%’s shop ≪&quot;
-    },
-    {
-      &quot;styleType&quot;: &quot;CLICK_COMMAND_RUN&quot;,
-      &quot;preset&quot;: &quot;/shop open %player:name%&quot;
-    },
-    {
-      &quot;styleType&quot;: &quot;BOLD&quot;,
-      &quot;preset&quot;: &quot;&quot;
-    }
-  ]
-}
-</code></pre>
-<p>This is how you can apply the Text Placeholder API.
-You can check the default placeholders of the Placeholder API on the official website. <a href="https://placeholders.pb4.eu/user/default-placeholders/#list-of-placeholders">Here</a></p>
 
 
 
