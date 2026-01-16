@@ -61,7 +61,6 @@ public class MessageProcessor implements ConfigListener {
             PlaceHolderUtil.remove(sender);
         }
 
-        if (config.useClearFormat()) return message;
-        else return message.withUnsignedContent(textMessage);
+        return message.withUnsignedContent(textMessage);
     }
 }
