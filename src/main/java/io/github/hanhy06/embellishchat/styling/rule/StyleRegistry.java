@@ -303,8 +303,9 @@ public class StyleRegistry {
             path = segments.getLast();
         }else {
             String type = (item.getItem() instanceof BlockItem) ? "block" : "item";
-
             Identifier modelId = item.get(DataComponentTypes.ITEM_MODEL);
+            if (modelId==null) return parameter.segment();
+
             namespace = String.format("%s:%ss",modelId.getNamespace(),type);
             path = String.format("%s/%s",type,modelId.getPath());
         }
