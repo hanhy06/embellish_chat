@@ -21,6 +21,27 @@ If you use the `JSON` type, you can replace the matched string with JSON.
 The example above shows how to use the `JSON` type to replace `:fire:` with a fire atlas.<br>
 You can read about Minecraft’s atlas [Text component format wiki](https://minecraft.wiki/w/Text_component_format#Atlas_Object_Type) and [Atlas wiki](https://minecraft.wiki/w/Atlas).
 
+## Text Formatting & Text Placeholder API
+
+```
+{
+  "pattern": "(.+)()",
+  "styles": [
+    {
+      "styleType": "REPLACE",
+      "preset": "[%player:displayname%] %embellish-chat:content%"
+    }
+  ]
+}
+
+```
+
+![Fire](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Formatting.png?raw=true)
+
+You can format the chat by matching all rules from the first English styling set and applying them using the `REPLACE` type.
+If you use custom formatting, make sure to disable `useClearFormat`.
+
+
 ## Using chat as a macro
 
 ```
@@ -83,28 +104,3 @@ In regular expressions, .+ means all characters. Using this method, you can appl
 
 If you write it like ((text)), you can make capture group 1 and 2 have the same content in the regular expression.
 For example, if you put ((red)) in the preset, every red will be displayed in red.
-
-## Text Placeholder API
-
-```
-{
-  "pattern": "(\\[shop])()",
-  "styles": [
-    {
-      "styleType": "REPLACE",
-      "preset": "≫ This is %player:name%’s shop ≪"
-    },
-    {
-      "styleType": "CLICK_COMMAND_RUN",
-      "preset": "/shop open %player:name%"
-    },
-    {
-      "styleType": "BOLD",
-      "preset": ""
-    }
-  ]
-}
-```
-
-This is how you can apply the Text Placeholder API.
-You can check the default placeholders of the Placeholder API on the official website. [Here](https://placeholders.pb4.eu/user/default-placeholders/#list-of-placeholders)
