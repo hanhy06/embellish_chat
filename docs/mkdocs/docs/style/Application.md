@@ -15,7 +15,7 @@
 
 ```
 
-![Fire](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/Fire.gif?raw=true)
+![Fire](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Fire.gif?raw=true)
 
 If you use the `JSON` type, you can replace the matched string with JSON.
 The example above shows how to use the `JSON` type to replace `:fire:` with a fire atlas.<br>
@@ -35,7 +35,7 @@ You can read about Minecraft’s atlas [Text component format wiki](https://mine
 }
 ```
 
-![Show_Item](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/Show_Item.gif?raw=true)
+![Show_Item](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Show_Item.gif?raw=true)
 
 If you use the `SHOW_ITEM` type, you can show off not only the item’s description but also the image of the item you are holding.
 
@@ -64,7 +64,7 @@ To specify a custom texture path, use `[i minecraft:blocks;block/grass_block_sid
 ]
 ```
 
-![Command_Run](https://github.com/hanhy06/embellish-chat/blob/v2.6.2/%2B1.21.11/docs/images/Command_Run.gif?raw=true)
+![Command_Run](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Command_Run.gif?raw=true)
 
 Triggers and the COMMAND_RUN type allow chat to function as a macro.
 The example above demonstrates a showcase datapack that enables expressions like crying or joy through chat.
