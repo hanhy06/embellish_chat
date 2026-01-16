@@ -151,6 +151,7 @@ The configuration file is located at: `config/embellish-chat.json`.
   "defaultTeamColor": "#FF55FF",
   "notificationCommandEnable": true,
   "mentionBroadcast": true,
+  "useClearFormat": false,
   
   //player list
   "bannedPlayerList": [],
