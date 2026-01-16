@@ -21,26 +21,6 @@ If you use the `JSON` type, you can replace the matched string with JSON.
 The example above shows how to use the `JSON` type to replace `:fire:` with a fire atlas.<br>
 You can read about Minecraft’s atlas [Text component format wiki](https://minecraft.wiki/w/Text_component_format#Atlas_Object_Type) and [Atlas wiki](https://minecraft.wiki/w/Atlas).
 
-## Showing off items
-
-```
-{
-  "pattern": "(\\[i(.*?)\\])",
-  "styles": [
-    {
-      "styleType": "SHOW_ITEM",
-      "preset": ""
-    }
-  ]
-}
-```
-
-![Show_Item](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Show_Item.gif?raw=true)
-
-If you use the `SHOW_ITEM` type, you can show off not only the item’s description but also the image of the item you are holding.
-
-To specify a custom texture path, use `[i minecraft:blocks;block/grass_block_side]`. Otherwise, simply using `[i]` will automatically infer the texture from the held item.
-
 ## Using chat as a macro
 
 ```
