@@ -33,6 +33,7 @@ public record Config(
         Color defaultTeamColor,
         boolean notificationCommandEnable,
         boolean mentionBroadcast,
+        boolean useClearFormat,
 
         //player list
         HashSet<UUID> bannedPlayerList,
@@ -278,6 +279,7 @@ public record Config(
                 new Color(0xFF55FF),
                 true,
                 true,
+                false,
 
                 //player list
                 new HashSet<>(),
