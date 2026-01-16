@@ -39,8 +39,7 @@ You can read about Minecraft’s atlas [Text component format wiki](https://mine
 ![Formatting](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Formatting.png?raw=true)
 
 You can format the chat by matching all rules from the first English styling set and applying them using the `REPLACE` type.
-If you use custom formatting, make sure to disable `useClearFormat`.
-
+When using custom formatting, ensure that `useClearFormat` is enabled.
 
 ## Using chat as a macro
 
