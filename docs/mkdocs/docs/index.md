@@ -79,6 +79,9 @@ Requires OP Level 2 or appropriate permissions.
 ---
 ## Configuration
 
+Embellish Chat provides powerful functionality through the use of regular expressions.
+Because regular expressions are inherently difficult, it is recommended to leverage various AI tools for rule creation and optimization.
+
 The configuration file is located at `config/embellish-chat.json`.
 
 ```
@@ -111,7 +114,6 @@ The configuration file is located at `config/embellish-chat.json`.
 * The `delimiter` value is internally handled as a regular expression; special characters such as `|` must be properly escaped.
 * If `defaultTeamColor` is missing or set to `null`, automatic coloring will not be applied.
 * To avoid JSON syntax errors and ensure valid configurations, using the [Web Config Generator](https://hanhy06.github.io/embellish-chat/site/config-generator.html) is strongly recommended:
-  
 
 ---
 
