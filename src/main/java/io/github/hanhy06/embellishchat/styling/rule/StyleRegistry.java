@@ -65,9 +65,9 @@ public class StyleRegistry {
                 entry(StyleType.CLICK_COMMAND_RUN, this::CLICK_COMMAND_RUN),
                 entry(StyleType.CLICK_COMMAND_SUGGEST, this::CLICK_COMMAND_SUGGEST),
                 entry(StyleType.CLICK_COPY, this::CLICK_COPY),
-                entry(StyleType.CLICK_OPEN_INVENTORY,this::SHOW_INVENTORY),
                 entry(StyleType.HOVER_TEXT,this::HOVER_TEXT),
                 entry(StyleType.HOVER_ITEM,this::HOVER_ITEM),
+                entry(StyleType.SHOW_INVENTORY,this::SHOW_INVENTORY),
                 entry(StyleType.SHOW_ITEM,this::SHOW_ITEM),
                 entry(StyleType.FONT, this::FONT),
                 entry(StyleType.URL, this::URL),
@@ -256,17 +256,6 @@ public class StyleRegistry {
         return parameter.segment().fillStyle(Style.EMPTY.withClickEvent(clickEvent));
     }
 
-    public MutableText SHOW_INVENTORY(StyleParameter parameter){
-        ServerPlayerEntity player = parameter.player();
-        InventoryManager.put(player);
-
-        ClickEvent clickEvent = new ClickEvent.RunCommand("/ec open "+player.getUuid());
-        ProfileComponent component = ProfileComponent.ofStatic(player.getGameProfile());
-        MutableText text = Text.object(new PlayerTextObjectContents(component, true));
-
-        return text.fillStyle(Style.EMPTY.withClickEvent(clickEvent));
-    }
-
     public MutableText HOVER_TEXT(StyleParameter parameter){
         HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(parameter.option()));
         return parameter.segment().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
@@ -289,6 +278,18 @@ public class StyleRegistry {
 
         HoverEvent hoverEvent = new HoverEvent.ShowItem(item);
         return parameter.segment().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
+    }
+
+    public MutableText SHOW_INVENTORY(StyleParameter parameter){
+        ServerPlayerEntity player = parameter.player();
+        InventoryManager.put(player);
+
+        ClickEvent clickEvent = new ClickEvent.RunCommand("/ec open "+player.getUuid());
+        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(player.getName().getString() + "'s Inventory"));
+        ProfileComponent component = ProfileComponent.ofStatic(player.getGameProfile());
+        MutableText text = Text.object(new PlayerTextObjectContents(component, true));
+
+        return text.fillStyle(Style.EMPTY.withClickEvent(clickEvent).withHoverEvent(hoverEvent));
     }
 
     public MutableText SHOW_ITEM(StyleParameter parameter){
