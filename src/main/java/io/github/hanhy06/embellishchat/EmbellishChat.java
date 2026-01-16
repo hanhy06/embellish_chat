@@ -36,7 +36,7 @@ public class EmbellishChat implements ModInitializer {
 	}
 
 	private static void handleServerStart(MinecraftServer server) {
-        EmbellishChat.SERVER =server;
+        EmbellishChat.SERVER = server;
 
         Path fabricConfigDirPath = FabricLoader.getInstance().getConfigDir();
         ConfigManager manager = new ConfigManager(fabricConfigDirPath);
