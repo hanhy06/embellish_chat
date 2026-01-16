@@ -53,39 +53,43 @@ public class StyleRegistry {
         this.timestamp = DateTimeFormatter.ofPattern(config.timestamp());
         this.colorPreset = config.colorPreset();
         this.registers = new EnumMap<>(Map.ofEntries(
-                entry(StyleType.METADATA, this::METADATA),
-                entry(StyleType.LOG, this::LOG),
                 entry(StyleType.COLOR_HEX, this::COLOR_HEX),
                 entry(StyleType.COLOR_RAINBOW, this::COLOR_RAINBOW),
                 entry(StyleType.COLOR_GRADIENT, this::COLOR_GRADIENT),
                 entry(StyleType.COLOR_PRESET, this::COLOR_PRESET),
                 entry(StyleType.COLOR_SHADOW, this::COLOR_SHADOW),
                 entry(StyleType.COLOR_TEAM, this::COLOR_TEAM),
-                entry(StyleType.COMMAND_RUN, this::COMMAND_RUN),
-                entry(StyleType.CLICK_COMMAND_RUN, this::CLICK_COMMAND_RUN),
-                entry(StyleType.CLICK_COMMAND_SUGGEST, this::CLICK_COMMAND_SUGGEST),
-                entry(StyleType.CLICK_COPY, this::CLICK_COPY),
-                entry(StyleType.HOVER_TEXT,this::HOVER_TEXT),
-                entry(StyleType.HOVER_ITEM,this::HOVER_ITEM),
-                entry(StyleType.SHOW_INVENTORY,this::SHOW_INVENTORY),
-                entry(StyleType.SHOW_ITEM,this::SHOW_ITEM),
-                entry(StyleType.FONT, this::FONT),
-                entry(StyleType.URL, this::URL),
+
                 entry(StyleType.BOLD, this::BOLD),
                 entry(StyleType.ITALIC, this::ITALIC),
                 entry(StyleType.UNDERLINE, this::UNDERLINE),
                 entry(StyleType.STRIKETHROUGH, this::STRIKETHROUGH),
                 entry(StyleType.OBFUSCATED, this::OBFUSCATED),
-                entry(StyleType.REPLACE, this::REPLACE),
-                entry(StyleType.MASK, this::MASK),
+                entry(StyleType.FONT, this::FONT),
+                entry(StyleType.CLEAR, this::CLEAR),
+
+                entry(StyleType.CLICK_COMMAND_RUN, this::CLICK_COMMAND_RUN),
+                entry(StyleType.CLICK_COMMAND_SUGGEST, this::CLICK_COMMAND_SUGGEST),
+                entry(StyleType.CLICK_COPY, this::CLICK_COPY),
+                entry(StyleType.HOVER_TEXT, this::HOVER_TEXT),
+                entry(StyleType.HOVER_ITEM, this::HOVER_ITEM),
+                entry(StyleType.URL, this::URL),
+                entry(StyleType.METADATA, this::METADATA),
+
                 entry(StyleType.UPPER, this::UPPER),
                 entry(StyleType.LOWER, this::LOWER),
-                entry(StyleType.CAPITALIZE,this::CAPITALIZE),
-                entry(StyleType.PREFIX,this::PREFIX),
-                entry(StyleType.SUFFIX,this::SUFFIX),
-                entry(StyleType.CLEAR, this::CLEAR),
+                entry(StyleType.CAPITALIZE, this::CAPITALIZE),
+                entry(StyleType.REPLACE, this::REPLACE),
+                entry(StyleType.MASK, this::MASK),
+                entry(StyleType.PREFIX, this::PREFIX),
+                entry(StyleType.SUFFIX, this::SUFFIX),
+
+                entry(StyleType.SHOW_ITEM, this::SHOW_ITEM),
+                entry(StyleType.SHOW_INVENTORY, this::SHOW_INVENTORY),
                 entry(StyleType.JSON, this::JSON),
-                entry(StyleType.DISCORD_JSON, this::DISCORD_JSON)
+                entry(StyleType.DISCORD_JSON, this::DISCORD_JSON),
+                entry(StyleType.COMMAND_RUN, this::COMMAND_RUN),
+                entry(StyleType.LOG, this::LOG)
         ));
         this.messenger = new DiscordMessenger(config);
 
@@ -94,23 +98,6 @@ public class StyleRegistry {
 
     public Function<StyleParameter, MutableText> get(StyleType styleType) {
         return registers.get(styleType);
-    }
-
-    public MutableText METADATA(StyleParameter parameter) {
-        MutableText text = parameter.segment();
-        String now = LocalDateTime.now().format(timestamp);
-
-        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(now + "\nClick to copy to clipboard").formatted(Formatting.GRAY));
-        ClickEvent clickEvent = new ClickEvent.CopyToClipboard(now + " " + text.getString());
-
-        return text.fillStyle(Style.EMPTY
-                .withHoverEvent(hoverEvent)
-                .withClickEvent(clickEvent));
-    }
-
-    public MutableText LOG(StyleParameter parameter){
-        EmbellishChat.LOGGER.info("Log StyleType segment: {}, open segment:{}, sender: {}",parameter.segment().getString(),parameter.option(),parameter.player());
-        return parameter.segment();
     }
 
     public MutableText COLOR_HEX(StyleParameter parameter) {
@@ -223,22 +210,34 @@ public class StyleRegistry {
         return parameter.segment();
     }
 
-    public MutableText COMMAND_RUN(StyleParameter parameter){
-        ServerPlayerEntity player = parameter.player();
-        MinecraftServer server = player.getCommandSource().getServer();
-        String command = parameter.option();
-        if (command.startsWith("/")) command = command.substring(1);
+    public MutableText BOLD(StyleParameter parameter) {
+        return parameter.segment().fillStyle(Style.EMPTY.withBold(true));
+    }
 
-        if (server != null) {
-            ServerCommandSource commandSource = player.getCommandSource();
-            try {
-                server.getCommandManager().getDispatcher().execute(command, commandSource);
-            } catch (Exception e) {
-                EmbellishChat.LOGGER.error("Failed to execute command: {}", command, e);
-            }
-        }
+    public MutableText ITALIC(StyleParameter parameter) {
+        return parameter.segment().fillStyle(Style.EMPTY.withItalic(true));
+    }
 
-        return parameter.segment();
+    public MutableText UNDERLINE(StyleParameter parameter) {
+        return parameter.segment().fillStyle(Style.EMPTY.withUnderline(true));
+    }
+
+    public MutableText STRIKETHROUGH(StyleParameter parameter) {
+        return parameter.segment().fillStyle(Style.EMPTY.withStrikethrough(true));
+    }
+
+    public MutableText OBFUSCATED(StyleParameter parameter) {
+        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(parameter.segment().getString()));
+        return parameter.segment().fillStyle(Style.EMPTY.withObfuscated(true).withHoverEvent(hoverEvent));
+    }
+
+    public MutableText FONT(StyleParameter parameter) {
+        StyleSpriteSource font = new StyleSpriteSource.Font(Identifier.tryParse(parameter.option()));
+        return parameter.segment().fillStyle(Style.EMPTY.withFont(font));
+    }
+
+    public MutableText CLEAR(StyleParameter parameter) {
+        return Text.literal(parameter.segment().getString());
     }
 
     public MutableText CLICK_COMMAND_RUN(StyleParameter parameter){
@@ -280,16 +279,61 @@ public class StyleRegistry {
         return parameter.segment().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
     }
 
-    public MutableText SHOW_INVENTORY(StyleParameter parameter){
-        ServerPlayerEntity player = parameter.player();
-        InventoryManager.put(player);
+    public MutableText URL(StyleParameter parameter) {
+        try {
+            URI uri = URI.create(parameter.option());
+            ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
+            return parameter.segment().fillStyle(Style.EMPTY
+                    .withClickEvent(clickEvent)
+                    .withColor(config.urlColor().getRGB()));
+        } catch (IllegalArgumentException e) {
+            EmbellishChat.LOGGER.warn("Invalid URL provided for segment [{}]: {}", parameter.segment().getString(), parameter.option());
+            return parameter.segment();
+        }
+    }
 
-        ClickEvent clickEvent = new ClickEvent.RunCommand("/ec open "+player.getUuid());
-        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(player.getName().getString() + "'s Inventory"));
-        ProfileComponent component = ProfileComponent.ofStatic(player.getGameProfile());
-        MutableText text = Text.object(new PlayerTextObjectContents(component, true));
+    public MutableText METADATA(StyleParameter parameter) {
+        MutableText text = parameter.segment();
+        String now = LocalDateTime.now().format(timestamp);
 
-        return text.fillStyle(Style.EMPTY.withClickEvent(clickEvent).withHoverEvent(hoverEvent));
+        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(now + "\nClick to copy to clipboard").formatted(Formatting.GRAY));
+        ClickEvent clickEvent = new ClickEvent.CopyToClipboard(now + " " + text.getString());
+
+        return text.fillStyle(Style.EMPTY.withHoverEvent(hoverEvent).withClickEvent(clickEvent));
+    }
+
+    public MutableText UPPER(StyleParameter parameter) {
+        String string = parameter.segment().getString();
+        return Text.of(string.toUpperCase()).copy().fillStyle(parameter.segment().getStyle());
+    }
+
+    public MutableText LOWER(StyleParameter parameter) {
+        String string = parameter.segment().getString();
+        return Text.of(string.toLowerCase()).copy().fillStyle(parameter.segment().getStyle());
+    }
+
+    public MutableText CAPITALIZE(StyleParameter parameter){
+        String string = parameter.segment().getString();
+        return Text.of(StringUtils.capitalize(string)).copy().fillStyle(parameter.segment().getStyle());
+    }
+
+    public MutableText REPLACE(StyleParameter parameter) {
+        return Text.of(parameter.option()).copy().fillStyle(parameter.segment().getStyle());
+    }
+
+    public MutableText MASK(StyleParameter parameter) {
+        int length = parameter.segment().getString().length();
+        return Text.of(parameter.option().repeat(length)).copy().fillStyle(parameter.segment().getStyle());
+    }
+
+    public MutableText PREFIX(StyleParameter parameter){
+        MutableText prefix = Text.literal(parameter.option());
+        return prefix.append(parameter.segment());
+    }
+
+    public MutableText SUFFIX(StyleParameter parameter){
+        MutableText suffix = Text.literal(parameter.option());
+        return parameter.segment().append(suffix);
     }
 
     public MutableText SHOW_ITEM(StyleParameter parameter){
@@ -318,81 +362,16 @@ public class StyleRegistry {
         return text.copy().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
     }
 
-    public MutableText FONT(StyleParameter parameter) {
-        StyleSpriteSource font = new StyleSpriteSource.Font(Identifier.tryParse(parameter.option()));
-        return parameter.segment().fillStyle(Style.EMPTY.withFont(font));
-    }
+    public MutableText SHOW_INVENTORY(StyleParameter parameter){
+        ServerPlayerEntity player = parameter.player();
+        InventoryManager.put(player);
 
-    public MutableText URL(StyleParameter parameter) {
-        try {
-            URI uri = URI.create(parameter.option());
-            ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
-            return parameter.segment().fillStyle(Style.EMPTY
-                    .withClickEvent(clickEvent)
-                    .withColor(config.urlColor().getRGB()));
-        } catch (IllegalArgumentException e) {
-            EmbellishChat.LOGGER.warn("Invalid URL provided for segment [{}]: {}", parameter.segment().getString(), parameter.option());
-            return parameter.segment();
-        }
-    }
+        ClickEvent clickEvent = new ClickEvent.RunCommand("/ec open "+player.getUuid());
+        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(player.getName().getString() + "'s Inventory"));
+        ProfileComponent component = ProfileComponent.ofStatic(player.getGameProfile());
+        MutableText text = Text.object(new PlayerTextObjectContents(component, true));
 
-    public MutableText BOLD(StyleParameter parameter) {
-        return parameter.segment().fillStyle(Style.EMPTY.withBold(true));
-    }
-
-    public MutableText ITALIC(StyleParameter parameter) {
-        return parameter.segment().fillStyle(Style.EMPTY.withItalic(true));
-    }
-
-    public MutableText UNDERLINE(StyleParameter parameter) {
-        return parameter.segment().fillStyle(Style.EMPTY.withUnderline(true));
-    }
-
-    public MutableText OBFUSCATED(StyleParameter parameter) {
-        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(parameter.segment().getString()));
-        return parameter.segment().fillStyle(Style.EMPTY.withObfuscated(true).withHoverEvent(hoverEvent));
-    }
-
-    public MutableText STRIKETHROUGH(StyleParameter parameter) {
-        return parameter.segment().fillStyle(Style.EMPTY.withStrikethrough(true));
-    }
-
-    public MutableText REPLACE(StyleParameter parameter) {
-        return Text.of(parameter.option()).copy().fillStyle(parameter.segment().getStyle());
-    }
-
-    public MutableText MASK(StyleParameter parameter) {
-        int length = parameter.segment().getString().length();
-        return Text.of(parameter.option().repeat(length)).copy().fillStyle(parameter.segment().getStyle());
-    }
-
-    public MutableText UPPER(StyleParameter parameter) {
-        String string = parameter.segment().getString();
-        return Text.of(string.toUpperCase()).copy().fillStyle(parameter.segment().getStyle());
-    }
-
-    public MutableText LOWER(StyleParameter parameter) {
-        String string = parameter.segment().getString();
-        return Text.of(string.toLowerCase()).copy().fillStyle(parameter.segment().getStyle());
-    }
-
-    public MutableText CAPITALIZE(StyleParameter parameter){
-        String string = parameter.segment().getString();
-        return Text.of(StringUtils.capitalize(string)).copy().fillStyle(parameter.segment().getStyle());
-    }
-
-    public MutableText PREFIX(StyleParameter parameter){
-        MutableText prefix = Text.literal(parameter.option());
-        return prefix.append(parameter.segment());
-    }
-
-    public MutableText SUFFIX(StyleParameter parameter){
-        MutableText suffix = Text.literal(parameter.option());
-        return parameter.segment().append(suffix);
-    }
-
-    public MutableText CLEAR(StyleParameter parameter) {
-        return Text.literal(parameter.segment().getString());
+        return text.fillStyle(Style.EMPTY.withClickEvent(clickEvent).withHoverEvent(hoverEvent));
     }
 
     public MutableText JSON(StyleParameter parameter){
@@ -403,6 +382,29 @@ public class StyleRegistry {
 
     public MutableText DISCORD_JSON(StyleParameter parameter){
         messenger.send(parameter.option());
+        return parameter.segment();
+    }
+
+    public MutableText COMMAND_RUN(StyleParameter parameter){
+        ServerPlayerEntity player = parameter.player();
+        MinecraftServer server = player.getCommandSource().getServer();
+        String command = parameter.option();
+        if (command.startsWith("/")) command = command.substring(1);
+
+        if (server != null) {
+            ServerCommandSource commandSource = player.getCommandSource();
+            try {
+                server.getCommandManager().getDispatcher().execute(command, commandSource);
+            } catch (Exception e) {
+                EmbellishChat.LOGGER.error("Failed to execute command: {}", command, e);
+            }
+        }
+
+        return parameter.segment();
+    }
+
+    public MutableText LOG(StyleParameter parameter){
+        EmbellishChat.LOGGER.info("Log StyleType segment: {}, open segment:{}, sender: {}",parameter.segment().getString(),parameter.option(),parameter.player());
         return parameter.segment();
     }
 }

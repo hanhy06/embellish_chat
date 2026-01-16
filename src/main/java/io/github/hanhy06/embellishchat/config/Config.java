@@ -106,6 +106,14 @@ public record Config(
                                         StylingRule.of(
                                                 "(.+)()",
                                                 List.of(StyleAction.of(StyleType.METADATA,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(\\[i\\])()",
+                                                List.of(StyleAction.of(StyleType.SHOW_ITEM,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(\\[inv\\])()",
+                                                List.of(StyleAction.of(StyleType.SHOW_INVENTORY,""))
                                         )
                                 )
                         ),

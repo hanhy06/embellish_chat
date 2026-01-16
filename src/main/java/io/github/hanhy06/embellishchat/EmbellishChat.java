@@ -21,6 +21,7 @@ import java.nio.file.Path;
 public class EmbellishChat implements ModInitializer {
 	public static final String MOD_ID = "embellish-chat";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static MinecraftServer SERVER;
 
     @Override
 	public void onInitialize() {
@@ -35,6 +36,8 @@ public class EmbellishChat implements ModInitializer {
 	}
 
 	private static void handleServerStart(MinecraftServer server) {
+        EmbellishChat.SERVER =server;
+
         Path fabricConfigDirPath = FabricLoader.getInstance().getConfigDir();
         ConfigManager manager = new ConfigManager(fabricConfigDirPath);
 

@@ -32,7 +32,8 @@ public class PlaceHolderUtil {
     }
 
     public static Text parsedText(String option, ServerPlayerEntity player){
-        if (player == null || option.isEmpty()) return Text.literal(option);
-        return Placeholders.parseText(Text.literal(option), PlaceholderContext.of(player));
+        if (option.isEmpty()) return Text.literal(option);
+        else if (player != null) return Placeholders.parseText(Text.literal(option), PlaceholderContext.of(player));
+        else return Placeholders.parseText(Text.literal(option), PlaceholderContext.of(EmbellishChat.SERVER));
     }
 }
