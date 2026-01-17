@@ -10,11 +10,11 @@ public record StyleParameter(MutableText segment, Text option, ServerPlayerEntit
         return new StyleParameter(segment, PlaceHolderUtil.parsedText(option,player),player);
     }
 
-    public String getOption(){
+    public String getStringOption(){
         return this.option.getString();
     }
 
-    public MutableText getStyledOption(){
-        return this.option.copy();
+    public Text getTextOption(){
+        return this.option;
     }
 }
