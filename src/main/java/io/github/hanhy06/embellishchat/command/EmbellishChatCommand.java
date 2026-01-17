@@ -167,6 +167,6 @@ public class EmbellishChatCommand {
                         Text.literal(result),
                 false
         );
-        return 1;
+        return (int) duration;
     }
 }
