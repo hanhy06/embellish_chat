@@ -6,6 +6,7 @@ import io.github.hanhy06.embellishchat.mention.data.Cooldown;
 import io.github.hanhy06.embellishchat.mention.data.Mention;
 import io.github.hanhy06.embellishchat.mention.data.Sound;
 import io.github.hanhy06.embellishchat.mention.data.Target;
+import io.github.hanhy06.embellishchat.mention.rule.MentionAction;
 import io.github.hanhy06.embellishchat.mention.rule.MentionParameter;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRegistry;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
@@ -99,23 +100,18 @@ public class MentionProcessor implements ConfigListener {
         Set<Mention> result = new HashSet<>();
 
         for (Mention mention : mentions) {
-            List<Function<MentionParameter, Target>> functions = new ArrayList<>();
-            List<String> presets = new ArrayList<>();
-
-            mention.rule().mentions().forEach(action -> {
-                functions.add(registries.get(action.mentionType()));
-                presets.add(action.preset());
-            });
-
-            List<String> options = mention.options();
-            options = OptionUtil.selectOption(options,presets);
+            List<MentionAction> actions = mention.rule().mentions();
 
             HashSet<ServerPlayerEntity> targets = null;
             Style style = Style.EMPTY;
 
-            for (int i = 0; i < functions.size(); i++) {
-                MentionParameter parameter = MentionParameter.of(player, options.get(i));
-                Target target = functions.get(i).apply(parameter);
+            for (int i=0;i<actions.size();i++){
+                MentionAction action = actions.get(i);
+
+                Function<MentionParameter,Target> function = registries.get(action.mentionType());
+                String option = OptionUtil.parseOption(action.preset(),mention.options().get(i),player).getString();
+
+                Target target = function.apply(MentionParameter.of(player,option));
 
                 if (targets == null) {
                     targets = target.targets();

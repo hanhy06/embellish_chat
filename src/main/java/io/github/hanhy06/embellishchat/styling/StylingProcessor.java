@@ -3,10 +3,12 @@ package io.github.hanhy06.embellishchat.styling;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
 import io.github.hanhy06.embellishchat.mention.data.Mention;
-import io.github.hanhy06.embellishchat.styling.rule.*;
+import io.github.hanhy06.embellishchat.styling.rule.StyleAction;
+import io.github.hanhy06.embellishchat.styling.rule.StyleParameter;
+import io.github.hanhy06.embellishchat.styling.rule.StyleRegistry;
+import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
 import io.github.hanhy06.embellishchat.styling.util.Runs;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
-import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -58,14 +60,6 @@ public class StylingProcessor implements ConfigListener {
         if (!matcher.find()) return text;
 
         MutableText result = Text.empty();
-
-        List<StyleType> types = new ArrayList<>();
-        List<String> presets = new ArrayList<>();
-        style.styles().forEach(action ->{
-            types.add(action.styleType());
-            presets.add(action.preset());
-        });
-
         Runs runs = flatten(text);
         int lastEnd = 0;
         do {
@@ -73,8 +67,7 @@ public class StylingProcessor implements ConfigListener {
 
             MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
             List<String> options = OptionUtil.split(matcher.group(2),config.delimiter());
-            options = OptionUtil.selectOption(options,presets);
-            result.append(applyStyle(segment, types, options, player));
+            result.append(applyStyle(segment, style.styles(), options, player));
 
             lastEnd = matcher.end();
         } while (matcher.find());
@@ -83,12 +76,16 @@ public class StylingProcessor implements ConfigListener {
         return result;
     }
 
-    private MutableText applyStyle(MutableText segment, List<StyleType> types, List<String> options,ServerPlayerEntity player){
+    private MutableText applyStyle(MutableText segment, List<StyleAction> actions,List<String> options,ServerPlayerEntity player){
         MutableText result = segment;
 
-        for (int i=0;i<types.size();i++){
-            Function<StyleParameter, MutableText> function = registry.get(types.get(i));
-            result = function.apply(StyleParameter.of(result,options.get(i),player));
+        for (int i=0;i<actions.size();i++){
+            StyleAction action = actions.get(i);
+
+            Function<StyleParameter, MutableText> function = registry.get(action.styleType());
+            Text option = OptionUtil.parseOption(action.preset(),options.get(i),player );
+
+            result = function.apply(StyleParameter.of(result,option,player));
         }
 
         return result;
@@ -141,9 +138,9 @@ public class StylingProcessor implements ConfigListener {
 
             MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
             List<String> options = OptionUtil.split(matcher.group(2),config.delimiter());
-            options = OptionUtil.selectOption(options,presets);
             for (int i=0;i<functions.size();i++){
-                StyleParameter parameter = StyleParameter.of(segment,options.get(i),player);
+                Text option = OptionUtil.parseOption(presets.get(i),options.get(i),player);
+                StyleParameter parameter = StyleParameter.of(segment,option,player);
                 segment = functions.get(i).apply(parameter);
             }
 
