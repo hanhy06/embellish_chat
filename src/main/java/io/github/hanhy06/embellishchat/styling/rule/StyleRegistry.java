@@ -104,9 +104,9 @@ public class StyleRegistry {
         int color = 0xffffff;
 
         try {
-            color = Color.decode(parameter.option()).getRGB();
+            color = Color.decode(parameter.getOption()).getRGB();
         } catch (NumberFormatException e) {
-            EmbellishChat.LOGGER.warn("Invalid hex color format: {}", parameter.option());
+            EmbellishChat.LOGGER.warn("Invalid hex color format: {}", parameter.getOption());
         } catch (NullPointerException e){
             EmbellishChat.LOGGER.warn("The option value you entered is null.");
         }
@@ -121,7 +121,7 @@ public class StyleRegistry {
         float saturation = 0.7f;
 
         try {
-            saturation = Float.parseFloat(parameter.option());
+            saturation = Float.parseFloat(parameter.getOption());
         } catch (NumberFormatException e) {
             EmbellishChat.LOGGER.warn("The option value you entered is not a valid number.");
         } catch (NullPointerException e){
@@ -138,7 +138,7 @@ public class StyleRegistry {
     }
 
     public MutableText COLOR_GRADIENT(StyleParameter parameter) {
-        Matcher matcher = HEX_CODE.matcher(parameter.option());
+        Matcher matcher = HEX_CODE.matcher(parameter.getOption());
         if (!matcher.find()) {
             return parameter.segment();
         }
@@ -178,7 +178,7 @@ public class StyleRegistry {
     }
 
     public MutableText COLOR_PRESET(StyleParameter parameter) {
-        Color color = colorPreset.getOrDefault(parameter.option(), Color.WHITE);
+        Color color = colorPreset.getOrDefault(parameter.getOption(), Color.WHITE);
         return parameter.segment().fillStyle(Style.EMPTY.withColor(color.getRGB()));
     }
 
@@ -186,9 +186,9 @@ public class StyleRegistry {
         int color = 0xffffff;
 
         try {
-            color = Color.decode(parameter.option()).getRGB();
+            color = Color.decode(parameter.getOption()).getRGB();
         } catch (NumberFormatException e) {
-            EmbellishChat.LOGGER.warn("Invalid hex color format: {}", parameter.option());
+            EmbellishChat.LOGGER.warn("Invalid hex color format: {}", parameter.getOption());
         } catch (NullPointerException e){
             EmbellishChat.LOGGER.warn("The option value you entered is null.");
         }
@@ -232,7 +232,7 @@ public class StyleRegistry {
     }
 
     public MutableText FONT(StyleParameter parameter) {
-        StyleSpriteSource font = new StyleSpriteSource.Font(Identifier.tryParse(parameter.option()));
+        StyleSpriteSource font = new StyleSpriteSource.Font(Identifier.tryParse(parameter.getOption()));
         return parameter.segment().fillStyle(Style.EMPTY.withFont(font));
     }
 
@@ -241,22 +241,22 @@ public class StyleRegistry {
     }
 
     public MutableText CLICK_COMMAND_RUN(StyleParameter parameter){
-        ClickEvent clickEvent = new ClickEvent.RunCommand(parameter.option());
+        ClickEvent clickEvent = new ClickEvent.RunCommand(parameter.getOption());
         return parameter.segment().fillStyle(Style.EMPTY.withClickEvent(clickEvent));
     }
 
     public MutableText CLICK_COMMAND_SUGGEST(StyleParameter parameter){
-        ClickEvent clickEvent = new ClickEvent.SuggestCommand(parameter.option());
+        ClickEvent clickEvent = new ClickEvent.SuggestCommand(parameter.getOption());
         return parameter.segment().fillStyle(Style.EMPTY.withClickEvent(clickEvent));
     }
 
     public MutableText CLICK_COPY(StyleParameter parameter){
-        ClickEvent clickEvent = new ClickEvent.CopyToClipboard(parameter.option());
+        ClickEvent clickEvent = new ClickEvent.CopyToClipboard(parameter.getOption());
         return parameter.segment().fillStyle(Style.EMPTY.withClickEvent(clickEvent));
     }
 
     public MutableText HOVER_TEXT(StyleParameter parameter){
-        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(parameter.option()));
+        HoverEvent hoverEvent = new HoverEvent.ShowText(parameter.getStyledOption());
         return parameter.segment().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
     }
 
@@ -266,7 +266,7 @@ public class StyleRegistry {
         int slot;
 
         try {
-            slot = Integer.decode(parameter.option());
+            slot = Integer.decode(parameter.getOption());
         } catch (NumberFormatException e) {
             slot = -1;
         }
@@ -281,13 +281,13 @@ public class StyleRegistry {
 
     public MutableText URL(StyleParameter parameter) {
         try {
-            URI uri = URI.create(parameter.option());
+            URI uri = URI.create(parameter.getOption());
             ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
             return parameter.segment().fillStyle(Style.EMPTY
                     .withClickEvent(clickEvent)
                     .withColor(config.urlColor().getRGB()));
         } catch (IllegalArgumentException e) {
-            EmbellishChat.LOGGER.warn("Invalid URL provided for segment [{}]: {}", parameter.segment().getString(), parameter.option());
+            EmbellishChat.LOGGER.warn("Invalid URL provided for segment [{}]: {}", parameter.segment().getString(), parameter.getOption());
             return parameter.segment();
         }
     }
@@ -304,35 +304,35 @@ public class StyleRegistry {
 
     public MutableText UPPER(StyleParameter parameter) {
         String string = parameter.segment().getString();
-        return Text.of(string.toUpperCase()).copy().fillStyle(parameter.segment().getStyle());
+        return Text.literal(string.toUpperCase()).fillStyle(parameter.segment().getStyle());
     }
 
     public MutableText LOWER(StyleParameter parameter) {
         String string = parameter.segment().getString();
-        return Text.of(string.toLowerCase()).copy().fillStyle(parameter.segment().getStyle());
+        return Text.literal(string.toLowerCase()).fillStyle(parameter.segment().getStyle());
     }
 
     public MutableText CAPITALIZE(StyleParameter parameter){
         String string = parameter.segment().getString();
-        return Text.of(StringUtils.capitalize(string)).copy().fillStyle(parameter.segment().getStyle());
+        return Text.literal(StringUtils.capitalize(string)).fillStyle(parameter.segment().getStyle());
     }
 
     public MutableText REPLACE(StyleParameter parameter) {
-        return Text.of(parameter.option()).copy().fillStyle(parameter.segment().getStyle());
+        return parameter.getStyledOption().fillStyle(parameter.segment().getStyle());
     }
 
     public MutableText MASK(StyleParameter parameter) {
         int length = parameter.segment().getString().length();
-        return Text.of(parameter.option().repeat(length)).copy().fillStyle(parameter.segment().getStyle());
+        return Text.literal(parameter.getOption().repeat(length)).fillStyle(parameter.segment().getStyle());
     }
 
     public MutableText PREFIX(StyleParameter parameter){
-        MutableText prefix = Text.literal(parameter.option());
+        MutableText prefix = Text.literal(parameter.getOption());
         return prefix.append(parameter.segment());
     }
 
     public MutableText SUFFIX(StyleParameter parameter){
-        MutableText suffix = Text.literal(parameter.option());
+        MutableText suffix = Text.literal(parameter.getOption());
         return parameter.segment().append(suffix);
     }
 
@@ -342,8 +342,8 @@ public class StyleRegistry {
 
         String namespace;
         String path;
-        if (!parameter.option().isBlank()){
-            List<String> segments = OptionUtil.split(parameter.option().trim(),";");
+        if (!parameter.getOption().isBlank()){
+            List<String> segments = OptionUtil.split(parameter.getOption().trim(),";");
             namespace = segments.getFirst();
             path = segments.getLast();
         }else {
@@ -375,20 +375,20 @@ public class StyleRegistry {
     }
 
     public MutableText JSON(StyleParameter parameter){
-        JsonElement element = JsonParser.parseString(parameter.option());
+        JsonElement element = JsonParser.parseString(parameter.getOption());
         Text text = TextCodecs.CODEC.parse(JsonOps.INSTANCE,element).getOrThrow();
         return text.copy();
     }
 
     public MutableText DISCORD_JSON(StyleParameter parameter){
-        messenger.send(parameter.option());
+        messenger.send(parameter.getOption());
         return parameter.segment();
     }
 
     public MutableText COMMAND_RUN(StyleParameter parameter){
         ServerPlayerEntity player = parameter.player();
         MinecraftServer server = player.getCommandSource().getServer();
-        String command = parameter.option();
+        String command = parameter.getOption();
         if (command.startsWith("/")) command = command.substring(1);
 
         if (server != null) {
@@ -404,7 +404,7 @@ public class StyleRegistry {
     }
 
     public MutableText LOG(StyleParameter parameter){
-        EmbellishChat.LOGGER.info("Log StyleType segment: {}, open segment:{}, sender: {}",parameter.segment().getString(),parameter.option(),parameter.player());
+        EmbellishChat.LOGGER.info("Log StyleType segment: {}, open segment:{}, sender: {}",parameter.segment().getString(),parameter.getOption(),parameter.player());
         return parameter.segment();
     }
 }

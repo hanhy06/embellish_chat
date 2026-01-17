@@ -72,7 +72,7 @@ public class StylingProcessor implements ConfigListener {
 
             MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
             List<String> options = OptionUtil.split(matcher.group(2),config.delimiter());
-            options = OptionUtil.parseOption(options,presets,player);
+            options = OptionUtil.selectOption(options,presets);
             result.append(applyStyle(segment, types, options, player));
 
             lastEnd = matcher.end();
@@ -107,9 +107,7 @@ public class StylingProcessor implements ConfigListener {
             MutableText segment = slice(runs, mention.begin(), mention.end());
             if (mention.style() != null) segment.fillStyle(mention.style());
             for (StyleAction style : mention.rule().styles()) {
-                String preset = PlaceHolderUtil.parsedText(style.preset(), player).getString();
-
-                StyleParameter parameter = StyleParameter.of(segment, preset, player);
+                StyleParameter parameter = StyleParameter.of(segment, style.preset(), player);
                 segment = registry.get(style.styleType()).apply(parameter);
             }
 
@@ -142,7 +140,7 @@ public class StylingProcessor implements ConfigListener {
 
             MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
             List<String> options = OptionUtil.split(matcher.group(2),config.delimiter());
-            options = OptionUtil.parseOption(options,presets,player);
+            options = OptionUtil.selectOption(options,presets);
             for (int i=0;i<functions.size();i++){
                 StyleParameter parameter = StyleParameter.of(segment,options.get(i),player);
                 segment = functions.get(i).apply(parameter);

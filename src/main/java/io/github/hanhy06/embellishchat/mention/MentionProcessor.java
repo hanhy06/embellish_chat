@@ -107,7 +107,7 @@ public class MentionProcessor implements ConfigListener {
             });
 
             List<String> options = mention.options();
-            options = OptionUtil.parseOption(options,presets,player);
+            options = OptionUtil.selectOption(options,presets);
 
             HashSet<ServerPlayerEntity> targets = null;
             Style style = Style.EMPTY;

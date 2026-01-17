@@ -1,18 +1,15 @@
 package io.github.hanhy06.embellishchat.util;
 
-import net.minecraft.server.network.ServerPlayerEntity;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class OptionUtil {
-    public static List<String> parseOption(List<String> options,List<String> presets,ServerPlayerEntity player){
+    public static List<String> selectOption(List<String> options, List<String> presets){
         List<String> result = new ArrayList<>();
 
         for (int i = 0; i<presets.size();i++){
             String option = presets.get(i);
             if (option.isBlank() && options.size() > i) option = options.get(i);
-            option = PlaceHolderUtil.parsedText(option,player).getString();
             result.add(option);
         }
 
