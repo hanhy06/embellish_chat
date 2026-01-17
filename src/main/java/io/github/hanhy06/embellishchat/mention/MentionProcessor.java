@@ -71,6 +71,7 @@ public class MentionProcessor implements ConfigListener {
     public List<Mention> handleMention(String text, List<String> keys, ServerPlayerEntity player){
         List<MentionRule> rules = new ArrayList<>();
         keys.forEach(key -> rules.addAll(mentionRules.get(key)));
+        if (rules.isEmpty()) return List.of();
 
         UUID uuid = player.getUuid();
         Set<Mention> mentions = new HashSet<>();
