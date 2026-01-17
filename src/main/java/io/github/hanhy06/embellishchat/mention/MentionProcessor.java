@@ -117,7 +117,7 @@ public class MentionProcessor implements ConfigListener {
                 Target target = functions.get(i).apply(parameter);
 
                 if (targets == null) {
-                    targets = new HashSet<>(target.targets());
+                    targets = target.targets();
                     style = target.style();
                 } else {
                     targets.retainAll(target.targets());
