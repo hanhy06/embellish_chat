@@ -1112,26 +1112,35 @@
 Because regular expressions are inherently difficult, it is recommended to leverage various AI tools for rule creation and optimization.</p>
 <p>The configuration file is located at <code>config/embellish-chat.json</code>.</p>
 <pre><code>{
-  &quot;version&quot;: &quot;2.7.0&quot;,
+  // version
+  &quot;version&quot;: &quot;3.0.0&quot;,
 
+  //rules
   &quot;stylingRules&quot;: {
-    &quot;embellish-chat.command_argument&quot;: [],
-    &quot;embellish-chat.chat&quot;: [...]
+    &quot;embellish-chat.chat&quot;: [ ... ],
+    &quot;embellish-chat.command_argument&quot;: []
   },
   &quot;mentionRules&quot;: {
-    &quot;embellish-chat.mention&quot;: [...]
+    &quot;embellish-chat.mention&quot;: [ ... ]
   },
 
+  // presets
   &quot;delimiter&quot;: &quot;,&quot;,
   &quot;timestamp&quot;: &quot;yyyy-MM-dd HH:mm:ss&quot;,
   &quot;urlColor&quot;: &quot;#0000EE&quot;,
-  &quot;colorPreset&quot;: {...},
+  &quot;colorPreset&quot;: { ... },
   &quot;defaultTeamColor&quot;: &quot;#FF55FF&quot;,
   &quot;notificationCommandEnable&quot;: true,
   &quot;mentionBroadcast&quot;: true,
+  &quot;useClearFormat&quot;: false,
+
+  //player list
   &quot;bannedPlayerList&quot;: [],
-  &quot;notificationOffPlayerList&quot;: [],
+  &quot;notificationOffPlayerList&quot;: []
+
+  //discord
   &quot;webhook&quot;: &quot;&quot;
+}
 </code></pre>
 <ul>
 <li>The <code>version</code> field must not be modified manually.</li>

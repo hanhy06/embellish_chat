@@ -88,26 +88,35 @@ The configuration file is located at `config/embellish-chat.json`.
 
 ```
 {
-  "version": "2.7.0",
+  // version
+  "version": "3.0.0",
   
+  //rules
   "stylingRules": {
-    "embellish-chat.command_argument": [],
-    "embellish-chat.chat": [...]
+    "embellish-chat.chat": [ ... ],
+    "embellish-chat.command_argument": []
   },
   "mentionRules": {
-    "embellish-chat.mention": [...]
+    "embellish-chat.mention": [ ... ]
   },
   
+  // presets
   "delimiter": ",",
   "timestamp": "yyyy-MM-dd HH:mm:ss",
   "urlColor": "#0000EE",
-  "colorPreset": {...},
+  "colorPreset": { ... },
   "defaultTeamColor": "#FF55FF",
   "notificationCommandEnable": true,
   "mentionBroadcast": true,
+  "useClearFormat": false,
+  
+  //player list
   "bannedPlayerList": [],
-  "notificationOffPlayerList": [],
+  "notificationOffPlayerList": []
+  
+  //discord
   "webhook": ""
+}
 ```
 
 * The `version` field must not be modified manually.
