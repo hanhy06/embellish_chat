@@ -297,14 +297,14 @@ you can see more detail in [MentionWiki.md](https://github.com/hanhy06/embellish
     - If both mods must be used simultaneously, you should remove all contents within Embellish Chat’s stylingRules. Otherwise, Embellish Chat will continue to perform style calculations in the background, causing unnecessary performance overhead.
 
 ---
-## 📊 Performance: Processing Time per Tick
+## 📊 Performance
 
 ### Test Setup
 
 These tests were performed in a synthetic stress environment to measure **worst-case** performance.  
 They do **not** represent normal server conditions.
 
-- Embellish Chat: **2.6.1 (DEV)**
+- Embellish Chat: **3.0.0 (DEV)**
 - Minecraft: **1.21.11**
 - World: **Singleplayer, Superflat**
 - CPU: **13th Gen Intel(R) Core(TM) i7-1360P**
@@ -336,8 +336,8 @@ The messages used in the tests are:
 | Mixed        | 50     | `**Hey** @everyone! Look at [this]<red> _cool_ @here.`                                                                                                                                                                       |
 | Mixed        | 200    | `Attention @everyone! The **Boss Raid** is starting. @team(Red) please defend the [Core]<#FF0000>. @here gather at the gate! Watch out for the **hidden assassin**. The prize is [GOD SWORD]<RAINBOW>. Msg @Admin if stuck.` |
 
-![MSPT-50](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/MSPT2.6.1-50.png?raw=true)
-![MSPT-200](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/MSPT2.6.1-200.png?raw=true)
+![MSPT-50](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/MSPT3.0.0-50.png?raw=true)
+![MSPT-200](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/MSPT3.0.0-200.png?raw=true)
 
 ---
 

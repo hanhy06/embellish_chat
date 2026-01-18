@@ -139,7 +139,7 @@ public class StylingProcessor implements ConfigListener {
             MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
             List<String> options = OptionUtil.split(matcher.group(2),config.delimiter());
             for (int i=0;i<functions.size();i++){
-                String option = OptionUtil.parseOption(presets.get(i),options.get(i),player);
+                String option = OptionUtil.parseOption(presets.get(i),options.size() > i ? options.get(i):"",player);
                 StyleParameter parameter = StyleParameter.of(segment,option,player);
                 segment = functions.get(i).apply(parameter);
             }
