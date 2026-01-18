@@ -101,6 +101,7 @@ public class MentionProcessor implements ConfigListener {
 
         for (Mention mention : mentions) {
             List<MentionAction> actions = mention.rule().mentions();
+            List<String> options = mention.options();
 
             HashSet<ServerPlayerEntity> targets = null;
             Style style = Style.EMPTY;
@@ -109,7 +110,7 @@ public class MentionProcessor implements ConfigListener {
                 MentionAction action = actions.get(i);
 
                 Function<MentionParameter,Target> function = registries.get(action.mentionType());
-                String option = OptionUtil.parseOption(action.preset(),mention.options().get(i),player);
+                String option = OptionUtil.parseOption(action.preset(),options.size() > i ? options.get(i):"",player);
 
                 Target target = function.apply(MentionParameter.of(player,option));
 

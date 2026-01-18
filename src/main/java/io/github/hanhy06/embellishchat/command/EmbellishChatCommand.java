@@ -145,8 +145,8 @@ public class EmbellishChatCommand {
             return 0;
         }
 
-        if (count > 1000) {
-            source.sendFeedback(() -> Text.literal("Count is too large. (Max 1000)"), true);
+        if (count > 5000) {
+            source.sendFeedback(() -> Text.literal("Count is too large. (Max 5000)"), true);
             return 0;
         }
 
