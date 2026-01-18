@@ -151,7 +151,7 @@ The configuration file is located at `config/embellish-chat.json`.
 These tests were performed in a synthetic stress environment to measure **worst-case** performance.  
 They do **not** represent normal server conditions.
 
-- Embellish Chat: **2.6.1 (DEV)**
+- Embellish Chat: **3.0.0 (DEV)**
 - Minecraft: **1.21.11**
 - World: **Singleplayer, Superflat**
 - CPU: **13th Gen Intel(R) Core(TM) i7-1360P**
