@@ -16,33 +16,24 @@
 <script type="text/babel">
     const { useState, useEffect } = React;
 
-    // [Fixed] IconWrapper using lucide.createElement
-    // Resolves TypeError: window.lucide.icons[iconKey].toSvg is not a function
     const IconWrapper = ({ name, size, className }) => {
-        // kebab-case (rotate-ccw) -> PascalCase (RotateCcw)
         const iconKey = name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('');
 
-        // Safety check for Lucide availability
         if (!window.lucide || !window.lucide.icons || !window.lucide.icons[iconKey]) {
-            return <span style={{ width: size, height: size, display: 'inline-block' }} />; // Placeholder to prevent layout shift
+            return <span style={{ width: size, height: size, display: 'inline-block' }} />;
         }
 
         try {
-            // Use lucide.createElement to generate the SVG DOM element
             if (typeof window.lucide.createElement === 'function') {
                 const element = window.lucide.createElement(window.lucide.icons[iconKey]);
-
-                // Apply attributes
                 element.setAttribute('width', size);
                 element.setAttribute('height', size);
                 if (className) element.setAttribute('class', className);
                 element.setAttribute('stroke-width', '2');
-
-                // Render via dangerouslySetInnerHTML
                 return <span dangerouslySetInnerHTML={{ __html: element.outerHTML }} style={{ display: 'inline-flex', verticalAlign: 'middle' }} />;
             }
         } catch (e) {
-            console.error("Lucide rendering error:", e);
+            console.error(e);
         }
 
         return null;
@@ -65,8 +56,9 @@
     ];
 
     const DEFAULT_CONFIG = {
-      "version": "2.6.2",
+      "version": "3.0.0",
       "stylingRules": {
+        "embellish-chat.command_argument": [],
         "embellish-chat.chat": [
           {
             "pattern": "\\[([^\\]]+?)]\\((https://.*?)\\)",
@@ -184,9 +176,26 @@
                 "preset": ""
               }
             ]
+          },
+          {
+            "pattern": "(\\[i\\])()",
+            "styles": [
+              {
+                "styleType": "SHOW_ITEM",
+                "preset": ""
+              }
+            ]
+          },
+          {
+            "pattern": "(\\[inv\\])()",
+            "styles": [
+              {
+                "styleType": "SHOW_INVENTORY",
+                "preset": ""
+              }
+            ]
           }
-        ],
-        "embellish-chat.command_argument": []
+        ]
       },
       "mentionRules": {
         "embellish-chat.mention": [
@@ -370,6 +379,7 @@
       "defaultTeamColor": "#FF55FF",
       "notificationCommandEnable": true,
       "mentionBroadcast": true,
+      "useClearFormat": false,
       "bannedPlayerList": [],
       "notificationOffPlayerList": [],
       "webhook": ""
@@ -702,6 +712,19 @@
                             Broadcast Mentions globally
                         </label>
                     </div>
+
+                    <div className="flex items-center space-x-3">
+                        <input
+                            type="checkbox"
+                            id="useClearFormat"
+                            checked={config.useClearFormat}
+                            onChange={(e) => updateGlobal('useClearFormat', e.target.checked)}
+                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                        />
+                        <label htmlFor="useClearFormat" className="text-sm font-medium text-slate-700 dark:text-slate-200 cursor-pointer">
+                            Use Clear Format (Remove default &lt;name&gt; prefix)
+                        </label>
+                    </div>
                 </div>
 
                 <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
@@ -885,7 +908,6 @@
                                             placeholder="e.g. @everyone()"
                                         />
 
-                                        {/* Sound Settings Block */}
                                         <div className="md:col-span-12 grid grid-cols-1 md:grid-cols-12 gap-4 bg-slate-50 dark:bg-slate-900/30 p-3 rounded">
                                             <div className="md:col-span-12 text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 mb-[-8px]">Notification Sound</div>
                                             <Input
@@ -1066,18 +1088,17 @@
                 if (parsed.bannedPlayerList === undefined) parsed.bannedPlayerList = [];
                 if (parsed.notificationOffPlayerList === undefined) parsed.notificationOffPlayerList = [];
 
-                // Add default for new setting
                 if (parsed.mentionBroadcast === undefined) parsed.mentionBroadcast = true;
                 if (parsed.webhook === undefined) parsed.webhook = "";
+                if (parsed.useClearFormat === undefined) parsed.useClearFormat = false;
 
                 if (parsed.mentionRules) {
                     Object.keys(parsed.mentionRules).forEach(key => {
                         parsed.mentionRules[key].forEach(rule => {
                             if (rule.cooldown === undefined) rule.cooldown = 0;
-                            // Ensure sound object exists
                             if (rule.sound && typeof rule.sound === 'string') {
                                 rule.sound = { id: rule.sound, category: "UI", volume: 1.0, pitch: rule.pitch || 1.0 };
-                                delete rule.pitch; // remove old root level pitch if exists
+                                delete rule.pitch;
                             }
                         });
                     });
@@ -1177,7 +1198,7 @@
                             <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">
                                 Embellish Chat
                             </h1>
-                            <p className="text-slate-500 dark:text-slate-400 mt-1">Config Editor v2.6.2</p>
+                            <p className="text-slate-500 dark:text-slate-400 mt-1">Config Editor v3.0.0</p>
                         </div>
                         <div className="flex gap-2 bg-white dark:bg-slate-900 p-1 rounded-lg shadow-sm border border-slate-200 dark:border-slate-800 overflow-x-auto">
                             {tabs.map(tab => (

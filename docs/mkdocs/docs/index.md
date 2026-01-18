@@ -174,8 +174,18 @@ The messages used in the tests are:
 | Mixed        | 50     | `**Hey** @everyone! Look at [this]<red> _cool_ @here.`                                                                                                                                                                       |
 | Mixed        | 200    | `Attention @everyone! The **Boss Raid** is starting. @team(Red) please defend the [Core]<#FF0000>. @here gather at the gate! Watch out for the **hidden assassin**. The prize is [GOD SWORD]<RAINBOW>. Msg @Admin if stuck.` |
 
-![MSPT-50](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/MSPT3.0.0-50.png?raw=true)
-![MSPT-200](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/MSPT3.0.0-200.png?raw=true)
+### Results and Analysis
+
+<div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 15px;">
+  <button onclick="updateMode('50')" style="padding: 8px 16px; cursor: pointer; border: 1px solid #ccc; border-radius: 4px;">50 Characters Mode</button>
+  <button onclick="updateMode('200')" style="padding: 8px 16px; cursor: pointer; border: 1px solid #ccc; border-radius: 4px;">200 Characters Mode</button>
+</div>
+
+<canvas id="mstpChart"></canvas>
+
+A single tick in Minecraft allows for a **50ms** processing window. As indicated in the data above, the most resource-intensive mode (**Mention Only** with notifications enabled) consumes approximately **34ms** when processing **500 messages per tick**.
+
+This results in a safety margin of **16ms** within the tick limit. Consequently, even under extreme load conditions equivalent to **10,000 messages per second**, the system is designed to minimize server lag (TPS drops) and maintain stability.
 
 ---
 

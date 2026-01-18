@@ -31,3 +31,7 @@ theme:
     - toc.integrate
     - search.highlight
     - search.suggest
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/chart.js
+  - js/mstp_chart.js
