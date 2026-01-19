@@ -39,7 +39,7 @@ Use the following patterns directly in the chat window:
 > * *Preset* values depend on the mod's configuration (e.g., `pink`, `blue`, etc.).
 > * `path` for **Font** accepts a namespaced ID such as `minecraft:alt`.
 > * If multiple style types exist and no preset is configured, the user can enter one manually. The separator can be checked through /ec help style.
-> * The table above shows only the most common styles. Embellish Chat supports many additional style types. For more details, please refer to [StyleWiki.md](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/wiki/StyleWiki.md)
+> * The table above shows only the most common styles. Embellish Chat supports many additional style types. For more details, please refer to [StyleWiki](https://hanhy06.github.io/embellish-chat/site/style/StyleSystem/)
 
 ---
 
@@ -62,7 +62,7 @@ Use the following patterns directly in the chat window:
 > * `@group(name)` requires LuckPerms. Without it, the mention resolves to no players.
 > * `@team` and `@Player` mentions follow the color of their respective team. If the team has no color, the `defaultTeamColor` value is used.
 > * Other mention types can have their color customized by modifying the `styleRule` value.
-> * The table above shows only the most common mentions. Embellish Chat supports many additional mention types. For more details, please refer to [MentionWiki.md](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/wiki/MentionWiki.md)
+> * The table above shows only the most common mentions. Embellish Chat supports many additional mention types. For more details, please refer to https://hanhy06.github.io/embellish-chat/site/mention/MentionSystem/
 
 ---
 
@@ -209,7 +209,7 @@ Each rule consists of a regular expression (`pattern`) and a style action list(`
     2) an optional captured value that can be passed as an argument.
   * **styles** This is a list of style actions. Each action consists of a style type (`styleType`) and style option preset(`preset`).
 
-you can see more detail in [StyleWiki.md](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/wiki/StyleWiki.md)
+you can see more detail in [StyleWiki](https://hanhy06.github.io/embellish-chat/site/style/StyleSystem/)
 
 ---
 
@@ -259,7 +259,7 @@ regular expression (`pattern`), notification settings (`title`, `cooldown`, `sou
   * **mentions** A list of mention actions. Each action specifies a `mentionType` and an optional `preset`.
   * **styles** A list of style actions. Works the same way as in the styling rules section.
 
-you can see more detail in [MentionWiki.md](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/wiki/MentionWiki.md)
+you can see more detail in https://hanhy06.github.io/embellish-chat/site/mention/MentionSystem/
 
 ---
 
