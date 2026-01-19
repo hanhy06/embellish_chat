@@ -71,7 +71,7 @@ public class MentionProcessor implements ConfigListener {
 
     public List<Mention> handleMention(String text, List<String> keys, ServerPlayerEntity player){
         List<MentionRule> rules = new ArrayList<>();
-        keys.forEach(key -> rules.addAll(mentionRules.get(key)));
+        keys.forEach(key -> rules.addAll(mentionRules.getOrDefault(key,List.of())));
         if (rules.isEmpty()) return List.of();
 
         UUID uuid = player.getUuid();
@@ -85,53 +85,17 @@ public class MentionProcessor implements ConfigListener {
                 if (cooldowns.contains(cooldown)) continue;
             }
 
-            buffer = parseMention(text,rule);
+            buffer = parseMention(text,rule,player);
             if (cooldown != null && !buffer.isEmpty()) cooldowns.add(cooldown);
             mentions.addAll(buffer);
         }
-        mentions = parseTarget(mentions,player);
 
         mentionBroadcast(mentions,player);
 
         return new ArrayList<>(mentions);
     }
 
-    private Set<Mention> parseTarget(Set<Mention> mentions, ServerPlayerEntity player) {
-        Set<Mention> result = new HashSet<>();
-
-        for (Mention mention : mentions) {
-            List<MentionAction> actions = mention.rule().mentions();
-            List<String> options = mention.options();
-
-            HashSet<ServerPlayerEntity> targets = null;
-            Style style = Style.EMPTY;
-
-            for (int i=0;i<actions.size();i++){
-                MentionAction action = actions.get(i);
-
-                Function<MentionParameter,Target> function = registries.get(action.mentionType());
-                String option = OptionUtil.selectOption(action.preset(),options.size() > i ? options.get(i):"",player);
-
-                Target target = function.apply(MentionParameter.of(player,option));
-
-                if (targets == null) {
-                    targets = target.targets();
-                    style = target.style();
-                } else {
-                    targets.retainAll(target.targets());
-                }
-            }
-
-            Mention newMention = Mention.of(
-                    mention.begin(),mention.end(),targets,style,mention.rule()
-            );
-            result.add(newMention);
-        }
-
-        return result;
-    }
-
-    private Set<Mention> parseMention(String text,MentionRule rule){
+    private Set<Mention> parseMention(String text,MentionRule rule,ServerPlayerEntity player){
         Set<Mention> mentions = new HashSet<>();
         Matcher matcher = rule.pattern().matcher(text);
 
@@ -141,10 +105,37 @@ public class MentionProcessor implements ConfigListener {
             List<String> options = OptionUtil.split(matcher.group(1),config.delimiter());
 
             Mention mention = Mention.of(begin,end, options,rule);
-            mentions.add(mention);
+            mentions.add(parseTarget(mention,player));
         }
 
         return mentions;
+    }
+
+
+    private Mention parseTarget(Mention mention,ServerPlayerEntity player){
+        List<MentionAction> actions = mention.rule().mentions();
+        List<String> options = mention.options();
+
+        HashSet<ServerPlayerEntity> targets = null;
+        Style style = Style.EMPTY;
+
+        for (int i=0;i<actions.size();i++){
+            MentionAction action = actions.get(i);
+
+            Function<MentionParameter,Target> function = registries.get(action.mentionType());
+            String option = OptionUtil.selectOption(action.preset(),options.size() > i ? options.get(i):"",player);
+
+            Target target = function.apply(MentionParameter.of(option,player));
+
+            if (targets == null) {
+                targets = target.targets();
+                style = target.style();
+            } else {
+                targets.retainAll(target.targets());
+            }
+        }
+
+        return Mention.of(mention.begin(),mention.end(),targets,style,mention.rule());
     }
 
     private void mentionBroadcast(Set<Mention> mentions,ServerPlayerEntity player){

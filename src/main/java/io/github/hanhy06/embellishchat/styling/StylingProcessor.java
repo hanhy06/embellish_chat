@@ -44,7 +44,7 @@ public class StylingProcessor implements ConfigListener {
 
     public MutableText handleStyle(MutableText text,List<String> keys,ServerPlayerEntity player){
         List<StylingRule> rules = new ArrayList<>();
-        keys.forEach(key -> rules.addAll(stylingRules.get(key)));
+        keys.forEach(key -> rules.addAll(stylingRules.getOrDefault(key,List.of())));
         if (rules.isEmpty()) return text;
 
         MutableText result = text;
