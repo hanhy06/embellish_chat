@@ -2,18 +2,6 @@
 
 Embellish Chat modernizes your Minecraft server’s chat experience with a fully server-side design. It introduces Markdown-style formatting, interactive message events, and a robust mention system—no client installation required.
 
-## Documentation
-
-Detailed guides for each system can be found below:
-
-* **[Configuration](#configuration)**
-    * Learn how to set up `config.json`.
-    * Explore the [Web Config Generator](https://hanhy06.github.io/embellish-chat/site/config-generator.html) for easy rule creation.
-* **[Style System](style/StyleSystem.md)**
-    * Comprehensive guide on text formatting, colors, and regex-based styling rules.
-* **[Mention System](mention/MentionSystem.md)**
-    * Guide on setting up player, team, and proximity notifications.
-
 ---
 
 ## Quick Reference

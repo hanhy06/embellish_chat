@@ -4,7 +4,7 @@ repo_url: https://github.com/hanhy06/embellish-chat
 repo_name: embellish chat
 
 nav:
-  - Home: index.md
+  - Introduction: index.md
   - Style:
       - Introduction: style/StyleSystem.md
       - Configuration: style/Configuration.md

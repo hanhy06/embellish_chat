@@ -10,10 +10,10 @@ const data50 = [
 
 const data200 = [
   { label: "Plain Text", data: [2, 4, 5, 11, 14], borderColor: "#FF6384", backgroundColor: "#FF6384", tension: 0.1 },
-  { label: "Styling Only", data: [2, 5, 7, 14, 18], borderColor: "#36A2EB", backgroundColor: "#36A2EB", tension: 0.1 },
+  { label: "Styling Only", data: [2, 5, 7, 15, 19], borderColor: "#36A2EB", backgroundColor: "#36A2EB", tension: 0.1 },
   { label: "Mention Only(on)", data: [2, 7, 11, 23, 34], borderColor: "#FFCE56", backgroundColor: "#FFCE56", tension: 0.1 },
   { label: "Mention Only(off)", data: [2, 7, 9, 21, 31], borderColor: "#4BC0C0", backgroundColor: "#4BC0C0", tension: 0.1 },
-  { label: "Mixed", data: [2, 6, 9, 17, 23], borderColor: "#9966FF", backgroundColor: "#9966FF", tension: 0.1 }
+  { label: "Mixed", data: [2, 6, 9, 18, 24], borderColor: "#9966FF", backgroundColor: "#9966FF", tension: 0.1 }
 ];
 
 let myChart = null;
