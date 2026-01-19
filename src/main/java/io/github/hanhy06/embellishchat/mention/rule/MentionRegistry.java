@@ -83,8 +83,8 @@ public class MentionRegistry {
         }
 
         HashSet<ServerPlayerEntity> players = new HashSet<>(PlayerLookup.around(
-                parameter.sender().getEntityWorld(),
-                parameter.sender().getEntityPos(),
+                parameter.player().getEntityWorld(),
+                parameter.player().getEntityPos(),
                 round
         ));
 
@@ -133,7 +133,7 @@ public class MentionRegistry {
 
     private Target WORLD(MentionParameter parameter){
         String worldName = parameter.option();
-        MinecraftServer server = parameter.sender().getEntityWorld().getServer();
+        MinecraftServer server = EmbellishChat.SERVER;
         ServerWorld targetWorld = null;
 
         for (ServerWorld world : server.getWorlds()) {
@@ -165,7 +165,7 @@ public class MentionRegistry {
 
     private Target OPEN_PARTIES_AND_CLAIMS(MentionParameter parameter){
         if (isOpenParty){
-            HashSet<ServerPlayerEntity> players = OpenPartyUtil.getPartyPlayers(server,parameter.sender());
+            HashSet<ServerPlayerEntity> players = OpenPartyUtil.getPartyPlayers(server,parameter.player());
             return Target.of(players,null);
         }else {
             EmbellishChat.LOGGER.info("Open Party and Claims not found. @party mentions will be ignored.");
@@ -174,7 +174,7 @@ public class MentionRegistry {
     }
 
     private Target CUSTOM(MentionParameter parameter){
-        ServerPlayerEntity sender = parameter.sender();
+        ServerPlayerEntity sender = parameter.player();
         StringReader selector = new StringReader(parameter.option());
 
         try {
