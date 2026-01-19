@@ -29,7 +29,7 @@ You can read about Minecraft’s atlas [Text component format wiki](https://mine
   "styles": [
     {
       "styleType": "REPLACE",
-      "preset": "[%player:displayname%] %embellish-chat:content%"
+      "preset": "<b>[%player:displayname%]</b> %embellish-chat:content%"
     }
   ]
 }
