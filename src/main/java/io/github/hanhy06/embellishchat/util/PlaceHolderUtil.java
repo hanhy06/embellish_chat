@@ -33,14 +33,19 @@ public class PlaceHolderUtil {
         });
     }
 
-    public static Text parsedText(String option, ServerPlayerEntity player){
+    public static Text parseText(String option, ServerPlayerEntity player){
         if (option.isEmpty()) return Text.literal(option);
 
         PlaceholderContext context;
         if (player!=null) context = PlaceholderContext.of(player);
         else context = PlaceholderContext.of(EmbellishChat.SERVER);
 
-        Text text = TagParser.DEFAULT.parseText(option,ParserContext.of());
-        return Placeholders.parseText(text,context);
+        return Placeholders.parseText(TagParser.DEFAULT.parseText(option, ParserContext.of()),context);
+    }
+
+    public static String parsePlaceholder(String option, ServerPlayerEntity player){
+        if (option.isEmpty()) return option;
+        else if (player!=null) return Placeholders.parseText(Text.literal(option),PlaceholderContext.of(player)).getString();
+        else return Placeholders.parseText(Text.literal(option),PlaceholderContext.of(EmbellishChat.SERVER)).getString();
     }
 }

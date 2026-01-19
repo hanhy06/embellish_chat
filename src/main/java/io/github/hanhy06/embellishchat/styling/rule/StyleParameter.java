@@ -7,7 +7,7 @@ import net.minecraft.text.Text;
 
 public record StyleParameter(MutableText segment, Text option, ServerPlayerEntity player) {
     public static StyleParameter of(MutableText segment,String option,ServerPlayerEntity player){
-        return new StyleParameter(segment, PlaceHolderUtil.parsedText(option,player),player);
+        return new StyleParameter(segment, PlaceHolderUtil.parseText(option,player),player);
     }
 
     public String getString(){
