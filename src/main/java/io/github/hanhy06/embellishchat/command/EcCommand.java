@@ -2,6 +2,7 @@ package io.github.hanhy06.embellishchat.command;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.context.CommandContext;
+import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.ConfigManager;
 import io.github.hanhy06.embellishchat.inventory.InventoryManager;
 import io.github.hanhy06.embellishchat.inventory.InventoryScreenHandler;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class EcCommand {
@@ -150,7 +152,13 @@ public class EcCommand {
                 false
         );
 
-        ConfigManager.INSTANCE.writeConfig();
+        CompletableFuture.runAsync(() -> {
+            try {
+                ConfigManager.INSTANCE.writeConfig();
+            } catch (Exception e) {
+                EmbellishChat.LOGGER.error("Failed to save config async", e);
+            }
+        });
         return 1;
     }
 
