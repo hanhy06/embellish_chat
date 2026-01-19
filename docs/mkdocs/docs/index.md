@@ -144,7 +144,7 @@ They do **not** represent normal server conditions.
 - World: **Singleplayer, Superflat**
 - CPU: **13th Gen Intel(R) Core(TM) i7-1360P**
 
-- Max RAM for JVM: **2 GB**
+- Max RAM: **4 GB**
 - System: **Windows 11**
 - Config: **Default**
 
