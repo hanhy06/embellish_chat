@@ -62,7 +62,7 @@ Use the following patterns directly in the chat window:
 > * `@group(name)` requires LuckPerms. Without it, the mention resolves to no players.
 > * `@team` and `@Player` mentions follow the color of their respective team. If the team has no color, the `defaultTeamColor` value is used.
 > * Other mention types can have their color customized by modifying the `styleRule` value.
-> * The table above shows only the most common mentions. Embellish Chat supports many additional mention types. For more details, please refer to https://hanhy06.github.io/embellish-chat/site/mention/MentionSystem/
+> * The table above shows only the most common mentions. Embellish Chat supports many additional mention types. For more details, please refer to [MentionWiki](https://hanhy06.github.io/embellish-chat/site/mention/MentionSystem/)
 
 ---
 
@@ -173,7 +173,7 @@ The configuration file is located at: `config/embellish-chat.json`.
 
 ## Configurations
 
-### This document dives into the detailed configuration structure. But hey, don’t forget — we have a web [config-generator.html](https://hanhy06.github.io/embellish-chat/docs/wiki/config-generator.html)!
+### This document dives into the detailed configuration structure. But hey, don’t forget — we have a web [config-generator.html](https://hanhy06.github.io/embellish-chat/site/config-generator.html)!
 
 ## Styling Configuration
 
@@ -309,7 +309,7 @@ They do **not** represent normal server conditions.
 - World: **Singleplayer, Superflat**
 - CPU: **13th Gen Intel(R) Core(TM) i7-1360P**
 
-- Max RAM for JVM: **2 GB**
+- Max RAM for JVM: **4 GB**
 - System: **Windows 11**
 - Config: **Default**
 
