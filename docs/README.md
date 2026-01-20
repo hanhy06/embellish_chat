@@ -259,7 +259,7 @@ regular expression (`pattern`), notification settings (`title`, `cooldown`, `sou
   * **mentions** A list of mention actions. Each action specifies a `mentionType` and an optional `preset`.
   * **styles** A list of style actions. Works the same way as in the styling rules section.
 
-you can see more detail in https://hanhy06.github.io/embellish-chat/site/mention/MentionSystem/
+you can see more detail in [MentionWiki](https://hanhy06.github.io/embellish-chat/site/mention/MentionSystem/)
 
 ---
 
