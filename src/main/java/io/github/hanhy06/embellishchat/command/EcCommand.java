@@ -2,6 +2,7 @@ package io.github.hanhy06.embellishchat.command;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.ConfigManager;
 import io.github.hanhy06.embellishchat.inventory.InventoryManager;
@@ -14,6 +15,7 @@ import io.github.hanhy06.embellishchat.styling.rule.StyleType;
 import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
 import io.github.hanhy06.embellishchat.util.PermissionUtil;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.UuidArgumentType;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
@@ -43,7 +45,10 @@ public class EcCommand {
                         )
                         .then(CommandManager.literal("open")
                                 .then(CommandManager.argument("key", UuidArgumentType.uuid())
-                                        .executes(EcCommand::executeOpenInventory)
+                                        .executes((context) -> executeOpenInventory(context,false))
+                                )
+                                .then(CommandManager.argument("player", EntityArgumentType.player())
+                                        .executes((context) -> executeOpenInventory(context,true))
                                 )
                         )
         ));
@@ -162,31 +167,43 @@ public class EcCommand {
         return 1;
     }
 
-    private static int executeOpenInventory(CommandContext<ServerCommandSource> context){
-        UUID uuid = UuidArgumentType.getUuid(context,"key");
+    private static int executeOpenInventory(CommandContext<ServerCommandSource> context,boolean type){
         ServerPlayerEntity player = context.getSource().getPlayer();
-        SimpleInventory inventory = InventoryManager.get(uuid);
+        GameProfile profile = null;
+
+        try {
+            if (type) {
+                profile = EntityArgumentType.getPlayer(context, "player").getGameProfile();
+            }
+            else {
+                UUID uuid = UuidArgumentType.getUuid(context, "key");
+                GameProfileResolver resolver = EmbellishChat.SERVER.getApiServices().profileResolver();
+                profile= resolver.getProfileById(uuid).orElse(new GameProfile(uuid,"None"));
+            }
+        } catch (CommandSyntaxException e) {
+            EmbellishChat.LOGGER.warn("The specified player is invalid.");
+            context.getSource().sendError(Text.literal("The specified player is invalid."));
+            return 0;
+        }
+
+        SimpleInventory inventory = InventoryManager.get(profile.id());
 
         if (player == null){
             context.getSource().sendError(Text.literal("Player not found."));
-            return 1;
+            return 0;
         }
 
         if (inventory == null) {
             context.getSource().sendError(Text.literal("Inventory not found."));
-            return 1;
+            return 0;
         }
 
-        GameProfileResolver resolver = context.getSource().getServer().getApiServices().profileResolver();
-        GameProfile gameProfile = resolver.getProfileById(uuid).orElse(new GameProfile(uuid,"None"));
-        Text name = Text.literal(gameProfile.name()+"'s inventory");
-
+        Text name = Text.literal(profile.name()+"'s inventory");
         player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
                 (syncId, playerInventory, playerEntity) ->
                         new InventoryScreenHandler(syncId,playerInventory,inventory),
                 name
         ));
-
         return 1;
     }
 }

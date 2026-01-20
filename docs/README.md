@@ -9,6 +9,7 @@
 * **Markdown‑Style Formatting**: Bold, italic, underline, strikethrough, obfuscation, color, custom font, and links. Works in public chat, private messages, and commands.
 * **Mention System**: Mention individual players, your team, everyone, or nearby players with `@`. Online targets receive a notification; mentions auto‑tint to the player/team color.
 * **Message Metadata**: Hover to see the send time, and click a message to copy it to the clipboard.
+* **Show off your items**: Use the \[i] and \[inv] syntax to showcase your items to other players.
 
 ---
 
