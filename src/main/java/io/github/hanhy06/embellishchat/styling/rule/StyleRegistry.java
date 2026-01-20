@@ -12,17 +12,22 @@ import io.github.hanhy06.embellishchat.util.ColorUtil;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ProfileComponent;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.decoration.DisplayEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.*;
 import net.minecraft.text.object.PlayerTextObjectContents;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.AffineTransformation;
 import org.apache.commons.lang3.StringUtils;
+import org.joml.Vector3f;
 
 import java.awt.*;
 import java.net.URI;
@@ -89,7 +94,8 @@ public class StyleRegistry {
                 entry(StyleType.JSON, this::JSON),
                 entry(StyleType.DISCORD_JSON, this::DISCORD_JSON),
                 entry(StyleType.COMMAND_RUN, this::COMMAND_RUN),
-                entry(StyleType.LOG, this::LOG)
+                entry(StyleType.LOG, this::LOG),
+                entry(StyleType.BUBBLE, this::BUBBLE)
         ));
         this.messenger = new DiscordMessenger(config);
 
@@ -405,6 +411,30 @@ public class StyleRegistry {
 
     public MutableText LOG(StyleParameter parameter){
         EmbellishChat.LOGGER.info("Log StyleType segment: {}, open segment:{}, sender: {}",parameter.segment().getString(),parameter.getString(),parameter.player());
+        return parameter.segment();
+    }
+
+    public MutableText BUBBLE(StyleParameter parameter){
+        ServerPlayerEntity player = parameter.player();
+        ServerWorld world = player.getEntityWorld();
+
+        DisplayEntity.TextDisplayEntity entity = new DisplayEntity.TextDisplayEntity(EntityType.TEXT_DISPLAY,world);
+
+        entity.setText(parameter.option());
+        entity.setBillboardMode(DisplayEntity.BillboardMode.CENTER);
+
+        entity.setPosition(player.getX(), player.getY(), player.getZ());
+        world.spawnEntity(entity);
+
+        entity.setTransformation(new AffineTransformation(
+                new Vector3f(0f, player.getHeight()+0.15f, 0f),
+                null,
+                null,
+                null
+        ));
+        entity.setInterpolationDuration(20);
+        entity.getStartInterpolation();
+
         return parameter.segment();
     }
 }
