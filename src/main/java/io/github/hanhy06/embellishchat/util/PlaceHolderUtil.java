@@ -24,7 +24,7 @@ public class PlaceHolderUtil {
         placeholders.remove(player);
     }
 
-    public static void register(){
+    public static void registerPlaceholder(){
         placeholders.clear();
 
         Placeholders.register(Identifier.of(EmbellishChat.MOD_ID,"content"),(context, string) -> {

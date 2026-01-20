@@ -7,6 +7,7 @@ import io.github.hanhy06.embellishchat.inventory.InventoryManager;
 import io.github.hanhy06.embellishchat.mention.MentionProcessor;
 import io.github.hanhy06.embellishchat.message.MessageProcessor;
 import io.github.hanhy06.embellishchat.styling.StylingProcessor;
+import io.github.hanhy06.embellishchat.util.BubbleUtil;
 import io.github.hanhy06.embellishchat.util.PermissionUtil;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.fabricmc.api.ModInitializer;
@@ -31,6 +32,8 @@ public class EmbellishChat implements ModInitializer {
 
         PermissionUtil.registerPermissions();
         InventoryManager.registryLeaveEvent();
+        BubbleUtil.registerTickEvent();
+
 		EmbellishChatCommand.registerEmbellishChat();
         EcCommand.registerEc();
 	}
@@ -41,7 +44,7 @@ public class EmbellishChat implements ModInitializer {
         Path fabricConfigDirPath = FabricLoader.getInstance().getConfigDir();
         ConfigManager manager = new ConfigManager(fabricConfigDirPath);
 
-        PlaceHolderUtil.register();
+        PlaceHolderUtil.registerPlaceholder();
 
         StylingProcessor styler = new StylingProcessor();
         MentionProcessor mention = new MentionProcessor(server,server.getPlayerManager(),server.getScoreboard());

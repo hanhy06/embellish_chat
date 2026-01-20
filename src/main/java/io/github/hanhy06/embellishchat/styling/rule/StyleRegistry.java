@@ -8,6 +8,7 @@ import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.discord.DiscordMessenger;
 import io.github.hanhy06.embellishchat.inventory.InventoryManager;
 import io.github.hanhy06.embellishchat.styling.util.Runs;
+import io.github.hanhy06.embellishchat.util.BubbleUtil;
 import io.github.hanhy06.embellishchat.util.ColorUtil;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
 import net.minecraft.component.DataComponentTypes;
@@ -415,26 +416,8 @@ public class StyleRegistry {
     }
 
     public MutableText BUBBLE(StyleParameter parameter){
-        ServerPlayerEntity player = parameter.player();
-        ServerWorld world = player.getEntityWorld();
-
-        DisplayEntity.TextDisplayEntity entity = new DisplayEntity.TextDisplayEntity(EntityType.TEXT_DISPLAY,world);
-
-        entity.setText(parameter.option());
-        entity.setBillboardMode(DisplayEntity.BillboardMode.CENTER);
-
-        entity.setPosition(player.getX(), player.getY(), player.getZ());
-        world.spawnEntity(entity);
-
-        entity.setTransformation(new AffineTransformation(
-                new Vector3f(0f, player.getHeight()+0.15f, 0f),
-                null,
-                null,
-                null
-        ));
-        entity.setInterpolationDuration(20);
-        entity.getStartInterpolation();
-
+        BubbleUtil.spawnDisplayEntity(parameter.player(),parameter.segment());
         return parameter.segment();
     }
+
 }
