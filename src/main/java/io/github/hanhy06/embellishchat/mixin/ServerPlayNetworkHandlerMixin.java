@@ -17,7 +17,7 @@ public class ServerPlayNetworkHandlerMixin {
     }
 
     @Inject(method = "handleDecoratedMessage", at = @At("HEAD"), cancellable = true)
-    private static void handleDecoratedMessage(SignedMessage message, CallbackInfo ci) {
+    private void handleDecoratedMessage(SignedMessage message, CallbackInfo ci) {
         if (message == null) {
             ci.cancel();
         }
