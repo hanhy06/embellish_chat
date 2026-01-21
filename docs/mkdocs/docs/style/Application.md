@@ -33,7 +33,6 @@ You can read about Minecraft’s atlas [Text component format wiki](https://mine
     }
   ]
 }
-
 ```
 
 ![Formatting](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Formatting.png?raw=true)
