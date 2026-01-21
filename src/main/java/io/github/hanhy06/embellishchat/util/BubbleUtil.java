@@ -37,7 +37,7 @@ public class BubbleUtil {
             }
 
             Map<UUID, Integer> stackCounts = new HashMap<>();
-            ScoreboardObjective objectBlow = server.getScoreboard().getObjectiveForSlot(ScoreboardDisplaySlot.BELOW_NAME);
+            ScoreboardObjective blowObject = server.getScoreboard().getObjectiveForSlot(ScoreboardDisplaySlot.BELOW_NAME);
 
             for (int i = activeBubbles.size() - 1; i >= 0; i--) {
                 BubbleContext context = activeBubbles.get(i);
@@ -47,7 +47,7 @@ public class BubbleUtil {
                 UUID ownerUuid = owner.getUuid();
 
                 int stackIndex = stackCounts.getOrDefault(ownerUuid, 0);
-                double yOffset = 0.2 + (stackIndex * 0.3) + (objectBlow != null ? 0.2:0);
+                double yOffset = 0.2 + (stackIndex * 0.3) + (blowObject != null ? 0.2:0);
 
                 entity.setPosition(
                         owner.getX(),
