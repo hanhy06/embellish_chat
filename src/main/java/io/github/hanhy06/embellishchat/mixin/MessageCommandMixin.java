@@ -15,15 +15,15 @@ import java.util.Collection;
 
 @Mixin(MessageCommand.class)
 public class MessageCommandMixin {
+    @ModifyVariable(method = "execute", at = @At("HEAD"), argsOnly = true)
+    private static SignedMessage execute(SignedMessage original) {
+        return MessageProcessor.INSTANCE.handleMessage(original);
+    }
+
     @Inject(method = "execute", at = @At("HEAD"), cancellable = true)
     private static void execute(ServerCommandSource source, Collection<ServerPlayerEntity> targets, SignedMessage message, CallbackInfo ci) {
         if (message == null) {
             ci.cancel();
         }
-    }
-
-    @ModifyVariable(method = "execute", at = @At("HEAD"), argsOnly = true)
-    private static SignedMessage execute(SignedMessage original) {
-        return MessageProcessor.INSTANCE.handleMessage(original);
     }
 }

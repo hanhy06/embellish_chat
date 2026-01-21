@@ -11,15 +11,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayNetworkHandler.class)
 public class ServerPlayNetworkHandlerMixin {
+    @ModifyVariable(method = "handleDecoratedMessage", at = @At("HEAD"), argsOnly = true)
+    private SignedMessage handleDecoratedMessage(SignedMessage original) {
+        return MessageProcessor.INSTANCE.handleMessage(original);
+    }
+
     @Inject(method = "handleDecoratedMessage", at = @At("HEAD"), cancellable = true)
     private static void handleDecoratedMessage(SignedMessage message, CallbackInfo ci) {
         if (message == null) {
             ci.cancel();
         }
-    }
-
-    @ModifyVariable(method = "handleDecoratedMessage", at = @At("HEAD"), argsOnly = true)
-    private SignedMessage handleDecoratedMessage(SignedMessage original) {
-        return MessageProcessor.INSTANCE.handleMessage(original);
     }
 }
