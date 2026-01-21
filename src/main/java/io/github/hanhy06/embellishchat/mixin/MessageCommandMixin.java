@@ -22,11 +22,7 @@ public class MessageCommandMixin {
         }
     }
 
-    @ModifyVariable(
-            method = "execute",
-            at = @At("HEAD"),
-            argsOnly = true
-    )
+    @ModifyVariable(method = "execute", at = @At("HEAD"), argsOnly = true)
     private static SignedMessage execute(SignedMessage original) {
         return MessageProcessor.INSTANCE.handleMessage(original);
     }
