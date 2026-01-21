@@ -19,7 +19,7 @@ public class BubbleUtil {
     }
 
     public static void registerTickEvent() {
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
+        ServerTickEvents.START_SERVER_TICK.register(server -> {
             if (activeBubbles.isEmpty()) return;
 
             Iterator<BubbleContext> iterator = activeBubbles.iterator();
@@ -31,7 +31,7 @@ public class BubbleUtil {
                 if (entity.isRemoved() || owner.isRemoved()) {
                     entity.discard();
                     iterator.remove();
-                } else if (entity.age >= 40) {
+                } else if (entity.age >= 50) {
                     entity.discard();
                     iterator.remove();
                 }
@@ -49,7 +49,7 @@ public class BubbleUtil {
                 int stackIndex = stackCounts.getOrDefault(ownerUuid, 0);
                 double yOffset = 0.2 + (stackIndex * 0.3);
 
-                entity.setPos(
+                entity.setPosition(
                         owner.getX(),
                         owner.getY() + owner.getHeight() + yOffset,
                         owner.getZ()
@@ -57,7 +57,7 @@ public class BubbleUtil {
 
                 stackCounts.put(ownerUuid, stackIndex + 1);
 
-                if (entity.age == 35) {
+                if (entity.age == 45) {
                     entity.setTransformation(new AffineTransformation(
                             null,
                             null,
@@ -78,6 +78,7 @@ public class BubbleUtil {
         entity.setText(text);
         entity.setBillboardMode(DisplayEntity.BillboardMode.CENTER);
         entity.setPosition(player.getX(), player.getY() + player.getHeight() - 0.2f, player.getZ());
+        entity.setTeleportDuration(1);
 
         entity.setTransformation(new AffineTransformation(
                 new Vector3f(0f, 0f, 0f),
