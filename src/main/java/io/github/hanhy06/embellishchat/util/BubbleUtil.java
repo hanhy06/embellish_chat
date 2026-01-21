@@ -3,6 +3,9 @@ package io.github.hanhy06.embellishchat.util;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.decoration.DisplayEntity;
+import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.scoreboard.ScoreboardDisplaySlot;
+import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
@@ -28,16 +31,14 @@ public class BubbleUtil {
                 DisplayEntity.TextDisplayEntity entity = context.entity();
                 ServerPlayerEntity owner = context.owner();
 
-                if (entity.isRemoved() || owner.isRemoved()) {
-                    entity.discard();
-                    iterator.remove();
-                } else if (entity.age >= 50) {
+                if (entity.age >= 50 || owner.isRemoved()) {
                     entity.discard();
                     iterator.remove();
                 }
             }
 
             Map<UUID, Integer> stackCounts = new HashMap<>();
+            ScoreboardObjective objectBlow = server.getScoreboard().getObjectiveForSlot(ScoreboardDisplaySlot.BELOW_NAME);
 
             for (int i = activeBubbles.size() - 1; i >= 0; i--) {
                 BubbleContext context = activeBubbles.get(i);
@@ -47,7 +48,7 @@ public class BubbleUtil {
                 UUID ownerUuid = owner.getUuid();
 
                 int stackIndex = stackCounts.getOrDefault(ownerUuid, 0);
-                double yOffset = 0.2 + (stackIndex * 0.3);
+                double yOffset = 0.2 + (stackIndex * 0.3) + (objectBlow != null ? 0.2:0);
 
                 entity.setPosition(
                         owner.getX(),
