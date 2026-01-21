@@ -127,6 +127,7 @@
     * **Option:** `None`
 * `BUBBLE`
     * Displays a speech bubble above the user’s head.
+    * This type must be placed above types `SHOW_ITEM` and `SHOW_INVENTORY`.
     * **Option:** `None`
 * `BLOCK`
     * Stops sending messages.
