@@ -77,7 +77,7 @@ The configuration file is located at `config/embellish-chat.json`.
 ```
 {
   // version
-  "version": "3.0.0",
+  "version": "3.1.0",
   
   //rules
   "stylingRules": {

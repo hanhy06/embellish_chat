@@ -15,7 +15,7 @@
 
 ```
 
-![Fire](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Fire.gif?raw=true)
+![Fire](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Fire.gif?raw=true)
 
 If you use the `JSON` type, you can replace the matched string with JSON.
 The example above shows how to use the `JSON` type to replace `:fire:` with a fire atlas.<br>
@@ -35,10 +35,34 @@ You can read about Minecraft’s atlas [Text component format wiki](https://mine
 }
 ```
 
-![Formatting](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Formatting.png?raw=true)
+![Formatting](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Formatting.png?raw=true)
 
 You can format the chat by matching all rules from the first English styling set and applying them using the `REPLACE` type.
 When using custom formatting, ensure that `useClearFormat` is enabled.
+
+
+### Bubble Chat
+
+```
+{
+  "pattern": "(.+)()",
+  "styles": [
+    {
+      "styleType": "BUBBLE",
+      "preset": ""
+    },
+    {
+      "styleType": "BLOCK",
+      "preset": ""
+    }
+  ]
+}
+```
+
+![BubbleChat](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/BubbleChat.gif?raw=true)
+
+By displaying a speech bubble and preventing the chat message from being sent, 
+you can create a more natural conversational experience.
 
 ## Using chat as a macro
 
@@ -63,7 +87,7 @@ When using custom formatting, ensure that `useClearFormat` is enabled.
 ]
 ```
 
-![Command_Run](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Command_Run.gif?raw=true)
+![Command_Run](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Command_Run.gif?raw=true)
 
 Triggers and the COMMAND_RUN type allow chat to function as a macro.
 The example above demonstrates a showcase datapack that enables expressions like crying or joy through chat.

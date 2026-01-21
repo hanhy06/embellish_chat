@@ -107,9 +107,11 @@
 
 * `SHOW_ITEM`
     * Displays the description and texture of the item/block held by the player.
+    * This style type must be placed at the very bottom.
     * **Option:** `Altas Path(atlas;sprite)`
 * `SHOW_INVENTORY`
     * Displays the user’s face. Clicking it shows the user’s inventory snapshot.
+    * This style type must be placed at the very bottom.
     * **Option:** `None`
 * `JSON`
     * Parses the provided JSON string and displays it as a text component.
