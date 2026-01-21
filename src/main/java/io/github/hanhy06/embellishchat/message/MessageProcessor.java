@@ -28,6 +28,8 @@ public class MessageProcessor implements ConfigListener {
     private Config config;
     private Set<UUID> bannedPlayerList;
 
+    public static class MessageBlockedException extends RuntimeException {}
+
     public MessageProcessor(MentionProcessor mentionProcessor, StylingProcessor stylingProcessor, PlayerManager playerManager) {
         INSTANCE = this;
         this.mentionProcessor = mentionProcessor;
@@ -57,7 +59,9 @@ public class MessageProcessor implements ConfigListener {
 
             textMessage = stylingProcessor.applyMention(textMessage,mentions,sender);
             textMessage = stylingProcessor.handleStyle(textMessage,getPermissions(sender, config.stylingRules().keySet()),sender);
-        }finally {
+        } catch (MessageBlockedException block){
+            return null;
+        } finally {
             PlaceHolderUtil.remove(sender);
         }
 

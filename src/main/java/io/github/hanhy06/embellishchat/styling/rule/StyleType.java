@@ -38,5 +38,6 @@ public enum StyleType {
     DISCORD_JSON,
     COMMAND_RUN,
     LOG,
-    BUBBLE
+    BUBBLE,
+    BLOCK
 }
