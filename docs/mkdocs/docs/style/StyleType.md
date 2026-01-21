@@ -8,7 +8,7 @@
 | **Formatting**   | `BOLD`, `ITALIC`, `UNDERLINE`, `STRIKETHROUGH`, `OBFUSCATED`, `FONT`, `CLEAR`                             |
 | **Interaction**  | `CLICK_COMMAND_RUN`, `CLICK_COMMAND_SUGGEST`, `CLICK_COPY`, `HOVER_TEXT`, `HOVER_ITEM`, `URL`, `METADATA` |
 | **Modification** | `UPPER`, `LOWER`, `CAPITALIZE`, `REPLACE`, `MASK`, `PREFIX`, `SUFFIX`                                     |
-| **Advanced**     | `SHOW_ITEM`,`SHOW_INVENTORY`,`JSON`, `DISCORD_JSON`, `COMMAND_RUN`, `LOG`                                 |
+| **Advanced**     | `SHOW_ITEM`,`SHOW_INVENTORY`,`JSON`, `DISCORD_JSON`, `COMMAND_RUN`, `LOG`, `BUBBLE`, `BLOCK`               |
 
 ## Color Styles
 
@@ -122,5 +122,11 @@
     * **Option:** `Command`
 * `LOG`
     * Logs the text and sender information to the server console.
+    * **Option:** `None`
+* `BUBBLE`
+    * Displays a speech bubble above the user’s head.
+    * **Option:** `None`
+* `BLOCK`
+    * Stops sending messages.
     * **Option:** `None`
 
