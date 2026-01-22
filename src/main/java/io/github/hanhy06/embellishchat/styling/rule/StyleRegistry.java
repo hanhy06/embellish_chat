@@ -8,9 +8,9 @@ import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.discord.DiscordMessenger;
 import io.github.hanhy06.embellishchat.inventory.InventoryManager;
 import io.github.hanhy06.embellishchat.message.MessageProcessor;
-import io.github.hanhy06.embellishchat.styling.util.Runs;
-import io.github.hanhy06.embellishchat.util.BubbleUtil;
-import io.github.hanhy06.embellishchat.util.ColorUtil;
+import io.github.hanhy06.embellishchat.styling.data.Runs;
+import io.github.hanhy06.embellishchat.styling.util.BubbleUtil;
+import io.github.hanhy06.embellishchat.styling.util.ColorUtil;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ProfileComponent;
@@ -21,6 +21,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.*;
+import net.minecraft.text.object.AtlasTextObjectContents;
 import net.minecraft.text.object.PlayerTextObjectContents;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -44,6 +45,7 @@ public class StyleRegistry {
     private final Config config;
     private final DateTimeFormatter timestamp;
     private final HashMap<String, Color> colorPreset;
+    private final HashMap<String, AtlasTextObjectContents> atlasPreset;
     private final EnumMap<StyleType, Function<StyleParameter, MutableText>> registers;
     private final Pattern HEX_CODE = Pattern.compile("#[A-Fa-f0-9]{6}");
     private final DiscordMessenger messenger;
@@ -54,6 +56,7 @@ public class StyleRegistry {
         this.config = config;
         this.timestamp = DateTimeFormatter.ofPattern(config.timestamp());
         this.colorPreset = config.colorPreset();
+        this.atlasPreset = config.atlasPreset();
         this.registers = new EnumMap<>(Map.ofEntries(
                 entry(StyleType.COLOR_HEX, this::COLOR_HEX),
                 entry(StyleType.COLOR_RAINBOW, this::COLOR_RAINBOW),
@@ -88,6 +91,7 @@ public class StyleRegistry {
 
                 entry(StyleType.SHOW_ITEM, this::SHOW_ITEM),
                 entry(StyleType.SHOW_INVENTORY, this::SHOW_INVENTORY),
+                entry(StyleType.ATLAS_PRESET, this::ATLAS_PRESET),
                 entry(StyleType.JSON, this::JSON),
                 entry(StyleType.DISCORD_JSON, this::DISCORD_JSON),
                 entry(StyleType.COMMAND_RUN, this::COMMAND_RUN),
@@ -376,6 +380,12 @@ public class StyleRegistry {
         MutableText text = Text.object(new PlayerTextObjectContents(component, true));
 
         return text.fillStyle(Style.EMPTY.withClickEvent(clickEvent).withHoverEvent(hoverEvent));
+    }
+
+    public MutableText ATLAS_PRESET(StyleParameter parameter) {
+        AtlasTextObjectContents atlas = atlasPreset.get(parameter.getString());
+        if (atlas!=null) return Text.object(atlas);
+        else return parameter.segment();
     }
 
     public MutableText JSON(StyleParameter parameter){

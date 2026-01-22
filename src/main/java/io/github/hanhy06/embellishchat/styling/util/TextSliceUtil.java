@@ -1,5 +1,7 @@
 package io.github.hanhy06.embellishchat.styling.util;
 
+import io.github.hanhy06.embellishchat.styling.data.Run;
+import io.github.hanhy06.embellishchat.styling.data.Runs;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;

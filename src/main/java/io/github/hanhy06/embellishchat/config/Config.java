@@ -10,6 +10,9 @@ import io.github.hanhy06.embellishchat.styling.rule.StyleType;
 import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.StyleSpriteSource;
+import net.minecraft.text.object.AtlasTextObjectContents;
+import net.minecraft.util.Identifier;
 
 import java.awt.*;
 import java.net.URI;
@@ -26,10 +29,13 @@ public record Config(
         LinkedHashMap<String,List<MentionRule>> mentionRules,
 
         //preset
+        HashMap<String, Color> colorPreset,
+        HashMap<String, AtlasTextObjectContents> atlasPreset,
+
+        //setting
         String delimiter,
         String timestamp,
         Color urlColor,
-        HashMap<String, Color> colorPreset,
         Color defaultTeamColor,
         boolean notificationCommandEnable,
         boolean mentionBroadcast,
@@ -255,9 +261,6 @@ public record Config(
                 )),
 
                 //preset
-                ",",
-                "yyyy-MM-dd HH:mm:ss",
-                new  Color(0x0000EE),
                 new HashMap<>(Map.ofEntries(
                         entry("black", new Color(0x000000)),
                         entry("dark blue", new Color(0x0000AA)),
@@ -276,6 +279,14 @@ public record Config(
                         entry("yellow", new Color(0xFFFF55)),
                         entry("white", new Color(0xFFFFFF))
                 )),
+                new HashMap<>(Map.ofEntries(
+                        entry("fire", new AtlasTextObjectContents(Identifier.of("minecraft:blocks"),Identifier.of("minecraft:block/campfire_fire")))
+                )),
+
+                //setting
+                ",",
+                "yyyy-MM-dd HH:mm:ss",
+                new  Color(0x0000EE),
                 new Color(0xFF55FF),
                 true,
                 true,

@@ -7,7 +7,7 @@ import io.github.hanhy06.embellishchat.styling.rule.StyleAction;
 import io.github.hanhy06.embellishchat.styling.rule.StyleParameter;
 import io.github.hanhy06.embellishchat.styling.rule.StyleRegistry;
 import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
-import io.github.hanhy06.embellishchat.styling.util.Runs;
+import io.github.hanhy06.embellishchat.styling.data.Runs;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;

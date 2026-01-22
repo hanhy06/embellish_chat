@@ -34,6 +34,7 @@ public enum StyleType {
 
     SHOW_ITEM,
     SHOW_INVENTORY,
+    ATLAS_PRESET,
     JSON,
     DISCORD_JSON,
     COMMAND_RUN,

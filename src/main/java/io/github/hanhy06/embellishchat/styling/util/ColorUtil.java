@@ -1,4 +1,4 @@
-package io.github.hanhy06.embellishchat.util;
+package io.github.hanhy06.embellishchat.styling.util;
 
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.Team;
