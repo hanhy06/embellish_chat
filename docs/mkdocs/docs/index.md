@@ -10,24 +10,28 @@ Embellish Chat modernizes your Minecraft server’s chat experience with a fully
 
 Use these patterns directly in the chat window.
 
-| Feature            | Syntax                  | Example                          |
-|:-------------------|:------------------------|:---------------------------------|
-| **Bold**           | `**Text**`              | `**Important**`                  |
-| **Italic**         | `_Text_`                | `_Whisper_`                      |
-| **Underline**      | `__Text__`              | `__Title__`                      |
-| **Strikethrough**  | `~~Text~~`              | `~~Deleted~~`                    |
-| **Obfuscated**     | `\|\|Text\|\|`          | `\|\|Secret\|\|`                 |
-| **Color (Hex)**    | `[Text]<#Hex>`          | `[Sky]<#00AAFF>`                 |
-| **Color (Preset)** | `[Text]<Preset>`        | `[Warning]<red>`                 |
-| **Gradient**       | `[Text]<#Hex #Hex...>`  | `[Fire]<#ffff00 #ff0000>`        |
-| **Rainbow**        | `[Text]<RAINBOW>`       | `[Magic]<RAINBOW>`               |
-| **Link**           | `[Text](URL)`           | `[Click Me](https://google.com)` |
-| **Font**           | `[Text]{Font ID}`       | `[Rune]{minecraft:alt}`          |
-| **Item**           | `[i]`                   | `Look at my [i]`                 |
-| **Inventory**      | `[inv]`                 | `Look at my [inv]`               |         
-| **Mention**        | `@Target`               | `@everyone`, `@User`             |
+| Feature            | Syntax                 | Example                          |
+|:-------------------|:-----------------------|:---------------------------------|
+| **Bold**           | `**Text**`             | `**Important**`                  |
+| **Italic**         | `_Text_`               | `_Whisper_`                      |
+| **Underline**      | `__Text__`             | `__Title__`                      |
+| **Strikethrough**  | `~~Text~~`             | `~~Deleted~~`                    |
+| **Obfuscated**     | `\|\|Text\|\|`         | `\|\|Secret\|\|`                 |
+| **Color (Hex)**    | `[Text]<#Hex>`         | `[Sky]<#00AAFF>`                 |
+| **Color (Preset)** | `[Text]<Preset>`       | `[Warning]<red>`                 |
+| **Gradient**       | `[Text]<#Hex #Hex...>` | `[Fire]<#ffff00 #ff0000>`        |
+| **Rainbow**        | `[Text]<RAINBOW>`      | `[Magic]<RAINBOW>`               |
+| **Link**           | `[Text](URL)`          | `[Click Me](https://google.com)` |
+| **Font**           | `[Text]{Font ID}`      | `[Rune]{minecraft:alt}`          |
+| **Item**           | `[i]`                  | `Look at my [i]`                 |
+| **Inventory**      | `[inv]`                | `Look at my [inv]`               |         
+| **Mention**        | `@Target`              | `@everyone`, `@User`             |
+| **Icon**           | `:Icon:`               | `:yes:`, `:fire:`                |
 
-> **Note:** For complex styling logic or custom rules, refer to the **[Style System](style/StyleSystem.md)**.
+> **Note:** 
+> 
+> * For complex styling logic or custom rules, refer to the **[Style System](style/StyleSystem.md)**.
+> * These icons are available by default. `fire, hunger, heart, yes, no, move`
 
 ### Mention Targets
 

@@ -121,6 +121,10 @@ public record Config(
                                         StylingRule.of(
                                                 "(\\[inv\\])()",
                                                 List.of(StyleAction.of(StyleType.SHOW_INVENTORY,""))
+                                        ),
+                                        StylingRule.of(
+                                                "(:(.+?):)",
+                                                List.of(StyleAction.of(StyleType.ATLAS_PRESET,""))
                                         )
                                 )
                         ),
@@ -280,7 +284,24 @@ public record Config(
                         entry("white", new Color(0xFFFFFF))
                 )),
                 new HashMap<>(Map.ofEntries(
-                        entry("fire", new AtlasTextObjectContents(Identifier.of("minecraft:blocks"),Identifier.of("minecraft:block/campfire_fire")))
+                        entry("fire", new AtlasTextObjectContents(
+                                Identifier.of("minecraft:blocks"),Identifier.of("minecraft:block/campfire_fire"))
+                        ),
+                        entry("hunger", new AtlasTextObjectContents(
+                                Identifier.of("minecraft:gui"),Identifier.of("minecraft:hud/food_full"))
+                        ),
+                        entry("heart", new AtlasTextObjectContents(
+                                Identifier.of("minecraft:gui"),Identifier.of("minecraft:hud/heart/full"))
+                        ),
+                        entry("yes", new AtlasTextObjectContents(
+                                Identifier.of("minecraft:gui"),Identifier.of("minecraft:container/beacon/confirm"))
+                        ),
+                        entry("no", new AtlasTextObjectContents(
+                                Identifier.of("minecraft:gui"),Identifier.of("minecraft:container/beacon/cancel"))
+                        ),
+                        entry("move", new AtlasTextObjectContents(
+                                Identifier.of("minecraft:gui"),Identifier.of("minecraft:mob_effect/wind_charged"))
+                        )
                 )),
 
                 //setting
