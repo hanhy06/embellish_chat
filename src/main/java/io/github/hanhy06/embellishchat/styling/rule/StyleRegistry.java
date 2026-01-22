@@ -348,23 +348,22 @@ public class StyleRegistry {
         ItemStack item = parameter.player().getMainHandStack();
         if (item == null || item.isEmpty()) return parameter.segment();
 
-        String namespace;
-        String path;
+        AtlasTextObjectContents atlas;
         if (!parameter.getString().isBlank()){
             List<String> segments = OptionUtil.split(parameter.getString().trim(),";");
-            namespace = segments.getFirst();
-            path = segments.getLast();
+            atlas = new AtlasTextObjectContents(Identifier.of(segments.getFirst()),Identifier.of(segments.getLast()));
         }else {
             String type = (item.getItem() instanceof BlockItem) ? "block" : "item";
             Identifier modelId = item.get(DataComponentTypes.ITEM_MODEL);
             if (modelId==null) return parameter.segment();
 
-            namespace = String.format("%s:%ss",modelId.getNamespace(),type);
-            path = String.format("%s/%s",type,modelId.getPath());
+            atlas = new AtlasTextObjectContents(
+                    Identifier.of(modelId.getNamespace(),type+"s"),
+                    Identifier.of(modelId.getNamespace(),String.format("%s/%s",type,modelId.getPath()))
+            );
         }
 
-        JsonElement element = JsonParser.parseString(String.format(ATLAS_ITEM,namespace,path));
-        Text text = TextCodecs.CODEC.parse(JsonOps.INSTANCE,element).getOrThrow();
+        Text text = Text.object(atlas);
         HoverEvent hoverEvent = new HoverEvent.ShowItem(item);
 
         return text.copy().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
