@@ -59,12 +59,15 @@ public class MessageProcessor implements ConfigListener {
 
             textMessage = stylingProcessor.applyMention(textMessage,mentions,sender);
             textMessage = stylingProcessor.handleStyle(textMessage,getPermissions(sender, config.stylingRules().keySet()),sender);
+            message.withUnsignedContent(textMessage);
+
+            mentionProcessor.targetBroadcast(mentions,message,sender);
         } catch (MessageBlockedException block){
             return null;
         } finally {
             PlaceHolderUtil.remove(sender);
         }
 
-        return message.withUnsignedContent(textMessage);
+        return message;
     }
 }

@@ -10,9 +10,13 @@ import io.github.hanhy06.embellishchat.mention.rule.MentionAction;
 import io.github.hanhy06.embellishchat.mention.rule.MentionParameter;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRegistry;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
+import io.github.hanhy06.embellishchat.message.MessageProcessor;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.network.message.MessageType;
+import net.minecraft.network.message.SentMessage;
+import net.minecraft.network.message.SignedMessage;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
@@ -154,5 +158,22 @@ public class MentionProcessor implements ConfigListener {
                 sound.playSoundToPlayer(target);
             });
         }
+    }
+
+    public void targetBroadcast(List<Mention> mentions, SignedMessage message,ServerPlayerEntity sender){
+        HashSet<ServerPlayerEntity> targets = new HashSet<>();
+        mentions.forEach(mention -> {
+            if (mention.rule().onlyTarget()) targets.addAll(mention.targets());
+        });
+
+        if (targets.isEmpty()) return;
+
+        SentMessage sentMessage = SentMessage.of(message);
+        MessageType.Parameters parameters = MessageType.params(MessageType.CHAT, sender);
+        targets.forEach(target ->{
+            target.sendChatMessage(sentMessage,false, parameters);
+        });
+
+        throw new MessageProcessor.MessageBlockedException();
     }
 }

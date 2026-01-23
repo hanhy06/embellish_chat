@@ -10,7 +10,6 @@ import io.github.hanhy06.embellishchat.styling.rule.StyleType;
 import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.StyleSpriteSource;
 import net.minecraft.text.object.AtlasTextObjectContents;
 import net.minecraft.util.Identifier;
 
@@ -138,6 +137,7 @@ public record Config(
                                             "@here()",
                                             "%player:displayname% mentioned you",
                                             0,
+                                            false,
                                             Sound.of(
                                                     "minecraft:entity.experience_orb.pickup",
                                                     SoundCategory.UI,1,1.75f
@@ -160,6 +160,7 @@ public record Config(
                                             "@everyone()",
                                             "%player:displayname% mentioned you",
                                             0,
+                                            false,
                                             Sound.of(
                                                     "minecraft:entity.experience_orb.pickup",
                                                     SoundCategory.UI,1,1.75f
@@ -182,6 +183,7 @@ public record Config(
                                             "@team\\((.+?)\\)",
                                             "%player:displayname% mentioned you",
                                             0,
+                                            false,
                                             Sound.of(
                                                     "minecraft:entity.experience_orb.pickup",
                                                     SoundCategory.UI,1,1.75f
@@ -201,6 +203,7 @@ public record Config(
                                             "@group\\((.+?)\\)",
                                             "%player:displayname% mentioned you",
                                             0,
+                                            false,
                                             Sound.of(
                                                     "minecraft:entity.experience_orb.pickup",
                                                     SoundCategory.UI,1,1.75f
@@ -223,6 +226,7 @@ public record Config(
                                             "@world\\((.+?)\\)",
                                             "%player:displayname% mentioned you",
                                             0,
+                                            false,
                                             Sound.of(
                                                     "minecraft:entity.experience_orb.pickup",
                                                     SoundCategory.UI,1,1.75f
@@ -245,6 +249,7 @@ public record Config(
                                             "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
                                             "%player:displayname% mentioned you",
                                             0,
+                                            false,
                                             Sound.of(
                                                     "minecraft:entity.experience_orb.pickup",
                                                     SoundCategory.UI,1,1.75f
