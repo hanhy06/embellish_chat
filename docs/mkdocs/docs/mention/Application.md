@@ -6,6 +6,7 @@
 {
   "pattern": "@admin()",
   "title": "%player:displayname% mentioned you",
+  "onlyTarget": false,
   "cooldown": 0,
   "sound": {
     "id": "minecraft:entity.experience_orb.pickup",
@@ -38,7 +39,6 @@
     }
   ]
 }
-
 ```
 
 ![Mention](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Mention.gif?raw=true)
@@ -55,6 +55,7 @@ If you also use `DISCORD_JSON`, the administrator will receive a notification in
   "pattern": "\\[notification\\]()",
   "title": "%player:displayname% mentioned you",
   "cooldown": 0,
+  "onlyTarget": false,
   "sound": {
     "id": "minecraft:entity.experience_orb.pickup",
     "category": "UI",
@@ -81,3 +82,36 @@ If you also use `DISCORD_JSON`, the administrator will receive a notification in
 ```
 
 Typing `[notification]` will send an alert to everyone.
+
+## Use as a channel
+
+```
+{
+  "pattern": "#Admin()",
+  "title": "",
+  "onlyTarget": true,
+  "cooldown": 0,
+  "sound": null,
+  "mentions": [
+    {
+      "mentionType": "LUCK_PERMS_GROUP",
+      "preset": "admin"
+    }
+  ],
+  "styles": [
+    {
+      "styleType": "BOLD",
+      "preset": ""
+    },
+    {
+      "styleType": "COLOR_GRADIENT",
+      "preset": "#FF5555#C77DFF"
+    }
+  ]
+}
+```
+
+By setting `"onlyTarget": true`, you can use the mention system as a private chat channel.
+In this example, messages starting with #Admin will not be broadcast to the global chat.
+Instead, they will be sent exclusively to players in the admin LuckPerms group. 
+This allows you to easily create private channels like Staff Chat or Team Chat without needing separate commands.

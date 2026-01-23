@@ -7,6 +7,7 @@
   "pattern": "@everyone()",
   "title": "%player:displayname% mentioned you",
   "cooldown": 0,
+  "onlyTarget": false
   "sound": {
     "id": "minecraft:entity.experience_orb.pickup",
     "category": "UI",
@@ -38,6 +39,8 @@
     * `%player:displayname%` is the display name of the player who sent the mention.
 * **`cooldown`**: This is the mention cooldown time in seconds.
     * Set to `0` to disable the cooldown.
+* **`onlyTarget`**: 
+    * When set to true, prevents the message from being broadcast globally and sends it only to the target.
 * **`sound`**: Defines the notification sound settings.
     * `id`: Sound identifier.
     * `category`: Sound category.

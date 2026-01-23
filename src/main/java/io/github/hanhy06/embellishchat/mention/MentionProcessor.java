@@ -161,18 +161,23 @@ public class MentionProcessor implements ConfigListener {
     }
 
     public void targetBroadcast(List<Mention> mentions, SignedMessage message,ServerPlayerEntity sender){
+        boolean onlyTarget = false;
         HashSet<ServerPlayerEntity> targets = new HashSet<>();
-        mentions.forEach(mention -> {
-            if (mention.rule().onlyTarget()) targets.addAll(mention.targets());
-        });
 
-        if (targets.isEmpty()) return;
+        for (Mention mention:mentions){
+            if (mention.rule().onlyTarget()){
+                onlyTarget = true;
+                targets.addAll(mention.targets());
+            }
+        }
+
+        if (!onlyTarget) return;
 
         SentMessage sentMessage = SentMessage.of(message);
         MessageType.Parameters parameters = MessageType.params(MessageType.CHAT, sender);
-        targets.forEach(target ->{
-            target.sendChatMessage(sentMessage,false, parameters);
-        });
+        targets.forEach(target ->
+                target.sendChatMessage(sentMessage,false, parameters)
+        );
 
         throw new MessageProcessor.MessageBlockedException();
     }
