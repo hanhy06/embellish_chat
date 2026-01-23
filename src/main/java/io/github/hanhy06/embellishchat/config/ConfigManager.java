@@ -6,9 +6,11 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.Strictness;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.adapter.ColorTypeAdapter;
+import io.github.hanhy06.embellishchat.config.adapter.IdentifierTypeAdapter;
 import io.github.hanhy06.embellishchat.config.adapter.PatternTypeAdapter;
 import io.github.hanhy06.embellishchat.config.adapter.SoundEventTypeAdapter;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Identifier;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -35,6 +37,7 @@ public class ConfigManager {
             .registerTypeAdapter(Pattern.class,new PatternTypeAdapter())
             .registerTypeAdapter(SoundEvent.class,new SoundEventTypeAdapter())
             .registerTypeAdapter(Color.class,new ColorTypeAdapter())
+            .registerTypeAdapter(Identifier.class,new IdentifierTypeAdapter())
             .setPrettyPrinting()
             .setStrictness(Strictness.LENIENT)
             .disableHtmlEscaping()
