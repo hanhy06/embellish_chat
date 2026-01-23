@@ -51,6 +51,7 @@ public class MessageProcessor implements ConfigListener {
         ServerPlayerEntity sender = playerManager.getPlayer(message.getSender());
         MutableText textMessage = message.getContent().copy();
         String stringMessage = message.getContent().getString();
+        SignedMessage result;
 
         try {
             PlaceHolderUtil.put(sender,stringMessage);
@@ -59,15 +60,15 @@ public class MessageProcessor implements ConfigListener {
 
             textMessage = stylingProcessor.applyMention(textMessage,mentions,sender);
             textMessage = stylingProcessor.handleStyle(textMessage,getPermissions(sender, config.stylingRules().keySet()),sender);
-            message.withUnsignedContent(textMessage);
+            result = message.withUnsignedContent(textMessage);
 
-            mentionProcessor.targetBroadcast(mentions,message,sender);
+            mentionProcessor.targetBroadcast(mentions,result,sender);
         } catch (MessageBlockedException block){
             return null;
         } finally {
             PlaceHolderUtil.remove(sender);
         }
 
-        return message;
+        return result;
     }
 }
