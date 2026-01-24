@@ -89,68 +89,20 @@ Use the following patterns directly in the chat window:
 
 ## ⚙️ Configuration
 
-The configuration file is located at: `config/embellish-chat.json`.
-
-### Sample
-
+The configuration file is located at `config/embellish-chat/config.json`.
 ```
 {
-  // version
-  "version": "3.0.0",
+  //version
+  "version": "3.1.0",
   
-  //rules
-  "stylingRules": {
-    "embellish-chat.chat": [
-      {
-        "pattern": "\\[([^\\]]+?)]\\((https://.*?)\\)",
-        "styles": [
-          {
-            "styleType": "URL",
-            "preset": ""
-          }
-        ]
-      },
-      ...
-    ],
-    "embellish-chat.command_argument": []
-  },
-  "mentionRules": {
-    "embellish-chat.mention": [
-      {
-        "pattern": "@here()",
-        "title": "%player:displayname% mentioned you",
-        "cooldown": 0,
-        "sound": {
-          "id": "minecraft:entity.experience_orb.pickup",
-          "category": "UI",
-          "volume": 1.0,
-          "pitch": 1.75
-        },
-        "mentions": [
-          {
-            "mentionType": "INSIDE",
-            "preset": "64"
-          }
-        ],
-        "styles": [
-          {
-            "styleType": "BOLD",
-            "preset": ""
-          }
-        ]
-      },
-      ...
-    ]
-  },
+  //preset
+  "colorPreset": { ... },
+  "atlasPreset": { ... },
   
-  // presets
+  //setting
   "delimiter": ",",
   "timestamp": "yyyy-MM-dd HH:mm:ss",
   "urlColor": "#0000EE",
-  "colorPreset": {
-    "dark green": "#00AA00",
-    ...
-  },
   "defaultTeamColor": "#FF55FF",
   "notificationCommandEnable": true,
   "mentionBroadcast": true,
@@ -158,10 +110,56 @@ The configuration file is located at: `config/embellish-chat.json`.
   
   //player list
   "bannedPlayerList": [],
-  "notificationOffPlayerList": []
+  "notificationOffPlayerList": [],
   
-  //discord
+  //webhook
   "webhook": ""
+}
+```
+
+The configuration file is located at `config/embellish-chat/styles.json`.
+```
+{
+  "stylingRules": {
+    "embellish-chat.chat": [
+      {
+        "pattern": " ... ",
+        "styles": [
+          {
+            "styleType": " ... ",
+            "preset": " ... "
+          }
+        ]
+      }
+      ...
+    ],
+    "embellish-chat.command_argument": []
+  }
+}
+```
+
+The configuration file is located at `config/embellish-chat/mentions.json`.
+```
+{
+  "mentionRules": {
+    "embellish-chat.mention": [
+      {
+        "pattern": " ... ",
+        "title": " ... ",
+        "cooldown": 0,
+        "onlyTarget": false,
+        "sound": { ... },
+        "mentions": [
+          {
+            "mentionType": " ... ",
+            "preset": " ... "
+          }
+        ],
+        "styles": [ ... ]
+      }
+      ...
+    ]
+  }
 }
 ```
 
