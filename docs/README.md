@@ -163,7 +163,7 @@ The configuration file is located at `config/embellish-chat/styles.json`.
     * `group 1`: This is text to be styled.
     * `group 2`: This is text passed as an option.
 * **`styles`**: Defines the styles to be applied to captured group 1.
-    * `styleType`: This is the style type. You can use all types listed in the table above.
+    * `styleType`: This is the style type. You can use all types listed in the [StyleWiki](https://hanhy06.github.io/embellish-chat/site/style/StyleType/).
     * `preset`: This is a preset value. If a value is provided, it is always used; if it is empty, the content of the user's captured group 2 is used instead.
 
 ### Mention
@@ -207,7 +207,7 @@ The configuration file is located at `config/embellish-chat/mentions.json`.
     * `volume`: Sound volume.
     * `pitch`: Sound pitch.
 * **`mentions`**: Defines the mention actions to be executed.
-    * `mentionType`: This is the type of mention action.
+    * `mentionType`: This is the mention type. You can use all types listed in the [MentionWiki](https://hanhy06.github.io/embellish-chat/site/mention/MentionType/).
     * `preset`: This is an optional preset value.
 * **`styles`**: Defines the styles to be applied when the mention is triggered.
     * Works the same way as in the styling rules section.
