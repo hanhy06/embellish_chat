@@ -95,7 +95,7 @@ Typing `[notification]` will send an alert to everyone.
   "mentions": [
     {
       "mentionType": "LUCK_PERMS_GROUP",
-      "preset": "admin"
+      "preset": "staff"
     }
   ],
   "styles": [

@@ -12,6 +12,7 @@ import net.minecraft.util.Identifier;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -56,20 +57,20 @@ public class ConfigManager {
             if (!Files.exists(configDirPath)) {
                 Files.createDirectories(configDirPath);
             }
-            if (!Files.exists(configDirPath.resolve(CONFIG_FILE_NAME))){
-                Files.createFile(configDirPath.resolve(CONFIG_FILE_NAME));
-            }
-            if (!Files.exists(configDirPath.resolve(STYLE_FILE_NAME))){
-                Files.createFile(configDirPath.resolve(STYLE_FILE_NAME));
-            }
-            if (!Files.exists(configDirPath.resolve(MENTION_FILE_NAME))){
-                Files.createFile(configDirPath.resolve(MENTION_FILE_NAME));
-            }
 
-            writeConfig();
+            JsonObject jsonConfig = gson.toJsonTree(config).getAsJsonObject();
+            createConfig(STYLE_FILE_NAME,jsonConfig.remove("stylingRules").getAsJsonObject());
+            createConfig(MENTION_FILE_NAME,jsonConfig.remove("mentionRules").getAsJsonObject());
+            createConfig(CONFIG_FILE_NAME,jsonConfig);
         } catch (IOException e) {
             EmbellishChat.LOGGER.warn("Failed to create config files. Using default settings.", e);
         }
+    }
+
+    private void createConfig(String file,JsonObject object) throws IOException {
+        if (Files.exists(configDirPath.resolve(file))) return;
+        Files.createFile(configDirPath.resolve(file));
+        writeJsonFile(file,object);
     }
 
     public boolean readConfig() {
