@@ -1,24 +1,34 @@
 # Embellish Chat for Fabric
 
-**Embellish Chat** is a Fabric mod that enhances the chat experience on Minecraft servers. It makes player communication more expressive and convenient with Discord-like Markdown-style formatting, mentions, clickable links, and mention notifications.
+Embellish Chat modernizes your Minecraft server’s chat experience with a fully server-side design. It introduces Markdown-style formatting, interactive message events, and a robust mention system—no client installation required.
 
 ---
 
 ## ✨ Key Features
 
-* **Markdown‑Style Formatting**: Bold, italic, underline, strikethrough, obfuscation, color, custom font, and links. Works in public chat, private messages, and commands.
-* **Mention System**: Mention individual players, your team, everyone, or nearby players with `@`. Online targets receive a notification; mentions auto‑tint to the player/team color.
-* **Message Metadata**: Hover to see the send time, and click a message to copy it to the clipboard.
-* **Show off your items**: Use the \[i] and \[inv] syntax to showcase your items to other players.
+* **Rich Text Formatting**
+    * Express yourself with **bold**, *italic*, __underline__, ~~strikethrough~~, ||obfuscation||, and custom fonts.
+    * Supports advanced color options including Hex codes, Gradients, Presets, and Rainbow patterns.
+    * Works consistently across public chat, private messages (DMs), and commands.
+* **Advanced Mention System**
+    * Ping specific players, teams, `@everyone`, or `@here` with visual and auditory notifications.
+    * Mention text automatically adapts to the target's color (e.g., team color).
+    * Supports detailed targeting like LuckPerms groups (`@group`) and specific worlds (`@world`).
+* **Item & Inventory Showcase**
+    * Instantly share your gear! Type `[i]` to link your held item or `[inv]` for your entire inventory.
+    * Other players can hover over the link to view detailed item tooltips.
+* **Chat Utilities**
+    * **Metadata:** Hover over any message to see the exact timestamp.
+    * **Quick Copy:** Click on any message to instantly copy its content to your clipboard.
 
 ---
 
 ## 🛠️ Styling System
 
-Use the following patterns directly in the chat window:
+Use the following patterns directly in the chat window to apply styles:
 
 | Feature          | Syntax                  | Example                                                       | Showcase                                                                                                            |
-|------------------|-------------------------|---------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|
+|:-----------------|:------------------------|:--------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------|
 | Bold             | `**Text**`              | `**You really need to read this!**`                           | ![Bold](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Bold.png?raw=true)             |
 | Italic           | `_Text_`                | `_This is top secret..._`                                     | ![Italic](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Italic.png?raw=true)         |
 | Underline        | `__Text__`              | `__Check this out__`                                          | ![Underline](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Underline.png?raw=true)   |
@@ -36,63 +46,61 @@ Use the following patterns directly in the chat window:
 
 > **Notes**
 >
-> * For security, the **Link** feature only recognizes URLs using the `https://` protocol.
-> * *Preset* values depend on the mod's configuration (e.g., `pink`, `blue`, etc.).
-> * `path` for **Font** accepts a namespaced ID such as `minecraft:alt`.
-> * If multiple style types exist and no preset is configured, the user can enter one manually. The separator can be checked through /ec help style.
-> * The table above shows only the most common styles. Embellish Chat supports many additional style types. For more details, please refer to [StyleWiki](https://hanhy06.github.io/embellish-chat/site/style/StyleSystem/)
+> * **Links:** Only `https://` URLs are supported for security.
+> * **Colors:** Presets (e.g., `pink`) are defined in the mod configuration.
+> * **Fonts:** The `path` requires a namespaced ID (e.g., `minecraft:alt`).
+> * **More Info:** For advanced syntax, style combinations, and detailed rules, refer to `/ec help style` or the [StyleWiki](https://hanhy06.github.io/embellish-chat/site/style/StyleSystem/).
 
 ---
 
 ## 🗣️ Mention System
 
-| Target         | Behavior                                                                                                                                                                                                                                           |
-|----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `@PlayerName`  | Mentions a specific player. If the player is online, the mention adopts the player’s display name style. If the player is offline or does not exist, it still follows the player's team style if available.                                        |
-| `@team(name)`  | Mentions all players in the specified team.                                                                                                                                                                                                        |
-| `@group(name)` | Mentions all players in the specified LuckPerms group.                                                                                                                                                                                             |
-| `@world(name)` | Mentions all players in the specified world.                                                                                                                                                                                                       |
-| `@everyone`    | Mentions all players on the server.                                                                                                                                                                                                                |
-| `@here`        | Mentions all players within a configurable radius in the same world as the sender. The default radius is **64 blocks**, adjustable in the configuration.                                                                                           |
-
+| Target         | Behavior                                                                                                |
+|:---------------|:--------------------------------------------------------------------------------------------------------|
+| `@PlayerName`  | Mentions a specific player. Uses their display name style if online, or falls back to their team style. |
+| `@team(name)`  | Mentions all players in the specified team.                                                             |
+| `@group(name)` | Mentions all players in the specified **LuckPerms** group.                                              |
+| `@world(name)` | Mentions all players in the specified world.                                                            |
+| `@everyone`    | Mentions every player on the server.                                                                    |
+| `@here`        | Mentions players within a configurable radius (default: **64 blocks**) in the same world.               |
 
 > **Notes**
 >
-> * Online mention targets receive a notification, and the message is automatically styled using the appropriate formatting rules.
-> * The mention notification sound uses the **UI** sound category by default. On **Minecraft 1.21.5 and earlier**, it falls back to the **PLAYER** category.
-> * `@group(name)` requires LuckPerms. Without it, the mention resolves to no players.
-> * `@team` and `@Player` mentions follow the color of their respective team. If the team has no color, the `defaultTeamColor` value is used.
-> * Other mention types can have their color customized by modifying the `styleRule` value.
-> * The table above shows only the most common mentions. Embellish Chat supports many additional mention types. For more details, please refer to [MentionWiki](https://hanhy06.github.io/embellish-chat/site/mention/MentionSystem/)
+> * **Behavior:** Successful mentions send a notification sound to the target and automatically tint the text (e.g., to the team color).
+> * **Dependencies:** `@group` requires **LuckPerms**. Without it, the mention will be ignored.
+> * **Colors:** `@team` and `@Player` use their respective team colors. If no team color is set, the `defaultTeamColor` from the config is used.
+> * **Sound:** The notification sound uses the **UI** category (falls back to the **PLAYER** category on Minecraft 1.21.5 and earlier).
+> * **More Info:** For a full list of mention types and advanced usage, refer to [MentionWiki](https://hanhy06.github.io/embellish-chat/site/mention/MentionSystem/).
 
 ---
 
 ## ⌨️ Commands
 
-* **`/embellish-chat reload`** — Reloads the configuration from `config/embellish-chat.json`.
-* **`/embellish-chat ban <player>`** — Prevents the specified player from using any features provided by the mod.
-* **`/embellish-chat pardon <player>`** — Restores access to all features provided by the mod for the specified player.
-* **`/embellish-chat test regex <regex> <test>`** - Compiles the `<regex>` pattern and tests it against the `<test>` string.
-* **`/embellish-chat test stress <count> <test>`** - Sends a simulated message containing `<test>` exactly `<count>` times with the permissions of the user who executed the command, and processes it the same way as a real message.
+### Operator Commands
+> Requires **OP Level 2** (or `GAMEMASTERS_CHECK` on 1.21.11+).
 
-* **`/ec help mention`** - Displays the currently available mentions, how to use them, the mention targets, and the applicable style types.
-* **`/ec help style`** - Displays the currently available styles, how to use them, the applicable style types, and the required input options.
-* **`/ec notification`** - Allows you to decide whether to receive a notification when you are mentioned.
+* **`/embellish-chat reload`** Reloads the configuration from `config/embellish-chat.json` immediately.
+* **`/embellish-chat ban/pardon <player>`** Blocks or restores a player's access to all mod features.
+* **`/embellish-chat test regex <regex> <test>`** Compiles a regex pattern and tests it against a string for debugging purposes.
+* **`/embellish-chat test stress <count> <test>`** Simulates `<count>` messages to stress-test the server's processing performance.
 
-> **Notes**
->
-> * All commands in the /embellish-chat family require OP level 2. On Minecraft 1.21.11 and later, this is checked using GAMEMASTERS_CHECK instead.
-> * Commands in the /ec family do not require any OP level and can be used by all users.
-> * Through ```notificationCommandEnable```, you can configure whether users are allowed to set their notification preferences using /ec notification. If ```notificationCommandEnable``` is false, the user’s preference is ignored and notifications are sent for all mentions.
+### User Commands
+> Available to **all players** (no permission required).
+
+* **`/ec help mention`** Displays the list of available mention targets and usage guides.
+* **`/ec help style`** Displays the list of available styles, presets, and syntax guides.
+* **`/ec notification`** Toggles your personal mention notification preferences. *(This command is controlled by `notificationCommandEnable` in the configuration).*
 
 ---
 
 ## ⚙️ Configuration
 
-The configuration file is located at: `config/embellish-chat.json`.
+Embellish Chat provides powerful functionality through the use of regular expressions.
+Because regular expressions are inherently difficult, it is recommended to leverage various AI tools for rule creation and optimization.
 
-### Sample
+### Config
 
+The configuration file is located at `config/embellish-chat/config.json`.
 ```
 {
   //version
@@ -115,143 +123,120 @@ The configuration file is located at: `config/embellish-chat.json`.
   "bannedPlayerList": [],
   "notificationOffPlayerList": [],
   
-  //discord webhook
+  //webhook
   "webhook": ""
 }
 ```
 
-> **Notes**
-> * The `delimiter` is internally processed using a regular expression. If you want to use a special character like `|` as a separator, please enter the escaped version of the delimiter.
-> * If the `defaultTeamColor` value is missing or `null`, it will not be automatically colored.
-> * You can specify the mention cooldown time (in seconds) through the config. When the cooldown time is set to 0, there are no restrictions.
+* The `version` field must not be modified manually.
+* The core configuration logic is defined in `stylingRules` and `mentionRules`.
+* Rules are processed from top to bottom, so placing a catch-all rule earlier may override more specific rules defined below.
+* The `delimiter` value is internally handled as a regular expression; special characters such as `|` must be properly escaped.
+* If `defaultTeamColor` is missing or set to `null`, automatic coloring will not be applied.
+* To avoid JSON syntax errors and ensure valid configurations, using the **[Web Config Generator](https://hanhy06.github.io/embellish-chat/site/config-generator.html)** is strongly recommended:
 
----
+### Styling
 
-## Configurations
-
-### This document dives into the detailed configuration structure. But hey, don’t forget — we have a web [config-generator.html](https://hanhy06.github.io/embellish-chat/site/config-generator.html)!
-
-## Styling Configuration
-
-Embellish Chat, powered by regular expressions, provides highly flexible styling for nearly any chat pattern imaginable.
-Since every message must be scanned, extremely large servers may experience additional overhead. (It is expected to have no significant performance impact on typical general servers.)
-Furthermore, creating custom rules can be challenging because regular expressions (regex) are inherently complex. We recommend using various AI tools for assistance with rule creation and optimization.
-
-<span style="color:red">
-In this mod, the order of mention rules and styling rules is extremely important!
-Depending on the order, serious bugs may occur, so please be careful.  
-The mod applies mentions and styling strictly from top to bottom in the given order.
-</span>
-
-### Style Rule Structure
-
-This section defines the text styling rules.<br>
-Each rule consists of a regular expression (`pattern`) and a style action list(`styles`).
-
+The configuration file is located at `config/embellish-chat/styles.json`.
 ```
 {
-  "pattern": "\\*\\*(.+?)\\*\\*()",
-  "styles": [
-    {
-      "styleType": "BOLD",
-      "preset": ""
-    }
-  ]
+  "stylingRules": {
+    "embellish-chat.chat": [
+      {
+        "pattern": " ... ",
+        "styles": [
+          {
+            "styleType": " ... ",
+            "preset": " ... "
+          }
+        ]
+      }
+      ...
+    ],
+    "embellish-chat.command_argument": []
+  }
 }
 ```
 
-* **pattern** Must contain **two capturing groups**:
-    1) the text to apply the style to
-    2) an optional captured value that can be passed as an argument.
-  * **styles** This is a list of style actions. Each action consists of a style type (`styleType`) and style option preset(`preset`).
+* **`pattern`**: This is a regular expression for scanning text. It must have two capture groups.
+    * `group 1`: This is text to be styled.
+    * `group 2`: This is text passed as an option.
+* **`styles`**: Defines the styles to be applied to captured group 1.
+    * `styleType`: This is the style type. You can use all types listed in the table above.
+    * `preset`: This is a preset value. If a value is provided, it is always used; if it is empty, the content of the user's captured group 2 is used instead.
 
-you can see more detail in [StyleWiki](https://hanhy06.github.io/embellish-chat/site/style/StyleSystem/)
+### Mention
 
----
-
-## Mention Configuration
-
-A mention rule is applied only when the message satisfies all targets specified in the rule — effectively using the intersection of all mention targets.
-
-### Mention Rule Structure
-
-This section defines the mention rules.<br>
-regular expression (`pattern`), notification settings (`title`, `cooldown`, `sound`), mention action list(`mentions`) and style action list(`styles`).
-
+The configuration file is located at `config/embellish-chat/mentions.json`.
 ```
 {
-  "pattern": "@here()",
-  "title": "%player:displayname% mentioned you",
-  "cooldown": 0,
-  "sound": {
-    "id": "minecraft:entity.experience_orb.pickup",
-    "category": "UI",
-    "volume": 1.0,
-    "pitch": 1.75
-  },
-  "mentions": [
-    {
-      "mentionType": "INSIDE",
-      "preset": "64"
-    }
-  ],
-  "styles": [
-    {
-      "styleType": "BOLD",
-      "preset": ""
-    },
-    {
-      "styleType": "COLOR_PRESET",
-      "preset": "light purple"
-    }
-  ]
+  "mentionRules": {
+    "embellish-chat.mention": [
+      {
+        "pattern": " ... ",
+        "title": " ... ",
+        "cooldown": 0,
+        "onlyTarget": false,
+        "sound": { ... },
+        "mentions": [
+          {
+            "mentionType": " ... ",
+            "preset": " ... "
+          }
+        ],
+        "styles": [ ... ]
+      }
+      ...
+    ]
+  }
 }
 ```
 
-* **pattern** must contain one capturing group, which represents the mention option. For example, this could be a team name or a LuckPerms group name.
-  * **title** The title that appears on the mentioned player's screen. Supports the Text Placeholder API, where %player:displayname% is the name of the player who sent the mention.
-  * **cooldown** Mention cooldown time in seconds. Set to 0 for no cooldown.
-  * **sound** Defines the notification sound settings. Contains `id` (sound identifier), `category` (sound category), `volume`, and `pitch`.
-  * **mentions** A list of mention actions. Each action specifies a `mentionType` and an optional `preset`.
-  * **styles** A list of style actions. Works the same way as in the styling rules section.
+* **`pattern`**: This is a regular expression for scanning text. It must have one capture group.
+    * This is the mention option (e.g. team name, LuckPerms group).
+* **`title`**: This is the title shown on the mentioned player's screen.
+    * `%player:displayname%` is the display name of the player who sent the mention.
+* **`cooldown`**: This is the mention cooldown time in seconds.
+    * Set to `0` to disable the cooldown.
+* **`onlyTarget`**:
+    * When set to true, prevents the message from being broadcast globally and sends it only to the target.
+* **`sound`**: Defines the notification sound settings.
+    * `id`: Sound identifier.
+    * `category`: Sound category.
+    * `volume`: Sound volume.
+    * `pitch`: Sound pitch.
+* **`mentions`**: Defines the mention actions to be executed.
+    * `mentionType`: This is the type of mention action.
+    * `preset`: This is an optional preset value.
+* **`styles`**: Defines the styles to be applied when the mention is triggered.
+    * Works the same way as in the styling rules section.
 
-you can see more detail in [MentionWiki](https://hanhy06.github.io/embellish-chat/site/mention/MentionSystem/)
 
 ---
-
 ## 📜 Compatibility
 
-### Supported
+### ✅ Fully Supported
 
-* ✅ **fabric-permissions-api** (Embedded)
-    - Keys in `stylingRules` and `mentionRules` represent permissions (e.g., chat, command, mention).
-    - Checks rules from top to bottom and applies them based on the user's permissions.
+* **Fabric Permissions API (Embedded)**
+    * The keys defined in `stylingRules` and `mentionRules` directly function as permission nodes.
+    * Rules are evaluated from top to bottom based on the player's permissions.
+* **Placeholder API**
+    * Supports dynamic placeholders in mention titles and style presets.
+    * **Exclusive:** Use `%embellish-chat:content%` to access the raw, unparsed chat message.
+* **LuckPerms**
+    * **Required** for the `@group` mention type. Without it, group mentions will be ignored.
+* **Geyser (Bedrock Edition)**
+    * Mentions between Java and Bedrock editions work seamlessly.
+    * *Note:* Advanced styling (hover text, click events) may not fully render on Bedrock clients.
+* **Chat Heads**
+    * Fully compatible.
 
-* ✅ **placeholder-api** (Embedded)
-    - Supports dynamic data in mention titles, all presets used in rules, and user-configurable options.
-    - Provides a custom placeholder `%embellish-chat:content%` for accessing the raw, unparsed chat message.
+### ❗ Known Conflicts
 
-* ✅ **LuckPerms**
-    - Required for the `@group` mention type (`LUCK_PERMS_GROUP`).
-    - Without LuckPerms, group mention features have no effect.
-
-* ✅ **Geyser**
-    - Supports JE-BE mentions
-    - Supports chat styling (color, hover, and click events are not fully rendered on be)
-
-[//]: # (* ✅ **Advanced Chat** &#40;[by Wesley1808]&#40;https://modrinth.com/mod/advanced-chat&#41;/It adds channels and other features different from DarkKronicle’s **AdvancedChatCore series**.&#41;)
-
-* ✅ **Chat Heads**
-
-[//]: # (* ✅ **No Chat Reports**)
-
-### Not Supported
-
-* ❗ **Styled Chat**
-    - When **Styled Chat** and **Embellish Chat** are used together, **Styled Chat takes priority**, and **Embellish Chat styling is not applied**.
-    - However, **Embellish Chat’s mention (notification) feature still works**.
-    - If both mods must be used simultaneously, you should remove all contents within Embellish Chat’s stylingRules. Otherwise, Embellish Chat will continue to perform style calculations in the background, causing unnecessary performance overhead.
-
+* **Styled Chat**
+    * **Styled Chat takes priority.** If installed, Embellish Chat's *styling* features will be overridden.
+    * **Mentions still work:** The mention and notification system remains functional.
+    * **Performance Tip:** If you must use both, remove all entries in Embellish Chat's `stylingRules` to prevent unnecessary background processing.
 ---
 ## 📊 Performance
 

@@ -15,8 +15,8 @@
 ```
 
 * **`pattern`**: This is a regular expression for scanning text. It must have two capture groups.
-    * 1) This is text to be styled.
-    * 2) This is text passed as an option.
+    * `group 1`: This is text to be styled.
+    * `group 2`: This is text passed as an option.
 * **`styles`**: Defines the styles to be applied to captured group 1.
     * `styleType`: This is the style type. You can use all types listed in the table above.
     * `preset`: This is a preset value. If a value is provided, it is always used; if it is empty, the content of the user's captured group 2 is used instead.
