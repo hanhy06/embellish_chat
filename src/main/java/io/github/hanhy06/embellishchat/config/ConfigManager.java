@@ -12,7 +12,6 @@ import net.minecraft.util.Identifier;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -71,6 +70,8 @@ public class ConfigManager {
         if (Files.exists(configDirPath.resolve(file))) return;
         Files.createFile(configDirPath.resolve(file));
         writeJsonFile(file,object);
+
+        EmbellishChat.LOGGER.info("{} not found. Using a generated default.",file);
     }
 
     public boolean readConfig() {

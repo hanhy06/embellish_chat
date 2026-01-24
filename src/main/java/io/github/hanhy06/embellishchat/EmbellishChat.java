@@ -55,6 +55,6 @@ public class EmbellishChat implements ModInitializer {
         manager.addListener(message);
 		manager.readConfig();
 
-		LOGGER.info("[{}] initialized successfully.", MOD_ID.toUpperCase());
+		LOGGER.info("[{}] initialized successfully.", MOD_ID);
 	}
 }
