@@ -1,9 +1,6 @@
 package io.github.hanhy06.embellishchat.config;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.Strictness;
+import com.google.gson.*;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.adapter.ColorTypeAdapter;
 import io.github.hanhy06.embellishchat.config.adapter.IdentifierTypeAdapter;
@@ -27,88 +24,140 @@ import java.util.regex.Pattern;
 public class ConfigManager {
     public static ConfigManager INSTANCE;
 
-    private static final String CONFIG_FILE_NAME = EmbellishChat.MOD_ID+".json";
-    private final Path configFilePath;
+    private static final String CONFIG_FILE_DIR = EmbellishChat.MOD_ID;
+    private static final String CONFIG_FILE_NAME = "config.json";
+    private static final String STYLE_FILE_NAME = "styles.json";
+    private static final String MENTION_FILE_NAME = "mentions.json";
+
+    private final Path configDirPath;
     private Config config = Config.createDefault();
 
     private final List<ConfigListener> listeners = new ArrayList<>();
 
     private final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(Pattern.class,new PatternTypeAdapter())
-            .registerTypeAdapter(SoundEvent.class,new SoundEventTypeAdapter())
-            .registerTypeAdapter(Color.class,new ColorTypeAdapter())
-            .registerTypeAdapter(Identifier.class,new IdentifierTypeAdapter())
+            .registerTypeAdapter(Pattern.class, new PatternTypeAdapter())
+            .registerTypeAdapter(SoundEvent.class, new SoundEventTypeAdapter())
+            .registerTypeAdapter(Color.class, new ColorTypeAdapter())
+            .registerTypeAdapter(Identifier.class, new IdentifierTypeAdapter())
             .setPrettyPrinting()
             .setStrictness(Strictness.LENIENT)
             .disableHtmlEscaping()
             .create();
 
-    public static Config getConfig(){
+    public static Config getConfig() {
         return INSTANCE.config;
     }
 
-    public ConfigManager(Path configDirPath){
+    public ConfigManager(Path configBasePath) {
         INSTANCE = this;
+        this.configDirPath = configBasePath.resolve(CONFIG_FILE_DIR);
 
-        this.configFilePath = configDirPath.resolve(CONFIG_FILE_NAME);
-
-        if(!Files.exists(configFilePath)){
-            try {
-                Files.createFile(configFilePath);
-                writeConfig();
-            } catch (IOException e) {
-                EmbellishChat.LOGGER.warn("Failed to create config file. Using default settings.", e);
+        try {
+            if (!Files.exists(configDirPath)) {
+                Files.createDirectories(configDirPath);
             }
+            if (!Files.exists(configDirPath.resolve(CONFIG_FILE_NAME))){
+                Files.createFile(configDirPath.resolve(CONFIG_FILE_NAME));
+            }
+            if (!Files.exists(configDirPath.resolve(STYLE_FILE_NAME))){
+                Files.createFile(configDirPath.resolve(STYLE_FILE_NAME));
+            }
+            if (!Files.exists(configDirPath.resolve(MENTION_FILE_NAME))){
+                Files.createFile(configDirPath.resolve(MENTION_FILE_NAME));
+            }
+
+            writeConfig();
+        } catch (IOException e) {
+            EmbellishChat.LOGGER.warn("Failed to create config files. Using default settings.", e);
         }
     }
 
-    public boolean readConfig(){
-        Config loaded = null;
+    public boolean readConfig() {
+        Config defaultConfig = Config.createDefault();
 
-        try (BufferedReader reader = Files.newBufferedReader(configFilePath, StandardCharsets.UTF_8)) {
-            loaded = gson.fromJson(reader, Config.class);
-        } catch (IOException e) {
-            EmbellishChat.LOGGER.error("Failed to read config file: {}. Using default values.", configFilePath, e);
+        JsonObject configJson = readJsonFile(CONFIG_FILE_NAME);
+        JsonObject stylesJson = readJsonFile(STYLE_FILE_NAME);
+        JsonObject mentionsJson = readJsonFile(MENTION_FILE_NAME);
+
+        JsonObject merged = configJson != null ? configJson : new JsonObject();
+
+        if (stylesJson != null && stylesJson.has("stylingRules")) {
+            merged.add("stylingRules", stylesJson.get("stylingRules"));
+        }
+        if (mentionsJson != null && mentionsJson.has("mentionRules")) {
+            merged.add("mentionRules", mentionsJson.get("mentionRules"));
+        }
+
+        try {
+            Config loaded = gson.fromJson(merged, Config.class);
+
+            if (loaded != null && loaded.version() != null && loaded.version().equals(defaultConfig.version())) {
+                config = loaded;
+                broadcastConfig();
+                EmbellishChat.LOGGER.info("Config loaded successfully.");
+                return true;
+            } else {
+                EmbellishChat.LOGGER.warn("Config version mismatch or invalid. Using default config.");
+            }
         } catch (JsonSyntaxException e) {
-            EmbellishChat.LOGGER.error("Failed to parse config file: {}. Check JSON syntax. Using default values.", configFilePath, e);
-        } catch (Exception e) {
-            EmbellishChat.LOGGER.error("Unexpected error loading config file: {}. Using default values.", configFilePath, e);
+            EmbellishChat.LOGGER.error("Failed to parse merged config. Using default values.", e);
         }
 
-        if (loaded != null && loaded.version() != null && loaded.version().equals(config.version())) {
-            config = loaded;
-            broadcastConfig();
-            EmbellishChat.LOGGER.info("Config loaded successfully.");
-            return true;
-        } else if (loaded != null) {
-            broadcastConfig();
-            EmbellishChat.LOGGER.warn("Config version mismatch or missing. Using default config. Please review and update your config file.");
-            return false;
-        } else {
-            broadcastConfig();
-            EmbellishChat.LOGGER.warn("Config file is empty or invalid. Using default config.");
-            return false;
+        config = defaultConfig;
+        broadcastConfig();
+        return false;
+    }
+
+    private JsonObject readJsonFile(String fileName) {
+        Path filePath = configDirPath.resolve(fileName);
+        try (BufferedReader reader = Files.newBufferedReader(filePath, StandardCharsets.UTF_8)) {
+            JsonElement element = JsonParser.parseReader(reader);
+            return element.isJsonObject() ? element.getAsJsonObject() : null;
+        } catch (IOException | JsonSyntaxException e) {
+            EmbellishChat.LOGGER.warn("Failed to read {}: {}", fileName, e.getMessage());
+            return null;
         }
     }
 
-    public void writeConfig(){
-        try (BufferedWriter writer = Files.newBufferedWriter(configFilePath, StandardCharsets.UTF_8,
-                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
-            gson.toJson(config, writer);
-            EmbellishChat.LOGGER.info("Config saved successfully to {}", configFilePath);
+    public void writeConfig() {
+        JsonObject fullJson = gson.toJsonTree(config).getAsJsonObject();
+
+        JsonElement stylingRules = fullJson.remove("stylingRules");
+        JsonObject stylesJson = new JsonObject();
+        if (stylingRules != null) {
+            stylesJson.add("stylingRules", stylingRules);
+        }
+
+        JsonElement mentionRules = fullJson.remove("mentionRules");
+        JsonObject mentionsJson = new JsonObject();
+        if (mentionRules != null) {
+            mentionsJson.add("mentionRules", mentionRules);
+        }
+
+        writeJsonFile(CONFIG_FILE_NAME, fullJson);
+        writeJsonFile(STYLE_FILE_NAME, stylesJson);
+        writeJsonFile(MENTION_FILE_NAME, mentionsJson);
+    }
+
+    private void writeJsonFile(String fileName, JsonObject json) {
+        Path filePath = configDirPath.resolve(fileName);
+        try (BufferedWriter writer = Files.newBufferedWriter(
+                filePath, StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING
+        )) {
+            gson.toJson(json, writer);
+            EmbellishChat.LOGGER.info("Saved {}", fileName);
         } catch (IOException e) {
-            EmbellishChat.LOGGER.error("Failed to write config file: {}", configFilePath, e);
-        } catch (Exception e) {
-            EmbellishChat.LOGGER.error("Unexpected error saving config file: {}", configFilePath, e);
+            EmbellishChat.LOGGER.error("Failed to write {}: {}", fileName, e.getMessage());
         }
     }
 
-    public void addListener(ConfigListener listener){
+    public void addListener(ConfigListener listener) {
         listeners.add(listener);
     }
 
-    public void broadcastConfig(){
-        for (ConfigListener listener : listeners){
+    public void broadcastConfig() {
+        for (ConfigListener listener : listeners) {
             listener.onConfigReload(config);
         }
     }
