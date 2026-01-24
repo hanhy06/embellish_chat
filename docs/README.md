@@ -29,20 +29,20 @@ Use the following patterns directly in the chat window to apply styles:
 
 | Feature          | Syntax                  | Example                                                       | Showcase                                                                                                            |
 |:-----------------|:------------------------|:--------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------|
-| Bold             | `**Text**`              | `**You really need to read this!**`                           | ![Bold](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Bold.png?raw=true)             |
-| Italic           | `_Text_`                | `_This is top secret..._`                                     | ![Italic](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Italic.png?raw=true)         |
-| Underline        | `__Text__`              | `__Check this out__`                                          | ![Underline](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Underline.png?raw=true)   |
-| Strikethrough    | `~~Text~~`              | `~~We don’t talk about this anymore~~`                        | ![Strike](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Strikethrough.png?raw=true)  |
-| Obfuscated       | `\|\|Text\|\|`          | `\|\|Unreadable text\|\|`                                     | ![Obfuscated](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Obfuscated.gif?raw=true) |
-| Color (Hex)      | `[Text]<#RRGGBB>`       | `[Blue]<#0000FF> like the deep ocean`                         | ![Color](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Color_Hex.png?raw=true)       |
-| Color (Gradient) | `[Text]<#RRGGBB #R...>` | `[Grraaaaaaadieeeeent]<#ffaaaa #aaaaff #aaffaa>`              | ![Color](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Color_Gradient.png?raw=true)  |
-| Color (Preset)   | `[Text]<preset>`        | `[pink]<pink> pig`                                            | ![Color](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Color_Preset.png?raw=true)    |
-| Color (Rainbow)  | `[Text]<RAINBOW>`       | `look at this [rainbow]<RAINBOW>`                             | ![Color](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Color_Rainbow.png?raw=true)   |
-| Link             | `[Text](URL)`           | `Download it [here](https://modrinth.com/mod/embellish-chat)` | ![Link](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Link.gif?raw=true)             |
-| Font             | `[Text]{path}`          | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Font.png?raw=true)             |
-| Item             | `[i]`                   | `Look at my [i]`                                              | ![Item](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Item.png?raw=true)             |
-| Inventory        | `[inv]`                 | `Look at my [inv]`                                            | ![Inventory](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Inventory.png?raw=true)   |
-| Mention          | `@PlayerName`           | `Hello, @User`                                                | ![Mention](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Mention.png?raw=true)       |
+| Bold             | `**Text**`              | `**You really need to read this!**`                           | ![Bold](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Bold.png?raw=true)             |
+| Italic           | `_Text_`                | `_This is top secret..._`                                     | ![Italic](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Italic.png?raw=true)         |
+| Underline        | `__Text__`              | `__Check this out__`                                          | ![Underline](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Underline.png?raw=true)   |
+| Strikethrough    | `~~Text~~`              | `~~We don’t talk about this anymore~~`                        | ![Strike](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Strikethrough.png?raw=true)  |
+| Obfuscated       | `\|\|Text\|\|`          | `\|\|Unreadable text\|\|`                                     | ![Obfuscated](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Obfuscated.gif?raw=true) |
+| Color (Hex)      | `[Text]<#RRGGBB>`       | `[Blue]<#0000FF> like the deep ocean`                         | ![Color](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Color_Hex.png?raw=true)       |
+| Color (Gradient) | `[Text]<#RRGGBB #R...>` | `[Grraaaaaaadieeeeent]<#ffaaaa #aaaaff #aaffaa>`              | ![Color](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Color_Gradient.png?raw=true)  |
+| Color (Preset)   | `[Text]<preset>`        | `[pink]<pink> pig`                                            | ![Color](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Color_Preset.png?raw=true)    |
+| Color (Rainbow)  | `[Text]<RAINBOW>`       | `look at this [rainbow]<RAINBOW>`                             | ![Color](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Color_Rainbow.png?raw=true)   |
+| Link             | `[Text](URL)`           | `Download it [here](https://modrinth.com/mod/embellish-chat)` | ![Link](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Link.gif?raw=true)             |
+| Font             | `[Text]{path}`          | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Font.png?raw=true)             |
+| Item             | `[i]`                   | `Look at my [i]`                                              | ![Item](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Item.png?raw=true)             |
+| Inventory        | `[inv]`                 | `Look at my [inv]`                                            | ![Inventory](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Inventory.png?raw=true)   |
+| Mention          | `@PlayerName`           | `Hello, @User`                                                | ![Mention](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Mention.png?raw=true)       |
 
 > **Notes**
 >
@@ -250,7 +250,7 @@ They do **not** represent normal server conditions.
 - World: **Singleplayer, Superflat**
 - CPU: **13th Gen Intel(R) Core(TM) i7-1360P**
 
-- Max RAM for JVM: **4 GB**
+- Max RAM: **4 GB**
 - System: **Windows 11**
 - Config: **Default**
 
@@ -277,8 +277,8 @@ The messages used in the tests are:
 | Mixed        | 50     | `**Hey** @everyone! Look at [this]<red> _cool_ @here.`                                                                                                                                                                       |
 | Mixed        | 200    | `Attention @everyone! The **Boss Raid** is starting. @team(Red) please defend the [Core]<#FF0000>. @here gather at the gate! Watch out for the **hidden assassin**. The prize is [GOD SWORD]<RAINBOW>. Msg @Admin if stuck.` |
 
-![MSPT-50](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/MSPT3.0.0-50.png?raw=true)
-![MSPT-200](https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/MSPT3.0.0-200.png?raw=true)
+![MSPT-50](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/MSPT3.0.0-50.png?raw=true)
+![MSPT-200](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/MSPT3.0.0-200.png?raw=true)
 
 ---
 
