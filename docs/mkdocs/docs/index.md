@@ -76,21 +76,11 @@ Requires OP Level 2 or appropriate permissions.
 Embellish Chat provides powerful functionality through the use of regular expressions.
 Because regular expressions are inherently difficult, it is recommended to leverage various AI tools for rule creation and optimization.
 
-The configuration file is located at `config/embellish-chat.json`.
-
+The configuration file is located at `config/embellish-chat/config.json`.
 ```
 {
   //version
   "version": "3.1.0",
-  
-  //rule
-  "stylingRules": {
-    "embellish-chat.command_argument": [],
-    "embellish-chat.chat": [ ... ]
-  },
-  "mentionRules": {
-    "embellish-chat.mention": [ ... ]
-  },
   
   //preset
   "colorPreset": { ... },
@@ -111,6 +101,52 @@ The configuration file is located at `config/embellish-chat.json`.
   
   //webhook
   "webhook": ""
+}
+```
+
+The configuration file is located at `config/embellish-chat/styles.json`.
+```
+{
+  "stylingRules": {
+    "embellish-chat.chat": [
+      {
+        "pattern": " ... ",
+        "styles": [
+          {
+            "styleType": " ... ",
+            "preset": " ... "
+          }
+        ]
+      }
+      ...
+    ],
+    "embellish-chat.command_argument": []
+  }
+}
+```
+
+The configuration file is located at `config/embellish-chat/mentions.json`.
+```
+{
+  "mentionRules": {
+    "embellish-chat.mention": [
+      {
+        "pattern": " ... ",
+        "title": " ... ",
+        "cooldown": 0,
+        "onlyTarget": false,
+        "sound": { ... },
+        "mentions": [
+          {
+            "mentionType": " ... ",
+            "preset": " ... "
+          }
+        ],
+        "styles": [ ... ]
+      }
+      ...
+    ]
+  }
 }
 ```
 
