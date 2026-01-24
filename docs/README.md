@@ -89,7 +89,10 @@ Use the following patterns directly in the chat window:
 
 ## ⚙️ Configuration
 
-The configuration file is located at `config/embellish-chat/config.json`.
+The configuration file is located at: `config/embellish-chat.json`.
+
+### Sample
+
 ```
 {
   //version
@@ -112,54 +115,8 @@ The configuration file is located at `config/embellish-chat/config.json`.
   "bannedPlayerList": [],
   "notificationOffPlayerList": [],
   
-  //webhook
+  //discord webhook
   "webhook": ""
-}
-```
-
-The configuration file is located at `config/embellish-chat/styles.json`.
-```
-{
-  "stylingRules": {
-    "embellish-chat.chat": [
-      {
-        "pattern": " ... ",
-        "styles": [
-          {
-            "styleType": " ... ",
-            "preset": " ... "
-          }
-        ]
-      }
-      ...
-    ],
-    "embellish-chat.command_argument": []
-  }
-}
-```
-
-The configuration file is located at `config/embellish-chat/mentions.json`.
-```
-{
-  "mentionRules": {
-    "embellish-chat.mention": [
-      {
-        "pattern": " ... ",
-        "title": " ... ",
-        "cooldown": 0,
-        "onlyTarget": false,
-        "sound": { ... },
-        "mentions": [
-          {
-            "mentionType": " ... ",
-            "preset": " ... "
-          }
-        ],
-        "styles": [ ... ]
-      }
-      ...
-    ]
-  }
 }
 ```
 
