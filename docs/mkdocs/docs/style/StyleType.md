@@ -112,6 +112,7 @@
 * `SHOW_INVENTORY`
     * Displays the user’s face. Clicking it shows the user’s inventory snapshot.
     * This style type must be placed at the very bottom.
+    * The inventory snapshot is cleared when the player leaves the server.
     * **Option:** `None`
 * `ATLAS_PRESET`
     * Uses a predefined atlas name from the `atlasPreset` section.

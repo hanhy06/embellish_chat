@@ -14,8 +14,8 @@ Embellish Chat modernizes your Minecraft server’s chat experience with a fully
     * Ping specific players, teams, `@everyone`, or `@here` with visual and auditory notifications.
     * Mention text automatically adapts to the target's color (e.g., team color).
     * Supports detailed targeting like LuckPerms groups (`@group`) and specific worlds (`@world`).
-* **Item & Inventory Showcase**
-    * Instantly share your gear! Type `[i]` to link your held item or `[inv]` for your entire inventory.
+* **Instantly show off your gear!**
+    * Type `[i]` to display the item you’re holding, or `[inv]` to display your entire inventory.
     * Other players can hover over the link to view detailed item tooltips.
 * **Chat Utilities**
     * **Metadata:** Hover over any message to see the exact timestamp.
@@ -55,14 +55,14 @@ Use the following patterns directly in the chat window to apply styles:
 
 ## 🗣️ Mention System
 
-| Target         | Behavior                                                                                                |
-|:---------------|:--------------------------------------------------------------------------------------------------------|
-| `@PlayerName`  | Mentions a specific player. Uses their display name style if online, or falls back to their team style. |
-| `@team(name)`  | Mentions all players in the specified team.                                                             |
-| `@group(name)` | Mentions all players in the specified **LuckPerms** group.                                              |
-| `@world(name)` | Mentions all players in the specified world.                                                            |
-| `@everyone`    | Mentions every player on the server.                                                                    |
-| `@here`        | Mentions players within a configurable radius (default: **64 blocks**) in the same world.               |
+| Target         | Behavior                                                                                  |
+|:---------------|:------------------------------------------------------------------------------------------|
+| `@PlayerName`  | Mentions a specific player.                                                               |
+| `@team(name)`  | Mentions all players in the specified team.                                               |
+| `@group(name)` | Mentions all players in the specified **LuckPerms** group.                                |
+| `@world(name)` | Mentions all players in the specified world.                                              |
+| `@everyone`    | Mentions every player on the server.                                                      |
+| `@here`        | Mentions players within a configurable radius (default: **64 blocks**) in the same world. |
 
 > **Notes**
 >
@@ -79,7 +79,7 @@ Use the following patterns directly in the chat window to apply styles:
 ### Operator Commands
 > Requires **OP Level 2** (or `GAMEMASTERS_CHECK` on 1.21.11+).
 
-* **`/embellish-chat reload`** Reloads the configuration from `config/embellish-chat.json` immediately.
+* **`/embellish-chat reload`** Reloads all configuration files under `/config/embellish-chat/` immediately.
 * **`/embellish-chat ban/pardon <player>`** Blocks or restores a player's access to all mod features.
 * **`/embellish-chat test regex <regex> <test>`** Compiles a regex pattern and tests it against a string for debugging purposes.
 * **`/embellish-chat test stress <count> <test>`** Simulates `<count>` messages to stress-test the server's processing performance.
@@ -87,6 +87,7 @@ Use the following patterns directly in the chat window to apply styles:
 ### User Commands
 > Available to **all players** (no permission required).
 
+* **`/ec open <player>`** Opens the last shared inventory of the specified player.
 * **`/ec help mention`** Displays the list of available mention targets and usage guides.
 * **`/ec help style`** Displays the list of available styles, presets, and syntax guides.
 * **`/ec notification`** Toggles your personal mention notification preferences. *(This command is controlled by `notificationCommandEnable` in the configuration).*
