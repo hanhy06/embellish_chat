@@ -250,7 +250,6 @@ They do **not** represent normal server conditions.
 - Minecraft: **1.21.11**
 - World: **Singleplayer, Superflat**
 - CPU: **13th Gen Intel(R) Core(TM) i7-1360P**
-
 - Max RAM: **4 GB**
 - System: **Windows 11**
 - Config: **Default**
