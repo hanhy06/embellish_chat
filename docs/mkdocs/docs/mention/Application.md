@@ -87,7 +87,7 @@ Typing `[notification]` will send an alert to everyone.
 
 ```
 {
-  "pattern": "#Admin()",
+  "pattern": "#staff()",
   "title": "",
   "onlyTarget": true,
   "cooldown": 0,
@@ -112,6 +112,5 @@ Typing `[notification]` will send an alert to everyone.
 ```
 
 By setting `"onlyTarget": true`, you can use the mention system as a private chat channel.
-In this example, messages starting with #Admin will not be broadcast to the global chat.
-Instead, they will be sent exclusively to players in the admin LuckPerms group. 
-This allows you to easily create private channels like Staff Chat or Team Chat without needing separate commands.
+In this example, messages starting with #staff will not be broadcast to the global chat.
+Instead, they will be sent exclusively to players in the staff LuckPerms group.
