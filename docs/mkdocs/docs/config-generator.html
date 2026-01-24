@@ -55,309 +55,9 @@
         "MASTER", "MUSIC", "RECORDS", "WEATHER", "BLOCKS", "HOSTILE", "NEUTRAL", "PLAYERS", "AMBIENT", "VOICE", "UI"
     ];
 
+    // Default config.json
     const DEFAULT_CONFIG = {
-      "version": "3.0.0",
-      "stylingRules": {
-        "embellish-chat.command_argument": [],
-        "embellish-chat.chat": [
-          {
-            "pattern": "\\[([^\\]]+?)]\\((https://.*?)\\)",
-            "styles": [
-              {
-                "styleType": "URL",
-                "preset": ""
-              }
-            ]
-          },
-          {
-            "pattern": "((https://\\S+))",
-            "styles": [
-              {
-                "styleType": "URL",
-                "preset": ""
-              }
-            ]
-          },
-          {
-            "pattern": "\\[([^\\]]+?)]\\{(.*?)}",
-            "styles": [
-              {
-                "styleType": "FONT",
-                "preset": ""
-              }
-            ]
-          },
-          {
-            "pattern": "\\[([^\\]]+?)]<(#.{6})>",
-            "styles": [
-              {
-                "styleType": "COLOR_HEX",
-                "preset": ""
-              }
-            ]
-          },
-          {
-            "pattern": "\\[([^\\]]+?)]<(#.{6,})>",
-            "styles": [
-              {
-                "styleType": "COLOR_GRADIENT",
-                "preset": ""
-              }
-            ]
-          },
-          {
-            "pattern": "\\[([^\\]]+?)]<([a-z\\s]+?)>",
-            "styles": [
-              {
-                "styleType": "COLOR_PRESET",
-                "preset": ""
-              }
-            ]
-          },
-          {
-            "pattern": "\\*\\*(.+?)\\*\\*()",
-            "styles": [
-              {
-                "styleType": "BOLD",
-                "preset": ""
-              }
-            ]
-          },
-          {
-            "pattern": "__(.+?)__()",
-            "styles": [
-              {
-                "styleType": "UNDERLINE",
-                "preset": ""
-              }
-            ]
-          },
-          {
-            "pattern": "_(.+?)_()",
-            "styles": [
-              {
-                "styleType": "ITALIC",
-                "preset": ""
-              }
-            ]
-          },
-          {
-            "pattern": "~~(.+?)~~()",
-            "styles": [
-              {
-                "styleType": "STRIKETHROUGH",
-                "preset": ""
-              }
-            ]
-          },
-          {
-            "pattern": "\\|\\|(.+?)\\|\\|()",
-            "styles": [
-              {
-                "styleType": "OBFUSCATED",
-                "preset": ""
-              }
-            ]
-          },
-          {
-            "pattern": "\\[([^\\]]+?)]<(RAINBOW)>",
-            "styles": [
-              {
-                "styleType": "COLOR_RAINBOW",
-                "preset": "0.7"
-              }
-            ]
-          },
-          {
-            "pattern": "(.+)()",
-            "styles": [
-              {
-                "styleType": "METADATA",
-                "preset": ""
-              }
-            ]
-          },
-          {
-            "pattern": "(\\[i\\])()",
-            "styles": [
-              {
-                "styleType": "SHOW_ITEM",
-                "preset": ""
-              }
-            ]
-          },
-          {
-            "pattern": "(\\[inv\\])()",
-            "styles": [
-              {
-                "styleType": "SHOW_INVENTORY",
-                "preset": ""
-              }
-            ]
-          }
-        ]
-      },
-      "mentionRules": {
-        "embellish-chat.mention": [
-          {
-            "pattern": "@here()",
-            "title": "%player:displayname% mentioned you",
-            "cooldown": 0,
-            "sound": {
-              "id": "minecraft:entity.experience_orb.pickup",
-              "category": "UI",
-              "volume": 1.0,
-              "pitch": 1.75
-            },
-            "mentions": [
-              {
-                "mentionType": "INSIDE",
-                "preset": "64"
-              }
-            ],
-            "styles": [
-              {
-                "styleType": "BOLD",
-                "preset": ""
-              },
-              {
-                "styleType": "COLOR_PRESET",
-                "preset": "light purple"
-              }
-            ]
-          },
-          {
-            "pattern": "@everyone()",
-            "title": "%player:displayname% mentioned you",
-            "cooldown": 0,
-            "sound": {
-              "id": "minecraft:entity.experience_orb.pickup",
-              "category": "UI",
-              "volume": 1.0,
-              "pitch": 1.75
-            },
-            "mentions": [
-              {
-                "mentionType": "EVERYONE",
-                "preset": ""
-              }
-            ],
-            "styles": [
-              {
-                "styleType": "BOLD",
-                "preset": ""
-              },
-              {
-                "styleType": "COLOR_PRESET",
-                "preset": "light purple"
-              }
-            ]
-          },
-          {
-            "pattern": "@team\\((.+?)\\)",
-            "title": "%player:displayname% mentioned you",
-            "cooldown": 0,
-            "sound": {
-              "id": "minecraft:entity.experience_orb.pickup",
-              "category": "UI",
-              "volume": 1.0,
-              "pitch": 1.75
-            },
-            "mentions": [
-              {
-                "mentionType": "TEAM",
-                "preset": ""
-              }
-            ],
-            "styles": [
-              {
-                "styleType": "BOLD",
-                "preset": ""
-              }
-            ]
-          },
-          {
-            "pattern": "@group\\((.+?)\\)",
-            "title": "%player:displayname% mentioned you",
-            "cooldown": 0,
-            "sound": {
-              "id": "minecraft:entity.experience_orb.pickup",
-              "category": "UI",
-              "volume": 1.0,
-              "pitch": 1.75
-            },
-            "mentions": [
-              {
-                "mentionType": "LUCK_PERMS_GROUP",
-                "preset": ""
-              }
-            ],
-            "styles": [
-              {
-                "styleType": "BOLD",
-                "preset": ""
-              },
-              {
-                "styleType": "COLOR_PRESET",
-                "preset": "light purple"
-              }
-            ]
-          },
-          {
-            "pattern": "@world\\((.+?)\\)",
-            "title": "%player:displayname% mentioned you",
-            "cooldown": 0,
-            "sound": {
-              "id": "minecraft:entity.experience_orb.pickup",
-              "category": "UI",
-              "volume": 1.0,
-              "pitch": 1.75
-            },
-            "mentions": [
-              {
-                "mentionType": "WORLD",
-                "preset": ""
-              }
-            ],
-            "styles": [
-              {
-                "styleType": "BOLD",
-                "preset": ""
-              },
-              {
-                "styleType": "COLOR_PRESET",
-                "preset": "light purple"
-              }
-            ]
-          },
-          {
-            "pattern": "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
-            "title": "%player:displayname% mentioned you",
-            "cooldown": 0,
-            "sound": {
-              "id": "minecraft:entity.experience_orb.pickup",
-              "category": "UI",
-              "volume": 1.0,
-              "pitch": 1.75
-            },
-            "mentions": [
-              {
-                "mentionType": "PLAYER",
-                "preset": ""
-              }
-            ],
-            "styles": [
-              {
-                "styleType": "BOLD",
-                "preset": ""
-              }
-            ]
-          }
-        ]
-      },
-      "delimiter": ",",
-      "timestamp": "yyyy-MM-dd HH:mm:ss",
-      "urlColor": "#0000EE",
+      "version": "3.1.0",
       "colorPreset": {
         "dark green": "#00AA00",
         "green": "#55FF55",
@@ -376,6 +76,17 @@
         "dark aqua": "#00AAAA",
         "dark blue": "#0000AA"
       },
+      "atlasPreset": {
+        "fire": { "atlas": "minecraft:blocks", "sprite": "minecraft:block/campfire_fire" },
+        "hunger": { "atlas": "minecraft:gui", "sprite": "minecraft:hud/food_full" },
+        "heart": { "atlas": "minecraft:gui", "sprite": "minecraft:hud/heart/full" },
+        "yes": { "atlas": "minecraft:gui", "sprite": "minecraft:container/beacon/confirm" },
+        "no": { "atlas": "minecraft:gui", "sprite": "minecraft:container/beacon/cancel" },
+        "move": { "atlas": "minecraft:gui", "sprite": "minecraft:mob_effect/wind_charged" }
+      },
+      "delimiter": ",",
+      "timestamp": "yyyy-MM-dd HH:mm:ss",
+      "urlColor": "#0000EE",
       "defaultTeamColor": "#FF55FF",
       "notificationCommandEnable": true,
       "mentionBroadcast": true,
@@ -384,6 +95,95 @@
       "notificationOffPlayerList": [],
       "webhook": ""
     };
+
+    // Default styles.json
+    const DEFAULT_STYLES = {
+      "stylingRules": {
+        "embellish-chat.chat": [
+          { "pattern": "\\[([^\\]]+?)]\\((https://.*?)\\)", "styles": [{ "styleType": "URL", "preset": "" }] },
+          { "pattern": "((https://\\S+))", "styles": [{ "styleType": "URL", "preset": "" }] },
+          { "pattern": "\\[([^\\]]+?)]\\{(.*?)}", "styles": [{ "styleType": "FONT", "preset": "" }] },
+          { "pattern": "\\[([^\\]]+?)]<(#.{6})>", "styles": [{ "styleType": "COLOR_HEX", "preset": "" }] },
+          { "pattern": "\\[([^\\]]+?)]<(#.{6,})>", "styles": [{ "styleType": "COLOR_GRADIENT", "preset": "" }] },
+          { "pattern": "\\[([^\\]]+?)]<([a-z\\s]+?)>", "styles": [{ "styleType": "COLOR_PRESET", "preset": "" }] },
+          { "pattern": "\\*\\*(.+?)\\*\\*()", "styles": [{ "styleType": "BOLD", "preset": "" }] },
+          { "pattern": "__(.+?)__()", "styles": [{ "styleType": "UNDERLINE", "preset": "" }] },
+          { "pattern": "_(.+?)_()", "styles": [{ "styleType": "ITALIC", "preset": "" }] },
+          { "pattern": "~~(.+?)~~()", "styles": [{ "styleType": "STRIKETHROUGH", "preset": "" }] },
+          { "pattern": "\\|\\|(.+?)\\|\\|()", "styles": [{ "styleType": "OBFUSCATED", "preset": "" }] },
+          { "pattern": "\\[([^\\]]+?)]<(RAINBOW)>", "styles": [{ "styleType": "COLOR_RAINBOW", "preset": "0.7" }] },
+          { "pattern": "(.+)()", "styles": [{ "styleType": "METADATA", "preset": "" }] },
+          { "pattern": "(\\[i\\])()", "styles": [{ "styleType": "SHOW_ITEM", "preset": "" }] },
+          { "pattern": "(\\[inv\\])()", "styles": [{ "styleType": "SHOW_INVENTORY", "preset": "" }] },
+          { "pattern": "(:(.+?):)", "styles": [{ "styleType": "ATLAS_PRESET", "preset": "" }] }
+        ],
+        "embellish-chat.command_argument": []
+      }
+    };
+
+    // Default mentions.json
+    const DEFAULT_MENTIONS = {
+      "mentionRules": {
+        "embellish-chat.mention": [
+          {
+            "pattern": "@here()",
+            "title": "%player:displayname% mentioned you",
+            "cooldown": 0,
+            "onlyTarget": false,
+            "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
+            "mentions": [{ "mentionType": "INSIDE", "preset": "64" }],
+            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }]
+          },
+          {
+            "pattern": "@everyone()",
+            "title": "%player:displayname% mentioned you",
+            "cooldown": 0,
+            "onlyTarget": false,
+            "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
+            "mentions": [{ "mentionType": "EVERYONE", "preset": "" }],
+            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }]
+          },
+          {
+            "pattern": "@team\\((.+?)\\)",
+            "title": "%player:displayname% mentioned you",
+            "cooldown": 0,
+            "onlyTarget": false,
+            "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
+            "mentions": [{ "mentionType": "TEAM", "preset": "" }],
+            "styles": [{ "styleType": "BOLD", "preset": "" }]
+          },
+          {
+            "pattern": "@group\\((.+?)\\)",
+            "title": "%player:displayname% mentioned you",
+            "cooldown": 0,
+            "onlyTarget": false,
+            "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
+            "mentions": [{ "mentionType": "LUCK_PERMS_GROUP", "preset": "" }],
+            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }]
+          },
+          {
+            "pattern": "@world\\((.+?)\\)",
+            "title": "%player:displayname% mentioned you",
+            "cooldown": 0,
+            "onlyTarget": false,
+            "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
+            "mentions": [{ "mentionType": "WORLD", "preset": "" }],
+            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }]
+          },
+          {
+            "pattern": "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
+            "title": "%player:displayname% mentioned you",
+            "cooldown": 0,
+            "onlyTarget": false,
+            "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
+            "mentions": [{ "mentionType": "PLAYER", "preset": "" }],
+            "styles": [{ "styleType": "BOLD", "preset": "" }]
+          }
+        ]
+      }
+    };
+
+
 
     const Card = ({ children, className = "" }) => (
         <div className={`bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 ${className}`}>
@@ -663,7 +463,7 @@
         </div>
     );
 
-    const GlobalView = ({ config, updateGlobal, addPreset, removePreset, updatePreset }) => (
+    const GlobalView = ({ config, updateGlobal, addPreset, removePreset, updatePreset, addAtlasPreset, removeAtlasPreset, updateAtlasPreset }) => (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card className="p-6 space-y-4">
                 <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center">
@@ -762,7 +562,7 @@
                     />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    {Object.entries(config.colorPreset).map(([name, color]) => (
+                    {Object.entries(config.colorPreset || {}).map(([name, color]) => (
                         <div key={name} className="flex items-center space-x-2 bg-slate-50 dark:bg-slate-900/50 p-2 rounded border border-slate-200 dark:border-slate-700">
                             <input
                                 type="color"
@@ -777,6 +577,44 @@
                             <button type="button" onClick={() => removePreset(name)} className="text-slate-400 hover:text-red-500 p-1">
                                 <IconWrapper name="trash-2" size={16} />
                             </button>
+                        </div>
+                    ))}
+                </div>
+            </Card>
+
+            <Card className="p-6 col-span-1 md:col-span-2">
+                <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
+                    <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center">
+                        <IconWrapper name="image" className="mr-2" size={20} /> Atlas Presets
+                    </h3>
+                    <AddGroupInput
+                        onAdd={addAtlasPreset}
+                        placeholder="New Atlas Preset Name"
+                    />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {Object.entries(config.atlasPreset || {}).map(([name, data]) => (
+                        <div key={name} className="bg-slate-50 dark:bg-slate-900/50 p-3 rounded border border-slate-200 dark:border-slate-700">
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="text-sm font-semibold dark:text-slate-300">{name}</span>
+                                <button type="button" onClick={() => removeAtlasPreset(name)} className="text-slate-400 hover:text-red-500 p-1">
+                                    <IconWrapper name="trash-2" size={16} />
+                                </button>
+                            </div>
+                            <div className="space-y-2">
+                                <Input
+                                    label="Atlas"
+                                    value={data.atlas}
+                                    onChange={(v) => updateAtlasPreset(name, 'atlas', v)}
+                                    placeholder="minecraft:blocks"
+                                />
+                                <Input
+                                    label="Sprite"
+                                    value={data.sprite}
+                                    onChange={(v) => updateAtlasPreset(name, 'sprite', v)}
+                                    placeholder="minecraft:block/campfire_fire"
+                                />
+                            </div>
                         </div>
                     ))}
                 </div>
@@ -968,6 +806,25 @@
                                             />
                                         </div>
 
+                                        <div className="md:col-span-3 flex items-end pb-2">
+                                            <div className="flex items-center space-x-2">
+                                                <input
+                                                    type="checkbox"
+                                                    id={`onlyTarget-${permKey}-${idx}`}
+                                                    checked={rule.onlyTarget || false}
+                                                    onChange={(e) => {
+                                                        const newRules = [...rules];
+                                                        newRules[idx] = { ...newRules[idx], onlyTarget: e.target.checked };
+                                                        updateRuleList('mentionRules', permKey, newRules);
+                                                    }}
+                                                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                                                />
+                                                <label htmlFor={`onlyTarget-${permKey}-${idx}`} className="text-sm font-medium text-slate-700 dark:text-slate-200 cursor-pointer">
+                                                    Only Target
+                                                </label>
+                                            </div>
+                                        </div>
+
                                         <Input
                                             label="Title (Placeholder API Supported)"
                                             value={rule.title}
@@ -976,7 +833,7 @@
                                                 newRules[idx] = { ...newRules[idx], title: v };
                                                 updateRuleList('mentionRules', permKey, newRules);
                                             }}
-                                            className="md:col-span-9"
+                                            className="md:col-span-6"
                                         />
 
                                         <div className="md:col-span-12 bg-slate-50 dark:bg-slate-900/30 p-3 rounded">
@@ -1009,14 +866,15 @@
                                 onClick={() => {
                                     const newRules = [...rules, {
                                         pattern: "",
+                                        title: "",
+                                        cooldown: 0,
+                                        onlyTarget: false,
                                         sound: {
                                             id: "minecraft:entity.experience_orb.pickup",
                                             category: "UI",
                                             volume: 1.0,
                                             pitch: 1.0
                                         },
-                                        title: "",
-                                        cooldown: 0,
                                         mentions: [],
                                         styles: []
                                     }];
@@ -1032,81 +890,145 @@
         );
     };
 
-    const JsonView = ({ jsonInput, setJsonInput, handleImport, copyToClipboard, copySuccess, error, onReset }) => (
-        <div className="flex flex-col">
-            <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold dark:text-white">Raw JSON</h2>
-                <div className="space-x-2 flex">
-                    <DeleteButton
-                        onDelete={onReset}
-                        label={<><IconWrapper name="rotate-ccw" size={14} className="mr-1 inline" /> Reset Default</>}
-                        size="md"
-                    />
-                    <Button onClick={handleImport} variant="secondary">
-                        <IconWrapper name="upload" size={16} className="mr-2" /> Load from Text
-                    </Button>
-                    <Button onClick={copyToClipboard} variant="primary">
-                        {copySuccess ? <IconWrapper name="check" size={16} className="mr-2" /> : <IconWrapper name="copy" size={16} className="mr-2" />}
-                        {copySuccess ? "Copied!" : "Copy to Clipboard"}
-                    </Button>
+    const JsonView = ({
+        configJson, setConfigJson,
+        stylesJson, setStylesJson,
+        mentionsJson, setMentionsJson,
+        handleImport, copyToClipboard, copySuccess, error, onReset,
+        activeJsonTab, setActiveJsonTab
+    }) => {
+        const jsonTabs = [
+            { id: "config", label: "config.json", icon: "settings" },
+            { id: "styles", label: "styles.json", icon: "message-square" },
+            { id: "mentions", label: "mentions.json", icon: "at-sign" },
+        ];
+
+        const getCurrentJson = () => {
+            if (activeJsonTab === "config") return configJson;
+            if (activeJsonTab === "styles") return stylesJson;
+            return mentionsJson;
+        };
+
+        const setCurrentJson = (val) => {
+            if (activeJsonTab === "config") setConfigJson(val);
+            else if (activeJsonTab === "styles") setStylesJson(val);
+            else setMentionsJson(val);
+        };
+
+        return (
+            <div className="flex flex-col">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
+                    <h2 className="text-xl font-bold dark:text-white">Import / Export</h2>
+                    <div className="space-x-2 flex flex-wrap gap-2">
+                        <DeleteButton
+                            onDelete={onReset}
+                            label={<><IconWrapper name="rotate-ccw" size={14} className="mr-1 inline" /> Reset All</>}
+                            size="md"
+                        />
+                        <Button onClick={() => handleImport(activeJsonTab)} variant="secondary">
+                            <IconWrapper name="upload" size={16} className="mr-2" /> Load from Text
+                        </Button>
+                        <Button onClick={() => copyToClipboard(activeJsonTab)} variant="primary">
+                            {copySuccess === activeJsonTab ? <IconWrapper name="check" size={16} className="mr-2" /> : <IconWrapper name="copy" size={16} className="mr-2" />}
+                            {copySuccess === activeJsonTab ? "Copied!" : "Copy to Clipboard"}
+                        </Button>
+                    </div>
                 </div>
+
+                <div className="flex gap-2 mb-4 bg-white dark:bg-slate-900 p-1 rounded-lg shadow-sm border border-slate-200 dark:border-slate-800">
+                    {jsonTabs.map(tab => (
+                        <button
+                            key={tab.id}
+                            onClick={() => setActiveJsonTab(tab.id)}
+                            className={`flex items-center px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                                activeJsonTab === tab.id
+                                    ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300"
+                                    : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+                            }`}
+                        >
+                            <IconWrapper name={tab.icon} size={16} className="mr-2" />
+                            {tab.label}
+                        </button>
+                    ))}
+                </div>
+
+                {error && <div className="bg-red-100 text-red-700 p-3 rounded mb-4">{error}</div>}
+                <textarea
+                    className="w-full min-h-[600px] font-mono text-sm p-4 bg-slate-900 text-slate-100 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                    value={getCurrentJson()}
+                    onChange={(e) => setCurrentJson(e.target.value)}
+                    spellCheck="false"
+                />
             </div>
-            {error && <div className="bg-red-100 text-red-700 p-3 rounded mb-4">{error}</div>}
-            <textarea
-                className="w-full min-h-[600px] font-mono text-sm p-4 bg-slate-900 text-slate-100 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                value={jsonInput}
-                onChange={(e) => setJsonInput(e.target.value)}
-                spellCheck="false"
-            />
-        </div>
-    );
+        );
+    };
 
     function ConfigEditor() {
+        // 3개의 분리된 설정 상태
         const [config, setConfig] = useState(DEFAULT_CONFIG);
+        const [styles, setStyles] = useState(DEFAULT_STYLES);
+        const [mentions, setMentions] = useState(DEFAULT_MENTIONS);
+
         const [activeTab, setActiveTab] = useState("global");
-        const [jsonInput, setJsonInput] = useState("");
-        const [copySuccess, setCopySuccess] = useState(false);
+        const [activeJsonTab, setActiveJsonTab] = useState("config");
+
+        const [configJson, setConfigJson] = useState("");
+        const [stylesJson, setStylesJson] = useState("");
+        const [mentionsJson, setMentionsJson] = useState("");
+
+        const [copySuccess, setCopySuccess] = useState(null);
         const [error, setError] = useState(null);
 
         useEffect(() => {
-            setJsonInput(JSON.stringify(config, null, 2));
-        }, []);
-
-        useEffect(() => {
-            setJsonInput(JSON.stringify(config, null, 2));
+            setConfigJson(JSON.stringify(config, null, 2));
         }, [config]);
 
-        const handleImport = () => {
+        useEffect(() => {
+            setStylesJson(JSON.stringify(styles, null, 2));
+        }, [styles]);
+
+        useEffect(() => {
+            setMentionsJson(JSON.stringify(mentions, null, 2));
+        }, [mentions]);
+
+        const handleImport = (fileType) => {
             try {
-                const parsed = JSON.parse(jsonInput);
-
-                if (parsed.mentionColor && !parsed.defaultTeamColor) {
-                    parsed.defaultTeamColor = parsed.mentionColor;
-                    delete parsed.mentionColor;
-                }
-
-                if (parsed.bannedPlayerList === undefined) parsed.bannedPlayerList = [];
-                if (parsed.notificationOffPlayerList === undefined) parsed.notificationOffPlayerList = [];
-
-                if (parsed.mentionBroadcast === undefined) parsed.mentionBroadcast = true;
-                if (parsed.webhook === undefined) parsed.webhook = "";
-                if (parsed.useClearFormat === undefined) parsed.useClearFormat = false;
-
-                if (parsed.mentionRules) {
-                    Object.keys(parsed.mentionRules).forEach(key => {
-                        parsed.mentionRules[key].forEach(rule => {
-                            if (rule.cooldown === undefined) rule.cooldown = 0;
-                            if (rule.sound && typeof rule.sound === 'string') {
-                                rule.sound = { id: rule.sound, category: "UI", volume: 1.0, pitch: rule.pitch || 1.0 };
-                                delete rule.pitch;
-                            }
+                if (fileType === "config") {
+                    const parsed = JSON.parse(configJson);
+                    // Migration from old format
+                    if (parsed.mentionColor && !parsed.defaultTeamColor) {
+                        parsed.defaultTeamColor = parsed.mentionColor;
+                        delete parsed.mentionColor;
+                    }
+                    if (parsed.bannedPlayerList === undefined) parsed.bannedPlayerList = [];
+                    if (parsed.notificationOffPlayerList === undefined) parsed.notificationOffPlayerList = [];
+                    if (parsed.mentionBroadcast === undefined) parsed.mentionBroadcast = true;
+                    if (parsed.webhook === undefined) parsed.webhook = "";
+                    if (parsed.useClearFormat === undefined) parsed.useClearFormat = false;
+                    if (parsed.atlasPreset === undefined) parsed.atlasPreset = {};
+                    setConfig(parsed);
+                } else if (fileType === "styles") {
+                    const parsed = JSON.parse(stylesJson);
+                    setStyles(parsed);
+                } else if (fileType === "mentions") {
+                    const parsed = JSON.parse(mentionsJson);
+                    // Migration: add onlyTarget if missing
+                    if (parsed.mentionRules) {
+                        Object.keys(parsed.mentionRules).forEach(key => {
+                            parsed.mentionRules[key].forEach(rule => {
+                                if (rule.cooldown === undefined) rule.cooldown = 0;
+                                if (rule.onlyTarget === undefined) rule.onlyTarget = false;
+                                if (rule.sound && typeof rule.sound === 'string') {
+                                    rule.sound = { id: rule.sound, category: "UI", volume: 1.0, pitch: rule.pitch || 1.0 };
+                                    delete rule.pitch;
+                                }
+                            });
                         });
-                    });
+                    }
+                    setMentions(parsed);
                 }
-
-                setConfig(parsed);
                 setError(null);
-                alert("Configuration loaded successfully!");
+                alert(`${fileType}.json loaded successfully!`);
             } catch (e) {
                 setError("Invalid JSON: " + e.message);
             }
@@ -1114,26 +1036,33 @@
 
         const handleReset = () => {
             setConfig(DEFAULT_CONFIG);
-            alert("Configuration reset to defaults.");
+            setStyles(DEFAULT_STYLES);
+            setMentions(DEFAULT_MENTIONS);
+            alert("All configurations reset to defaults.");
         };
 
-        const copyToClipboard = () => {
-            navigator.clipboard.writeText(JSON.stringify(config, null, 2));
-            setCopySuccess(true);
-            setTimeout(() => setCopySuccess(false), 2000);
+        const copyToClipboard = (fileType) => {
+            let content;
+            if (fileType === "config") content = JSON.stringify(config, null, 2);
+            else if (fileType === "styles") content = JSON.stringify(styles, null, 2);
+            else content = JSON.stringify(mentions, null, 2);
+
+            navigator.clipboard.writeText(content);
+            setCopySuccess(fileType);
+            setTimeout(() => setCopySuccess(null), 2000);
         };
 
         const updateGlobal = (key, val) => setConfig(prev => ({ ...prev, [key]: val }));
 
         const addPreset = (name) => {
             if (!name) return;
-            if (config.colorPreset[name]) {
+            if (config.colorPreset && config.colorPreset[name]) {
                 alert("Preset already exists!");
                 return;
             }
             setConfig(prev => ({
                 ...prev,
-                colorPreset: { ...prev.colorPreset, [name]: "#FFFFFF" }
+                colorPreset: { ...(prev.colorPreset || {}), [name]: "#FFFFFF" }
             }));
         };
 
@@ -1150,36 +1079,110 @@
             }));
         };
 
-        const updateRuleList = (category, permissionKey, newRules) => {
+        const addAtlasPreset = (name) => {
+            if (!name) return;
+            if (config.atlasPreset && config.atlasPreset[name]) {
+                alert("Atlas preset already exists!");
+                return;
+            }
             setConfig(prev => ({
                 ...prev,
-                [category]: {
-                    ...prev[category],
+                atlasPreset: { ...(prev.atlasPreset || {}), [name]: { atlas: "minecraft:gui", sprite: "" } }
+            }));
+        };
+
+        const removeAtlasPreset = (key) => {
+            const newPresets = { ...config.atlasPreset };
+            delete newPresets[key];
+            updateGlobal('atlasPreset', newPresets);
+        };
+
+        const updateAtlasPreset = (key, field, val) => {
+            setConfig(prev => ({
+                ...prev,
+                atlasPreset: {
+                    ...prev.atlasPreset,
+                    [key]: { ...prev.atlasPreset[key], [field]: val }
+                }
+            }));
+        };
+
+        // Styling Rules (styles.json)
+        const updateStyleRuleList = (permissionKey, newRules) => {
+            setStyles(prev => ({
+                ...prev,
+                stylingRules: {
+                    ...prev.stylingRules,
                     [permissionKey]: newRules
                 }
             }));
         };
 
-        const addPermissionGroup = (category, key) => {
+        const addStylePermissionGroup = (key) => {
             if (!key) return;
-
-            if (config[category][key]) {
+            if (styles.stylingRules[key]) {
                 alert("This permission group already exists!");
                 return;
             }
-
-            setConfig(prev => ({
+            setStyles(prev => ({
                 ...prev,
-                [category]: { ...prev[category], [key]: [] }
+                stylingRules: { ...prev.stylingRules, [key]: [] }
             }));
         };
 
-        const removePermissionGroup = (category, key) => {
-            setConfig(prev => {
-                const newCat = { ...prev[category] };
-                delete newCat[key];
-                return { ...prev, [category]: newCat };
+        const removeStylePermissionGroup = (key) => {
+            setStyles(prev => {
+                const newRules = { ...prev.stylingRules };
+                delete newRules[key];
+                return { ...prev, stylingRules: newRules };
             });
+        };
+
+        // Mention Rules (mentions.json)
+        const updateMentionRuleList = (permissionKey, newRules) => {
+            setMentions(prev => ({
+                ...prev,
+                mentionRules: {
+                    ...prev.mentionRules,
+                    [permissionKey]: newRules
+                }
+            }));
+        };
+
+        const addMentionPermissionGroup = (key) => {
+            if (!key) return;
+            if (mentions.mentionRules[key]) {
+                alert("This permission group already exists!");
+                return;
+            }
+            setMentions(prev => ({
+                ...prev,
+                mentionRules: { ...prev.mentionRules, [key]: [] }
+            }));
+        };
+
+        const removeMentionPermissionGroup = (key) => {
+            setMentions(prev => {
+                const newRules = { ...prev.mentionRules };
+                delete newRules[key];
+                return { ...prev, mentionRules: newRules };
+            });
+        };
+
+        // Wrapper functions for compatibility with existing views
+        const addPermissionGroup = (category, key) => {
+            if (category === 'stylingRules') addStylePermissionGroup(key);
+            else if (category === 'mentionRules') addMentionPermissionGroup(key);
+        };
+
+        const removePermissionGroup = (category, key) => {
+            if (category === 'stylingRules') removeStylePermissionGroup(key);
+            else if (category === 'mentionRules') removeMentionPermissionGroup(key);
+        };
+
+        const updateRuleList = (category, permissionKey, newRules) => {
+            if (category === 'stylingRules') updateStyleRuleList(permissionKey, newRules);
+            else if (category === 'mentionRules') updateMentionRuleList(permissionKey, newRules);
         };
 
         const tabs = [
@@ -1198,7 +1201,7 @@
                             <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">
                                 Embellish Chat
                             </h1>
-                            <p className="text-slate-500 dark:text-slate-400 mt-1">Config Editor v3.0.0</p>
+                            <p className="text-slate-500 dark:text-slate-400 mt-1">Config Editor v3.1.0</p>
                         </div>
                         <div className="flex gap-2 bg-white dark:bg-slate-900 p-1 rounded-lg shadow-sm border border-slate-200 dark:border-slate-800 overflow-x-auto">
                             {tabs.map(tab => (
@@ -1227,33 +1230,42 @@
                                 addPreset={addPreset}
                                 removePreset={removePreset}
                                 updatePreset={updatePreset}
+                                addAtlasPreset={addAtlasPreset}
+                                removeAtlasPreset={removeAtlasPreset}
+                                updateAtlasPreset={updateAtlasPreset}
                             />
                         )}
                         {activeTab === 'styling' && (
                             <StylingView
-                                config={config}
-                                addPermissionGroup={addPermissionGroup}
-                                removePermissionGroup={removePermissionGroup}
-                                updateRuleList={updateRuleList}
+                                config={styles}
+                                addPermissionGroup={(cat, key) => addPermissionGroup('stylingRules', key)}
+                                removePermissionGroup={(cat, key) => removePermissionGroup('stylingRules', key)}
+                                updateRuleList={(cat, permKey, rules) => updateRuleList('stylingRules', permKey, rules)}
                             />
                         )}
                         {activeTab === 'mention' && (
                             <MentionView
-                                config={config}
-                                addPermissionGroup={addPermissionGroup}
-                                removePermissionGroup={removePermissionGroup}
-                                updateRuleList={updateRuleList}
+                                config={mentions}
+                                addPermissionGroup={(cat, key) => addPermissionGroup('mentionRules', key)}
+                                removePermissionGroup={(cat, key) => removePermissionGroup('mentionRules', key)}
+                                updateRuleList={(cat, permKey, rules) => updateRuleList('mentionRules', permKey, rules)}
                             />
                         )}
                         {activeTab === 'json' && (
                             <JsonView
-                                jsonInput={jsonInput}
-                                setJsonInput={setJsonInput}
+                                configJson={configJson}
+                                setConfigJson={setConfigJson}
+                                stylesJson={stylesJson}
+                                setStylesJson={setStylesJson}
+                                mentionsJson={mentionsJson}
+                                setMentionsJson={setMentionsJson}
                                 handleImport={handleImport}
                                 copyToClipboard={copyToClipboard}
                                 copySuccess={copySuccess}
                                 error={error}
                                 onReset={handleReset}
+                                activeJsonTab={activeJsonTab}
+                                setActiveJsonTab={setActiveJsonTab}
                             />
                         )}
                     </main>
