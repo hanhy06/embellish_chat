@@ -66,8 +66,8 @@ public class ConfigManager {
     }
 
     public boolean readConfig() {
-        Config defaultConfig = Config.createDefault();
-
+        JsonObject defaultConfig = gson.toJsonTree(config).getAsJsonObject();
+                
         JsonObject configJson = readJsonFile(CONFIG_FILE_NAME);
         JsonObject stylesJson = readJsonFile(STYLE_FILE_NAME);
         JsonObject mentionsJson = readJsonFile(MENTION_FILE_NAME);
@@ -76,15 +76,19 @@ public class ConfigManager {
 
         if (stylesJson != null && stylesJson.has("stylingRules")) {
             merged.add("stylingRules", stylesJson.get("stylingRules"));
+        }else {
+            merged.add("stylingRules", defaultConfig.get("stylingRules"));
         }
         if (mentionsJson != null && mentionsJson.has("mentionRules")) {
             merged.add("mentionRules", mentionsJson.get("mentionRules"));
+        }else{
+            merged.add("mentionRules", defaultConfig.get("mentionRules"));
         }
 
         try {
             Config loaded = gson.fromJson(merged, Config.class);
 
-            if (loaded != null && loaded.version() != null && loaded.version().equals(defaultConfig.version())) {
+            if (loaded != null && loaded.version() != null && loaded.version().equals(config.version())) {
                 config = loaded;
                 broadcastConfig();
                 EmbellishChat.LOGGER.info("Config loaded successfully.");
@@ -96,7 +100,6 @@ public class ConfigManager {
             EmbellishChat.LOGGER.error("Failed to parse merged config. Using default values.", e);
         }
 
-        config = defaultConfig;
         broadcastConfig();
         return false;
     }
