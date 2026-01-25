@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 
 public class ConfigManager {
     public static ConfigManager INSTANCE;
+    public final Object LOCK_KEY = new Object();
 
     private static final String CONFIG_FILE_DIR = EmbellishChat.MOD_ID;
     private static final String CONFIG_FILE_NAME = "config.json";
@@ -120,7 +121,10 @@ public class ConfigManager {
     }
 
     private void writeConfig(BiConsumer<String,JsonObject> writer) {
-        JsonObject fullJson = gson.toJsonTree(config).getAsJsonObject();
+        JsonObject fullJson;
+        synchronized (LOCK_KEY){
+            fullJson = gson.toJsonTree(config).getAsJsonObject();
+        }
 
         JsonElement stylingRules = fullJson.remove("stylingRules");
         JsonObject stylesJson = new JsonObject();

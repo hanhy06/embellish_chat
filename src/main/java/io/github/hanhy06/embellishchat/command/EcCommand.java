@@ -143,19 +143,16 @@ public class EcCommand {
 
         HashSet<UUID> players = ConfigManager.getConfig().notificationOffPlayerList();
         UUID uuid = player.getUuid();
+        boolean notification;
 
-        boolean notification = players.contains(uuid);
-        if (notification){
-            players.remove(uuid);
-        }else {
-            players.add(uuid);
+        synchronized (ConfigManager.INSTANCE.LOCK_KEY) {
+            notification = players.contains(uuid);
+            if (notification) players.remove(uuid);
+            else players.add(uuid);
         }
 
         String result = String.format("Mention notifications set to: %s", (notification ? "ON" : "OFF"));
-        context.getSource().sendFeedback(() ->
-                        Text.literal(result),
-                false
-        );
+        context.getSource().sendFeedback(() -> Text.literal(result), false);
 
         CompletableFuture.runAsync(() -> {
             try {
