@@ -127,7 +127,7 @@ public class MentionProcessor implements ConfigListener {
             MentionAction action = actions.get(i);
 
             Function<MentionParameter,Target> function = registries.get(action.mentionType());
-            String option = OptionUtil.selectOption(action.preset(),options.size() > i ? options.get(i):"",player);
+            String option = OptionUtil.selectOption(action.preset(),options.size() > i ? options.get(i):"");
 
             Target target = function.apply(MentionParameter.of(option,player));
 
