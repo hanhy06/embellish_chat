@@ -104,13 +104,13 @@ public class ConfigManager {
         return false;
     }
 
-    private JsonObject readJsonFile(String fileName) {
-        Path filePath = configDirPath.resolve(fileName);
-        try (BufferedReader reader = Files.newBufferedReader(filePath, StandardCharsets.UTF_8)) {
+    private JsonObject readJsonFile(String file) {
+        Path path = configDirPath.resolve(file);
+        try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             JsonElement element = JsonParser.parseReader(reader);
             return element.isJsonObject() ? element.getAsJsonObject() : null;
         } catch (IOException | JsonSyntaxException e) {
-            EmbellishChat.LOGGER.warn("Failed to read {}: {}", fileName, e.getMessage());
+            EmbellishChat.LOGGER.warn("Failed to read {}: {}", file, e.getMessage());
             return null;
         }
     }
@@ -137,10 +137,10 @@ public class ConfigManager {
     }
 
     private  void writeIfAbsent(String file, JsonObject json) {
-        Path filePath = configDirPath.resolve(file);
-        if (Files.exists(filePath)) return;
+        Path path = configDirPath.resolve(file);
+        if (Files.exists(path)) return;
         try (BufferedWriter writer = Files.newBufferedWriter(
-                filePath, StandardCharsets.UTF_8,
+                path, StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING
         )) {
             gson.toJson(json, writer);
@@ -151,9 +151,9 @@ public class ConfigManager {
     }
 
     private void writeJsonFile(String file, JsonObject json) {
-        Path filePath = configDirPath.resolve(file);
+        Path path = configDirPath.resolve(file);
         try (BufferedWriter writer = Files.newBufferedWriter(
-                filePath, StandardCharsets.UTF_8,
+                path, StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING
         )) {
             gson.toJson(json, writer);
