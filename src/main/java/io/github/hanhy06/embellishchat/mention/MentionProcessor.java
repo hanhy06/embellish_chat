@@ -160,7 +160,7 @@ public class MentionProcessor implements ConfigListener {
         }
     }
 
-    public void targetBroadcast(List<Mention> mentions, SignedMessage message,ServerPlayerEntity sender){
+    public void targetBroadcast(List<Mention> mentions, SignedMessage message,ServerPlayerEntity player){
         boolean onlyTarget = false;
         HashSet<ServerPlayerEntity> targets = new HashSet<>();
 
@@ -174,7 +174,7 @@ public class MentionProcessor implements ConfigListener {
         if (!onlyTarget) return;
 
         SentMessage sentMessage = SentMessage.of(message);
-        MessageType.Parameters parameters = MessageType.params(MessageType.CHAT, sender);
+        MessageType.Parameters parameters = MessageType.params(MessageType.CHAT, player);
         targets.forEach(target ->
                 target.sendChatMessage(sentMessage,false, parameters)
         );

@@ -55,38 +55,25 @@ public class StylingProcessor implements ConfigListener {
         return result;
     }
 
+
+
     private MutableText applyStyleRule(MutableText text, StylingRule style, ServerPlayerEntity player){
         Matcher matcher = style.pattern().matcher(text.getString());
         if (!matcher.find()) return text;
 
         MutableText result = Text.empty();
         Runs runs = flatten(text);
+
         int lastEnd = 0;
         do {
             result.append(slice(runs, lastEnd, matcher.start()));
 
             MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
-            List<String> options = OptionUtil.split(matcher.group(2),config.delimiter());
-            result.append(applyStyle(segment, style.styles(), options, player));
+            result.append(applyStyle(segment, style.styles(), matcher.group(2), player));
 
             lastEnd = matcher.end();
         } while (matcher.find());
         result.append(slice(runs, lastEnd, runs.full().length()));
-
-        return result;
-    }
-
-    private MutableText applyStyle(MutableText segment, List<StyleAction> actions,List<String> options,ServerPlayerEntity player){
-        MutableText result = segment;
-
-        for (int i=0;i<actions.size();i++){
-            StyleAction action = actions.get(i);
-
-            Function<StyleParameter, MutableText> function = registry.get(action.styleType());
-            String option = OptionUtil.selectOption(action.preset(),options.size() > i ? options.get(i):"");
-
-            result = function.apply(StyleParameter.of(result,option,player));
-        }
 
         return result;
     }
@@ -104,15 +91,30 @@ public class StylingProcessor implements ConfigListener {
 
             MutableText segment = slice(runs, mention.begin(), mention.end());
             if (mention.style() != null) segment.fillStyle(mention.style());
-            for (StyleAction style : mention.rule().styles()) {
-                StyleParameter parameter = StyleParameter.of(segment, style.preset(), player);
-                segment = registry.get(style.styleType()).apply(parameter);
-            }
+            result.append(applyStyle(segment,mention.rule().styles(),"",player));
 
-            result.append(segment);
             lastEnd = mention.end();
         }
         result.append(slice(runs, lastEnd, runs.full().length()));
+
+        return result;
+    }
+
+    private MutableText applyStyle(MutableText segment,List<StyleAction> actions,String option,ServerPlayerEntity player){
+        MutableText result = segment;
+        List<String> options = OptionUtil.split(option,config.delimiter());
+
+        for (int i=0;i<actions.size();i++){
+            StyleAction action = actions.get(i);
+
+            Function<StyleParameter, MutableText> function = registry.get(action.styleType());
+            String selectOption = OptionUtil.selectOption(
+                    action.preset(),
+                    options.size() > i ? options.get(i):""
+            );
+
+            result = function.apply(StyleParameter.of(result,selectOption,player));
+        }
 
         return result;
     }
@@ -131,8 +133,8 @@ public class StylingProcessor implements ConfigListener {
 
         Runs runs = flatten(text);
         MutableText result = Text.empty();
-        int lastEnd = 0;
 
+        int lastEnd = 0;
         do {
             result.append(slice(runs,lastEnd,matcher.start()));
 

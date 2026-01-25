@@ -115,7 +115,11 @@ public class ConfigManager {
         }
     }
 
-    public void writeConfig(BiConsumer<String,JsonObject> writer) {
+    public void writeConfig() {
+        writeConfig(this::writeJsonFile);
+    }
+
+    private void writeConfig(BiConsumer<String,JsonObject> writer) {
         JsonObject fullJson = gson.toJsonTree(config).getAsJsonObject();
 
         JsonElement stylingRules = fullJson.remove("stylingRules");

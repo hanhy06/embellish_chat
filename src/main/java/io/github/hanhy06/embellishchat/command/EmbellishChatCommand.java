@@ -81,7 +81,7 @@ public class EmbellishChatCommand {
                     players.stream().map(ServerPlayerEntity::getUuid).toList()
             );
         }
-        ConfigManager.INSTANCE.writeConfig(null);
+        ConfigManager.INSTANCE.writeConfig();
 
         String playerNames = players.stream()
                 .map(ServerPlayerEntity::getName)
