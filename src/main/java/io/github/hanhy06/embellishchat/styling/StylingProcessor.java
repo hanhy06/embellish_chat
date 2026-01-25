@@ -55,8 +55,6 @@ public class StylingProcessor implements ConfigListener {
         return result;
     }
 
-
-
     private MutableText applyStyleRule(MutableText text, StylingRule style, ServerPlayerEntity player){
         Matcher matcher = style.pattern().matcher(text.getString());
         if (!matcher.find()) return text;
