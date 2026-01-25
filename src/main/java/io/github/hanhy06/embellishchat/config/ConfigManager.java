@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
 public class ConfigManager {
@@ -55,23 +56,13 @@ public class ConfigManager {
         try {
             if (!Files.exists(configDirPath)) {
                 Files.createDirectories(configDirPath);
+                writeConfig(this::writeJsonFile);
+            }else {
+                writeConfig(this::writeIfAbsent);
             }
-
-            JsonObject jsonConfig = gson.toJsonTree(config).getAsJsonObject();
-            createConfig(STYLE_FILE_NAME,jsonConfig.remove("stylingRules").getAsJsonObject());
-            createConfig(MENTION_FILE_NAME,jsonConfig.remove("mentionRules").getAsJsonObject());
-            createConfig(CONFIG_FILE_NAME,jsonConfig);
         } catch (IOException e) {
             EmbellishChat.LOGGER.warn("Failed to create config files. Using default settings.", e);
         }
-    }
-
-    private void createConfig(String file,JsonObject object) throws IOException {
-        if (Files.exists(configDirPath.resolve(file))) return;
-        Files.createFile(configDirPath.resolve(file));
-        writeJsonFile(file,object);
-
-        EmbellishChat.LOGGER.info("{} not found. Using a generated default.",file);
     }
 
     public boolean readConfig() {
@@ -121,7 +112,7 @@ public class ConfigManager {
         }
     }
 
-    public void writeConfig() {
+    public void writeConfig(BiConsumer<String,JsonObject> writer) {
         JsonObject fullJson = gson.toJsonTree(config).getAsJsonObject();
 
         JsonElement stylingRules = fullJson.remove("stylingRules");
@@ -136,21 +127,36 @@ public class ConfigManager {
             mentionsJson.add("mentionRules", mentionRules);
         }
 
-        writeJsonFile(CONFIG_FILE_NAME, fullJson);
-        writeJsonFile(STYLE_FILE_NAME, stylesJson);
-        writeJsonFile(MENTION_FILE_NAME, mentionsJson);
+        if (writer == null) writer = this::writeJsonFile;
+        writer.accept(CONFIG_FILE_NAME,fullJson);
+        writer.accept(STYLE_FILE_NAME, stylesJson);
+        writer.accept(MENTION_FILE_NAME, mentionsJson);
     }
 
-    private void writeJsonFile(String fileName, JsonObject json) {
-        Path filePath = configDirPath.resolve(fileName);
+    private  void writeIfAbsent(String file, JsonObject json) {
+        Path filePath = configDirPath.resolve(file);
+        if (Files.exists(filePath)) return;
         try (BufferedWriter writer = Files.newBufferedWriter(
                 filePath, StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING
         )) {
             gson.toJson(json, writer);
-            EmbellishChat.LOGGER.info("Saved {}", fileName);
+            EmbellishChat.LOGGER.info("Saved {}", file);
         } catch (IOException e) {
-            EmbellishChat.LOGGER.error("Failed to write {}: {}", fileName, e.getMessage());
+            EmbellishChat.LOGGER.error("Failed to write {}: {}", file, e.getMessage());
+        }
+    }
+
+    private void writeJsonFile(String file, JsonObject json) {
+        Path filePath = configDirPath.resolve(file);
+        try (BufferedWriter writer = Files.newBufferedWriter(
+                filePath, StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING
+        )) {
+            gson.toJson(json, writer);
+            EmbellishChat.LOGGER.info("Saved {}", file);
+        } catch (IOException e) {
+            EmbellishChat.LOGGER.error("Failed to write {}: {}", file, e.getMessage());
         }
     }
 

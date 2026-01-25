@@ -159,7 +159,7 @@ public class EcCommand {
 
         CompletableFuture.runAsync(() -> {
             try {
-                ConfigManager.INSTANCE.writeConfig();
+                ConfigManager.INSTANCE.writeConfig(null);
             } catch (Exception e) {
                 EmbellishChat.LOGGER.error("Failed to save config async", e);
             }
