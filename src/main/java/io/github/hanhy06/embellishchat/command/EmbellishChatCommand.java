@@ -15,7 +15,9 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
-import java.util.Collection;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -63,31 +65,35 @@ public class EmbellishChatCommand {
 
     private static int executeBanOrPardon(CommandContext<ServerCommandSource> context, boolean ban) {
         String action = ban ? "banned" : "pardoned";
-        Collection<ServerPlayerEntity> players;
+        Set<UUID> uuids;
+        String names;
 
         try {
-            players = EntityArgumentType.getPlayers(context, "target");
+            names = EntityArgumentType.getPlayers(context, "target").stream()
+                    .map(ServerPlayerEntity::getName)
+                    .map(Text::getString)
+                    .collect(Collectors.joining(", "));
+            uuids = EntityArgumentType.getPlayers(context, "target").stream()
+                    .map(ServerPlayerEntity::getUuid)
+                    .collect(Collectors.toSet());
         } catch (CommandSyntaxException e) {
             EmbellishChat.LOGGER.error("Unable to perform {} due to an unknown error.",action);
             return 1;
         }
 
-        if (ban) {
-            ConfigManager.getConfig().bannedPlayerList().addAll(
-                    players.stream().map(ServerPlayerEntity::getUuid).toList()
-            );
-        } else {
-            ConfigManager.getConfig().bannedPlayerList().removeAll(
-                    players.stream().map(ServerPlayerEntity::getUuid).toList()
-            );
+        synchronized (ConfigManager.INSTANCE.LOCK_KEY) {
+            if (ban) ConfigManager.getConfig().bannedPlayerList().addAll(uuids);
+            else ConfigManager.getConfig().bannedPlayerList().removeAll(uuids);
         }
-        ConfigManager.INSTANCE.writeConfig();
+        CompletableFuture.runAsync(() -> {
+            try {
+                ConfigManager.INSTANCE.writeConfig();
+            } catch (Exception e) {
+                EmbellishChat.LOGGER.error("Failed to save config async", e);
+            }
+        });
 
-        String playerNames = players.stream()
-                .map(ServerPlayerEntity::getName)
-                .map(Text::getString)
-                .collect(Collectors.joining(", "));
-        String result = String.format("Player(s) %s %s.", playerNames, action);
+        String result = String.format("Player(s) %s %s.", names, action);
 
         context.getSource().sendFeedback(() -> Text.literal(result), true);
         return 1;
