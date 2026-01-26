@@ -15,7 +15,7 @@ public class InventoryScreenHandler extends GenericContainerScreenHandler {
 
     @Override
     public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
-        if (slotIndex >= 0 && slotIndex < 54) {
+        if ((slotIndex >= 0 && slotIndex < 54) || actionType.equals(SlotActionType.PICKUP_ALL)) {
             return;
         }
 
@@ -27,7 +27,6 @@ public class InventoryScreenHandler extends GenericContainerScreenHandler {
         return ItemStack.EMPTY;
     }
 
-    // 3. 사용 가능 여부
     @Override
     public boolean canUse(PlayerEntity player) {
         return true;
