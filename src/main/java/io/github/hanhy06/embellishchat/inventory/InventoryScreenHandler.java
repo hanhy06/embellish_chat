@@ -1,5 +1,7 @@
 package io.github.hanhy06.embellishchat.inventory;
 
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ContainerComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -10,18 +12,19 @@ import net.minecraft.network.packet.s2c.play.OpenWrittenBookS2CPacket;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Hand;
 
 public class InventoryScreenHandler extends GenericContainerScreenHandler {
-    public InventoryScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory) {
-        super(ScreenHandlerType.GENERIC_9X6, syncId, playerInventory, inventory, 6);
+    public InventoryScreenHandler(ScreenHandlerType<?> type,int syncId, PlayerInventory playerInventory, Inventory inventory,int raws) {
+        super(type, syncId, playerInventory, inventory, raws);
     }
 
     @Override
     public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
-        if (slotIndex >= 0 && slotIndex < 54) {
+        if (slotIndex >= 0 && slotIndex < 9 * this.getRows()) {
             ItemStack stack = this.getSlot(slotIndex).getStack();
 
             if (stack.getItem() == Items.WRITTEN_BOOK && player instanceof ServerPlayerEntity serverPlayer) {
@@ -34,6 +37,18 @@ public class InventoryScreenHandler extends GenericContainerScreenHandler {
                 serverPlayer.networkHandler.sendPacket(new OpenWrittenBookS2CPacket(Hand.MAIN_HAND));
                 serverPlayer.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(
                         0, this.nextRevision(), selectSlot, original
+                ));
+            }
+            else if (stack.getItem() == Items.SHULKER_BOX && player instanceof ServerPlayerEntity serverPlayer) {
+                ContainerComponent container =  stack.get(DataComponentTypes.CONTAINER);
+                if (container == null) return;
+
+                SimpleInventory inventory = new SimpleInventory(27);
+                container.stream().forEach(inventory::addStack);
+                serverPlayer.openHandledScreen(new SimpleNamedScreenHandlerFactory(
+                        (syncId, playerInventory, playerEntity) ->
+                                new InventoryScreenHandler(ScreenHandlerType.GENERIC_9X3,syncId,playerInventory,inventory,3),
+                                stack.getName()
                 ));
             }
 

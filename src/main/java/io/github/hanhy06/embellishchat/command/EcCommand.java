@@ -18,6 +18,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.UuidArgumentType;
 import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.server.GameProfileResolver;
 import net.minecraft.server.command.CommandManager;
@@ -198,8 +199,8 @@ public class EcCommand {
         Text name = Text.literal(profile.name()+"'s inventory");
         player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
                 (syncId, playerInventory, playerEntity) ->
-                        new InventoryScreenHandler(syncId,playerInventory,inventory),
-                name
+                        new InventoryScreenHandler(ScreenHandlerType.GENERIC_9X6,syncId,playerInventory,inventory,6),
+                        name
         ));
         return 1;
     }
