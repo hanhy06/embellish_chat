@@ -6,7 +6,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.ConfigManager;
 import io.github.hanhy06.embellishchat.inventory.InventoryManager;
-import io.github.hanhy06.embellishchat.inventory.InventoryScreenHandler;
 import io.github.hanhy06.embellishchat.mention.rule.MentionAction;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
 import io.github.hanhy06.embellishchat.mention.rule.MentionType;
@@ -17,8 +16,6 @@ import io.github.hanhy06.embellishchat.util.PermissionUtil;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.UuidArgumentType;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.server.GameProfileResolver;
 import net.minecraft.server.command.CommandManager;
@@ -184,24 +181,19 @@ public class EcCommand {
             return 0;
         }
 
-        SimpleInventory inventory = InventoryManager.get(profile.id());
+        SimpleNamedScreenHandlerFactory factory= InventoryManager.get(profile.id());
 
         if (player == null){
             context.getSource().sendError(Text.literal("Player not found."));
             return 0;
         }
 
-        if (inventory == null) {
+        if (factory == null) {
             context.getSource().sendError(Text.literal("Inventory not found."));
             return 0;
         }
 
-        Text name = Text.literal(profile.name()+"'s inventory");
-        player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
-                (syncId, playerInventory, playerEntity) ->
-                        new InventoryScreenHandler(ScreenHandlerType.GENERIC_9X6,syncId,playerInventory,inventory,6),
-                        name
-        ));
+        player.openHandledScreen(factory);
         return 1;
     }
 }

@@ -15,7 +15,7 @@ Embellish Chat modernizes your Minecraft server’s chat experience with a fully
     * Mention text automatically adapts to the target's color (e.g., team color).
     * Supports detailed targeting like LuckPerms groups (`@group`) and specific worlds (`@world`).
 * **Instantly show off your gear!**
-    * Type `[i]` to display the item you’re holding, or `[inv]` to display your entire inventory.
+    * Type `[i]` to display the item you’re holding, or `[inv]` to display your entire inventoryContext.
     * Other players can hover over the link to view detailed item tooltips.
 * **Chat Utilities**
     * **Metadata:** Hover over any message to see the exact timestamp.
@@ -87,7 +87,7 @@ Use the following patterns directly in the chat window to apply styles:
 ### User Commands
 > Available to **all players** (no permission required).
 
-* **`/ec open <player>`** Opens the last shared inventory of the specified player.
+* **`/ec open <player>`** Opens the last shared inventoryContext of the specified player.
 * **`/ec help mention`** Displays the list of available mention targets and usage guides.
 * **`/ec help style`** Displays the list of available styles, presets, and syntax guides.
 * **`/ec notification`** Toggles your personal mention notification preferences. *(This command is controlled by `notificationCommandEnable` in the configuration).*

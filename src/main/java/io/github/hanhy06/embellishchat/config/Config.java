@@ -122,6 +122,10 @@ public record Config(
                                                 List.of(StyleAction.of(StyleType.SHOW_INVENTORY,""))
                                         ),
                                         StylingRule.of(
+                                                "(\\[ender\\])()",
+                                                List.of(StyleAction.of(StyleType.SHOW_ENDER_CHEST,""))
+                                        ),
+                                        StylingRule.of(
                                                 "(:(.+?):)",
                                                 List.of(StyleAction.of(StyleType.ATLAS_PRESET,""))
                                         )

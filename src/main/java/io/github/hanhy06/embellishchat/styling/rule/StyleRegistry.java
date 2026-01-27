@@ -91,6 +91,7 @@ public class StyleRegistry {
 
                 entry(StyleType.SHOW_ITEM, this::SHOW_ITEM),
                 entry(StyleType.SHOW_INVENTORY, this::SHOW_INVENTORY),
+                entry(StyleType.SHOW_ENDER_CHEST, this::SHOW_ENDER_CHEST),
                 entry(StyleType.ATLAS_PRESET, this::ATLAS_PRESET),
                 entry(StyleType.JSON, this::JSON),
                 entry(StyleType.DISCORD_JSON, this::DISCORD_JSON),
@@ -363,18 +364,33 @@ public class StyleRegistry {
             );
         }
 
+        ServerPlayerEntity player = parameter.player();
         Text text = Text.object(atlas);
         HoverEvent hoverEvent = new HoverEvent.ShowItem(item);
+        ClickEvent clickEvent = new ClickEvent.RunCommand("/ec open "+player.getUuid());
+        InventoryManager.putItem(player,item);
 
-        return text.copy().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
+        return text.copy().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent).withClickEvent(clickEvent));
     }
 
     public MutableText SHOW_INVENTORY(StyleParameter parameter){
         ServerPlayerEntity player = parameter.player();
-        InventoryManager.put(player);
+        InventoryManager.putInventory(player);
 
         ClickEvent clickEvent = new ClickEvent.RunCommand("/ec open "+player.getUuid());
-        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(player.getName().getString() + "'s Inventory"));
+        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(player.getName().getString() + "'s inventory"));
+        ProfileComponent component = ProfileComponent.ofStatic(player.getGameProfile());
+        MutableText text = Text.object(new PlayerTextObjectContents(component, true));
+
+        return text.fillStyle(Style.EMPTY.withClickEvent(clickEvent).withHoverEvent(hoverEvent));
+    }
+
+    public MutableText SHOW_ENDER_CHEST(StyleParameter parameter){
+        ServerPlayerEntity player = parameter.player();
+        InventoryManager.putEnderChest(player);
+
+        ClickEvent clickEvent = new ClickEvent.RunCommand("/ec open "+player.getUuid());
+        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(player.getName().getString() + "'s ender chest"));
         ProfileComponent component = ProfileComponent.ofStatic(player.getGameProfile());
         MutableText text = Text.object(new PlayerTextObjectContents(component, true));
 

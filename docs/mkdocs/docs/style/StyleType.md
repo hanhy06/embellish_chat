@@ -70,7 +70,7 @@
     * Displays the supplied text when the mouse hovers over it.
     * **Option:** `Text`
 * `HOVER_ITEM`
-    * Displays the item description for a specified inventory slot when hovered over. (e.g., `-1` for main-hand, `40` for off-hand).
+    * Displays the item description for a specified inventoryContext slot when hovered over. (e.g., `-1` for main-hand, `40` for off-hand).
     * **Option:** `Slot ID`
 * `URL`
     * Opens the provided URL in a browser when clicked.
@@ -110,9 +110,9 @@
     * This style type must be placed at the very bottom.
     * **Option:** `Altas Path(atlas;sprite)`
 * `SHOW_INVENTORY`
-    * Displays the user’s face. Clicking it shows the user’s inventory snapshot.
+    * Displays the user’s face. Clicking it shows the user’s inventoryContext snapshot.
     * This style type must be placed at the very bottom.
-    * The inventory snapshot is cleared when the player leaves the server.
+    * The inventoryContext snapshot is cleared when the player leaves the server.
     * **Option:** `None`
 * `ATLAS_PRESET`
     * Uses a predefined atlas name from the `atlasPreset` section.
