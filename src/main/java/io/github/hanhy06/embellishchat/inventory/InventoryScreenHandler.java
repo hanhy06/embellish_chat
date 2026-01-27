@@ -1,5 +1,7 @@
 package io.github.hanhy06.embellishchat.inventory;
 
+import net.minecraft.block.ShulkerBoxBlock;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ContainerComponent;
 import net.minecraft.entity.player.PlayerEntity;
@@ -37,18 +39,6 @@ public class InventoryScreenHandler extends GenericContainerScreenHandler {
                 serverPlayer.networkHandler.sendPacket(new OpenWrittenBookS2CPacket(Hand.MAIN_HAND));
                 serverPlayer.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(
                         0, this.nextRevision(), selectSlot, original
-                ));
-            }
-            else if (stack.getItem() == Items.SHULKER_BOX && player instanceof ServerPlayerEntity serverPlayer) {
-                ContainerComponent container =  stack.get(DataComponentTypes.CONTAINER);
-                if (container == null) return;
-
-                SimpleInventory inventory = new SimpleInventory(27);
-                container.stream().forEach(inventory::addStack);
-                serverPlayer.openHandledScreen(new SimpleNamedScreenHandlerFactory(
-                        (syncId, playerInventory, playerEntity) ->
-                                new InventoryScreenHandler(ScreenHandlerType.GENERIC_9X3,syncId,playerInventory,inventory,3),
-                                stack.getName()
                 ));
             }
 
