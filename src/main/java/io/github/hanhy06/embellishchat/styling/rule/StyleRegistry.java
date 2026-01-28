@@ -50,8 +50,6 @@ public class StyleRegistry {
     private final Pattern HEX_CODE = Pattern.compile("#[A-Fa-f0-9]{6}");
     private final DiscordMessenger messenger;
 
-    private final String ATLAS_ITEM;
-
     public StyleRegistry(Config config) {
         this.config = config;
         this.timestamp = DateTimeFormatter.ofPattern(config.timestamp());
@@ -101,8 +99,6 @@ public class StyleRegistry {
                 entry(StyleType.BLOCK, this::BLOCK)
         ));
         this.messenger = new DiscordMessenger(config);
-
-        this.ATLAS_ITEM = "{\"type\": \"object\", \"atlas\": \"%s\", \"sprite\": \"%s\"}";
     }
 
     public Function<StyleParameter, MutableText> get(StyleType styleType) {
@@ -207,8 +203,8 @@ public class StyleRegistry {
 
     public MutableText COLOR_TEAM(StyleParameter parameter){
         ServerPlayerEntity player = parameter.player();
+        if (player == null) return parameter.segment();
         Team team = player.getScoreboardTeam();
-
         if (team == null) return parameter.segment();
 
         Formatting formatting = team.getColor();
@@ -272,13 +268,11 @@ public class StyleRegistry {
     public MutableText HOVER_ITEM(StyleParameter parameter){
         ItemStack item;
         ServerPlayerEntity player = parameter.player();
-        int slot;
+        if (player == null) return parameter.segment();
 
-        try {
-            slot = Integer.decode(parameter.getString());
-        } catch (NumberFormatException e) {
-            slot = -1;
-        }
+        int slot;
+        try {slot = Integer.decode(parameter.getString());}
+        catch (NumberFormatException e) {slot = -1;}
 
         if (slot < 0 || 42 < slot) item = player.getMainHandStack();
         else item = player.getInventory().getStack(slot);
@@ -346,7 +340,9 @@ public class StyleRegistry {
     }
 
     public MutableText SHOW_ITEM(StyleParameter parameter){
-        ItemStack item = parameter.player().getMainHandStack();
+        ServerPlayerEntity player = parameter.player();
+        if (player == null) return parameter.segment();
+        ItemStack item = player.getMainHandStack();
         if (item == null || item.isEmpty()) return parameter.segment();
 
         AtlasTextObjectContents atlas;
@@ -364,7 +360,6 @@ public class StyleRegistry {
             );
         }
 
-        ServerPlayerEntity player = parameter.player();
         Text text = Text.object(atlas);
         HoverEvent hoverEvent = new HoverEvent.ShowItem(item);
         ClickEvent clickEvent = new ClickEvent.RunCommand("/ec open "+player.getUuid());
@@ -375,6 +370,7 @@ public class StyleRegistry {
 
     public MutableText SHOW_INVENTORY(StyleParameter parameter){
         ServerPlayerEntity player = parameter.player();
+        if (player == null) return parameter.segment();
         InventoryManager.putInventory(player);
 
         ClickEvent clickEvent = new ClickEvent.RunCommand("/ec open "+player.getUuid());
@@ -387,6 +383,7 @@ public class StyleRegistry {
 
     public MutableText SHOW_ENDER_CHEST(StyleParameter parameter){
         ServerPlayerEntity player = parameter.player();
+        if (player == null) return parameter.segment();
         InventoryManager.putEnderChest(player);
 
         ClickEvent clickEvent = new ClickEvent.RunCommand("/ec open "+player.getUuid());
@@ -438,6 +435,7 @@ public class StyleRegistry {
     }
 
     public MutableText BUBBLE(StyleParameter parameter){
+        if (parameter.player() == null) return parameter.segment();
         BubbleUtil.spawnDisplayEntity(parameter.player(),parameter.segment());
         return parameter.segment();
     }
