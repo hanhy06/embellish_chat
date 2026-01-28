@@ -44,11 +44,11 @@ public class MessageProcessor implements ConfigListener {
     }
 
     public SignedMessage handleMessage(SignedMessage message) {
-        if (bannedPlayerList.contains(message.getSender())) {
+        ServerPlayerEntity sender = playerManager.getPlayer(message.getSender());
+        if (sender == null || bannedPlayerList.contains(message.getSender())) {
             return message;
         }
 
-        ServerPlayerEntity sender = playerManager.getPlayer(message.getSender());
         MutableText textMessage = message.getContent().copy();
         String stringMessage = message.getContent().getString();
         SignedMessage result;
