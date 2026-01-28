@@ -413,6 +413,7 @@ public class StyleRegistry {
 
     public MutableText COMMAND_RUN(StyleParameter parameter){
         ServerPlayerEntity player = parameter.player();
+        if (player == null) return parameter.segment();
         MinecraftServer server = player.getCommandSource().getServer();
         String command = parameter.getString();
         if (command.startsWith("/")) command = command.substring(1);
