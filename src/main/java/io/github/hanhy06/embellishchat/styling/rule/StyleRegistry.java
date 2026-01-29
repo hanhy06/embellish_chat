@@ -356,7 +356,7 @@ public class StyleRegistry {
 
             atlas = new AtlasTextObjectContents(
                     Identifier.of(modelId.getNamespace(),type+"s"),
-                    Identifier.of(modelId.getNamespace(),String.format("%s/%s",type,modelId.getPath()))
+                    Identifier.of(modelId.getNamespace(),"%s/%s".formatted(type,modelId.getPath()))
             );
         }
 
