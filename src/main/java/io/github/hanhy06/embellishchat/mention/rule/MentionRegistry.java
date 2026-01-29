@@ -28,18 +28,16 @@ import java.util.function.Function;
 import static java.util.Map.entry;
 
 public class MentionRegistry {
-    private final MinecraftServer server;
     private final PlayerManager manager;
     private final Scoreboard scoreboard;
     private final Style colorTeam;
 
     private final boolean isLuckPerms;
-    private final boolean isOpenParty;
 
     private final EnumMap<MentionType, Function<MentionParameter, Target>> registries;
 
     public MentionRegistry(Config config) {
-        this.server = EmbellishChat.SERVER;
+        MinecraftServer server = EmbellishChat.SERVER;
         this.manager = server.getPlayerManager();
         this.scoreboard = server.getScoreboard();
 
@@ -60,7 +58,6 @@ public class MentionRegistry {
         ));
 
         this.isLuckPerms = FabricLoader.getInstance().isModLoaded("luckperms");
-        this.isOpenParty = FabricLoader.getInstance().isModLoaded("openpartiesandclaims");
     }
 
     public Function<MentionParameter, Target> get(MentionType key){
