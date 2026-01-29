@@ -20,9 +20,6 @@
 * `LUCK_PERMS_GROUP`
     * Mentions **all players in a specific LuckPerms group**. Requires LuckPerms to be installed.
     * **Option:** `Group Name`
-* `OPEN_PARTIES_AND_CLAIMS`
-    * Mentions **all players** in the party.
-    * **Option:** `None`
 * `CUSTOM`
     * Mentions all players matching the **vanilla target selectors**.
     * **Option:** `Target Selector`
