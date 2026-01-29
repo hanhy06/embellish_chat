@@ -24,7 +24,8 @@ Use these patterns directly in the chat window.
 | **Link**           | `[Text](URL)`          | `[Click Me](https://google.com)` |
 | **Font**           | `[Text]{Font ID}`      | `[Rune]{minecraft:alt}`          |
 | **Item**           | `[i]`                  | `Look at my [i]`                 |
-| **Inventory**      | `[inv]`                | `Look at my [inv]`               |         
+| **Inventory**      | `[inv]`                | `Look at my [inv]`               |   
+| **Ender Chest**    | `[ender]`              | `Look at my [ender]`             |   
 | **Mention**        | `@Target`              | `@everyone`, `@User`             |
 | **Icon**           | `:Icon:`               | `:yes:`, `:fire:`                |
 
