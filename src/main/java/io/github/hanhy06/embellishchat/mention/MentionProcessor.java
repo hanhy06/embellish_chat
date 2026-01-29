@@ -45,11 +45,7 @@ public class MentionProcessor implements ConfigListener {
 
     private int counter;
 
-    public MentionProcessor(MinecraftServer server,PlayerManager manager, Scoreboard scoreboard) {
-        this.server =server;
-        this.manager = manager;
-        this.scoreboard = scoreboard;
-
+    public MentionProcessor() {
         this.cooldowns = new HashSet<>();
         this.counter =0;
         ServerTickEvents.START_SERVER_TICK.register(tick ->{
@@ -65,7 +61,7 @@ public class MentionProcessor implements ConfigListener {
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
         this.mentionRules = config.mentionRules();
-        this.registries = new MentionRegistry(newConfig,server,manager, scoreboard);
+        this.registries = new MentionRegistry(newConfig);
 
         this.cooldowns.clear();
         this.notificationOffPlayerList = config.notificationOffPlayerList();

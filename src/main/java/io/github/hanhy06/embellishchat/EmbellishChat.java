@@ -31,7 +31,7 @@ public class EmbellishChat implements ModInitializer {
 		ServerLifecycleEvents.SERVER_STARTED.register(EmbellishChat::handleServerStart);
 
         PermissionUtil.registerPermissions();
-        InventoryManager.registryLeaveEvent();
+        InventoryManager.registerLeaveEvent();
         BubbleUtil.registerTickEvent();
 
 		EmbellishChatCommand.registerEmbellishChat();
@@ -47,7 +47,7 @@ public class EmbellishChat implements ModInitializer {
         PlaceHolderUtil.registerPlaceholder();
 
         StylingProcessor styler = new StylingProcessor();
-        MentionProcessor mention = new MentionProcessor(server,server.getPlayerManager(),server.getScoreboard());
+        MentionProcessor mention = new MentionProcessor();
         MessageProcessor message = new MessageProcessor(mention,styler, server.getPlayerManager());
 
         manager.addListener(styler);

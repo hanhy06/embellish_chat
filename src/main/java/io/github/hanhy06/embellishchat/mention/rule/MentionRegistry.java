@@ -39,10 +39,10 @@ public class MentionRegistry {
 
     private final EnumMap<MentionType, Function<MentionParameter, Target>> registries;
 
-    public MentionRegistry(Config config,MinecraftServer server,PlayerManager manager, Scoreboard scoreboard) {
-        this.server = server;
-        this.manager = manager;
-        this.scoreboard = scoreboard;
+    public MentionRegistry(Config config) {
+        this.server = EmbellishChat.SERVER;
+        this.manager = server.getPlayerManager();
+        this.scoreboard = server.getScoreboard();
 
         if (config.defaultTeamColor() != null){
             colorTeam = Style.EMPTY.withColor(config.defaultTeamColor().getRGB());

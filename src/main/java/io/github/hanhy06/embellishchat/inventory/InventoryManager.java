@@ -104,7 +104,7 @@ public class InventoryManager {
         return inventory;
     }
 
-    public static void registryLeaveEvent(){
+    public static void registerLeaveEvent(){
         ServerPlayerEvents.LEAVE.register(player ->{
             inventories.remove(player.getUuid());
         });
