@@ -42,6 +42,7 @@ Use the following patterns directly in the chat window to apply styles:
 | Font             | `[Text]{path}`          | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Font.png?raw=true)             |
 | Item             | `[i]`                   | `Look at my [i]`                                              | ![Item](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Item.png?raw=true)             |
 | Inventory        | `[inv]`                 | `Look at my [inv]`                                            | ![Inventory](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Inventory.png?raw=true)   |
+| Ender Chest      | `[ender]`               | `Look at my [ender]`                                          | ![Inventory](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/EnderChest.png?raw=true)  |
 | Mention          | `@PlayerName`           | `Hello, @User`                                                | ![Mention](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Mention.png?raw=true)       |
 
 > **Notes**
