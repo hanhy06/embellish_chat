@@ -88,7 +88,7 @@ Use the following patterns directly in the chat window to apply styles:
 ### User Commands
 > Available to **all players** (no permission required).
 
-* **`/ec open <player>`** Opens the last shared inventoryContext of the specified player.
+* **`/ec open <player>`** Opens the last shared inventory of the specified player.
 * **`/ec help mention`** Displays the list of available mention targets and usage guides.
 * **`/ec help style`** Displays the list of available styles, presets, and syntax guides.
 * **`/ec notification`** Toggles your personal mention notification preferences. *(This command is controlled by `notificationCommandEnable` in the configuration).*

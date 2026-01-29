@@ -2,13 +2,13 @@
 
 ## Type Table
 
-| Category         | Type                                                                                                           |
-|------------------|----------------------------------------------------------------------------------------------------------------|
-| **Color**        | `COLOR_HEX`, `COLOR_RAINBOW`, `COLOR_GRADIENT`, `COLOR_PRESET`, `COLOR_SHADOW`, `COLOR_TEAM`                   |
-| **Formatting**   | `BOLD`, `ITALIC`, `UNDERLINE`, `STRIKETHROUGH`, `OBFUSCATED`, `FONT`, `CLEAR`                                  |
-| **Interaction**  | `CLICK_COMMAND_RUN`, `CLICK_COMMAND_SUGGEST`, `CLICK_COPY`, `HOVER_TEXT`, `HOVER_ITEM`, `URL`, `METADATA`      |
-| **Modification** | `UPPER`, `LOWER`, `CAPITALIZE`, `REPLACE`, `MASK`, `PREFIX`, `SUFFIX`                                          |
-| **Advanced**     | `SHOW_ITEM`, `SHOW_INVENTORY`, `ATLAS_PRESET`, `JSON`, `DISCORD_JSON`, `COMMAND_RUN`, `LOG`, `BUBBLE`, `BLOCK` |
+| Category         | Type                                                                                                                               |
+|------------------|------------------------------------------------------------------------------------------------------------------------------------|
+| **Color**        | `COLOR_HEX`, `COLOR_RAINBOW`, `COLOR_GRADIENT`, `COLOR_PRESET`, `COLOR_SHADOW`, `COLOR_TEAM`                                       |
+| **Formatting**   | `BOLD`, `ITALIC`, `UNDERLINE`, `STRIKETHROUGH`, `OBFUSCATED`, `FONT`, `CLEAR`                                                      |
+| **Interaction**  | `CLICK_COMMAND_RUN`, `CLICK_COMMAND_SUGGEST`, `CLICK_COPY`, `HOVER_TEXT`, `HOVER_ITEM`, `URL`, `METADATA`                          |
+| **Modification** | `UPPER`, `LOWER`, `CAPITALIZE`, `REPLACE`, `MASK`, `PREFIX`, `SUFFIX`                                                              |
+| **Advanced**     | `SHOW_ITEM`, `SHOW_INVENTORY`, `SHOW_ENDER_CHEST`, `ATLAS_PRESET`, `JSON`, `DISCORD_JSON`, `COMMAND_RUN`, `LOG`, `BUBBLE`, `BLOCK` |
 
 ## Color Styles
 
