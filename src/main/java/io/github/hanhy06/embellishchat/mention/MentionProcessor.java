@@ -30,9 +30,6 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 
 public class MentionProcessor implements ConfigListener {
-    private final MinecraftServer server;
-    private final PlayerManager manager;
-    private final Scoreboard scoreboard;
     private final HashSet<Cooldown> cooldowns;
 
     private Config config;
