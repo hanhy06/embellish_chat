@@ -122,7 +122,7 @@ public record Config(
                                                 List.of(StyleAction.of(StyleType.SHOW_INVENTORY,""))
                                         ),
                                         StylingRule.of(
-                                                "(\\[ender\\])()",
+                                                "(\\[end\\])()",
                                                 List.of(StyleAction.of(StyleType.SHOW_ENDER_CHEST,""))
                                         ),
                                         StylingRule.of(

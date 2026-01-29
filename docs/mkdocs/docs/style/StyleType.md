@@ -114,6 +114,11 @@
     * This style type must be placed at the very bottom.
     * The inventoryContext snapshot is cleared when the player leaves the server.
     * **Option:** `None`
+* `SHOW_ENDER_CHEST`
+    * Displays the user’s face. Clicking it shows the user’s ender chest snapshot.
+    * This style type must be placed at the very bottom.
+    * The inventoryContext snapshot is cleared when the player leaves the server.
+    * **Option:** `None`
 * `ATLAS_PRESET`
     * Uses a predefined atlas name from the `atlasPreset` section.
     * This style type must be placed at the very bottom.
