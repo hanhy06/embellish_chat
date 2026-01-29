@@ -32,6 +32,5 @@
     },
 	"suggests": {
 		"luckperms": ">=5.4",
-        "openpartiesandclaims": "*"
 	}
 }
