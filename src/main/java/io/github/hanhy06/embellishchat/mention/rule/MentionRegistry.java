@@ -7,7 +7,6 @@ import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.mention.data.Target;
 import io.github.hanhy06.embellishchat.styling.util.ColorUtil;
 import io.github.hanhy06.embellishchat.util.LuckPermsUtil;
-import io.github.hanhy06.embellishchat.util.OpenPartyUtil;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.EntitySelector;
@@ -57,7 +56,6 @@ public class MentionRegistry {
                 entry(MentionType.PLAYER,this::PLAYER),
                 entry(MentionType.WORLD,this::WORLD),
                 entry(MentionType.LUCK_PERMS_GROUP,this::LUCK_PERMS_GROUP),
-                entry(MentionType.OPEN_PARTIES_AND_CLAIMS,this::OPEN_PARTIES_AND_CLAIMS),
                 entry(MentionType.CUSTOM,this::CUSTOM)
         ));
 
@@ -155,16 +153,6 @@ public class MentionRegistry {
             return Target.of(players,null);
         }else {
             EmbellishChat.LOGGER.info("LuckPerms not found. @group mentions will be ignored.");
-            return Target.of(new HashSet<>(),null);
-        }
-    }
-
-    private Target OPEN_PARTIES_AND_CLAIMS(MentionParameter parameter){
-        if (isOpenParty){
-            HashSet<ServerPlayerEntity> players = OpenPartyUtil.getPartyPlayers(server,parameter.player());
-            return Target.of(players,null);
-        }else {
-            EmbellishChat.LOGGER.info("Open Party and Claims not found. @party mentions will be ignored.");
             return Target.of(new HashSet<>(),null);
         }
     }
