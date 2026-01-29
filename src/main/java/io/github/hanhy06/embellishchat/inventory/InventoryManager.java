@@ -45,7 +45,7 @@ public class InventoryManager {
         SimpleInventory inventory = context.inventory();
         SimpleNamedScreenHandlerFactory factory;
 
-        if (inventory.size() == 57) {
+        if (inventory.size() == 54) {
             factory = new SimpleNamedScreenHandlerFactory((id, playerInventory, player) ->
                     new InventoryScreenHandler(ScreenHandlerType.GENERIC_9X6,id,playerInventory,inventory,6),
                     context.name()
