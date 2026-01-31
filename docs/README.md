@@ -239,47 +239,6 @@ The configuration file is located at `config/embellish-chat/mentions.json`.
     * **Styled Chat takes priority.** If installed, Embellish Chat's *styling* features will be overridden.
     * **Mentions still work:** The mention and notification system remains functional.
     * **Performance Tip:** If you must use both, remove all entries in Embellish Chat's `stylingRules` to prevent unnecessary background processing.
----
-## 📊 Performance
-
-### Test Setup
-
-These tests were performed in a synthetic stress environment to measure **worst-case** performance.  
-They do **not** represent normal server conditions.
-
-- Embellish Chat: **3.0.0 (DEV)**
-- Minecraft: **1.21.11**
-- World: **Singleplayer, Superflat**
-- CPU: **13th Gen Intel(R) Core(TM) i7-1360P**
-- Max RAM: **4 GB**
-- System: **Windows 11**
-- Config: **Default**
-
-### Test Scenario
-
-For each test:
-
-- The server was stressed with up to **500 chat messages per tick**  
-  (≈ **10,000 messages per second**).
-- Each message was about **50** or **200** characters long.
-- The server was kept under continuous load while sending these messages every tick.Once the MSPT(Milliseconds Per Tick) value stabilized, the average was calculated over that steady-state period.
-- The reported value is the **average MSPT** during that period.
-
-The messages used in the tests are:
-
-| Type         | Length | Test String                                                                                                                                                                                                                  |
-|--------------|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Plain Text   | 50     | `This is a simple plain text message for latency test.`                                                                                                                                                                      |
-| Plain Text   | 200    | `This is a standard long message designed to test the baseline performance of the chat system. It contains simple alphanumeric characters and basic punctuation only, without any markdown triggers.`                        |
-| Styling Only | 50     | `**Bold** _Italic_ [Red]<red> [Blue]<blue> ~~Strike~~`                                                                                                                                                                       |
-| Styling Only | 200    | `**Welcome** to the server! Please read the [rules]<#FF5555> at spawn. _Need help?_ Ask an admin! There is a **secret event** starting soon at the arena. Don't miss the [LEGENDARY PRIZES]<RAINBOW>!`                       |
-| Mention Only | 50     | `Hello @everyone is anyone @here? calling @PlayerName`                                                                                                                                                                       |
-| Mention Only | 200    | `Attention @everyone on the server. We are gathering @here now. If you are in @team(red) or @team(blue), please report to @PlayerOne. @group(admin) and @world(overworld) players should attend too.`                        |
-| Mixed        | 50     | `**Hey** @everyone! Look at [this]<red> _cool_ @here.`                                                                                                                                                                       |
-| Mixed        | 200    | `Attention @everyone! The **Boss Raid** is starting. @team(Red) please defend the [Core]<#FF0000>. @here gather at the gate! Watch out for the **hidden assassin**. The prize is [GOD SWORD]<RAINBOW>. Msg @Admin if stuck.` |
-
-![MSPT-50](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/MSPT3.0.0-50.png?raw=true)
-![MSPT-200](https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/MSPT3.0.0-200.png?raw=true)
 
 ---
 
