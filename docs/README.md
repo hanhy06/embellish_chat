@@ -213,8 +213,8 @@ The configuration file is located at `config/embellish-chat/mentions.json`.
 * **`styles`**: Defines the styles to be applied when the mention is triggered.
     * Works the same way as in the styling rules section.
 
-
 ---
+
 ## 📜 Compatibility
 
 ### ✅ Fully Supported
