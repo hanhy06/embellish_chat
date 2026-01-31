@@ -481,17 +481,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#inline-icons" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Inline Icons
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#text-formatting-text-placeholder-api" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -499,6 +488,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Text Formatting &amp; Text Placeholder API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bubble-chat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bubble Chat
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -755,22 +761,6 @@
 
 
 <h1 id="application">Application</h1>
-<h2 id="inline-icons">Inline Icons</h2>
-<pre><code>{
-  &quot;pattern&quot;: &quot;(:fire:)()&quot;,
-  &quot;styles&quot;: [
-    {
-      &quot;styleType&quot;: &quot;JSON&quot;,
-      &quot;preset&quot;: &quot;{\&quot;type\&quot;: \&quot;object\&quot;, \&quot;atlas\&quot;: \&quot;minecraft:blocks\&quot;, \&quot;sprite\&quot;: \&quot;block/campfire_fire\&quot;}&quot;
-    }
-  ]
-}
-
-</code></pre>
-<p><img alt="Fire" src="https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Fire.gif?raw=true" /></p>
-<p>If you use the <code>JSON</code> type, you can replace the matched string with JSON.
-The example above shows how to use the <code>JSON</code> type to replace <code>:fire:</code> with a fire atlas.<br>
-You can read about Minecraft’s atlas <a href="https://minecraft.wiki/w/Text_component_format#Atlas_Object_Type">Text component format wiki</a> and <a href="https://minecraft.wiki/w/Atlas">Atlas wiki</a>.</p>
 <h2 id="text-formatting-text-placeholder-api">Text Formatting &amp; Text Placeholder API</h2>
 <pre><code>{
   &quot;pattern&quot;: &quot;(.+)()&quot;,
@@ -781,11 +771,28 @@ You can read about Minecraft’s atlas <a href="https://minecraft.wiki/w/Text_co
     }
   ]
 }
-
 </code></pre>
-<p><img alt="Formatting" src="https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Formatting.png?raw=true" /></p>
+<p><img alt="Formatting" src="https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Formatting.png?raw=true" /></p>
 <p>You can format the chat by matching all rules from the first English styling set and applying them using the <code>REPLACE</code> type.
 When using custom formatting, ensure that <code>useClearFormat</code> is enabled.</p>
+<h3 id="bubble-chat">Bubble Chat</h3>
+<pre><code>{
+  &quot;pattern&quot;: &quot;(.+)()&quot;,
+  &quot;styles&quot;: [
+    {
+      &quot;styleType&quot;: &quot;BUBBLE&quot;,
+      &quot;preset&quot;: &quot;&quot;
+    },
+    {
+      &quot;styleType&quot;: &quot;BLOCK&quot;,
+      &quot;preset&quot;: &quot;&quot;
+    }
+  ]
+}
+</code></pre>
+<p><img alt="BubbleChat" src="https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/BubbleChat.gif?raw=true" /></p>
+<p>By displaying a speech bubble and preventing the chat message from being sent, 
+you can create a more natural conversational experience.</p>
 <h2 id="using-chat-as-a-macro">Using chat as a macro</h2>
 <pre><code>[
   {
@@ -806,7 +813,7 @@ When using custom formatting, ensure that <code>useClearFormat</code> is enabled
   }
 ]
 </code></pre>
-<p><img alt="Command_Run" src="https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Command_Run.gif?raw=true" /></p>
+<p><img alt="Command_Run" src="https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Command_Run.gif?raw=true" /></p>
 <p>Triggers and the COMMAND_RUN type allow chat to function as a macro.
 The example above demonstrates a showcase datapack that enables expressions like crying or joy through chat.</p>
 <p>If you want, you can download it <a href="https://modrinth.com/datapack/embellish-chat-showcase">here</a>.</p>

@@ -967,14 +967,28 @@
 <td style="text-align: left;"><code>Look at my [inv]</code></td>
 </tr>
 <tr>
+<td style="text-align: left;"><strong>Ender Chest</strong></td>
+<td style="text-align: left;"><code>[end]</code></td>
+<td style="text-align: left;"><code>Look at my [end]</code></td>
+</tr>
+<tr>
 <td style="text-align: left;"><strong>Mention</strong></td>
 <td style="text-align: left;"><code>@Target</code></td>
 <td style="text-align: left;"><code>@everyone</code>, <code>@User</code></td>
 </tr>
+<tr>
+<td style="text-align: left;"><strong>Icon</strong></td>
+<td style="text-align: left;"><code>:Icon:</code></td>
+<td style="text-align: left;"><code>:yes:</code>, <code>:fire:</code></td>
+</tr>
 </tbody>
 </table>
 <blockquote>
-<p><strong>Note:</strong> For complex styling logic or custom rules, refer to the <strong><a href="style/StyleSystem">Style System</a></strong>.</p>
+<p><strong>Note:</strong> </p>
+<ul>
+<li>For complex styling logic or custom rules, refer to the <strong><a href="style/StyleSystem">Style System</a></strong>.</li>
+<li>These icons are available by default. <code>fire, hunger, heart, yes, no, move</code></li>
+</ul>
 </blockquote>
 <h3 id="mention-targets">Mention Targets</h3>
 <table>
@@ -1038,6 +1052,10 @@
 <td style="text-align: left;"><code>/ec notification</code></td>
 <td style="text-align: left;">Toggles personal mention notifications (if enabled in config).</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>/ec open</code></td>
+<td style="text-align: left;">Opens the last shared inventory/ender chest/item of the specified player</td>
+</tr>
 </tbody>
 </table>
 <h3 id="admin-commands-embellish-chat">Admin Commands (<code>/embellish-chat</code>)</h3>
@@ -1082,25 +1100,19 @@
 <h2 id="configuration">Configuration</h2>
 <p>Embellish Chat provides powerful functionality through the use of regular expressions.
 Because regular expressions are inherently difficult, it is recommended to leverage various AI tools for rule creation and optimization.</p>
-<p>The configuration file is located at <code>config/embellish-chat.json</code>.</p>
+<p>The configuration file is located at <code>config/embellish-chat/config.json</code>.</p>
 <pre><code>{
-  // version
-  &quot;version&quot;: &quot;3.0.0&quot;,
+  //version
+  &quot;version&quot;: &quot;3.1.0&quot;,
 
-  //rules
-  &quot;stylingRules&quot;: {
-    &quot;embellish-chat.chat&quot;: [ ... ],
-    &quot;embellish-chat.command_argument&quot;: []
-  },
-  &quot;mentionRules&quot;: {
-    &quot;embellish-chat.mention&quot;: [ ... ]
-  },
+  //preset
+  &quot;colorPreset&quot;: { ... },
+  &quot;atlasPreset&quot;: { ... },
 
-  // presets
+  //setting
   &quot;delimiter&quot;: &quot;,&quot;,
   &quot;timestamp&quot;: &quot;yyyy-MM-dd HH:mm:ss&quot;,
   &quot;urlColor&quot;: &quot;#0000EE&quot;,
-  &quot;colorPreset&quot;: { ... },
   &quot;defaultTeamColor&quot;: &quot;#FF55FF&quot;,
   &quot;notificationCommandEnable&quot;: true,
   &quot;mentionBroadcast&quot;: true,
@@ -1108,10 +1120,52 @@ Because regular expressions are inherently difficult, it is recommended to lever
 
   //player list
   &quot;bannedPlayerList&quot;: [],
-  &quot;notificationOffPlayerList&quot;: []
+  &quot;notificationOffPlayerList&quot;: [],
 
-  //discord
+  //webhook
   &quot;webhook&quot;: &quot;&quot;
+}
+</code></pre>
+<p>The configuration file is located at <code>config/embellish-chat/styles.json</code>.</p>
+<pre><code>{
+  &quot;stylingRules&quot;: {
+    &quot;embellish-chat.chat&quot;: [
+      {
+        &quot;pattern&quot;: &quot; ... &quot;,
+        &quot;styles&quot;: [
+          {
+            &quot;styleType&quot;: &quot; ... &quot;,
+            &quot;preset&quot;: &quot; ... &quot;
+          }
+        ]
+      }
+      ...
+    ],
+    &quot;embellish-chat.command_argument&quot;: []
+  }
+}
+</code></pre>
+<p>The configuration file is located at <code>config/embellish-chat/mentions.json</code>.</p>
+<pre><code>{
+  &quot;mentionRules&quot;: {
+    &quot;embellish-chat.mention&quot;: [
+      {
+        &quot;pattern&quot;: &quot; ... &quot;,
+        &quot;title&quot;: &quot; ... &quot;,
+        &quot;cooldown&quot;: 0,
+        &quot;onlyTarget&quot;: false,
+        &quot;sound&quot;: { ... },
+        &quot;mentions&quot;: [
+          {
+            &quot;mentionType&quot;: &quot; ... &quot;,
+            &quot;preset&quot;: &quot; ... &quot;
+          }
+        ],
+        &quot;styles&quot;: [ ... ]
+      }
+      ...
+    ]
+  }
 }
 </code></pre>
 <ul>
@@ -1129,7 +1183,6 @@ Because regular expressions are inherently difficult, it is recommended to lever
 <li><strong>Fabric Permissions API(Embedded):</strong> Full integration for permission-based rules.</li>
 <li><strong>Text Placeholder API:</strong> Supports placeholders in mention titles and presets.</li>
 <li><strong>LuckPerms:</strong> Required for <code>@group</code> mentions.</li>
-<li><strong>Open Parties and Claims:</strong> Required for <code>@party</code> mentions.</li>
 <li><strong>Geyser:</strong> Basic support (Mentions work; Click/Hover events are limited on Bedrock).</li>
 <li><strong>Chat Heads:</strong> Fully compatible.</li>
 </ul>

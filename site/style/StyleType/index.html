@@ -793,7 +793,7 @@
 </tr>
 <tr>
 <td><strong>Advanced</strong></td>
-<td><code>SHOW_ITEM</code>,<code>SHOW_INVENTORY</code>,<code>JSON</code>, <code>DISCORD_JSON</code>, <code>COMMAND_RUN</code>, <code>LOG</code></td>
+<td><code>SHOW_ITEM</code>, <code>SHOW_INVENTORY</code>, <code>SHOW_ENDER_CHEST</code>, <code>ATLAS_PRESET</code>, <code>JSON</code>, <code>DISCORD_JSON</code>, <code>COMMAND_RUN</code>, <code>LOG</code>, <code>BUBBLE</code>, <code>BLOCK</code></td>
 </tr>
 </tbody>
 </table>
@@ -948,11 +948,27 @@
 <ul>
 <li><code>SHOW_ITEM</code><ul>
 <li>Displays the description and texture of the item/block held by the player.</li>
+<li>This style type must be placed at the very bottom.</li>
 <li><strong>Option:</strong> <code>Altas Path(atlas;sprite)</code></li>
 </ul>
 </li>
 <li><code>SHOW_INVENTORY</code><ul>
 <li>Displays the user’s face. Clicking it shows the user’s inventoryContext snapshot.</li>
+<li>This style type must be placed at the very bottom.</li>
+<li>The inventoryContext snapshot is cleared when the player leaves the server.</li>
+<li><strong>Option:</strong> <code>None</code></li>
+</ul>
+</li>
+<li><code>SHOW_ENDER_CHEST</code><ul>
+<li>Displays the user’s face. Clicking it shows the user’s ender chest snapshot.</li>
+<li>This style type must be placed at the very bottom.</li>
+<li>The inventoryContext snapshot is cleared when the player leaves the server.</li>
+<li><strong>Option:</strong> <code>None</code></li>
+</ul>
+</li>
+<li><code>ATLAS_PRESET</code><ul>
+<li>Uses a predefined atlas name from the <code>atlasPreset</code> section.</li>
+<li>This style type must be placed at the very bottom.</li>
 <li><strong>Option:</strong> <code>None</code></li>
 </ul>
 </li>
@@ -973,6 +989,17 @@
 </li>
 <li><code>LOG</code><ul>
 <li>Logs the text and sender information to the server console.</li>
+<li><strong>Option:</strong> <code>None</code></li>
+</ul>
+</li>
+<li><code>BUBBLE</code><ul>
+<li>Displays a speech bubble above the user’s head.</li>
+<li>This type must be placed above types <code>SHOW_ITEM</code> and <code>SHOW_INVENTORY</code>.</li>
+<li><strong>Option:</strong> <code>None</code></li>
+</ul>
+</li>
+<li><code>BLOCK</code><ul>
+<li>Stops sending messages.</li>
 <li><strong>Option:</strong> <code>None</code></li>
 </ul>
 </li>

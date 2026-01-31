@@ -683,6 +683,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#use-as-a-channel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use as a channel
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -724,6 +735,7 @@
 <pre><code>{
   &quot;pattern&quot;: &quot;@admin()&quot;,
   &quot;title&quot;: &quot;%player:displayname% mentioned you&quot;,
+  &quot;onlyTarget&quot;: false,
   &quot;cooldown&quot;: 0,
   &quot;sound&quot;: {
     &quot;id&quot;: &quot;minecraft:entity.experience_orb.pickup&quot;,
@@ -756,9 +768,8 @@
     }
   ]
 }
-
 </code></pre>
-<p><img alt="Mention" src="https://github.com/hanhy06/embellish-chat/blob/v3.0.0/%2B1.21.11/docs/images/Mention.gif?raw=true" /></p>
+<p><img alt="Mention" src="https://github.com/hanhy06/embellish-chat/blob/v3.1.0/%2B1.21.11/docs/images/Mention.gif?raw=true" /></p>
 <p>You can put any value accepted as an option into the preset.
 When used this way, you can always trigger an admin mention simply by using <code>@admin</code>.
 Additionally, by using <code>CLICK_COMMAND_RUN</code> in the styles section, the mentioned administrator can easily teleport to the sender’s location.
@@ -768,6 +779,7 @@ If you also use <code>DISCORD_JSON</code>, the administrator will receive a noti
   &quot;pattern&quot;: &quot;\\[notification\\]()&quot;,
   &quot;title&quot;: &quot;%player:displayname% mentioned you&quot;,
   &quot;cooldown&quot;: 0,
+  &quot;onlyTarget&quot;: false,
   &quot;sound&quot;: {
     &quot;id&quot;: &quot;minecraft:entity.experience_orb.pickup&quot;,
     &quot;category&quot;: &quot;UI&quot;,
@@ -793,6 +805,34 @@ If you also use <code>DISCORD_JSON</code>, the administrator will receive a noti
 }
 </code></pre>
 <p>Typing <code>[notification]</code> will send an alert to everyone.</p>
+<h2 id="use-as-a-channel">Use as a channel</h2>
+<pre><code>{
+  &quot;pattern&quot;: &quot;#staff()&quot;,
+  &quot;title&quot;: &quot;&quot;,
+  &quot;onlyTarget&quot;: true,
+  &quot;cooldown&quot;: 0,
+  &quot;sound&quot;: null,
+  &quot;mentions&quot;: [
+    {
+      &quot;mentionType&quot;: &quot;LUCK_PERMS_GROUP&quot;,
+      &quot;preset&quot;: &quot;staff&quot;
+    }
+  ],
+  &quot;styles&quot;: [
+    {
+      &quot;styleType&quot;: &quot;BOLD&quot;,
+      &quot;preset&quot;: &quot;&quot;
+    },
+    {
+      &quot;styleType&quot;: &quot;COLOR_GRADIENT&quot;,
+      &quot;preset&quot;: &quot;#FF5555#C77DFF&quot;
+    }
+  ]
+}
+</code></pre>
+<p>By setting <code>"onlyTarget": true</code>, you can use the mention system as a private chat channel.
+In this example, messages starting with #staff will not be broadcast to the global chat.
+Instead, they will be sent exclusively to players in the staff LuckPerms group.</p>
 
 
 

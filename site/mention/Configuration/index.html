@@ -766,6 +766,7 @@
   &quot;pattern&quot;: &quot;@everyone()&quot;,
   &quot;title&quot;: &quot;%player:displayname% mentioned you&quot;,
   &quot;cooldown&quot;: 0,
+  &quot;onlyTarget&quot;: false
   &quot;sound&quot;: {
     &quot;id&quot;: &quot;minecraft:entity.experience_orb.pickup&quot;,
     &quot;category&quot;: &quot;UI&quot;,
@@ -801,6 +802,10 @@
 </li>
 <li><strong><code>cooldown</code></strong>: This is the mention cooldown time in seconds.<ul>
 <li>Set to <code>0</code> to disable the cooldown.</li>
+</ul>
+</li>
+<li><strong><code>onlyTarget</code></strong>: <ul>
+<li>When set to true, prevents the message from being broadcast globally and sends it only to the target.</li>
 </ul>
 </li>
 <li><strong><code>sound</code></strong>: Defines the notification sound settings.<ul>
