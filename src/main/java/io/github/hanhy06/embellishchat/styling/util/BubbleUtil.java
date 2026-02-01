@@ -19,7 +19,7 @@ public class BubbleUtil {
     private static final List<BubbleContext> activeBubbles = new ArrayList<>();
 
     private static final Vector3f SMALL_SCALE = new Vector3f(0,0,0);
-    private static final Vector3f BIG_SCALE = new Vector3f(1.2f,1.2f,1.2f);
+    private static final Vector3f BIG_SCALE = new Vector3f(1.1f,1.1f,1.1f);
     private static final Vector3f Y_OFFSET = new Vector3f(0,0.4f,0);
 
     private record BubbleContext(DisplayEntity.TextDisplayEntity entity, ServerPlayerEntity owner) {
@@ -56,7 +56,7 @@ public class BubbleUtil {
             }
 
             int stackIndex = stackCounts.getOrDefault(ownerUuid, 0);
-            double yPos = owner.getY() + owner.getHeight() + 0.2 + (stackIndex * 0.35) + (blowObject != null ? 0.25:0);
+            double yPos = owner.getY() + owner.getHeight() + 0.2 + (stackIndex * 0.32) + (blowObject != null ? 0.2:0);
             entity.setPosition(owner.getX(), yPos, owner.getZ());
 
             stackCounts.put(ownerUuid, stackIndex + 1);
