@@ -15,7 +15,6 @@ import org.joml.Vector3f;
 import java.util.*;
 
 public class BubbleUtil {
-
     private static final List<BubbleContext> activeBubbles = new ArrayList<>();
 
     private static final Vector3f SMALL_SCALE = new Vector3f(0,0,0);
