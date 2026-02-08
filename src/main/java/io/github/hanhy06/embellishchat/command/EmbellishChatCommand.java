@@ -145,7 +145,7 @@ public class EmbellishChatCommand {
 
         if (player == null) {
             source.sendFeedback(() ->
-                    Text.literal("Stress test must be run by a player in-game."),
+                            Text.literal("Stress test must be run by a player in-game."),
                     false
             );
             return 0;
