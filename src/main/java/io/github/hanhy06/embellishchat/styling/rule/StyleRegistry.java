@@ -5,7 +5,7 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
-import io.github.hanhy06.embellishchat.discord.DiscordMessenger;
+import io.github.hanhy06.embellishchat.styling.util.DiscordUtil;
 import io.github.hanhy06.embellishchat.inventory.InventoryManager;
 import io.github.hanhy06.embellishchat.message.MessageProcessor;
 import io.github.hanhy06.embellishchat.styling.data.Runs;
@@ -48,7 +48,7 @@ public class StyleRegistry {
     private final HashMap<String, AtlasTextObjectContents> atlasPreset;
     private final EnumMap<StyleType, Function<StyleParameter, MutableText>> registers;
     private final Pattern HEX_CODE = Pattern.compile("#[A-Fa-f0-9]{6}");
-    private final DiscordMessenger messenger;
+    private final DiscordUtil messenger;
 
     public StyleRegistry(Config config) {
         this.config = config;
@@ -98,7 +98,7 @@ public class StyleRegistry {
                 entry(StyleType.BUBBLE, this::BUBBLE),
                 entry(StyleType.BLOCK, this::BLOCK)
         ));
-        this.messenger = new DiscordMessenger(config);
+        this.messenger = new DiscordUtil(config);
     }
 
     public Function<StyleParameter, MutableText> get(StyleType styleType) {

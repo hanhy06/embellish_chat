@@ -1,4 +1,4 @@
-package io.github.hanhy06.embellishchat.discord;
+package io.github.hanhy06.embellishchat.styling.util;
 
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
@@ -8,11 +8,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-public class DiscordMessenger {
+public class DiscordUtil {
     private final HttpClient client;
     private final URI webhook;
 
-    public DiscordMessenger(Config config) {
+    public DiscordUtil(Config config) {
         this.client = HttpClient.newHttpClient();
         this.webhook = config.webhook();
     }
