@@ -95,7 +95,7 @@ public class AdminCommand {
 
     private static int executeStressTest(CommandContext<ServerCommandSource> context) {
         int count = IntegerArgumentType.getInteger(context, "count");
-        String test  = StringArgumentType.getString(context,"txst");
+        String test  = StringArgumentType.getString(context,"text");
         ServerCommandSource source = context.getSource();
         ServerPlayerEntity player = source.getPlayer();
 
