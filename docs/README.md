@@ -50,7 +50,7 @@ Use the following patterns directly in the chat window to apply styles:
 > * **Links:** Only `https://` URLs are supported for security.
 > * **Colors:** Presets (e.g., `pink`) are defined in the mod configuration.
 > * **Fonts:** The `path` requires a namespaced ID (e.g., `minecraft:alt`).
-> * **More Info:** For advanced syntax, style combinations, and detailed rules, refer to `/ec help style` or the [StyleWiki](https://hanhy06.github.io/embellish-chat/site/style/StyleSystem/).
+> * **More Info:** For advanced syntax, style combinations, and detailed rules, refer to `/embellish-chat help style` or the [StyleWiki](https://hanhy06.github.io/embellish-chat/site/style/StyleSystem/).
 
 ---
 
@@ -82,16 +82,15 @@ Use the following patterns directly in the chat window to apply styles:
 
 * **`/embellish-chat reload`** Reloads all configuration files under `/config/embellish-chat/` immediately.
 * **`/embellish-chat ban/pardon <player>`** Blocks or restores a player's access to all mod features.
-* **`/embellish-chat test regex <regex> <test>`** Compiles a regex pattern and tests it against a string for debugging purposes.
-* **`/embellish-chat test stress <count> <test>`** Simulates `<count>` messages to stress-test the server's processing performance.
+* **`/embellish-chat stress_test <count> <text>`** Simulates `<count>` messages to stress-test the server's message-processing performance. *(Max: 5000 messages, player-only execution).*
 
 ### User Commands
 > Available to **all players** (no permission required).
 
-* **`/mebellish-chat open <player>`** Opens the last shared inventory of the specified player.
-* **`/mebellish-chat help mention`** Displays the list of available mention targets and usage guides.
-* **`/mebellish-chat help style`** Displays the list of available styles, presets, and syntax guides.
-* **`/mebellish-chat notification`** Toggles your personal mention notification preferences. *(This command is controlled by `notificationCommandEnable` in the configuration).*
+* **`/embellish-chat open <player|uuid>`** Opens the last shared inventory/ender chest/item snapshot of the specified player.
+* **`/embellish-chat help mention`** Displays the mention rules available to you based on your permissions.
+* **`/embellish-chat help style`** Displays the styling rules available to you based on your permissions.
+* **`/embellish-chat notification`** Toggles your personal mention notification preferences. *(Enabled/disabled globally by `notificationCommandEnable` in the config).*
 
 ---
 
@@ -106,7 +105,7 @@ The configuration file is located at `config/embellish-chat/config.json`.
 ```
 {
   //version
-  "version": "3.1.0",
+  "version": "3.1.1",
   
   //preset
   "colorPreset": { ... },
