@@ -70,7 +70,7 @@ public class InventoryManager {
             inventory.setStack(i, grayPane.copy());
         }
 
-        inventory.setStack(6,player.getOffHandStack());
+        inventory.setStack(6,player.getOffHandStack().copy());
         for (int i = 0; i < 4; i++) {
             ItemStack item = playerInventory.getStack(39-i).copy();
             inventory.setStack(i+2, item);
