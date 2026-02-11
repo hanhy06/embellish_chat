@@ -87,7 +87,7 @@ Use the following patterns directly in the chat window to apply styles:
 ### User Commands
 > Available to **all players** (no permission required).
 
-* **`/embellish-chat open <player|uuid>`** Opens the last shared inventory/ender chest/item snapshot of the specified player.
+* **`/embellish-chat open <player>`** Opens the last shared inventory/ender/item of the specified player.
 * **`/embellish-chat help mention`** Displays the mention rules available to you based on your permissions.
 * **`/embellish-chat help style`** Displays the styling rules available to you based on your permissions.
 * **`/embellish-chat notification`** Toggles your personal mention notification preferences. *(Enabled/disabled globally by `notificationCommandEnable` in the config).*

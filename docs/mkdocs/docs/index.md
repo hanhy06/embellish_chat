@@ -54,22 +54,22 @@ Use these patterns directly in the chat window.
 ### User Commands (`/embellish-chat`)
 Available to all players.
 
-| Command            | Description                                                              |
-|:-------------------|:-------------------------------------------------------------------------|
-| `/embellish-chat help style`   | Displays available styles and syntax usage.                              |
-| `/embellish-chat help mention` | Displays available mention types and targets.                            |
-| `/embellish-chat notification` | Toggles personal mention notifications (if enabled in config).           |
-| `/embellish-chat open <player\|uuid>` | Opens the last shared inventory/ender chest/item snapshot of the specified player |
+| Command                          | Description                                                         |
+|----------------------------------|---------------------------------------------------------------------|
+| `/embellish-chat help style`     | Displays available styles and syntax usage.                         |
+| `/embellish-chat help mention`   | Displays available mention types and targets.                       |
+| `/embellish-chat notification`   | Toggles personal mention notifications (if enabled in config).      |
+| `/embellish-chat open <player >` | Opens the last shared inventory/ender /item of the specified player |
 
 ### Admin Commands (`/embellish-chat`)
 Requires OP Level 2 or appropriate permissions.
 
-| Command       | Arguments        | Description                                           |
-|:--------------|:-----------------|:------------------------------------------------------|
-| `reload`      | `None`           | Reloads all files under `config/embellish-chat/`.                 |
-| `ban`         | `<player>`       | Blocks a player from using mod features.              |
-| `pardon`      | `<player>`       | Restores mod access for a player.                     |
-| `stress_test` | `<count> <text>` | Simulates `<count>` messages for performance testing. |
+| Command       | Arguments        | Description                                                |
+|---------------|------------------|------------------------------------------------------------|
+| `reload`      | `None`           | Reloads all files under `config/embellish-chat/`.          |
+| `ban`         | `<player>`       | Blocks a player from using mod features.                   |
+| `pardon`      | `<player>`       | Restores mod access for a player.                          |
+| `stress_test` | `<count> <text>` | Simulates `<count>` messages for performance testing.      |
 
 ---
 ## Configuration
