@@ -23,31 +23,28 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
-public class EmbellishChatCommand {
-    public static void registerEmbellishChat() {
+public class AdminCommand {
+    public static void registerCommand() {
         CommandRegistrationCallback.EVENT.register(
                 (commandDispatcher, commandRegistryAccess, registrationEnvironment) ->
                         commandDispatcher.register(
                                 CommandManager.literal("embellish-chat")
-                                        .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
                                         .then(CommandManager.literal("reload")
-                                                .executes(EmbellishChatCommand::executeReloadConfig))
+                                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
+                                                .executes(AdminCommand::executeReloadConfig))
                                         .then(CommandManager.literal("ban")
+                                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
                                                 .then(CommandManager.argument("target", EntityArgumentType.players())
                                                         .executes(context -> executeBanOrPardon(context, true))))
                                         .then(CommandManager.literal("pardon")
+                                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
                                                 .then(CommandManager.argument("target", EntityArgumentType.players())
                                                         .executes(context -> executeBanOrPardon(context, false))))
-                                        .then(CommandManager.literal("test")
-                                                .then(CommandManager.literal("regex")
-                                                        .then(CommandManager.argument("regex", StringArgumentType.string())
-                                                                .then(CommandManager.argument("test", StringArgumentType.string())
-                                                                        .executes(EmbellishChatCommand::executeRegexTest))))
-                                                .then(CommandManager.literal("stress")
-                                                        .then(CommandManager.argument("count", IntegerArgumentType.integer())
-                                                                .then(CommandManager.argument("test", StringArgumentType.string())
-                                                                        .executes(EmbellishChatCommand::executeStressTest))))
-                                        )
+                                        .then(CommandManager.literal("stress_test")
+                                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
+                                                .then(CommandManager.argument("count", IntegerArgumentType.integer())
+                                                        .then(CommandManager.argument("test", StringArgumentType.string())
+                                                                .executes(AdminCommand::executeStressTest))))
                         )
         );
     }

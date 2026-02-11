@@ -6,11 +6,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.ConfigManager;
 import io.github.hanhy06.embellishchat.inventory.InventoryManager;
-import io.github.hanhy06.embellishchat.mention.rule.MentionAction;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
-import io.github.hanhy06.embellishchat.mention.rule.MentionType;
-import io.github.hanhy06.embellishchat.styling.rule.StyleAction;
-import io.github.hanhy06.embellishchat.styling.rule.StyleType;
 import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
 import io.github.hanhy06.embellishchat.util.PermissionUtil;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
@@ -29,18 +25,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
-public class EcCommand {
-    public static void registerEc() {
+public class UserCommand {
+    public static void registerCommand() {
         CommandRegistrationCallback.EVENT.register((commandDispatcher, commandRegistryAccess, registrationEnvironment) -> commandDispatcher.register(
-                CommandManager.literal("ec")
+                CommandManager.literal("embellish-chat")
                         .then(CommandManager.literal("help")
-                                .then(CommandManager.literal("mention").executes(EcCommand::executeHelpMention))
-                                .then(CommandManager.literal("style").executes(EcCommand::executeHelpStyle))
+                                .then(CommandManager.literal("mention").executes(UserCommand::executeHelpMention))
+                                .then(CommandManager.literal("style").executes(UserCommand::executeHelpStyle))
                         )
                         .then(CommandManager.literal("notification")
-                                .executes(EcCommand::executeNotification)
+                                .executes(UserCommand::executeNotification)
                         )
                         .then(CommandManager.literal("open")
                                 .then(CommandManager.argument("key", UuidArgumentType.uuid())
@@ -118,8 +113,8 @@ public class EcCommand {
             else players.add(uuid);
         }
 
-        String result = String.format("Mention notifications set to: %s", (notification ? "ON" : "OFF"));
-        context.getSource().sendFeedback(() -> Text.literal(result), false);
+        String result = String.format("Mentions set to: %s", (notification ? "<green>ON</green>" : "<gray>OFF</gray>"));
+        context.getSource().sendFeedback(() -> PlaceHolderUtil.parseTag(result), false);
 
         CompletableFuture.runAsync(() -> {
             try {
