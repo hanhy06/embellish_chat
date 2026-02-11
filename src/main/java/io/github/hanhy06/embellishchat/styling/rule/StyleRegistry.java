@@ -5,12 +5,12 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
-import io.github.hanhy06.embellishchat.styling.util.DiscordUtil;
 import io.github.hanhy06.embellishchat.inventory.InventoryManager;
 import io.github.hanhy06.embellishchat.message.MessageProcessor;
 import io.github.hanhy06.embellishchat.styling.data.Runs;
 import io.github.hanhy06.embellishchat.styling.util.BubbleUtil;
 import io.github.hanhy06.embellishchat.styling.util.ColorUtil;
+import io.github.hanhy06.embellishchat.styling.util.DiscordUtil;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ProfileComponent;
@@ -297,10 +297,10 @@ public class StyleRegistry {
 
     public MutableText METADATA(StyleParameter parameter) {
         MutableText text = parameter.segment();
-        String now = LocalDateTime.now().format(timestamp);
 
-        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(now + "\nClick to copy to clipboard").formatted(Formatting.GRAY));
-        ClickEvent clickEvent = new ClickEvent.CopyToClipboard(now + " " + text.getString());
+        String timestamp = LocalDateTime.now().format(this.timestamp);
+        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(timestamp + "\nClick to copy to clipboard").formatted(Formatting.GRAY));
+        ClickEvent clickEvent = new ClickEvent.CopyToClipboard(timestamp + " " + text.getString());
 
         return text.fillStyle(Style.EMPTY.withHoverEvent(hoverEvent).withClickEvent(clickEvent));
     }
@@ -360,12 +360,12 @@ public class StyleRegistry {
             );
         }
 
-        Text text = Text.object(atlas);
+        MutableText text = Text.object(atlas);
         HoverEvent hoverEvent = new HoverEvent.ShowItem(item);
         ClickEvent clickEvent = new ClickEvent.RunCommand("/ec open "+player.getUuid());
         InventoryManager.putItem(player,item);
 
-        return text.copy().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent).withClickEvent(clickEvent));
+        return text.fillStyle(Style.EMPTY.withHoverEvent(hoverEvent).withClickEvent(clickEvent));
     }
 
     public MutableText SHOW_INVENTORY(StyleParameter parameter){

@@ -1,7 +1,7 @@
 package io.github.hanhy06.embellishchat;
 
-import io.github.hanhy06.embellishchat.command.UserCommand;
 import io.github.hanhy06.embellishchat.command.AdminCommand;
+import io.github.hanhy06.embellishchat.command.UserCommand;
 import io.github.hanhy06.embellishchat.config.ConfigManager;
 import io.github.hanhy06.embellishchat.inventory.InventoryManager;
 import io.github.hanhy06.embellishchat.mention.MentionProcessor;

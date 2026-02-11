@@ -18,9 +18,6 @@ import net.minecraft.text.Text;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
 public class AdminCommand {
@@ -43,7 +40,7 @@ public class AdminCommand {
                                         .then(CommandManager.literal("stress_test")
                                                 .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
                                                 .then(CommandManager.argument("count", IntegerArgumentType.integer())
-                                                        .then(CommandManager.argument("test", StringArgumentType.string())
+                                                        .then(CommandManager.argument("text", StringArgumentType.string())
                                                                 .executes(AdminCommand::executeStressTest))))
                         )
         );
@@ -98,7 +95,7 @@ public class AdminCommand {
 
     private static int executeStressTest(CommandContext<ServerCommandSource> context) {
         int count = IntegerArgumentType.getInteger(context, "count");
-        String test  = StringArgumentType.getString(context,"test");
+        String test  = StringArgumentType.getString(context,"txst");
         ServerCommandSource source = context.getSource();
         ServerPlayerEntity player = source.getPlayer();
 
