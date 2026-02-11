@@ -60,8 +60,8 @@ public class AdminCommand {
         return 1;
     }
 
-    private static int executeBanOrPardon(CommandContext<ServerCommandSource> context, boolean ban) {
-        String action = ban ? "banned" : "pardoned";
+    private static int executeBanOrPardon(CommandContext<ServerCommandSource> context, boolean isBan) {
+        String action = isBan ? "banned" : "pardoned";
         Set<UUID> uuids;
         String names;
 
@@ -79,7 +79,7 @@ public class AdminCommand {
         }
 
         synchronized (ConfigManager.INSTANCE.LOCK_KEY) {
-            if (ban) ConfigManager.getConfig().bannedPlayerList().addAll(uuids);
+            if (isBan) ConfigManager.getConfig().bannedPlayerList().addAll(uuids);
             else ConfigManager.getConfig().bannedPlayerList().removeAll(uuids);
         }
         CompletableFuture.runAsync(() -> {
@@ -93,32 +93,6 @@ public class AdminCommand {
         String result = String.format("Player(s) %s %s.", names, action);
 
         context.getSource().sendFeedback(() -> Text.literal(result), true);
-        return 1;
-    }
-
-    private static int executeRegexTest(CommandContext<ServerCommandSource> context) {
-        String regexString = StringArgumentType.getString(context, "regex");
-        String testString = StringArgumentType.getString(context, "test");
-
-        Pattern pattern;
-        Matcher matcher;
-
-        try {
-            pattern = Pattern.compile(regexString);
-            matcher = pattern.matcher(testString);
-        } catch (PatternSyntaxException e) {
-            String error = String.format("Failed to compile regex: \"%s\" (%s)", regexString, e.getMessage());
-            context.getSource().sendFeedback(() -> Text.literal(error), false);
-            return 0;
-        }
-
-        if (!matcher.find()) {
-            context.getSource().sendFeedback(() -> Text.literal("No match found."), false);
-            return 0;
-        }
-
-        String result = formatMatchResult(matcher);
-        context.getSource().sendFeedback(() -> Text.literal(result), false);
         return 1;
     }
 

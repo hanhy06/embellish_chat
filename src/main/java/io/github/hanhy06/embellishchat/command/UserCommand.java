@@ -38,7 +38,7 @@ public class UserCommand {
                                 .executes(UserCommand::executeNotification)
                         )
                         .then(CommandManager.literal("open")
-                                .then(CommandManager.argument("key", UuidArgumentType.uuid())
+                                .then(CommandManager.argument("uuid", UuidArgumentType.uuid())
                                         .executes((context) -> executeOpenInventory(context,false))
                                 )
                                 .then(CommandManager.argument("player", EntityArgumentType.player())
@@ -126,16 +126,16 @@ public class UserCommand {
         return 1;
     }
 
-    private static int executeOpenInventory(CommandContext<ServerCommandSource> context,boolean type){
+    private static int executeOpenInventory(CommandContext<ServerCommandSource> context,boolean isPlayer){
         ServerPlayerEntity player = context.getSource().getPlayer();
         GameProfile profile = null;
 
         try {
-            if (type) {
+            if (isPlayer) {
                 profile = EntityArgumentType.getPlayer(context, "player").getGameProfile();
             }
             else {
-                UUID uuid = UuidArgumentType.getUuid(context, "key");
+                UUID uuid = UuidArgumentType.getUuid(context, "uuid");
                 GameProfileResolver resolver = EmbellishChat.SERVER.getApiServices().profileResolver();
                 profile= resolver.getProfileById(uuid).orElse(new GameProfile(uuid,"None"));
             }
