@@ -33,6 +33,11 @@ public class PlaceHolderUtil {
         });
     }
 
+    public static Text parseTag(String text){
+        if (text.isEmpty()) return Text.literal(text);
+        return TagParser.DEFAULT.parseText(text,ParserContext.of());
+    }
+
     public static Text parseText(String option, ServerPlayerEntity player){
         if (option.isEmpty()) return Text.literal(option);
 

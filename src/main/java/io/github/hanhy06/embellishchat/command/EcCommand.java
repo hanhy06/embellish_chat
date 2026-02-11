@@ -13,6 +13,7 @@ import io.github.hanhy06.embellishchat.styling.rule.StyleAction;
 import io.github.hanhy06.embellishchat.styling.rule.StyleType;
 import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
 import io.github.hanhy06.embellishchat.util.PermissionUtil;
+import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.UuidArgumentType;
@@ -58,7 +59,7 @@ public class EcCommand {
             return 1;
         }
 
-        player.sendMessage(Text.literal("--- Available Mentions ---"));
+        player.sendMessage(PlaceHolderUtil.parseTag("<gray>-----</gray> <aqua><b>Available Mentions</b></aqua> <gray>-----</gray>"));
         List<String> keys = PermissionUtil.getPermissions(player, ConfigManager.getConfig().mentionRules().keySet());
         List<MentionRule> rules = new ArrayList<>();
 
@@ -67,25 +68,9 @@ public class EcCommand {
         }
 
         for (MentionRule rule : rules) {
-            String pattern = rule.pattern().pattern();
-            String mentionTypes = rule.mentions()
-                    .stream()
-                    .map(MentionAction::mentionType)
-                    .map(MentionType::name)
-                    .collect(Collectors.joining(", "));
-            String styles = rule.styles()
-                    .stream()
-                    .map(StyleAction::styleType)
-                    .map(StyleType::name)
-                    .collect(Collectors.joining(", "));
-
-            String message = String.format(
-                    "Pattern: %s\nTargets: %s\nStyles: %s\n",
-                    pattern, mentionTypes, styles
-            );
-
-            player.sendMessage(Text.literal(message));
+            player.sendMessage(PlaceHolderUtil.parseTag(rule.comment()));
         }
+        player.sendMessage(PlaceHolderUtil.parseTag("<gray>------------------------------<gray>"));
 
         return 1;
     }
@@ -96,7 +81,7 @@ public class EcCommand {
             return 1;
         }
 
-        player.sendMessage(Text.literal("--- Available Styles ---"));
+        player.sendMessage(PlaceHolderUtil.parseTag("<gray>-----</gray> <aqua><b>Available Styles</b></aqua> <gray>-----</gray>"));
         List<String> keys = PermissionUtil.getPermissions(player, ConfigManager.getConfig().stylingRules().keySet());
         List<StylingRule> rules = new ArrayList<>();
 
@@ -105,25 +90,9 @@ public class EcCommand {
         }
 
         for (StylingRule rule : rules) {
-            String pattern = rule.pattern().pattern();
-            String styles = rule.styles()
-                    .stream()
-                    .map(StyleAction::styleType)
-                    .map(StyleType::name)
-                    .collect(Collectors.joining(", "));
-            String presetOptions = rule.styles()
-                    .stream()
-                    .map(StyleAction::preset)
-                    .map(str -> String.format("%s", str.isBlank() ? "user input" : str))
-                    .collect(Collectors.joining(ConfigManager.getConfig().delimiter()));
-
-            String message = String.format(
-                    "Pattern: %s\nStyles: %s\nPreset Options: %s\n",
-                    pattern, styles, presetOptions
-            );
-
-            player.sendMessage(Text.literal(message));
+            player.sendMessage(PlaceHolderUtil.parseTag(rule.comment()));
         }
+        player.sendMessage(PlaceHolderUtil.parseTag("<gray>----------------------------</gray>"));
 
         return 1;
     }

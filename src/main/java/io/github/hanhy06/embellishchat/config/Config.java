@@ -63,71 +63,88 @@ public record Config(
                                 List.of(
                                         StylingRule.of(
                                                 "\\[([^\\]]+?)]\\((https://.*?)\\)",
-                                                List.of(StyleAction.of(StyleType.URL,""))
+                                                List.of(StyleAction.of(StyleType.URL,"")),
+                                                "<blue><b>Pattern</b></blue>: [Text](url)\n<dark_aqua><b>Comment</b></dark_aqua>: clickable link with custom text\n"
                                         ),
                                         StylingRule.of(
                                                 "((https://\\S+))",
-                                                List.of(StyleAction.of(StyleType.URL,""))
+                                                List.of(StyleAction.of(StyleType.URL,"")),
+                                                "<blue><b>Pattern</b></blue>: url\n<dark_aqua><b>Comment</b></dark_aqua>: auto-detect clickable link\n"
                                         ),
                                         StylingRule.of(
                                                 "\\[([^\\]]+?)]\\{(.*?)}",
-                                                List.of(StyleAction.of(StyleType.FONT,""))
+                                                List.of(StyleAction.of(StyleType.FONT,"")),
+                                                "<blue><b>Pattern</b></blue>: [Text]{font}\n<dark_aqua><b>Comment</b></dark_aqua>: apply custom font to text\n"
                                         ),
                                         StylingRule.of(
                                                 "\\[([^\\]]+?)]<(#.{6})>",
-                                                List.of(StyleAction.of(StyleType.COLOR_HEX,""))
+                                                List.of(StyleAction.of(StyleType.COLOR_HEX,"")),
+                                                "<blue><b>Pattern</b></blue>: [Text]<#RRGGBB>\n<dark_aqua><b>Comment</b></dark_aqua>: apply hex color\n"
                                         ),
                                         StylingRule.of(
                                                 "\\[([^\\]]+?)]<(#.{6,})>",
-                                                List.of(StyleAction.of(StyleType.COLOR_GRADIENT,""))
+                                                List.of(StyleAction.of(StyleType.COLOR_GRADIENT,"")),
+                                                "<blue><b>Pattern</b></blue>: [Text]<#color1#color2...>\n<dark_aqua><b>Comment</b></dark_aqua>: apply gradient color\n"
                                         ),
                                         StylingRule.of(
                                                 "\\[([^\\]]+?)]<([a-z\\s]+?)>",
-                                                List.of(StyleAction.of(StyleType.COLOR_PRESET,""))
+                                                List.of(StyleAction.of(StyleType.COLOR_PRESET,"")),
+                                                "<blue><b>Pattern</b></blue>: [Text]<preset>\n<dark_aqua><b>Comment</b></dark_aqua>: apply preset color name\n"
                                         ),
                                         StylingRule.of(
                                                 "\\*\\*(.+?)\\*\\*()",
-                                                List.of(StyleAction.of(StyleType.BOLD,""))
+                                                List.of(StyleAction.of(StyleType.BOLD,"")),
+                                                "<blue><b>Pattern</b></blue>: **Text**\n<dark_aqua><b>Comment</b></dark_aqua>: bold formatting\n"
                                         ),
                                         StylingRule.of(
                                                 "__(.+?)__()",
-                                                List.of(StyleAction.of(StyleType.UNDERLINE,""))
+                                                List.of(StyleAction.of(StyleType.UNDERLINE,"")),
+                                                "<blue><b>Pattern</b></blue>: __Text__\n<dark_aqua><b>Comment</b></dark_aqua>: underline formatting\n"
                                         ),
                                         StylingRule.of(
                                                 "_(.+?)_()",
-                                                List.of(StyleAction.of(StyleType.ITALIC,""))
+                                                List.of(StyleAction.of(StyleType.ITALIC,"")),
+                                                "<blue><b>Pattern</b></blue>: _Text_\n<dark_aqua><b>Comment</b></dark_aqua>: italic formatting\n"
                                         ),
                                         StylingRule.of(
                                                 "~~(.+?)~~()",
-                                                List.of(StyleAction.of(StyleType.STRIKETHROUGH,""))
+                                                List.of(StyleAction.of(StyleType.STRIKETHROUGH,"")),
+                                                "<blue><b>Pattern</b></blue>: ~~Text~~\n<dark_aqua><b>Comment</b></dark_aqua>: strikethrough formatting\n"
                                         ),
                                         StylingRule.of(
                                                 "\\|\\|(.+?)\\|\\|()",
-                                                List.of(StyleAction.of(StyleType.OBFUSCATED,""))
+                                                List.of(StyleAction.of(StyleType.OBFUSCATED,"")),
+                                                "<blue><b>Pattern</b></blue>: ||Text||\n<dark_aqua><b>Comment</b></dark_aqua>: obfuscated text\n"
                                         ),
                                         StylingRule.of(
                                                 "\\[([^\\]]+?)]<(RAINBOW)>",
-                                                List.of(StyleAction.of(StyleType.COLOR_RAINBOW,"0.7"))
+                                                List.of(StyleAction.of(StyleType.COLOR_RAINBOW,"0.7")),
+                                                "<blue><b>Pattern</b></blue>: [Text]<RAINBOW>\n<dark_aqua><b>Comment</b></dark_aqua>: rainbow color\n"
                                         ),
                                         StylingRule.of(
                                                 "(.+)()",
-                                                List.of(StyleAction.of(StyleType.METADATA,""))
+                                                List.of(StyleAction.of(StyleType.METADATA,"")),
+                                                "<blue><b>Pattern</b></blue>: any text\n<dark_aqua><b>Comment</b></dark_aqua>: metadata capture layer\n"
                                         ),
                                         StylingRule.of(
                                                 "(\\[i\\])()",
-                                                List.of(StyleAction.of(StyleType.SHOW_ITEM,""))
+                                                List.of(StyleAction.of(StyleType.SHOW_ITEM,"")),
+                                                "<blue><b>Pattern</b></blue>: [i]\n<dark_aqua><b>Comment</b></dark_aqua>: show held item\n"
                                         ),
                                         StylingRule.of(
                                                 "(\\[inv\\])()",
-                                                List.of(StyleAction.of(StyleType.SHOW_INVENTORY,""))
+                                                List.of(StyleAction.of(StyleType.SHOW_INVENTORY,"")),
+                                                "<blue><b>Pattern</b></blue>: [inv]\n<dark_aqua><b>Comment</b></dark_aqua>: show player inventory\n"
                                         ),
                                         StylingRule.of(
                                                 "(\\[end\\])()",
-                                                List.of(StyleAction.of(StyleType.SHOW_ENDER_CHEST,""))
+                                                List.of(StyleAction.of(StyleType.SHOW_ENDER_CHEST,"")),
+                                                "<blue><b>Pattern</b></blue>: [end]\n<dark_aqua><b>Comment</b></dark_aqua>: show ender chest contents\n"
                                         ),
                                         StylingRule.of(
                                                 "(:(.+?):)",
-                                                List.of(StyleAction.of(StyleType.ATLAS_PRESET,""))
+                                                List.of(StyleAction.of(StyleType.ATLAS_PRESET,"")),
+                                                "<blue><b>Pattern</b></blue>: :icon:\n<dark_aqua><b>Comment</b></dark_aqua>: atlas emoji/icon preset\n"
                                         )
                                 )
                         ),
@@ -158,8 +175,10 @@ public record Config(
                                                     StyleAction.of(
                                                             StyleType.COLOR_PRESET,"light purple"
                                                     )
-                                            )
+                                            ),
+                                            "<blue><b>Pattern</b></blue>: @here\n<dark_aqua><b>Comment</b></dark_aqua>: mention players within 64 blocks\n"
                                     ),
+
                                     MentionRule.of(
                                             "@everyone()",
                                             "%player:displayname% mentioned you",
@@ -181,8 +200,10 @@ public record Config(
                                                     StyleAction.of(
                                                             StyleType.COLOR_PRESET,"light purple"
                                                     )
-                                            )
+                                            ),
+                                            "<blue><b>Pattern</b></blue>: @everyone\n<dark_aqua><b>Comment</b></dark_aqua>: mention all online players\n"
                                     ),
+
                                     MentionRule.of(
                                             "@team\\((.+?)\\)",
                                             "%player:displayname% mentioned you",
@@ -201,8 +222,10 @@ public record Config(
                                                     StyleAction.of(
                                                             StyleType.BOLD,""
                                                     )
-                                            )
+                                            ),
+                                            "<blue><b>Pattern</b></blue>: @team(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given scoreboard team\n"
                                     ),
+
                                     MentionRule.of(
                                             "@group\\((.+?)\\)",
                                             "%player:displayname% mentioned you",
@@ -224,8 +247,10 @@ public record Config(
                                                     StyleAction.of(
                                                             StyleType.COLOR_PRESET,"light purple"
                                                     )
-                                            )
+                                            ),
+                                            "<blue><b>Pattern</b></blue>: @group(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given LuckPerms group\n"
                                     ),
+
                                     MentionRule.of(
                                             "@world\\((.+?)\\)",
                                             "%player:displayname% mentioned you",
@@ -247,8 +272,10 @@ public record Config(
                                                     StyleAction.of(
                                                             StyleType.COLOR_PRESET,"light purple"
                                                     )
-                                            )
+                                            ),
+                                            "<blue><b>Pattern</b></blue>: @world(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given world\n"
                                     ),
+
                                     MentionRule.of(
                                             "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
                                             "%player:displayname% mentioned you",
@@ -267,9 +294,11 @@ public record Config(
                                                     StyleAction.of(
                                                             StyleType.BOLD,""
                                                     )
-                                            )
+                                            ),
+                                            "<blue><b>Pattern</b></blue>: @Player\n<dark_aqua><b>Comment</b></dark_aqua>: mention a specific player\n"
                                     )
                             )
+
                     )
                 )),
 

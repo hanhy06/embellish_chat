@@ -13,9 +13,10 @@ public record MentionRule(
         boolean onlyTarget,
         Sound sound,
         List<MentionAction> mentions,
-        List<StyleAction> styles
+        List<StyleAction> styles,
+        String comment
 ) {
-    public static MentionRule of(String regex,String title,int cooldown,boolean onlyTarget,Sound sound,List<MentionAction> mentions, List<StyleAction> styles){
-        return new MentionRule(Pattern.compile(regex),title,cooldown,onlyTarget,sound,mentions,styles);
+    public static MentionRule of(String regex,String title,int cooldown,boolean onlyTarget,Sound sound,List<MentionAction> mentions, List<StyleAction> styles,String comment){
+        return new MentionRule(Pattern.compile(regex),title,cooldown,onlyTarget,sound,mentions,styles,comment);
     }
 }
