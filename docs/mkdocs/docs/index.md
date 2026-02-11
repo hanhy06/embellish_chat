@@ -51,26 +51,25 @@ Use these patterns directly in the chat window.
 
 ## Commands
 
-### User Commands (`/ec`)
+### User Commands (`/embellish-chat`)
 Available to all players.
 
 | Command            | Description                                                              |
 |:-------------------|:-------------------------------------------------------------------------|
-| `/ec help style`   | Displays available styles and syntax usage.                              |
-| `/ec help mention` | Displays available mention types and targets.                            |
-| `/ec notification` | Toggles personal mention notifications (if enabled in config).           |
-| `/ec open`         | Opens the last shared inventory/ender chest/item of the specified player |
+| `/embellish-chat help style`   | Displays available styles and syntax usage.                              |
+| `/embellish-chat help mention` | Displays available mention types and targets.                            |
+| `/embellish-chat notification` | Toggles personal mention notifications (if enabled in config).           |
+| `/embellish-chat open <player\|uuid>` | Opens the last shared inventory/ender chest/item snapshot of the specified player |
 
 ### Admin Commands (`/embellish-chat`)
 Requires OP Level 2 or appropriate permissions.
 
 | Command       | Arguments        | Description                                           |
 |:--------------|:-----------------|:------------------------------------------------------|
-| `reload`      | `None`           | Reloads `config/embellish-chat.json`.                 |
+| `reload`      | `None`           | Reloads all files under `config/embellish-chat/`.                 |
 | `ban`         | `<player>`       | Blocks a player from using mod features.              |
 | `pardon`      | `<player>`       | Restores mod access for a player.                     |
-| `test regex`  | `<regex> <test>` | Tests a regex pattern against a string.               |
-| `test stress` | `<count> <test>` | Simulates `<count>` messages for performance testing. |
+| `stress_test` | `<count> <text>` | Simulates `<count>` messages for performance testing. |
 
 ---
 ## Configuration
@@ -82,7 +81,7 @@ The configuration file is located at `config/embellish-chat/config.json`.
 ```
 {
   //version
-  "version": "3.1.0",
+  "version": "3.1.1",
   
   //preset
   "colorPreset": { ... },

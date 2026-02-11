@@ -70,7 +70,7 @@
     * Displays the supplied text when the mouse hovers over it.
     * **Option:** `Text`
 * `HOVER_ITEM`
-    * Displays the item description for a specified inventoryContext slot when hovered over. (e.g., `-1` for main-hand, `40` for off-hand).
+    * Displays the item description for a specified inventory slot when hovered over. (e.g., `-1` for main-hand, `40` for off-hand).
     * **Option:** `Slot ID`
 * `URL`
     * Opens the provided URL in a browser when clicked.
@@ -108,16 +108,16 @@
 * `SHOW_ITEM`
     * Displays the description and texture of the item/block held by the player.
     * This style type must be placed at the very bottom.
-    * **Option:** `Altas Path(atlas;sprite)`
+    * **Option:** `Atlas Path (atlas;sprite)`
 * `SHOW_INVENTORY`
-    * Displays the user’s face. Clicking it shows the user’s inventoryContext snapshot.
+    * Displays the user’s face. Clicking it shows the user’s inventory snapshot.
     * This style type must be placed at the very bottom.
-    * The inventoryContext snapshot is cleared when the player leaves the server.
+    * The inventory snapshot is cleared when the player leaves the server.
     * **Option:** `None`
 * `SHOW_ENDER_CHEST`
     * Displays the user’s face. Clicking it shows the user’s ender chest snapshot.
     * This style type must be placed at the very bottom.
-    * The inventoryContext snapshot is cleared when the player leaves the server.
+    * The inventory snapshot is cleared when the player leaves the server.
     * **Option:** `None`
 * `ATLAS_PRESET`
     * Uses a predefined atlas name from the `atlasPreset` section.
