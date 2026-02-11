@@ -96,18 +96,6 @@ public class AdminCommand {
         return 1;
     }
 
-    private static String formatMatchResult(Matcher matcher) {
-        int groupCount = matcher.groupCount();
-
-        if (groupCount == 1) {
-            return String.format("Matched (Group 1): %s", matcher.group(1));
-        } else if (groupCount == 2) {
-            return String.format("Matched [Group 1: %s] | [Group 2: %s]", matcher.group(1), matcher.group(2));
-        } else {
-            return "Invalid regex or test string. (Requires 1 or 2 capture groups)";
-        }
-    }
-
     private static int executeStressTest(CommandContext<ServerCommandSource> context) {
         int count = IntegerArgumentType.getInteger(context, "count");
         String test  = StringArgumentType.getString(context,"test");
