@@ -23,10 +23,22 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-import java.util.stream.LongStream;
-import java.util.stream.Stream;
 
 public class AdminCommand {
+    private static final String STRESS_TEST_FORMAT = """
+            <gray>── Performance Analysis ──</gray>
+            • <aqua>Iterations</aqua>: %d
+            • <green>Average</green>: %.2fms
+            • <dark_green>Minimum</dark_green>: %dms
+            • <red>Maximum</red>: %dms
+            • <light_purple>Median</light_purple>: %.2fms
+            • <gold>Total</gold>: %dms
+
+            <gray>── Tick Analysis ──</gray>
+            • <blue>Used Ticks</blue>: %d / %d
+            • <blue>Usage</blue>: %.2f%%
+            """;
+
     public static void registerCommand() {
         CommandRegistrationCallback.EVENT.register(
                 (commandDispatcher, commandRegistryAccess, registrationEnvironment) ->
@@ -135,19 +147,17 @@ public class AdminCommand {
                 median = result.get(size / 2);
             }
 
-            String resultMessage = """
-                    <yellow>Results</yellow>
-                    • <aqua>Iterations</aqua>: %d
-                    • <green>Average</green>: %.2fms
-                    • <dark_green>Minimum</dark_green>: %dms
-                    • <red>Maximum</red>: %dms
-                    • <light_purple>Median</light_purple>: %.2fms
-                    • <gold>Total</gold>: %dms
-                    """;
+            long occupiedTicks = total / 50;
+            double usagePercent = (occupiedTicks / (double) time) * 100.0;
 
-            source.sendFeedback(() -> PlaceHolderUtil.parseTag(String.format(
-                    resultMessage, size, average, min, max, median, total
-            )), true);
+            String message = String.format(
+                    STRESS_TEST_FORMAT,
+                    size, average, min, max, median, total,
+                    occupiedTicks, time, usagePercent
+            );
+
+            source.sendFeedback(() -> PlaceHolderUtil.parseTag(message), true);
+            EmbellishChat.LOGGER.info(STRESS_TEST_FORMAT);
         });
 
         source.sendFeedback(() -> Text.literal("Starting stress test..."), true);
