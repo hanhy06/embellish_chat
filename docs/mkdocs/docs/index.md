@@ -38,7 +38,7 @@ Use these patterns directly in the chat window.
 
 | Target         | Description                                                     |
 |:---------------|:----------------------------------------------------------------|
-| `@PlayerName`  | Mentions a specific player.                                     |
+| `@Player`      | Mentions a specific player.                                     |
 | `@everyone`    | Mentions **all players** on the server.                         |
 | `@here`        | Mentions players within a specific radius (Default: 64 blocks). |
 | `@team(name)`  | Mentions members of a specific scoreboard team.                 |
@@ -64,12 +64,12 @@ Available to all players.
 ### Admin Commands (`/embellish-chat`)
 Requires OP Level 2 or appropriate permissions.
 
-| Command       | Arguments        | Description                                                |
-|---------------|------------------|------------------------------------------------------------|
-| `reload`      | `None`           | Reloads all files under `config/embellish-chat/`.          |
-| `ban`         | `<player>`       | Blocks a player from using mod features.                   |
-| `pardon`      | `<player>`       | Restores mod access for a player.                          |
-| `stress_test` | `<count> <text>` | Simulates `<count>` messages for performance testing.      |
+| Command       | Arguments               | Description                                                                                                       |
+|---------------|-------------------------|-------------------------------------------------------------------------------------------------------------------|
+| `reload`      | `None`                  | Reloads all files under `config/embellish-chat/`.                                                                 |
+| `ban`         | `<player>`              | Blocks a player from using mod features.                                                                          |
+| `pardon`      | `<player>`              | Restores mod access for a player.                                                                                 |
+| `stress_test` | `<time> <count> <text>` | Repeatedly simulates `<count>` messages for `<time>` to stress-test the server's message-processing performance.  |
 
 ---
 ## Configuration

@@ -77,7 +77,7 @@ Use the following patterns directly in the chat window to apply styles:
 
 ## ⌨️ Commands
 
-### Operator Commands
+### Admin Commands
 > Requires **OP Level 2** (or `GAMEMASTERS_CHECK` on 1.21.11+).
 
 * **`/embellish-chat reload`** Reloads all configuration files under `/config/embellish-chat/` immediately.
