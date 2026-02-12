@@ -1,5 +1,6 @@
 package io.github.hanhy06.embellishchat.command;
 
+import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
 
@@ -14,7 +15,7 @@ public class EmbellishChatCommandManager implements ConfigListener {
     }
 
     public static void registerCommand(){
-        String defaultCommand = Config.createDefault().commandAlias();
+        String defaultCommand = EmbellishChat.MOD_ID;
         AdminCommand.registerCommand(defaultCommand);
         UserCommand.registerCommand(defaultCommand);
     }

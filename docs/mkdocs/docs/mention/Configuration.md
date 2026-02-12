@@ -29,7 +29,8 @@
       "styleType": "COLOR_PRESET",
       "preset": "light purple"
     }
-  ]
+  ],
+  "comment": "<blue><b>Pattern</b></blue>: @everyone\n<dark_aqua><b>Comment</b></dark_aqua>: mention all online players\n"
 }
 ```
 
@@ -51,6 +52,7 @@
     * `preset`: This is an optional preset value.
 * **`styles`**: Defines the styles to be applied when the mention is triggered.
     * Works the same way as in the styling rules section.
+* **`comment`**: This comment is used in `/embellish-chat help mention`.
 
 ## Usage Patterns
 

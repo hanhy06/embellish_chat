@@ -10,7 +10,8 @@
       "styleType": "BOLD",
       "preset": ""
     }
-  ]
+  ],
+  "comment": "<blue><b>Pattern</b></blue>: **Text**\n<dark_aqua><b>Comment</b></dark_aqua>: bold formatting\n"
 }
 ```
 
@@ -20,6 +21,7 @@
 * **`styles`**: Defines the styles to be applied to captured group 1.
     * `styleType`: This is the style type. You can use all types listed in the table above.
     * `preset`: This is a preset value. If a value is provided, it is always used; if it is empty, the content of the user's captured group 2 is used instead.
+* **`comment`**: This comment is used in `/embellish-chat help style`.
 
 ## Usage Patterns
 

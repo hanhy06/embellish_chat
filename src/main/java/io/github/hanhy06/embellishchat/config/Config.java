@@ -346,7 +346,7 @@ public record Config(
                 //setting
                 ",",
                 "yyyy-MM-dd HH:mm:ss",
-                "embellish-chat",
+                "",
                 new  Color(0x0000EE),
                 new Color(0xFF55FF),
                 true,

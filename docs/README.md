@@ -82,7 +82,7 @@ Use the following patterns directly in the chat window to apply styles:
 
 * **`/embellish-chat reload`** Reloads all configuration files under `/config/embellish-chat/` immediately.
 * **`/embellish-chat ban/pardon <player>`** Blocks or restores a player's access to all mod features.
-* **`/embellish-chat stress_test <count> <text>`** Simulates `<count>` messages to stress-test the server's message-processing performance. *(Max: 5000 messages, player-only execution).*
+* **`/embellish-chat stress_test <time> <count> <text>`** Repeatedly simulates `<count>` messages for `<time>` to stress-test the server's message-processing performance.
 
 ### User Commands
 > Available to **all players** (no permission required).
@@ -114,6 +114,7 @@ The configuration file is located at `config/embellish-chat/config.json`.
   //setting
   "delimiter": ",",
   "timestamp": "yyyy-MM-dd HH:mm:ss",
+  "commandAlias": ""
   "urlColor": "#0000EE",
   "defaultTeamColor": "#FF55FF",
   "notificationCommandEnable": true,
@@ -150,7 +151,8 @@ The configuration file is located at `config/embellish-chat/styles.json`.
             "styleType": " ... ",
             "preset": " ... "
           }
-        ]
+        ],
+        "comment": "..."
       }
       ...
     ],
@@ -165,6 +167,7 @@ The configuration file is located at `config/embellish-chat/styles.json`.
 * **`styles`**: Defines the styles to be applied to captured group 1.
     * `styleType`: This is the style type. You can use all types listed in the [StyleWiki](https://hanhy06.github.io/embellish-chat/site/style/StyleType/).
     * `preset`: This is a preset value. If a value is provided, it is always used; if it is empty, the content of the user's captured group 2 is used instead.
+* **`comment`**: This comment is used in `/embellish-chat help style`.
 
 ### Mention
 
@@ -185,7 +188,8 @@ The configuration file is located at `config/embellish-chat/mentions.json`.
             "preset": " ... "
           }
         ],
-        "styles": [ ... ]
+        "styles": [ ... ],
+        "comment": "..."
       }
       ...
     ]
@@ -211,6 +215,7 @@ The configuration file is located at `config/embellish-chat/mentions.json`.
     * `preset`: This is an optional preset value.
 * **`styles`**: Defines the styles to be applied when the mention is triggered.
     * Works the same way as in the styling rules section.
+* **`comment`**: This comment is used in `/embellish-chat help mention`.
 
 ---
 

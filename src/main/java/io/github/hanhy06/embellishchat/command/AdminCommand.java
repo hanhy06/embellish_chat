@@ -39,11 +39,11 @@ public class AdminCommand {
             • <blue>Usage</blue>: %.2f%%
             """;
 
-    public static void registerCommand(String alias) {
+    public static void registerCommand(String command) {
         CommandRegistrationCallback.EVENT.register(
                 (commandDispatcher, commandRegistryAccess, registrationEnvironment) ->
                         commandDispatcher.register(
-                                CommandManager.literal(alias)
+                                CommandManager.literal(command)
                                         .then(CommandManager.literal("reload")
                                                 .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
                                                 .executes(AdminCommand::executeReloadConfig))
