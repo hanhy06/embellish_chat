@@ -57,7 +57,7 @@
 
     // Default config.json
     const DEFAULT_CONFIG = {
-      "version": "3.1.0",
+      "version": "3.1.1",
       "colorPreset": {
         "dark green": "#00AA00",
         "green": "#55FF55",
@@ -86,6 +86,7 @@
       },
       "delimiter": ",",
       "timestamp": "yyyy-MM-dd HH:mm:ss",
+      "commandAlias": "",
       "urlColor": "#0000EE",
       "defaultTeamColor": "#FF55FF",
       "notificationCommandEnable": true,
@@ -466,9 +467,9 @@
 
     const GlobalView = ({ config, updateGlobal, addPreset, removePreset, updatePreset, addAtlasPreset, removeAtlasPreset, updateAtlasPreset }) => (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="p-6 space-y-4">
+            <Card className="p-6 space-y-4 col-span-1 md:col-span-2">
                 <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center">
-                    <IconWrapper name="settings" className="mr-2" size={20} /> General
+                    <IconWrapper name="settings" className="mr-2" size={20} /> General & Colors
                 </h3>
                 <Input
                     label="Mod Version (Reference)"
@@ -487,8 +488,34 @@
                     onChange={(v) => updateGlobal('timestamp', v)}
                     placeholder="yyyy-MM-dd HH:mm:ss"
                 />
-                <div className="flex flex-col gap-3">
-                    <div className="flex items-center space-x-3 pt-2">
+                <Input
+                    label="Command Alias (/ec 대신 사용할 별칭)"
+                    value={config.commandAlias || ""}
+                    onChange={(v) => updateGlobal('commandAlias', v)}
+                    placeholder="Leave empty to keep /embellish-chat only"
+                />
+                <Input
+                    label="Discord Webhook URL"
+                    value={config.webhook}
+                    onChange={(v) => updateGlobal('webhook', v)}
+                    placeholder="Leave empty to disable"
+                />
+
+                <div className="pt-2 border-t border-slate-200 dark:border-slate-700 space-y-4">
+                    <ColorPicker
+                        label="URL Color"
+                        value={config.urlColor}
+                        onChange={(v) => updateGlobal('urlColor', v)}
+                    />
+                    <ColorPicker
+                        label="Default Team Color"
+                        value={config.defaultTeamColor}
+                        onChange={(v) => updateGlobal('defaultTeamColor', v)}
+                    />
+                </div>
+
+                <div className="pt-2 border-t border-slate-200 dark:border-slate-700 flex flex-col gap-3">
+                    <div className="flex items-center space-x-3">
                         <input
                             type="checkbox"
                             id="notifEnable"
@@ -527,31 +554,6 @@
                         </label>
                     </div>
                 </div>
-
-                <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
-                    <Input
-                        label="Discord Webhook URL"
-                        value={config.webhook}
-                        onChange={(v) => updateGlobal('webhook', v)}
-                        placeholder="Leave empty to disable"
-                    />
-                </div>
-            </Card>
-
-            <Card className="p-6 space-y-4">
-                <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center">
-                    <IconWrapper name="palette" className="mr-2" size={20} /> Colors
-                </h3>
-                <ColorPicker
-                    label="URL Color"
-                    value={config.urlColor}
-                    onChange={(v) => updateGlobal('urlColor', v)}
-                />
-                <ColorPicker
-                    label="Default Team Color"
-                    value={config.defaultTeamColor}
-                    onChange={(v) => updateGlobal('defaultTeamColor', v)}
-                />
             </Card>
 
             <Card className="p-6 col-span-1 md:col-span-2">
@@ -665,6 +667,16 @@
                                         className="font-mono text-sm"
                                         placeholder="e.g. \*\*([^\*]+)\*\*()"
                                     />
+                                    <Input
+                                        label="Comment (/embellish-chat help style)"
+                                        value={rule.comment || ""}
+                                        onChange={(v) => {
+                                            const newRules = [...rules];
+                                            newRules[idx] = { ...newRules[idx], comment: v };
+                                            updateRuleList('stylingRules', permKey, newRules);
+                                        }}
+                                        placeholder="<blue><b>Pattern</b></blue>: **Text** ..."
+                                    />
                                     <StyleActionsEditor
                                         actions={rule.styles}
                                         onChange={(newActions) => {
@@ -680,7 +692,7 @@
                             className="w-full mt-4"
                             variant="secondary"
                             onClick={() => {
-                                const newRules = [...rules, { pattern: "", styles: [] }];
+                                const newRules = [...rules, { pattern: "", styles: [], comment: "" }];
                                 updateRuleList('stylingRules', permKey, newRules);
                             }}
                         >
@@ -837,6 +849,18 @@
                                             className="md:col-span-6"
                                         />
 
+                                        <Input
+                                            label="Comment (/embellish-chat help mention)"
+                                            value={rule.comment || ""}
+                                            onChange={(v) => {
+                                                const newRules = [...rules];
+                                                newRules[idx] = { ...newRules[idx], comment: v };
+                                                updateRuleList('mentionRules', permKey, newRules);
+                                            }}
+                                            className="md:col-span-6"
+                                            placeholder="<blue><b>Pattern</b></blue>: @everyone ..."
+                                        />
+
                                         <div className="md:col-span-12 bg-slate-50 dark:bg-slate-900/30 p-3 rounded">
                                             <MentionActionsEditor
                                                 actions={rule.mentions}
@@ -877,7 +901,8 @@
                                             pitch: 1.0
                                         },
                                         mentions: [],
-                                        styles: []
+                                        styles: [],
+                                        comment: ""
                                     }];
                                     updateRuleList('mentionRules', permKey, newRules);
                                 }}
@@ -1006,10 +1031,18 @@
                     if (parsed.mentionBroadcast === undefined) parsed.mentionBroadcast = true;
                     if (parsed.webhook === undefined) parsed.webhook = "";
                     if (parsed.useClearFormat === undefined) parsed.useClearFormat = false;
+                    if (parsed.commandAlias === undefined) parsed.commandAlias = "";
                     if (parsed.atlasPreset === undefined) parsed.atlasPreset = {};
                     setConfig(parsed);
                 } else if (fileType === "styles") {
                     const parsed = JSON.parse(stylesJson);
+                    if (parsed.stylingRules) {
+                        Object.keys(parsed.stylingRules).forEach(key => {
+                            parsed.stylingRules[key].forEach(rule => {
+                                if (rule.comment === undefined) rule.comment = "";
+                            });
+                        });
+                    }
                     setStyles(parsed);
                 } else if (fileType === "mentions") {
                     const parsed = JSON.parse(mentionsJson);
@@ -1023,6 +1056,7 @@
                                     rule.sound = { id: rule.sound, category: "UI", volume: 1.0, pitch: rule.pitch || 1.0 };
                                     delete rule.pitch;
                                 }
+                                if (rule.comment === undefined) rule.comment = "";
                             });
                         });
                     }
