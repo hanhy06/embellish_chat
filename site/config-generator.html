@@ -57,7 +57,7 @@
 
     // Default config.json
     const DEFAULT_CONFIG = {
-      "version": "3.1.0",
+      "version": "3.1.1",
       "colorPreset": {
         "dark green": "#00AA00",
         "green": "#55FF55",
@@ -86,6 +86,7 @@
       },
       "delimiter": ",",
       "timestamp": "yyyy-MM-dd HH:mm:ss",
+      "commandAlias": "",
       "urlColor": "#0000EE",
       "defaultTeamColor": "#FF55FF",
       "notificationCommandEnable": true,
@@ -99,28 +100,97 @@
     // Default styles.json
     const DEFAULT_STYLES = {
       "stylingRules": {
+        "embellish-chat.command_argument": [],
         "embellish-chat.chat": [
-          { "pattern": "\\[([^\\]]+?)]\\((https://.*?)\\)", "styles": [{ "styleType": "URL", "preset": "" }] },
-          { "pattern": "((https://\\S+))", "styles": [{ "styleType": "URL", "preset": "" }] },
-          { "pattern": "\\[([^\\]]+?)]\\{(.*?)}", "styles": [{ "styleType": "FONT", "preset": "" }] },
-          { "pattern": "\\[([^\\]]+?)]<(#.{6})>", "styles": [{ "styleType": "COLOR_HEX", "preset": "" }] },
-          { "pattern": "\\[([^\\]]+?)]<(#.{6,})>", "styles": [{ "styleType": "COLOR_GRADIENT", "preset": "" }] },
-          { "pattern": "\\[([^\\]]+?)]<([a-z\\s]+?)>", "styles": [{ "styleType": "COLOR_PRESET", "preset": "" }] },
-          { "pattern": "\\*\\*(.+?)\\*\\*()", "styles": [{ "styleType": "BOLD", "preset": "" }] },
-          { "pattern": "__(.+?)__()", "styles": [{ "styleType": "UNDERLINE", "preset": "" }] },
-          { "pattern": "_(.+?)_()", "styles": [{ "styleType": "ITALIC", "preset": "" }] },
-          { "pattern": "~~(.+?)~~()", "styles": [{ "styleType": "STRIKETHROUGH", "preset": "" }] },
-          { "pattern": "\\|\\|(.+?)\\|\\|()", "styles": [{ "styleType": "OBFUSCATED", "preset": "" }] },
-          { "pattern": "\\[([^\\]]+?)]<(RAINBOW)>", "styles": [{ "styleType": "COLOR_RAINBOW", "preset": "0.7" }] },
-          { "pattern": "(.+)()", "styles": [{ "styleType": "METADATA", "preset": "" }] },
-          { "pattern": "(\\[i\\])()", "styles": [{ "styleType": "SHOW_ITEM", "preset": "" }] },
-          { "pattern": "(\\[inv\\])()", "styles": [{ "styleType": "SHOW_INVENTORY", "preset": "" }] },
-          { "pattern": "(\\[end\\])()", "styles": [{ "styleType": "SHOW_ENDER_CHEST", "preset": "" }] },
-          { "pattern": "(:(.+?):)", "styles": [{ "styleType": "ATLAS_PRESET", "preset": "" }] }
-        ],
-        "embellish-chat.command_argument": []
-      }
+          {
+            "pattern": "\\[([^\\]]+?)]\\((https://.*?)\\)",
+            "styles": [{ "styleType": "URL", "preset": "" }],
+            "comment": "<blue><b>Pattern</b></blue>: [Text](url)\n<dark_aqua><b>Comment</b></dark_aqua>: clickable link with custom text\n"
+          },
+          {
+            "pattern": "((https://\\S+))",
+            "styles": [{ "styleType": "URL", "preset": "" }],
+            "comment": "<blue><b>Pattern</b></blue>: url\n<dark_aqua><b>Comment</b></dark_aqua>: auto-detect clickable link\n"
+          },
+          {
+            "pattern": "\\[([^\\]]+?)]\\{(.*?)}",
+            "styles": [{ "styleType": "FONT", "preset": "" }],
+            "comment": "<blue><b>Pattern</b></blue>: [Text]{font}\n<dark_aqua><b>Comment</b></dark_aqua>: apply custom font to text\n"
+          },
+          {
+            "pattern": "\\[([^\\]]+?)]<(#.{6})>",
+            "styles": [{ "styleType": "COLOR_HEX", "preset": "" }],
+            "comment": "<blue><b>Pattern</b></blue>: [Text]<#RRGGBB>\n<dark_aqua><b>Comment</b></dark_aqua>: apply hex color\n"
+          },
+          {
+            "pattern": "\\[([^\\]]+?)]<(#.{6,})>",
+            "styles": [{ "styleType": "COLOR_GRADIENT", "preset": "" }],
+            "comment": "<blue><b>Pattern</b></blue>: [Text]<#color1#color2...>\n<dark_aqua><b>Comment</b></dark_aqua>: apply gradient color\n"
+          },
+          {
+            "pattern": "\\[([^\\]]+?)]<([a-z\\s]+?)>",
+            "styles": [{ "styleType": "COLOR_PRESET", "preset": "" }],
+            "comment": "<blue><b>Pattern</b></blue>: [Text]<preset>\n<dark_aqua><b>Comment</b></dark_aqua>: apply preset color name\n"
+          },
+          {
+            "pattern": "\\*\\*(.+?)\\*\\*()",
+            "styles": [{ "styleType": "BOLD", "preset": "" }],
+            "comment": "<blue><b>Pattern</b></blue>: **Text**\n<dark_aqua><b>Comment</b></dark_aqua>: bold formatting\n"
+          },
+          {
+            "pattern": "__(.+?)__()",
+            "styles": [{ "styleType": "UNDERLINE", "preset": "" }],
+            "comment": "<blue><b>Pattern</b></blue>: __Text__\n<dark_aqua><b>Comment</b></dark_aqua>: underline formatting\n"
+          },
+          {
+            "pattern": "_(.+?)_()",
+            "styles": [{ "styleType": "ITALIC", "preset": "" }],
+            "comment": "<blue><b>Pattern</b></blue>: _Text_\n<dark_aqua><b>Comment</b></dark_aqua>: italic formatting\n"
+          },
+          {
+            "pattern": "~~(.+?)~~()",
+            "styles": [{ "styleType": "STRIKETHROUGH", "preset": "" }],
+            "comment": "<blue><b>Pattern</b></blue>: ~~Text~~\n<dark_aqua><b>Comment</b></dark_aqua>: strikethrough formatting\n"
+          },
+          {
+            "pattern": "\\|\\|(.+?)\\|\\|()",
+            "styles": [{ "styleType": "OBFUSCATED", "preset": "" }],
+            "comment": "<blue><b>Pattern</b></blue>: ||Text||\n<dark_aqua><b>Comment</b></dark_aqua>: obfuscated text\n"
+          },
+          {
+            "pattern": "\\[([^\\]]+?)]<(RAINBOW)>",
+            "styles": [{ "styleType": "COLOR_RAINBOW", "preset": "0.7" }],
+            "comment": "<blue><b>Pattern</b></blue>: [Text]<RAINBOW>\n<dark_aqua><b>Comment</b></dark_aqua>: rainbow color\n"
+          },
+          {
+            "pattern": "(.+)()",
+            "styles": [{ "styleType": "METADATA", "preset": "" }],
+            "comment": "<blue><b>Pattern</b></blue>: any text\n<dark_aqua><b>Comment</b></dark_aqua>: metadata capture layer\n"
+          },
+          {
+            "pattern": "(\\[i\\])()",
+            "styles": [{ "styleType": "SHOW_ITEM", "preset": "" }],
+            "comment": "<blue><b>Pattern</b></blue>: [i]\n<dark_aqua><b>Comment</b></dark_aqua>: show held item\n"
+          },
+          {
+            "pattern": "(\\[inv\\])()",
+            "styles": [{ "styleType": "SHOW_INVENTORY", "preset": "" }],
+            "comment": "<blue><b>Pattern</b></blue>: [inv]\n<dark_aqua><b>Comment</b></dark_aqua>: show player inventory\n"
+          },
+          {
+            "pattern": "(\\[end\\])()",
+            "styles": [{ "styleType": "SHOW_ENDER_CHEST", "preset": "" }],
+            "comment": "<blue><b>Pattern</b></blue>: [end]\n<dark_aqua><b>Comment</b></dark_aqua>: show ender chest contents\n"
+          },
+          {
+            "pattern": "(:(.+?):)",
+            "styles": [{ "styleType": "ATLAS_PRESET", "preset": "" }],
+            "comment": "<blue><b>Pattern</b></blue>: :icon:\n<dark_aqua><b>Comment</b></dark_aqua>: atlas emoji/icon preset\n"
+          }
+        ]
+       }
     };
+
 
     // Default mentions.json
     const DEFAULT_MENTIONS = {
@@ -133,7 +203,8 @@
             "onlyTarget": false,
             "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
             "mentions": [{ "mentionType": "INSIDE", "preset": "64" }],
-            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }]
+            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }],
+            "comment": "<blue><b>Pattern</b></blue>: @here\n<dark_aqua><b>Comment</b></dark_aqua>: mention players within 64 blocks\n"
           },
           {
             "pattern": "@everyone()",
@@ -142,7 +213,8 @@
             "onlyTarget": false,
             "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
             "mentions": [{ "mentionType": "EVERYONE", "preset": "" }],
-            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }]
+            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }],
+            "comment": "<blue><b>Pattern</b></blue>: @everyone\n<dark_aqua><b>Comment</b></dark_aqua>: mention all online players\n"
           },
           {
             "pattern": "@team\\((.+?)\\)",
@@ -151,7 +223,8 @@
             "onlyTarget": false,
             "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
             "mentions": [{ "mentionType": "TEAM", "preset": "" }],
-            "styles": [{ "styleType": "BOLD", "preset": "" }]
+            "styles": [{ "styleType": "BOLD", "preset": "" }],
+            "comment": "<blue><b>Pattern</b></blue>: @team(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given scoreboard team\n"
           },
           {
             "pattern": "@group\\((.+?)\\)",
@@ -160,7 +233,8 @@
             "onlyTarget": false,
             "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
             "mentions": [{ "mentionType": "LUCK_PERMS_GROUP", "preset": "" }],
-            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }]
+            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }],
+            "comment": "<blue><b>Pattern</b></blue>: @group(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given LuckPerms group\n"
           },
           {
             "pattern": "@world\\((.+?)\\)",
@@ -169,7 +243,8 @@
             "onlyTarget": false,
             "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
             "mentions": [{ "mentionType": "WORLD", "preset": "" }],
-            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }]
+            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }],
+            "comment": "<blue><b>Pattern</b></blue>: @world(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given world\n"
           },
           {
             "pattern": "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
@@ -178,7 +253,8 @@
             "onlyTarget": false,
             "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
             "mentions": [{ "mentionType": "PLAYER", "preset": "" }],
-            "styles": [{ "styleType": "BOLD", "preset": "" }]
+            "styles": [{ "styleType": "BOLD", "preset": "" }],
+            "comment": "<blue><b>Pattern</b></blue>: @Player\n<dark_aqua><b>Comment</b></dark_aqua>: mention a specific player\n"
           }
         ]
       }
@@ -464,164 +540,220 @@
         </div>
     );
 
-    const GlobalView = ({ config, updateGlobal, addPreset, removePreset, updatePreset, addAtlasPreset, removeAtlasPreset, updateAtlasPreset }) => (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="p-6 space-y-4">
-                <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center">
-                    <IconWrapper name="settings" className="mr-2" size={20} /> General
-                </h3>
-                <Input
-                    label="Mod Version (Reference)"
-                    value={config.version}
-                    onChange={(v) => updateGlobal('version', v)}
-                />
-                <Input
-                    label="Option Delimiter"
-                    value={config.delimiter}
-                    onChange={(v) => updateGlobal('delimiter', v)}
-                    placeholder=","
-                />
-                <Input
-                    label="Timestamp Format"
-                    value={config.timestamp}
-                    onChange={(v) => updateGlobal('timestamp', v)}
-                    placeholder="yyyy-MM-dd HH:mm:ss"
-                />
-                <div className="flex flex-col gap-3">
-                    <div className="flex items-center space-x-3 pt-2">
-                        <input
-                            type="checkbox"
-                            id="notifEnable"
-                            checked={config.notificationCommandEnable}
-                            onChange={(e) => updateGlobal('notificationCommandEnable', e.target.checked)}
-                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
-                        />
-                        <label htmlFor="notifEnable" className="text-sm font-medium text-slate-700 dark:text-slate-200 cursor-pointer">
-                            Allow /ec notification command
-                        </label>
-                    </div>
+    // 기존 GlobalView 전체를 아래로 교체하세요.
+const GlobalView = ({
+  config,
+  updateGlobal,
+  addPreset,
+  removePreset,
+  updatePreset,
+  addAtlasPreset,
+  removeAtlasPreset,
+  updateAtlasPreset
+}) => (
+  <div className="grid grid-cols-1 gap-6">
+    {/* General + Colors 통합 */}
+    <Card className="p-6 space-y-6">
+      <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center">
+        <IconWrapper name="settings" className="mr-2" size={20} /> General & Colors
+      </h3>
 
-                    <div className="flex items-center space-x-3">
-                        <input
-                            type="checkbox"
-                            id="mentionBroadcast"
-                            checked={config.mentionBroadcast}
-                            onChange={(e) => updateGlobal('mentionBroadcast', e.target.checked)}
-                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
-                        />
-                        <label htmlFor="mentionBroadcast" className="text-sm font-medium text-slate-700 dark:text-slate-200 cursor-pointer">
-                            Broadcast Mentions globally
-                        </label>
-                    </div>
+      {/* 1) 글 입력(Input) 섹션 */}
+      <div className="space-y-4">
+        <Input
+          label="Mod Version (Reference)"
+          value={config.version}
+          onChange={(v) => updateGlobal("version", v)}
+        />
+        <Input
+          label="Option Delimiter"
+          value={config.delimiter}
+          onChange={(v) => updateGlobal("delimiter", v)}
+          placeholder=","
+        />
+        <Input
+          label="Timestamp Format"
+          value={config.timestamp}
+          onChange={(v) => updateGlobal("timestamp", v)}
+          placeholder="yyyy-MM-dd HH:mm:ss"
+        />
+        <Input
+          label="Command Alias"
+          value={config.commandAlias || ""}
+          onChange={(v) => updateGlobal("commandAlias", v)}
+          placeholder="Leave empty to keep /embellish-chat only"
+        />
+        <Input
+          label="Discord Webhook URL"
+          value={config.webhook}
+          onChange={(v) => updateGlobal("webhook", v)}
+          placeholder="Leave empty to disable"
+        />
+      </div>
 
-                    <div className="flex items-center space-x-3">
-                        <input
-                            type="checkbox"
-                            id="useClearFormat"
-                            checked={config.useClearFormat}
-                            onChange={(e) => updateGlobal('useClearFormat', e.target.checked)}
-                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
-                        />
-                        <label htmlFor="useClearFormat" className="text-sm font-medium text-slate-700 dark:text-slate-200 cursor-pointer">
-                            Use Clear Format (Remove default &lt;name&gt; prefix)
-                        </label>
-                    </div>
-                </div>
-
-                <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
-                    <Input
-                        label="Discord Webhook URL"
-                        value={config.webhook}
-                        onChange={(v) => updateGlobal('webhook', v)}
-                        placeholder="Leave empty to disable"
-                    />
-                </div>
-            </Card>
-
-            <Card className="p-6 space-y-4">
-                <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center">
-                    <IconWrapper name="palette" className="mr-2" size={20} /> Colors
-                </h3>
-                <ColorPicker
-                    label="URL Color"
-                    value={config.urlColor}
-                    onChange={(v) => updateGlobal('urlColor', v)}
-                />
-                <ColorPicker
-                    label="Default Team Color"
-                    value={config.defaultTeamColor}
-                    onChange={(v) => updateGlobal('defaultTeamColor', v)}
-                />
-            </Card>
-
-            <Card className="p-6 col-span-1 md:col-span-2">
-                <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
-                    <h3 className="text-lg font-bold text-slate-800 dark:text-white">Color Presets</h3>
-                    <AddGroupInput
-                        onAdd={addPreset}
-                        placeholder="New Preset Name"
-                    />
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    {Object.entries(config.colorPreset || {}).map(([name, color]) => (
-                        <div key={name} className="flex items-center space-x-2 bg-slate-50 dark:bg-slate-900/50 p-2 rounded border border-slate-200 dark:border-slate-700">
-                            <input
-                                type="color"
-                                value={color}
-                                onChange={(e) => updatePreset(name, e.target.value)}
-                                className="h-8 w-8 rounded border-none bg-transparent cursor-pointer"
-                            />
-                            <div className="flex-1">
-                                <div className="text-xs font-semibold dark:text-slate-300">{name}</div>
-                                <div className="text-xs text-slate-500 font-mono">{color}</div>
-                            </div>
-                            <button type="button" onClick={() => removePreset(name)} className="text-slate-400 hover:text-red-500 p-1">
-                                <IconWrapper name="trash-2" size={16} />
-                            </button>
-                        </div>
-                    ))}
-                </div>
-            </Card>
-
-            <Card className="p-6 col-span-1 md:col-span-2">
-                <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
-                    <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center">
-                        <IconWrapper name="image" className="mr-2" size={20} /> Atlas Presets
-                    </h3>
-                    <AddGroupInput
-                        onAdd={addAtlasPreset}
-                        placeholder="New Atlas Preset Name"
-                    />
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {Object.entries(config.atlasPreset || {}).map(([name, data]) => (
-                        <div key={name} className="bg-slate-50 dark:bg-slate-900/50 p-3 rounded border border-slate-200 dark:border-slate-700">
-                            <div className="flex justify-between items-center mb-2">
-                                <span className="text-sm font-semibold dark:text-slate-300">{name}</span>
-                                <button type="button" onClick={() => removeAtlasPreset(name)} className="text-slate-400 hover:text-red-500 p-1">
-                                    <IconWrapper name="trash-2" size={16} />
-                                </button>
-                            </div>
-                            <div className="space-y-2">
-                                <Input
-                                    label="Atlas"
-                                    value={data.atlas}
-                                    onChange={(v) => updateAtlasPreset(name, 'atlas', v)}
-                                    placeholder="minecraft:blocks"
-                                />
-                                <Input
-                                    label="Sprite"
-                                    value={data.sprite}
-                                    onChange={(v) => updateAtlasPreset(name, 'sprite', v)}
-                                    placeholder="minecraft:block/campfire_fire"
-                                />
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </Card>
+      {/* 2) 색(Color) 섹션 */}
+      <div className="pt-4 border-t border-slate-200 dark:border-slate-700 space-y-4">
+        <div className="flex items-center gap-2">
+          <IconWrapper name="palette" className="mr-1" size={18} />
+          <div className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+            Colors
+          </div>
         </div>
-    );
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <ColorPicker
+            label="URL Color"
+            value={config.urlColor}
+            onChange={(v) => updateGlobal("urlColor", v)}
+          />
+          <ColorPicker
+            label="Default Team Color"
+            value={config.defaultTeamColor}
+            onChange={(v) => updateGlobal("defaultTeamColor", v)}
+          />
+        </div>
+      </div>
+
+      {/* 3) 토글(Checkbox) 섹션 */}
+      <div className="pt-4 border-t border-slate-200 dark:border-slate-700 space-y-3">
+        <div className="flex items-center gap-2">
+          <IconWrapper name="toggle-left" className="mr-1" size={18} />
+          <div className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+            Toggles
+          </div>
+        </div>
+
+        <div className="flex items-center space-x-3">
+          <input
+            type="checkbox"
+            id="notifEnable"
+            checked={config.notificationCommandEnable}
+            onChange={(e) => updateGlobal("notificationCommandEnable", e.target.checked)}
+            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+          />
+          <label
+            htmlFor="notifEnable"
+            className="text-sm font-medium text-slate-700 dark:text-slate-200 cursor-pointer"
+          >
+            Allow /embellish-chat notification command
+          </label>
+        </div>
+
+        <div className="flex items-center space-x-3">
+          <input
+            type="checkbox"
+            id="mentionBroadcast"
+            checked={config.mentionBroadcast}
+            onChange={(e) => updateGlobal("mentionBroadcast", e.target.checked)}
+            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+          />
+          <label
+            htmlFor="mentionBroadcast"
+            className="text-sm font-medium text-slate-700 dark:text-slate-200 cursor-pointer"
+          >
+            Broadcast Mention
+          </label>
+        </div>
+
+        <div className="flex items-center space-x-3">
+          <input
+            type="checkbox"
+            id="useClearFormat"
+            checked={config.useClearFormat}
+            onChange={(e) => updateGlobal("useClearFormat", e.target.checked)}
+            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+          />
+          <label
+            htmlFor="useClearFormat"
+            className="text-sm font-medium text-slate-700 dark:text-slate-200 cursor-pointer"
+          >
+            Use Clear Format (Remove default &lt;name&gt; prefix)
+          </label>
+        </div>
+      </div>
+    </Card>
+
+    {/* Color Presets는 그대로 */}
+    <Card className="p-6">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
+        <h3 className="text-lg font-bold text-slate-800 dark:text-white">Color Presets</h3>
+        <AddGroupInput onAdd={addPreset} placeholder="New Preset Name" />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {Object.entries(config.colorPreset || {}).map(([name, color]) => (
+          <div
+            key={name}
+            className="flex items-center space-x-2 bg-slate-50 dark:bg-slate-900/50 p-2 rounded border border-slate-200 dark:border-slate-700"
+          >
+            <input
+              type="color"
+              value={color}
+              onChange={(e) => updatePreset(name, e.target.value)}
+              className="h-8 w-8 rounded border-none bg-transparent cursor-pointer"
+            />
+            <div className="flex-1">
+              <div className="text-xs font-semibold dark:text-slate-300">{name}</div>
+              <div className="text-xs text-slate-500 font-mono">{color}</div>
+            </div>
+            <button
+              type="button"
+              onClick={() => removePreset(name)}
+              className="text-slate-400 hover:text-red-500 p-1"
+            >
+              <IconWrapper name="trash-2" size={16} />
+            </button>
+          </div>
+        ))}
+      </div>
+    </Card>
+
+    {/* Atlas Presets도 그대로 */}
+    <Card className="p-6">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
+        <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center">
+          <IconWrapper name="image" className="mr-2" size={20} /> Atlas Presets
+        </h3>
+        <AddGroupInput onAdd={addAtlasPreset} placeholder="New Atlas Preset Name" />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {Object.entries(config.atlasPreset || {}).map(([name, data]) => (
+          <div
+            key={name}
+            className="bg-slate-50 dark:bg-slate-900/50 p-3 rounded border border-slate-200 dark:border-slate-700"
+          >
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-semibold dark:text-slate-300">{name}</span>
+              <button
+                type="button"
+                onClick={() => removeAtlasPreset(name)}
+                className="text-slate-400 hover:text-red-500 p-1"
+              >
+                <IconWrapper name="trash-2" size={16} />
+              </button>
+            </div>
+
+            <div className="space-y-2">
+              <Input
+                label="Atlas"
+                value={data.atlas}
+                onChange={(v) => updateAtlasPreset(name, "atlas", v)}
+                placeholder="minecraft:blocks"
+              />
+              <Input
+                label="Sprite"
+                value={data.sprite}
+                onChange={(v) => updateAtlasPreset(name, "sprite", v)}
+                placeholder="minecraft:block/campfire_fire"
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </Card>
+  </div>
+);
 
     const StylingView = ({ config, addPermissionGroup, removePermissionGroup, updateRuleList }) => (
         <div className="space-y-6">
@@ -665,6 +797,16 @@
                                         className="font-mono text-sm"
                                         placeholder="e.g. \*\*([^\*]+)\*\*()"
                                     />
+                                    <Input
+                                        label="Comment (/embellish-chat help style)"
+                                        value={rule.comment || ""}
+                                        onChange={(v) => {
+                                            const newRules = [...rules];
+                                            newRules[idx] = { ...newRules[idx], comment: v };
+                                            updateRuleList('stylingRules', permKey, newRules);
+                                        }}
+                                        placeholder="<blue><b>Pattern</b></blue>: **Text** ..."
+                                    />
                                     <StyleActionsEditor
                                         actions={rule.styles}
                                         onChange={(newActions) => {
@@ -680,7 +822,7 @@
                             className="w-full mt-4"
                             variant="secondary"
                             onClick={() => {
-                                const newRules = [...rules, { pattern: "", styles: [] }];
+                                const newRules = [...rules, { pattern: "", styles: [], comment: "" }];
                                 updateRuleList('stylingRules', permKey, newRules);
                             }}
                         >
@@ -837,6 +979,18 @@
                                             className="md:col-span-6"
                                         />
 
+                                        <Input
+                                            label="Comment (/embellish-chat help mention)"
+                                            value={rule.comment || ""}
+                                            onChange={(v) => {
+                                                const newRules = [...rules];
+                                                newRules[idx] = { ...newRules[idx], comment: v };
+                                                updateRuleList('mentionRules', permKey, newRules);
+                                            }}
+                                            className="md:col-span-6"
+                                            placeholder="<blue><b>Pattern</b></blue>: @everyone ..."
+                                        />
+
                                         <div className="md:col-span-12 bg-slate-50 dark:bg-slate-900/30 p-3 rounded">
                                             <MentionActionsEditor
                                                 actions={rule.mentions}
@@ -877,7 +1031,8 @@
                                             pitch: 1.0
                                         },
                                         mentions: [],
-                                        styles: []
+                                        styles: [],
+                                        comment: ""
                                     }];
                                     updateRuleList('mentionRules', permKey, newRules);
                                 }}
@@ -1006,10 +1161,18 @@
                     if (parsed.mentionBroadcast === undefined) parsed.mentionBroadcast = true;
                     if (parsed.webhook === undefined) parsed.webhook = "";
                     if (parsed.useClearFormat === undefined) parsed.useClearFormat = false;
+                    if (parsed.commandAlias === undefined) parsed.commandAlias = "";
                     if (parsed.atlasPreset === undefined) parsed.atlasPreset = {};
                     setConfig(parsed);
                 } else if (fileType === "styles") {
                     const parsed = JSON.parse(stylesJson);
+                    if (parsed.stylingRules) {
+                        Object.keys(parsed.stylingRules).forEach(key => {
+                            parsed.stylingRules[key].forEach(rule => {
+                                if (rule.comment === undefined) rule.comment = "";
+                            });
+                        });
+                    }
                     setStyles(parsed);
                 } else if (fileType === "mentions") {
                     const parsed = JSON.parse(mentionsJson);
@@ -1023,6 +1186,7 @@
                                     rule.sound = { id: rule.sound, category: "UI", volume: 1.0, pitch: rule.pitch || 1.0 };
                                     delete rule.pitch;
                                 }
+                                if (rule.comment === undefined) rule.comment = "";
                             });
                         });
                     }
@@ -1202,7 +1366,7 @@
                             <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">
                                 Embellish Chat
                             </h1>
-                            <p className="text-slate-500 dark:text-slate-400 mt-1">Config Editor v3.1.0</p>
+                            <p className="text-slate-500 dark:text-slate-400 mt-1">Config Editor v3.1.1</p>
                         </div>
                         <div className="flex gap-2 bg-white dark:bg-slate-900 p-1 rounded-lg shadow-sm border border-slate-200 dark:border-slate-800 overflow-x-auto">
                             {tabs.map(tab => (

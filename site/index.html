@@ -355,10 +355,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#user-commands-ec" class="md-nav__link">
+  <a href="#user-commands-embellish-chat" class="md-nav__link">
     <span class="md-ellipsis">
       
-        User Commands (/ec)
+        User Commands (/embellish-chat)
       
     </span>
   </a>
@@ -1000,7 +1000,7 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><code>@PlayerName</code></td>
+<td style="text-align: left;"><code>@Player</code></td>
 <td style="text-align: left;">Mentions a specific player.</td>
 </tr>
 <tr>
@@ -1030,31 +1030,31 @@
 </blockquote>
 <hr />
 <h2 id="commands">Commands</h2>
-<h3 id="user-commands-ec">User Commands (<code>/ec</code>)</h3>
+<h3 id="user-commands-embellish-chat">User Commands (<code>/embellish-chat</code>)</h3>
 <p>Available to all players.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">Command</th>
-<th style="text-align: left;">Description</th>
+<th>Command</th>
+<th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><code>/ec help style</code></td>
-<td style="text-align: left;">Displays available styles and syntax usage.</td>
+<td><code>/embellish-chat help style</code></td>
+<td>Displays available styles and syntax usage.</td>
 </tr>
 <tr>
-<td style="text-align: left;"><code>/ec help mention</code></td>
-<td style="text-align: left;">Displays available mention types and targets.</td>
+<td><code>/embellish-chat help mention</code></td>
+<td>Displays available mention types and targets.</td>
 </tr>
 <tr>
-<td style="text-align: left;"><code>/ec notification</code></td>
-<td style="text-align: left;">Toggles personal mention notifications (if enabled in config).</td>
+<td><code>/embellish-chat notification</code></td>
+<td>Toggles personal mention notifications (if enabled in config).</td>
 </tr>
 <tr>
-<td style="text-align: left;"><code>/ec open</code></td>
-<td style="text-align: left;">Opens the last shared inventory/ender chest/item of the specified player</td>
+<td><code>/embellish-chat open &lt;player &gt;</code></td>
+<td>Opens the last shared inventory/ender /item of the specified player</td>
 </tr>
 </tbody>
 </table>
@@ -1063,36 +1063,31 @@
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">Command</th>
-<th style="text-align: left;">Arguments</th>
-<th style="text-align: left;">Description</th>
+<th>Command</th>
+<th>Arguments</th>
+<th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><code>reload</code></td>
-<td style="text-align: left;"><code>None</code></td>
-<td style="text-align: left;">Reloads <code>config/embellish-chat.json</code>.</td>
+<td><code>reload</code></td>
+<td><code>None</code></td>
+<td>Reloads all files under <code>config/embellish-chat/</code>.</td>
 </tr>
 <tr>
-<td style="text-align: left;"><code>ban</code></td>
-<td style="text-align: left;"><code>&lt;player&gt;</code></td>
-<td style="text-align: left;">Blocks a player from using mod features.</td>
+<td><code>ban</code></td>
+<td><code>&lt;player&gt;</code></td>
+<td>Blocks a player from using mod features.</td>
 </tr>
 <tr>
-<td style="text-align: left;"><code>pardon</code></td>
-<td style="text-align: left;"><code>&lt;player&gt;</code></td>
-<td style="text-align: left;">Restores mod access for a player.</td>
+<td><code>pardon</code></td>
+<td><code>&lt;player&gt;</code></td>
+<td>Restores mod access for a player.</td>
 </tr>
 <tr>
-<td style="text-align: left;"><code>test regex</code></td>
-<td style="text-align: left;"><code>&lt;regex&gt; &lt;test&gt;</code></td>
-<td style="text-align: left;">Tests a regex pattern against a string.</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>test stress</code></td>
-<td style="text-align: left;"><code>&lt;count&gt; &lt;test&gt;</code></td>
-<td style="text-align: left;">Simulates <code>&lt;count&gt;</code> messages for performance testing.</td>
+<td><code>stress_test</code></td>
+<td><code>&lt;time&gt; &lt;count&gt; &lt;text&gt;</code></td>
+<td>Repeatedly simulates <code>&lt;count&gt;</code> messages for <code>&lt;time&gt;</code> to stress-test the server's message-processing performance.</td>
 </tr>
 </tbody>
 </table>
@@ -1103,7 +1098,7 @@ Because regular expressions are inherently difficult, it is recommended to lever
 <p>The configuration file is located at <code>config/embellish-chat/config.json</code>.</p>
 <pre><code>{
   //version
-  &quot;version&quot;: &quot;3.1.0&quot;,
+  &quot;version&quot;: &quot;3.1.1&quot;,
 
   //preset
   &quot;colorPreset&quot;: { ... },
