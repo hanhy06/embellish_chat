@@ -362,7 +362,7 @@ public class StyleRegistry {
 
         MutableText text = Text.object(atlas);
         HoverEvent hoverEvent = new HoverEvent.ShowItem(item);
-        ClickEvent clickEvent = new ClickEvent.RunCommand("/ec open "+player.getUuid());
+        ClickEvent clickEvent = new ClickEvent.RunCommand("/embellish-chat open "+player.getUuid());
         InventoryManager.putItem(player,item);
 
         return text.fillStyle(Style.EMPTY.withHoverEvent(hoverEvent).withClickEvent(clickEvent));
@@ -373,7 +373,7 @@ public class StyleRegistry {
         if (player == null) return parameter.segment();
         InventoryManager.putInventory(player);
 
-        ClickEvent clickEvent = new ClickEvent.RunCommand("/ec open "+player.getUuid());
+        ClickEvent clickEvent = new ClickEvent.RunCommand("/embellish-chat open "+player.getUuid());
         HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(player.getName().getString() + "'s inventory"));
         ProfileComponent component = ProfileComponent.ofStatic(player.getGameProfile());
         MutableText text = Text.object(new PlayerTextObjectContents(component, true));
@@ -386,7 +386,7 @@ public class StyleRegistry {
         if (player == null) return parameter.segment();
         InventoryManager.putEnderChest(player);
 
-        ClickEvent clickEvent = new ClickEvent.RunCommand("/ec open "+player.getUuid());
+        ClickEvent clickEvent = new ClickEvent.RunCommand("/embellish-chat open "+player.getUuid());
         HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(player.getName().getString() + "'s ender chest"));
         ProfileComponent component = ProfileComponent.ofStatic(player.getGameProfile());
         MutableText text = Text.object(new PlayerTextObjectContents(component, true));
