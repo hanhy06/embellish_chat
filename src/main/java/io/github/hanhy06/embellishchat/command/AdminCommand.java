@@ -28,9 +28,9 @@ public class AdminCommand {
     private static final String STRESS_TEST_FORMAT = """
             <gray>── Performance Analysis ──</gray>
             • <aqua>Iterations</aqua>: %d
-            • <green>Average</green>: %.2fms
             • <dark_green>Minimum</dark_green>: %dms
             • <red>Maximum</red>: %dms
+            • <green>Average</green>: %.2fms
             • <light_purple>Median</light_purple>: %.2fms
             • <gold>Total</gold>: %dms
 
@@ -152,7 +152,7 @@ public class AdminCommand {
 
             Text message = PlaceHolderUtil.parseTag(String.format(
                     STRESS_TEST_FORMAT,
-                    size, average, min, max, median, total,
+                    size, min, max,average, median, total,
                     occupiedTicks, time, usagePercent
             ));
 
@@ -164,29 +164,36 @@ public class AdminCommand {
         return 1;
     }
 
-    private static CompletableFuture<List<Long>> stressTest(int time, int count,String text, UUID uuid, MinecraftServer server) {
+    private static CompletableFuture<List<Long>> stressTest(int time, int count, String text, UUID uuid, MinecraftServer server) {
         CompletableFuture<List<Long>> future = new CompletableFuture<>();
+        List<Long> results = new ArrayList<>();
 
-        server.submit(() -> {
-            long startTime = System.currentTimeMillis();
-            for (int i = 0; i < count; i++) {
-                SignedMessage message = SignedMessage.ofUnsigned(uuid, text);
-                MessageProcessor.INSTANCE.handleMessage(message);
-            }
-            long duration = System.currentTimeMillis() - startTime;
+        Runnable task = new Runnable() {
+            int remaining = time;
 
-            if (time > 1) {
-                stressTest(time-1,count,text,uuid,server).thenAccept(list -> {
-                    list.addFirst(duration);
-                    future.complete(list);
-                });
-            } else {
-                List<Long> result = new ArrayList<>();
-                result.add(duration);
-                future.complete(result);
+            @Override
+            public void run() {
+                if (remaining <= 0) {
+                    future.complete(results);
+                    return;
+                }
+
+                long startTime = System.nanoTime();
+                for (int i = 0; i < count; i++) {
+                    SignedMessage message = SignedMessage.ofUnsigned(uuid, text);
+                    MessageProcessor.INSTANCE.handleMessage(message);
+                }
+                long duration = (System.nanoTime() - startTime)/ 1_000_000L;
+
+                results.add(duration);
+                remaining--;
+
+                server.submit(this);
             }
-        });
+        };
+        server.submit(task);
 
         return future;
     }
+
 }
