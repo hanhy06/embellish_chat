@@ -1,7 +1,6 @@
 package io.github.hanhy06.embellishchat;
 
-import io.github.hanhy06.embellishchat.command.AdminCommand;
-import io.github.hanhy06.embellishchat.command.UserCommand;
+import io.github.hanhy06.embellishchat.command.EmbellishChatCommandManager;
 import io.github.hanhy06.embellishchat.config.ConfigManager;
 import io.github.hanhy06.embellishchat.inventory.InventoryManager;
 import io.github.hanhy06.embellishchat.mention.MentionProcessor;
@@ -34,8 +33,7 @@ public class EmbellishChat implements ModInitializer {
         InventoryManager.registerLeaveEvent();
         BubbleUtil.registerTickEvent();
 
-		AdminCommand.registerCommand();
-        UserCommand.registerCommand();
+        EmbellishChatCommandManager.registerCommand();
 	}
 
 	private static void handleServerStart(MinecraftServer server) {
@@ -49,10 +47,12 @@ public class EmbellishChat implements ModInitializer {
         StylingProcessor styler = new StylingProcessor();
         MentionProcessor mention = new MentionProcessor();
         MessageProcessor message = new MessageProcessor(mention,styler, server.getPlayerManager());
+        EmbellishChatCommandManager command = new EmbellishChatCommandManager();
 
         manager.addListener(styler);
         manager.addListener(mention);
         manager.addListener(message);
+        manager.addListener(command);
 		manager.readConfig();
 
 		LOGGER.info("[{}] initialized successfully.", MOD_ID);

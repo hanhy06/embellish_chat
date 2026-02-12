@@ -27,9 +27,9 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class UserCommand {
-    public static void registerCommand() {
+    public static void registerCommand(String alias) {
         CommandRegistrationCallback.EVENT.register((commandDispatcher, commandRegistryAccess, registrationEnvironment) -> commandDispatcher.register(
-                CommandManager.literal("embellish-chat")
+                CommandManager.literal(alias)
                         .then(CommandManager.literal("help")
                                 .then(CommandManager.literal("mention").executes(UserCommand::executeHelpMention))
                                 .then(CommandManager.literal("style").executes(UserCommand::executeHelpStyle))

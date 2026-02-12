@@ -34,6 +34,7 @@ public record Config(
         //setting
         String delimiter,
         String timestamp,
+        String commandAlias,
         Color urlColor,
         Color defaultTeamColor,
         boolean notificationCommandEnable,
@@ -345,6 +346,7 @@ public record Config(
                 //setting
                 ",",
                 "yyyy-MM-dd HH:mm:ss",
+                "embellish-chat",
                 new  Color(0x0000EE),
                 new Color(0xFF55FF),
                 true,

@@ -39,11 +39,11 @@ public class AdminCommand {
             • <blue>Usage</blue>: %.2f%%
             """;
 
-    public static void registerCommand() {
+    public static void registerCommand(String alias) {
         CommandRegistrationCallback.EVENT.register(
                 (commandDispatcher, commandRegistryAccess, registrationEnvironment) ->
                         commandDispatcher.register(
-                                CommandManager.literal("embellish-chat")
+                                CommandManager.literal(alias)
                                         .then(CommandManager.literal("reload")
                                                 .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
                                                 .executes(AdminCommand::executeReloadConfig))
