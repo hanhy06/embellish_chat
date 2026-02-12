@@ -7,18 +7,24 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.ConfigManager;
 import io.github.hanhy06.embellishchat.message.MessageProcessor;
+import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.network.message.SignedMessage;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 public class AdminCommand {
     public static void registerCommand() {
@@ -39,9 +45,11 @@ public class AdminCommand {
                                                         .executes(context -> executeBanOrPardon(context, false))))
                                         .then(CommandManager.literal("stress_test")
                                                 .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
-                                                .then(CommandManager.argument("count", IntegerArgumentType.integer())
-                                                        .then(CommandManager.argument("text", StringArgumentType.string())
-                                                                .executes(AdminCommand::executeStressTest))))
+                                                .then(CommandManager.argument("time", IntegerArgumentType.integer())
+                                                        .then(CommandManager.argument("count", IntegerArgumentType.integer())
+                                                                .then(CommandManager.argument("text", StringArgumentType.string())
+                                                                        .executes(AdminCommand::executeStressTest))))
+                                        )
                         )
         );
     }
@@ -94,16 +102,14 @@ public class AdminCommand {
     }
 
     private static int executeStressTest(CommandContext<ServerCommandSource> context) {
+        int time = IntegerArgumentType.getInteger(context, "time");
         int count = IntegerArgumentType.getInteger(context, "count");
-        String test  = StringArgumentType.getString(context,"text");
+        String text  = StringArgumentType.getString(context,"text");
         ServerCommandSource source = context.getSource();
         ServerPlayerEntity player = source.getPlayer();
 
         if (player == null) {
-            source.sendFeedback(() ->
-                            Text.literal("Stress test must be run by a player in-game."),
-                    false
-            );
+            source.sendFeedback(() -> Text.literal("Player only command."),false);
             return 0;
         }
 
@@ -112,23 +118,65 @@ public class AdminCommand {
             return 0;
         }
 
-        long startTime = System.currentTimeMillis();
-        for (int i = 0; i < count; i++) {
-            SignedMessage testMessage = SignedMessage.ofUnsigned(
-                    player.getUuid(),
-                    test
-            );
+        stressTest(time, count, text, player.getUuid(), source.getServer()).thenAccept(result -> {
+            source.sendFeedback(() -> Text.literal("Stress test completed!"), true);
 
-            MessageProcessor.INSTANCE.handleMessage(testMessage);
-        }
-        long duration = System.currentTimeMillis() - startTime;
+            long total = result.stream().mapToLong(Long::longValue).sum();
+            long min = result.stream().mapToLong(Long::longValue).min().orElse(0);
+            long max = result.stream().mapToLong(Long::longValue).max().orElse(0);
+            double average = total / (double) result.size();
 
-        double messagesPerSecond = (count * 1000.0) / duration;
-        String result = String.format("Stress test complete: Processed %d messages in %dms (%.2f msg/s)", count, duration, messagesPerSecond);
-        source.sendFeedback(() ->
-                        Text.literal(result),
-                false
-        );
-        return (int) duration;
+            result.sort(null);
+            double median;
+            int size = result.size();
+            if (size % 2 == 0) {
+                median = (result.get(size / 2 - 1) + result.get(size / 2)) / 2.0;
+            } else {
+                median = result.get(size / 2);
+            }
+
+            String resultMessage = """
+                    <yellow>Results</yellow>
+                    • <aqua>Iterations</aqua>: %d
+                    • <green>Average</green>: %.2fms
+                    • <dark_green>Minimum</dark_green>: %dms
+                    • <red>Maximum</red>: %dms
+                    • <light_purple>Median</light_purple>: %.2fms
+                    • <gold>Total</gold>: %dms
+                    """;
+
+            source.sendFeedback(() -> PlaceHolderUtil.parseTag(String.format(
+                    resultMessage, size, average, min, max, median, total
+            )), true);
+        });
+
+        source.sendFeedback(() -> Text.literal("Starting stress test..."), true);
+        return 1;
+    }
+
+    private static CompletableFuture<List<Long>> stressTest(int time, int count,String text, UUID uuid, MinecraftServer server) {
+        CompletableFuture<List<Long>> future = new CompletableFuture<>();
+
+        server.submit(() -> {
+            long startTime = System.currentTimeMillis();
+            for (int i = 0; i < count; i++) {
+                SignedMessage message = SignedMessage.ofUnsigned(uuid, text);
+                MessageProcessor.INSTANCE.handleMessage(message);
+            }
+            long duration = System.currentTimeMillis() - startTime;
+
+            if (time > 1) {
+                stressTest(time-1,count,text,uuid,server).thenAccept(list -> {
+                    list.addFirst(duration);
+                    future.complete(list);
+                });
+            } else {
+                List<Long> result = new ArrayList<>();
+                result.add(duration);
+                future.complete(result);
+            }
+        });
+
+        return future;
     }
 }
