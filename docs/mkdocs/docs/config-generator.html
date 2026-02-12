@@ -489,7 +489,7 @@
                     placeholder="yyyy-MM-dd HH:mm:ss"
                 />
                 <Input
-                    label="Command Alias (/ec 대신 사용할 별칭)"
+                    label="Command Alias"
                     value={config.commandAlias || ""}
                     onChange={(v) => updateGlobal('commandAlias', v)}
                     placeholder="Leave empty to keep /embellish-chat only"
@@ -504,7 +504,7 @@
                             className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
                         />
                         <label htmlFor="notifEnable" className="text-sm font-medium text-slate-700 dark:text-slate-200 cursor-pointer">
-                            Allow /ec notification command
+                            Allow /embellish-chat notification command
                         </label>
                     </div>
 
