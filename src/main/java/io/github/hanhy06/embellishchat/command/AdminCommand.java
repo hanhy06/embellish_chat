@@ -150,14 +150,14 @@ public class AdminCommand {
             long occupiedTicks = total / 50;
             double usagePercent = (occupiedTicks / (double) time) * 100.0;
 
-            String message = String.format(
+            Text message = PlaceHolderUtil.parseTag(String.format(
                     STRESS_TEST_FORMAT,
                     size, average, min, max, median, total,
                     occupiedTicks, time, usagePercent
-            );
+            ));
 
-            source.sendFeedback(() -> PlaceHolderUtil.parseTag(message), true);
-            EmbellishChat.LOGGER.info(STRESS_TEST_FORMAT);
+            source.sendFeedback(() -> message, true);
+            EmbellishChat.LOGGER.info(message.getString());
         });
 
         source.sendFeedback(() -> Text.literal("Starting stress test..."), true);
