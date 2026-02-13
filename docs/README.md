@@ -105,7 +105,7 @@ The configuration file is located at `config/embellish-chat/config.json`.
 ```
 {
   //version
-  "version": "3.1.1",
+  "version": "3.2.0",
   
   //preset
   "colorPreset": { ... },
