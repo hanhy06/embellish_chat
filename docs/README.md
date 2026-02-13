@@ -15,7 +15,7 @@ Embellish Chat modernizes your Minecraft server’s chat experience with a fully
     * Mention text automatically adapts to the target's color (e.g., team color).
     * Supports detailed targeting like LuckPerms groups (`@group`) and specific worlds (`@world`).
 * **Instantly show off your gear!**
-    * Type `[i]` to display the item you’re holding, or `[inv]` to display your entire inventoryContext.
+    * Type `[i]` to display the item you’re holding, or `[inv]` to display your entire inventory.
     * Other players can hover over the link to view detailed item tooltips.
 * **Chat Utilities**
     * **Metadata:** Hover over any message to see the exact timestamp.
