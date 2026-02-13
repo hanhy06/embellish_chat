@@ -71,8 +71,6 @@ you can create a more natural conversational experience.
 Triggers and the COMMAND_RUN type allow chat to function as a macro.
 The example above demonstrates a showcase datapack that enables expressions like crying or joy through chat.
 
-If you want, you can download it [here](https://modrinth.com/datapack/embellish-chat-showcase).
-
 ## Global Style
 
 ```
