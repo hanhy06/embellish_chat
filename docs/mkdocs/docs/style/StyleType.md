@@ -121,6 +121,7 @@
     * **Option:** `None`
 * `ATLAS_PRESET`
     * Uses a predefined atlas name from the `atlasPreset` section.
+    * This style type can’t be used in versions below 1.21.8.
     * This style type must be placed at the very bottom.
     * **Option:** `None`
 * `JSON`
