@@ -46,6 +46,7 @@ public class StyleRegistry {
     private final DateTimeFormatter timestamp;
     private final HashMap<String, Color> colorPreset;
     private final HashMap<String, AtlasTextObjectContents> atlasPreset;
+    private final HashSet<String> whiteListPreset;
     private final EnumMap<StyleType, Function<StyleParameter, MutableText>> registers;
     private final Pattern HEX_CODE = Pattern.compile("#[A-Fa-f0-9]{6}");
     private final DiscordUtil messenger;
@@ -55,6 +56,7 @@ public class StyleRegistry {
         this.timestamp = DateTimeFormatter.ofPattern(config.timestamp());
         this.colorPreset = config.colorPreset();
         this.atlasPreset = config.atlasPreset();
+        this.whiteListPreset = config.whiteListPreset();
         this.registers = new EnumMap<>(Map.ofEntries(
                 entry(StyleType.COLOR_HEX, this::COLOR_HEX),
                 entry(StyleType.COLOR_RAINBOW, this::COLOR_RAINBOW),
@@ -283,6 +285,10 @@ public class StyleRegistry {
     }
 
     public MutableText URL(StyleParameter parameter) {
+        if (!whiteListPreset.isEmpty() && !whiteListPreset.contains(parameter.getString())){
+            return parameter.segment();
+        }
+
         try {
             URI uri = URI.create(parameter.getString());
             ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);

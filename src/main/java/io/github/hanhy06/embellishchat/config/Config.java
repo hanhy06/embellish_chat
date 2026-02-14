@@ -30,6 +30,7 @@ public record Config(
         //preset
         HashMap<String, Color> colorPreset,
         HashMap<String, AtlasTextObjectContents> atlasPreset,
+        HashSet<String> whiteListPreset,
 
         //setting
         String delimiter,
@@ -342,6 +343,7 @@ public record Config(
                                 Identifier.of("minecraft:gui"),Identifier.of("minecraft:mob_effect/wind_charged"))
                         )
                 )),
+                new HashSet<>(),
 
                 //setting
                 ",",
