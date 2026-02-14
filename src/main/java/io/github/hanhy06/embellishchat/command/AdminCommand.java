@@ -69,6 +69,15 @@ public class AdminCommand {
                                                         .then(CommandManager.argument("count", IntegerArgumentType.integer())
                                                                 .then(CommandManager.argument("text", StringArgumentType.string())
                                                                         .executes(AdminCommand::executeStressTest))))
+                                                .then(CommandManager.literal("stop")
+                                                        .executes(source -> {
+                                                            if (testSource == null || remainingTicks <= 0){
+                                                                source.getSource().sendError(Text.literal("Stress test is not running."));
+                                                            }else {
+                                                                completeStressTest();
+                                                            }
+                                                            return 1;
+                                                        }))
                                         )
                         )
         );
@@ -175,6 +184,10 @@ public class AdminCommand {
     }
 
     private static void completeStressTest() {
+        if (remainingTicks <= 0){
+            return;
+        }
+
         int totalTicks = testResults.size();
         long totalProcessing = testResults.stream().mapToLong(Long::longValue).sum();
         long min = testResults.stream().mapToLong(Long::longValue).min().orElse(0);
