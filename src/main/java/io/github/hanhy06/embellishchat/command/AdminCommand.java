@@ -9,6 +9,7 @@ import io.github.hanhy06.embellishchat.config.ConfigManager;
 import io.github.hanhy06.embellishchat.message.MessageProcessor;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.MinecraftServer;
@@ -26,18 +27,25 @@ import java.util.stream.Collectors;
 
 public class AdminCommand {
     private static final String STRESS_TEST_FORMAT = """
-            <gray>── Performance Analysis ──</gray>
-            • <aqua>Iterations</aqua>: %d
-            • <dark_green>Minimum</dark_green>: %dms
-            • <red>Maximum</red>: %dms
-            • <green>Average</green>: %.2fms
-            • <light_purple>Median</light_purple>: %.2fms
-            • <gold>Total</gold>: %dms
+        <gray>── Performance Analysis ──</gray>
+        • <aqua>Ticks</aqua>: %d
+        • <dark_green>Minimum</dark_green>: %dms
+        • <red>Maximum</red>: %dms
+        • <green>Average</green>: %.2fms
+        • <light_purple>Median</light_purple>: %.2fms
+        • <gold>Total Processing Time</gold>: %dms
 
-            <gray>── Tick Analysis ──</gray>
-            • <blue>Used Ticks</blue>: %d / %d
-            • <blue>Usage</blue>: %.2f%%
-            """;
+        <gray>── Tick Analysis ──</gray>
+        • <blue>Used Ticks</blue>: %d / %d
+        • <blue>Usage</blue>: %.2f%%
+        """;
+
+    private static int remainingTicks = 0;
+    private static int countPerTick = 0;
+    private static String testText = "";
+    private static UUID testUuid = null;
+    private static ServerCommandSource testSource = null;
+    private static List<Long> testResults = new ArrayList<>();
 
     public static void registerCommand(String command) {
         CommandRegistrationCallback.EVENT.register(
@@ -57,20 +65,22 @@ public class AdminCommand {
                                                         .executes(context -> executeBanOrPardon(context, false))))
                                         .then(CommandManager.literal("stress_test")
                                                 .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
-                                                .then(CommandManager.argument("time", IntegerArgumentType.integer())
+                                                .then(CommandManager.argument("ticks", IntegerArgumentType.integer())
                                                         .then(CommandManager.argument("count", IntegerArgumentType.integer())
                                                                 .then(CommandManager.argument("text", StringArgumentType.string())
                                                                         .executes(AdminCommand::executeStressTest))))
                                         )
                         )
         );
+
+        ServerTickEvents.START_SERVER_TICK.register(AdminCommand::onServerTick);
     }
 
     private static int executeReloadConfig(CommandContext<ServerCommandSource> context) {
         Text feedback;
-        if (ConfigManager.INSTANCE.readConfig()){
+        if (ConfigManager.INSTANCE.readConfig()) {
             feedback = Text.literal("Config reloaded successfully.");
-        }else {
+        } else {
             feedback = Text.literal("Failed to reload config. Please check the log.");
         }
         context.getSource().sendFeedback(() -> feedback, true);
@@ -91,7 +101,7 @@ public class AdminCommand {
                     .map(ServerPlayerEntity::getUuid)
                     .collect(Collectors.toSet());
         } catch (CommandSyntaxException e) {
-            EmbellishChat.LOGGER.error("Unable to perform {} due to an unknown error.",action);
+            EmbellishChat.LOGGER.error("Unable to perform {} due to an unknown error.", action);
             return 1;
         }
 
@@ -114,86 +124,86 @@ public class AdminCommand {
     }
 
     private static int executeStressTest(CommandContext<ServerCommandSource> context) {
-        int time = IntegerArgumentType.getInteger(context, "time");
+        if (remainingTicks > 0) {
+            context.getSource().sendFeedback(() -> Text.literal("Stress test is already running."), false);
+            return 0;
+        }
+
+        int ticks = IntegerArgumentType.getInteger(context, "ticks");
         int count = IntegerArgumentType.getInteger(context, "count");
-        String text  = StringArgumentType.getString(context,"text");
+        String text = StringArgumentType.getString(context, "text");
         ServerCommandSource source = context.getSource();
         ServerPlayerEntity player = source.getPlayer();
 
         if (player == null) {
-            source.sendFeedback(() -> Text.literal("Player only command."),false);
+            source.sendFeedback(() -> Text.literal("Player only command."), false);
             return 0;
         }
 
         if (count > 5000) {
-            source.sendFeedback(() -> Text.literal("Count is too large. (Max 5000)"), true);
+            source.sendFeedback(() -> Text.literal("Count is too large. (Max 5000)"), false);
             return 0;
         }
 
-        stressTest(time, count, text, player.getUuid(), source.getServer()).thenAccept(result -> {
-            source.sendFeedback(() -> Text.literal("Stress test completed!"), true);
-
-            long total = result.stream().mapToLong(Long::longValue).sum();
-            long min = result.stream().mapToLong(Long::longValue).min().orElse(0);
-            long max = result.stream().mapToLong(Long::longValue).max().orElse(0);
-            double average = total / (double) result.size();
-
-            result.sort(null);
-            double median;
-            int size = result.size();
-            if (size % 2 == 0) {
-                median = (result.get(size / 2 - 1) + result.get(size / 2)) / 2.0;
-            } else {
-                median = result.get(size / 2);
-            }
-
-            long occupiedTicks = total / 50;
-            double usagePercent = (occupiedTicks / (double) time) * 100.0;
-
-            Text message = PlaceHolderUtil.parseTag(String.format(
-                    STRESS_TEST_FORMAT,
-                    size, min, max,average, median, total,
-                    occupiedTicks, time, usagePercent
-            ));
-
-            source.sendFeedback(() -> message, true);
-            EmbellishChat.LOGGER.info(message.getString());
-        });
+        remainingTicks = ticks;
+        countPerTick = count;
+        testText = text;
+        testUuid = player.getUuid();
+        testSource = source;
+        testResults = new ArrayList<>();
 
         source.sendFeedback(() -> Text.literal("Starting stress test..."), true);
         return 1;
     }
 
-    private static CompletableFuture<List<Long>> stressTest(int time, int count, String text, UUID uuid, MinecraftServer server) {
-        CompletableFuture<List<Long>> future = new CompletableFuture<>();
-        List<Long> results = new ArrayList<>();
+    private static void onServerTick(MinecraftServer server) {
+        if (remainingTicks <= 0) {
+            return;
+        }
 
-        Runnable task = new Runnable() {
-            int remaining = time;
+        long startTime = System.nanoTime();
+        for (int i = 0; i < countPerTick; i++) {
+            SignedMessage message = SignedMessage.ofUnsigned(testUuid, testText);
+            MessageProcessor.INSTANCE.handleMessage(message);
+        }
+        testResults.add((System.nanoTime() - startTime) / 1_000_000L);
+        remainingTicks--;
 
-            @Override
-            public void run() {
-                if (remaining <= 0) {
-                    future.complete(results);
-                    return;
-                }
-
-                long startTime = System.nanoTime();
-                for (int i = 0; i < count; i++) {
-                    SignedMessage message = SignedMessage.ofUnsigned(uuid, text);
-                    MessageProcessor.INSTANCE.handleMessage(message);
-                }
-                long duration = (System.nanoTime() - startTime)/ 1_000_000L;
-
-                results.add(duration);
-                remaining--;
-
-                server.submit(this);
-            }
-        };
-        server.submit(task);
-
-        return future;
+        if (remainingTicks <= 0) {
+            completeStressTest();
+        }
     }
 
+    private static void completeStressTest() {
+        int totalTicks = testResults.size();
+        long totalProcessing = testResults.stream().mapToLong(Long::longValue).sum();
+        long min = testResults.stream().mapToLong(Long::longValue).min().orElse(0);
+        long max = testResults.stream().mapToLong(Long::longValue).max().orElse(0);
+        double average = totalProcessing / (double) totalTicks;
+
+        testResults.sort(null);
+        double median;
+        if (totalTicks % 2 == 0) {
+            median = (testResults.get(totalTicks / 2 - 1) + testResults.get(totalTicks / 2)) / 2.0;
+        } else {
+            median = testResults.get(totalTicks / 2);
+        }
+
+        long occupiedTicks = totalProcessing / 50;
+        double usagePercentTicks = (occupiedTicks / (double) totalTicks) * 100.0;
+
+        Text message = PlaceHolderUtil.parseTag(String.format(
+                STRESS_TEST_FORMAT,
+                totalTicks, min, max, average, median, totalProcessing,
+                occupiedTicks, totalTicks, usagePercentTicks
+        ));
+
+        testSource.sendFeedback(() -> Text.literal("Stress test completed!"), true);
+        testSource.sendFeedback(() -> message, true);
+        EmbellishChat.LOGGER.info(message.getString());
+
+        testSource = null;
+        testUuid = null;
+        testResults = new ArrayList<>();
+    }
 }
