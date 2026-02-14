@@ -1,18 +1,21 @@
 package io.github.hanhy06.embellishchat.command;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.ConfigManager;
 import io.github.hanhy06.embellishchat.inventory.InventoryManager;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
+import io.github.hanhy06.embellishchat.message.MessageProcessor;
 import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
 import io.github.hanhy06.embellishchat.util.PermissionUtil;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.UuidArgumentType;
+import net.minecraft.network.message.SignedMessage;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.server.GameProfileResolver;
 import net.minecraft.server.command.CommandManager;
@@ -43,6 +46,11 @@ public class UserCommand {
                                 )
                                 .then(CommandManager.argument("player", EntityArgumentType.player())
                                         .executes((context) -> executeOpenInventory(context,true))
+                                )
+                        )
+                        .then(CommandManager.literal("preview")
+                                .then(CommandManager.argument("message", StringArgumentType.string())
+                                        .executes(UserCommand::executePreview)
                                 )
                         )
         ));
@@ -158,6 +166,20 @@ public class UserCommand {
         }
 
         player.openHandledScreen(factory);
+        return 1;
+    }
+
+    private static int executePreview(CommandContext<ServerCommandSource> context){
+        ServerPlayerEntity player = context.getSource().getPlayer();
+        if (player == null) return 0;
+
+        SignedMessage message = SignedMessage.ofUnsigned(
+                player.getUuid(),
+                StringArgumentType.getString(context,"message")
+        );
+        message = MessageProcessor.INSTANCE.handleMessage(message);
+        player.sendMessage(message.unsignedContent());
+
         return 1;
     }
 }

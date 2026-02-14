@@ -1,5 +1,6 @@
 package io.github.hanhy06.embellishchat.command;
 
+import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -7,12 +8,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.ConfigManager;
 import io.github.hanhy06.embellishchat.message.MessageProcessor;
-import io.github.hanhy06.embellishchat.styling.StylingProcessor;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.network.message.SignedMessage;
+import net.minecraft.server.GameProfileResolver;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -21,10 +22,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,44 +51,54 @@ public class AdminCommand {
     private static List<Long> testResults = new ArrayList<>();
 
     public static void registerCommand(String command) {
-        CommandRegistrationCallback.EVENT.register(
-                (commandDispatcher, commandRegistryAccess, registrationEnvironment) ->
-                        commandDispatcher.register(
-                                CommandManager.literal(command)
-                                        .then(CommandManager.literal("reload")
-                                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
-                                                .executes(AdminCommand::executeReloadConfig))
-                                        .then(CommandManager.literal("ban")
-                                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
-                                                .then(CommandManager.argument("target", EntityArgumentType.players())
-                                                        .executes(context -> executeBanOrPardon(context, true))))
-                                        .then(CommandManager.literal("pardon")
-                                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
-                                                .then(CommandManager.argument("target", EntityArgumentType.players())
-                                                        .executes(context -> executeBanOrPardon(context, false))))
-                                        .then(CommandManager.literal("stress_test")
-                                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
-                                                .then(CommandManager.argument("ticks", IntegerArgumentType.integer())
-                                                        .then(CommandManager.argument("count", IntegerArgumentType.integer())
-                                                                .then(CommandManager.argument("text", StringArgumentType.string())
-                                                                        .executes(AdminCommand::executeStressTest))))
-                                                .then(CommandManager.literal("stop")
-                                                        .executes(source -> {
-                                                            if (testSource == null || remainingTicks <= 0){
-                                                                source.getSource().sendError(Text.literal("Stress test is not running."));
-                                                            }else {
-                                                                completeStressTest();
-                                                            }
-                                                            return 1;
-                                                        }))
-                                        )
-                                        .then(CommandManager.literal("regex_test")
-                                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
-                                                .then(CommandManager.argument("regex",StringArgumentType.string())
-                                                        .then(CommandManager.argument("text",StringArgumentType.string())
-                                                                .executes(AdminCommand::executeRegexTest)))
-                                        )
+        CommandRegistrationCallback.EVENT.register((commandDispatcher, commandRegistryAccess, registrationEnvironment) -> commandDispatcher.register(
+                CommandManager.literal(command)
+                        .then(CommandManager.literal("reload")
+                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
+                                .executes(AdminCommand::executeReloadConfig)
                         )
+                        .then(CommandManager.literal("ban")
+                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
+                                .then(CommandManager.argument("target", EntityArgumentType.players())
+                                        .executes(context -> executeBanOrPardon(context, true))
+                                )
+                        )
+                        .then(CommandManager.literal("pardon")
+                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
+                                .then(CommandManager.argument("target", EntityArgumentType.players())
+                                        .executes(context -> executeBanOrPardon(context, false))
+                                )
+                        )
+                        .then(CommandManager.literal("stress_test")
+                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
+                                .then(CommandManager.argument("ticks", IntegerArgumentType.integer())
+                                        .then(CommandManager.argument("count", IntegerArgumentType.integer())
+                                                .then(CommandManager.argument("text", StringArgumentType.string())
+                                                        .executes(AdminCommand::executeStressTest)))
+                                )
+                                .then(CommandManager.literal("stop")
+                                        .executes(source -> {
+                                            if (testSource == null || remainingTicks <= 0){
+                                                source.getSource().sendError(Text.literal("Stress test is not running."));
+                                            }else {
+                                                completeStressTest();
+                                            }
+                                            return 1;
+                                        })
+                                )
+                        )
+                        .then(CommandManager.literal("regex_test")
+                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
+                                .then(CommandManager.argument("regex",StringArgumentType.string())
+                                        .then(CommandManager.argument("text",StringArgumentType.string())
+                                                .executes(AdminCommand::executeRegexTest))
+                                )
+                        )
+                        .then(CommandManager.literal("banlist")
+                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
+                                .executes(AdminCommand::executeBanlist)
+                        )
+                )
         );
 
         ServerTickEvents.START_SERVER_TICK.register(AdminCommand::onServerTick);
@@ -252,4 +260,25 @@ public class AdminCommand {
         context.getSource().sendFeedback(() -> result,false);
         return 1;
     }
+
+    private static int executeBanlist(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        HashSet<UUID> bannedList = ConfigManager.getConfig().bannedPlayerList();
+
+        source.sendMessage(PlaceHolderUtil.parseTag(
+                "<gray>-----</gray> <aqua><b>Banned Player List</b></aqua> <gray>-----</gray>"
+        ));
+
+        GameProfileResolver resolver = EmbellishChat.SERVER.getApiServices().profileResolver();
+        for (UUID uuid : bannedList) {
+            Optional<GameProfile> profile = resolver.getProfileById(uuid);
+            if (profile.isEmpty()) continue;
+            String message = "<red><b>name</b></red>: " + profile.get().name();
+            source.sendMessage(PlaceHolderUtil.parseTag(message));
+        }
+
+        source.sendMessage(PlaceHolderUtil.parseTag("<gray>------------------------------</gray>"));
+        return 1;
+    }
+
 }
