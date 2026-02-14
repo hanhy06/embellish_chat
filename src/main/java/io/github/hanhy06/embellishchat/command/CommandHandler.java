@@ -10,7 +10,7 @@ import net.minecraft.server.command.ServerCommandSource;
 
 import java.util.List;
 
-public class EmbellishChatCommandManager implements ConfigListener {
+public class CommandHandler implements ConfigListener {
     @Override
     public void onConfigReload(Config newConfig) {
         String alias = newConfig.commandAlias();
