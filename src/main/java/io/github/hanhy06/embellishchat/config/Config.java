@@ -30,7 +30,7 @@ public record Config(
         //preset
         HashMap<String, Color> colorPreset,
         HashMap<String, AtlasTextObjectContents> atlasPreset,
-        HashSet<String> whiteListPreset,
+        HashSet<String> whitelist,
 
         //setting
         String delimiter,

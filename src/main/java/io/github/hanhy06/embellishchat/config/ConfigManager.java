@@ -27,9 +27,11 @@ public class ConfigManager {
     public final Object LOCK_KEY = new Object();
 
     private static final String CONFIG_FILE_DIR = EmbellishChat.MOD_ID;
+
     private static final String CONFIG_FILE_NAME = "config.json";
     private static final String STYLE_FILE_NAME = "styles.json";
     private static final String MENTION_FILE_NAME = "mentions.json";
+    private static final String PRESET_FILE_NAME = "presets.json";
 
     private final Path configDirPath;
     private Config config = Config.createDefault();
@@ -72,6 +74,7 @@ public class ConfigManager {
         JsonObject configJson = readJsonFile(CONFIG_FILE_NAME);
         JsonObject stylesJson = readJsonFile(STYLE_FILE_NAME);
         JsonObject mentionsJson = readJsonFile(MENTION_FILE_NAME);
+        JsonObject presetsJson = readJsonFile(PRESET_FILE_NAME);
 
         JsonObject merged = configJson != null ? configJson : new JsonObject();
 
@@ -84,6 +87,27 @@ public class ConfigManager {
             merged.add("mentionRules", mentionsJson.get("mentionRules"));
         }else{
             merged.add("mentionRules", defaultConfig.get("mentionRules"));
+        }
+        if (presetsJson != null) {
+            if (presetsJson.has("colorPreset")) {
+                merged.add("colorPreset", presetsJson.get("colorPreset"));
+            } else {
+                merged.add("colorPreset", defaultConfig.get("colorPreset"));
+            }
+            if (presetsJson.has("atlasPreset")) {
+                merged.add("atlasPreset", presetsJson.get("atlasPreset"));
+            } else {
+                merged.add("atlasPreset", defaultConfig.get("atlasPreset"));
+            }
+            if (presetsJson.has("whitelist")) {
+                merged.add("whitelist", presetsJson.get("whitelist"));
+            } else {
+                merged.add("whitelist", defaultConfig.get("whitelist"));
+            }
+        } else {
+            merged.add("colorPreset", defaultConfig.get("colorPreset"));
+            merged.add("atlasPreset", defaultConfig.get("atlasPreset"));
+            merged.add("whitelist", defaultConfig.get("whitelist"));
         }
 
         try {
@@ -138,10 +162,19 @@ public class ConfigManager {
             mentionsJson.add("mentionRules", mentionRules);
         }
 
+        JsonObject presetsJson = new JsonObject();
+        JsonElement colorPreset = fullJson.remove("colorPreset");
+        if (colorPreset != null) presetsJson.add("colorPreset", colorPreset);
+        JsonElement atlasPreset = fullJson.remove("atlasPreset");
+        if (atlasPreset != null) presetsJson.add("atlasPreset", atlasPreset);
+        JsonElement whitelist = fullJson.remove("whitelist");
+        if (whitelist != null) presetsJson.add("whitelist", whitelist);
+
         if (writer == null) writer = this::writeJsonFile;
         writer.accept(CONFIG_FILE_NAME,fullJson);
         writer.accept(STYLE_FILE_NAME, stylesJson);
         writer.accept(MENTION_FILE_NAME, mentionsJson);
+        writer.accept(PRESET_FILE_NAME, presetsJson);
     }
 
     private  void writeIfAbsent(String file, JsonObject json) {
