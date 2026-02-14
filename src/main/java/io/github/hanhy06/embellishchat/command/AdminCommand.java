@@ -48,7 +48,7 @@ public class AdminCommand {
     private static String testText = "";
     private static UUID testUuid = null;
     private static ServerCommandSource testSource = null;
-    private static List<Long> testResults = new ArrayList<>();
+    private static List<Long> testResults = null;
 
     public static void registerCommand() {
         CommandRegistrationCallback.EVENT.register((commandDispatcher, commandRegistryAccess, registrationEnvironment) -> commandDispatcher.register(
@@ -232,7 +232,8 @@ public class AdminCommand {
 
         testSource = null;
         testUuid = null;
-        testResults = new ArrayList<>();
+        testResults = null;
+        remainingTicks = 0;
     }
 
     private static int executeRegexTest(CommandContext<ServerCommandSource> context){
