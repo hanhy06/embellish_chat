@@ -50,9 +50,9 @@ public class AdminCommand {
     private static ServerCommandSource testSource = null;
     private static List<Long> testResults = new ArrayList<>();
 
-    public static void registerCommand(String command) {
+    public static void registerCommand() {
         CommandRegistrationCallback.EVENT.register((commandDispatcher, commandRegistryAccess, registrationEnvironment) -> commandDispatcher.register(
-                CommandManager.literal(command)
+                CommandManager.literal(EmbellishChat.MOD_ID)
                         .then(CommandManager.literal("reload")
                                 .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
                                 .executes(AdminCommand::executeReloadConfig)
@@ -203,10 +203,6 @@ public class AdminCommand {
     }
 
     private static void completeStressTest() {
-        if (remainingTicks <= 0){
-            return;
-        }
-
         int totalTicks = testResults.size();
         long totalProcessing = testResults.stream().mapToLong(Long::longValue).sum();
         long min = testResults.stream().mapToLong(Long::longValue).min().orElse(0);
@@ -280,5 +276,4 @@ public class AdminCommand {
         source.sendMessage(PlaceHolderUtil.parseTag("<gray>------------------------------</gray>"));
         return 1;
     }
-
 }
