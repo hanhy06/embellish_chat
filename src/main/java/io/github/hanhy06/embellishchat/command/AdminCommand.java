@@ -7,6 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.ConfigManager;
 import io.github.hanhy06.embellishchat.message.MessageProcessor;
+import io.github.hanhy06.embellishchat.styling.StylingProcessor;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -16,6 +17,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
@@ -23,6 +26,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class AdminCommand {
@@ -78,6 +83,12 @@ public class AdminCommand {
                                                             }
                                                             return 1;
                                                         }))
+                                        )
+                                        .then(CommandManager.literal("regex_test")
+                                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
+                                                .then(CommandManager.argument("regex",StringArgumentType.string())
+                                                        .then(CommandManager.argument("text",StringArgumentType.string())
+                                                                .executes(AdminCommand::executeRegexTest)))
                                         )
                         )
         );
@@ -218,5 +229,27 @@ public class AdminCommand {
         testSource = null;
         testUuid = null;
         testResults = new ArrayList<>();
+    }
+
+    private static int executeRegexTest(CommandContext<ServerCommandSource> context){
+        String text = StringArgumentType.getString(context,"text");
+        String regex = StringArgumentType.getString(context,"regex");
+        MutableText result = Text.empty();
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(text);
+
+        int lastEnd = 0;
+        while (matcher.find()){
+            result.append(text.substring(lastEnd,matcher.start(1)));
+            result.append(Text.literal(matcher.group(1)).setStyle(Style.EMPTY.withColor(0xaaffaa)));
+            result.append(text.substring(matcher.end(1),matcher.start(2)));
+            result.append(Text.literal(matcher.group(2)).setStyle(Style.EMPTY.withColor(0xffaaaa)));
+            lastEnd = matcher.end(2);
+        }
+        result.append(text.substring(lastEnd));
+
+        context.getSource().sendFeedback(() -> result,false);
+        return 1;
     }
 }
