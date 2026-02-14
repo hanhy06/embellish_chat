@@ -49,7 +49,7 @@ public class UserCommand {
                                 )
                         )
                         .then(CommandManager.literal("preview")
-                                .then(CommandManager.argument("message", StringArgumentType.string())
+                                .then(CommandManager.argument("message", StringArgumentType.greedyString())
                                         .executes(UserCommand::executePreview)
                                 )
                         )
