@@ -82,7 +82,8 @@ Use the following patterns directly in the chat window to apply styles:
 
 * **`/embellish-chat reload`** Reloads all configuration files under `/config/embellish-chat/` immediately.
 * **`/embellish-chat ban/pardon <player>`** Blocks or restores a player's access to all mod features.
-* **`/embellish-chat stress_test <time> <count> <text>`** Repeatedly simulates `<count>` messages for `<time>` to stress-test the server's message-processing performance.
+* **`/embellish-chat stress_test <ticks> <count> <text>`** Repeatedly simulates `<count>` messages for `<ticks>` to stress-test the server's message-processing performance.
+* **`/embellish-chat regex_test <regex> <text>`** Tests the provided `<regex>` against `<text>` and highlights capture groups to analyze the match result.
 
 ### User Commands
 > Available to **all players** (no permission required).

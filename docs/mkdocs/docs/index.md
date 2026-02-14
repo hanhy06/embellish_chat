@@ -64,12 +64,13 @@ Available to all players.
 ### Admin Commands (`/embellish-chat`)
 Requires OP Level 2 or appropriate permissions.
 
-| Command       | Arguments               | Description                                                                                                       |
-|---------------|-------------------------|-------------------------------------------------------------------------------------------------------------------|
-| `reload`      | `None`                  | Reloads all files under `config/embellish-chat/`.                                                                 |
-| `ban`         | `<player>`              | Blocks a player from using mod features.                                                                          |
-| `pardon`      | `<player>`              | Restores mod access for a player.                                                                                 |
-| `stress_test` | `<time> <count> <text>` | Repeatedly simulates `<count>` messages for `<time>` to stress-test the server's message-processing performance.  |
+| Command       | Arguments                | Description                                                                                                       |
+|---------------|--------------------------|-------------------------------------------------------------------------------------------------------------------|
+| `reload`      | `None`                   | Reloads all files under `config/embellish-chat/`.                                                                 |
+| `ban`         | `<player>`               | Blocks a player from using mod features.                                                                          |
+| `pardon`      | `<player>`               | Restores mod access for a player.                                                                                 |
+| `stress_test` | `<ticks> <count> <text>` | Repeatedly simulates `<count>` messages for `<ticks>` to stress-test the server's message-processing performance. |
+| `regex_test ` | `<regex> <text>`         | Tests the provided `<regex>` against `<text>` and highlights capture groups to analyze the match result.          |                                                                                                                  |
 
 ---
 ## Configuration
