@@ -43,10 +43,12 @@ import static java.util.Map.entry;
 
 public class StyleRegistry {
     private final Config config;
+
     private final DateTimeFormatter timestamp;
-    private final HashMap<String, Color> colorPreset;
-    private final HashMap<String, AtlasTextObjectContents> atlasPreset;
+    private final HashMap<String, Color> colors;
+    private final HashMap<String, AtlasTextObjectContents> atlas;
     private final HashSet<String> whitelist;
+
     private final EnumMap<StyleType, Function<StyleParameter, MutableText>> registers;
     private final Pattern HEX_CODE = Pattern.compile("#[A-Fa-f0-9]{6}");
     private final DiscordUtil messenger;
@@ -54,8 +56,8 @@ public class StyleRegistry {
     public StyleRegistry(Config config) {
         this.config = config;
         this.timestamp = DateTimeFormatter.ofPattern(config.timestamp());
-        this.colorPreset = config.colorPreset();
-        this.atlasPreset = config.atlasPreset();
+        this.colors = config.colors();
+        this.atlas = config.atlas();
         this.whitelist = config.whitelist();
         this.registers = new EnumMap<>(Map.ofEntries(
                 entry(StyleType.COLOR_HEX, this::COLOR_HEX),
@@ -185,7 +187,7 @@ public class StyleRegistry {
     }
 
     public MutableText COLOR_PRESET(StyleParameter parameter) {
-        Color color = colorPreset.getOrDefault(parameter.getString(), Color.WHITE);
+        Color color = colors.getOrDefault(parameter.getString(), Color.WHITE);
         return parameter.segment().fillStyle(Style.EMPTY.withColor(color.getRGB()));
     }
 
@@ -430,7 +432,7 @@ public class StyleRegistry {
     }
 
     public MutableText ATLAS_PRESET(StyleParameter parameter) {
-        AtlasTextObjectContents atlas = atlasPreset.get(parameter.getString());
+        AtlasTextObjectContents atlas = this.atlas.get(parameter.getString());
         if (atlas!=null) return Text.object(atlas);
         else return parameter.segment();
     }

@@ -28,8 +28,8 @@ public record Config(
         LinkedHashMap<String,List<MentionRule>> mentionRules,
 
         //preset
-        HashMap<String, Color> colorPreset,
-        HashMap<String, AtlasTextObjectContents> atlasPreset,
+        HashMap<String, Color> colors,
+        HashMap<String, AtlasTextObjectContents> atlas,
         HashSet<String> whitelist,
 
         //setting

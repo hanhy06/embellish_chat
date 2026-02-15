@@ -89,15 +89,15 @@ public class ConfigManager {
             merged.add("mentionRules", defaultConfig.get("mentionRules"));
         }
         if (presetsJson != null) {
-            if (presetsJson.has("colorPreset")) {
-                merged.add("colorPreset", presetsJson.get("colorPreset"));
+            if (presetsJson.has("colors")) {
+                merged.add("colors", presetsJson.get("colors"));
             } else {
-                merged.add("colorPreset", defaultConfig.get("colorPreset"));
+                merged.add("colors", defaultConfig.get("colors"));
             }
-            if (presetsJson.has("atlasPreset")) {
-                merged.add("atlasPreset", presetsJson.get("atlasPreset"));
+            if (presetsJson.has("atlas")) {
+                merged.add("atlas", presetsJson.get("atlas"));
             } else {
-                merged.add("atlasPreset", defaultConfig.get("atlasPreset"));
+                merged.add("atlas", defaultConfig.get("atlas"));
             }
             if (presetsJson.has("whitelist")) {
                 merged.add("whitelist", presetsJson.get("whitelist"));
@@ -105,8 +105,8 @@ public class ConfigManager {
                 merged.add("whitelist", defaultConfig.get("whitelist"));
             }
         } else {
-            merged.add("colorPreset", defaultConfig.get("colorPreset"));
-            merged.add("atlasPreset", defaultConfig.get("atlasPreset"));
+            merged.add("colors", defaultConfig.get("colors"));
+            merged.add("atlas", defaultConfig.get("atlas"));
             merged.add("whitelist", defaultConfig.get("whitelist"));
         }
 
@@ -163,10 +163,10 @@ public class ConfigManager {
         }
 
         JsonObject presetsJson = new JsonObject();
-        JsonElement colorPreset = fullJson.remove("colorPreset");
-        if (colorPreset != null) presetsJson.add("colorPreset", colorPreset);
-        JsonElement atlasPreset = fullJson.remove("atlasPreset");
-        if (atlasPreset != null) presetsJson.add("atlasPreset", atlasPreset);
+        JsonElement colorPreset = fullJson.remove("colors");
+        if (colorPreset != null) presetsJson.add("colors", colorPreset);
+        JsonElement atlasPreset = fullJson.remove("atlas");
+        if (atlasPreset != null) presetsJson.add("atlas", atlasPreset);
         JsonElement whitelist = fullJson.remove("whitelist");
         if (whitelist != null) presetsJson.add("whitelist", whitelist);
 

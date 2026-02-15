@@ -38,19 +38,19 @@ public class PlaceHolderUtil {
         return TagParser.DEFAULT.parseText(text,ParserContext.of());
     }
 
-    public static Text parseText(String option, ServerPlayerEntity player){
-        if (option.isEmpty()) return Text.literal(option);
+    public static Text parseText(String text, ServerPlayerEntity player){
+        if (text.isEmpty()) return Text.literal(text);
 
         PlaceholderContext context;
         if (player!=null) context = PlaceholderContext.of(player);
         else context = PlaceholderContext.of(EmbellishChat.SERVER);
 
-        return Placeholders.parseText(TagParser.DEFAULT.parseText(option, ParserContext.of()),context);
+        return Placeholders.parseText(TagParser.DEFAULT.parseText(text, ParserContext.of()),context);
     }
 
-    public static String parsePlaceholder(String option, ServerPlayerEntity player){
-        if (option.isEmpty()) return option;
-        else if (player!=null) return Placeholders.parseText(Text.literal(option),PlaceholderContext.of(player)).getString();
-        else return Placeholders.parseText(Text.literal(option),PlaceholderContext.of(EmbellishChat.SERVER)).getString();
+    public static String parsePlaceholder(String text, ServerPlayerEntity player){
+        if (text.isEmpty()) return text;
+        else if (player!=null) return Placeholders.parseText(Text.literal(text),PlaceholderContext.of(player)).getString();
+        else return Placeholders.parseText(Text.literal(text),PlaceholderContext.of(EmbellishChat.SERVER)).getString();
     }
 }
