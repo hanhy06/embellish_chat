@@ -19,8 +19,8 @@ import java.util.concurrent.TimeUnit;
 
 public class TelemetryUtil implements ConfigListener {
     //TODO: 빌드할때 uri 바꿔야함
-    private static final URI uri = URI.create("https://127.0.0.1");
-    private static final HttpClient client = HttpClient.newHttpClient();
+    private static final URI uri = URI.create("http://127.0.0.1:8000/api/metrics");
+    private static final HttpClient client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build();
 
     private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private static ScheduledFuture<?> handle;
@@ -43,11 +43,11 @@ public class TelemetryUtil implements ConfigListener {
         } else {
             nextRun = now.plusDays(1).withHour(0).withMinute(0).withSecond(0);
         }
-
         long initialDelay = Duration.between(now, nextRun).toHours();
+
         handle = scheduler.scheduleAtFixedRate(
                 () -> EmbellishChat.SERVER.execute(TelemetryUtil::send),
-                initialDelay,
+                0,
                 12,
                 TimeUnit.HOURS
         );
@@ -63,6 +63,7 @@ public class TelemetryUtil implements ConfigListener {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(uri)
                 .header("Content-Type", "application/json")
+                .header(EmbellishChat.MOD_ID, "telemetry")
                 .POST(HttpRequest.BodyPublishers.ofString(content))
                 .build();
 
