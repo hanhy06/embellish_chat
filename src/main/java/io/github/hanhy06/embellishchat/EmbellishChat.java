@@ -9,6 +9,7 @@ import io.github.hanhy06.embellishchat.styling.StylingProcessor;
 import io.github.hanhy06.embellishchat.styling.util.BubbleUtil;
 import io.github.hanhy06.embellishchat.util.PermissionUtil;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
+import io.github.hanhy06.embellishchat.util.TelemetryUtil;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
@@ -48,11 +49,13 @@ public class EmbellishChat implements ModInitializer {
         MentionProcessor mention = new MentionProcessor();
         MessageProcessor message = new MessageProcessor(mention,styler, server.getPlayerManager());
         CommandHandler command = new CommandHandler();
+        TelemetryUtil telemetry = new TelemetryUtil();
 
         manager.addListener(styler);
         manager.addListener(mention);
         manager.addListener(message);
         manager.addListener(command);
+        manager.addListener(telemetry);
 		manager.readConfig();
 
 		LOGGER.info("[{}] initialized successfully.", MOD_ID);

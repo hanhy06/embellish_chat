@@ -1,12 +1,15 @@
 package io.github.hanhy06.embellishchat.util;
 
 import io.github.hanhy06.embellishchat.EmbellishChat;
+import io.github.hanhy06.embellishchat.config.Config;
+import io.github.hanhy06.embellishchat.config.ConfigListener;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.concurrent.Executors;
@@ -14,13 +17,19 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-public class TelemetryUtil {
+public class TelemetryUtil implements ConfigListener {
     //TODO: 빌드할때 uri 바꿔야함
-    private static final URI uri = URI.create("");
+    private static final URI uri = URI.create("https://127.0.0.1");
     private static final HttpClient client = HttpClient.newHttpClient();
 
     private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private static ScheduledFuture<?> handle;
+
+    @Override
+    public void onConfigReload(Config newConfig) {
+        if (newConfig.enableTelemetry()) start();
+        else if (handle!=null) handle.cancel(false);
+    }
 
     public static void start(){
         if (handle != null) handle.cancel(false);
@@ -36,14 +45,19 @@ public class TelemetryUtil {
         }
 
         long initialDelay = Duration.between(now, nextRun).toHours();
-        handle = scheduler.scheduleAtFixedRate(() -> EmbellishChat.SERVER.execute(TelemetryUtil::send), initialDelay, 12, TimeUnit.HOURS);
+        handle = scheduler.scheduleAtFixedRate(
+                () -> EmbellishChat.SERVER.execute(TelemetryUtil::send),
+                initialDelay,
+                12,
+                TimeUnit.HOURS
+        );
     }
 
     private static void send(){
         String content = "{\"minecraftVersion\":\"%s\",\"playerCount\":%d,\"time\":\"%s\"}".formatted(
                 EmbellishChat.SERVER.getVersion(),
                 EmbellishChat.SERVER.getCurrentPlayerCount(),
-                ZonedDateTime.now()
+                OffsetDateTime.now()
         );
 
         HttpRequest request = HttpRequest.newBuilder()
