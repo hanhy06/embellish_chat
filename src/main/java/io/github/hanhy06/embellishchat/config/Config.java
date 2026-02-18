@@ -41,7 +41,6 @@ public record Config(
         boolean notificationCommandEnable,
         boolean mentionBroadcast,
         boolean useClearFormat,
-        boolean enableTelemetry,
 
         //player list
         HashSet<UUID> bannedPlayerList,
@@ -355,7 +354,6 @@ public record Config(
                 true,
                 true,
                 false,
-                true,
 
                 //player list
                 new HashSet<>(),

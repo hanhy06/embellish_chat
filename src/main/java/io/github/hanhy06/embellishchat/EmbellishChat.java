@@ -49,13 +49,11 @@ public class EmbellishChat implements ModInitializer {
         MentionProcessor mention = new MentionProcessor();
         MessageProcessor message = new MessageProcessor(mention,styler, server.getPlayerManager());
         CommandHandler command = new CommandHandler();
-        TelemetryUtil telemetry = new TelemetryUtil();
 
         manager.addListener(styler);
         manager.addListener(mention);
         manager.addListener(message);
         manager.addListener(command);
-        manager.addListener(telemetry);
 		manager.readConfig();
 
 		LOGGER.info("[{}] initialized successfully.", MOD_ID);
