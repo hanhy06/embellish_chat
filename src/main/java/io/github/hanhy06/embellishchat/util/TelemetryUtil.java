@@ -9,7 +9,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.concurrent.Executors;
@@ -39,25 +38,24 @@ public class TelemetryUtil implements ConfigListener {
 
         int currentHour = now.getHour();
         if (currentHour < 12) {
-            nextRun = now.withHour(12).withMinute(0).withSecond(0);
+            nextRun = now.withHour(12).withMinute(0);
         } else {
-            nextRun = now.plusDays(1).withHour(0).withMinute(0).withSecond(0);
+            nextRun = now.plusDays(1).withHour(0).withMinute(0);
         }
         long initialDelay = Duration.between(now, nextRun).toHours();
 
         handle = scheduler.scheduleAtFixedRate(
                 () -> EmbellishChat.SERVER.execute(TelemetryUtil::send),
-                0,
+                initialDelay,
                 12,
                 TimeUnit.HOURS
         );
     }
 
     private static void send(){
-        String content = "{\"minecraftVersion\":\"%s\",\"playerCount\":%d,\"time\":\"%s\"}".formatted(
+        String content = "{\"minecraftVersion\":\"%s\",\"playerCount\":%d}".formatted(
                 EmbellishChat.SERVER.getVersion(),
-                EmbellishChat.SERVER.getCurrentPlayerCount(),
-                OffsetDateTime.now()
+                EmbellishChat.SERVER.getCurrentPlayerCount()
         );
 
         HttpRequest request = HttpRequest.newBuilder()
