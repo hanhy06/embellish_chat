@@ -22,7 +22,7 @@
     * Applies a color gradient using the provided HEX codes. Supports two or more colors.
     * **Option:** `Hex Codes`
 * `COLOR_PRESET`
-    * Uses a predefined color name from the `persets.json/colors` section.
+    * Uses a predefined color name from the `presets.json/colors` section.
     * **Option:** `Preset Name`
 * `COLOR_SHADOW`
     * Applies the HEX code color provided as an option to the shadow. (Available in 1.21.2+).

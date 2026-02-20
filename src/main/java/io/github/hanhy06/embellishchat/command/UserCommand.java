@@ -48,11 +48,11 @@ public class UserCommand {
                                         .executes((context) -> executeOpenInventory(context,true))
                                 )
                         )
-                        .then(CommandManager.literal("preview")
-                                .then(CommandManager.argument("message", StringArgumentType.greedyString())
-                                        .executes(UserCommand::executePreview)
-                                )
-                        )
+//                        .then(CommandManager.literal("preview")
+//                                .then(CommandManager.argument("message", StringArgumentType.greedyString())
+//                                        .executes(UserCommand::executePreview)
+//                                )
+//                        )
         ));
     }
 

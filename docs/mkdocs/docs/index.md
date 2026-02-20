@@ -82,15 +82,12 @@ The configuration file is located at `config/embellish-chat/config.json`.
 ```
 {
   //version
-  "version": "3.1.1",
-  
-  //preset
-  "colorPreset": { ... },
-  "atlasPreset": { ... },
+  "version": "3.3.0",
   
   //setting
   "delimiter": ",",
   "timestamp": "yyyy-MM-dd HH:mm:ss",
+  "commandAlias": "ec"
   "urlColor": "#0000EE",
   "defaultTeamColor": "#FF55FF",
   "notificationCommandEnable": true,
@@ -158,6 +155,27 @@ The configuration file is located at `config/embellish-chat/mentions.json`.
 * The `delimiter` value is internally handled as a regular expression; special characters such as `|` must be properly escaped.
 * If `defaultTeamColor` is missing or set to `null`, automatic coloring will not be applied.
 * To avoid JSON syntax errors and ensure valid configurations, using the **[Web Config Generator](https://hanhy06.github.io/embellish-chat/site/config-generator.html)** is strongly recommended:
+
+The configuration file is located at `config/embellish-chat/presets.json`.
+```
+{
+  "colors": {
+    " ... ": " ... ",
+  },
+  "atlas": {
+    " ... ": {
+      "atlas": " ... ",
+      "sprite": " ... "
+    }
+  },
+  "whitelist": [
+    " ... "
+  ]
+}
+```
+* **`colors`**: This is used in the color presets for styling.
+* **`atlas`**: This is used in the atlas presets for styling.
+* **`whitelist`**: This is used in the `URL` style type. If left empty, all URLs are allowed.
 
 ---
 

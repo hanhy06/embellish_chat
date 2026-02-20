@@ -94,10 +94,10 @@ public class AdminCommand {
                                                 .executes(AdminCommand::executeRegexTest))
                                 )
                         )
-                        .then(CommandManager.literal("banlist")
-                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
-                                .executes(AdminCommand::executeBanlist)
-                        )
+//                        .then(CommandManager.literal("banlist")
+//                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
+//                                .executes(AdminCommand::executeBanlist)
+//                        )
                 )
         );
 
