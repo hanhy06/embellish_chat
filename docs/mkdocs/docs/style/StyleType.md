@@ -74,8 +74,7 @@
     * **Option:** `Slot ID`
 * `URL`
     * Opens the provided URL in a browser when clicked.
-    * The domain or subdomain must be included in `presets.json/whitelist`.
-      * If the value is empty, all URLs are allowed. 
+    * The domain or subdomain must be included in `presets.json/whitelist`. If empty, all URLs are allowed.
     * **Option:** `URL`
 * `METADATA`
     * Displays the server receipt time on hover and copies it to the clipboard on click.
