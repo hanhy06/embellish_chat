@@ -22,7 +22,7 @@
     * Applies a color gradient using the provided HEX codes. Supports two or more colors.
     * **Option:** `Hex Codes`
 * `COLOR_PRESET`
-    * Uses a predefined color name from the `colorPreset` section.
+    * Uses a predefined color name from the `persets.json/colors` section.
     * **Option:** `Preset Name`
 * `COLOR_SHADOW`
     * Applies the HEX code color provided as an option to the shadow. (Available in 1.21.2+).
@@ -74,6 +74,8 @@
     * **Option:** `Slot ID`
 * `URL`
     * Opens the provided URL in a browser when clicked.
+    * The domain or subdomain must be included in `presets.json/whitelist`.
+      * If the value is empty, all URLs are allowed. 
     * **Option:** `URL`
 * `METADATA`
     * Displays the server receipt time on hover and copies it to the clipboard on click.
@@ -120,7 +122,7 @@
     * The inventory snapshot is cleared when the player leaves the server.
     * **Option:** `None`
 * `ATLAS_PRESET`
-    * Uses a predefined atlas name from the `atlasPreset` section.
+    * Uses a predefined atlas name from the `presets.json/atlas` section.
     * This style type can’t be used in versions below 1.21.8.
     * This style type must be placed at the very bottom.
     * **Option:** `None`
