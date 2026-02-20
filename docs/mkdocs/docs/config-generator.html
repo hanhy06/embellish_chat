@@ -57,8 +57,23 @@
 
     // Default config.json
     const DEFAULT_CONFIG = {
-      "version": "3.2.0",
-      "colorPreset": {
+      "version": "3.3.0",
+      "delimiter": ",",
+      "timestamp": "yyyy-MM-dd HH:mm:ss",
+      "commandAlias": "ec",
+      "urlColor": "#0000EE",
+      "defaultTeamColor": "#FF55FF",
+      "notificationCommandEnable": true,
+      "mentionBroadcast": true,
+      "useClearFormat": false,
+      "bannedPlayerList": [],
+      "notificationOffPlayerList": [],
+      "webhook": ""
+    };
+
+    // Default presets.json
+    const DEFAULT_PRESETS = {
+      "colors": {
         "dark green": "#00AA00",
         "green": "#55FF55",
         "yellow": "#FFFF55",
@@ -76,7 +91,7 @@
         "dark aqua": "#00AAAA",
         "dark blue": "#0000AA"
       },
-      "atlasPreset": {
+      "atlas": {
         "fire": { "atlas": "minecraft:blocks", "sprite": "minecraft:block/campfire_fire" },
         "hunger": { "atlas": "minecraft:gui", "sprite": "minecraft:hud/food_full" },
         "heart": { "atlas": "minecraft:gui", "sprite": "minecraft:hud/heart/full" },
@@ -84,17 +99,7 @@
         "no": { "atlas": "minecraft:gui", "sprite": "minecraft:container/beacon/cancel" },
         "move": { "atlas": "minecraft:gui", "sprite": "minecraft:mob_effect/wind_charged" }
       },
-      "delimiter": ",",
-      "timestamp": "yyyy-MM-dd HH:mm:ss",
-      "commandAlias": "",
-      "urlColor": "#0000EE",
-      "defaultTeamColor": "#FF55FF",
-      "notificationCommandEnable": true,
-      "mentionBroadcast": true,
-      "useClearFormat": false,
-      "bannedPlayerList": [],
-      "notificationOffPlayerList": [],
-      "webhook": ""
+      "whitelist": []
     };
 
     // Default styles.json
@@ -543,13 +548,16 @@
     // 기존 GlobalView 전체를 아래로 교체하세요.
 const GlobalView = ({
   config,
+  presets,
   updateGlobal,
   addPreset,
   removePreset,
   updatePreset,
   addAtlasPreset,
   removeAtlasPreset,
-  updateAtlasPreset
+  updateAtlasPreset,
+  addWhitelist,
+  removeWhitelist
 }) => (
   <div className="grid grid-cols-1 gap-6">
     {/* General + Colors 통합 */}
@@ -681,7 +689,7 @@ const GlobalView = ({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {Object.entries(config.colorPreset || {}).map(([name, color]) => (
+        {Object.entries(presets.colors || {}).map(([name, color]) => (
           <div
             key={name}
             className="flex items-center space-x-2 bg-slate-50 dark:bg-slate-900/50 p-2 rounded border border-slate-200 dark:border-slate-700"
@@ -718,7 +726,7 @@ const GlobalView = ({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {Object.entries(config.atlasPreset || {}).map(([name, data]) => (
+        {Object.entries(presets.atlas || {}).map(([name, data]) => (
           <div
             key={name}
             className="bg-slate-50 dark:bg-slate-900/50 p-3 rounded border border-slate-200 dark:border-slate-700"
@@ -748,6 +756,31 @@ const GlobalView = ({
                 placeholder="minecraft:block/campfire_fire"
               />
             </div>
+          </div>
+        ))}
+      </div>
+    </Card>
+
+    <Card className="p-6">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
+        <h3 className="text-lg font-bold text-slate-800 dark:text-white">Whitelist</h3>
+        <AddGroupInput onAdd={addWhitelist} placeholder="New Whitelist Entry" />
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        {(presets.whitelist || []).map((entry) => (
+          <div
+            key={entry}
+            className="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-3 py-1 text-sm"
+          >
+            <span className="font-mono mr-2">{entry}</span>
+            <button
+              type="button"
+              onClick={() => removeWhitelist(entry)}
+              className="text-slate-400 hover:text-red-500"
+            >
+              <IconWrapper name="x" size={14} />
+            </button>
           </div>
         ))}
       </div>
@@ -1050,6 +1083,7 @@ const GlobalView = ({
         configJson, setConfigJson,
         stylesJson, setStylesJson,
         mentionsJson, setMentionsJson,
+        presetsJson, setPresetsJson,
         handleImport, copyToClipboard, copySuccess, error, onReset,
         activeJsonTab, setActiveJsonTab
     }) => {
@@ -1057,18 +1091,21 @@ const GlobalView = ({
             { id: "config", label: "config.json", icon: "settings" },
             { id: "styles", label: "styles.json", icon: "message-square" },
             { id: "mentions", label: "mentions.json", icon: "at-sign" },
+            { id: "presets", label: "presets.json", icon: "swatch-book" },
         ];
 
         const getCurrentJson = () => {
             if (activeJsonTab === "config") return configJson;
             if (activeJsonTab === "styles") return stylesJson;
-            return mentionsJson;
+            if (activeJsonTab === "mentions") return mentionsJson;
+            return presetsJson;
         };
 
         const setCurrentJson = (val) => {
             if (activeJsonTab === "config") setConfigJson(val);
             else if (activeJsonTab === "styles") setStylesJson(val);
-            else setMentionsJson(val);
+            else if (activeJsonTab === "mentions") setMentionsJson(val);
+            else setPresetsJson(val);
         };
 
         return (
@@ -1120,10 +1157,11 @@ const GlobalView = ({
     };
 
     function ConfigEditor() {
-        // 3개의 분리된 설정 상태
+        // 4개의 분리된 설정 상태
         const [config, setConfig] = useState(DEFAULT_CONFIG);
         const [styles, setStyles] = useState(DEFAULT_STYLES);
         const [mentions, setMentions] = useState(DEFAULT_MENTIONS);
+        const [presets, setPresets] = useState(DEFAULT_PRESETS);
 
         const [activeTab, setActiveTab] = useState("global");
         const [activeJsonTab, setActiveJsonTab] = useState("config");
@@ -1131,6 +1169,7 @@ const GlobalView = ({
         const [configJson, setConfigJson] = useState("");
         const [stylesJson, setStylesJson] = useState("");
         const [mentionsJson, setMentionsJson] = useState("");
+        const [presetsJson, setPresetsJson] = useState("");
 
         const [copySuccess, setCopySuccess] = useState(null);
         const [error, setError] = useState(null);
@@ -1147,6 +1186,10 @@ const GlobalView = ({
             setMentionsJson(JSON.stringify(mentions, null, 2));
         }, [mentions]);
 
+        useEffect(() => {
+            setPresetsJson(JSON.stringify(presets, null, 2));
+        }, [presets]);
+
         const handleImport = (fileType) => {
             try {
                 if (fileType === "config") {
@@ -1161,8 +1204,28 @@ const GlobalView = ({
                     if (parsed.mentionBroadcast === undefined) parsed.mentionBroadcast = true;
                     if (parsed.webhook === undefined) parsed.webhook = "";
                     if (parsed.useClearFormat === undefined) parsed.useClearFormat = false;
-                    if (parsed.commandAlias === undefined) parsed.commandAlias = "";
-                    if (parsed.atlasPreset === undefined) parsed.atlasPreset = {};
+                    if (parsed.commandAlias === undefined) parsed.commandAlias = "ec";
+
+                    const migratedPresets = {};
+                    if (parsed.colors !== undefined) {
+                        migratedPresets.colors = parsed.colors;
+                        delete parsed.colors;
+                    }
+                    if (parsed.atlas !== undefined) {
+                        migratedPresets.atlas = parsed.atlas;
+                        delete parsed.atlas;
+                    }
+                    if (parsed.whitelist !== undefined) {
+                        migratedPresets.whitelist = parsed.whitelist;
+                        delete parsed.whitelist;
+                    }
+
+                    if (Object.keys(migratedPresets).length > 0) {
+                        setPresets(prev => ({
+                            ...prev,
+                            ...migratedPresets,
+                        }));
+                    }
                     setConfig(parsed);
                 } else if (fileType === "styles") {
                     const parsed = JSON.parse(stylesJson);
@@ -1191,6 +1254,20 @@ const GlobalView = ({
                         });
                     }
                     setMentions(parsed);
+                } else if (fileType === "presets") {
+                    const parsed = JSON.parse(presetsJson);
+                    if (parsed.colorPreset && parsed.colors === undefined) {
+                        parsed.colors = parsed.colorPreset;
+                        delete parsed.colorPreset;
+                    }
+                    if (parsed.atlasPreset && parsed.atlas === undefined) {
+                        parsed.atlas = parsed.atlasPreset;
+                        delete parsed.atlasPreset;
+                    }
+                    if (parsed.colors === undefined) parsed.colors = {};
+                    if (parsed.atlas === undefined) parsed.atlas = {};
+                    if (parsed.whitelist === undefined) parsed.whitelist = [];
+                    setPresets(parsed);
                 }
                 setError(null);
                 alert(`${fileType}.json loaded successfully!`);
@@ -1203,6 +1280,7 @@ const GlobalView = ({
             setConfig(DEFAULT_CONFIG);
             setStyles(DEFAULT_STYLES);
             setMentions(DEFAULT_MENTIONS);
+            setPresets(DEFAULT_PRESETS);
             alert("All configurations reset to defaults.");
         };
 
@@ -1210,7 +1288,8 @@ const GlobalView = ({
             let content;
             if (fileType === "config") content = JSON.stringify(config, null, 2);
             else if (fileType === "styles") content = JSON.stringify(styles, null, 2);
-            else content = JSON.stringify(mentions, null, 2);
+            else if (fileType === "mentions") content = JSON.stringify(mentions, null, 2);
+            else content = JSON.stringify(presets, null, 2);
 
             navigator.clipboard.writeText(content);
             setCopySuccess(fileType);
@@ -1221,54 +1300,70 @@ const GlobalView = ({
 
         const addPreset = (name) => {
             if (!name) return;
-            if (config.colorPreset && config.colorPreset[name]) {
+            if (presets.colors && presets.colors[name]) {
                 alert("Preset already exists!");
                 return;
             }
-            setConfig(prev => ({
+            setPresets(prev => ({
                 ...prev,
-                colorPreset: { ...(prev.colorPreset || {}), [name]: "#FFFFFF" }
+                colors: { ...(prev.colors || {}), [name]: "#FFFFFF" }
             }));
         };
 
         const removePreset = (key) => {
-            const newPresets = { ...config.colorPreset };
+            const newPresets = { ...presets.colors };
             delete newPresets[key];
-            updateGlobal('colorPreset', newPresets);
+            setPresets(prev => ({ ...prev, colors: newPresets }));
         };
 
         const updatePreset = (key, val) => {
-            setConfig(prev => ({
+            setPresets(prev => ({
                 ...prev,
-                colorPreset: { ...prev.colorPreset, [key]: val }
+                colors: { ...prev.colors, [key]: val }
             }));
         };
 
         const addAtlasPreset = (name) => {
             if (!name) return;
-            if (config.atlasPreset && config.atlasPreset[name]) {
+            if (presets.atlas && presets.atlas[name]) {
                 alert("Atlas preset already exists!");
                 return;
             }
-            setConfig(prev => ({
+            setPresets(prev => ({
                 ...prev,
-                atlasPreset: { ...(prev.atlasPreset || {}), [name]: { atlas: "minecraft:gui", sprite: "" } }
+                atlas: { ...(prev.atlas || {}), [name]: { atlas: "minecraft:gui", sprite: "" } }
             }));
         };
 
         const removeAtlasPreset = (key) => {
-            const newPresets = { ...config.atlasPreset };
+            const newPresets = { ...presets.atlas };
             delete newPresets[key];
-            updateGlobal('atlasPreset', newPresets);
+            setPresets(prev => ({ ...prev, atlas: newPresets }));
         };
 
         const updateAtlasPreset = (key, field, val) => {
-            setConfig(prev => ({
+            setPresets(prev => ({
                 ...prev,
-                atlasPreset: {
-                    ...prev.atlasPreset,
-                    [key]: { ...prev.atlasPreset[key], [field]: val }
+                atlas: {
+                    ...prev.atlas,
+                    [key]: { ...prev.atlas[key], [field]: val }
                 }
+            }));
+        };
+
+        const addWhitelist = (entry) => {
+            if (!entry) return;
+            if ((presets.whitelist || []).includes(entry)) {
+                alert("Whitelist entry already exists!");
+                return;
+            }
+            setPresets(prev => ({ ...prev, whitelist: [...(prev.whitelist || []), entry] }));
+        };
+
+        const removeWhitelist = (entry) => {
+            setPresets(prev => ({
+                ...prev,
+                whitelist: (prev.whitelist || []).filter((v) => v !== entry)
             }));
         };
 
@@ -1366,7 +1461,7 @@ const GlobalView = ({
                             <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">
                                 Embellish Chat
                             </h1>
-                            <p className="text-slate-500 dark:text-slate-400 mt-1">Config Editor v3.2.0</p>
+                            <p className="text-slate-500 dark:text-slate-400 mt-1">Config Editor v3.3.0</p>
                         </div>
                         <div className="flex gap-2 bg-white dark:bg-slate-900 p-1 rounded-lg shadow-sm border border-slate-200 dark:border-slate-800 overflow-x-auto">
                             {tabs.map(tab => (
@@ -1391,6 +1486,7 @@ const GlobalView = ({
                         {activeTab === 'global' && (
                             <GlobalView
                                 config={config}
+                                presets={presets}
                                 updateGlobal={updateGlobal}
                                 addPreset={addPreset}
                                 removePreset={removePreset}
@@ -1398,6 +1494,8 @@ const GlobalView = ({
                                 addAtlasPreset={addAtlasPreset}
                                 removeAtlasPreset={removeAtlasPreset}
                                 updateAtlasPreset={updateAtlasPreset}
+                                addWhitelist={addWhitelist}
+                                removeWhitelist={removeWhitelist}
                             />
                         )}
                         {activeTab === 'styling' && (
@@ -1424,6 +1522,8 @@ const GlobalView = ({
                                 setStylesJson={setStylesJson}
                                 mentionsJson={mentionsJson}
                                 setMentionsJson={setMentionsJson}
+                                presetsJson={presetsJson}
+                                setPresetsJson={setPresetsJson}
                                 handleImport={handleImport}
                                 copyToClipboard={copyToClipboard}
                                 copySuccess={copySuccess}
