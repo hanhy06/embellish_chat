@@ -18,7 +18,7 @@ nav:
 
 theme:
   name: material
-  logo: null
+  logo: https://github.com/hanhy06/embellish-chat/blob/v3.3.0/+1.21.11/src/main/resources/assets/embellish-chat/icon/logo.png?raw=true
   palette:
     - scheme: slate
       primary: deep purple
