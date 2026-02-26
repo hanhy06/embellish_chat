@@ -50,7 +50,7 @@ Use the following patterns directly in the chat window to apply styles:
 > * **Links:** Only `https://` URLs are supported for security.
 > * **Colors:** Presets (e.g., `pink`) are defined in the mod configuration.
 > * **Fonts:** The `path` requires a namespaced ID (e.g., `minecraft:alt`).
-> * **More Info:** For advanced syntax, style combinations, and detailed rules, refer to `/embellish-chat help style` or the [StyleWiki](https://hanhy06.github.io/embellish-chat/site/style/StyleSystem/).
+> * **More Info:** For advanced syntax, style combinations, and detailed rules, refer to `/embellish-chat help style` or the [StyleWiki](https://hanhy06.github.io/embellish-chat-wiki/style/StyleSystem/).
 
 ---
 
@@ -71,7 +71,7 @@ Use the following patterns directly in the chat window to apply styles:
 > * **Dependencies:** `@group` requires **LuckPerms**. Without it, the mention will be ignored.
 > * **Colors:** `@team` and `@Player` use their respective team colors. If no team color is set, the `defaultTeamColor` from the config is used.
 > * **Sound:** The notification sound uses the **UI** category (falls back to the **PLAYER** category on Minecraft 1.21.5 and earlier).
-> * **More Info:** For a full list of mention types and advanced usage, refer to [MentionWiki](https://hanhy06.github.io/embellish-chat/site/mention/MentionSystem/).
+> * **More Info:** For a full list of mention types and advanced usage, refer to [MentionWiki](https://hanhy06.github.io/embellish-chat-wiki/mention/MentionSystem/).
 
 ---
 
@@ -132,7 +132,7 @@ The configuration file is located at `config/embellish-chat/config.json`.
 * Rules are processed from top to bottom, so placing a catch-all rule earlier may override more specific rules defined below.
 * The `delimiter` value is internally handled as a regular expression; special characters such as `|` must be properly escaped.
 * If `defaultTeamColor` is missing or set to `null`, automatic coloring will not be applied.
-* To avoid JSON syntax errors and ensure valid configurations, using the **[Web Config Generator](https://hanhy06.github.io/embellish-chat/site/config-generator.html)** is strongly recommended:
+* To avoid JSON syntax errors and ensure valid configurations, using the **[Web Config Generator](https://hanhy06.github.io/embellish-chat-wiki/config-generator.html)** is strongly recommended:
 
 ### Styling
 
@@ -162,7 +162,7 @@ The configuration file is located at `config/embellish-chat/styles.json`.
     * `group 1`: This is text to be styled.
     * `group 2`: This is text passed as an option.
 * **`styles`**: Defines the styles to be applied to captured group 1.
-    * `styleType`: This is the style type. You can use all types listed in the [StyleWiki](https://hanhy06.github.io/embellish-chat/site/style/StyleType/).
+    * `styleType`: This is the style type. You can use all types listed in the [StyleWiki](https://hanhy06.github.io/embellish-chat-wiki/style/StyleType/).
     * `preset`: This is a preset value. If a value is provided, it is always used; if it is empty, the content of the user's captured group 2 is used instead.
 * **`comment`**: This comment is used in `/embellish-chat help style`.
 
@@ -208,7 +208,7 @@ The configuration file is located at `config/embellish-chat/mentions.json`.
     * `volume`: Sound volume.
     * `pitch`: Sound pitch.
 * **`mentions`**: Defines the mention actions to be executed.
-    * `mentionType`: This is the mention type. You can use all types listed in the [MentionWiki](https://hanhy06.github.io/embellish-chat/site/mention/MentionType/).
+    * `mentionType`: This is the mention type. You can use all types listed in the [MentionWiki](https://hanhy06.github.io/embellish-chat-wiki/mention/MentionType/).
     * `preset`: This is an optional preset value.
 * **`styles`**: Defines the styles to be applied when the mention is triggered.
     * Works the same way as in the styling rules section.

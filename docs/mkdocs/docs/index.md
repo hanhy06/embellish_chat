@@ -154,7 +154,7 @@ The configuration file is located at `config/embellish-chat/mentions.json`.
 * Rules are processed from top to bottom, so placing a catch-all rule earlier may override more specific rules defined below.
 * The `delimiter` value is internally handled as a regular expression; special characters such as `|` must be properly escaped.
 * If `defaultTeamColor` is missing or set to `null`, automatic coloring will not be applied.
-* To avoid JSON syntax errors and ensure valid configurations, using the **[Web Config Generator](https://hanhy06.github.io/embellish-chat/site/config-generator.html)** is strongly recommended:
+* To avoid JSON syntax errors and ensure valid configurations, using the **[Web Config Generator](config-generator.html)** is strongly recommended:
 
 The configuration file is located at `config/embellish-chat/presets.json`.
 ```
