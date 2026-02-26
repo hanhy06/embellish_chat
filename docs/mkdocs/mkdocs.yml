@@ -32,6 +32,9 @@ theme:
     - search.highlight
     - search.suggest
 
+extra_css:
+  - stylesheets/extra.css
+
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/chart.js
   - js/mstp_chart.js

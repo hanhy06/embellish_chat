@@ -1,0 +1,17 @@
+/* 로고 크기 확대 */
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+    height: 2.2rem !important;  /* 기본값보다 크게 (기본: 1.5rem) */
+    width: auto !important;
+}
+
+/* 로고와 제목 사이 간격 줄이기 */
+.md-header__title {
+    margin-left: 0rem !important;  /* 기본값보다 작게 (기본: 0.8rem) */
+}
+
+/* 로고 컨테이너 패딩 조정 */
+.md-header__button.md-logo {
+    padding: 0 0.1rem !important;
+}
+
