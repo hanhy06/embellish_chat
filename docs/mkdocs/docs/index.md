@@ -170,12 +170,16 @@ The configuration file is located at `config/embellish-chat/presets.json`.
   },
   "whitelist": [
     " ... "
-  ]
+  ],
+  "prefixes": {
+    " ... ": " ... "
+  }
 }
 ```
 * **`colors`**: This is used in the color presets for styling.
 * **`atlas`**: This is used in the atlas presets for styling.
 * **`whitelist`**: This is used in the `URL` style type. If left empty, all URLs are allowed.
+* **`prefixes`**: stylingRules, like mentionRules, uses permission nodes as its keys. The prefix supports placeholder tags and placeholder functionality.
 
 ---
 
