@@ -57,7 +57,7 @@
 
     // Default config.json
     const DEFAULT_CONFIG = {
-      "version": "3.3.0",
+      "version": "3.4.0",
       "delimiter": ",",
       "timestamp": "yyyy-MM-dd HH:mm:ss",
       "commandAlias": "ec",
@@ -99,7 +99,8 @@
         "no": { "atlas": "minecraft:gui", "sprite": "minecraft:container/beacon/cancel" },
         "move": { "atlas": "minecraft:gui", "sprite": "minecraft:mob_effect/wind_charged" }
       },
-      "whitelist": []
+      "whitelist": [],
+      "prefixes": {}
     };
 
     // Default styles.json
@@ -557,7 +558,10 @@ const GlobalView = ({
   removeAtlasPreset,
   updateAtlasPreset,
   addWhitelist,
-  removeWhitelist
+  removeWhitelist,
+  addPrefix,
+  removePrefix,
+  updatePrefix
 }) => (
   <div className="grid grid-cols-1 gap-6">
     {/* General + Colors 통합 */}
@@ -781,6 +785,42 @@ const GlobalView = ({
             >
               <IconWrapper name="x" size={14} />
             </button>
+          </div>
+        ))}
+      </div>
+    </Card>
+
+    <Card className="p-6">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
+        <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center">
+          <IconWrapper name="text-quote" className="mr-2" size={20} /> Prefixes
+        </h3>
+        <AddGroupInput onAdd={addPrefix} placeholder="New Prefix Key" />
+      </div>
+
+      <div className="space-y-3">
+        {Object.entries(presets.prefixes || {}).map(([name, value]) => (
+          <div
+            key={name}
+            className="bg-slate-50 dark:bg-slate-900/50 p-3 rounded border border-slate-200 dark:border-slate-700"
+          >
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-semibold dark:text-slate-300 font-mono">{name}</span>
+              <button
+                type="button"
+                onClick={() => removePrefix(name)}
+                className="text-slate-400 hover:text-red-500 p-1"
+              >
+                <IconWrapper name="trash-2" size={16} />
+              </button>
+            </div>
+
+            <Input
+              label="Prefix Value"
+              value={value}
+              onChange={(v) => updatePrefix(name, v)}
+              placeholder="e.g. [Admin]"
+            />
           </div>
         ))}
       </div>
@@ -1219,6 +1259,10 @@ const GlobalView = ({
                         migratedPresets.whitelist = parsed.whitelist;
                         delete parsed.whitelist;
                     }
+                    if (parsed.prefixes !== undefined) {
+                        migratedPresets.prefixes = parsed.prefixes;
+                        delete parsed.prefixes;
+                    }
 
                     if (Object.keys(migratedPresets).length > 0) {
                         setPresets(prev => ({
@@ -1267,6 +1311,7 @@ const GlobalView = ({
                     if (parsed.colors === undefined) parsed.colors = {};
                     if (parsed.atlas === undefined) parsed.atlas = {};
                     if (parsed.whitelist === undefined) parsed.whitelist = [];
+                    if (parsed.prefixes === undefined) parsed.prefixes = {};
                     setPresets(parsed);
                 }
                 setError(null);
@@ -1367,6 +1412,31 @@ const GlobalView = ({
             }));
         };
 
+        const addPrefix = (key) => {
+            if (!key) return;
+            if (presets.prefixes && presets.prefixes[key] !== undefined) {
+                alert("Prefix already exists!");
+                return;
+            }
+            setPresets(prev => ({
+                ...prev,
+                prefixes: { ...(prev.prefixes || {}), [key]: "" }
+            }));
+        };
+
+        const removePrefix = (key) => {
+            const newPrefixes = { ...(presets.prefixes || {}) };
+            delete newPrefixes[key];
+            setPresets(prev => ({ ...prev, prefixes: newPrefixes }));
+        };
+
+        const updatePrefix = (key, val) => {
+            setPresets(prev => ({
+                ...prev,
+                prefixes: { ...(prev.prefixes || {}), [key]: val }
+            }));
+        };
+
         // Styling Rules (styles.json)
         const updateStyleRuleList = (permissionKey, newRules) => {
             setStyles(prev => ({
@@ -1461,7 +1531,7 @@ const GlobalView = ({
                             <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">
                                 Embellish Chat
                             </h1>
-                            <p className="text-slate-500 dark:text-slate-400 mt-1">Config Editor v3.3.0</p>
+                            <p className="text-slate-500 dark:text-slate-400 mt-1">Config Editor v3.4.0</p>
                         </div>
                         <div className="flex gap-2 bg-white dark:bg-slate-900 p-1 rounded-lg shadow-sm border border-slate-200 dark:border-slate-800 overflow-x-auto">
                             {tabs.map(tab => (
@@ -1496,6 +1566,9 @@ const GlobalView = ({
                                 updateAtlasPreset={updateAtlasPreset}
                                 addWhitelist={addWhitelist}
                                 removeWhitelist={removeWhitelist}
+                                addPrefix={addPrefix}
+                                removePrefix={removePrefix}
+                                updatePrefix={updatePrefix}
                             />
                         )}
                         {activeTab === 'styling' && (
