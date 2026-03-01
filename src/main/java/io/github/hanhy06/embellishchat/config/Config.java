@@ -31,6 +31,7 @@ public record Config(
         HashMap<String, Color> colors,
         HashMap<String, AtlasTextObjectContents> atlas,
         HashSet<String> whitelist,
+        LinkedHashMap<String,String> prefixes,
 
         //setting
         String delimiter,
@@ -344,6 +345,7 @@ public record Config(
                         )
                 )),
                 new HashSet<>(),
+                new LinkedHashMap<>(),
 
                 //setting
                 ",",

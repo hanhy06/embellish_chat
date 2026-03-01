@@ -10,11 +10,9 @@ import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static io.github.hanhy06.embellishchat.util.PermissionUtil.getPermissions;
 
@@ -27,6 +25,7 @@ public class MessageProcessor implements ConfigListener {
 
     private Config config;
     private Set<UUID> bannedPlayerList;
+    private LinkedHashMap<String,String> prefixes;
 
     public static class MessageBlockedException extends RuntimeException {}
 
@@ -41,6 +40,7 @@ public class MessageProcessor implements ConfigListener {
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
         this.bannedPlayerList = config.bannedPlayerList();
+        this.prefixes = config.prefixes();
     }
 
     public SignedMessage handleMessage(SignedMessage message) {
@@ -60,6 +60,10 @@ public class MessageProcessor implements ConfigListener {
 
             textMessage = stylingProcessor.applyMention(textMessage,mentions,sender);
             textMessage = stylingProcessor.handleStyle(textMessage,getPermissions(sender, config.stylingRules().keySet()),sender);
+
+            String prefix = prefixes.getOrDefault(getPermissions(sender,prefixes.keySet()).getLast(),"");
+            if (!prefix.isEmpty()) textMessage = PlaceHolderUtil.parseText(prefix,sender).copy().append(textMessage);
+
             result = message.withUnsignedContent(textMessage);
 
             mentionProcessor.targetBroadcast(mentions,result,sender);

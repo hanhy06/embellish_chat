@@ -104,10 +104,16 @@ public class ConfigManager {
             } else {
                 merged.add("whitelist", defaultConfig.get("whitelist"));
             }
+            if (presetsJson.has("prefixes")) {
+                merged.add("prefixes", presetsJson.get("prefixes"));
+            } else {
+                merged.add("prefixes", defaultConfig.get("prefixes"));
+            }
         } else {
             merged.add("colors", defaultConfig.get("colors"));
             merged.add("atlas", defaultConfig.get("atlas"));
             merged.add("whitelist", defaultConfig.get("whitelist"));
+            merged.add("prefixes", defaultConfig.get("prefixes"));
         }
 
         try {
@@ -169,6 +175,8 @@ public class ConfigManager {
         if (atlasPreset != null) presetsJson.add("atlas", atlasPreset);
         JsonElement whitelist = fullJson.remove("whitelist");
         if (whitelist != null) presetsJson.add("whitelist", whitelist);
+        JsonElement prefixes = fullJson.remove("prefixes");
+        if (prefixes != null) presetsJson.add("prefixes", prefixes);
 
         if (writer == null) writer = this::writeJsonFile;
         writer.accept(CONFIG_FILE_NAME,fullJson);
