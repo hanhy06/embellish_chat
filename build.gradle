@@ -54,7 +54,7 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
 	include(modImplementation('me.lucko:fabric-permissions-api:0.6.1'))
-    modImplementation('eu.pb4:placeholder-api:2.8.1+1.21.10')
+    modImplementation('eu.pb4:placeholder-api:2.8.2+1.21.10')
     modCompileOnly "net.luckperms:api:5.4"
 }
 
