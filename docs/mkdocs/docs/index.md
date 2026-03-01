@@ -235,7 +235,12 @@ A single tick in Minecraft allows for a **50ms** processing window. As indicated
 This results in a safety margin of **35ms** within the tick limit. Consequently, even under extreme load conditions equivalent to **10,000 messages per second**, the system is designed to minimize server lag (TPS drops) and maintain stability.
 
 ### Reason for Separating Mention Notification (ON/OFF)
-The Mention feature test was divided into notification enabled (ON) and disabled (OFF) states to isolate the latency caused by Minecraft's native packet processing. When notifications are enabled, the server must send additional vanilla packets to the target players to play sounds and display screen titles, which adds a slight processing overhead. Therefore, we separated these states to more accurately measure the pure computational performance of the mod itself.
+The Mention feature test was divided into notification enabled (ON) and disabled (OFF) states to isolate the latency caused by Minecraft's native packet processing.  
+When notifications are enabled, the server must send additional vanilla packets to the target players to play sounds and display screen titles, which adds a slight processing overhead.  
+Therefore, we separated these states to more accurately measure the pure computational performance of the mod itself.
+
+In real-world multiplayer environments, this packet-sending overhead can scale with the number of recipients (online players), so performance may degrade further depending on player count and mention usage patterns.  
+If you want to disable sound/title notifications entirely, set `mentionBroadcast` to `false` in `embellish-chat/config.json`.
 
 ### Reason for Test Configuration Changes
 The previous testing environment assumed extreme conditions and did not perfectly represent a realistic server environment. To derive more practical and meaningful performance metrics, the test conditions were updated as follows:
