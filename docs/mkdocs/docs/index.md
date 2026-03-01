@@ -201,7 +201,7 @@ The configuration file is located at `config/embellish-chat/presets.json`.
 These tests were performed in a synthetic stress environment to measure **worst-case** performance.  
 They do **not** represent normal server conditions.
 
-- Embellish Chat: **3.0.0 (DEV)**
+- Embellish Chat: **3.4.0 (DEV)**
 - Minecraft: **1.21.11**
 - World: **Singleplayer, Superflat**
 - CPU: **13th Gen Intel(R) Core(TM) i7-1360P**
@@ -212,33 +212,21 @@ They do **not** represent normal server conditions.
 
 ### Test Scenario
 
-For each test:
+For each test, the server was stressed for a total of 1,000 ticks, applying up to 500 chat messages per tick (approximately 10,000 messages per second).
+The reported value represents the average tick processing time (MSPT) of the mod measured during that period.
 
-- The server was stressed with up to **500 chat messages per tick**  
-  (≈ **10,000 messages per second**).
-- Each message was about **50** or **200** characters long.
-- The server was kept under continuous load while sending these messages every tick.Once the MSPT(Milliseconds Per Tick) value stabilized, the average was calculated over that steady-state period.
-- The reported value is the **average MSPT** during that period.
+Each message was between 70 and 100 characters in length, and realistic, naturally occurring chat messages were used.
 
-The messages used in the tests are:
+The messages used in the tests are as follows:
 
-| Type         | Length | Test String                                                                                                                                                                                                                  |
-|--------------|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Plain Text   | 50     | `This is a simple plain text message for latency test.`                                                                                                                                                                      |
-| Plain Text   | 200    | `This is a standard long message designed to test the baseline performance of the chat system. It contains simple alphanumeric characters and basic punctuation only, without any markdown triggers.`                        |
-| Styling Only | 50     | `**Bold** _Italic_ [Red]<red> [Blue]<blue> ~~Strike~~`                                                                                                                                                                       |
-| Styling Only | 200    | `**Welcome** to the server! Please read the [rules]<#FF5555> at spawn. _Need help?_ Ask an admin! There is a **secret event** starting soon at the arena. Don't miss the [LEGENDARY PRIZES]<RAINBOW>!`                       |
-| Mention Only | 50     | `Hello @everyone is anyone @here? calling @PlayerName`                                                                                                                                                                       |
-| Mention Only | 200    | `Attention @everyone on the server. We are gathering @here now. If you are in @team(red) or @team(blue), please report to @PlayerOne. @group(admin) and @world(overworld) players should attend too.`                        |
-| Mixed        | 50     | `**Hey** @everyone! Look at [this]<red> _cool_ @here.`                                                                                                                                                                       |
-| Mixed        | 200    | `Attention @everyone! The **Boss Raid** is starting. @team(Red) please defend the [Core]<#FF0000>. @here gather at the gate! Watch out for the **hidden assassin**. The prize is [GOD SWORD]<RAINBOW>. Msg @Admin if stuck.` |
+| Type         | Length | Test String                                                                                      |
+|--------------|--------|--------------------------------------------------------------------------------------------------|
+| Plain Text   | 81     | `Hello everyone! What are you all doing on the server today? I am mining diamonds.`              |
+| Styling Only | 94     | `**Trading now!** Check my [inv] and [end]. Selling the [Legendary Sword]<#00FFFF> cheap :fire:` |
+| Mention Only | 75     | `@everyone Gather @here for the weekend boss raid! @team(red) get ready too.`                    |
+| Mixed        | 93     | `@team(blue) charge the boss! ~~No retreat~~ My [inv] is full of potions, yell :heart: if low.`  |
 
 ### Results and Analysis
-
-<div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 15px;">
-  <button onclick="updateMode('50')" style="padding: 8px 16px; cursor: pointer; border: 1px solid #ccc; border-radius: 4px;">50 Characters Mode</button>
-  <button onclick="updateMode('200')" style="padding: 8px 16px; cursor: pointer; border: 1px solid #ccc; border-radius: 4px;">200 Characters Mode</button>
-</div>
 
 <canvas id="mstpChart"></canvas>
 

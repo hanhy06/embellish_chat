@@ -1,19 +1,11 @@
 const labels = [0, 50, 100, 300, 500];
 
-const data50 = [
-  { label: "Plain Text", data: [2, 3, 3, 5, 8], borderColor: "#FF6384", backgroundColor: "#FF6384", tension: 0.1 },
-  { label: "Styling Only", data: [2, 4, 5, 9, 11], borderColor: "#36A2EB", backgroundColor: "#36A2EB", tension: 0.1 },
-  { label: "Mention Only(on)", data: [2, 4, 5, 10, 14], borderColor: "#FFCE56", backgroundColor: "#FFCE56", tension: 0.1 },
-  { label: "Mention Only(off)", data: [2, 4, 5, 10, 14], borderColor: "#4BC0C0", backgroundColor: "#4BC0C0", tension: 0.1 },
-  { label: "Mixed", data: [2, 4, 5, 11, 14], borderColor: "#9966FF", backgroundColor: "#9966FF", tension: 0.1 }
-];
-
-const data200 = [
-  { label: "Plain Text", data: [2, 4, 5, 11, 14], borderColor: "#FF6384", backgroundColor: "#FF6384", tension: 0.1 },
-  { label: "Styling Only", data: [2, 5, 7, 15, 19], borderColor: "#36A2EB", backgroundColor: "#36A2EB", tension: 0.1 },
-  { label: "Mention Only(on)", data: [2, 7, 11, 23, 34], borderColor: "#FFCE56", backgroundColor: "#FFCE56", tension: 0.1 },
-  { label: "Mention Only(off)", data: [2, 7, 9, 21, 31], borderColor: "#4BC0C0", backgroundColor: "#4BC0C0", tension: 0.1 },
-  { label: "Mixed", data: [2, 6, 9, 18, 24], borderColor: "#9966FF", backgroundColor: "#9966FF", tension: 0.1 }
+const chartData = [
+  { label: "Plain Text",        data: [0, 0.27, 1.06, 3.77, 5.83],  borderColor: "#FF6384", backgroundColor: "#FF6384", tension: 0.1 },
+  { label: "Styling Only",      data: [0, 0.90, 2.16, 6.93, 10.99], borderColor: "#36A2EB", backgroundColor: "#36A2EB", tension: 0.1 },
+  { label: "Mention Only (ON)", data: [0, 3.06, 4.86, 9.83, 14.27], borderColor: "#FFCE56", backgroundColor: "#FFCE56", tension: 0.1 },
+  { label: "Mention Only (OFF)",data: [0, 1.18, 3.03, 8.69, 13.00], borderColor: "#4BC0C0", backgroundColor: "#4BC0C0", tension: 0.1 },
+  { label: "Mixed",             data: [0, 1.28, 2.57, 7.06, 12.00], borderColor: "#9966FF", backgroundColor: "#9966FF", tension: 0.1 }
 ];
 
 let myChart = null;
@@ -25,9 +17,10 @@ document.addEventListener("DOMContentLoaded", function() {
     type: 'line',
     data: {
       labels: labels,
-      datasets: data50
+      datasets: chartData
     },
     options: {
+      aspectRatio: window.innerWidth < 768 ? 1.0 : 2.0,
       responsive: true,
       interaction: {
         mode: 'index',
@@ -38,7 +31,6 @@ document.addEventListener("DOMContentLoaded", function() {
           labels: {
             generateLabels: function(chart) {
               const original = Chart.defaults.plugins.legend.labels.generateLabels(chart);
-
               original.forEach(label => {
                 if (label.hidden) {
                   label.fillStyle = '#b0b0b0';
@@ -51,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function() {
         },
         title: {
           display: true,
-          text: 'Processing Time (50 Characters)'
+          text: 'Message Processing Time by Message Type'
         },
         tooltip: {
           itemSort: function(a, b) {
@@ -69,29 +61,14 @@ document.addEventListener("DOMContentLoaded", function() {
       },
       scales: {
         x: {
-          title: { display: true, text: 'Message Count/tick' }
+          title: { display: true, text: 'Message Count / tick' }
         },
         y: {
           beginAtZero: true,
-          max: 20,
-          title: { display: true, text: 'Value' }
+          max: 16,
+          title: { display: true, text: 'Processing Time (ms)' }
         }
       }
     }
   });
 });
-
-function updateMode(mode) {
-  if (!myChart) return;
-
-  if (mode === '50') {
-    myChart.data.datasets = data50;
-    myChart.options.plugins.title.text = 'Processing Time (50 Characters)';
-    myChart.options.scales.y.max = 20;
-  } else {
-    myChart.data.datasets = data200;
-    myChart.options.plugins.title.text = 'Processing Time (200 Characters)';
-    myChart.options.scales.y.max = 40;
-  }
-  myChart.update();
-}
