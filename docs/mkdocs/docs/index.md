@@ -230,9 +230,19 @@ The messages used in the tests are as follows:
 
 <canvas id="mstpChart"></canvas>
 
-A single tick in Minecraft allows for a **50ms** processing window. As indicated in the data above, the most resource-intensive mode (**Mention Only** with notifications enabled) consumes approximately **34ms** when processing **500 messages per tick**.
+A single tick in Minecraft allows for a **50ms** processing window. As indicated in the data above, the most resource-intensive mode (**Mention Only (ON)**) consumes approximately **14.27ms** when processing **500 messages per tick**.
 
-This results in a safety margin of **16ms** within the tick limit. Consequently, even under extreme load conditions equivalent to **10,000 messages per second**, the system is designed to minimize server lag (TPS drops) and maintain stability.
+This results in a safety margin of **35ms** within the tick limit. Consequently, even under extreme load conditions equivalent to **10,000 messages per second**, the system is designed to minimize server lag (TPS drops) and maintain stability.
+
+### Reason for Separating Mention Notification (ON/OFF)
+The Mention feature test was divided into notification enabled (ON) and disabled (OFF) states to isolate the latency caused by Minecraft's native packet processing. When notifications are enabled, the server must send additional vanilla packets to the target players to play sounds and display screen titles, which adds a slight processing overhead. Therefore, we separated these states to more accurately measure the pure computational performance of the mod itself.
+
+### Reason for Test Configuration Changes
+The previous testing environment assumed extreme conditions and did not perfectly represent a realistic server environment. To derive more practical and meaningful performance metrics, the test conditions were updated as follows:
+
+* **Realistic Message Length:** We used natural sentence structures reflecting actual player chat patterns and adjusted the character count to between 70 and 100 characters to match average chat lengths.
+* **Simulating a Production Server Environment:** To create an environment similar to an actively running server setup, optimization mods such as Sodium and Lithium were applied together.
+* **Isolated Performance Measurement:** Although the server environment itself was optimized, the millisecond per tick (MSPT) processing time measured in this test represents the isolated computational performance of the Embellish Chat mod's internal logic. The external optimization mods do not directly intervene in or affect this mod's chat processing results.
 
 ---
 
