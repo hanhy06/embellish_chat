@@ -30,6 +30,11 @@ import java.util.stream.Collectors;
 
 public class AdminCommand {
     private static final String STRESS_TEST_FORMAT = """
+        <gray>── Test Configuration ──</gray>
+        • <yellow>Total Ticks</yellow>: %d
+        • <yellow>Count Per Tick</yellow>: %d
+        • <yellow>Test Message</yellow>: %s
+    
         <gray>── Performance Analysis ──</gray>
         • <aqua>Ticks</aqua>: %d
         • <dark_green>Minimum</dark_green>: %dms
@@ -37,7 +42,7 @@ public class AdminCommand {
         • <green>Average</green>: %.2fms
         • <light_purple>Median</light_purple>: %.2fms
         • <gold>Total Processing Time</gold>: %dms
-
+    
         <gray>── Tick Analysis ──</gray>
         • <blue>Used Ticks</blue>: %d / %d
         • <blue>Usage</blue>: %.2f%%
@@ -223,6 +228,7 @@ public class AdminCommand {
 
         Text message = PlaceHolderUtil.parseTag(String.format(
                 STRESS_TEST_FORMAT,
+                totalTicks+remainingTicks,countPerTick,testText,
                 totalTicks, min, max, average, median, totalProcessing,
                 occupiedTicks, totalTicks, usagePercentTicks
         ));
