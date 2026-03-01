@@ -111,7 +111,7 @@ The configuration file is located at `config/embellish-chat/config.json`.
   //setting
   "delimiter": ",",
   "timestamp": "yyyy-MM-dd HH:mm:ss",
-  "commandAlias": "ec"
+  "commandAlias": "ec",
   "urlColor": "#0000EE",
   "defaultTeamColor": "#FF55FF",
   "notificationCommandEnable": true,

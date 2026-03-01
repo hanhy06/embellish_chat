@@ -7,7 +7,7 @@
   "pattern": "@everyone()",
   "title": "%player:displayname% mentioned you",
   "cooldown": 0,
-  "onlyTarget": false
+  "onlyTarget": false,
   "sound": {
     "id": "minecraft:entity.experience_orb.pickup",
     "category": "UI",
