@@ -60,8 +60,11 @@ public class MessageProcessor implements ConfigListener {
             textMessage = stylingProcessor.applyMention(textMessage,mentions,sender);
             textMessage = stylingProcessor.handleStyle(textMessage,getPermissions(sender, config.stylingRules().keySet()),sender);
 
-            String prefix = prefixes.getOrDefault(getPermissions(sender,prefixes.keySet()).getLast(),"");
-            if (!prefix.isEmpty()) textMessage = PlaceHolderUtil.parseText(prefix,sender).copy().append(textMessage);
+            List<String> prefixKeys = getPermissions(sender,prefixes.keySet());
+            if (!prefixKeys.isEmpty()){
+                String prefix = prefixes.get(prefixKeys.getLast());
+                textMessage = PlaceHolderUtil.parseText(prefix,sender).copy().append(textMessage);
+            }
 
             result = message.withUnsignedContent(textMessage);
 
