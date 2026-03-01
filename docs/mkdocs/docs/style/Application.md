@@ -2,15 +2,14 @@
 
 ## Text Formatting & Text Placeholder API
 
+<span style="color:red;">Important:</span>This setting must be modified in `embellish-chat/presets.json`, not in `embellish-chat/styles.json`.
+
 ```
 {
-  "pattern": "(.+)()",
-  "styles": [
-    {
-      "styleType": "REPLACE",
-      "preset": "<b>[%player:displayname%]</b> %embellish-chat:content%"
-    }
-  ]
+  {
+  "prefixes": {
+    "chat.prefix.default":"<b>[%player:displayname%]</b> "
+  }
 }
 ```
 
