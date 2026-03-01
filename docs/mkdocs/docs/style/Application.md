@@ -6,7 +6,6 @@
 
 ```
 {
-  {
   "prefixes": {
     "chat.prefix.default":"<b>[%player:displayname%]</b> "
   }
