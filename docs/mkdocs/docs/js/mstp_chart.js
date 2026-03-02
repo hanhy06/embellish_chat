@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function() {
       datasets: chartData
     },
     options: {
-      aspectRatio: window.innerWidth < 768 ? 1.0 : 2.0,
+//      aspectRatio: window.innerWidth < 768 ? 0.01 : 2.3,
       responsive: true,
       interaction: {
         mode: 'index',
