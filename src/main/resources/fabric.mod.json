@@ -27,11 +27,11 @@
 		"minecraft": ">=1.21.11",
 		"java": ">=21",
 		"fabric-api": "*",
-        "fabric-permissions-api-v0": ">=0.6.1",
-        "placeholder-api": ">=2.8.1+1.21.10"
+        "fabric-permissions-api-v0": "*",
+        "placeholder-api": "*"
     },
 	"suggests": {
-		"luckperms": ">=5.4",
-		"styled-nicknames": ">=1.11.1+1.21.11"
+		"styled-nicknames": "*",
+		"luckperms": ">=5.4"
 	}
 }
