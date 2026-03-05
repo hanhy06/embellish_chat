@@ -2,11 +2,13 @@ package io.github.hanhy06.embellishchat.mention.rule;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import eu.pb4.stylednicknames.NicknameHolder;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.mention.data.Target;
 import io.github.hanhy06.embellishchat.styling.util.ColorUtil;
 import io.github.hanhy06.embellishchat.util.LuckPermsUtil;
+import io.github.hanhy06.embellishchat.util.NickNamesUtil;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.EntitySelector;
@@ -18,6 +20,7 @@ import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Style;
+import net.minecraft.text.Text;
 
 import java.util.EnumMap;
 import java.util.HashSet;
@@ -33,6 +36,7 @@ public class MentionRegistry {
     private final Style colorTeam;
 
     private final boolean isLuckPerms;
+    private final boolean isNickName;
 
     private final EnumMap<MentionType, Function<MentionParameter, Target>> registries;
 
@@ -58,6 +62,7 @@ public class MentionRegistry {
         ));
 
         this.isLuckPerms = FabricLoader.getInstance().isModLoaded("luckperms");
+        this.isNickName = FabricLoader.getInstance().isModLoaded("styled-nicknames");
     }
 
     public Function<MentionParameter, Target> get(MentionType key){
@@ -106,6 +111,10 @@ public class MentionRegistry {
         ServerPlayerEntity target = manager.getPlayer(parameter.option());
         Style style = colorTeam;
         HashSet<ServerPlayerEntity> players = new HashSet<>();
+
+        if (target == null && isNickName) {
+            target = NickNamesUtil.getPlayerByNickName(parameter.option());
+        }
 
         if (target!=null){
             players.add(target);

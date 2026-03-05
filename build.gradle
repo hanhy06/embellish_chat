@@ -24,18 +24,12 @@ repositories {
     }
 
     maven {
-        url "https://cursemaven.com"
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
         content {
-            includeGroup "curse.maven"
+            includeGroup "maven.modrinth"
         }
     }
-//    maven {
-//        name = "Modrinth"
-//        url = "https://api.modrinth.com/maven"
-//        content {
-//            includeGroup "maven.modrinth"
-//        }
-//    }
 }
 
 fabricApi {
@@ -55,6 +49,7 @@ dependencies {
 
 	include(modImplementation('me.lucko:fabric-permissions-api:0.6.1'))
     modImplementation('eu.pb4:placeholder-api:2.8.2+1.21.10')
+	modCompileOnly "maven.modrinth:styled-nicknames:1.11.1+1.21.11"
     modCompileOnly "net.luckperms:api:5.4"
 }
 
