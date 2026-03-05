@@ -3,7 +3,7 @@
 [![Download](https://img.shields.io/modrinth/dt/embellish-chat?label=Modrinth&logo=modrinth)](https://modrinth.com/mod/embellish-chat)
 [![Wiki](https://img.shields.io/badge/wiki-pages-blueviolet?logo=github)](https://hanhy06.github.io/embellish-chat-wiki/)
 
-Embellish Chat modernizes your Minecraft server’s chat experience with a fully server-side design. It introduces Markdown-style formatting, interactive message events, and a robust mention system—no client installation required.
+Embellish Chat modernizes your Minecraft server’s chat experience with a fully server-side design. It introduces Markdown-style formatting, interactive message events, and a robust mention system—no client installation required. It also supports integration with LuckPerms, Styled Nickname, and various other mods.
 
 ---
 
