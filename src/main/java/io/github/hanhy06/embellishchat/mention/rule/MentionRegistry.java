@@ -2,7 +2,6 @@ package io.github.hanhy06.embellishchat.mention.rule;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import eu.pb4.stylednicknames.NicknameHolder;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.mention.data.Target;
@@ -20,7 +19,6 @@ import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Style;
-import net.minecraft.text.Text;
 
 import java.util.EnumMap;
 import java.util.HashSet;
