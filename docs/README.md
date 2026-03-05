@@ -256,6 +256,8 @@ The configuration file is located at `config/embellish-chat/presets.json`.
 * **Placeholder API**
     * Supports dynamic placeholders in mention titles and style presets.
     * **Exclusive:** Use `%embellish-chat:content%` to access the raw, unparsed chat message.
+* **Styled Nicknames**
+    * Supports mentioning players by nickname.
 * **LuckPerms**
     * **Required** for the `@group` mention type. Without it, group mentions will be ignored.
 * **Geyser (Bedrock Edition)**
