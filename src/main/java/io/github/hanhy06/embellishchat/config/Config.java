@@ -154,155 +154,189 @@ public record Config(
                         entry("embellish-chat.command_argument", List.of())
                 )),
                 new LinkedHashMap<>(Map.ofEntries(
-                    entry(
-                            "embellish-chat.mention",
-                            List.of(
-                                    MentionRule.of(
-                                            "@here()",
-                                            "%player:displayname% mentioned you",
-                                            0,
-                                            false,
-                                            Sound.of(
-                                                    "minecraft:entity.experience_orb.pickup",
-                                                    SoundCategory.UI,1,1.75f
-                                            ),
-                                            List.of(
-                                                    MentionAction.of(
-                                                            MentionType.INSIDE,"64"
-                                                    )
-                                            ),
-                                            List.of(
-                                                    StyleAction.of(
-                                                            StyleType.BOLD,""
-                                                    ),
-                                                    StyleAction.of(
-                                                            StyleType.COLOR_PRESET,"light purple"
-                                                    )
-                                            ),
-                                            "<blue><b>Pattern</b></blue>: @here\n<dark_aqua><b>Comment</b></dark_aqua>: mention players within 64 blocks\n"
-                                    ),
+                        entry(
+                                "embellish-chat.mention",
+                                List.of(
+                                        MentionRule.of(
+                                                "@here()",
+                                                "%player:displayname% mentioned you",
+                                                0,
+                                                false,
+                                                Sound.of(
+                                                        "minecraft:entity.experience_orb.pickup",
+                                                        SoundCategory.UI,1,1.75f
+                                                ),
+                                                List.of(
+                                                        MentionAction.of(
+                                                                MentionType.INSIDE,"64"
+                                                        )
+                                                ),
+                                                List.of(
+                                                        StyleAction.of(
+                                                                StyleType.BOLD,""
+                                                        ),
+                                                        StyleAction.of(
+                                                                StyleType.COLOR_PRESET,"light purple"
+                                                        )
+                                                ),
+                                                "<blue><b>Pattern</b></blue>: @here\n<dark_aqua><b>Comment</b></dark_aqua>: mention players within 64 blocks\n"
+                                        ),
 
-                                    MentionRule.of(
-                                            "@everyone()",
-                                            "%player:displayname% mentioned you",
-                                            0,
-                                            false,
-                                            Sound.of(
-                                                    "minecraft:entity.experience_orb.pickup",
-                                                    SoundCategory.UI,1,1.75f
-                                            ),
-                                            List.of(
-                                                    MentionAction.of(
-                                                            MentionType.EVERYONE,""
-                                                    )
-                                            ),
-                                            List.of(
-                                                    StyleAction.of(
-                                                            StyleType.BOLD,""
-                                                    ),
-                                                    StyleAction.of(
-                                                            StyleType.COLOR_PRESET,"light purple"
-                                                    )
-                                            ),
-                                            "<blue><b>Pattern</b></blue>: @everyone\n<dark_aqua><b>Comment</b></dark_aqua>: mention all online players\n"
-                                    ),
+                                        MentionRule.of(
+                                                "@everyone()",
+                                                "%player:displayname% mentioned you",
+                                                0,
+                                                false,
+                                                Sound.of(
+                                                        "minecraft:entity.experience_orb.pickup",
+                                                        SoundCategory.UI,1,1.75f
+                                                ),
+                                                List.of(
+                                                        MentionAction.of(
+                                                                MentionType.EVERYONE,""
+                                                        )
+                                                ),
+                                                List.of(
+                                                        StyleAction.of(
+                                                                StyleType.BOLD,""
+                                                        ),
+                                                        StyleAction.of(
+                                                                StyleType.COLOR_PRESET,"light purple"
+                                                        )
+                                                ),
+                                                "<blue><b>Pattern</b></blue>: @everyone\n<dark_aqua><b>Comment</b></dark_aqua>: mention all online players\n"
+                                        ),
 
-                                    MentionRule.of(
-                                            "@team\\((.+?)\\)",
-                                            "%player:displayname% mentioned you",
-                                            0,
-                                            false,
-                                            Sound.of(
-                                                    "minecraft:entity.experience_orb.pickup",
-                                                    SoundCategory.UI,1,1.75f
-                                            ),
-                                            List.of(
-                                                    MentionAction.of(
-                                                            MentionType.TEAM,""
-                                                    )
-                                            ),
-                                            List.of(
-                                                    StyleAction.of(
-                                                            StyleType.BOLD,""
-                                                    )
-                                            ),
-                                            "<blue><b>Pattern</b></blue>: @team(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given scoreboard team\n"
-                                    ),
+                                        MentionRule.of(
+                                                "@team\\((.+?)\\)",
+                                                "%player:displayname% mentioned you",
+                                                0,
+                                                false,
+                                                Sound.of(
+                                                        "minecraft:entity.experience_orb.pickup",
+                                                        SoundCategory.UI,1,1.75f
+                                                ),
+                                                List.of(
+                                                        MentionAction.of(
+                                                                MentionType.TEAM,""
+                                                        )
+                                                ),
+                                                List.of(
+                                                        StyleAction.of(
+                                                                StyleType.BOLD,""
+                                                        )
+                                                ),
+                                                "<blue><b>Pattern</b></blue>: @team(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given scoreboard team\n"
+                                        ),
 
-                                    MentionRule.of(
-                                            "@group\\((.+?)\\)",
-                                            "%player:displayname% mentioned you",
-                                            0,
-                                            false,
-                                            Sound.of(
-                                                    "minecraft:entity.experience_orb.pickup",
-                                                    SoundCategory.UI,1,1.75f
-                                            ),
-                                            List.of(
-                                                    MentionAction.of(
-                                                            MentionType.LUCK_PERMS_GROUP,""
-                                                    )
-                                            ),
-                                            List.of(
-                                                    StyleAction.of(
-                                                            StyleType.BOLD,""
-                                                    ),
-                                                    StyleAction.of(
-                                                            StyleType.COLOR_PRESET,"light purple"
-                                                    )
-                                            ),
-                                            "<blue><b>Pattern</b></blue>: @group(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given LuckPerms group\n"
-                                    ),
+                                        MentionRule.of(
+                                                "@group\\((.+?)\\)",
+                                                "%player:displayname% mentioned you",
+                                                0,
+                                                false,
+                                                Sound.of(
+                                                        "minecraft:entity.experience_orb.pickup",
+                                                        SoundCategory.UI,1,1.75f
+                                                ),
+                                                List.of(
+                                                        MentionAction.of(
+                                                                MentionType.LUCK_PERMS_GROUP,""
+                                                        )
+                                                ),
+                                                List.of(
+                                                        StyleAction.of(
+                                                                StyleType.BOLD,""
+                                                        ),
+                                                        StyleAction.of(
+                                                                StyleType.COLOR_PRESET,"light purple"
+                                                        )
+                                                ),
+                                                "<blue><b>Pattern</b></blue>: @group(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given LuckPerms group\n"
+                                        ),
 
-                                    MentionRule.of(
-                                            "@world\\((.+?)\\)",
-                                            "%player:displayname% mentioned you",
-                                            0,
-                                            false,
-                                            Sound.of(
-                                                    "minecraft:entity.experience_orb.pickup",
-                                                    SoundCategory.UI,1,1.75f
-                                            ),
-                                            List.of(
-                                                    MentionAction.of(
-                                                            MentionType.WORLD,""
-                                                    )
-                                            ),
-                                            List.of(
-                                                    StyleAction.of(
-                                                            StyleType.BOLD,""
-                                                    ),
-                                                    StyleAction.of(
-                                                            StyleType.COLOR_PRESET,"light purple"
-                                                    )
-                                            ),
-                                            "<blue><b>Pattern</b></blue>: @world(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given world\n"
-                                    ),
+                                        MentionRule.of(
+                                                "@world\\((.+?)\\)",
+                                                "%player:displayname% mentioned you",
+                                                0,
+                                                false,
+                                                Sound.of(
+                                                        "minecraft:entity.experience_orb.pickup",
+                                                        SoundCategory.UI,1,1.75f
+                                                ),
+                                                List.of(
+                                                        MentionAction.of(
+                                                                MentionType.WORLD,""
+                                                        )
+                                                ),
+                                                List.of(
+                                                        StyleAction.of(
+                                                                StyleType.BOLD,""
+                                                        ),
+                                                        StyleAction.of(
+                                                                StyleType.COLOR_PRESET,"light purple"
+                                                        )
+                                                ),
+                                                "<blue><b>Pattern</b></blue>: @world(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given world\n"
+                                        ),
 
-                                    MentionRule.of(
-                                            "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
-                                            "%player:displayname% mentioned you",
-                                            0,
-                                            false,
-                                            Sound.of(
-                                                    "minecraft:entity.experience_orb.pickup",
-                                                    SoundCategory.UI,1,1.75f
-                                            ),
-                                            List.of(
-                                                    MentionAction.of(
-                                                            MentionType.PLAYER,""
-                                                    )
-                                            ),
-                                            List.of(
-                                                    StyleAction.of(
-                                                            StyleType.BOLD,""
-                                                    )
-                                            ),
-                                            "<blue><b>Pattern</b></blue>: @Player\n<dark_aqua><b>Comment</b></dark_aqua>: mention a specific player\n"
-                                    )
-                            )
-
-                    )
+                                        MentionRule.of(
+                                                "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
+                                                "%player:displayname% mentioned you",
+                                                0,
+                                                false,
+                                                Sound.of(
+                                                        "minecraft:entity.experience_orb.pickup",
+                                                        SoundCategory.UI,1,1.75f
+                                                ),
+                                                List.of(
+                                                        MentionAction.of(
+                                                                MentionType.PLAYER,""
+                                                        )
+                                                ),
+                                                List.of(
+                                                        StyleAction.of(
+                                                                StyleType.BOLD,""
+                                                        )
+                                                ),
+                                                "<blue><b>Pattern</b></blue>: @Player\n<dark_aqua><b>Comment</b></dark_aqua>: mention a specific player\n"
+                                        )
+                                )
+                        ),
+                        entry(
+                                "embellish-chat.example",
+                                List.of(
+                                        MentionRule.of(
+                                                "@admin()",
+                                                "%player:displayname% mentioned you",
+                                                0,
+                                                false,
+                                                Sound.of(
+                                                        "minecraft:entity.experience_orb.pickup",
+                                                        SoundCategory.UI,1,1.75f
+                                                ),
+                                                List.of(
+                                                        MentionAction.of(
+                                                                MentionType.LUCK_PERMS_GROUP,"admin"
+                                                        )
+                                                ),
+                                                List.of(
+                                                        StyleAction.of(
+                                                                StyleType.BOLD,""
+                                                        ),
+                                                        StyleAction.of(
+                                                                StyleType.COLOR_GRADIENT,"#FF5555#C77DFF"
+                                                        ),
+                                                        StyleAction.of(
+                                                                StyleType.CLICK_COMMAND_RUN,"execute in %world:id% run tp %player:pos_x% %player:pos_y% %player:pos_z%"
+                                                        ),
+                                                        StyleAction.of(
+                                                                StyleType.DISCORD_JSON,"{\"embeds\":[{\"title\":\"%player:name_unformatted% mentioned admins\",\"color\":16753920,\"description\":\"TP command\\n```mcfunction\\nexecute in %world:id% run tp %player:pos_x% %player:pos_y% %player:pos_z%\\n```\",\"fields\":[{\"name\":\"Content\",\"value\":\"%embellish-chat:content%\",\"inline\":false},{\"name\":\"UUID\",\"value\":\"`%player:uuid%`\",\"inline\":false},{\"name\":\"Player\",\"value\":\"`%player:name_unformatted%`\",\"inline\":true},{\"name\":\"Ping\",\"value\":\"`%player:ping% ms`\",\"inline\":true},{\"name\":\"\\u200b\",\"value\":\"\\u200b\",\"inline\":true},{\"name\":\"Position\",\"value\":\"`%player:pos_x% %player:pos_y% %player:pos_z%`\",\"inline\":true},{\"name\":\"World\",\"value\":\"`%world:id%`\",\"inline\":true},{\"name\":\"\\u200b\",\"value\":\"\\u200b\",\"inline\":true},{\"name\":\"Server\",\"value\":\"`%server:name%`\",\"inline\":true},{\"name\":\"Time\",\"value\":\"`%server:time%`\",\"inline\":true},{\"name\":\"Status\",\"value\":\"`TPS:%server:tps%` `MSPT:%server:mspt%`\",\"inline\":true}]}]}"
+                                                        )
+                                                ),
+                                                "<blue><b>Pattern</b></blue>: @admin\n<dark_aqua><b>Comment</b></dark_aqua>: Alerts admins on Discord and adds a click-to-teleport action.\n<red><b>Note</b></red>: This mention is placed behind the default rules, so it will not work as-is. To activate it, move it to the top of the embellish-chat.mention list.\n"
+                                        )
+                                )
+                        )
                 )),
 
                 //preset
