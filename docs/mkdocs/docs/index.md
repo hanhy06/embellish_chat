@@ -1,6 +1,6 @@
 # Embellish Chat
 
-Embellish Chat modernizes your Minecraft server’s chat experience with a fully server-side design. It introduces Markdown-style formatting, interactive message events, and a robust mention system—no client installation required.
+Embellish Chat modernizes your Minecraft server’s chat experience with a fully server-side design. It introduces Markdown-style formatting, interactive message events, and a robust mention system—no client installation required. It also supports integration with LuckPerms, Styled Nickname, and various other mods.
 
 ---
 
