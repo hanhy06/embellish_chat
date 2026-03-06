@@ -27,7 +27,11 @@
 <div id="root"></div>
 
 <script type="text/babel">
-    const { useState, useEffect } = React;
+    const { useState, useEffect, useRef } = React;
+
+    const CONFIG_VERSION = "3.4.0";
+    const cloneJson = (value) => JSON.parse(JSON.stringify(value));
+    const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
     const IconWrapper = ({ name, size, className }) => {
         const iconKey = name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('');
@@ -70,7 +74,7 @@
 
     // Default config.json
     const DEFAULT_CONFIG = {
-      "version": "3.4.0",
+      "version": CONFIG_VERSION,
       "delimiter": ",",
       "timestamp": "yyyy-MM-dd HH:mm:ss",
       "commandAlias": "ec",
@@ -555,8 +559,157 @@
                 <IconWrapper name={icon} size={20} />
             </div>
             <h3 className="mt-4 text-lg font-bold text-slate-800 dark:text-white">{title}</h3>
+            {description && <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{description}</p>}
         </div>
     );
+
+    const StringListCard = ({
+        eyebrow,
+        title,
+        icon,
+        count,
+        items,
+        onAdd,
+        onRemove,
+        placeholder,
+        emptyTitle,
+        emptyDescription,
+        enableProfileLookup = false,
+        loadEntryPreview = null,
+    }) => {
+        const [selectedEntry, setSelectedEntry] = useState(null);
+        const [previewState, setPreviewState] = useState({ status: "idle", data: null, error: "" });
+
+        const handleEntryClick = async (entry) => {
+            if (!enableProfileLookup || typeof loadEntryPreview !== "function") return;
+
+            if (selectedEntry === entry && previewState.status !== "loading") {
+                setSelectedEntry(null);
+                setPreviewState({ status: "idle", data: null, error: "" });
+                return;
+            }
+
+            setSelectedEntry(entry);
+            setPreviewState({ status: "loading", data: null, error: "" });
+
+            try {
+                const profile = await loadEntryPreview(entry);
+                setPreviewState({ status: "success", data: profile, error: "" });
+            } catch (error) {
+                const normalizedUuid = entry.replace(/-/g, "");
+                setPreviewState({
+                    status: "error",
+                    data: {
+                        uuid: entry,
+                        normalizedUuid,
+                        name: "Unknown Player",
+                        headUrl: `https://mc-heads.net/head/${normalizedUuid}/96`,
+                        avatarUrl: `https://mc-heads.net/avatar/${normalizedUuid}/64`
+                    },
+                    error: error?.message || "Could not load this player from the profile API."
+                });
+            }
+        };
+
+        return (
+            <Card className="p-6 md:p-7">
+                <div className="flex flex-col gap-5">
+                    <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                        <SectionHeading
+                            eyebrow={eyebrow}
+                            title={title}
+                            icon={icon}
+                            badge={<CountBadge count={count} label="entries" />}
+                        />
+                        <AddGroupInput onAdd={onAdd} placeholder={placeholder} />
+                    </div>
+
+                    {count === 0 ? (
+                        <EmptyState icon={icon} title={emptyTitle} description={emptyDescription} />
+                    ) : (
+                        <>
+                            <div className="flex flex-wrap gap-3">
+                                {items.map((entry) => {
+                                    const isSelected = selectedEntry === entry;
+                                    return (
+                                        <div
+                                            key={entry}
+                                            className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm shadow-sm dark:bg-slate-950/60 ${
+                                                isSelected
+                                                    ? "border-indigo-300 bg-indigo-50 text-indigo-700 dark:border-indigo-500/40 dark:bg-indigo-500/10 dark:text-indigo-200"
+                                                    : "border-slate-200/80 bg-slate-50/90 dark:border-slate-700"
+                                            }`}
+                                        >
+                                            <button
+                                                type="button"
+                                                onClick={() => handleEntryClick(entry)}
+                                                className={`inline-flex items-center gap-2 rounded-full text-left transition ${enableProfileLookup ? "cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-300" : "cursor-default"}`}
+                                            >
+                                                {enableProfileLookup && <IconWrapper name="contact" size={14} />}
+                                                <span className="font-mono text-slate-700 dark:text-slate-200">{entry}</span>
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => onRemove(entry)}
+                                                className="text-slate-400 transition hover:text-red-500"
+                                            >
+                                                <IconWrapper name="x" size={14} />
+                                            </button>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            {enableProfileLookup && selectedEntry && (
+                                <div className="rounded-[24px] border border-slate-200/80 bg-slate-50/80 p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/40">
+                                    <div className="mb-3 flex items-center gap-3">
+                                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-glow">
+                                            <IconWrapper name="contact" size={16} />
+                                        </div>
+                                        <div>
+                                            <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Player Preview</div>
+                                            <div className="text-sm font-semibold text-slate-800 dark:text-slate-100">Click the UUID again to collapse.</div>
+                                        </div>
+                                    </div>
+
+                                    {previewState.status === "loading" && (
+                                        <div className="flex items-center gap-4 rounded-2xl bg-white/80 p-4 dark:bg-slate-950/50">
+                                            <div className="h-16 w-16 animate-pulse rounded-2xl bg-slate-200 dark:bg-slate-800" />
+                                            <div className="flex-1 space-y-2">
+                                                <div className="h-4 w-32 animate-pulse rounded bg-slate-200 dark:bg-slate-800" />
+                                                <div className="h-3 w-56 animate-pulse rounded bg-slate-200 dark:bg-slate-800" />
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {previewState.status !== "loading" && previewState.data && (
+                                        <div className="flex flex-col gap-4 rounded-2xl bg-white/80 p-4 dark:bg-slate-950/50 md:flex-row md:items-center">
+                                            <img
+                                                src={previewState.data.headUrl}
+                                                alt={`${previewState.data.name} head`}
+                                                className="h-20 w-20 rounded-2xl border border-slate-200 object-cover shadow-sm dark:border-slate-700"
+                                            />
+                                            <div className="min-w-0 flex-1">
+                                                <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Player Name</div>
+                                                <div className="truncate text-xl font-black text-slate-900 dark:text-white">{previewState.data.name}</div>
+                                                <div className="mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">UUID</div>
+                                                <div className="mt-1 break-all font-mono text-sm text-slate-600 dark:text-slate-300">{previewState.data.uuid}</div>
+                                                {previewState.status === "error" && (
+                                                    <div className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-700 dark:border-amber-900/40 dark:bg-amber-950/30 dark:text-amber-300">
+                                                        {previewState.error}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </>
+                    )}
+                </div>
+            </Card>
+        );
+    };
 
     const TabButton = ({ active, onClick, icon, label, compactLabel }) => (
         <button
@@ -734,12 +887,19 @@
       removeWhitelist,
       addPrefix,
       removePrefix,
-      updatePrefix
+      updatePrefix,
+      addBannedPlayer,
+      removeBannedPlayer,
+      addNotificationOffPlayer,
+      removeNotificationOffPlayer,
+      fetchPlayerProfile
     }) => {
       const colorPresetCount = Object.keys(presets.colors || {}).length;
       const atlasPresetCount = Object.keys(presets.atlas || {}).length;
       const whitelistCount = (presets.whitelist || []).length;
       const prefixCount = Object.keys(presets.prefixes || {}).length;
+      const bannedPlayerCount = (config.bannedPlayerList || []).length;
+      const notificationOffPlayerCount = (config.notificationOffPlayerList || []).length;
 
       return (
         <div className="space-y-8">
@@ -753,11 +913,13 @@
               />
 
               <div className="grid gap-4 md:grid-cols-2">
-                <Input
-                  label="Mod Version (Reference)"
-                  value={config.version}
-                  onChange={(v) => updateGlobal("version", v)}
-                />
+                <div className="flex flex-col gap-2 md:col-span-2">
+                  <label className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Mod Version</label>
+                  <div className="rounded-2xl border border-slate-200/80 bg-slate-100/80 px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-200">
+                    {config.version || CONFIG_VERSION}
+                  </div>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">`ConfigManager.readConfig()` only loads configs that match the current mod version, so this generator keeps the value read-only.</p>
+                </div>
                 <Input
                   label="Option Delimiter"
                   value={config.delimiter}
@@ -844,7 +1006,7 @@
           </Card>
 
           <div className="grid gap-6">
-            <Card className="p-6 md:p-7">
+             <Card className="p-6 md:p-7">
               <div className="flex flex-col gap-5">
                 <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                   <SectionHeading
@@ -937,7 +1099,7 @@
             </Card>
           </div>
 
-          <div className="grid gap-6 xl:grid-cols-2">
+          <div className="grid gap-6">
             <Card className="p-6 md:p-7">
               <div className="flex flex-col gap-5">
                 <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -1017,6 +1179,37 @@
               </div>
             </Card>
           </div>
+
+          <div className="grid gap-6">
+             <StringListCard
+               eyebrow="Players"
+               title="Banned Player UUIDs"
+               icon="user"
+               count={bannedPlayerCount}
+               items={config.bannedPlayerList || []}
+               onAdd={addBannedPlayer}
+               onRemove={removeBannedPlayer}
+               placeholder="UUID (e.g. 123e4567-e89b-12d3-a456-426614174000)"
+               emptyTitle="No banned player UUIDs"
+               emptyDescription="Matches the `bannedPlayerList` field in `config.json`."
+               enableProfileLookup={true}
+               loadEntryPreview={fetchPlayerProfile}
+             />
+             <StringListCard
+               eyebrow="Notifications"
+               title="Notification-Off Player UUIDs"
+               icon="users"
+               count={notificationOffPlayerCount}
+               items={config.notificationOffPlayerList || []}
+               onAdd={addNotificationOffPlayer}
+               onRemove={removeNotificationOffPlayer}
+               placeholder="UUID (e.g. 123e4567-e89b-12d3-a456-426614174000)"
+               emptyTitle="No notification opt-out UUIDs"
+               emptyDescription="Matches the `notificationOffPlayerList` field in `config.json`."
+               enableProfileLookup={true}
+               loadEntryPreview={fetchPlayerProfile}
+             />
+           </div>
         </div>
       );
     };
@@ -1370,6 +1563,18 @@
             else setPresetsJson(val);
         };
 
+        const saveCurrentJsonToFile = () => {
+            const blob = new Blob([getCurrentJson()], { type: "application/json;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const anchor = document.createElement("a");
+            anchor.href = url;
+            anchor.download = `${activeJsonTab}.json`;
+            document.body.appendChild(anchor);
+            anchor.click();
+            document.body.removeChild(anchor);
+            URL.revokeObjectURL(url);
+        };
+
         return (
             <div className="space-y-6">
                 <Card className="p-6 md:p-8">
@@ -1387,6 +1592,9 @@
                             />
                             <Button onClick={() => handleImport(activeJsonTab)} variant="secondary">
                                 <IconWrapper name="upload" size={16} /> Load from Text
+                            </Button>
+                            <Button onClick={saveCurrentJsonToFile} variant="secondary">
+                                <IconWrapper name="download" size={16} /> Save to File
                             </Button>
                             <Button onClick={() => copyToClipboard(activeJsonTab)} variant="primary">
                                 {copySuccess === activeJsonTab ? <IconWrapper name="check" size={16} /> : <IconWrapper name="copy" size={16} />}
@@ -1436,10 +1644,11 @@
     };
 
     function ConfigEditor() {
-        const [config, setConfig] = useState(DEFAULT_CONFIG);
-        const [styles, setStyles] = useState(DEFAULT_STYLES);
-        const [mentions, setMentions] = useState(DEFAULT_MENTIONS);
-        const [presets, setPresets] = useState(DEFAULT_PRESETS);
+        const [config, setConfig] = useState(cloneJson(DEFAULT_CONFIG));
+        const [styles, setStyles] = useState(cloneJson(DEFAULT_STYLES));
+        const [mentions, setMentions] = useState(cloneJson(DEFAULT_MENTIONS));
+        const [presets, setPresets] = useState(cloneJson(DEFAULT_PRESETS));
+        const playerProfileCacheRef = useRef({});
 
         const [activeTab, setActiveTab] = useState("global");
         const [activeJsonTab, setActiveJsonTab] = useState("config");
@@ -1468,38 +1677,139 @@
             setPresetsJson(JSON.stringify(presets, null, 2));
         }, [presets]);
 
+        const normalizeConfigData = (rawConfig = {}) => {
+            const parsed = { ...rawConfig };
+
+            if (parsed.mentionColor && !parsed.defaultTeamColor) {
+                parsed.defaultTeamColor = parsed.mentionColor;
+            }
+            delete parsed.mentionColor;
+
+            const migratedPresets = {};
+            if (parsed.colors !== undefined) {
+                migratedPresets.colors = parsed.colors;
+                delete parsed.colors;
+            }
+            if (parsed.atlas !== undefined) {
+                migratedPresets.atlas = parsed.atlas;
+                delete parsed.atlas;
+            }
+            if (parsed.whitelist !== undefined) {
+                migratedPresets.whitelist = parsed.whitelist;
+                delete parsed.whitelist;
+            }
+            if (parsed.prefixes !== undefined) {
+                migratedPresets.prefixes = parsed.prefixes;
+                delete parsed.prefixes;
+            }
+
+            return {
+                config: {
+                    ...cloneJson(DEFAULT_CONFIG),
+                    ...parsed,
+                    version: CONFIG_VERSION,
+                    bannedPlayerList: Array.isArray(parsed.bannedPlayerList) ? parsed.bannedPlayerList : [],
+                    notificationOffPlayerList: Array.isArray(parsed.notificationOffPlayerList) ? parsed.notificationOffPlayerList : []
+                },
+                migratedPresets
+            };
+        };
+
+        const addUuidEntry = (key, entry, duplicateMessage) => {
+            if (!entry) return;
+            if (!UUID_PATTERN.test(entry)) {
+                alert("Invalid UUID format.");
+                return;
+            }
+            if ((config[key] || []).includes(entry)) {
+                alert(duplicateMessage);
+                return;
+            }
+            setConfig(prev => ({
+                ...prev,
+                [key]: [...(prev[key] || []), entry]
+            }));
+        };
+
+        const removeUuidEntry = (key, entry) => {
+            setConfig(prev => ({
+                ...prev,
+                [key]: (prev[key] || []).filter((value) => value !== entry)
+            }));
+        };
+
+        const fetchPlayerProfile = async (uuid) => {
+            const normalizedUuid = uuid.replace(/-/g, "");
+            const cachedProfile = playerProfileCacheRef.current[normalizedUuid];
+            if (cachedProfile) return cachedProfile;
+
+            const profileApis = [
+                {
+                    label: "PlayerDB",
+                    url: `https://playerdb.co/api/player/minecraft/${normalizedUuid}`,
+                    pickName: (json) => json?.data?.player?.username || json?.data?.player?.raw_id
+                },
+                {
+                    label: "Ashcon",
+                    url: `https://api.ashcon.app/mojang/v2/user/${normalizedUuid}`,
+                    pickName: (json) => json?.username || json?.name
+                },
+                {
+                    label: "Mojang Session Server",
+                    url: `https://sessionserver.mojang.com/session/minecraft/profile/${normalizedUuid}`,
+                    pickName: (json) => json?.name
+                }
+            ];
+
+            let resolvedName = null;
+            const failures = [];
+
+            for (const api of profileApis) {
+                try {
+                    const response = await fetch(api.url, {
+                        method: "GET",
+                        headers: { "Accept": "application/json" }
+                    });
+
+                    if (!response.ok) {
+                        failures.push(`${api.label}: HTTP ${response.status}`);
+                        continue;
+                    }
+
+                    const profileJson = await response.json();
+                    const candidateName = api.pickName(profileJson);
+                    if (candidateName) {
+                        resolvedName = candidateName;
+                        break;
+                    }
+
+                    failures.push(`${api.label}: empty response`);
+                } catch (error) {
+                    failures.push(`${api.label}: ${error?.message || "request failed"}`);
+                }
+            }
+
+            if (!resolvedName) {
+                throw new Error(`Could not resolve this UUID. ${failures.join(" | ")}`);
+            }
+
+            const profile = {
+                uuid,
+                normalizedUuid,
+                name: resolvedName,
+                headUrl: `https://mc-heads.net/head/${normalizedUuid}/96`,
+                avatarUrl: `https://mc-heads.net/avatar/${normalizedUuid}/64`
+            };
+
+            playerProfileCacheRef.current[normalizedUuid] = profile;
+            return profile;
+        };
+
         const handleImport = (fileType) => {
             try {
                 if (fileType === "config") {
                     const parsed = JSON.parse(configJson);
-                    if (parsed.mentionColor && !parsed.defaultTeamColor) {
-                        parsed.defaultTeamColor = parsed.mentionColor;
-                        delete parsed.mentionColor;
-                    }
-                    if (parsed.bannedPlayerList === undefined) parsed.bannedPlayerList = [];
-                    if (parsed.notificationOffPlayerList === undefined) parsed.notificationOffPlayerList = [];
-                    if (parsed.mentionBroadcast === undefined) parsed.mentionBroadcast = true;
-                    if (parsed.webhook === undefined) parsed.webhook = "";
-                    if (parsed.useClearFormat === undefined) parsed.useClearFormat = false;
-                    if (parsed.commandAlias === undefined) parsed.commandAlias = "ec";
-
-                    const migratedPresets = {};
-                    if (parsed.colors !== undefined) {
-                        migratedPresets.colors = parsed.colors;
-                        delete parsed.colors;
-                    }
-                    if (parsed.atlas !== undefined) {
-                        migratedPresets.atlas = parsed.atlas;
-                        delete parsed.atlas;
-                    }
-                    if (parsed.whitelist !== undefined) {
-                        migratedPresets.whitelist = parsed.whitelist;
-                        delete parsed.whitelist;
-                    }
-                    if (parsed.prefixes !== undefined) {
-                        migratedPresets.prefixes = parsed.prefixes;
-                        delete parsed.prefixes;
-                    }
+                    const { config: normalizedConfig, migratedPresets } = normalizeConfigData(parsed);
 
                     if (Object.keys(migratedPresets).length > 0) {
                         setPresets(prev => ({
@@ -1507,7 +1817,7 @@
                             ...migratedPresets,
                         }));
                     }
-                    setConfig(parsed);
+                    setConfig(normalizedConfig);
                 } else if (fileType === "styles") {
                     const parsed = JSON.parse(stylesJson);
                     if (parsed.stylingRules) {
@@ -1517,7 +1827,11 @@
                             });
                         });
                     }
-                    setStyles(parsed);
+                    setStyles({
+                        ...cloneJson(DEFAULT_STYLES),
+                        ...parsed,
+                        stylingRules: parsed.stylingRules ?? {}
+                    });
                 } else if (fileType === "mentions") {
                     const parsed = JSON.parse(mentionsJson);
                     if (parsed.mentionRules) {
@@ -1533,7 +1847,11 @@
                             });
                         });
                     }
-                    setMentions(parsed);
+                    setMentions({
+                        ...cloneJson(DEFAULT_MENTIONS),
+                        ...parsed,
+                        mentionRules: parsed.mentionRules ?? {}
+                    });
                 } else if (fileType === "presets") {
                     const parsed = JSON.parse(presetsJson);
                     if (parsed.colorPreset && parsed.colors === undefined) {
@@ -1558,10 +1876,10 @@
         };
 
         const handleReset = () => {
-            setConfig(DEFAULT_CONFIG);
-            setStyles(DEFAULT_STYLES);
-            setMentions(DEFAULT_MENTIONS);
-            setPresets(DEFAULT_PRESETS);
+            setConfig(cloneJson(DEFAULT_CONFIG));
+            setStyles(cloneJson(DEFAULT_STYLES));
+            setMentions(cloneJson(DEFAULT_MENTIONS));
+            setPresets(cloneJson(DEFAULT_PRESETS));
             alert("All configurations reset to defaults.");
         };
 
@@ -1673,6 +1991,11 @@
             }));
         };
 
+        const addBannedPlayer = (entry) => addUuidEntry('bannedPlayerList', entry, "Banned player UUID already exists!");
+        const removeBannedPlayer = (entry) => removeUuidEntry('bannedPlayerList', entry);
+        const addNotificationOffPlayer = (entry) => addUuidEntry('notificationOffPlayerList', entry, "Notification-off player UUID already exists!");
+        const removeNotificationOffPlayer = (entry) => removeUuidEntry('notificationOffPlayerList', entry);
+
         const updateStyleRuleList = (permissionKey, newRules) => {
             setStyles(prev => ({
                 ...prev,
@@ -1747,7 +2070,6 @@
             if (category === 'stylingRules') updateStyleRuleList(permissionKey, newRules);
             else if (category === 'mentionRules') updateMentionRuleList(permissionKey, newRules);
         };
-
         const tabs = [
             { id: "global", label: "Global Settings", compactLabel: "Global", icon: "settings" },
             { id: "styling", label: "Styling Rules", compactLabel: "Styling", icon: "message-square" },
@@ -1785,7 +2107,7 @@
                                     </div>
                                 </div>
                                 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                                    <StatPill label="Version" value={config.version || '3.4.0'} accent="indigo" />
+                                    <StatPill label="Version" value={config.version || CONFIG_VERSION} accent="indigo" />
                                     <StatPill label="Style Rules" value={stylingRuleCount} accent="emerald" />
                                     <StatPill label="Mention Rules" value={mentionRuleCount} accent="amber" />
                                     <StatPill label="Presets" value={presetCount} accent="slate" />
@@ -1826,6 +2148,11 @@
                                 addPrefix={addPrefix}
                                 removePrefix={removePrefix}
                                 updatePrefix={updatePrefix}
+                                addBannedPlayer={addBannedPlayer}
+                                removeBannedPlayer={removeBannedPlayer}
+                                addNotificationOffPlayer={addNotificationOffPlayer}
+                                removeNotificationOffPlayer={removeNotificationOffPlayer}
+                                fetchPlayerProfile={fetchPlayerProfile}
                             />
                         )}
                         {activeTab === 'styling' && (
