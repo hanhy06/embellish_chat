@@ -47,10 +47,10 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
-	include(modImplementation('me.lucko:fabric-permissions-api:latest.release'))
-    modCompileOnly "net.luckperms:api:latest.release"
-	modImplementation('eu.pb4:placeholder-api:latest.release')
-	modCompileOnly "maven.modrinth:styled-nicknames:latest.release"
+	include(modImplementation('me.lucko:fabric-permissions-api:0.6.1'))
+    modImplementation('eu.pb4:placeholder-api:2.8.2+1.21.10')
+	modCompileOnly "maven.modrinth:styled-nicknames:1.11.1+1.21.11"
+    modCompileOnly "net.luckperms:api:5.4"
 }
 
 
