@@ -302,6 +302,8 @@
 
     const fieldBaseClass = "w-full rounded-2xl border border-slate-200/80 bg-white/85 px-4 py-3 text-sm text-slate-800 shadow-sm outline-none transition duration-200 placeholder:text-slate-400 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:border-slate-700 dark:bg-slate-950/80 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-indigo-500 dark:focus:ring-indigo-500/20";
     const sectionCardClass = "relative overflow-hidden rounded-[28px] border border-white/60 bg-white/85 shadow-soft backdrop-blur dark:border-slate-800/80 dark:bg-slate-900/80";
+    const fieldLabelClass = "text-[11px] font-extrabold uppercase tracking-[0.2em] text-slate-700 dark:text-slate-200";
+    const sectionLabelClass = "text-[11px] font-extrabold uppercase tracking-[0.22em] text-slate-700 dark:text-slate-200";
 
     const BrandMark = ({ size = 72, className = "" }) => (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 32 32" width={size} height={size} fill="none" className={className}>
@@ -354,11 +356,20 @@
         </div>
     );
 
-    const CountBadge = ({ count, label = "items" }) => (
-        <div className="relative top-0.5 inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-xs font-bold text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300">
-            {count} {label}
-        </div>
-    );
+    const CountBadge = ({ count, label = "items", tone = "indigo" }) => {
+        const tones = {
+            indigo: "bg-indigo-100 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300",
+            amber: "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300",
+            emerald: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300",
+            slate: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300"
+        };
+
+        return (
+            <div className={`relative top-0.5 inline-flex items-center rounded-full px-3 py-1 text-xs font-bold ${tones[tone] || tones.indigo}`}>
+                {count} {label}
+            </div>
+        );
+    };
 
     const StatPill = ({ label, value, accent = "indigo" }) => {
         const accents = {
@@ -462,7 +473,7 @@
 
     const Input = ({ label, value, onChange, placeholder, type = "text", className = "", step = "any" }) => (
         <div className={`flex flex-col gap-2 ${className}`}>
-            {label && <label className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">{label}</label>}
+            {label && <label className={fieldLabelClass}>{label}</label>}
             <input
                 type={type}
                 step={step}
@@ -479,7 +490,7 @@
 
         return (
             <div className={`flex flex-col gap-2 ${className}`}>
-                {label && <label className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">{label}</label>}
+                {label && <label className={fieldLabelClass}>{label}</label>}
                 <input
                     list={listId}
                     value={value ?? ""}
@@ -498,7 +509,7 @@
 
     const ColorPicker = ({ label, value, onChange }) => (
         <div className="flex flex-col gap-2">
-            {label && <label className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">{label}</label>}
+            {label && <label className={fieldLabelClass}>{label}</label>}
             <div className="flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white/85 p-3 shadow-sm dark:border-slate-700 dark:bg-slate-950/80">
                 <input
                     type="color"
@@ -742,7 +753,7 @@
                             {isOpen ? <IconWrapper name="chevron-down" size={16} className="flex-shrink-0" /> : <IconWrapper name="chevron-right" size={16} className="flex-shrink-0" />}
                         </div>
                         <div className="min-w-0">
-                            <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-400">Rule</div>
+                            <div className={sectionLabelClass}>Rule</div>
                             <span className="block truncate text-sm font-semibold text-slate-800 dark:text-slate-100">{title}</span>
                         </div>
                     </div>
@@ -763,11 +774,11 @@
 
     const StyleActionsEditor = ({ actions, onChange }) => (
         <div className="space-y-3 mt-2">
-            <label className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Style Actions</label>
+            <label className={fieldLabelClass}>Style Actions</label>
             {actions.map((action, idx) => (
-                <div key={idx} className="grid gap-3 rounded-3xl border border-slate-200/80 bg-slate-50/80 p-3 dark:border-slate-700 dark:bg-slate-900/50 md:grid-cols-[1fr_1fr_auto] md:items-end">
+                <div key={idx} className="grid gap-3 rounded-3xl border border-slate-200/80 bg-slate-50/80 p-3 dark:border-slate-700 dark:bg-slate-900/50 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] md:items-end">
                     <Combobox
-                        label={idx === 0 ? "Type" : "Action Type"}
+                        label={idx === 0 ? "Style Type" : "Action Type"}
                         value={action.styleType}
                         options={STYLE_TYPES}
                         onChange={(v) => {
@@ -812,11 +823,11 @@
 
     const MentionActionsEditor = ({ actions, onChange }) => (
         <div className="space-y-3 mt-2">
-            <label className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Mention Actions</label>
+            <label className={fieldLabelClass}>Mention Actions</label>
             {actions.map((action, idx) => (
-                <div key={idx} className="grid gap-3 rounded-3xl border border-slate-200/80 bg-slate-50/80 p-3 dark:border-slate-700 dark:bg-slate-900/50 md:grid-cols-[1fr_1fr_auto] md:items-end">
+                <div key={idx} className="grid gap-3 rounded-3xl border border-slate-200/80 bg-slate-50/80 p-3 dark:border-slate-700 dark:bg-slate-900/50 md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)_auto] md:items-end">
                     <Combobox
-                        label={idx === 0 ? "Type" : "Mention Type"}
+                        label={idx === 0 ? "Mention Type" : "Action Type"}
                         value={action.mentionType}
                         options={MENTION_TYPES}
                         onChange={(v) => {
@@ -827,7 +838,7 @@
                         placeholder="Select..."
                     />
                     <Input
-                        label={idx === 0 ? "Preset" : "Preset"}
+                        label={idx === 0 ? "Preset / Value" : "Value"}
                         value={action.preset}
                         onChange={(v) => {
                             const newActions = [...actions];
@@ -914,7 +925,7 @@
 
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="flex flex-col gap-2 md:col-span-2">
-                  <label className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Mod Version</label>
+                  <label className={fieldLabelClass}>Mod Version</label>
                   <div className="rounded-2xl border border-slate-200/80 bg-slate-100/80 px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-200">
                     {config.version || CONFIG_VERSION}
                   </div>
@@ -1235,10 +1246,12 @@
                     <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                         <div>
                             <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-indigo-500">Permission Group</div>
-                            <h3 className="mt-1 break-all font-mono text-lg font-black text-slate-900 dark:text-white">{permKey}</h3>
+                            <div className="mt-1 flex flex-wrap items-center gap-3">
+                                <h3 className="break-all font-mono text-lg font-black text-slate-900 dark:text-white">{permKey}</h3>
+                                <CountBadge count={rules.length} label={rules.length === 1 ? "rule" : "rules"} tone="indigo" />
+                            </div>
                         </div>
                         <div className="flex items-center gap-3">
-                            <StatPill label="Rules" value={rules.length} accent="indigo" />
                             <DeleteButton
                                 onDelete={() => removePermissionGroup('stylingRules', permKey)}
                                 label="Delete Group"
@@ -1343,10 +1356,12 @@
                         <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                             <div>
                                 <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-indigo-500">Permission Group</div>
-                                <h3 className="mt-1 break-all font-mono text-lg font-black text-slate-900 dark:text-white">{permKey}</h3>
+                                <div className="mt-1 flex flex-wrap items-center gap-3">
+                                    <h3 className="break-all font-mono text-lg font-black text-slate-900 dark:text-white">{permKey}</h3>
+                                    <CountBadge count={rules.length} label={rules.length === 1 ? "rule" : "rules"} tone="amber" />
+                                </div>
                             </div>
                             <div className="flex items-center gap-3">
-                                <StatPill label="Rules" value={rules.length} accent="amber" />
                                 <DeleteButton
                                     onDelete={() => removePermissionGroup('mentionRules', permKey)}
                                     label="Delete Group"
@@ -1368,7 +1383,7 @@
                                         updateRuleList('mentionRules', permKey, newRules);
                                     }}
                                 >
-                                    <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
+                                    <div className="space-y-5">
                                         <Input
                                             label="Regex Pattern"
                                             value={rule.pattern}
@@ -1377,12 +1392,52 @@
                                                 newRules[idx] = { ...newRules[idx], pattern: v };
                                                 updateRuleList('mentionRules', permKey, newRules);
                                             }}
-                                            className="md:col-span-12 font-mono"
+                                            className="font-mono"
                                             placeholder="e.g. @everyone()"
                                         />
 
-                                        <div className="md:col-span-12 rounded-[24px] border border-slate-200/80 bg-slate-50/80 p-4 dark:border-slate-700 dark:bg-slate-900/30">
-                                            <div className="mb-4 text-[11px] font-bold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">Notification Sound</div>
+                                        <div className="rounded-[24px] border border-slate-200/80 bg-slate-50/70 p-4 dark:border-slate-700 dark:bg-slate-900/30">
+                                            <div className={`${sectionLabelClass} mb-4`}>Core Settings</div>
+                                            <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
+                                                <Input
+                                                    label="Title (Placeholder API Supported)"
+                                                    value={rule.title}
+                                                    onChange={(v) => {
+                                                        const newRules = [...rules];
+                                                        newRules[idx] = { ...newRules[idx], title: v };
+                                                        updateRuleList('mentionRules', permKey, newRules);
+                                                    }}
+                                                    className="md:col-span-7"
+                                                />
+                                                <Input
+                                                    label="Cooldown (sec)"
+                                                    type="number"
+                                                    step="1"
+                                                    value={rule.cooldown !== undefined ? rule.cooldown : 0}
+                                                    onChange={(v) => {
+                                                        const newRules = [...rules];
+                                                        newRules[idx] = { ...newRules[idx], cooldown: parseInt(v) || 0 };
+                                                        updateRuleList('mentionRules', permKey, newRules);
+                                                    }}
+                                                    className="md:col-span-3"
+                                                />
+                                                <div className="md:col-span-2 flex items-end">
+                                                    <InlineCheckbox
+                                                        id={`onlyTarget-${permKey}-${idx}`}
+                                                        label="Only Target"
+                                                        checked={rule.onlyTarget || false}
+                                                        onChange={(checked) => {
+                                                            const newRules = [...rules];
+                                                            newRules[idx] = { ...newRules[idx], onlyTarget: checked };
+                                                            updateRuleList('mentionRules', permKey, newRules);
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="rounded-[24px] border border-slate-200/80 bg-slate-50/80 p-4 dark:border-slate-700 dark:bg-slate-900/30">
+                                            <div className={`${sectionLabelClass} mb-4`}>Notification Sound</div>
                                             <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
                                                 <Input
                                                     label="Sound ID"
@@ -1391,7 +1446,7 @@
                                                         const newRules = updateSound(rules, idx, 'id', v);
                                                         updateRuleList('mentionRules', permKey, newRules);
                                                     }}
-                                                    className="md:col-span-4"
+                                                    className="md:col-span-5"
                                                     placeholder="minecraft:entity.experience_orb.pickup"
                                                 />
                                                 <Combobox
@@ -1424,48 +1479,34 @@
                                                         const newRules = updateSound(rules, idx, 'pitch', parseFloat(v));
                                                         updateRuleList('mentionRules', permKey, newRules);
                                                     }}
-                                                    className="md:col-span-3"
+                                                    className="md:col-span-2"
                                                 />
                                             </div>
                                         </div>
 
-                                        <div className="md:col-span-3">
-                                            <Input
-                                                label="Cooldown (sec)"
-                                                type="number"
-                                                step="1"
-                                                value={rule.cooldown !== undefined ? rule.cooldown : 0}
-                                                onChange={(v) => {
-                                                    const newRules = [...rules];
-                                                    newRules[idx] = { ...newRules[idx], cooldown: parseInt(v) || 0 };
-                                                    updateRuleList('mentionRules', permKey, newRules);
-                                                }}
-                                            />
-                                        </div>
+                                        <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+                                            <div className="rounded-[24px] border border-slate-200/80 bg-slate-50/80 p-4 dark:border-slate-700 dark:bg-slate-900/30">
+                                                <MentionActionsEditor
+                                                    actions={rule.mentions || []}
+                                                    onChange={(newActions) => {
+                                                        const newRules = [...rules];
+                                                        newRules[idx] = { ...newRules[idx], mentions: newActions };
+                                                        updateRuleList('mentionRules', permKey, newRules);
+                                                    }}
+                                                />
+                                            </div>
 
-                                        <div className="md:col-span-3 flex items-end">
-                                            <InlineCheckbox
-                                                id={`onlyTarget-${permKey}-${idx}`}
-                                                label="Only Target"
-                                                checked={rule.onlyTarget || false}
-                                                onChange={(checked) => {
-                                                    const newRules = [...rules];
-                                                    newRules[idx] = { ...newRules[idx], onlyTarget: checked };
-                                                    updateRuleList('mentionRules', permKey, newRules);
-                                                }}
-                                            />
+                                            <div className="rounded-[24px] border border-slate-200/80 bg-slate-50/80 p-4 dark:border-slate-700 dark:bg-slate-900/30">
+                                                <StyleActionsEditor
+                                                    actions={rule.styles || []}
+                                                    onChange={(newActions) => {
+                                                        const newRules = [...rules];
+                                                        newRules[idx] = { ...newRules[idx], styles: newActions };
+                                                        updateRuleList('mentionRules', permKey, newRules);
+                                                    }}
+                                                />
+                                            </div>
                                         </div>
-
-                                        <Input
-                                            label="Title (Placeholder API Supported)"
-                                            value={rule.title}
-                                            onChange={(v) => {
-                                                const newRules = [...rules];
-                                                newRules[idx] = { ...newRules[idx], title: v };
-                                                updateRuleList('mentionRules', permKey, newRules);
-                                            }}
-                                            className="md:col-span-6"
-                                        />
 
                                         <Input
                                             label="Comment (/embellish-chat help mention)"
@@ -1475,31 +1516,8 @@
                                                 newRules[idx] = { ...newRules[idx], comment: v };
                                                 updateRuleList('mentionRules', permKey, newRules);
                                             }}
-                                            className="md:col-span-6"
                                             placeholder="<blue><b>Pattern</b></blue>: @everyone ..."
                                         />
-
-                                        <div className="md:col-span-12 rounded-[24px] border border-slate-200/80 bg-slate-50/80 p-4 dark:border-slate-700 dark:bg-slate-900/30">
-                                            <MentionActionsEditor
-                                                actions={rule.mentions || []}
-                                                onChange={(newActions) => {
-                                                    const newRules = [...rules];
-                                                    newRules[idx] = { ...newRules[idx], mentions: newActions };
-                                                    updateRuleList('mentionRules', permKey, newRules);
-                                                }}
-                                            />
-                                        </div>
-
-                                        <div className="md:col-span-12 rounded-[24px] border border-slate-200/80 bg-slate-50/80 p-4 dark:border-slate-700 dark:bg-slate-900/30">
-                                            <StyleActionsEditor
-                                                actions={rule.styles || []}
-                                                onChange={(newActions) => {
-                                                    const newRules = [...rules];
-                                                    newRules[idx] = { ...newRules[idx], styles: newActions };
-                                                    updateRuleList('mentionRules', permKey, newRules);
-                                                }}
-                                            />
-                                        </div>
                                     </div>
                                 </Accordion>
                             ))}
