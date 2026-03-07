@@ -5,15 +5,18 @@
 ```
 {
   "pattern": "@admin()",
+
   "title": "%player:displayname% mentioned you",
-  "onlyTarget": false,
-  "cooldown": 0,
   "sound": {
     "id": "minecraft:entity.experience_orb.pickup",
     "category": "UI",
     "volume": 1.0,
     "pitch": 1.75
   },
+
+  "cooldown": 0,
+  "onlyTarget": false,
+
   "mentions": [
     {
       "mentionType": "LUCK_PERMS_GROUP",
@@ -39,6 +42,7 @@
     }
   ]
 }
+
 ```
 
 ![Mention](https://github.com/hanhy06/embellish-chat/blob/v3.3.0/%2B1.21.11/docs/images/Mention.gif?raw=true)
@@ -53,15 +57,18 @@ If you also use `DISCORD_JSON`, the administrator will receive a notification in
 ```
 {
   "pattern": "\\[notification\\]()",
+
   "title": "%player:displayname% mentioned you",
-  "cooldown": 0,
-  "onlyTarget": false,
   "sound": {
     "id": "minecraft:entity.experience_orb.pickup",
     "category": "UI",
     "volume": 1.0,
     "pitch": 1.75
   },
+
+  "cooldown": 0,
+  "onlyTarget": false,
+
   "mentions": [
     {
       "mentionType": "EVERYONE",
@@ -79,6 +86,7 @@ If you also use `DISCORD_JSON`, the administrator will receive a notification in
     }
   ]
 }
+
 ```
 
 Typing `[notification]` will send an alert to everyone.
@@ -88,10 +96,13 @@ Typing `[notification]` will send an alert to everyone.
 ```
 {
   "pattern": "#staff()",
+
   "title": "",
-  "onlyTarget": true,
-  "cooldown": 0,
   "sound": null,
+
+  "cooldown": 0,
+  "onlyTarget": true,
+
   "mentions": [
     {
       "mentionType": "LUCK_PERMS_GROUP",
@@ -109,6 +120,7 @@ Typing `[notification]` will send an alert to everyone.
     }
   ]
 }
+
 ```
 
 By setting `"onlyTarget": true`, you can use the mention system as a private chat channel.

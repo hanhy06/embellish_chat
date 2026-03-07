@@ -5,15 +5,19 @@
 ```
 {
   "pattern": "@everyone()",
+  "comment": "<blue><b>Pattern</b></blue>: @everyone\n<dark_aqua><b>Comment</b></dark_aqua>: mention all online players\n",
+
   "title": "%player:displayname% mentioned you",
-  "cooldown": 0,
-  "onlyTarget": false,
   "sound": {
     "id": "minecraft:entity.experience_orb.pickup",
     "category": "UI",
     "volume": 1.0,
     "pitch": 1.75
   },
+
+  "cooldown": 0,
+  "onlyTarget": false,
+
   "mentions": [
     {
       "mentionType": "EVERYONE",
@@ -29,30 +33,29 @@
       "styleType": "COLOR_PRESET",
       "preset": "light purple"
     }
-  ],
-  "comment": "<blue><b>Pattern</b></blue>: @everyone\n<dark_aqua><b>Comment</b></dark_aqua>: mention all online players\n"
-}
+  ]
+}}
 ```
 
 * **`pattern`**: This is a regular expression for scanning text. It must have one capture group.
-    * This is the mention option (e.g. team name, LuckPerms group).
-* **`title`**: This is the title shown on the mentioned player's screen.
-    * `%player:displayname%` is the display name of the player who sent the mention.
-* **`cooldown`**: This is the mention cooldown time in seconds.
-    * Set to `0` to disable the cooldown.
-* **`onlyTarget`**: 
-    * When set to true, prevents the message from being broadcast globally and sends it only to the target.
-* **`sound`**: Defines the notification sound settings.
-    * `id`: Sound identifier.
-    * `category`: Sound category.
-    * `volume`: Sound volume.
-    * `pitch`: Sound pitch.
-* **`mentions`**: Defines the mention actions to be executed.
-    * `mentionType`: This is the type of mention action.
-    * `preset`: This is an optional preset value.
-* **`styles`**: Defines the styles to be applied when the mention is triggered.
-    * Works the same way as in the styling rules section.
+  * This is the mention option (e.g. team name, LuckPerms group).
 * **`comment`**: This comment is used in `/embellish-chat help mention`.
+* **`title`**: This is the title shown on the mentioned player's screen.
+  * `%player:displayname%` is the display name of the player who sent the mention.
+* **`sound`**: Defines the notification sound settings.
+  * `id`: Sound identifier.
+  * `category`: Sound category.
+  * `volume`: Sound volume.
+  * `pitch`: Sound pitch.
+* **`cooldown`**: This is the mention cooldown time in seconds.
+  * Set to `0` to disable the cooldown.
+* **`onlyTarget`**:
+  * When set to `true`, prevents the message from being broadcast globally and sends it only to the target.
+* **`mentions`**: Defines the mention actions to be executed.
+  * `mentionType`: This is the mention type. You can use all types listed in the [MentionWiki](https://hanhy06.github.io/embellish-chat-wiki/mention/MentionType/).
+  * `preset`: This is an optional preset value.
+* **`styles`**: Defines the styles to be applied when the mention is triggered.
+  * Works the same way as in the styling rules section.
 
 ## Usage Patterns
 
@@ -61,14 +64,18 @@
 ```
 {
   "pattern": "@everyone()",
+
   "title": "%player:displayname% mentioned you",
-  "cooldown": 0,
   "sound": {
     "id": "minecraft:entity.experience_orb.pickup",
     "category": "UI",
     "volume": 1.0,
     "pitch": 1.75
   },
+
+  "cooldown": 0,
+  "onlyTarget": false,
+
   "mentions": [
     {
       "mentionType": "EVERYONE",
@@ -86,6 +93,7 @@
     }
   ]
 }
+
 ```
 This is the most basic way to use it.
 
@@ -94,14 +102,18 @@ This is the most basic way to use it.
 ```
 {
   "pattern": "@red-team-here()",
+
   "title": "%player:displayname% mentioned you",
-  "cooldown": 0,
   "sound": {
     "id": "minecraft:entity.experience_orb.pickup",
     "category": "UI",
     "volume": 1.0,
     "pitch": 1.75
   },
+
+  "cooldown": 0,
+  "onlyTarget": false,
+
   "mentions": [
     {
       "mentionType": "INSIDE",
@@ -123,6 +135,7 @@ This is the most basic way to use it.
     }
   ]
 }
+
 ```
 
 Mentions any red-team player within a 64-block radius.
@@ -132,14 +145,18 @@ Mentions any red-team player within a 64-block radius.
 ```
 {
   "pattern": "@red()",
+
   "title": "%player:displayname% mentioned you",
-  "cooldown": 0,
   "sound": {
     "id": "minecraft:entity.experience_orb.pickup",
     "category": "UI",
     "volume": 1.0,
     "pitch": 1.75
   },
+
+  "cooldown": 0,
+  "onlyTarget": false,
+
   "mentions": [
     {
       "mentionType": "TEAM",
@@ -157,6 +174,7 @@ Mentions any red-team player within a 64-block radius.
     }
   ]
 }
+
 ```
 
 This way, only the red team will always be in the mention
