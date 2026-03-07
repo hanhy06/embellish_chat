@@ -7,16 +7,19 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public record MentionRule(
-        Pattern pattern,
-        String title,
-        int cooldown,
-        boolean onlyTarget,
-        Sound sound,
+        Pattern pattern, String comment,
+        String title, Sound sound,
+        int cooldown, boolean onlyTarget,
         List<MentionAction> mentions,
-        List<StyleAction> styles,
-        String comment
+        List<StyleAction> styles
 ) {
-    public static MentionRule of(String regex,String title,int cooldown,boolean onlyTarget,Sound sound,List<MentionAction> mentions, List<StyleAction> styles,String comment){
-        return new MentionRule(Pattern.compile(regex),title,cooldown,onlyTarget,sound,mentions,styles,comment);
+    public static MentionRule of(
+            String regex, String comment,
+            String title, Sound sound,
+            int cooldown, boolean onlyTarget,
+            List<MentionAction> mentions,
+            List<StyleAction> styles
+    ){
+        return new MentionRule(Pattern.compile(regex), comment, title, sound, cooldown, onlyTarget, mentions, styles);
     }
 }

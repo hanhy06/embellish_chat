@@ -66,277 +66,185 @@ public record Config(
                                 List.of(
                                         StylingRule.of(
                                                 "\\[([^\\]]+?)]\\((https://.*?)\\)",
-                                                List.of(StyleAction.of(StyleType.URL,"")),
-                                                "<blue><b>Pattern</b></blue>: [Text](url)\n<dark_aqua><b>Comment</b></dark_aqua>: clickable link with custom text\n"
+                                                "<blue><b>Pattern</b></blue>: [Text](url)\n<dark_aqua><b>Comment</b></dark_aqua>: clickable link with custom text\n",
+                                                List.of(StyleAction.of(StyleType.URL, ""))
                                         ),
                                         StylingRule.of(
                                                 "((https://\\S+))",
-                                                List.of(StyleAction.of(StyleType.URL,"")),
-                                                "<blue><b>Pattern</b></blue>: url\n<dark_aqua><b>Comment</b></dark_aqua>: auto-detect clickable link\n"
+                                                "<blue><b>Pattern</b></blue>: url\n<dark_aqua><b>Comment</b></dark_aqua>: auto-detect clickable link\n",
+                                                List.of(StyleAction.of(StyleType.URL, ""))
                                         ),
                                         StylingRule.of(
                                                 "\\[([^\\]]+?)]\\{(.*?)}",
-                                                List.of(StyleAction.of(StyleType.FONT,"")),
-                                                "<blue><b>Pattern</b></blue>: [Text]{font}\n<dark_aqua><b>Comment</b></dark_aqua>: apply custom font to text\n"
+                                                "<blue><b>Pattern</b></blue>: [Text]{font}\n<dark_aqua><b>Comment</b></dark_aqua>: apply custom font to text\n",
+                                                List.of(StyleAction.of(StyleType.FONT, ""))
                                         ),
                                         StylingRule.of(
                                                 "\\[([^\\]]+?)]<(#.{6})>",
-                                                List.of(StyleAction.of(StyleType.COLOR_HEX,"")),
-                                                "<blue><b>Pattern</b></blue>: [Text]<#RRGGBB>\n<dark_aqua><b>Comment</b></dark_aqua>: apply hex color\n"
+                                                "<blue><b>Pattern</b></blue>: [Text]<#RRGGBB>\n<dark_aqua><b>Comment</b></dark_aqua>: apply hex color\n",
+                                                List.of(StyleAction.of(StyleType.COLOR_HEX, ""))
                                         ),
                                         StylingRule.of(
                                                 "\\[([^\\]]+?)]<(#.{6,})>",
-                                                List.of(StyleAction.of(StyleType.COLOR_GRADIENT,"")),
-                                                "<blue><b>Pattern</b></blue>: [Text]<#color1#color2...>\n<dark_aqua><b>Comment</b></dark_aqua>: apply gradient color\n"
+                                                "<blue><b>Pattern</b></blue>: [Text]<#color1#color2...>\n<dark_aqua><b>Comment</b></dark_aqua>: apply gradient color\n",
+                                                List.of(StyleAction.of(StyleType.COLOR_GRADIENT, ""))
                                         ),
                                         StylingRule.of(
                                                 "\\[([^\\]]+?)]<([a-z\\s]+?)>",
-                                                List.of(StyleAction.of(StyleType.COLOR_PRESET,"")),
-                                                "<blue><b>Pattern</b></blue>: [Text]<preset>\n<dark_aqua><b>Comment</b></dark_aqua>: apply preset color name\n"
+                                                "<blue><b>Pattern</b></blue>: [Text]<preset>\n<dark_aqua><b>Comment</b></dark_aqua>: apply preset color name\n",
+                                                List.of(StyleAction.of(StyleType.COLOR_PRESET, ""))
                                         ),
                                         StylingRule.of(
                                                 "\\*\\*(.+?)\\*\\*()",
-                                                List.of(StyleAction.of(StyleType.BOLD,"")),
-                                                "<blue><b>Pattern</b></blue>: **Text**\n<dark_aqua><b>Comment</b></dark_aqua>: bold formatting\n"
+                                                "<blue><b>Pattern</b></blue>: **Text**\n<dark_aqua><b>Comment</b></dark_aqua>: bold formatting\n",
+                                                List.of(StyleAction.of(StyleType.BOLD, ""))
                                         ),
                                         StylingRule.of(
                                                 "__(.+?)__()",
-                                                List.of(StyleAction.of(StyleType.UNDERLINE,"")),
-                                                "<blue><b>Pattern</b></blue>: __Text__\n<dark_aqua><b>Comment</b></dark_aqua>: underline formatting\n"
+                                                "<blue><b>Pattern</b></blue>: __Text__\n<dark_aqua><b>Comment</b></dark_aqua>: underline formatting\n",
+                                                List.of(StyleAction.of(StyleType.UNDERLINE, ""))
                                         ),
                                         StylingRule.of(
                                                 "_(.+?)_()",
-                                                List.of(StyleAction.of(StyleType.ITALIC,"")),
-                                                "<blue><b>Pattern</b></blue>: _Text_\n<dark_aqua><b>Comment</b></dark_aqua>: italic formatting\n"
+                                                "<blue><b>Pattern</b></blue>: _Text_\n<dark_aqua><b>Comment</b></dark_aqua>: italic formatting\n",
+                                                List.of(StyleAction.of(StyleType.ITALIC, ""))
                                         ),
                                         StylingRule.of(
                                                 "~~(.+?)~~()",
-                                                List.of(StyleAction.of(StyleType.STRIKETHROUGH,"")),
-                                                "<blue><b>Pattern</b></blue>: ~~Text~~\n<dark_aqua><b>Comment</b></dark_aqua>: strikethrough formatting\n"
+                                                "<blue><b>Pattern</b></blue>: ~~Text~~\n<dark_aqua><b>Comment</b></dark_aqua>: strikethrough formatting\n",
+                                                List.of(StyleAction.of(StyleType.STRIKETHROUGH, ""))
                                         ),
                                         StylingRule.of(
                                                 "\\|\\|(.+?)\\|\\|()",
-                                                List.of(StyleAction.of(StyleType.OBFUSCATED,"")),
-                                                "<blue><b>Pattern</b></blue>: ||Text||\n<dark_aqua><b>Comment</b></dark_aqua>: obfuscated text\n"
+                                                "<blue><b>Pattern</b></blue>: ||Text||\n<dark_aqua><b>Comment</b></dark_aqua>: obfuscated text\n",
+                                                List.of(StyleAction.of(StyleType.OBFUSCATED, ""))
                                         ),
                                         StylingRule.of(
                                                 "\\[([^\\]]+?)]<(RAINBOW)>",
-                                                List.of(StyleAction.of(StyleType.COLOR_RAINBOW,"0.7")),
-                                                "<blue><b>Pattern</b></blue>: [Text]<RAINBOW>\n<dark_aqua><b>Comment</b></dark_aqua>: rainbow color\n"
+                                                "<blue><b>Pattern</b></blue>: [Text]<RAINBOW>\n<dark_aqua><b>Comment</b></dark_aqua>: rainbow color\n",
+                                                List.of(StyleAction.of(StyleType.COLOR_RAINBOW, "0.7"))
                                         ),
                                         StylingRule.of(
                                                 "(.+)()",
-                                                List.of(StyleAction.of(StyleType.METADATA,"")),
-                                                "<blue><b>Pattern</b></blue>: any text\n<dark_aqua><b>Comment</b></dark_aqua>: metadata capture layer\n"
+                                                "<blue><b>Pattern</b></blue>: any text\n<dark_aqua><b>Comment</b></dark_aqua>: metadata capture layer\n",
+                                                List.of(StyleAction.of(StyleType.METADATA, ""))
                                         ),
                                         StylingRule.of(
                                                 "(\\[i\\])()",
-                                                List.of(StyleAction.of(StyleType.SHOW_ITEM,"")),
-                                                "<blue><b>Pattern</b></blue>: [i]\n<dark_aqua><b>Comment</b></dark_aqua>: show held item\n"
+                                                "<blue><b>Pattern</b></blue>: [i]\n<dark_aqua><b>Comment</b></dark_aqua>: show held item\n",
+                                                List.of(StyleAction.of(StyleType.SHOW_ITEM, ""))
                                         ),
                                         StylingRule.of(
                                                 "(\\[inv\\])()",
-                                                List.of(StyleAction.of(StyleType.SHOW_INVENTORY,"")),
-                                                "<blue><b>Pattern</b></blue>: [inv]\n<dark_aqua><b>Comment</b></dark_aqua>: show player inventory\n"
+                                                "<blue><b>Pattern</b></blue>: [inv]\n<dark_aqua><b>Comment</b></dark_aqua>: show player inventory\n",
+                                                List.of(StyleAction.of(StyleType.SHOW_INVENTORY, ""))
                                         ),
                                         StylingRule.of(
                                                 "(\\[end\\])()",
-                                                List.of(StyleAction.of(StyleType.SHOW_ENDER_CHEST,"")),
-                                                "<blue><b>Pattern</b></blue>: [end]\n<dark_aqua><b>Comment</b></dark_aqua>: show ender chest contents\n"
+                                                "<blue><b>Pattern</b></blue>: [end]\n<dark_aqua><b>Comment</b></dark_aqua>: show ender chest contents\n",
+                                                List.of(StyleAction.of(StyleType.SHOW_ENDER_CHEST, ""))
                                         ),
                                         StylingRule.of(
                                                 "(:(.+?):)",
-                                                List.of(StyleAction.of(StyleType.ATLAS_PRESET,"")),
-                                                "<blue><b>Pattern</b></blue>: :icon:\n<dark_aqua><b>Comment</b></dark_aqua>: atlas emoji/icon preset\n"
+                                                "<blue><b>Pattern</b></blue>: :icon:\n<dark_aqua><b>Comment</b></dark_aqua>: atlas emoji/icon preset\n",
+                                                List.of(StyleAction.of(StyleType.ATLAS_PRESET, ""))
                                         )
                                 )
                         ),
                         entry("embellish-chat.command_argument", List.of())
                 )),
                 new LinkedHashMap<>(Map.ofEntries(
-                        entry(
-                                "embellish-chat.mention",
-                                List.of(
-                                        MentionRule.of(
-                                                "@here()",
-                                                "%player:displayname% mentioned you",
-                                                0,
-                                                false,
-                                                Sound.of(
-                                                        "minecraft:entity.experience_orb.pickup",
-                                                        SoundCategory.UI,1,1.75f
-                                                ),
-                                                List.of(
-                                                        MentionAction.of(
-                                                                MentionType.INSIDE,"64"
-                                                        )
-                                                ),
-                                                List.of(
-                                                        StyleAction.of(
-                                                                StyleType.BOLD,""
-                                                        ),
-                                                        StyleAction.of(
-                                                                StyleType.COLOR_PRESET,"light purple"
-                                                        )
-                                                ),
-                                                "<blue><b>Pattern</b></blue>: @here\n<dark_aqua><b>Comment</b></dark_aqua>: mention players within 64 blocks\n"
-                                        ),
-
-                                        MentionRule.of(
-                                                "@everyone()",
-                                                "%player:displayname% mentioned you",
-                                                0,
-                                                false,
-                                                Sound.of(
-                                                        "minecraft:entity.experience_orb.pickup",
-                                                        SoundCategory.UI,1,1.75f
-                                                ),
-                                                List.of(
-                                                        MentionAction.of(
-                                                                MentionType.EVERYONE,""
-                                                        )
-                                                ),
-                                                List.of(
-                                                        StyleAction.of(
-                                                                StyleType.BOLD,""
-                                                        ),
-                                                        StyleAction.of(
-                                                                StyleType.COLOR_PRESET,"light purple"
-                                                        )
-                                                ),
-                                                "<blue><b>Pattern</b></blue>: @everyone\n<dark_aqua><b>Comment</b></dark_aqua>: mention all online players\n"
-                                        ),
-
-                                        MentionRule.of(
-                                                "@team\\((.+?)\\)",
-                                                "%player:displayname% mentioned you",
-                                                0,
-                                                false,
-                                                Sound.of(
-                                                        "minecraft:entity.experience_orb.pickup",
-                                                        SoundCategory.UI,1,1.75f
-                                                ),
-                                                List.of(
-                                                        MentionAction.of(
-                                                                MentionType.TEAM,""
-                                                        )
-                                                ),
-                                                List.of(
-                                                        StyleAction.of(
-                                                                StyleType.BOLD,""
-                                                        )
-                                                ),
-                                                "<blue><b>Pattern</b></blue>: @team(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given scoreboard team\n"
-                                        ),
-
-                                        MentionRule.of(
-                                                "@group\\((.+?)\\)",
-                                                "%player:displayname% mentioned you",
-                                                0,
-                                                false,
-                                                Sound.of(
-                                                        "minecraft:entity.experience_orb.pickup",
-                                                        SoundCategory.UI,1,1.75f
-                                                ),
-                                                List.of(
-                                                        MentionAction.of(
-                                                                MentionType.LUCK_PERMS_GROUP,""
-                                                        )
-                                                ),
-                                                List.of(
-                                                        StyleAction.of(
-                                                                StyleType.BOLD,""
-                                                        ),
-                                                        StyleAction.of(
-                                                                StyleType.COLOR_PRESET,"light purple"
-                                                        )
-                                                ),
-                                                "<blue><b>Pattern</b></blue>: @group(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given LuckPerms group\n"
-                                        ),
-
-                                        MentionRule.of(
-                                                "@world\\((.+?)\\)",
-                                                "%player:displayname% mentioned you",
-                                                0,
-                                                false,
-                                                Sound.of(
-                                                        "minecraft:entity.experience_orb.pickup",
-                                                        SoundCategory.UI,1,1.75f
-                                                ),
-                                                List.of(
-                                                        MentionAction.of(
-                                                                MentionType.WORLD,""
-                                                        )
-                                                ),
-                                                List.of(
-                                                        StyleAction.of(
-                                                                StyleType.BOLD,""
-                                                        ),
-                                                        StyleAction.of(
-                                                                StyleType.COLOR_PRESET,"light purple"
-                                                        )
-                                                ),
-                                                "<blue><b>Pattern</b></blue>: @world(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given world\n"
-                                        ),
-
-                                        MentionRule.of(
-                                                "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
-                                                "%player:displayname% mentioned you",
-                                                0,
-                                                false,
-                                                Sound.of(
-                                                        "minecraft:entity.experience_orb.pickup",
-                                                        SoundCategory.UI,1,1.75f
-                                                ),
-                                                List.of(
-                                                        MentionAction.of(
-                                                                MentionType.PLAYER,""
-                                                        )
-                                                ),
-                                                List.of(
-                                                        StyleAction.of(
-                                                                StyleType.BOLD,""
-                                                        )
-                                                ),
-                                                "<blue><b>Pattern</b></blue>: @Player\n<dark_aqua><b>Comment</b></dark_aqua>: mention a specific player\n"
+                        entry("embellish-chat.mention", List.of(
+                                MentionRule.of(
+                                        "@here()",
+                                        "<blue><b>Pattern</b></blue>: @here\n<dark_aqua><b>Comment</b></dark_aqua>: mention players within 64 blocks\n",
+                                        "%player:displayname% mentioned you",
+                                        Sound.of("minecraft:entity.experience_orb.pickup", SoundCategory.UI, 1, 1.75f),
+                                        0,
+                                        false,
+                                        List.of(MentionAction.of(MentionType.INSIDE, "64")),
+                                        List.of(
+                                                StyleAction.of(StyleType.BOLD, ""),
+                                                StyleAction.of(StyleType.COLOR_PRESET, "light purple")
+                                        )
+                                ),
+                                MentionRule.of(
+                                        "@everyone()",
+                                        "<blue><b>Pattern</b></blue>: @everyone\n<dark_aqua><b>Comment</b></dark_aqua>: mention all online players\n",
+                                        "%player:displayname% mentioned you",
+                                        Sound.of("minecraft:entity.experience_orb.pickup", SoundCategory.UI, 1, 1.75f),
+                                        0,
+                                        false,
+                                        List.of(MentionAction.of(MentionType.EVERYONE, "")),
+                                        List.of(
+                                                StyleAction.of(StyleType.BOLD, ""),
+                                                StyleAction.of(StyleType.COLOR_PRESET, "light purple")
+                                        )
+                                ),
+                                MentionRule.of(
+                                        "@team\\((.+?)\\)",
+                                        "<blue><b>Pattern</b></blue>: @team(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given scoreboard team\n",
+                                        "%player:displayname% mentioned you",
+                                        Sound.of("minecraft:entity.experience_orb.pickup", SoundCategory.UI, 1, 1.75f),
+                                        0,
+                                        false,
+                                        List.of(MentionAction.of(MentionType.TEAM, "")),
+                                        List.of(StyleAction.of(StyleType.BOLD, ""))
+                                ),
+                                MentionRule.of(
+                                        "@group\\((.+?)\\)",
+                                        "<blue><b>Pattern</b></blue>: @group(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given LuckPerms group\n",
+                                        "%player:displayname% mentioned you",
+                                        Sound.of("minecraft:entity.experience_orb.pickup", SoundCategory.UI, 1, 1.75f),
+                                        0,
+                                        false,
+                                        List.of(MentionAction.of(MentionType.LUCK_PERMS_GROUP, "")),
+                                        List.of(
+                                                StyleAction.of(StyleType.BOLD, ""),
+                                                StyleAction.of(StyleType.COLOR_PRESET, "light purple")
+                                        )
+                                ),
+                                MentionRule.of(
+                                        "@world\\((.+?)\\)",
+                                        "<blue><b>Pattern</b></blue>: @world(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given world\n",
+                                        "%player:displayname% mentioned you",
+                                        Sound.of("minecraft:entity.experience_orb.pickup", SoundCategory.UI, 1, 1.75f),
+                                        0,
+                                        false,
+                                        List.of(MentionAction.of(MentionType.WORLD, "")),
+                                        List.of(
+                                                StyleAction.of(StyleType.BOLD, ""),
+                                                StyleAction.of(StyleType.COLOR_PRESET, "light purple")
+                                        )
+                                ),
+                                MentionRule.of(
+                                        "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
+                                        "<blue><b>Pattern</b></blue>: @Player\n<dark_aqua><b>Comment</b></dark_aqua>: mention a specific player\n",
+                                        "%player:displayname% mentioned you",
+                                        Sound.of("minecraft:entity.experience_orb.pickup", SoundCategory.UI, 1, 1.75f),
+                                        0,
+                                        false,
+                                        List.of(MentionAction.of(MentionType.PLAYER, "")),
+                                        List.of(StyleAction.of(StyleType.BOLD, ""))
+                                )
+                        )),
+                        entry("embellish-chat.example", List.of(
+                                MentionRule.of(
+                                        "@admin()",
+                                        "<blue><b>Pattern</b></blue>: @admin\n<dark_aqua><b>Comment</b></dark_aqua>: Alerts admins on Discord and adds a click-to-teleport action.\n<red><b>Note</b></red>: This mention is placed behind the default rules, so it will not work as-is. To activate it, move it to the top of the embellish-chat.mention list.\n",
+                                        "%player:displayname% mentioned you",
+                                        Sound.of("minecraft:entity.experience_orb.pickup", SoundCategory.UI, 1, 1.75f),
+                                        0,
+                                        false,
+                                        List.of(MentionAction.of(MentionType.LUCK_PERMS_GROUP, "admin")),
+                                        List.of(
+                                                StyleAction.of(StyleType.BOLD, ""),
+                                                StyleAction.of(StyleType.COLOR_GRADIENT, "#FF5555#C77DFF"),
+                                                StyleAction.of(StyleType.CLICK_COMMAND_RUN, "execute in %world:id% run tp %player:pos_x% %player:pos_y% %player:pos_z%"),
+                                                StyleAction.of(StyleType.DISCORD_JSON, "{\"embeds\":[{\"title\":\"%player:name_unformatted% mentioned admins\",\"color\":16753920,\"description\":\"TP command\\n```mcfunction\\nexecute in %world:id% run tp %player:pos_x% %player:pos_y% %player:pos_z%\\n```\",\"fields\":[{\"name\":\"Content\",\"value\":\"%embellish-chat:content%\",\"inline\":false},{\"name\":\"UUID\",\"value\":\"`%player:uuid%`\",\"inline\":false},{\"name\":\"Player\",\"value\":\"`%player:name_unformatted%`\",\"inline\":true},{\"name\":\"Ping\",\"value\":\"`%player:ping% ms`\",\"inline\":true},{\"name\":\"\\u200b\",\"value\":\"\\u200b\",\"inline\":true},{\"name\":\"Position\",\"value\":\"`%player:pos_x% %player:pos_y% %player:pos_z%`\",\"inline\":true},{\"name\":\"World\",\"value\":\"`%world:id%`\",\"inline\":true},{\"name\":\"\\u200b\",\"value\":\"\\u200b\",\"inline\":true},{\"name\":\"Server\",\"value\":\"`%server:name%`\",\"inline\":true},{\"name\":\"Time\",\"value\":\"`%server:time%`\",\"inline\":true},{\"name\":\"Status\",\"value\":\"`TPS:%server:tps%` `MSPT:%server:mspt%`\",\"inline\":true}]}]}")
                                         )
                                 )
-                        ),
-                        entry(
-                                "embellish-chat.example",
-                                List.of(
-                                        MentionRule.of(
-                                                "@admin()",
-                                                "%player:displayname% mentioned you",
-                                                0,
-                                                false,
-                                                Sound.of(
-                                                        "minecraft:entity.experience_orb.pickup",
-                                                        SoundCategory.UI,1,1.75f
-                                                ),
-                                                List.of(
-                                                        MentionAction.of(
-                                                                MentionType.LUCK_PERMS_GROUP,"admin"
-                                                        )
-                                                ),
-                                                List.of(
-                                                        StyleAction.of(
-                                                                StyleType.BOLD,""
-                                                        ),
-                                                        StyleAction.of(
-                                                                StyleType.COLOR_GRADIENT,"#FF5555#C77DFF"
-                                                        ),
-                                                        StyleAction.of(
-                                                                StyleType.CLICK_COMMAND_RUN,"execute in %world:id% run tp %player:pos_x% %player:pos_y% %player:pos_z%"
-                                                        ),
-                                                        StyleAction.of(
-                                                                StyleType.DISCORD_JSON,"{\"embeds\":[{\"title\":\"%player:name_unformatted% mentioned admins\",\"color\":16753920,\"description\":\"TP command\\n```mcfunction\\nexecute in %world:id% run tp %player:pos_x% %player:pos_y% %player:pos_z%\\n```\",\"fields\":[{\"name\":\"Content\",\"value\":\"%embellish-chat:content%\",\"inline\":false},{\"name\":\"UUID\",\"value\":\"`%player:uuid%`\",\"inline\":false},{\"name\":\"Player\",\"value\":\"`%player:name_unformatted%`\",\"inline\":true},{\"name\":\"Ping\",\"value\":\"`%player:ping% ms`\",\"inline\":true},{\"name\":\"\\u200b\",\"value\":\"\\u200b\",\"inline\":true},{\"name\":\"Position\",\"value\":\"`%player:pos_x% %player:pos_y% %player:pos_z%`\",\"inline\":true},{\"name\":\"World\",\"value\":\"`%world:id%`\",\"inline\":true},{\"name\":\"\\u200b\",\"value\":\"\\u200b\",\"inline\":true},{\"name\":\"Server\",\"value\":\"`%server:name%`\",\"inline\":true},{\"name\":\"Time\",\"value\":\"`%server:time%`\",\"inline\":true},{\"name\":\"Status\",\"value\":\"`TPS:%server:tps%` `MSPT:%server:mspt%`\",\"inline\":true}]}]}"
-                                                        )
-                                                ),
-                                                "<blue><b>Pattern</b></blue>: @admin\n<dark_aqua><b>Comment</b></dark_aqua>: Alerts admins on Discord and adds a click-to-teleport action.\n<red><b>Note</b></red>: This mention is placed behind the default rules, so it will not work as-is. To activate it, move it to the top of the embellish-chat.mention list.\n"
-                                        )
-                                )
-                        )
+                        ))
                 )),
 
                 //preset
@@ -385,7 +293,7 @@ public record Config(
                 ",",
                 "yyyy-MM-dd HH:mm:ss",
                 "ec",
-                new  Color(0x0000EE),
+                new Color(0x0000EE),
                 new Color(0xFF55FF),
                 true,
                 true,
