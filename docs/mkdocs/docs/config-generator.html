@@ -258,68 +258,69 @@
         "embellish-chat.mention": [
           {
             "pattern": "@here()",
+            "comment": "<blue><b>Pattern</b></blue>: @here\n<dark_aqua><b>Comment</b></dark_aqua>: mention players within 64 blocks\n",
             "title": "%player:displayname% mentioned you",
             "cooldown": 0,
             "onlyTarget": false,
             "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
             "mentions": [{ "mentionType": "INSIDE", "preset": "64" }],
-            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }],
-            "comment": "<blue><b>Pattern</b></blue>: @here\n<dark_aqua><b>Comment</b></dark_aqua>: mention players within 64 blocks\n"
+            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }]
           },
           {
             "pattern": "@everyone()",
+            "comment": "<blue><b>Pattern</b></blue>: @everyone\n<dark_aqua><b>Comment</b></dark_aqua>: mention all online players\n",
             "title": "%player:displayname% mentioned you",
             "cooldown": 0,
             "onlyTarget": false,
             "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
             "mentions": [{ "mentionType": "EVERYONE", "preset": "" }],
-            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }],
-            "comment": "<blue><b>Pattern</b></blue>: @everyone\n<dark_aqua><b>Comment</b></dark_aqua>: mention all online players\n"
+            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }]
           },
           {
             "pattern": "@team\\((.+?)\\)",
+            "comment": "<blue><b>Pattern</b></blue>: @team(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given scoreboard team\n",
             "title": "%player:displayname% mentioned you",
             "cooldown": 0,
             "onlyTarget": false,
             "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
             "mentions": [{ "mentionType": "TEAM", "preset": "" }],
-            "styles": [{ "styleType": "BOLD", "preset": "" }],
-            "comment": "<blue><b>Pattern</b></blue>: @team(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given scoreboard team\n"
+            "styles": [{ "styleType": "BOLD", "preset": "" }]
           },
           {
             "pattern": "@group\\((.+?)\\)",
+            "comment": "<blue><b>Pattern</b></blue>: @group(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given LuckPerms group\n",
             "title": "%player:displayname% mentioned you",
             "cooldown": 0,
             "onlyTarget": false,
             "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
             "mentions": [{ "mentionType": "LUCK_PERMS_GROUP", "preset": "" }],
-            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }],
-            "comment": "<blue><b>Pattern</b></blue>: @group(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given LuckPerms group\n"
+            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }]
           },
           {
             "pattern": "@world\\((.+?)\\)",
+            "comment": "<blue><b>Pattern</b></blue>: @world(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given world\n",
             "title": "%player:displayname% mentioned you",
             "cooldown": 0,
             "onlyTarget": false,
             "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
             "mentions": [{ "mentionType": "WORLD", "preset": "" }],
-            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }],
-            "comment": "<blue><b>Pattern</b></blue>: @world(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given world\n"
+            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }]
           },
           {
             "pattern": "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
+            "comment": "<blue><b>Pattern</b></blue>: @Player\n<dark_aqua><b>Comment</b></dark_aqua>: mention a specific player\n",
             "title": "%player:displayname% mentioned you",
             "cooldown": 0,
             "onlyTarget": false,
             "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
             "mentions": [{ "mentionType": "PLAYER", "preset": "" }],
-            "styles": [{ "styleType": "BOLD", "preset": "" }],
-            "comment": "<blue><b>Pattern</b></blue>: @Player\n<dark_aqua><b>Comment</b></dark_aqua>: mention a specific player\n"
+            "styles": [{ "styleType": "BOLD", "preset": "" }]
           }
         ],
         "embellish-chat.example": [
           {
             "pattern": "@admin()",
+            "comment": "<blue><b>Pattern</b></blue>: @admin\n<dark_aqua><b>Comment</b></dark_aqua>: Alerts admins on Discord and adds a click-to-teleport action.\n<red><b>Note</b></red>: This mention is placed behind the default rules, so it will not work as-is. To activate it, move it to the top of the embellish-chat.mention list.\n",
             "title": "%player:displayname% mentioned you",
             "cooldown": 0,
             "onlyTarget": false,
@@ -330,8 +331,7 @@
               { "styleType": "COLOR_GRADIENT", "preset": "#FF5555#C77DFF" },
               { "styleType": "CLICK_COMMAND_RUN", "preset": "execute in %world:id% run tp %player:pos_x% %player:pos_y% %player:pos_z%" },
               { "styleType": "DISCORD_JSON", "preset": "{\"embeds\":[{\"title\":\"%player:name_unformatted% mentioned admins\",\"color\":16753920,\"description\":\"TP command\\n```mcfunction\\nexecute in %world:id% run tp %player:pos_x% %player:pos_y% %player:pos_z%\\n```\",\"fields\":[{\"name\":\"Content\",\"value\":\"%embellish-chat:content%\",\"inline\":false},{\"name\":\"UUID\",\"value\":\"`%player:uuid%`\",\"inline\":false},{\"name\":\"Player\",\"value\":\"`%player:name_unformatted%`\",\"inline\":true},{\"name\":\"Ping\",\"value\":\"`%player:ping% ms`\",\"inline\":true},{\"name\":\"\\u200b\",\"value\":\"\\u200b\",\"inline\":true},{\"name\":\"Position\",\"value\":\"`%player:pos_x% %player:pos_y% %player:pos_z%`\",\"inline\":true},{\"name\":\"World\",\"value\":\"`%world:id%`\",\"inline\":true},{\"name\":\"\\u200b\",\"value\":\"\\u200b\",\"inline\":true},{\"name\":\"Server\",\"value\":\"`%server:name%`\",\"inline\":true},{\"name\":\"Time\",\"value\":\"`%server:time%`\",\"inline\":true},{\"name\":\"Status\",\"value\":\"`TPS:%server:tps%` `MSPT:%server:mspt%`\",\"inline\":true}]}]}" }
-            ],
-            "comment": "<blue><b>Pattern</b></blue>: @admin\n<dark_aqua><b>Comment</b></dark_aqua>: Alerts admins on Discord and adds a click-to-teleport action.\n<red><b>Note</b></red>: This mention is placed behind the default rules, so it will not work as-is. To activate it, move it to the top of the embellish-chat.mention list.\n"
+            ]
           }
         ]
       }
@@ -1451,6 +1451,17 @@
                                             placeholder="e.g. @everyone()"
                                         />
 
+                                        <Input
+                                            label="Comment (/embellish-chat help mention)"
+                                            value={rule.comment || ""}
+                                            onChange={(v) => {
+                                                const newRules = [...rules];
+                                                newRules[idx] = { ...newRules[idx], comment: v };
+                                                updateRuleList('mentionRules', permKey, newRules);
+                                            }}
+                                            placeholder="<blue><b>Pattern</b></blue>: @everyone ..."
+                                        />
+
                                         <div className="rounded-[24px] border border-slate-200/80 bg-slate-50/70 p-4 dark:border-slate-700 dark:bg-slate-900/30">
                                             <div className={`${sectionLabelClass} mb-4`}>Core Settings</div>
                                             <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
@@ -1562,17 +1573,6 @@
                                                 />
                                             </div>
                                         </div>
-
-                                        <Input
-                                            label="Comment (/embellish-chat help mention)"
-                                            value={rule.comment || ""}
-                                            onChange={(v) => {
-                                                const newRules = [...rules];
-                                                newRules[idx] = { ...newRules[idx], comment: v };
-                                                updateRuleList('mentionRules', permKey, newRules);
-                                            }}
-                                            placeholder="<blue><b>Pattern</b></blue>: @everyone ..."
-                                        />
                                     </div>
                                 </Accordion>
                             ))}
@@ -1582,6 +1582,7 @@
                                 onClick={() => {
                                     const newRules = [...rules, {
                                         pattern: "",
+                                        comment: "",
                                         title: "",
                                         cooldown: 0,
                                         onlyTarget: false,
@@ -1592,8 +1593,7 @@
                                             pitch: 1.0
                                         },
                                         mentions: [],
-                                        styles: [],
-                                        comment: ""
+                                        styles: []
                                     }];
                                     updateRuleList('mentionRules', permKey, newRules);
                                 }}
@@ -1919,14 +1919,22 @@
                     const parsed = JSON.parse(mentionsJson);
                     if (parsed.mentionRules) {
                         Object.keys(parsed.mentionRules).forEach(key => {
-                            parsed.mentionRules[key].forEach(rule => {
-                                if (rule.cooldown === undefined) rule.cooldown = 0;
-                                if (rule.onlyTarget === undefined) rule.onlyTarget = false;
+                            parsed.mentionRules[key] = parsed.mentionRules[key].map(rule => {
                                 if (rule.sound && typeof rule.sound === 'string') {
                                     rule.sound = { id: rule.sound, category: "UI", volume: 1.0, pitch: rule.pitch || 1.0 };
                                     delete rule.pitch;
                                 }
-                                if (rule.comment === undefined) rule.comment = "";
+                                // Reorder keys: pattern, comment, title, cooldown, onlyTarget, sound, mentions, styles
+                                return {
+                                    pattern: rule.pattern ?? "",
+                                    comment: rule.comment ?? "",
+                                    title: rule.title ?? "",
+                                    cooldown: rule.cooldown ?? 0,
+                                    onlyTarget: rule.onlyTarget ?? false,
+                                    sound: rule.sound ?? { id: "minecraft:entity.experience_orb.pickup", category: "UI", volume: 1.0, pitch: 1.0 },
+                                    mentions: rule.mentions ?? [],
+                                    styles: rule.styles ?? []
+                                };
                             });
                         });
                     }
@@ -2109,12 +2117,23 @@
             });
         };
 
+        const normalizeMentionRule = (rule) => ({
+            pattern: rule.pattern ?? "",
+            comment: rule.comment ?? "",
+            title: rule.title ?? "",
+            cooldown: rule.cooldown ?? 0,
+            onlyTarget: rule.onlyTarget ?? false,
+            sound: rule.sound ?? { id: "minecraft:entity.experience_orb.pickup", category: "UI", volume: 1.0, pitch: 1.0 },
+            mentions: rule.mentions ?? [],
+            styles: rule.styles ?? []
+        });
+
         const updateMentionRuleList = (permissionKey, newRules) => {
             setMentions(prev => ({
                 ...prev,
                 mentionRules: {
                     ...prev.mentionRules,
-                    [permissionKey]: newRules
+                    [permissionKey]: newRules.map(normalizeMentionRule)
                 }
             }));
         };
