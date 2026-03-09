@@ -45,10 +45,7 @@ public record Config(
 
         //player list
         HashSet<UUID> BANNED_PLAYERS,
-        HashSet<UUID> NOTIFY_OFF_PLAYERS,
-
-        //discord
-        URI DISCORD_WEBHOOK
+        HashSet<UUID> NOTIFY_OFF_PLAYERS
 )
 {
     public static Config createDefault(){
@@ -301,10 +298,7 @@ public record Config(
 
                 //player list
                 new HashSet<>(),
-                new HashSet<>(),
-
-                //discord
-                URI.create("")
+                new HashSet<>()
         );
     }
 }
