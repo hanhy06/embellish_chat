@@ -20,31 +20,31 @@ import java.util.List;
 import static java.util.Map.entry;
 
 public record Config(
-        String VERSION,
+        String version,
 
         //rules
-        LinkedHashMap<String,List<StylingRule>> STYLE_RULES,
-        LinkedHashMap<String,List<MentionRule>> MENTION_RULES,
+        LinkedHashMap<String,List<StylingRule>> style_rules,
+        LinkedHashMap<String,List<MentionRule>> mention_rules,
 
         //preset
-        HashMap<String, Color> COLOR,
-        HashMap<String, AtlasTextObjectContents> ATLAS,
-        HashSet<String> WHITELIST,
-        LinkedHashMap<String,String> PREFIX,
+        HashMap<String, Color> color,
+        HashMap<String, AtlasTextObjectContents> atlas,
+        HashSet<String> whitelist,
+        LinkedHashMap<String,String> prefix,
 
         //setting
-        String DELIMITER,
-        String TIMESTAMP,
-        String COMMAND_ALIAS,
-        Color URL_COLOR,
-        Color TEAM_COLOR,
-        boolean NOTIFY_COMMAND_ENABLED,
-        boolean NOTIFY_MENTION_ENABLED,
-        boolean DISABLE_VANILLA_CHAT_FORMAT,
+        String delimiter,
+        String timestamp,
+        String command_alias,
+        Color url_color,
+        Color team_color,
+        boolean notify_command_enabled,
+        boolean notify_mention_enabled,
+        boolean disable_vanilla_chat_format,
 
         //player list
-        HashSet<UUID> BANNED_PLAYERS,
-        HashSet<UUID> NOTIFY_OFF_PLAYERS
+        HashSet<UUID> banned_players,
+        HashSet<UUID> notify_off_players
 )
 {
     public static Config createDefault(){
@@ -142,7 +142,7 @@ public record Config(
                                         ),
                                         StylingRule.of(
                                                 "(:(.+?):)",
-                                                "<blue><b>Pattern</b></blue>: :icon:\n<dark_aqua><b>Comment</b></dark_aqua>: ATLAS emoji/icon preset\n",
+                                                "<blue><b>Pattern</b></blue>: :icon:\n<dark_aqua><b>Comment</b></dark_aqua>: atlas emoji/icon preset\n",
                                                 List.of(StyleAction.of(StyleType.ATLAS_PRESET, ""))
                                         )
                                 )

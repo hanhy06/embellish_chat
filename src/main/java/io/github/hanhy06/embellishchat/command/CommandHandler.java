@@ -13,7 +13,7 @@ import java.util.List;
 public class CommandHandler implements ConfigListener {
     @Override
     public void onConfigReload(Config newConfig) {
-        String alias = newConfig.COMMAND_ALIAS();
+        String alias = newConfig.command_alias();
         if (alias == null || alias.isBlank()) return;
 
         CommandRegistrationCallback.EVENT.register((commandDispatcher, commandRegistryAccess, registrationEnvironment) -> commandDispatcher.register(

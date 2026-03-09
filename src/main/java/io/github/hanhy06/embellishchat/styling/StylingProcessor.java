@@ -38,7 +38,7 @@ public class StylingProcessor implements ConfigListener {
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
 
-        this.stylingRules = newConfig.STYLE_RULES();
+        this.stylingRules = newConfig.style_rules();
         this.registry = new StyleRegistry(newConfig);
     }
 
@@ -100,7 +100,7 @@ public class StylingProcessor implements ConfigListener {
 
     private MutableText applyStyle(MutableText segment,List<StyleAction> actions,String option,ServerPlayerEntity player){
         MutableText result = segment;
-        List<String> options = OptionUtil.split(option,config.DELIMITER());
+        List<String> options = OptionUtil.split(option,config.delimiter());
 
         for (int i=0;i<actions.size();i++){
             StyleAction action = actions.get(i);
@@ -137,7 +137,7 @@ public class StylingProcessor implements ConfigListener {
             result.append(slice(runs,lastEnd,matcher.start()));
 
             MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
-            List<String> options = OptionUtil.split(matcher.group(2),config.DELIMITER());
+            List<String> options = OptionUtil.split(matcher.group(2),config.delimiter());
             for (int i=0;i<functions.size();i++){
                 String option = OptionUtil.selectOption(presets.get(i),options.size() > i ? options.get(i):"");
                 StyleParameter parameter = StyleParameter.of(segment,option,player);

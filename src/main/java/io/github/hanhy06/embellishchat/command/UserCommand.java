@@ -63,11 +63,11 @@ public class UserCommand {
         }
 
         player.sendMessage(PlaceHolderUtil.parseTag("<gray>-----</gray> <aqua><b>Available Mentions</b></aqua> <gray>-----</gray>"));
-        List<String> keys = PermissionUtil.getPermissions(player, ConfigManager.getConfig().MENTION_RULES().keySet());
+        List<String> keys = PermissionUtil.getPermissions(player, ConfigManager.getConfig().mention_rules().keySet());
         List<MentionRule> rules = new ArrayList<>();
 
         for (String key : keys) {
-            rules.addAll(ConfigManager.getConfig().MENTION_RULES().get(key));
+            rules.addAll(ConfigManager.getConfig().mention_rules().get(key));
         }
 
         for (MentionRule rule : rules) {
@@ -86,11 +86,11 @@ public class UserCommand {
         }
 
         player.sendMessage(PlaceHolderUtil.parseTag("<gray>-----</gray> <aqua><b>Available Styles</b></aqua> <gray>-----</gray>"));
-        List<String> keys = PermissionUtil.getPermissions(player, ConfigManager.getConfig().STYLE_RULES().keySet());
+        List<String> keys = PermissionUtil.getPermissions(player, ConfigManager.getConfig().style_rules().keySet());
         List<StylingRule> rules = new ArrayList<>();
 
         for (String key : keys) {
-            rules.addAll(ConfigManager.getConfig().STYLE_RULES().get(key));
+            rules.addAll(ConfigManager.getConfig().style_rules().get(key));
         }
 
         for (StylingRule rule : rules) {
@@ -108,12 +108,12 @@ public class UserCommand {
             return 1;
         }
 
-        if (!ConfigManager.getConfig().NOTIFY_COMMAND_ENABLED()) {
+        if (!ConfigManager.getConfig().notify_command_enabled()) {
             player.sendMessage(Text.literal("Notification command is disabled."));
             return 1;
         }
 
-        HashSet<UUID> players = ConfigManager.getConfig().NOTIFY_OFF_PLAYERS();
+        HashSet<UUID> players = ConfigManager.getConfig().notify_off_players();
         UUID uuid = player.getUuid();
         boolean notification;
 

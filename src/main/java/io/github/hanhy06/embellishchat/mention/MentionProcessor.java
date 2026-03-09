@@ -54,13 +54,13 @@ public class MentionProcessor implements ConfigListener {
     @Override
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
-        this.mentionRules = config.MENTION_RULES();
+        this.mentionRules = config.mention_rules();
         this.registries = new MentionRegistry(newConfig);
 
         this.cooldowns.clear();
-        this.notificationOffPlayerList = config.NOTIFY_OFF_PLAYERS();
-        this.notification = config.NOTIFY_COMMAND_ENABLED();
-        this.broadcast = config.NOTIFY_MENTION_ENABLED();
+        this.notificationOffPlayerList = config.notify_off_players();
+        this.notification = config.notify_command_enabled();
+        this.broadcast = config.notify_mention_enabled();
     }
 
     public List<Mention> handleMention(String text, List<String> keys, ServerPlayerEntity player){
@@ -96,7 +96,7 @@ public class MentionProcessor implements ConfigListener {
         while (matcher.find()){
             int begin = matcher.start();
             int end = matcher.end();
-            List<String> options = OptionUtil.split(matcher.group(1),config.DELIMITER());
+            List<String> options = OptionUtil.split(matcher.group(1),config.delimiter());
 
             Mention mention = Mention.of(begin,end, options,rule);
             mentions.add(parseTarget(mention,player));

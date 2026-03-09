@@ -43,8 +43,8 @@ public class MentionRegistry {
         this.manager = server.getPlayerManager();
         this.scoreboard = server.getScoreboard();
 
-        if (config.TEAM_COLOR() != null){
-            colorTeam = Style.EMPTY.withColor(config.TEAM_COLOR().getRGB());
+        if (config.team_color() != null){
+            colorTeam = Style.EMPTY.withColor(config.team_color().getRGB());
         }else {
             colorTeam = null;
         }

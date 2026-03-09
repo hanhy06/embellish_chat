@@ -139,8 +139,8 @@ public class AdminCommand {
         }
 
         synchronized (ConfigManager.INSTANCE.LOCK_KEY) {
-            if (isBan) ConfigManager.getConfig().BANNED_PLAYERS().addAll(uuids);
-            else ConfigManager.getConfig().BANNED_PLAYERS().removeAll(uuids);
+            if (isBan) ConfigManager.getConfig().banned_players().addAll(uuids);
+            else ConfigManager.getConfig().banned_players().removeAll(uuids);
         }
         CompletableFuture.runAsync(() -> {
             try {
@@ -267,7 +267,7 @@ public class AdminCommand {
 
     private static int executeBanlist(CommandContext<ServerCommandSource> context) {
         ServerCommandSource source = context.getSource();
-        HashSet<UUID> bannedList = ConfigManager.getConfig().BANNED_PLAYERS();
+        HashSet<UUID> bannedList = ConfigManager.getConfig().banned_players();
 
         source.sendMessage(PlaceHolderUtil.parseTag(
                 "<gray>-----</gray> <aqua><b>Banned Player List</b></aqua> <gray>-----</gray>"

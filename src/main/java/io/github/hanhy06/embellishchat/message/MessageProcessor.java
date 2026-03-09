@@ -38,8 +38,8 @@ public class MessageProcessor implements ConfigListener {
     @Override
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
-        this.bannedPlayerList = config.BANNED_PLAYERS();
-        this.prefixes = config.PREFIX();
+        this.bannedPlayerList = config.banned_players();
+        this.prefixes = config.prefix();
     }
 
     public SignedMessage handleMessage(SignedMessage message) {
@@ -54,11 +54,11 @@ public class MessageProcessor implements ConfigListener {
 
         try {
             PlaceHolderUtil.put(sender,stringMessage);
-            List<Mention> mentions = mentionProcessor.handleMention(stringMessage,getPermissions(sender, config.MENTION_RULES().keySet()),sender);
+            List<Mention> mentions = mentionProcessor.handleMention(stringMessage,getPermissions(sender, config.mention_rules().keySet()),sender);
             mentions.sort(Comparator.comparing(Mention::begin));
 
             textMessage = stylingProcessor.applyMention(textMessage,mentions,sender);
-            textMessage = stylingProcessor.handleStyle(textMessage,getPermissions(sender, config.STYLE_RULES().keySet()),sender);
+            textMessage = stylingProcessor.handleStyle(textMessage,getPermissions(sender, config.style_rules().keySet()),sender);
 
             List<String> prefixKeys = getPermissions(sender,prefixes.keySet());
             if (!prefixKeys.isEmpty()){

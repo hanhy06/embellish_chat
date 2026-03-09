@@ -78,54 +78,54 @@ public class ConfigManager {
 
         JsonObject merged = configJson != null ? configJson : new JsonObject();
 
-        if (stylesJson != null && stylesJson.has("STYLE_RULES")) {
-            merged.add("STYLE_RULES", stylesJson.get("STYLE_RULES"));
+        if (stylesJson != null && stylesJson.has("style_rules")) {
+            merged.add("style_rules", stylesJson.get("style_rules"));
         }else {
-            merged.add("STYLE_RULES", defaultConfig.get("STYLE_RULES"));
+            merged.add("style_rules", defaultConfig.get("style_rules"));
         }
-        if (mentionsJson != null && mentionsJson.has("MENTION_RULES")) {
-            merged.add("MENTION_RULES", mentionsJson.get("MENTION_RULES"));
+        if (mentionsJson != null && mentionsJson.has("mention_rules")) {
+            merged.add("mention_rules", mentionsJson.get("mention_rules"));
         }else{
-            merged.add("MENTION_RULES", defaultConfig.get("MENTION_RULES"));
+            merged.add("mention_rules", defaultConfig.get("mention_rules"));
         }
         if (presetsJson != null) {
-            if (presetsJson.has("COLOR")) {
-                merged.add("COLOR", presetsJson.get("COLOR"));
+            if (presetsJson.has("color")) {
+                merged.add("color", presetsJson.get("color"));
             } else {
-                merged.add("COLOR", defaultConfig.get("COLOR"));
+                merged.add("color", defaultConfig.get("color"));
             }
-            if (presetsJson.has("ATLAS")) {
-                merged.add("ATLAS", presetsJson.get("ATLAS"));
+            if (presetsJson.has("atlas")) {
+                merged.add("atlas", presetsJson.get("atlas"));
             } else {
-                merged.add("ATLAS", defaultConfig.get("ATLAS"));
+                merged.add("atlas", defaultConfig.get("atlas"));
             }
-            if (presetsJson.has("WHITELIST")) {
-                merged.add("WHITELIST", presetsJson.get("WHITELIST"));
+            if (presetsJson.has("whitelist")) {
+                merged.add("whitelist", presetsJson.get("whitelist"));
             } else {
-                merged.add("WHITELIST", defaultConfig.get("WHITELIST"));
+                merged.add("whitelist", defaultConfig.get("whitelist"));
             }
-            if (presetsJson.has("PREFIX")) {
-                merged.add("PREFIX", presetsJson.get("PREFIX"));
+            if (presetsJson.has("prefix")) {
+                merged.add("prefix", presetsJson.get("prefix"));
             } else {
-                merged.add("PREFIX", defaultConfig.get("PREFIX"));
+                merged.add("prefix", defaultConfig.get("prefix"));
             }
         } else {
-            merged.add("COLOR", defaultConfig.get("COLOR"));
-            merged.add("ATLAS", defaultConfig.get("ATLAS"));
-            merged.add("WHITELIST", defaultConfig.get("WHITELIST"));
-            merged.add("PREFIX", defaultConfig.get("PREFIX"));
+            merged.add("color", defaultConfig.get("color"));
+            merged.add("atlas", defaultConfig.get("atlas"));
+            merged.add("whitelist", defaultConfig.get("whitelist"));
+            merged.add("prefix", defaultConfig.get("prefix"));
         }
 
         try {
             Config loaded = gson.fromJson(merged, Config.class);
 
-            if (loaded != null && loaded.VERSION() != null && loaded.VERSION().equals(config.VERSION())) {
+            if (loaded != null && loaded.version() != null && loaded.version().equals(config.version())) {
                 config = loaded;
                 broadcastConfig();
                 EmbellishChat.LOGGER.info("Config loaded successfully.");
                 return true;
             } else {
-                EmbellishChat.LOGGER.warn("Config VERSION mismatch or invalid. Using default config.");
+                EmbellishChat.LOGGER.warn("Config version mismatch or invalid. Using default config.");
             }
         } catch (JsonSyntaxException e) {
             EmbellishChat.LOGGER.error("Failed to parse merged config. Using default values.", e);
@@ -156,27 +156,27 @@ public class ConfigManager {
             fullJson = gson.toJsonTree(config).getAsJsonObject();
         }
 
-        JsonElement stylingRules = fullJson.remove("STYLE_RULES");
+        JsonElement stylingRules = fullJson.remove("style_rules");
         JsonObject stylesJson = new JsonObject();
         if (stylingRules != null) {
-            stylesJson.add("STYLE_RULES", stylingRules);
+            stylesJson.add("style_rules", stylingRules);
         }
 
-        JsonElement mentionRules = fullJson.remove("MENTION_RULES");
+        JsonElement mentionRules = fullJson.remove("mention_rules");
         JsonObject mentionsJson = new JsonObject();
         if (mentionRules != null) {
-            mentionsJson.add("MENTION_RULES", mentionRules);
+            mentionsJson.add("mention_rules", mentionRules);
         }
 
         JsonObject presetsJson = new JsonObject();
-        JsonElement colorPreset = fullJson.remove("COLOR");
-        if (colorPreset != null) presetsJson.add("COLOR", colorPreset);
-        JsonElement atlasPreset = fullJson.remove("ATLAS");
-        if (atlasPreset != null) presetsJson.add("ATLAS", atlasPreset);
-        JsonElement whitelist = fullJson.remove("WHITELIST");
-        if (whitelist != null) presetsJson.add("WHITELIST", whitelist);
-        JsonElement prefixes = fullJson.remove("PREFIX");
-        if (prefixes != null) presetsJson.add("PREFIX", prefixes);
+        JsonElement colorPreset = fullJson.remove("color");
+        if (colorPreset != null) presetsJson.add("color", colorPreset);
+        JsonElement atlasPreset = fullJson.remove("atlas");
+        if (atlasPreset != null) presetsJson.add("atlas", atlasPreset);
+        JsonElement whitelist = fullJson.remove("whitelist");
+        if (whitelist != null) presetsJson.add("whitelist", whitelist);
+        JsonElement prefixes = fullJson.remove("prefix");
+        if (prefixes != null) presetsJson.add("prefix", prefixes);
 
         if (writer == null) writer = this::writeJsonFile;
         writer.accept(CONFIG_FILE_NAME,fullJson);
