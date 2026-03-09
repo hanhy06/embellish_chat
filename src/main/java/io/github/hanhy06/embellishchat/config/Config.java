@@ -14,7 +14,6 @@ import net.minecraft.text.object.AtlasTextObjectContents;
 import net.minecraft.util.Identifier;
 
 import java.awt.*;
-import java.net.URI;
 import java.util.*;
 import java.util.List;
 
