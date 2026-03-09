@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
 import io.github.hanhy06.embellishchat.EmbellishChat;
-import io.github.hanhy06.embellishchat.config.Config;
+import io.github.hanhy06.embellishchat.config.configs.Config;
 import io.github.hanhy06.embellishchat.inventory.InventoryManager;
 import io.github.hanhy06.embellishchat.message.MessageProcessor;
 import io.github.hanhy06.embellishchat.styling.data.Runs;
@@ -55,10 +55,10 @@ public class StyleRegistry {
 
     public StyleRegistry(Config config) {
         this.config = config;
-        this.timestamp = DateTimeFormatter.ofPattern(config.timestamp());
-        this.colors = config.colors();
-        this.atlas = config.atlas();
-        this.whitelist = config.whitelist();
+        this.timestamp = DateTimeFormatter.ofPattern(config.TIMESTAMP());
+        this.colors = config.COLOR();
+        this.atlas = config.ATLAS();
+        this.whitelist = config.WHITELIST();
         this.registers = new EnumMap<>(Map.ofEntries(
                 entry(StyleType.COLOR_HEX, this::COLOR_HEX),
                 entry(StyleType.COLOR_RAINBOW, this::COLOR_RAINBOW),
@@ -312,7 +312,7 @@ public class StyleRegistry {
                 ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
                 return parameter.segment().fillStyle(Style.EMPTY
                         .withClickEvent(clickEvent)
-                        .withColor(config.urlColor().getRGB()));
+                        .withColor(config.URL_COLOR().getRGB()));
 
             } catch (IllegalArgumentException e) {
                 EmbellishChat.LOGGER.warn("Invalid URL provided for segment [{}]: {}", parameter.segment().getString(), parameter.getString());
@@ -325,7 +325,7 @@ public class StyleRegistry {
             ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
             return parameter.segment().fillStyle(Style.EMPTY
                     .withClickEvent(clickEvent)
-                    .withColor(config.urlColor().getRGB()));
+                    .withColor(config.URL_COLOR().getRGB()));
         } catch (IllegalArgumentException e) {
             EmbellishChat.LOGGER.warn("Invalid URL provided for segment [{}]: {}", parameter.segment().getString(), parameter.getString());
             return parameter.segment();

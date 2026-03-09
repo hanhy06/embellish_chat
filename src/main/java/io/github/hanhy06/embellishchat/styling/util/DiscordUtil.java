@@ -1,7 +1,7 @@
 package io.github.hanhy06.embellishchat.styling.util;
 
 import io.github.hanhy06.embellishchat.EmbellishChat;
-import io.github.hanhy06.embellishchat.config.Config;
+import io.github.hanhy06.embellishchat.config.configs.Config;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -14,12 +14,12 @@ public class DiscordUtil {
 
     public DiscordUtil(Config config) {
         this.client = HttpClient.newHttpClient();
-        this.webhook = config.webhook();
+        this.webhook = config.DISCORD_WEBHOOK();
     }
 
     public void send(String content){
         if (webhook == null || webhook.toString().isBlank()) {
-            EmbellishChat.LOGGER.warn("The registered Discord webhook does not exist");
+            EmbellishChat.LOGGER.warn("The registered Discord DISCORD_WEBHOOK does not exist");
             return;
         }
 

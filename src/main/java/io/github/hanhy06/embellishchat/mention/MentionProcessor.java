@@ -1,6 +1,6 @@
 package io.github.hanhy06.embellishchat.mention;
 
-import io.github.hanhy06.embellishchat.config.Config;
+import io.github.hanhy06.embellishchat.config.configs.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
 import io.github.hanhy06.embellishchat.mention.data.Cooldown;
 import io.github.hanhy06.embellishchat.mention.data.Mention;
@@ -54,13 +54,13 @@ public class MentionProcessor implements ConfigListener {
     @Override
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
-        this.mentionRules = config.mentionRules();
+        this.mentionRules = config.MENTION_RULES();
         this.registries = new MentionRegistry(newConfig);
 
         this.cooldowns.clear();
-        this.notificationOffPlayerList = config.notificationOffPlayerList();
-        this.notification = config.notificationCommandEnable();
-        this.broadcast = config.mentionBroadcast();
+        this.notificationOffPlayerList = config.NOTIFY_OFF_PLAYERS();
+        this.notification = config.NOTIFY_COMMAND_ENABLED();
+        this.broadcast = config.NOTIFY_MENTION_ENABLED();
     }
 
     public List<Mention> handleMention(String text, List<String> keys, ServerPlayerEntity player){
@@ -96,7 +96,7 @@ public class MentionProcessor implements ConfigListener {
         while (matcher.find()){
             int begin = matcher.start();
             int end = matcher.end();
-            List<String> options = OptionUtil.split(matcher.group(1),config.delimiter());
+            List<String> options = OptionUtil.split(matcher.group(1),config.DELIMITER());
 
             Mention mention = Mention.of(begin,end, options,rule);
             mentions.add(parseTarget(mention,player));

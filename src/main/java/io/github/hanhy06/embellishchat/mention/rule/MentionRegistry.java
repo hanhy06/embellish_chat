@@ -3,7 +3,7 @@ package io.github.hanhy06.embellishchat.mention.rule;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.hanhy06.embellishchat.EmbellishChat;
-import io.github.hanhy06.embellishchat.config.Config;
+import io.github.hanhy06.embellishchat.config.configs.Config;
 import io.github.hanhy06.embellishchat.mention.data.Target;
 import io.github.hanhy06.embellishchat.styling.util.ColorUtil;
 import io.github.hanhy06.embellishchat.util.LuckPermsUtil;
@@ -43,8 +43,8 @@ public class MentionRegistry {
         this.manager = server.getPlayerManager();
         this.scoreboard = server.getScoreboard();
 
-        if (config.defaultTeamColor() != null){
-            colorTeam = Style.EMPTY.withColor(config.defaultTeamColor().getRGB());
+        if (config.TEAM_COLOR() != null){
+            colorTeam = Style.EMPTY.withColor(config.TEAM_COLOR().getRGB());
         }else {
             colorTeam = null;
         }

@@ -1,6 +1,6 @@
 package io.github.hanhy06.embellishchat.message;
 
-import io.github.hanhy06.embellishchat.config.Config;
+import io.github.hanhy06.embellishchat.config.configs.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
 import io.github.hanhy06.embellishchat.mention.MentionProcessor;
 import io.github.hanhy06.embellishchat.mention.data.Mention;
@@ -38,8 +38,8 @@ public class MessageProcessor implements ConfigListener {
     @Override
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
-        this.bannedPlayerList = config.bannedPlayerList();
-        this.prefixes = config.prefixes();
+        this.bannedPlayerList = config.BANNED_PLAYERS();
+        this.prefixes = config.PREFIX();
     }
 
     public SignedMessage handleMessage(SignedMessage message) {
@@ -54,11 +54,11 @@ public class MessageProcessor implements ConfigListener {
 
         try {
             PlaceHolderUtil.put(sender,stringMessage);
-            List<Mention> mentions = mentionProcessor.handleMention(stringMessage,getPermissions(sender, config.mentionRules().keySet()),sender);
+            List<Mention> mentions = mentionProcessor.handleMention(stringMessage,getPermissions(sender, config.MENTION_RULES().keySet()),sender);
             mentions.sort(Comparator.comparing(Mention::begin));
 
             textMessage = stylingProcessor.applyMention(textMessage,mentions,sender);
-            textMessage = stylingProcessor.handleStyle(textMessage,getPermissions(sender, config.stylingRules().keySet()),sender);
+            textMessage = stylingProcessor.handleStyle(textMessage,getPermissions(sender, config.STYLE_RULES().keySet()),sender);
 
             List<String> prefixKeys = getPermissions(sender,prefixes.keySet());
             if (!prefixKeys.isEmpty()){

@@ -1,6 +1,6 @@
 package io.github.hanhy06.embellishchat.styling;
 
-import io.github.hanhy06.embellishchat.config.Config;
+import io.github.hanhy06.embellishchat.config.configs.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
 import io.github.hanhy06.embellishchat.mention.data.Mention;
 import io.github.hanhy06.embellishchat.styling.data.Runs;
@@ -38,7 +38,7 @@ public class StylingProcessor implements ConfigListener {
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
 
-        this.stylingRules = newConfig.stylingRules();
+        this.stylingRules = newConfig.STYLE_RULES();
         this.registry = new StyleRegistry(newConfig);
     }
 
@@ -100,7 +100,7 @@ public class StylingProcessor implements ConfigListener {
 
     private MutableText applyStyle(MutableText segment,List<StyleAction> actions,String option,ServerPlayerEntity player){
         MutableText result = segment;
-        List<String> options = OptionUtil.split(option,config.delimiter());
+        List<String> options = OptionUtil.split(option,config.DELIMITER());
 
         for (int i=0;i<actions.size();i++){
             StyleAction action = actions.get(i);
@@ -137,7 +137,7 @@ public class StylingProcessor implements ConfigListener {
             result.append(slice(runs,lastEnd,matcher.start()));
 
             MutableText segment = slice(runs, matcher.start(1), matcher.end(1));
-            List<String> options = OptionUtil.split(matcher.group(2),config.delimiter());
+            List<String> options = OptionUtil.split(matcher.group(2),config.DELIMITER());
             for (int i=0;i<functions.size();i++){
                 String option = OptionUtil.selectOption(presets.get(i),options.size() > i ? options.get(i):"");
                 StyleParameter parameter = StyleParameter.of(segment,option,player);

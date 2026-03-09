@@ -25,6 +25,11 @@ public class EmbellishChat implements ModInitializer {
 
     @Override
 	public void onInitialize() {
+//      TODO: 현제 단일 config 인걸 여러파일로 분할
+//      TODO: 단일 파일 업데이트를 지원 해야함
+//      TODO: StyleRule MentionRule 을 String이 아니라 MutableText 로 바꿔서 캐싱해야함
+//      TODO: api 리스너 형태로 업그레이드
+
         LOGGER.info("[{}] Initializing.", MOD_ID);
 
 		ServerLifecycleEvents.SERVER_STARTED.register(EmbellishChat::handleServerStart);

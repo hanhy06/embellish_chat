@@ -6,6 +6,7 @@ import io.github.hanhy06.embellishchat.config.adapter.ColorTypeAdapter;
 import io.github.hanhy06.embellishchat.config.adapter.IdentifierTypeAdapter;
 import io.github.hanhy06.embellishchat.config.adapter.PatternTypeAdapter;
 import io.github.hanhy06.embellishchat.config.adapter.SoundEventTypeAdapter;
+import io.github.hanhy06.embellishchat.config.configs.*;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
@@ -34,7 +35,12 @@ public class ConfigManager {
     private static final String PRESET_FILE_NAME = "presets.json";
 
     private final Path configDirPath;
+
     private Config config = Config.createDefault();
+    private MentionConfig mentions = MentionConfig.createDefault();
+    private StyleConfig styles = StyleConfig.createDefault();
+    private PresetConfig presets = PresetConfig.createDefault();
+    private PlayerConfig players = PlayerConfig.createDefault();
 
     private final List<ConfigListener> listeners = new ArrayList<>();
 
@@ -78,54 +84,54 @@ public class ConfigManager {
 
         JsonObject merged = configJson != null ? configJson : new JsonObject();
 
-        if (stylesJson != null && stylesJson.has("stylingRules")) {
-            merged.add("stylingRules", stylesJson.get("stylingRules"));
+        if (stylesJson != null && stylesJson.has("STYLE_RULES")) {
+            merged.add("STYLE_RULES", stylesJson.get("STYLE_RULES"));
         }else {
-            merged.add("stylingRules", defaultConfig.get("stylingRules"));
+            merged.add("STYLE_RULES", defaultConfig.get("STYLE_RULES"));
         }
-        if (mentionsJson != null && mentionsJson.has("mentionRules")) {
-            merged.add("mentionRules", mentionsJson.get("mentionRules"));
+        if (mentionsJson != null && mentionsJson.has("MENTION_RULES")) {
+            merged.add("MENTION_RULES", mentionsJson.get("MENTION_RULES"));
         }else{
-            merged.add("mentionRules", defaultConfig.get("mentionRules"));
+            merged.add("MENTION_RULES", defaultConfig.get("MENTION_RULES"));
         }
         if (presetsJson != null) {
-            if (presetsJson.has("colors")) {
-                merged.add("colors", presetsJson.get("colors"));
+            if (presetsJson.has("COLOR")) {
+                merged.add("COLOR", presetsJson.get("COLOR"));
             } else {
-                merged.add("colors", defaultConfig.get("colors"));
+                merged.add("COLOR", defaultConfig.get("COLOR"));
             }
-            if (presetsJson.has("atlas")) {
-                merged.add("atlas", presetsJson.get("atlas"));
+            if (presetsJson.has("ATLAS")) {
+                merged.add("ATLAS", presetsJson.get("ATLAS"));
             } else {
-                merged.add("atlas", defaultConfig.get("atlas"));
+                merged.add("ATLAS", defaultConfig.get("ATLAS"));
             }
-            if (presetsJson.has("whitelist")) {
-                merged.add("whitelist", presetsJson.get("whitelist"));
+            if (presetsJson.has("WHITELIST")) {
+                merged.add("WHITELIST", presetsJson.get("WHITELIST"));
             } else {
-                merged.add("whitelist", defaultConfig.get("whitelist"));
+                merged.add("WHITELIST", defaultConfig.get("WHITELIST"));
             }
-            if (presetsJson.has("prefixes")) {
-                merged.add("prefixes", presetsJson.get("prefixes"));
+            if (presetsJson.has("PREFIX")) {
+                merged.add("PREFIX", presetsJson.get("PREFIX"));
             } else {
-                merged.add("prefixes", defaultConfig.get("prefixes"));
+                merged.add("PREFIX", defaultConfig.get("PREFIX"));
             }
         } else {
-            merged.add("colors", defaultConfig.get("colors"));
-            merged.add("atlas", defaultConfig.get("atlas"));
-            merged.add("whitelist", defaultConfig.get("whitelist"));
-            merged.add("prefixes", defaultConfig.get("prefixes"));
+            merged.add("COLOR", defaultConfig.get("COLOR"));
+            merged.add("ATLAS", defaultConfig.get("ATLAS"));
+            merged.add("WHITELIST", defaultConfig.get("WHITELIST"));
+            merged.add("PREFIX", defaultConfig.get("PREFIX"));
         }
 
         try {
             Config loaded = gson.fromJson(merged, Config.class);
 
-            if (loaded != null && loaded.version() != null && loaded.version().equals(config.version())) {
+            if (loaded != null && loaded.VERSION() != null && loaded.VERSION().equals(config.VERSION())) {
                 config = loaded;
                 broadcastConfig();
                 EmbellishChat.LOGGER.info("Config loaded successfully.");
                 return true;
             } else {
-                EmbellishChat.LOGGER.warn("Config version mismatch or invalid. Using default config.");
+                EmbellishChat.LOGGER.warn("Config VERSION mismatch or invalid. Using default config.");
             }
         } catch (JsonSyntaxException e) {
             EmbellishChat.LOGGER.error("Failed to parse merged config. Using default values.", e);
@@ -156,27 +162,27 @@ public class ConfigManager {
             fullJson = gson.toJsonTree(config).getAsJsonObject();
         }
 
-        JsonElement stylingRules = fullJson.remove("stylingRules");
+        JsonElement stylingRules = fullJson.remove("STYLE_RULES");
         JsonObject stylesJson = new JsonObject();
         if (stylingRules != null) {
-            stylesJson.add("stylingRules", stylingRules);
+            stylesJson.add("STYLE_RULES", stylingRules);
         }
 
-        JsonElement mentionRules = fullJson.remove("mentionRules");
+        JsonElement mentionRules = fullJson.remove("MENTION_RULES");
         JsonObject mentionsJson = new JsonObject();
         if (mentionRules != null) {
-            mentionsJson.add("mentionRules", mentionRules);
+            mentionsJson.add("MENTION_RULES", mentionRules);
         }
 
         JsonObject presetsJson = new JsonObject();
-        JsonElement colorPreset = fullJson.remove("colors");
-        if (colorPreset != null) presetsJson.add("colors", colorPreset);
-        JsonElement atlasPreset = fullJson.remove("atlas");
-        if (atlasPreset != null) presetsJson.add("atlas", atlasPreset);
-        JsonElement whitelist = fullJson.remove("whitelist");
-        if (whitelist != null) presetsJson.add("whitelist", whitelist);
-        JsonElement prefixes = fullJson.remove("prefixes");
-        if (prefixes != null) presetsJson.add("prefixes", prefixes);
+        JsonElement colorPreset = fullJson.remove("COLOR");
+        if (colorPreset != null) presetsJson.add("COLOR", colorPreset);
+        JsonElement atlasPreset = fullJson.remove("ATLAS");
+        if (atlasPreset != null) presetsJson.add("ATLAS", atlasPreset);
+        JsonElement whitelist = fullJson.remove("WHITELIST");
+        if (whitelist != null) presetsJson.add("WHITELIST", whitelist);
+        JsonElement prefixes = fullJson.remove("PREFIX");
+        if (prefixes != null) presetsJson.add("PREFIX", prefixes);
 
         if (writer == null) writer = this::writeJsonFile;
         writer.accept(CONFIG_FILE_NAME,fullJson);
