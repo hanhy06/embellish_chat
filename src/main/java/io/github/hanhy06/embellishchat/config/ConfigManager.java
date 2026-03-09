@@ -6,7 +6,6 @@ import io.github.hanhy06.embellishchat.config.adapter.ColorTypeAdapter;
 import io.github.hanhy06.embellishchat.config.adapter.IdentifierTypeAdapter;
 import io.github.hanhy06.embellishchat.config.adapter.PatternTypeAdapter;
 import io.github.hanhy06.embellishchat.config.adapter.SoundEventTypeAdapter;
-import io.github.hanhy06.embellishchat.config.configs.*;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
@@ -35,12 +34,7 @@ public class ConfigManager {
     private static final String PRESET_FILE_NAME = "presets.json";
 
     private final Path configDirPath;
-
     private Config config = Config.createDefault();
-    private MentionConfig mentions = MentionConfig.createDefault();
-    private StyleConfig styles = StyleConfig.createDefault();
-    private PresetConfig presets = PresetConfig.createDefault();
-    private PlayerConfig players = PlayerConfig.createDefault();
 
     private final List<ConfigListener> listeners = new ArrayList<>();
 

@@ -1,6 +1,6 @@
 package io.github.hanhy06.embellishchat.mention;
 
-import io.github.hanhy06.embellishchat.config.configs.Config;
+import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
 import io.github.hanhy06.embellishchat.mention.data.Cooldown;
 import io.github.hanhy06.embellishchat.mention.data.Mention;

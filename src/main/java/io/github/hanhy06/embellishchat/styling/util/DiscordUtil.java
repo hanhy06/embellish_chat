@@ -1,7 +1,7 @@
 package io.github.hanhy06.embellishchat.styling.util;
 
 import io.github.hanhy06.embellishchat.EmbellishChat;
-import io.github.hanhy06.embellishchat.config.configs.Config;
+import io.github.hanhy06.embellishchat.config.Config;
 
 import java.net.URI;
 import java.net.http.HttpClient;

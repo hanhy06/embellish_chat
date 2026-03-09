@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
 import io.github.hanhy06.embellishchat.EmbellishChat;
-import io.github.hanhy06.embellishchat.config.configs.Config;
+import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.inventory.InventoryManager;
 import io.github.hanhy06.embellishchat.message.MessageProcessor;
 import io.github.hanhy06.embellishchat.styling.data.Runs;

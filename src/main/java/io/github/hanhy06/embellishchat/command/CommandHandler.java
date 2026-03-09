@@ -1,7 +1,7 @@
 package io.github.hanhy06.embellishchat.command;
 
 import io.github.hanhy06.embellishchat.EmbellishChat;
-import io.github.hanhy06.embellishchat.config.configs.Config;
+import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.CommandManager;
