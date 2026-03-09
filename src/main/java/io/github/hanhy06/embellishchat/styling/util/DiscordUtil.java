@@ -10,21 +10,19 @@ import java.net.http.HttpResponse;
 
 public class DiscordUtil {
     private final HttpClient client;
-    private final URI webhook;
 
     public DiscordUtil(Config config) {
         this.client = HttpClient.newHttpClient();
-        this.webhook = config.DISCORD_WEBHOOK();
     }
 
-    public void send(String content){
-        if (webhook == null || webhook.toString().isBlank()) {
+    public void send(URI uri,String content){
+        if (uri.toString().isBlank()) {
             EmbellishChat.LOGGER.warn("The registered Discord DISCORD_WEBHOOK does not exist");
             return;
         }
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(webhook)
+                .uri(uri)
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(content))
                 .build();

@@ -444,7 +444,10 @@ public class StyleRegistry {
     }
 
     public MutableText DISCORD_JSON(StyleParameter parameter){
-        messenger.send(parameter.getString());
+        String[] option = parameter.getString().split(";");
+        if (option.length < 2) return parameter.segment();
+
+        messenger.send(URI.create(option[0]),option[1]);
         return parameter.segment();
     }
 
