@@ -2,11 +2,9 @@ package io.github.hanhy06.embellishchat.config;
 
 import com.google.gson.*;
 import io.github.hanhy06.embellishchat.EmbellishChat;
-import io.github.hanhy06.embellishchat.config.adapter.ColorTypeAdapter;
-import io.github.hanhy06.embellishchat.config.adapter.IdentifierTypeAdapter;
-import io.github.hanhy06.embellishchat.config.adapter.PatternTypeAdapter;
-import io.github.hanhy06.embellishchat.config.adapter.SoundEventTypeAdapter;
+import io.github.hanhy06.embellishchat.config.adapter.*;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.text.MutableText;
 import net.minecraft.util.Identifier;
 
 import java.awt.*;
@@ -36,6 +34,7 @@ public class ConfigManager {
     private final Path configDirPath;
     private Config config = Config.createDefault();
 
+
     private final List<ConfigListener> listeners = new ArrayList<>();
 
     private final Gson gson = new GsonBuilder()
@@ -43,6 +42,7 @@ public class ConfigManager {
             .registerTypeAdapter(SoundEvent.class, new SoundEventTypeAdapter())
             .registerTypeAdapter(Color.class, new ColorTypeAdapter())
             .registerTypeAdapter(Identifier.class, new IdentifierTypeAdapter())
+            .registerTypeAdapter(MutableText.class, new MutableTextAdapter())
             .setPrettyPrinting()
             .setStrictness(Strictness.LENIENT)
             .disableHtmlEscaping()
