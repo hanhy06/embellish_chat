@@ -2,15 +2,13 @@ package io.github.hanhy06.embellishchat.mention.rule;
 
 import io.github.hanhy06.embellishchat.mention.data.Sound;
 import io.github.hanhy06.embellishchat.styling.rule.StyleAction;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 
 import java.util.List;
 import java.util.regex.Pattern;
 
 public record MentionRule(
-        Pattern pattern, MutableText comment,
-        MutableText title, Sound sound,
+        Pattern pattern, String comment,
+        String title, Sound sound,
         int cooldown, boolean onlyTarget,
         List<MentionAction> mentions,
         List<StyleAction> styles
@@ -22,6 +20,6 @@ public record MentionRule(
             List<MentionAction> mentions,
             List<StyleAction> styles
     ){
-        return new MentionRule(Pattern.compile(regex), Text.literal(comment), Text.literal(title), sound, cooldown, onlyTarget, mentions, styles);
+        return new MentionRule(Pattern.compile(regex), comment, title, sound, cooldown, onlyTarget, mentions, styles);
     }
 }

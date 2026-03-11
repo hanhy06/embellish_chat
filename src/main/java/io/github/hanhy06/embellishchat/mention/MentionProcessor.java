@@ -1,7 +1,7 @@
 package io.github.hanhy06.embellishchat.mention;
 
+import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
-import io.github.hanhy06.embellishchat.config.ConfigManager;
 import io.github.hanhy06.embellishchat.mention.data.Cooldown;
 import io.github.hanhy06.embellishchat.mention.data.Mention;
 import io.github.hanhy06.embellishchat.mention.data.Sound;
@@ -29,6 +29,7 @@ import java.util.regex.Matcher;
 public class MentionProcessor implements ConfigListener {
     private final HashSet<Cooldown> cooldowns;
 
+    private Config config;
     private Map<String, List<MentionRule>> mentionRules;
     private MentionRegistry registries;
 
@@ -51,9 +52,9 @@ public class MentionProcessor implements ConfigListener {
     }
 
     @Override
-    public void onConfigReload() {
+    public void onConfigReload(Config newConfig) {
         this.config = newConfig;
-        this.mentionRules = ConfigManager.MENTION.mention_rules();
+        this.mentionRules = config.mention_rules();
         this.registries = new MentionRegistry(newConfig);
 
         this.cooldowns.clear();

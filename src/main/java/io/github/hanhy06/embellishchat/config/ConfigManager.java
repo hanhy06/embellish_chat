@@ -2,10 +2,11 @@ package io.github.hanhy06.embellishchat.config;
 
 import com.google.gson.*;
 import io.github.hanhy06.embellishchat.EmbellishChat;
-import io.github.hanhy06.embellishchat.config.adapter.*;
-import io.github.hanhy06.embellishchat.config.data.*;
+import io.github.hanhy06.embellishchat.config.adapter.ColorTypeAdapter;
+import io.github.hanhy06.embellishchat.config.adapter.IdentifierTypeAdapter;
+import io.github.hanhy06.embellishchat.config.adapter.PatternTypeAdapter;
+import io.github.hanhy06.embellishchat.config.adapter.SoundEventTypeAdapter;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.text.MutableText;
 import net.minecraft.util.Identifier;
 
 import java.awt.*;
@@ -27,13 +28,13 @@ public class ConfigManager {
 
     private static final String CONFIG_FILE_DIR = EmbellishChat.MOD_ID;
 
-    private final Path configDirPath;
+    private static final String CONFIG_FILE_NAME = "config.json";
+    private static final String STYLE_FILE_NAME = "styles.json";
+    private static final String MENTION_FILE_NAME = "mentions.json";
+    private static final String PRESET_FILE_NAME = "presets.json";
 
-    public static Config CONFIG = Config.DEFAULT;
-    public static Mention MENTION = Mention.DEFAULT;
-    public static Style STYLE = Style.DEFAULT;
-    public static Preset PRESET = Preset.DEFAULT;
-    public static Player PLAYER = Player.DEFAULT;
+    private final Path configDirPath;
+    private Config config = Config.createDefault();
 
     private final List<ConfigListener> listeners = new ArrayList<>();
 
@@ -42,12 +43,14 @@ public class ConfigManager {
             .registerTypeAdapter(SoundEvent.class, new SoundEventTypeAdapter())
             .registerTypeAdapter(Color.class, new ColorTypeAdapter())
             .registerTypeAdapter(Identifier.class, new IdentifierTypeAdapter())
-            .registerTypeAdapter(MutableText.class, new MutableTextAdapter())
             .setPrettyPrinting()
             .setStrictness(Strictness.LENIENT)
             .disableHtmlEscaping()
             .create();
 
+    public static Config getConfig() {
+        return INSTANCE.config;
+    }
 
     public ConfigManager(Path configBasePath) {
         INSTANCE = this;
@@ -66,49 +69,58 @@ public class ConfigManager {
     }
 
     public boolean readConfig() {
-        JsonObject configJson = readJsonFile(Config.CONFIG_FILE_NAME);
-        JsonObject styleJson = readJsonFile(Style.STYLE_FILE_NAME);
-        JsonObject mentionJson = readJsonFile(Mention.MENTION_FILE_NAME);
-        JsonObject presetJson = readJsonFile(Preset.PRESET_FILE_NAME);
-        JsonObject playerJson = readJsonFile(Player.PLAYER_FILE_NAME);
+        JsonObject defaultConfig = gson.toJsonTree(config).getAsJsonObject();
+                
+        JsonObject configJson = readJsonFile(CONFIG_FILE_NAME);
+        JsonObject stylesJson = readJsonFile(STYLE_FILE_NAME);
+        JsonObject mentionsJson = readJsonFile(MENTION_FILE_NAME);
+        JsonObject presetsJson = readJsonFile(PRESET_FILE_NAME);
 
-        if (configJson == null || configJson.isEmpty()) {
-            EmbellishChat.LOGGER.warn("{} json is invalid. Using default.", configJson);
-            configJson = null;
+        JsonObject merged = configJson != null ? configJson : new JsonObject();
+
+        if (stylesJson != null && stylesJson.has("style_rules")) {
+            merged.add("style_rules", stylesJson.get("style_rules"));
+        }else {
+            merged.add("style_rules", defaultConfig.get("style_rules"));
         }
-
-        if (styleJson == null || styleJson.isEmpty()) {
-            EmbellishChat.LOGGER.warn("{} json is invalid. Using default.", styleJson);
-            styleJson = null;
+        if (mentionsJson != null && mentionsJson.has("mention_rules")) {
+            merged.add("mention_rules", mentionsJson.get("mention_rules"));
+        }else{
+            merged.add("mention_rules", defaultConfig.get("mention_rules"));
         }
-
-        if (mentionJson == null || mentionJson.isEmpty()) {
-            EmbellishChat.LOGGER.warn("{} json is invalid. Using default.", mentionJson);
-            mentionJson = null;
-        }
-
-        if (presetJson == null || presetJson.isEmpty())
-        {
-            EmbellishChat.LOGGER.warn("{} json is invalid. Using default.", presetJson);
-            presetJson = null;
-        }
-
-        if (playerJson == null || playerJson.isEmpty())
-        {
-            EmbellishChat.LOGGER.warn("{} json is invalid. Using default.", presetJson);
-            presetJson = null;
+        if (presetsJson != null) {
+            if (presetsJson.has("color")) {
+                merged.add("color", presetsJson.get("color"));
+            } else {
+                merged.add("color", defaultConfig.get("color"));
+            }
+            if (presetsJson.has("atlas")) {
+                merged.add("atlas", presetsJson.get("atlas"));
+            } else {
+                merged.add("atlas", defaultConfig.get("atlas"));
+            }
+            if (presetsJson.has("whitelist")) {
+                merged.add("whitelist", presetsJson.get("whitelist"));
+            } else {
+                merged.add("whitelist", defaultConfig.get("whitelist"));
+            }
+            if (presetsJson.has("prefix")) {
+                merged.add("prefix", presetsJson.get("prefix"));
+            } else {
+                merged.add("prefix", defaultConfig.get("prefix"));
+            }
+        } else {
+            merged.add("color", defaultConfig.get("color"));
+            merged.add("atlas", defaultConfig.get("atlas"));
+            merged.add("whitelist", defaultConfig.get("whitelist"));
+            merged.add("prefix", defaultConfig.get("prefix"));
         }
 
         try {
-            Config config = gson.fromJson(configJson, Config.class);
+            Config loaded = gson.fromJson(merged, Config.class);
 
-            if (config != null && config.version() != null && config.version().equals(CONFIG.version())) {
-                CONFIG = config;
-                if (styleJson != null) STYLE = gson.fromJson(styleJson, Style.class);
-                if (mentionJson != null) MENTION = gson.fromJson(mentionJson, Mention.class);
-                if (presetJson != null) PRESET = gson.fromJson(presetJson, Preset.class);
-                if (playerJson != null) PLAYER = gson.fromJson(playerJson, Player.class);
-
+            if (loaded != null && loaded.version() != null && loaded.version().equals(config.version())) {
+                config = loaded;
                 broadcastConfig();
                 EmbellishChat.LOGGER.info("Config loaded successfully.");
                 return true;
@@ -116,7 +128,7 @@ public class ConfigManager {
                 EmbellishChat.LOGGER.warn("Config version mismatch or invalid. Using default config.");
             }
         } catch (JsonSyntaxException e) {
-            EmbellishChat.LOGGER.error("Failed to parse config. Using default values.", e);
+            EmbellishChat.LOGGER.error("Failed to parse merged config. Using default values.", e);
         }
 
         broadcastConfig();
@@ -134,17 +146,46 @@ public class ConfigManager {
         }
     }
 
-    private void writeConfig(BiConsumer<String,JsonObject> writer) {
-        synchronized (LOCK_KEY){
-            writer.accept(Config.CONFIG_FILE_NAME,gson.toJsonTree(CONFIG).getAsJsonObject());
-            writer.accept(Style.STYLE_FILE_NAME, gson.toJsonTree(STYLE).getAsJsonObject());
-            writer.accept(Mention.MENTION_FILE_NAME, gson.toJsonTree(MENTION).getAsJsonObject());
-            writer.accept(Preset.PRESET_FILE_NAME, gson.toJsonTree(PRESET).getAsJsonObject());
-            writer.accept(Player.PLAYER_FILE_NAME,gson.toJsonTree(PLAYER).getAsJsonObject());
-        }
+    public void writeConfig() {
+        writeConfig(this::writeJsonFile);
     }
 
-    public void writeIfAbsent(String file, JsonObject json) {
+    private void writeConfig(BiConsumer<String,JsonObject> writer) {
+        JsonObject fullJson;
+        synchronized (LOCK_KEY){
+            fullJson = gson.toJsonTree(config).getAsJsonObject();
+        }
+
+        JsonElement stylingRules = fullJson.remove("style_rules");
+        JsonObject stylesJson = new JsonObject();
+        if (stylingRules != null) {
+            stylesJson.add("style_rules", stylingRules);
+        }
+
+        JsonElement mentionRules = fullJson.remove("mention_rules");
+        JsonObject mentionsJson = new JsonObject();
+        if (mentionRules != null) {
+            mentionsJson.add("mention_rules", mentionRules);
+        }
+
+        JsonObject presetsJson = new JsonObject();
+        JsonElement colorPreset = fullJson.remove("color");
+        if (colorPreset != null) presetsJson.add("color", colorPreset);
+        JsonElement atlasPreset = fullJson.remove("atlas");
+        if (atlasPreset != null) presetsJson.add("atlas", atlasPreset);
+        JsonElement whitelist = fullJson.remove("whitelist");
+        if (whitelist != null) presetsJson.add("whitelist", whitelist);
+        JsonElement prefixes = fullJson.remove("prefix");
+        if (prefixes != null) presetsJson.add("prefix", prefixes);
+
+        if (writer == null) writer = this::writeJsonFile;
+        writer.accept(CONFIG_FILE_NAME,fullJson);
+        writer.accept(STYLE_FILE_NAME, stylesJson);
+        writer.accept(MENTION_FILE_NAME, mentionsJson);
+        writer.accept(PRESET_FILE_NAME, presetsJson);
+    }
+
+    private  void writeIfAbsent(String file, JsonObject json) {
         Path path = configDirPath.resolve(file);
         if (Files.exists(path)) return;
         try (BufferedWriter writer = Files.newBufferedWriter(
@@ -158,7 +199,7 @@ public class ConfigManager {
         }
     }
 
-    public void writeJsonFile(String file, JsonObject json) {
+    private void writeJsonFile(String file, JsonObject json) {
         Path path = configDirPath.resolve(file);
         try (BufferedWriter writer = Files.newBufferedWriter(
                 path, StandardCharsets.UTF_8,
@@ -177,7 +218,7 @@ public class ConfigManager {
 
     public void broadcastConfig() {
         for (ConfigListener listener : listeners) {
-            listener.onConfigReload();
+            listener.onConfigReload(config);
         }
     }
 }
