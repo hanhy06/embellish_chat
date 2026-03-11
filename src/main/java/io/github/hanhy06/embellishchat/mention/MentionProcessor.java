@@ -136,7 +136,7 @@ public class MentionProcessor implements ConfigListener {
         if(!broadcast) return;
 
         for (Mention mention:mentions){
-            Text title = PlaceHolderUtil.parseText(mention.rule().title(),player);
+            Text title = PlaceHolderUtil.parsePlaceholder(mention.rule().title(),player);
             Sound sound = mention.rule().sound();
 
             mention.targets().forEach(target ->{
