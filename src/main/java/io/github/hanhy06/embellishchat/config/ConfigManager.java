@@ -104,10 +104,10 @@ public class ConfigManager {
 
             if (config != null && config.version() != null && config.version().equals(CONFIG.version())) {
                 CONFIG = config;
-                STYLE = gson.fromJson(styleJson, Style.class);
-                MENTION = gson.fromJson(mentionJson, Mention.class);
-                PRESET = gson.fromJson(presetJson, Preset.class);
-                PLAYER = gson.fromJson(playerJson, Player.class);
+                if (styleJson != null) STYLE = gson.fromJson(styleJson, Style.class);
+                if (mentionJson != null) MENTION = gson.fromJson(mentionJson, Mention.class);
+                if (presetJson != null) PRESET = gson.fromJson(presetJson, Preset.class);
+                if (playerJson != null) PLAYER = gson.fromJson(playerJson, Player.class);
 
                 broadcastConfig();
                 EmbellishChat.LOGGER.info("Config loaded successfully.");
@@ -134,13 +134,8 @@ public class ConfigManager {
         }
     }
 
-    public void writeConfig() {
-        writeConfig(this::writeJsonFile);
-    }
-
     private void writeConfig(BiConsumer<String,JsonObject> writer) {
         synchronized (LOCK_KEY){
-            if (writer == null) writer = this::writeJsonFile;
             writer.accept(Config.CONFIG_FILE_NAME,gson.toJsonTree(CONFIG).getAsJsonObject());
             writer.accept(Style.STYLE_FILE_NAME, gson.toJsonTree(STYLE).getAsJsonObject());
             writer.accept(Mention.MENTION_FILE_NAME, gson.toJsonTree(MENTION).getAsJsonObject());
@@ -149,7 +144,7 @@ public class ConfigManager {
         }
     }
 
-    private  void writeIfAbsent(String file, JsonObject json) {
+    public void writeIfAbsent(String file, JsonObject json) {
         Path path = configDirPath.resolve(file);
         if (Files.exists(path)) return;
         try (BufferedWriter writer = Files.newBufferedWriter(
@@ -163,7 +158,7 @@ public class ConfigManager {
         }
     }
 
-    private void writeJsonFile(String file, JsonObject json) {
+    public void writeJsonFile(String file, JsonObject json) {
         Path path = configDirPath.resolve(file);
         try (BufferedWriter writer = Files.newBufferedWriter(
                 path, StandardCharsets.UTF_8,
