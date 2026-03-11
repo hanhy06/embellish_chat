@@ -10,6 +10,7 @@ import io.github.hanhy06.embellishchat.styling.rule.StyleType;
 import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.object.AtlasTextObjectContents;
 import net.minecraft.util.Identifier;
 
@@ -30,7 +31,7 @@ public record Config(
         HashMap<String, Color> color,
         HashMap<String, AtlasTextObjectContents> atlas,
         HashSet<String> whitelist,
-        LinkedHashMap<String,String> prefix,
+        LinkedHashMap<String, MutableText> prefix,
 
         //setting
         String delimiter,

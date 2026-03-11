@@ -7,6 +7,7 @@ import eu.pb4.placeholders.api.Placeholders;
 import eu.pb4.placeholders.api.parsers.TagParser;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -52,5 +53,10 @@ public class PlaceHolderUtil {
         if (text.isEmpty()) return text;
         else if (player!=null) return Placeholders.parseText(Text.literal(text),PlaceholderContext.of(player)).getString();
         else return Placeholders.parseText(Text.literal(text),PlaceholderContext.of(EmbellishChat.SERVER)).getString();
+    }
+
+    public static MutableText parsePlaceholder(MutableText text, ServerPlayerEntity player){
+        if (player!=null) return Placeholders.parseText(text,PlaceholderContext.of(player)).copy();
+        else return Placeholders.parseText(text,PlaceholderContext.of(EmbellishChat.SERVER)).copy();
     }
 }

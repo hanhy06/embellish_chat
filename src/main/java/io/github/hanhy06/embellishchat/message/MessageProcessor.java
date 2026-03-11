@@ -24,7 +24,7 @@ public class MessageProcessor implements ConfigListener {
 
     private Config config;
     private Set<UUID> bannedPlayerList;
-    private LinkedHashMap<String,String> prefixes;
+    private LinkedHashMap<String,MutableText> prefixes;
 
     public static class MessageBlockedException extends RuntimeException {}
 
@@ -62,8 +62,8 @@ public class MessageProcessor implements ConfigListener {
 
             List<String> prefixKeys = getPermissions(sender,prefixes.keySet());
             if (!prefixKeys.isEmpty()){
-                String prefix = prefixes.get(prefixKeys.getLast());
-                textMessage = PlaceHolderUtil.parseText(prefix,sender).copy().append(textMessage);
+                MutableText prefix = prefixes.get(prefixKeys.getLast());
+                textMessage = PlaceHolderUtil.parsePlaceholder(prefix,sender).append(textMessage);
             }
 
             result = message.withUnsignedContent(textMessage);
