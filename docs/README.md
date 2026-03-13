@@ -31,23 +31,23 @@ Embellish Chat modernizes your Minecraft server’s chat experience with a fully
 
 Use the following patterns directly in the chat window to apply styles:
 
-| Feature          | Syntax                  | Example                                                       | Showcase                                                                                                            |
-|:-----------------|:------------------------|:--------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------|
-| Bold             | `**Text**`              | `**You really need to read this!**`                           | ![Bold](https://github.com/hanhy06/embellish-chat/blob/v3.4.0/%2B1.21.11/docs/images/Bold.png?raw=true)             |
-| Italic           | `_Text_`                | `_This is top secret..._`                                     | ![Italic](https://github.com/hanhy06/embellish-chat/blob/v3.4.0/%2B1.21.11/docs/images/Italic.png?raw=true)         |
-| Underline        | `__Text__`              | `__Check this out__`                                          | ![Underline](https://github.com/hanhy06/embellish-chat/blob/v3.4.0/%2B1.21.11/docs/images/Underline.png?raw=true)   |
-| Strikethrough    | `~~Text~~`              | `~~We don’t talk about this anymore~~`                        | ![Strike](https://github.com/hanhy06/embellish-chat/blob/v3.4.0/%2B1.21.11/docs/images/Strikethrough.png?raw=true)  |
-| Obfuscated       | `\|\|Text\|\|`          | `\|\|Unreadable text\|\|`                                     | ![Obfuscated](https://github.com/hanhy06/embellish-chat/blob/v3.4.0/%2B1.21.11/docs/images/Obfuscated.gif?raw=true) |
-| Color (Hex)      | `[Text]<#RRGGBB>`       | `[Blue]<#0000FF> like the deep ocean`                         | ![Color](https://github.com/hanhy06/embellish-chat/blob/v3.4.0/%2B1.21.11/docs/images/Color_Hex.png?raw=true)       |
-| Color (Gradient) | `[Text]<#RRGGBB #R...>` | `[Grraaaaaaadieeeeent]<#ffaaaa #aaaaff #aaffaa>`              | ![Color](https://github.com/hanhy06/embellish-chat/blob/v3.4.0/%2B1.21.11/docs/images/Color_Gradient.png?raw=true)  |
-| Color (Preset)   | `[Text]<preset>`        | `[pink]<pink> pig`                                            | ![Color](https://github.com/hanhy06/embellish-chat/blob/v3.4.0/%2B1.21.11/docs/images/Color_Preset.png?raw=true)    |
-| Color (Rainbow)  | `[Text]<RAINBOW>`       | `look at this [rainbow]<RAINBOW>`                             | ![Color](https://github.com/hanhy06/embellish-chat/blob/v3.4.0/%2B1.21.11/docs/images/Color_Rainbow.png?raw=true)   |
-| Link             | `[Text](URL)`           | `Download it [here](https://modrinth.com/mod/embellish-chat)` | ![Link](https://github.com/hanhy06/embellish-chat/blob/v3.4.0/%2B1.21.11/docs/images/Link.gif?raw=true)             |
-| Font             | `[Text]{path}`          | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://github.com/hanhy06/embellish-chat/blob/v3.4.0/%2B1.21.11/docs/images/Font.png?raw=true)             |
-| Item             | `[i]`                   | `Look at my [i]`                                              | ![Item](https://github.com/hanhy06/embellish-chat/blob/v3.4.0/%2B1.21.11/docs/images/Item.png?raw=true)             |
-| Inventory        | `[inv]`                 | `Look at my [inv]`                                            | ![Inventory](https://github.com/hanhy06/embellish-chat/blob/v3.4.0/%2B1.21.11/docs/images/Inventory.png?raw=true)   |
-| Ender Chest      | `[end]`                 | `Look at my [end]`                                            | ![EnderChest](https://github.com/hanhy06/embellish-chat/blob/v3.4.0/%2B1.21.11/docs/images/EnderChest.png?raw=true) |
-| Mention          | `@PlayerName`           | `Hello, @User`                                                | ![Mention](https://github.com/hanhy06/embellish-chat/blob/v3.4.0/%2B1.21.11/docs/images/Mention.png?raw=true)       |
+| Feature          | Syntax                  | Example                                                       | Showcase                                                                                  |
+|:-----------------|:------------------------|:--------------------------------------------------------------|:------------------------------------------------------------------------------------------|
+| Bold             | `**Text**`              | `**You really need to read this!**`                           | ![Bold](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Bold.png)             |
+| Italic           | `_Text_`                | `_This is top secret..._`                                     | ![Italic](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Italic.png)         |
+| Underline        | `__Text__`              | `__Check this out__`                                          | ![Underline](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Underline.png)   |
+| Strikethrough    | `~~Text~~`              | `~~We don’t talk about this anymore~~`                        | ![Strike](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Strikethrough.png)  |
+| Obfuscated       | `\|\|Text\|\|`          | `\|\|Unreadable text\|\|`                                     | ![Obfuscated](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Obfuscated.gif) |
+| Color (Hex)      | `[Text]<#RRGGBB>`       | `[Blue]<#0000FF> like the deep ocean`                         | ![Color](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Color_Hex.png)       |
+| Color (Gradient) | `[Text]<#RRGGBB #R...>` | `[Grraaaaaaadieeeeent]<#ffaaaa #aaaaff #aaffaa>`              | ![Color](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Color_Gradient.png)  |
+| Color (Preset)   | `[Text]<preset>`        | `[pink]<pink> pig`                                            | ![Color](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Color_Preset.png)    |
+| Color (Rainbow)  | `[Text]<RAINBOW>`       | `look at this [rainbow]<RAINBOW>`                             | ![Color](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Color_Rainbow.png)   |
+| Link             | `[Text](URL)`           | `Download it [here](https://modrinth.com/mod/embellish-chat)` | ![Link](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Link.gif)             |
+| Font             | `[Text]{path}`          | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Font.png)             |
+| Item             | `[i]`                   | `Look at my [i]`                                              | ![Item](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Item.png)             |
+| Inventory        | `[inv]`                 | `Look at my [inv]`                                            | ![Inventory](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Inventory.png)   |
+| Ender Chest      | `[end]`                 | `Look at my [end]`                                            | ![EnderChest](https://hanhy06.github.io/embellish-chat-wiki/assets/images/EnderChest.png) |
+| Mention          | `@PlayerName`           | `Hello, @User`                                                | ![Mention](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Mention.png)       |
 
 > **Notes**
 >

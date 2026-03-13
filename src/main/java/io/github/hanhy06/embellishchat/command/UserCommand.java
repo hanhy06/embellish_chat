@@ -72,7 +72,7 @@ public class UserCommand {
 
         for (MentionRule rule : rules) {
             if (rule.comment() == null) continue;
-            player.sendMessage(PlaceHolderUtil.parsePlaceholder(rule.comment(),player));
+            player.sendMessage(PlaceHolderUtil.parseText(rule.comment(),player));
         }
         player.sendMessage(PlaceHolderUtil.parseTag("<gray>------------------------------<gray>"));
 
@@ -95,7 +95,7 @@ public class UserCommand {
 
         for (StylingRule rule : rules) {
             if (rule.comment() == null) continue;
-            player.sendMessage(PlaceHolderUtil.parsePlaceholder(rule.comment(),player));
+            player.sendMessage(PlaceHolderUtil.parseText(rule.comment(),player));
         }
         player.sendMessage(PlaceHolderUtil.parseTag("<gray>----------------------------</gray>"));
 

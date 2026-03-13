@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public record MentionRule(
-        Pattern pattern, MutableText comment,
+        Pattern pattern, String comment,
         MutableText title, Sound sound,
         int cooldown, boolean onlyTarget,
         List<MentionAction> mentions,
@@ -22,6 +22,6 @@ public record MentionRule(
             List<MentionAction> mentions,
             List<StyleAction> styles
     ){
-        return new MentionRule(Pattern.compile(regex), Text.literal(comment), Text.literal(title), sound, cooldown, onlyTarget, mentions, styles);
+        return new MentionRule(Pattern.compile(regex), comment, Text.literal(title), sound, cooldown, onlyTarget, mentions, styles);
     }
 }

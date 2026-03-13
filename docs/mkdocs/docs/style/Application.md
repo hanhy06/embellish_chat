@@ -12,7 +12,7 @@
 }
 ```
 
-![Formatting](https://github.com/hanhy06/embellish-chat/blob/v3.4.0/%2B1.21.11/docs/images/Formatting.png?raw=true)
+![Formatting](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Formatting.png)
 
 You can format the chat by matching all rules from the first English styling set and applying them using the `REPLACE` type.
 When using custom formatting, ensure that `useClearFormat` is enabled.
@@ -36,7 +36,7 @@ When using custom formatting, ensure that `useClearFormat` is enabled.
 }
 ```
 
-![BubbleChat](https://github.com/hanhy06/embellish-chat/blob/v3.4.0/%2B1.21.11/docs/images/BubbleChat.gif?raw=true)
+![BubbleChat](https://hanhy06.github.io/embellish-chat-wiki/assets/images/BubbleChat.gif)
 
 By displaying a speech bubble and preventing the chat message from being sent, 
 you can create a more natural conversational experience.
@@ -64,7 +64,7 @@ you can create a more natural conversational experience.
 ]
 ```
 
-![Command_Run](https://github.com/hanhy06/embellish-chat/blob/v3.4.0/%2B1.21.11/docs/images/Command_Run.gif?raw=true)
+![Command_Run](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Command_Run.gif)
 
 Triggers and the COMMAND_RUN type allow chat to function as a macro.
 The example above demonstrates a showcase datapack that enables expressions like crying or joy through chat.

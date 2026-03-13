@@ -45,7 +45,7 @@
 
 ```
 
-![Mention](https://github.com/hanhy06/embellish-chat/blob/v3.4.0/%2B1.21.11/docs/images/Mention.gif?raw=true)
+![Mention](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Mention.gif)
 
 You can put any value accepted as an option into the preset.
 When used this way, you can always trigger an admin mention simply by using `@admin`.
