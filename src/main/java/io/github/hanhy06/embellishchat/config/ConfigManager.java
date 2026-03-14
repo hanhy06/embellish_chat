@@ -3,6 +3,10 @@ package io.github.hanhy06.embellishchat.config;
 import com.google.gson.*;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.adapter.*;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.Identifier;
+import net.minecraft.sounds.SoundEvent;
+
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -15,9 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.Identifier;
-import net.minecraft.sounds.SoundEvent;
 
 public class ConfigManager {
     public static ConfigManager INSTANCE;

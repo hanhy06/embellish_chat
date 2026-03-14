@@ -9,15 +9,16 @@ import io.github.hanhy06.embellishchat.styling.rule.StyleParameter;
 import io.github.hanhy06.embellishchat.styling.rule.StyleRegistry;
 import io.github.hanhy06.embellishchat.styling.rule.StyleRule;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerPlayer;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.server.level.ServerPlayer;
 
 import static io.github.hanhy06.embellishchat.styling.util.TextSliceUtil.flatten;
 import static io.github.hanhy06.embellishchat.styling.util.TextSliceUtil.slice;

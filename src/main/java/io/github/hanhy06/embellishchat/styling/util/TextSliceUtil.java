@@ -2,13 +2,14 @@ package io.github.hanhy06.embellishchat.styling.util;
 
 import io.github.hanhy06.embellishchat.styling.data.Run;
 import io.github.hanhy06.embellishchat.styling.data.Runs;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class TextSliceUtil {
     public static Runs flatten(Component text) {

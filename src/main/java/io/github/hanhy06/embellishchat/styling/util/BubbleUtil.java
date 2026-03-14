@@ -1,5 +1,6 @@
 package io.github.hanhy06.embellishchat.styling.util;
 
+import com.mojang.math.Transformation;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FontDescription;
@@ -13,7 +14,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.scores.DisplaySlot;
 import net.minecraft.world.scores.Objective;
 import org.joml.Vector3f;
-import com.mojang.math.Transformation;
+
 import java.util.*;
 
 public class BubbleUtil {

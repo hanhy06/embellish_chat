@@ -6,13 +6,14 @@ import eu.pb4.placeholders.api.PlaceholderResult;
 import eu.pb4.placeholders.api.Placeholders;
 import eu.pb4.placeholders.api.parsers.TagParser;
 import io.github.hanhy06.embellishchat.EmbellishChat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class PlaceHolderUtil {
     private static final Map<UUID,String> placeholders = new HashMap<>();

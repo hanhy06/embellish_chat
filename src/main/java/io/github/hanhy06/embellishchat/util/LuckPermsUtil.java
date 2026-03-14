@@ -6,6 +6,7 @@ import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 import net.minecraft.server.level.ServerPlayer;
+
 import java.util.HashSet;
 import java.util.List;
 

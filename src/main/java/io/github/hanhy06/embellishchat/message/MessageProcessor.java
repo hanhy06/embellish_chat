@@ -6,11 +6,12 @@ import io.github.hanhy06.embellishchat.mention.MentionProcessor;
 import io.github.hanhy06.embellishchat.mention.data.Mention;
 import io.github.hanhy06.embellishchat.styling.StyleProcessor;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
-import java.util.*;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
+
+import java.util.*;
 
 import static io.github.hanhy06.embellishchat.util.PermissionUtil.getPermissions;
 

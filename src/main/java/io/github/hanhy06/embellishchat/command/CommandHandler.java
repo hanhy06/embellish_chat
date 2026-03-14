@@ -6,6 +6,7 @@ import io.github.hanhy06.embellishchat.config.ConfigListener;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.commands.ReloadCommand;
+
 import java.util.List;
 
 public class CommandHandler implements ConfigListener {

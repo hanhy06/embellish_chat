@@ -1,11 +1,12 @@
 package io.github.hanhy06.embellishchat.mention.data;
 
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
+import net.minecraft.network.chat.Style;
+import net.minecraft.server.level.ServerPlayer;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import net.minecraft.network.chat.Style;
-import net.minecraft.server.level.ServerPlayer;
 
 public record Mention(
         int begin,int end,List<String> options,

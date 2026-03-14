@@ -6,8 +6,9 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
-import java.io.IOException;
 import net.minecraft.network.chat.MutableComponent;
+
+import java.io.IOException;
 
 public class MutableTextAdapter extends TypeAdapter<MutableComponent> {
     @Override

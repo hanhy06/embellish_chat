@@ -1,9 +1,10 @@
 package io.github.hanhy06.embellishchat.styling.util;
 
-import java.awt.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
+
+import java.awt.*;
 
 public class ColorUtil {
     public static Integer getTeamColor(Scoreboard scoreboard, String name){

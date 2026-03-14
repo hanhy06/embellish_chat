@@ -14,12 +14,9 @@ import io.github.hanhy06.embellishchat.message.MessageProcessor;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.network.chat.ChatType;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.OutgoingChatMessage;
-import net.minecraft.network.chat.PlayerChatMessage;
-import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.*;
 import net.minecraft.server.level.ServerPlayer;
+
 import java.time.Instant;
 import java.util.*;
 import java.util.function.Function;

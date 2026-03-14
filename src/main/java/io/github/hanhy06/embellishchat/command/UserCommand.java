@@ -22,6 +22,7 @@ import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.ProfileResolver;
 import net.minecraft.world.SimpleMenuProvider;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

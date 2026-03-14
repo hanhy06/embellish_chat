@@ -13,15 +13,10 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.objects.AtlasSprite;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
-import java.awt.Color;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
-import static java.util.Map.entry;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 public record Config(
         String version,
