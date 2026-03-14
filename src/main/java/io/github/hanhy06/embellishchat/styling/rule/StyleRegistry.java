@@ -45,7 +45,7 @@ public class StyleRegistry {
     private final Config config;
 
     private final DateTimeFormatter timestamp;
-    private final HashMap<String, Color> colors;
+    private final HashMap<String, Color> color;
     private final HashMap<String, AtlasTextObjectContents> atlas;
     private final HashSet<String> whitelist;
 
@@ -56,7 +56,7 @@ public class StyleRegistry {
     public StyleRegistry(Config config) {
         this.config = config;
         this.timestamp = DateTimeFormatter.ofPattern(config.timestamp());
-        this.colors = config.color();
+        this.color = config.color();
         this.atlas = config.atlas();
         this.whitelist = config.whitelist();
         this.registers = new EnumMap<>(Map.ofEntries(
@@ -187,7 +187,7 @@ public class StyleRegistry {
     }
 
     public MutableText COLOR_PRESET(StyleParameter parameter) {
-        Color color = colors.getOrDefault(parameter.getString(), Color.WHITE);
+        Color color = this.color.getOrDefault(parameter.getString(), Color.WHITE);
         return parameter.segment().fillStyle(Style.EMPTY.withColor(color.getRGB()));
     }
 
