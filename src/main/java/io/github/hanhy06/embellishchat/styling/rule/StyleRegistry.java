@@ -290,7 +290,7 @@ public class StyleRegistry {
         URI uri;
         try {
             uri = URI.create(parameter.getString());
-        }catch (IllegalAccessError e){
+        }catch (IllegalArgumentException e){
             EmbellishChat.LOGGER.warn("Invalid URL provided for segment [{}]: {}", parameter.segment().getString(), parameter.getString());
             return parameter.segment();
         }
