@@ -1,0 +1,211 @@
+{
+  "mention_rules": {
+    "embellish-chat.mention": [
+      {
+        "pattern": "@here()",
+        "comment": "<blue><b>Pattern</b></blue>: @here\n<dark_aqua><b>Comment</b></dark_aqua>: mention players within 64 blocks\n",
+        "title": "%player:displayname% mentioned you",
+        "sound": {
+          "id": "minecraft:entity.experience_orb.pickup",
+          "category": "UI",
+          "volume": 1.0,
+          "pitch": 1.75
+        },
+        "cooldown": 0,
+        "onlyTarget": false,
+        "mentions": [
+          {
+            "mentionType": "INSIDE",
+            "preset": "64"
+          }
+        ],
+        "styles": [
+          {
+            "styleType": "BOLD",
+            "preset": ""
+          },
+          {
+            "styleType": "COLOR_PRESET",
+            "preset": "light purple"
+          }
+        ]
+      },
+      {
+        "pattern": "@everyone()",
+        "comment": "<blue><b>Pattern</b></blue>: @everyone\n<dark_aqua><b>Comment</b></dark_aqua>: mention all online players\n",
+        "title": "%player:displayname% mentioned you",
+        "sound": {
+          "id": "minecraft:entity.experience_orb.pickup",
+          "category": "UI",
+          "volume": 1.0,
+          "pitch": 1.75
+        },
+        "cooldown": 0,
+        "onlyTarget": false,
+        "mentions": [
+          {
+            "mentionType": "EVERYONE",
+            "preset": ""
+          }
+        ],
+        "styles": [
+          {
+            "styleType": "BOLD",
+            "preset": ""
+          },
+          {
+            "styleType": "COLOR_PRESET",
+            "preset": "light purple"
+          }
+        ]
+      },
+      {
+        "pattern": "@team\\((.+?)\\)",
+        "comment": "<blue><b>Pattern</b></blue>: @team(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given scoreboard team\n",
+        "title": "%player:displayname% mentioned you",
+        "sound": {
+          "id": "minecraft:entity.experience_orb.pickup",
+          "category": "UI",
+          "volume": 1.0,
+          "pitch": 1.75
+        },
+        "cooldown": 0,
+        "onlyTarget": false,
+        "mentions": [
+          {
+            "mentionType": "TEAM",
+            "preset": ""
+          }
+        ],
+        "styles": [
+          {
+            "styleType": "BOLD",
+            "preset": ""
+          }
+        ]
+      },
+      {
+        "pattern": "@group\\((.+?)\\)",
+        "comment": "<blue><b>Pattern</b></blue>: @group(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given LuckPerms group\n",
+        "title": "%player:displayname% mentioned you",
+        "sound": {
+          "id": "minecraft:entity.experience_orb.pickup",
+          "category": "UI",
+          "volume": 1.0,
+          "pitch": 1.75
+        },
+        "cooldown": 0,
+        "onlyTarget": false,
+        "mentions": [
+          {
+            "mentionType": "LUCK_PERMS_GROUP",
+            "preset": ""
+          }
+        ],
+        "styles": [
+          {
+            "styleType": "BOLD",
+            "preset": ""
+          },
+          {
+            "styleType": "COLOR_PRESET",
+            "preset": "light purple"
+          }
+        ]
+      },
+      {
+        "pattern": "@world\\((.+?)\\)",
+        "comment": "<blue><b>Pattern</b></blue>: @world(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given world\n",
+        "title": "%player:displayname% mentioned you",
+        "sound": {
+          "id": "minecraft:entity.experience_orb.pickup",
+          "category": "UI",
+          "volume": 1.0,
+          "pitch": 1.75
+        },
+        "cooldown": 0,
+        "onlyTarget": false,
+        "mentions": [
+          {
+            "mentionType": "WORLD",
+            "preset": ""
+          }
+        ],
+        "styles": [
+          {
+            "styleType": "BOLD",
+            "preset": ""
+          },
+          {
+            "styleType": "COLOR_PRESET",
+            "preset": "light purple"
+          }
+        ]
+      },
+      {
+        "pattern": "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
+        "comment": "<blue><b>Pattern</b></blue>: @Player\n<dark_aqua><b>Comment</b></dark_aqua>: mention a specific player\n",
+        "title": "%player:displayname% mentioned you",
+        "sound": {
+          "id": "minecraft:entity.experience_orb.pickup",
+          "category": "UI",
+          "volume": 1.0,
+          "pitch": 1.75
+        },
+        "cooldown": 0,
+        "onlyTarget": false,
+        "mentions": [
+          {
+            "mentionType": "PLAYER",
+            "preset": ""
+          }
+        ],
+        "styles": [
+          {
+            "styleType": "BOLD",
+            "preset": ""
+          }
+        ]
+      }
+    ],
+    "embellish-chat.example": [
+      {
+        "pattern": "@admin()",
+        "comment": "<blue><b>Pattern</b></blue>: @admin\n<dark_aqua><b>Comment</b></dark_aqua>: Alerts admins on Discord and adds a click-to-teleport action.\n<red><b>Note</b></red>: This mention is placed behind the default rules, so it will not work as-is. To activate it, move it to the top of the embellish-chat.mention list.\n",
+        "title": "%player:displayname% mentioned you",
+        "sound": {
+          "id": "minecraft:entity.experience_orb.pickup",
+          "category": "UI",
+          "volume": 1.0,
+          "pitch": 1.75
+        },
+        "cooldown": 0,
+        "onlyTarget": false,
+        "mentions": [
+          {
+            "mentionType": "LUCK_PERMS_GROUP",
+            "preset": "admin"
+          }
+        ],
+        "styles": [
+          {
+            "styleType": "BOLD",
+            "preset": ""
+          },
+          {
+            "styleType": "COLOR_GRADIENT",
+            "preset": "#FF5555#C77DFF"
+          },
+          {
+            "styleType": "CLICK_COMMAND_RUN",
+            "preset": "execute in %world:id% run tp %player:pos_x% %player:pos_y% %player:pos_z%"
+          },
+          {
+            "styleType": "DISCORD_JSON",
+            "preset": "your webhook;{\"embeds\":[{\"title\":\"%player:name_unformatted% mentioned admins\",\"color\":16753920,\"description\":\"TP command\\n```mcfunction\\nexecute in %world:id% run tp %player:pos_x% %player:pos_y% %player:pos_z%\\n```\",\"fields\":[{\"name\":\"Content\",\"value\":\"%embellish-chat:content%\",\"inline\":false},{\"name\":\"UUID\",\"value\":\"`%player:uuid%`\",\"inline\":false},{\"name\":\"Player\",\"value\":\"`%player:name_unformatted%`\",\"inline\":true},{\"name\":\"Ping\",\"value\":\"`%player:ping% ms`\",\"inline\":true},{\"name\":\"\\u200b\",\"value\":\"\\u200b\",\"inline\":true},{\"name\":\"Position\",\"value\":\"`%player:pos_x% %player:pos_y% %player:pos_z%`\",\"inline\":true},{\"name\":\"World\",\"value\":\"`%world:id%`\",\"inline\":true},{\"name\":\"\\u200b\",\"value\":\"\\u200b\",\"inline\":true},{\"name\":\"Server\",\"value\":\"`%server:name%`\",\"inline\":true},{\"name\":\"Time\",\"value\":\"`%server:time%`\",\"inline\":true},{\"name\":\"Status\",\"value\":\"`TPS:%server:tps%` `MSPT:%server:mspt%`\",\"inline\":true}]}]}"
+          }
+        ]
+      }
+    ]
+  }
+}

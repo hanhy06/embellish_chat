@@ -3,25 +3,18 @@
     const CONFIG_VERSION = "3.5.0";
     const cloneJson = (value) => JSON.parse(JSON.stringify(value));
     const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-    const THEME_STORAGE_KEY = "embellish-chat-theme";
-    const getSystemTheme = () => (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark" : "light");
-    const getInitialTheme = () => {
-        if (typeof document !== 'undefined' && document.documentElement.dataset.theme) {
-            return document.documentElement.dataset.theme;
-        }
-
-        try {
-            const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-            return savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : getSystemTheme();
-        } catch (error) {
-            return getSystemTheme();
-        }
+    const DEFAULT_FILE_PATHS = {
+        config: "defaults/config.json",
+        styles: "defaults/styles.json",
+        mentions: "defaults/mentions.json",
+        presets: "defaults/presets.json"
     };
-    const applyTheme = (theme) => {
-        if (typeof document === 'undefined') return;
-        const resolvedTheme = theme === 'dark' ? 'dark' : 'light';
-        document.documentElement.classList.toggle('dark', resolvedTheme === 'dark');
-        document.documentElement.dataset.theme = resolvedTheme;
+    const fetchDefaultJson = async (path) => {
+        const response = await fetch(path, { cache: "no-store" });
+        if (!response.ok) {
+            throw new Error(`Could not load ${path} (${response.status})`);
+        }
+        return response.json();
     };
 
     const IconWrapper = ({ name, size, className }) => {
@@ -63,246 +56,18 @@
         "MASTER", "MUSIC", "RECORDS", "WEATHER", "BLOCKS", "HOSTILE", "NEUTRAL", "PLAYERS", "AMBIENT", "VOICE", "UI"
     ];
 
-    // Default config.json
-    const DEFAULT_CONFIG = {
-      "version": CONFIG_VERSION,
-      "delimiter": ",",
-      "timestamp": "yyyy-MM-dd HH:mm:ss",
-      "command_alias": "ec",
-      "url_color": "#0000EE",
-      "team_color": "#FF55FF",
-      "notify_command_enabled": true,
-      "notify_mention_enabled": true,
-      "disable_vanilla_chat_format": false,
-      "banned_players": [],
-      "notify_off_players": []
-    };
-
-    // Default presets.json
-    const DEFAULT_PRESETS = {
-      "color": {
-        "black": "#000000",
-        "dark blue": "#0000AA",
-        "dark green": "#00AA00",
-        "dark aqua": "#00AAAA",
-        "dark red": "#AA0000",
-        "dark purple": "#AA00AA",
-        "gold": "#FFAA00",
-        "gray": "#AAAAAA",
-        "dark gray": "#555555",
-        "blue": "#5555FF",
-        "green": "#55FF55",
-        "aqua": "#55FFFF",
-        "red": "#FF5555",
-        "light purple": "#FF55FF",
-        "yellow": "#FFFF55",
-        "white": "#FFFFFF"
-      },
-      "atlas": {
-        "fire": { "atlas": "minecraft:blocks", "sprite": "minecraft:block/campfire_fire" },
-        "hunger": { "atlas": "minecraft:gui", "sprite": "minecraft:hud/food_full" },
-        "heart": { "atlas": "minecraft:gui", "sprite": "minecraft:hud/heart/full" },
-        "yes": { "atlas": "minecraft:gui", "sprite": "minecraft:container/beacon/confirm" },
-        "no": { "atlas": "minecraft:gui", "sprite": "minecraft:container/beacon/cancel" },
-        "move": { "atlas": "minecraft:gui", "sprite": "minecraft:mob_effect/wind_charged" }
-      },
-      "whitelist": [],
-      "prefix": {}
-    };
-
-    // Default styles.json
-    const DEFAULT_STYLES = {
-      "style_rules": {
-        "embellish-chat.chat": [
-          {
-            "pattern": "\\[([^\\]]+?)]\\((https://.*?)\\)",
-            "styles": [{ "styleType": "URL", "preset": "" }],
-            "comment": "<blue><b>Pattern</b></blue>: [Text](url)\n<dark_aqua><b>Comment</b></dark_aqua>: clickable link with custom text\n"
-          },
-          {
-            "pattern": "((https://\\S+))",
-            "styles": [{ "styleType": "URL", "preset": "" }],
-            "comment": "<blue><b>Pattern</b></blue>: url\n<dark_aqua><b>Comment</b></dark_aqua>: auto-detect clickable link\n"
-          },
-          {
-            "pattern": "\\[([^\\]]+?)]\\{(.*?)}",
-            "styles": [{ "styleType": "FONT", "preset": "" }],
-            "comment": "<blue><b>Pattern</b></blue>: [Text]{font}\n<dark_aqua><b>Comment</b></dark_aqua>: apply custom font to text\n"
-          },
-          {
-            "pattern": "\\[([^\\]]+?)]<(#.{6})>",
-            "styles": [{ "styleType": "COLOR_HEX", "preset": "" }],
-            "comment": "<blue><b>Pattern</b></blue>: [Text]<#RRGGBB>\n<dark_aqua><b>Comment</b></dark_aqua>: apply hex color\n"
-          },
-          {
-            "pattern": "\\[([^\\]]+?)]<(#.{6,})>",
-            "styles": [{ "styleType": "COLOR_GRADIENT", "preset": "" }],
-            "comment": "<blue><b>Pattern</b></blue>: [Text]<#color1#color2...>\n<dark_aqua><b>Comment</b></dark_aqua>: apply gradient color\n"
-          },
-          {
-            "pattern": "\\[([^\\]]+?)]<([a-z\\s]+?)>",
-            "styles": [{ "styleType": "COLOR_PRESET", "preset": "" }],
-            "comment": "<blue><b>Pattern</b></blue>: [Text]<preset>\n<dark_aqua><b>Comment</b></dark_aqua>: apply preset color name\n"
-          },
-          {
-            "pattern": "\\*\\*(.+?)\\*\\*()",
-            "styles": [{ "styleType": "BOLD", "preset": "" }],
-            "comment": "<blue><b>Pattern</b></blue>: **Text**\n<dark_aqua><b>Comment</b></dark_aqua>: bold formatting\n"
-          },
-          {
-            "pattern": "__(.+?)__()",
-            "styles": [{ "styleType": "UNDERLINE", "preset": "" }],
-            "comment": "<blue><b>Pattern</b></blue>: __Text__\n<dark_aqua><b>Comment</b></dark_aqua>: underline formatting\n"
-          },
-          {
-            "pattern": "_(.+?)_()",
-            "styles": [{ "styleType": "ITALIC", "preset": "" }],
-            "comment": "<blue><b>Pattern</b></blue>: _Text_\n<dark_aqua><b>Comment</b></dark_aqua>: italic formatting\n"
-          },
-          {
-            "pattern": "~~(.+?)~~()",
-            "styles": [{ "styleType": "STRIKETHROUGH", "preset": "" }],
-            "comment": "<blue><b>Pattern</b></blue>: ~~Text~~\n<dark_aqua><b>Comment</b></dark_aqua>: strikethrough formatting\n"
-          },
-          {
-            "pattern": "\\|\\|(.+?)\\|\\|()",
-            "styles": [{ "styleType": "OBFUSCATED", "preset": "" }],
-            "comment": "<blue><b>Pattern</b></blue>: ||Text||\n<dark_aqua><b>Comment</b></dark_aqua>: obfuscated text\n"
-          },
-          {
-            "pattern": "\\[([^\\]]+?)]<(RAINBOW)>",
-            "styles": [{ "styleType": "COLOR_RAINBOW", "preset": "0.7" }],
-            "comment": "<blue><b>Pattern</b></blue>: [Text]<RAINBOW>\n<dark_aqua><b>Comment</b></dark_aqua>: rainbow color\n"
-          },
-          {
-            "pattern": "(.+)()",
-            "styles": [{ "styleType": "METADATA", "preset": "" }],
-            "comment": "<blue><b>Pattern</b></blue>: any text\n<dark_aqua><b>Comment</b></dark_aqua>: metadata capture layer\n"
-          },
-          {
-            "pattern": "(\\[i\\])()",
-            "styles": [{ "styleType": "SHOW_ITEM", "preset": "" }],
-            "comment": "<blue><b>Pattern</b></blue>: [i]\n<dark_aqua><b>Comment</b></dark_aqua>: show held item\n"
-          },
-          {
-            "pattern": "(\\[inv\\])()",
-            "styles": [{ "styleType": "SHOW_INVENTORY", "preset": "" }],
-            "comment": "<blue><b>Pattern</b></blue>: [inv]\n<dark_aqua><b>Comment</b></dark_aqua>: show player inventory\n"
-          },
-          {
-            "pattern": "(\\[end\\])()",
-            "styles": [{ "styleType": "SHOW_ENDER_CHEST", "preset": "" }],
-            "comment": "<blue><b>Pattern</b></blue>: [end]\n<dark_aqua><b>Comment</b></dark_aqua>: show ender chest contents\n"
-          },
-          {
-            "pattern": "(:(.+?):)",
-            "styles": [{ "styleType": "ATLAS_PRESET", "preset": "" }],
-            "comment": "<blue><b>Pattern</b></blue>: :icon:\n<dark_aqua><b>Comment</b></dark_aqua>: atlas emoji/icon preset\n"
-          }
-        ],
-        "embellish-chat.command_argument": []
-       }
-    };
-
-
-    // Default mentions.json
-    const DEFAULT_MENTIONS = {
-      "mention_rules": {
-        "embellish-chat.mention": [
-          {
-            "pattern": "@here()",
-            "comment": "<blue><b>Pattern</b></blue>: @here\n<dark_aqua><b>Comment</b></dark_aqua>: mention players within 64 blocks\n",
-            "title": "%player:displayname% mentioned you",
-            "cooldown": 0,
-            "onlyTarget": false,
-            "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
-            "mentions": [{ "mentionType": "INSIDE", "preset": "64" }],
-            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }]
-          },
-          {
-            "pattern": "@everyone()",
-            "comment": "<blue><b>Pattern</b></blue>: @everyone\n<dark_aqua><b>Comment</b></dark_aqua>: mention all online players\n",
-            "title": "%player:displayname% mentioned you",
-            "cooldown": 0,
-            "onlyTarget": false,
-            "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
-            "mentions": [{ "mentionType": "EVERYONE", "preset": "" }],
-            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }]
-          },
-          {
-            "pattern": "@team\\((.+?)\\)",
-            "comment": "<blue><b>Pattern</b></blue>: @team(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given scoreboard team\n",
-            "title": "%player:displayname% mentioned you",
-            "cooldown": 0,
-            "onlyTarget": false,
-            "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
-            "mentions": [{ "mentionType": "TEAM", "preset": "" }],
-            "styles": [{ "styleType": "BOLD", "preset": "" }]
-          },
-          {
-            "pattern": "@group\\((.+?)\\)",
-            "comment": "<blue><b>Pattern</b></blue>: @group(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given LuckPerms group\n",
-            "title": "%player:displayname% mentioned you",
-            "cooldown": 0,
-            "onlyTarget": false,
-            "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
-            "mentions": [{ "mentionType": "LUCK_PERMS_GROUP", "preset": "" }],
-            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }]
-          },
-          {
-            "pattern": "@world\\((.+?)\\)",
-            "comment": "<blue><b>Pattern</b></blue>: @world(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given world\n",
-            "title": "%player:displayname% mentioned you",
-            "cooldown": 0,
-            "onlyTarget": false,
-            "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
-            "mentions": [{ "mentionType": "WORLD", "preset": "" }],
-            "styles": [{ "styleType": "BOLD", "preset": "" }, { "styleType": "COLOR_PRESET", "preset": "light purple" }]
-          },
-          {
-            "pattern": "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
-            "comment": "<blue><b>Pattern</b></blue>: @Player\n<dark_aqua><b>Comment</b></dark_aqua>: mention a specific player\n",
-            "title": "%player:displayname% mentioned you",
-            "cooldown": 0,
-            "onlyTarget": false,
-            "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
-            "mentions": [{ "mentionType": "PLAYER", "preset": "" }],
-            "styles": [{ "styleType": "BOLD", "preset": "" }]
-          }
-        ],
-        "embellish-chat.example": [
-          {
-            "pattern": "@admin()",
-            "comment": "<blue><b>Pattern</b></blue>: @admin\n<dark_aqua><b>Comment</b></dark_aqua>: Alerts admins on Discord and adds a click-to-teleport action.\n<red><b>Note</b></red>: This mention is placed behind the default rules, so it will not work as-is. To activate it, move it to the top of the embellish-chat.mention list.\n",
-            "title": "%player:displayname% mentioned you",
-            "cooldown": 0,
-            "onlyTarget": false,
-            "sound": { "id": "minecraft:entity.experience_orb.pickup", "category": "UI", "volume": 1.0, "pitch": 1.75 },
-            "mentions": [{ "mentionType": "LUCK_PERMS_GROUP", "preset": "admin" }],
-            "styles": [
-              { "styleType": "BOLD", "preset": "" },
-              { "styleType": "COLOR_GRADIENT", "preset": "#FF5555#C77DFF" },
-              { "styleType": "CLICK_COMMAND_RUN", "preset": "execute in %world:id% run tp %player:pos_x% %player:pos_y% %player:pos_z%" },
-              { "styleType": "DISCORD_JSON", "preset": "{\"embeds\":[{\"title\":\"%player:name_unformatted% mentioned admins\",\"color\":16753920,\"description\":\"TP command\\n```mcfunction\\nexecute in %world:id% run tp %player:pos_x% %player:pos_y% %player:pos_z%\\n```\",\"fields\":[{\"name\":\"Content\",\"value\":\"%embellish-chat:content%\",\"inline\":false},{\"name\":\"UUID\",\"value\":\"`%player:uuid%`\",\"inline\":false},{\"name\":\"Player\",\"value\":\"`%player:name_unformatted%`\",\"inline\":true},{\"name\":\"Ping\",\"value\":\"`%player:ping% ms`\",\"inline\":true},{\"name\":\"\\u200b\",\"value\":\"\\u200b\",\"inline\":true},{\"name\":\"Position\",\"value\":\"`%player:pos_x% %player:pos_y% %player:pos_z%`\",\"inline\":true},{\"name\":\"World\",\"value\":\"`%world:id%`\",\"inline\":true},{\"name\":\"\\u200b\",\"value\":\"\\u200b\",\"inline\":true},{\"name\":\"Server\",\"value\":\"`%server:name%`\",\"inline\":true},{\"name\":\"Time\",\"value\":\"`%server:time%`\",\"inline\":true},{\"name\":\"Status\",\"value\":\"`TPS:%server:tps%` `MSPT:%server:mspt%`\",\"inline\":true}]}]}" }
-            ]
-          }
-        ]
-      }
-    };
-
     const fieldBaseClass = "w-full rounded-2xl border border-slate-200/80 bg-white/85 px-4 py-3 text-sm text-slate-800 shadow-sm outline-none transition duration-200 placeholder:text-slate-400 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:border-slate-700 dark:bg-slate-950/80 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-indigo-500 dark:focus:ring-indigo-500/20";
     const sectionCardClass = "relative overflow-hidden rounded-[28px] border border-white/60 bg-white/85 shadow-soft backdrop-blur dark:border-slate-800/80 dark:bg-slate-900/80";
     const fieldLabelClass = "text-[11px] font-extrabold uppercase tracking-[0.2em] text-slate-700 dark:text-slate-200";
     const sectionLabelClass = "text-[11px] font-extrabold uppercase tracking-[0.22em] text-slate-700 dark:text-slate-200";
 
-    const BrandMark = ({ size = 72, className = "", theme = "light" }) => {
-        const isDark = theme === "dark";
-        const outerStroke = isDark ? "#475569" : "#E2E8F0";
-        const bubbleStroke = isDark ? "url(#bubbleMonoConfig)" : "url(#bubbleGradConfig)";
-        const sparkleStroke = isDark ? "url(#sparkleMonoConfig)" : "url(#sparkleGradConfig)";
-        const sparkleFill = isDark ? "url(#sparkleMonoConfig)" : "url(#sparkleGradConfig)";
-        const glowColor = isDark ? "#FFFFFF" : "#F43F5E";
-        const glowOpacity = isDark ? "0.18" : "0.35";
+    const BrandMark = ({ size = 72, className = "" }) => {
+        const outerStroke = "#E2E8F0";
+        const bubbleStroke = "url(#bubbleGradConfig)";
+        const sparkleStroke = "url(#sparkleGradConfig)";
+        const sparkleFill = "url(#sparkleGradConfig)";
+        const glowColor = "#F43F5E";
+        const glowOpacity = "0.35";
 
         return (
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 32 32" width={size} height={size} fill="none" className={className}>
@@ -1663,12 +1428,12 @@
     };
 
     function ConfigEditor() {
-        const [config, setConfig] = useState(cloneJson(DEFAULT_CONFIG));
-        const [styles, setStyles] = useState(cloneJson(DEFAULT_STYLES));
-        const [mentions, setMentions] = useState(cloneJson(DEFAULT_MENTIONS));
-        const [presets, setPresets] = useState(cloneJson(DEFAULT_PRESETS));
+        const [defaultData, setDefaultData] = useState(null);
+        const [config, setConfig] = useState(null);
+        const [styles, setStyles] = useState(null);
+        const [mentions, setMentions] = useState(null);
+        const [presets, setPresets] = useState(null);
         const playerProfileCacheRef = useRef({});
-        const [theme, setTheme] = useState(getInitialTheme);
 
         const [activeTab, setActiveTab] = useState("global");
         const [activeJsonTab, setActiveJsonTab] = useState("config");
@@ -1682,29 +1447,60 @@
         const [error, setError] = useState(null);
 
         useEffect(() => {
+            let cancelled = false;
+
+            Promise.all([
+                fetchDefaultJson(DEFAULT_FILE_PATHS.config),
+                fetchDefaultJson(DEFAULT_FILE_PATHS.styles),
+                fetchDefaultJson(DEFAULT_FILE_PATHS.mentions),
+                fetchDefaultJson(DEFAULT_FILE_PATHS.presets)
+            ])
+                .then(([defaultConfig, defaultStyles, defaultMentions, defaultPresets]) => {
+                    if (cancelled) return;
+
+                    const nextDefaults = {
+                        config: defaultConfig,
+                        styles: defaultStyles,
+                        mentions: defaultMentions,
+                        presets: defaultPresets
+                    };
+
+                    setDefaultData(nextDefaults);
+                    setConfig(cloneJson(nextDefaults.config));
+                    setStyles(cloneJson(nextDefaults.styles));
+                    setMentions(cloneJson(nextDefaults.mentions));
+                    setPresets(cloneJson(nextDefaults.presets));
+                    setError(null);
+                })
+                .catch((loadError) => {
+                    if (cancelled) return;
+                    setError("Failed to load default configuration files: " + loadError.message);
+                });
+
+            return () => {
+                cancelled = true;
+            };
+        }, []);
+
+        useEffect(() => {
+            if (config === null) return;
             setConfigJson(JSON.stringify(config, null, 2));
         }, [config]);
 
         useEffect(() => {
+            if (styles === null) return;
             setStylesJson(JSON.stringify(styles, null, 2));
         }, [styles]);
 
         useEffect(() => {
+            if (mentions === null) return;
             setMentionsJson(JSON.stringify(mentions, null, 2));
         }, [mentions]);
 
         useEffect(() => {
+            if (presets === null) return;
             setPresetsJson(JSON.stringify(presets, null, 2));
         }, [presets]);
-
-        useEffect(() => {
-            applyTheme(theme);
-            try {
-                localStorage.setItem(THEME_STORAGE_KEY, theme);
-            } catch (error) {
-                console.warn('Could not persist theme preference.', error);
-            }
-        }, [theme]);
 
         const normalizeConfigData = (rawConfig = {}) => {
             const parsed = { ...rawConfig };
@@ -1776,7 +1572,7 @@
 
             return {
                 config: {
-                    ...cloneJson(DEFAULT_CONFIG),
+                    ...cloneJson(defaultData?.config || {}),
                     ...parsed,
                     version: CONFIG_VERSION,
                     banned_players: Array.isArray(parsed.banned_players) ? parsed.banned_players : [],
@@ -1903,7 +1699,7 @@
                         });
                     }
                     setStyles({
-                        ...cloneJson(DEFAULT_STYLES),
+                        ...cloneJson(defaultData.styles),
                         ...parsed,
                         style_rules: parsed.style_rules ?? {}
                     });
@@ -1935,7 +1731,7 @@
                         });
                     }
                     setMentions({
-                        ...cloneJson(DEFAULT_MENTIONS),
+                        ...cloneJson(defaultData.mentions),
                         ...parsed,
                         mention_rules: parsed.mention_rules ?? {}
                     });
@@ -1971,10 +1767,10 @@
         };
 
         const handleReset = () => {
-            setConfig(cloneJson(DEFAULT_CONFIG));
-            setStyles(cloneJson(DEFAULT_STYLES));
-            setMentions(cloneJson(DEFAULT_MENTIONS));
-            setPresets(cloneJson(DEFAULT_PRESETS));
+            setConfig(cloneJson(defaultData.config));
+            setStyles(cloneJson(defaultData.styles));
+            setMentions(cloneJson(defaultData.mentions));
+            setPresets(cloneJson(defaultData.presets));
             alert("All configurations reset to defaults.");
         };
 
@@ -2183,45 +1979,56 @@
             { id: "json", label: "Import / Export", compactLabel: "JSON", icon: "file-json" },
         ];
 
+        if (!defaultData || !config || !styles || !mentions || !presets) {
+            return (
+                <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_right,_rgba(99,102,241,0.16),_transparent_24%),radial-gradient(circle_at_top_left,_rgba(244,63,94,0.10),_transparent_18%),linear-gradient(180deg,_#f8fafc_0%,_#eef2ff_100%)] font-sans text-slate-900">
+                    <div className="relative mx-auto flex min-h-screen max-w-4xl items-center justify-center px-4 py-8">
+                        <Card className="w-full max-w-xl p-8">
+                            <div className="space-y-3 text-center">
+                                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-[2rem] border border-white/70 bg-white/90 shadow-glow">
+                                    <BrandMark size={60} />
+                                </div>
+                                <h1 className="text-2xl font-black tracking-tight text-slate-900">Config Generator</h1>
+                                <p className="text-sm text-slate-600">
+                                    {error || "Loading default configuration files..."}
+                                </p>
+                            </div>
+                        </Card>
+                    </div>
+                </div>
+            );
+        }
+
         const stylingRuleCount = Object.values(styles.style_rules || {}).reduce((sum, rules) => sum + rules.length, 0);
         const mentionRuleCount = Object.values(mentions.mention_rules || {}).reduce((sum, rules) => sum + rules.length, 0);
         const presetCount = Object.keys(presets.color || {}).length + Object.keys(presets.atlas || {}).length;
         const activeTabMeta = tabs.find(tab => tab.id === activeTab);
-        const isDarkMode = theme === 'dark';
 
         return (
-            <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_right,_rgba(99,102,241,0.16),_transparent_24%),radial-gradient(circle_at_top_left,_rgba(244,63,94,0.10),_transparent_18%),linear-gradient(180deg,_#f8fafc_0%,_#eef2ff_100%)] font-sans text-slate-900 dark:bg-[radial-gradient(circle_at_top_right,_rgba(99,102,241,0.18),_transparent_24%),radial-gradient(circle_at_top_left,_rgba(168,85,247,0.12),_transparent_18%),linear-gradient(180deg,_#020617_0%,_#0f172a_100%)] dark:text-slate-100">
-                <div className="pointer-events-none absolute -left-20 top-20 h-72 w-72 rounded-full bg-indigo-200/40 blur-3xl dark:bg-indigo-700/20" />
-                <div className="pointer-events-none absolute -right-20 top-40 h-80 w-80 rounded-full bg-fuchsia-200/30 blur-3xl dark:bg-fuchsia-700/15" />
+            <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_right,_rgba(99,102,241,0.16),_transparent_24%),radial-gradient(circle_at_top_left,_rgba(244,63,94,0.10),_transparent_18%),linear-gradient(180deg,_#f8fafc_0%,_#eef2ff_100%)] font-sans text-slate-900">
+                <div className="pointer-events-none absolute -left-20 top-20 h-72 w-72 rounded-full bg-indigo-200/40 blur-3xl" />
+                <div className="pointer-events-none absolute -right-20 top-40 h-80 w-80 rounded-full bg-fuchsia-200/30 blur-3xl" />
 
                 <div className="relative mx-auto max-w-[92rem] px-4 py-8 md:px-6 md:py-10">
                     <header className="mb-8 space-y-6">
                         <Card className="overflow-visible p-6 md:p-8">
-                            <div className="absolute right-0 top-0 h-52 w-52 rounded-full bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 blur-3xl opacity-80 dark:from-indigo-900/40 dark:via-purple-900/30 dark:to-pink-900/20" />
+                            <div className="absolute right-0 top-0 h-52 w-52 rounded-full bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 blur-3xl opacity-80" />
                             <div className="relative flex flex-col gap-6">
-                                <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+                                <div className="flex flex-col gap-6 md:flex-row md:items-start">
                                     <div className="flex flex-col gap-6 md:flex-row md:items-center">
-                                        <div className="flex h-24 w-24 items-center justify-center rounded-[2rem] border border-white/70 bg-white/90 shadow-glow dark:border-slate-700 dark:bg-slate-900/90">
-                                            <BrandMark size={72} theme={theme} />
+                                        <div className="flex h-24 w-24 items-center justify-center rounded-[2rem] border border-white/70 bg-white/90 shadow-glow">
+                                            <BrandMark size={72} />
                                         </div>
                                         <div>
                                             <p className="text-xs font-semibold uppercase tracking-[0.26em] text-indigo-500">Embellish Chat Toolkit</p>
-                                            <h1 className="mt-2 inline-block pb-2 text-4xl font-black leading-[1.2] tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-500 md:text-5xl dark:from-slate-100 dark:via-slate-200 dark:to-slate-400">
+                                            <h1 className="mt-2 inline-block pb-2 text-4xl font-black leading-[1.2] tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-500 md:text-5xl">
                                                 config generator
                                             </h1>
-                                            <div className="mt-3 inline-flex items-center rounded-full bg-white/80 px-3 py-1 text-xs font-bold text-slate-600 shadow-sm dark:bg-slate-900/80 dark:text-slate-300">
+                                            <div className="mt-3 inline-flex items-center rounded-full bg-white/80 px-3 py-1 text-xs font-bold text-slate-600 shadow-sm">
                                                 {activeTabMeta?.label}
                                             </div>
                                         </div>
                                     </div>
-                                    <Button
-                                        onClick={() => setTheme(isDarkMode ? 'light' : 'dark')}
-                                        variant="secondary"
-                                        className="self-start"
-                                    >
-                                        <IconWrapper name={isDarkMode ? 'sun' : 'moon'} size={16} />
-                                        {isDarkMode ? 'Light mode' : 'Dark mode'}
-                                    </Button>
                                 </div>
                                 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                                     <StatPill label="Version" value={config.version || CONFIG_VERSION} accent="indigo" />

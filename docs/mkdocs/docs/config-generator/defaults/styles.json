@@ -1,0 +1,177 @@
+{
+  "style_rules": {
+    "embellish-chat.chat": [
+      {
+        "pattern": "\\[([^\\]]+?)]\\((https://.*?)\\)",
+        "comment": "<blue><b>Pattern</b></blue>: [Text](url)\n<dark_aqua><b>Comment</b></dark_aqua>: clickable link with custom text\n",
+        "styles": [
+          {
+            "styleType": "URL",
+            "preset": ""
+          }
+        ]
+      },
+      {
+        "pattern": "((https://\\S+))",
+        "comment": "<blue><b>Pattern</b></blue>: url\n<dark_aqua><b>Comment</b></dark_aqua>: auto-detect clickable link\n",
+        "styles": [
+          {
+            "styleType": "URL",
+            "preset": ""
+          }
+        ]
+      },
+      {
+        "pattern": "\\[([^\\]]+?)]\\{(.*?)}",
+        "comment": "<blue><b>Pattern</b></blue>: [Text]{font}\n<dark_aqua><b>Comment</b></dark_aqua>: apply custom font to text\n",
+        "styles": [
+          {
+            "styleType": "FONT",
+            "preset": ""
+          }
+        ]
+      },
+      {
+        "pattern": "\\[([^\\]]+?)]<(#.{6})>",
+        "comment": "<blue><b>Pattern</b></blue>: [Text]<#RRGGBB>\n<dark_aqua><b>Comment</b></dark_aqua>: apply hex color\n",
+        "styles": [
+          {
+            "styleType": "COLOR_HEX",
+            "preset": ""
+          }
+        ]
+      },
+      {
+        "pattern": "\\[([^\\]]+?)]<(#.{6,})>",
+        "comment": "<blue><b>Pattern</b></blue>: [Text]<#color1#color2...>\n<dark_aqua><b>Comment</b></dark_aqua>: apply gradient color\n",
+        "styles": [
+          {
+            "styleType": "COLOR_GRADIENT",
+            "preset": ""
+          }
+        ]
+      },
+      {
+        "pattern": "\\[([^\\]]+?)]<([a-z\\s]+?)>",
+        "comment": "<blue><b>Pattern</b></blue>: [Text]<preset>\n<dark_aqua><b>Comment</b></dark_aqua>: apply preset color name\n",
+        "styles": [
+          {
+            "styleType": "COLOR_PRESET",
+            "preset": ""
+          }
+        ]
+      },
+      {
+        "pattern": "\\*\\*(.+?)\\*\\*()",
+        "comment": "<blue><b>Pattern</b></blue>: **Text**\n<dark_aqua><b>Comment</b></dark_aqua>: bold formatting\n",
+        "styles": [
+          {
+            "styleType": "BOLD",
+            "preset": ""
+          }
+        ]
+      },
+      {
+        "pattern": "__(.+?)__()",
+        "comment": "<blue><b>Pattern</b></blue>: __Text__\n<dark_aqua><b>Comment</b></dark_aqua>: underline formatting\n",
+        "styles": [
+          {
+            "styleType": "UNDERLINE",
+            "preset": ""
+          }
+        ]
+      },
+      {
+        "pattern": "_(.+?)_()",
+        "comment": "<blue><b>Pattern</b></blue>: _Text_\n<dark_aqua><b>Comment</b></dark_aqua>: italic formatting\n",
+        "styles": [
+          {
+            "styleType": "ITALIC",
+            "preset": ""
+          }
+        ]
+      },
+      {
+        "pattern": "~~(.+?)~~()",
+        "comment": "<blue><b>Pattern</b></blue>: ~~Text~~\n<dark_aqua><b>Comment</b></dark_aqua>: strikethrough formatting\n",
+        "styles": [
+          {
+            "styleType": "STRIKETHROUGH",
+            "preset": ""
+          }
+        ]
+      },
+      {
+        "pattern": "\\|\\|(.+?)\\|\\|()",
+        "comment": "<blue><b>Pattern</b></blue>: ||Text||\n<dark_aqua><b>Comment</b></dark_aqua>: obfuscated text\n",
+        "styles": [
+          {
+            "styleType": "OBFUSCATED",
+            "preset": ""
+          }
+        ]
+      },
+      {
+        "pattern": "\\[([^\\]]+?)]<(RAINBOW)>",
+        "comment": "<blue><b>Pattern</b></blue>: [Text]<RAINBOW>\n<dark_aqua><b>Comment</b></dark_aqua>: rainbow color\n",
+        "styles": [
+          {
+            "styleType": "COLOR_RAINBOW",
+            "preset": "0.7"
+          }
+        ]
+      },
+      {
+        "pattern": "(.+)()",
+        "comment": "<blue><b>Pattern</b></blue>: any text\n<dark_aqua><b>Comment</b></dark_aqua>: metadata capture layer\n",
+        "styles": [
+          {
+            "styleType": "METADATA",
+            "preset": ""
+          }
+        ]
+      },
+      {
+        "pattern": "(\\[i\\])()",
+        "comment": "<blue><b>Pattern</b></blue>: [i]\n<dark_aqua><b>Comment</b></dark_aqua>: show held item\n",
+        "styles": [
+          {
+            "styleType": "SHOW_ITEM",
+            "preset": ""
+          }
+        ]
+      },
+      {
+        "pattern": "(\\[inv\\])()",
+        "comment": "<blue><b>Pattern</b></blue>: [inv]\n<dark_aqua><b>Comment</b></dark_aqua>: show player inventory\n",
+        "styles": [
+          {
+            "styleType": "SHOW_INVENTORY",
+            "preset": ""
+          }
+        ]
+      },
+      {
+        "pattern": "(\\[end\\])()",
+        "comment": "<blue><b>Pattern</b></blue>: [end]\n<dark_aqua><b>Comment</b></dark_aqua>: show ender chest contents\n",
+        "styles": [
+          {
+            "styleType": "SHOW_ENDER_CHEST",
+            "preset": ""
+          }
+        ]
+      },
+      {
+        "pattern": "(:(.+?):)",
+        "comment": "<blue><b>Pattern</b></blue>: :icon:\n<dark_aqua><b>Comment</b></dark_aqua>: atlas emoji/icon preset\n",
+        "styles": [
+          {
+            "styleType": "ATLAS_PRESET",
+            "preset": ""
+          }
+        ]
+      }
+    ],
+    "embellish-chat.command_argument": []
+  }
+}

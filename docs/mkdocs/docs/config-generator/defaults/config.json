@@ -1,0 +1,13 @@
+{
+  "version": "3.5.0",
+  "delimiter": ",",
+  "timestamp": "yyyy-MM-dd HH:mm:ss",
+  "command_alias": "ec",
+  "url_color": "#0000EE",
+  "team_color": "#FF55FF",
+  "notify_command_enabled": true,
+  "notify_mention_enabled": true,
+  "disable_vanilla_chat_format": false,
+  "banned_players": [],
+  "notify_off_players": []
+}

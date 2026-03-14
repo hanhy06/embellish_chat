@@ -1,0 +1,48 @@
+{
+  "color": {
+    "black": "#000000",
+    "dark blue": "#0000AA",
+    "dark green": "#00AA00",
+    "dark aqua": "#00AAAA",
+    "dark red": "#AA0000",
+    "dark purple": "#AA00AA",
+    "gold": "#FFAA00",
+    "gray": "#AAAAAA",
+    "dark gray": "#555555",
+    "blue": "#5555FF",
+    "green": "#55FF55",
+    "aqua": "#55FFFF",
+    "red": "#FF5555",
+    "light purple": "#FF55FF",
+    "yellow": "#FFFF55",
+    "white": "#FFFFFF"
+  },
+  "atlas": {
+    "fire": {
+      "atlas": "minecraft:blocks",
+      "sprite": "minecraft:block/campfire_fire"
+    },
+    "hunger": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:hud/food_full"
+    },
+    "heart": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:hud/heart/full"
+    },
+    "yes": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:container/beacon/confirm"
+    },
+    "no": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:container/beacon/cancel"
+    },
+    "move": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:mob_effect/wind_charged"
+    }
+  },
+  "whitelist": [],
+  "prefix": {}
+}
