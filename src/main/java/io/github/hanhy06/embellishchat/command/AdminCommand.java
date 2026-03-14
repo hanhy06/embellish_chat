@@ -249,6 +249,10 @@ public class AdminCommand {
         MutableText result = Text.empty();
 
         Matcher matcher = Pattern.compile(regex).matcher(text);
+        if (matcher.groupCount() < 2) {
+            context.getSource().sendFeedback(() -> Text.literal("Two capture groups are required."), false);
+            return 0;
+        }
 
         int lastEnd = 0;
         while (matcher.find()){
