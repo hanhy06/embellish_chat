@@ -287,7 +287,13 @@ public class StyleRegistry {
     }
 
     public MutableText URL(StyleParameter parameter) {
-        URI uri = URI.create(parameter.getString());
+        URI uri;
+        try {
+            uri = URI.create(parameter.getString());
+        }catch (IllegalAccessError e){
+            EmbellishChat.LOGGER.warn("Invalid URL provided for segment [{}]: {}", parameter.segment().getString(), parameter.getString());
+            return parameter.segment();
+        }
         String host = uri.getHost();
 
         boolean allowed = whitelist.isEmpty() || whitelist.contains(host);
