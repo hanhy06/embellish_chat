@@ -26,7 +26,7 @@ public class StyleProcessor implements ConfigListener {
     public static StyleProcessor INSTANCE;
 
     private Config config;
-    private Map<String,List<StyleRule>> stylingRules;
+    private Map<String,List<StyleRule>> styleRules;
     private StyleRegistry registry;
 
     public StyleProcessor(){
@@ -37,13 +37,13 @@ public class StyleProcessor implements ConfigListener {
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
 
-        this.stylingRules = newConfig.style_rules();
+        this.styleRules = newConfig.style_rules();
         this.registry = new StyleRegistry(newConfig);
     }
 
     public MutableComponent handleStyle(MutableComponent text,List<String> keys,ServerPlayer player){
         List<StyleRule> rules = new ArrayList<>();
-        keys.forEach(key -> rules.addAll(stylingRules.getOrDefault(key,List.of())));
+        keys.forEach(key -> rules.addAll(styleRules.getOrDefault(key,List.of())));
         if (rules.isEmpty()) return text;
 
         MutableComponent result = text;
