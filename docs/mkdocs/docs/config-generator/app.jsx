@@ -9,6 +9,7 @@
         mentions: "defaults/mentions.json",
         presets: "defaults/presets.json"
     };
+    const APP_ICON_PATH = "../assets/images/icon-blackwhite.png";
     const fetchDefaultJson = async (path) => {
         const response = await fetch(path, { cache: "no-store" });
         if (!response.ok) {
@@ -56,56 +57,24 @@
         "MASTER", "MUSIC", "RECORDS", "WEATHER", "BLOCKS", "HOSTILE", "NEUTRAL", "PLAYERS", "AMBIENT", "VOICE", "UI"
     ];
 
-    const fieldBaseClass = "w-full rounded-2xl border border-slate-200/80 bg-white/85 px-4 py-3 text-sm text-slate-800 shadow-sm outline-none transition duration-200 placeholder:text-slate-400 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:border-slate-700 dark:bg-slate-950/80 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-indigo-500 dark:focus:ring-indigo-500/20";
-    const sectionCardClass = "relative overflow-hidden rounded-[28px] border border-white/60 bg-white/85 shadow-soft backdrop-blur dark:border-slate-800/80 dark:bg-slate-900/80";
-    const fieldLabelClass = "text-[11px] font-extrabold uppercase tracking-[0.2em] text-slate-700 dark:text-slate-200";
-    const sectionLabelClass = "text-[11px] font-extrabold uppercase tracking-[0.22em] text-slate-700 dark:text-slate-200";
+    const fieldBaseClass = "w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 shadow-sm outline-none transition duration-200 placeholder:text-slate-500 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20";
+    const sectionCardClass = "relative overflow-hidden rounded-[28px] border border-slate-800/80 bg-slate-900/80 shadow-soft backdrop-blur";
+    const fieldLabelClass = "text-[11px] font-extrabold uppercase tracking-[0.2em] text-slate-200";
+    const sectionLabelClass = "text-[11px] font-extrabold uppercase tracking-[0.22em] text-slate-200";
 
-    const BrandMark = ({ size = 72, className = "" }) => {
-        const outerStroke = "#E2E8F0";
-        const bubbleStroke = "url(#bubbleGradConfig)";
-        const sparkleStroke = "url(#sparkleGradConfig)";
-        const sparkleFill = "url(#sparkleGradConfig)";
-        const glowColor = "#F43F5E";
-        const glowOpacity = "0.35";
-
-        return (
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 32 32" width={size} height={size} fill="none" className={className}>
-                <defs>
-                    <linearGradient id="bubbleGradConfig" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#4F46E5" />
-                        <stop offset="100%" stopColor="#9333EA" />
-                    </linearGradient>
-                    <linearGradient id="sparkleGradConfig" x1="0%" y1="100%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#F59E0B" />
-                        <stop offset="100%" stopColor="#F43F5E" />
-                    </linearGradient>
-                    <linearGradient id="bubbleMonoConfig" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#FFFFFF" />
-                        <stop offset="100%" stopColor="#CBD5E1" />
-                    </linearGradient>
-                    <linearGradient id="sparkleMonoConfig" x1="0%" y1="100%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#F8FAFC" />
-                        <stop offset="100%" stopColor="#94A3B8" />
-                    </linearGradient>
-                    <filter id="glowConfig" x="-50%" y="-50%" width="200%" height="200%">
-                        <feDropShadow dx="0" dy="0" stdDeviation="2.5" floodColor={glowColor} floodOpacity={glowOpacity} />
-                    </filter>
-                </defs>
-                <path d="M8 8h12a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-1.5l-3.5 3v-3H8a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2z" stroke={outerStroke} strokeWidth="1.5" fill="none" strokeLinejoin="round"/>
-                <path d="M16 4H4a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h1.5v3.5L9 16h7a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" stroke={bubbleStroke} strokeWidth="2" fill="none" strokeLinejoin="round" strokeLinecap="round"/>
-                <path d="M6 9h7" stroke={bubbleStroke} strokeWidth="2" strokeLinecap="round"/>
-                <path d="M6 13h4" stroke={bubbleStroke} strokeWidth="2" strokeLinecap="round"/>
-                <path d="M19 1l1.5 3.5L24 6l-3.5 1.5L19 11l-1.5-3.5L14 6l3.5-1.5z" stroke={sparkleStroke} strokeWidth="1.8" fill={sparkleFill} strokeLinejoin="round" filter="url(#glowConfig)"/>
-                <path d="M4 1l.7 1.8L6.5 3.5 4.7 4.2 4 6l-.7-1.8L1.5 3.5l1.8-.7z" stroke={sparkleStroke} strokeWidth="1.5" fill={sparkleFill} strokeLinejoin="round"/>
-                <path d="M22 13l.5 1.5 1.5.5-1.5.5-.5 1.5-.5-1.5-1.5-.5 1.5-.5z" stroke={sparkleStroke} strokeWidth="1.5" fill={sparkleFill} strokeLinejoin="round"/>
-            </svg>
-        );
-    };
+    const AppLogo = ({ size = 72, className = "" }) => (
+        <img
+            src={APP_ICON_PATH}
+            alt="Embellish Chat icon"
+            width={size}
+            height={size}
+            className={className}
+        />
+    );
 
     const Card = ({ children, className = "" }) => (
         <div className={`${sectionCardClass} ${className}`}>
-            <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent dark:via-slate-700/60" />
+            <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-slate-700/60 to-transparent" />
             {children}
         </div>
     );
@@ -121,7 +90,7 @@
                         </div>
                     )}
                     <div className="flex flex-wrap items-center gap-3">
-                        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">{title}</h2>
+                        <h2 className="text-2xl font-black tracking-tight text-white">{title}</h2>
                         {badge}
                     </div>
                 </div>
@@ -131,10 +100,10 @@
 
     const CountBadge = ({ count, label = "items", tone = "indigo" }) => {
         const tones = {
-            indigo: "bg-indigo-100 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300",
-            amber: "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300",
-            emerald: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300",
-            slate: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300"
+            indigo: "bg-indigo-500/15 text-indigo-300",
+            amber: "bg-amber-500/15 text-amber-300",
+            emerald: "bg-emerald-500/15 text-emerald-300",
+            slate: "bg-slate-800 text-slate-300"
         };
 
         return (
@@ -146,14 +115,14 @@
 
     const StatPill = ({ label, value, accent = "indigo" }) => {
         const accents = {
-            indigo: "from-indigo-500/15 to-purple-500/15 text-indigo-700 dark:text-indigo-300",
-            amber: "from-amber-400/20 to-rose-400/15 text-amber-700 dark:text-amber-300",
-            emerald: "from-emerald-400/20 to-cyan-400/15 text-emerald-700 dark:text-emerald-300",
-            slate: "from-slate-200/60 to-slate-100/20 text-slate-700 dark:from-slate-800 dark:to-slate-900 dark:text-slate-300"
+            indigo: "from-indigo-500/15 to-purple-500/15 text-indigo-300",
+            amber: "from-amber-400/20 to-rose-400/15 text-amber-300",
+            emerald: "from-emerald-400/20 to-cyan-400/15 text-emerald-300",
+            slate: "from-slate-800 to-slate-900 text-slate-300"
         };
 
         return (
-            <div className={`rounded-2xl border border-white/70 bg-gradient-to-br px-4 py-3 shadow-sm dark:border-slate-800 ${accents[accent] || accents.indigo}`}>
+            <div className={`rounded-2xl border border-slate-800 bg-gradient-to-br px-4 py-3 shadow-sm ${accents[accent] || accents.indigo}`}>
                 <div className="text-[11px] font-semibold uppercase tracking-[0.22em] opacity-70">{label}</div>
                 <div className="mt-1 text-lg font-black">{value}</div>
             </div>
@@ -163,10 +132,10 @@
     const Button = ({ onClick, children, variant = "primary", size = "md", className = "", disabled = false }) => {
         const baseStyles = "inline-flex items-center justify-center gap-2 rounded-2xl font-semibold transition duration-200 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed";
         const variants = {
-            primary: "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-glow hover:brightness-105 focus:ring-indigo-200 dark:focus:ring-indigo-500/25",
-            secondary: "border border-slate-200 bg-white/90 text-slate-700 shadow-sm hover:border-indigo-200 hover:bg-indigo-50 focus:ring-indigo-100 dark:border-slate-700 dark:bg-slate-900/90 dark:text-slate-200 dark:hover:border-indigo-500/40 dark:hover:bg-slate-800 dark:focus:ring-indigo-500/20",
-            danger: "border border-red-200 bg-red-50 text-red-700 shadow-sm hover:bg-red-100 focus:ring-red-100 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300 dark:hover:bg-red-950/60 dark:focus:ring-red-500/20",
-            ghost: "text-slate-500 hover:bg-slate-100 hover:text-slate-800 focus:ring-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus:ring-slate-700"
+            primary: "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-glow hover:brightness-105 focus:ring-indigo-500/25",
+            secondary: "border border-slate-700 bg-slate-900/90 text-slate-200 shadow-sm hover:border-indigo-500/40 hover:bg-slate-800 focus:ring-indigo-500/20",
+            danger: "border border-red-900/50 bg-red-950/40 text-red-300 shadow-sm hover:bg-red-950/60 focus:ring-red-500/20",
+            ghost: "text-slate-400 hover:bg-slate-800 hover:text-slate-100 focus:ring-slate-700"
         };
         const sizes = {
             sm: "px-3 py-2 text-xs",
@@ -502,10 +471,10 @@
             className={`group inline-flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition duration-200 whitespace-nowrap ${
                 active
                     ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-glow'
-                    : 'bg-white/75 text-slate-600 hover:bg-white hover:text-slate-900 dark:bg-slate-900/70 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100'
+                    : 'bg-slate-900/70 text-slate-400 hover:bg-slate-800 hover:text-slate-100'
             }`}
         >
-            <span className={`flex h-8 w-8 items-center justify-center rounded-xl ${active ? 'bg-white/20' : 'bg-slate-100 text-indigo-500 dark:bg-slate-800 dark:text-indigo-300'}`}>
+            <span className={`flex h-8 w-8 items-center justify-center rounded-xl ${active ? 'bg-white/20' : 'bg-slate-800 text-indigo-300'}`}>
                 <IconWrapper name={icon} size={16} />
             </span>
             <span className="hidden sm:inline">{label}</span>
@@ -516,18 +485,18 @@
     const Accordion = ({ title, children, defaultOpen = false, onDelete }) => {
         const [isOpen, setIsOpen] = useState(defaultOpen);
         return (
-            <div className="overflow-hidden rounded-[26px] border border-slate-200/80 bg-white/70 shadow-sm dark:border-slate-700 dark:bg-slate-950/40">
+            <div className="overflow-hidden rounded-[26px] border border-slate-700 bg-slate-950/40 shadow-sm">
                 <div
-                    className="flex items-center justify-between gap-3 px-4 py-4 cursor-pointer select-none bg-gradient-to-r from-slate-50 to-white dark:from-slate-900/80 dark:to-slate-900/30"
+                    className="flex items-center justify-between gap-3 px-4 py-4 cursor-pointer select-none bg-gradient-to-r from-slate-900/80 to-slate-900/30"
                     onClick={() => setIsOpen(!isOpen)}
                 >
                     <div className="flex min-w-0 items-center gap-3 overflow-hidden">
-                        <div className={`flex h-9 w-9 items-center justify-center rounded-xl transition ${isOpen ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300' : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'}`}>
+                        <div className={`flex h-9 w-9 items-center justify-center rounded-xl transition ${isOpen ? 'bg-indigo-500/15 text-indigo-300' : 'bg-slate-800 text-slate-400'}`}>
                             {isOpen ? <IconWrapper name="chevron-down" size={16} className="flex-shrink-0" /> : <IconWrapper name="chevron-right" size={16} className="flex-shrink-0" />}
                         </div>
                         <div className="min-w-0">
                             <div className={sectionLabelClass}>Rule</div>
-                            <span className="block truncate text-sm font-semibold text-slate-800 dark:text-slate-100">{title}</span>
+                            <span className="block truncate text-sm font-semibold text-slate-100">{title}</span>
                         </div>
                     </div>
                     {onDelete && (
@@ -537,7 +506,7 @@
                     )}
                 </div>
                 {isOpen && (
-                    <div className="border-t border-slate-200/80 bg-white/80 p-5 dark:border-slate-700 dark:bg-slate-950/50">
+                    <div className="border-t border-slate-700 bg-slate-950/50 p-5">
                         {children}
                     </div>
                 )}
@@ -1981,15 +1950,15 @@
 
         if (!defaultData || !config || !styles || !mentions || !presets) {
             return (
-                <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_right,_rgba(99,102,241,0.16),_transparent_24%),radial-gradient(circle_at_top_left,_rgba(244,63,94,0.10),_transparent_18%),linear-gradient(180deg,_#f8fafc_0%,_#eef2ff_100%)] font-sans text-slate-900">
+                <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_right,_rgba(99,102,241,0.22),_transparent_24%),radial-gradient(circle_at_top_left,_rgba(244,63,94,0.14),_transparent_20%),linear-gradient(180deg,_#020617_0%,_#0f172a_45%,_#111827_100%)] font-sans text-slate-100">
                     <div className="relative mx-auto flex min-h-screen max-w-4xl items-center justify-center px-4 py-8">
                         <Card className="w-full max-w-xl p-8">
                             <div className="space-y-3 text-center">
-                                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-[2rem] border border-white/70 bg-white/90 shadow-glow">
-                                    <BrandMark size={60} />
+                                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-[2rem] border border-slate-700 bg-slate-950/80 shadow-glow">
+                                    <AppLogo size={60} className="h-14 w-14 rounded-2xl object-contain" />
                                 </div>
-                                <h1 className="text-2xl font-black tracking-tight text-slate-900">Config Generator</h1>
-                                <p className="text-sm text-slate-600">
+                                <h1 className="text-2xl font-black tracking-tight text-white">Config Generator</h1>
+                                <p className="text-sm text-slate-400">
                                     {error || "Loading default configuration files..."}
                                 </p>
                             </div>
@@ -2005,26 +1974,26 @@
         const activeTabMeta = tabs.find(tab => tab.id === activeTab);
 
         return (
-            <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_right,_rgba(99,102,241,0.16),_transparent_24%),radial-gradient(circle_at_top_left,_rgba(244,63,94,0.10),_transparent_18%),linear-gradient(180deg,_#f8fafc_0%,_#eef2ff_100%)] font-sans text-slate-900">
-                <div className="pointer-events-none absolute -left-20 top-20 h-72 w-72 rounded-full bg-indigo-200/40 blur-3xl" />
-                <div className="pointer-events-none absolute -right-20 top-40 h-80 w-80 rounded-full bg-fuchsia-200/30 blur-3xl" />
+            <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_right,_rgba(99,102,241,0.22),_transparent_24%),radial-gradient(circle_at_top_left,_rgba(244,63,94,0.14),_transparent_20%),linear-gradient(180deg,_#020617_0%,_#0f172a_45%,_#111827_100%)] font-sans text-slate-100">
+                <div className="pointer-events-none absolute -left-20 top-20 h-72 w-72 rounded-full bg-indigo-500/20 blur-3xl" />
+                <div className="pointer-events-none absolute -right-20 top-40 h-80 w-80 rounded-full bg-fuchsia-500/15 blur-3xl" />
 
                 <div className="relative mx-auto max-w-[92rem] px-4 py-8 md:px-6 md:py-10">
                     <header className="mb-8 space-y-6">
                         <Card className="overflow-visible p-6 md:p-8">
-                            <div className="absolute right-0 top-0 h-52 w-52 rounded-full bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 blur-3xl opacity-80" />
+                            <div className="absolute right-0 top-0 h-52 w-52 rounded-full bg-gradient-to-br from-indigo-500/20 via-purple-500/12 to-pink-500/12 blur-3xl opacity-90" />
                             <div className="relative flex flex-col gap-6">
                                 <div className="flex flex-col gap-6 md:flex-row md:items-start">
                                     <div className="flex flex-col gap-6 md:flex-row md:items-center">
-                                        <div className="flex h-24 w-24 items-center justify-center rounded-[2rem] border border-white/70 bg-white/90 shadow-glow">
-                                            <BrandMark size={72} />
+                                        <div className="flex h-24 w-24 items-center justify-center rounded-[2rem] border border-slate-700 bg-slate-950/80 shadow-glow">
+                                            <AppLogo size={72} className="h-16 w-16 rounded-[1.35rem] object-contain" />
                                         </div>
                                         <div>
                                             <p className="text-xs font-semibold uppercase tracking-[0.26em] text-indigo-500">Embellish Chat Toolkit</p>
                                             <h1 className="mt-2 inline-block pb-2 text-4xl font-black leading-[1.2] tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-500 md:text-5xl">
                                                 config generator
                                             </h1>
-                                            <div className="mt-3 inline-flex items-center rounded-full bg-white/80 px-3 py-1 text-xs font-bold text-slate-600 shadow-sm">
+                                            <div className="mt-3 inline-flex items-center rounded-full border border-slate-700 bg-slate-950/80 px-3 py-1 text-xs font-bold text-slate-300 shadow-sm">
                                                 {activeTabMeta?.label}
                                             </div>
                                         </div>
