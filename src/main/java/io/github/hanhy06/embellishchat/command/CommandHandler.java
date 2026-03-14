@@ -3,6 +3,7 @@ package io.github.hanhy06.embellishchat.command;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
+import io.github.hanhy06.embellishchat.config.ConfigManager;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ReloadCommand;
@@ -14,7 +15,7 @@ public class CommandHandler implements ConfigListener {
     @Override
     public void onConfigReload(Config newConfig) {
         String alias = newConfig.command_alias();
-        if (alias == null || alias.isBlank()) return;
+        if (alias == null || alias.isBlank() || ConfigManager.getConfig().command_alias().equals(alias)) return;
 
         CommandRegistrationCallback.EVENT.register((commandDispatcher, commandRegistryAccess, registrationEnvironment) -> commandDispatcher.register(
                 CommandManager.literal(alias).redirect(

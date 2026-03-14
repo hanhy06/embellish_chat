@@ -13,24 +13,25 @@ import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class PlaceHolderUtil {
-    private static final Map<ServerPlayerEntity,String> placeholders = new HashMap<>();
+    private static final Map<UUID,String> placeholders = new HashMap<>();
 
-    public static void put(ServerPlayerEntity player,String string){
-        placeholders.put(player,string);
+    public static void put(UUID uuid,String string){
+        placeholders.put(uuid,string);
     }
 
-    public static void remove(ServerPlayerEntity player){
-        placeholders.remove(player);
+    public static void remove(UUID uuid){
+        placeholders.remove(uuid);
     }
 
     public static void registerPlaceholder(){
         placeholders.clear();
 
         Placeholders.register(Identifier.of(EmbellishChat.MOD_ID,"content"),(context, string) -> {
-            if (!context.hasPlayer()) return PlaceholderResult.invalid("no player");
-            return PlaceholderResult.value(placeholders.get(context.player()));
+            if (context.player() == null) return PlaceholderResult.invalid("no player");
+            return PlaceholderResult.value(placeholders.get(context.player().getUuid()));
         });
     }
 

@@ -457,8 +457,7 @@ public class StyleRegistry {
     }
 
     public MutableText BUBBLE(StyleParameter parameter){
-        if (parameter.player() == null) return parameter.segment();
-        BubbleUtil.spawnDisplayEntity(parameter.player(),parameter.segment());
+        if (parameter.player() != null) BubbleUtil.spawnDisplayEntity(parameter.player(),parameter.segment());
         return parameter.segment();
     }
 

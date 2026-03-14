@@ -53,7 +53,7 @@ public class MessageProcessor implements ConfigListener {
         SignedMessage result;
 
         try {
-            PlaceHolderUtil.put(sender,stringMessage);
+            PlaceHolderUtil.put(message.getSender(),stringMessage);
             List<Mention> mentions = mentionProcessor.handleMention(stringMessage,getPermissions(sender, config.mention_rules().keySet()),sender);
             mentions.sort(Comparator.comparing(Mention::begin));
 
@@ -72,7 +72,7 @@ public class MessageProcessor implements ConfigListener {
         } catch (MessageBlockedException block){
             return null;
         } finally {
-            PlaceHolderUtil.remove(sender);
+            PlaceHolderUtil.remove(message.getSender());
         }
 
         return result;

@@ -31,7 +31,7 @@ public class MentionProcessor implements ConfigListener {
 
     private Config config;
     private Map<String, List<MentionRule>> mentionRules;
-    private MentionRegistry registries;
+    private MentionRegistry registry;
 
     private HashSet<UUID> notifyOffPlayers;
     private boolean notifyCommandEnabled;
@@ -55,7 +55,7 @@ public class MentionProcessor implements ConfigListener {
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
         this.mentionRules = config.mention_rules();
-        this.registries = new MentionRegistry(newConfig);
+        this.registry = new MentionRegistry(newConfig);
 
         this.cooldowns.clear();
         this.notifyOffPlayers = config.notify_off_players();
@@ -116,7 +116,7 @@ public class MentionProcessor implements ConfigListener {
         for (int i=0;i<actions.size();i++){
             MentionAction action = actions.get(i);
 
-            Function<MentionParameter,Target> function = registries.get(action.mentionType());
+            Function<MentionParameter,Target> function = registry.get(action.mentionType());
             String option = OptionUtil.selectOption(action.preset(),options.size() > i ? options.get(i):"");
 
             Target target = function.apply(MentionParameter.of(option,player));
