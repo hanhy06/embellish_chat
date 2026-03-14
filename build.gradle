@@ -53,7 +53,7 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
 	include(modImplementation("me.lucko:fabric-permissions-api:${fabric_permissions_api_version}"))
-	modImplementation("eu.pb4:placeholder-api:${placeholder_api_version}")
+	include(modImplementation("eu.pb4:placeholder-api:${placeholder_api_version}"))
 	modCompileOnly "maven.modrinth:styled-nicknames:${styled_nicknames_version}"
 	modCompileOnly "net.luckperms:api:${luckperms_version}"
 }

@@ -257,7 +257,7 @@ The configuration file is located at `config/embellish-chat/presets.json`.
 * **Fabric Permissions API (Embedded)**
   * The keys defined in `style_rules` and `mention_rules` directly function as permission nodes.
   * Rules are evaluated from top to bottom based on the player's permissions.
-* **Placeholder API**
+* **Text Placeholder API (Embedded)**
   * Supports dynamic placeholders in mention titles and style presets.
   * **Exclusive:** Use `%embellish-chat:content%` to access the raw, unparsed chat message.
 * **Styled Nicknames**

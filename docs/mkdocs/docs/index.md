@@ -192,8 +192,8 @@ The configuration file is located at `config/embellish-chat/presets.json`.
 ## Compatibility
 
 ### Supported
-* **Fabric Permissions API(Embedded):** Full integration for permission-based rules.
-* **Text Placeholder API:** Supports placeholders in mention titles and presets.
+* **Fabric Permissions API (Embedded):** Full integration for permission-based rules.
+* **Text Placeholder API (Embedded):** Supports placeholders in mention titles and presets.
 * **Styled Nicknames:** Supports mentioning players by nickname.
 * **LuckPerms:** Required for `@group` mentions.
 * **Geyser:** Basic support (Mentions work; Click/Hover events are limited on Bedrock).
