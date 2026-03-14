@@ -33,9 +33,9 @@ public class MentionProcessor implements ConfigListener {
     private Map<String, List<MentionRule>> mentionRules;
     private MentionRegistry registries;
 
-    private HashSet<UUID> notificationOffPlayerList;
-    private boolean notification;
-    private boolean broadcast;
+    private HashSet<UUID> notifyOffPlayers;
+    private boolean notifyCommandEnabled;
+    private boolean notifyMentionEnabled;
 
     private int counter;
 
@@ -58,9 +58,9 @@ public class MentionProcessor implements ConfigListener {
         this.registries = new MentionRegistry(newConfig);
 
         this.cooldowns.clear();
-        this.notificationOffPlayerList = config.notify_off_players();
-        this.notification = config.notify_command_enabled();
-        this.broadcast = config.notify_mention_enabled();
+        this.notifyOffPlayers = config.notify_off_players();
+        this.notifyCommandEnabled = config.notify_command_enabled();
+        this.notifyMentionEnabled = config.notify_mention_enabled();
     }
 
     public List<Mention> handleMention(String text, List<String> keys, ServerPlayerEntity player){
@@ -133,14 +133,14 @@ public class MentionProcessor implements ConfigListener {
     }
 
     private void mentionBroadcast(Set<Mention> mentions,ServerPlayerEntity player){
-        if(!broadcast) return;
+        if(!notifyMentionEnabled) return;
 
         for (Mention mention:mentions){
-            Text title = PlaceHolderUtil.parsePlaceholder(mention.rule().title(),player);
+            Text title = PlaceHolderUtil.parseText(mention.rule().title(),player);
             Sound sound = mention.rule().sound();
 
             mention.targets().forEach(target ->{
-                if (notification && notificationOffPlayerList.contains(target.getUuid())) {
+                if (notifyCommandEnabled && notifyOffPlayers.contains(target.getUuid())) {
                     return;
                 }
 

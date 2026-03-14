@@ -7,7 +7,7 @@ import io.github.hanhy06.embellishchat.styling.data.Runs;
 import io.github.hanhy06.embellishchat.styling.rule.StyleAction;
 import io.github.hanhy06.embellishchat.styling.rule.StyleParameter;
 import io.github.hanhy06.embellishchat.styling.rule.StyleRegistry;
-import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
+import io.github.hanhy06.embellishchat.styling.rule.StyleRule;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
@@ -23,14 +23,14 @@ import java.util.regex.Pattern;
 import static io.github.hanhy06.embellishchat.styling.util.TextSliceUtil.flatten;
 import static io.github.hanhy06.embellishchat.styling.util.TextSliceUtil.slice;
 
-public class StylingProcessor implements ConfigListener {
-    public static StylingProcessor INSTANCE;
+public class StyleProcessor implements ConfigListener {
+    public static StyleProcessor INSTANCE;
 
     private Config config;
-    private Map<String,List<StylingRule>> stylingRules;
+    private Map<String,List<StyleRule>> stylingRules;
     private StyleRegistry registry;
 
-    public StylingProcessor(){
+    public StyleProcessor(){
         INSTANCE = this;
     }
 
@@ -43,19 +43,19 @@ public class StylingProcessor implements ConfigListener {
     }
 
     public MutableText handleStyle(MutableText text,List<String> keys,ServerPlayerEntity player){
-        List<StylingRule> rules = new ArrayList<>();
+        List<StyleRule> rules = new ArrayList<>();
         keys.forEach(key -> rules.addAll(stylingRules.getOrDefault(key,List.of())));
         if (rules.isEmpty()) return text;
 
         MutableText result = text;
-        for (StylingRule rule : rules) {
+        for (StyleRule rule : rules) {
             result = applyStyleRule(result,rule,player);
         }
 
         return result;
     }
 
-    private MutableText applyStyleRule(MutableText text, StylingRule style, ServerPlayerEntity player){
+    private MutableText applyStyleRule(MutableText text, StyleRule style, ServerPlayerEntity player){
         Matcher matcher = style.pattern().matcher(text.getString());
         if (!matcher.find()) return text;
 

@@ -5,7 +5,7 @@ import io.github.hanhy06.embellishchat.config.ConfigManager;
 import io.github.hanhy06.embellishchat.inventory.InventoryManager;
 import io.github.hanhy06.embellishchat.mention.MentionProcessor;
 import io.github.hanhy06.embellishchat.message.MessageProcessor;
-import io.github.hanhy06.embellishchat.styling.StylingProcessor;
+import io.github.hanhy06.embellishchat.styling.StyleProcessor;
 import io.github.hanhy06.embellishchat.styling.util.BubbleUtil;
 import io.github.hanhy06.embellishchat.util.PermissionUtil;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
@@ -25,11 +25,6 @@ public class EmbellishChat implements ModInitializer {
 
     @Override
 	public void onInitialize() {
-//      TODO: 현제 단일 config 인걸 여러파일로 분할
-//      TODO: 단일 파일 업데이트를 지원 해야함
-//      TODO: StyleRule MentionRule 을 String이 아니라 MutableText 로 바꿔서 캐싱해야함
-//      TODO: api 리스너 형태로 업그레이드
-
         LOGGER.info("[{}] Initializing.", MOD_ID);
 
 		ServerLifecycleEvents.SERVER_STARTED.register(EmbellishChat::handleServerStart);
@@ -49,7 +44,7 @@ public class EmbellishChat implements ModInitializer {
 
         PlaceHolderUtil.registerPlaceholder();
 
-        StylingProcessor styler = new StylingProcessor();
+        StyleProcessor styler = new StyleProcessor();
         MentionProcessor mention = new MentionProcessor();
         MessageProcessor message = new MessageProcessor(mention,styler, server.getPlayerManager());
         CommandHandler command = new CommandHandler();

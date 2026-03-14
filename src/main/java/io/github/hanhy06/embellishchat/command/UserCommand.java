@@ -9,7 +9,7 @@ import io.github.hanhy06.embellishchat.config.ConfigManager;
 import io.github.hanhy06.embellishchat.inventory.InventoryManager;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
 import io.github.hanhy06.embellishchat.message.MessageProcessor;
-import io.github.hanhy06.embellishchat.styling.rule.StylingRule;
+import io.github.hanhy06.embellishchat.styling.rule.StyleRule;
 import io.github.hanhy06.embellishchat.util.PermissionUtil;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -87,13 +87,13 @@ public class UserCommand {
 
         player.sendMessage(PlaceHolderUtil.parseTag("<gray>-----</gray> <aqua><b>Available Styles</b></aqua> <gray>-----</gray>"));
         List<String> keys = PermissionUtil.getPermissions(player, ConfigManager.getConfig().style_rules().keySet());
-        List<StylingRule> rules = new ArrayList<>();
+        List<StyleRule> rules = new ArrayList<>();
 
         for (String key : keys) {
             rules.addAll(ConfigManager.getConfig().style_rules().get(key));
         }
 
-        for (StylingRule rule : rules) {
+        for (StyleRule rule : rules) {
             if (rule.comment() == null) continue;
             player.sendMessage(PlaceHolderUtil.parseText(rule.comment(),player));
         }

@@ -1,7 +1,7 @@
 package io.github.hanhy06.embellishchat.mixin;
 
 import com.mojang.brigadier.context.CommandContext;
-import io.github.hanhy06.embellishchat.styling.StylingProcessor;
+import io.github.hanhy06.embellishchat.styling.StyleProcessor;
 import net.minecraft.command.argument.TextArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
@@ -22,7 +22,7 @@ public class TextArgumentTypeMixin {
     ) {
         Text text = cir.getReturnValue();
 
-        text = StylingProcessor.INSTANCE.handleStyle(text.copy(), List.of("embellish-chat.command_argument"),context.getSource().getPlayer());
+        text = StyleProcessor.INSTANCE.handleStyle(text.copy(), List.of("embellish-chat.command_argument"),context.getSource().getPlayer());
 
         cir.setReturnValue(text);
     }
