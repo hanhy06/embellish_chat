@@ -1,12 +1,12 @@
 package io.github.hanhy06.embellishchat.styling.rule;
 
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerPlayer;
 
-public record StyleParameter(MutableText segment, Text option, ServerPlayerEntity player) {
-    public static StyleParameter of(MutableText segment,String option,ServerPlayerEntity player){
+public record StyleParameter(MutableComponent segment, Component option, ServerPlayer player) {
+    public static StyleParameter of(MutableComponent segment,String option,ServerPlayer player){
         return new StyleParameter(segment, PlaceHolderUtil.parseText(option,player),player);
     }
 
@@ -14,7 +14,7 @@ public record StyleParameter(MutableText segment, Text option, ServerPlayerEntit
         return this.option.getString();
     }
 
-    public Text getText(){
+    public Component getText(){
         return option;
     }
 }

@@ -1,7 +1,7 @@
 package io.github.hanhy06.embellishchat.inventory;
 
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.SimpleContainer;
 
-public record InventoryContext(SimpleInventory inventory, Text name) {
+public record InventoryContext(SimpleContainer inventory, Component name) {
 }

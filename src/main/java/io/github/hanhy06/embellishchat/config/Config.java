@@ -9,14 +9,17 @@ import io.github.hanhy06.embellishchat.styling.rule.StyleAction;
 import io.github.hanhy06.embellishchat.styling.rule.StyleRule;
 import io.github.hanhy06.embellishchat.styling.rule.StyleType;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.object.AtlasTextObjectContents;
-import net.minecraft.util.Identifier;
-
-import java.awt.*;
-import java.util.*;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.objects.AtlasSprite;
+import net.minecraft.resources.Identifier;
+import net.minecraft.sounds.SoundSource;
+import java.awt.Color;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import static java.util.Map.entry;
 
@@ -29,9 +32,9 @@ public record Config(
 
         //preset
         HashMap<String, Color> color,
-        HashMap<String, AtlasTextObjectContents> atlas,
+        HashMap<String, AtlasSprite> atlas,
         HashSet<String> whitelist,
-        LinkedHashMap<String, MutableText> prefix,
+        LinkedHashMap<String, MutableComponent> prefix,
 
         //setting
         String delimiter,
@@ -58,7 +61,7 @@ public record Config(
                         .getFriendlyString(),
 
                 //style
-                new LinkedHashMap<>(Map.ofEntries(
+                new LinkedHashMap<String, List<StyleRule>>(Map.ofEntries(
                         entry("embellish-chat.chat",
                                 List.of(
                                         StyleRule.of(
@@ -150,13 +153,13 @@ public record Config(
                         ),
                         entry("embellish-chat.command_argument", List.of())
                 )),
-                new LinkedHashMap<>(Map.ofEntries(
+                new LinkedHashMap<String, List<MentionRule>>(Map.ofEntries(
                         entry("embellish-chat.mention", List.of(
                                 MentionRule.of(
                                         "@here()",
                                         "<blue><b>Pattern</b></blue>: @here\n<dark_aqua><b>Comment</b></dark_aqua>: mention players within 64 blocks\n",
                                         "%player:displayname% mentioned you",
-                                        Sound.of("minecraft:entity.experience_orb.pickup", SoundCategory.UI, 1, 1.75f),
+                                        Sound.of("minecraft:entity.experience_orb.pickup", SoundSource.UI, 1, 1.75f),
                                         0,
                                         false,
                                         List.of(MentionAction.of(MentionType.INSIDE, "64")),
@@ -169,7 +172,7 @@ public record Config(
                                         "@everyone()",
                                         "<blue><b>Pattern</b></blue>: @everyone\n<dark_aqua><b>Comment</b></dark_aqua>: mention all online players\n",
                                         "%player:displayname% mentioned you",
-                                        Sound.of("minecraft:entity.experience_orb.pickup", SoundCategory.UI, 1, 1.75f),
+                                        Sound.of("minecraft:entity.experience_orb.pickup", SoundSource.UI, 1, 1.75f),
                                         0,
                                         false,
                                         List.of(MentionAction.of(MentionType.EVERYONE, "")),
@@ -182,7 +185,7 @@ public record Config(
                                         "@team\\((.+?)\\)",
                                         "<blue><b>Pattern</b></blue>: @team(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given scoreboard team\n",
                                         "%player:displayname% mentioned you",
-                                        Sound.of("minecraft:entity.experience_orb.pickup", SoundCategory.UI, 1, 1.75f),
+                                        Sound.of("minecraft:entity.experience_orb.pickup", SoundSource.UI, 1, 1.75f),
                                         0,
                                         false,
                                         List.of(MentionAction.of(MentionType.TEAM, "")),
@@ -192,7 +195,7 @@ public record Config(
                                         "@group\\((.+?)\\)",
                                         "<blue><b>Pattern</b></blue>: @group(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given LuckPerms group\n",
                                         "%player:displayname% mentioned you",
-                                        Sound.of("minecraft:entity.experience_orb.pickup", SoundCategory.UI, 1, 1.75f),
+                                        Sound.of("minecraft:entity.experience_orb.pickup", SoundSource.UI, 1, 1.75f),
                                         0,
                                         false,
                                         List.of(MentionAction.of(MentionType.LUCK_PERMS_GROUP, "")),
@@ -205,7 +208,7 @@ public record Config(
                                         "@world\\((.+?)\\)",
                                         "<blue><b>Pattern</b></blue>: @world(name)\n<dark_aqua><b>Comment</b></dark_aqua>: mention players in the given world\n",
                                         "%player:displayname% mentioned you",
-                                        Sound.of("minecraft:entity.experience_orb.pickup", SoundCategory.UI, 1, 1.75f),
+                                        Sound.of("minecraft:entity.experience_orb.pickup", SoundSource.UI, 1, 1.75f),
                                         0,
                                         false,
                                         List.of(MentionAction.of(MentionType.WORLD, "")),
@@ -218,7 +221,7 @@ public record Config(
                                         "@([A-Za-z0-9_]{1,16})(?=\\b|\\s|$)",
                                         "<blue><b>Pattern</b></blue>: @Player\n<dark_aqua><b>Comment</b></dark_aqua>: mention a specific player\n",
                                         "%player:displayname% mentioned you",
-                                        Sound.of("minecraft:entity.experience_orb.pickup", SoundCategory.UI, 1, 1.75f),
+                                        Sound.of("minecraft:entity.experience_orb.pickup", SoundSource.UI, 1, 1.75f),
                                         0,
                                         false,
                                         List.of(MentionAction.of(MentionType.PLAYER, "")),
@@ -230,7 +233,7 @@ public record Config(
                                         "@admin()",
                                         "<blue><b>Pattern</b></blue>: @admin\n<dark_aqua><b>Comment</b></dark_aqua>: Alerts admins on Discord and adds a click-to-teleport action.\n<red><b>Note</b></red>: This mention is placed behind the default rules, so it will not work as-is. To activate it, move it to the top of the embellish-chat.mention list.\n",
                                         "%player:displayname% mentioned you",
-                                        Sound.of("minecraft:entity.experience_orb.pickup", SoundCategory.UI, 1, 1.75f),
+                                        Sound.of("minecraft:entity.experience_orb.pickup", SoundSource.UI, 1, 1.75f),
                                         0,
                                         false,
                                         List.of(MentionAction.of(MentionType.LUCK_PERMS_GROUP, "admin")),
@@ -264,23 +267,23 @@ public record Config(
                         entry("white", new Color(0xFFFFFF))
                 )),
                 new HashMap<>(Map.ofEntries(
-                        entry("fire", new AtlasTextObjectContents(
-                                Identifier.of("minecraft:blocks"),Identifier.of("minecraft:block/campfire_fire"))
+                        entry("fire", new AtlasSprite(
+                                Identifier.parse("minecraft:blocks"),Identifier.parse("minecraft:block/campfire_fire"))
                         ),
-                        entry("hunger", new AtlasTextObjectContents(
-                                Identifier.of("minecraft:gui"),Identifier.of("minecraft:hud/food_full"))
+                        entry("hunger", new AtlasSprite(
+                                Identifier.parse("minecraft:gui"),Identifier.parse("minecraft:hud/food_full"))
                         ),
-                        entry("heart", new AtlasTextObjectContents(
-                                Identifier.of("minecraft:gui"),Identifier.of("minecraft:hud/heart/full"))
+                        entry("heart", new AtlasSprite(
+                                Identifier.parse("minecraft:gui"),Identifier.parse("minecraft:hud/heart/full"))
                         ),
-                        entry("yes", new AtlasTextObjectContents(
-                                Identifier.of("minecraft:gui"),Identifier.of("minecraft:container/beacon/confirm"))
+                        entry("yes", new AtlasSprite(
+                                Identifier.parse("minecraft:gui"),Identifier.parse("minecraft:container/beacon/confirm"))
                         ),
-                        entry("no", new AtlasTextObjectContents(
-                                Identifier.of("minecraft:gui"),Identifier.of("minecraft:container/beacon/cancel"))
+                        entry("no", new AtlasSprite(
+                                Identifier.parse("minecraft:gui"),Identifier.parse("minecraft:container/beacon/cancel"))
                         ),
-                        entry("move", new AtlasTextObjectContents(
-                                Identifier.of("minecraft:gui"),Identifier.of("minecraft:mob_effect/wind_charged"))
+                        entry("move", new AtlasSprite(
+                                Identifier.parse("minecraft:gui"),Identifier.parse("minecraft:mob_effect/wind_charged"))
                         )
                 )),
                 new HashSet<>(),

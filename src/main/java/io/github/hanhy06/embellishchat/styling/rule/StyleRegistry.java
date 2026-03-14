@@ -12,27 +12,37 @@ import io.github.hanhy06.embellishchat.styling.util.BubbleUtil;
 import io.github.hanhy06.embellishchat.styling.util.ColorUtil;
 import io.github.hanhy06.embellishchat.styling.util.DiscordUtil;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ProfileComponent;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.scoreboard.Team;
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.network.chat.FontDescription;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.contents.objects.AtlasSprite;
+import net.minecraft.network.chat.contents.objects.PlayerSprite;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.*;
-import net.minecraft.text.object.AtlasTextObjectContents;
-import net.minecraft.text.object.PlayerTextObjectContents;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ResolvableProfile;
+import net.minecraft.world.scores.PlayerTeam;
 import org.apache.commons.lang3.StringUtils;
 
-import java.awt.*;
+import java.awt.Color;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,10 +56,10 @@ public class StyleRegistry {
 
     private final DateTimeFormatter timestamp;
     private final HashMap<String, Color> color;
-    private final HashMap<String, AtlasTextObjectContents> atlas;
+    private final HashMap<String, AtlasSprite> atlas;
     private final HashSet<String> whitelist;
 
-    private final EnumMap<StyleType, Function<StyleParameter, MutableText>> registers;
+    private final EnumMap<StyleType, Function<StyleParameter, MutableComponent>> registers;
     private final Pattern HEX_CODE = Pattern.compile("#[A-Fa-f0-9]{6}");
     private final DiscordUtil messenger;
 
@@ -105,11 +115,11 @@ public class StyleRegistry {
         this.messenger = new DiscordUtil(config);
     }
 
-    public Function<StyleParameter, MutableText> get(StyleType styleType) {
+    public Function<StyleParameter, MutableComponent> get(StyleType styleType) {
         return registers.get(styleType);
     }
 
-    public MutableText COLOR_HEX(StyleParameter parameter) {
+    public MutableComponent COLOR_HEX(StyleParameter parameter) {
         int color = 0xffffff;
 
         try {
@@ -120,10 +130,10 @@ public class StyleRegistry {
             EmbellishChat.LOGGER.warn("The option value you entered is null.");
         }
 
-        return parameter.segment().fillStyle(Style.EMPTY.withColor(color));
+        return parameter.segment().withStyle(Style.EMPTY.withColor(color));
     }
 
-    public MutableText COLOR_RAINBOW(StyleParameter parameter) {
+    public MutableComponent COLOR_RAINBOW(StyleParameter parameter) {
         Runs runs = flatten(parameter.segment());
         String string = runs.full();
         int length = string.length();
@@ -137,16 +147,16 @@ public class StyleRegistry {
             EmbellishChat.LOGGER.warn("The option value you entered is null.");
         }
 
-        MutableText result = Text.empty();
+        MutableComponent result = Component.empty();
         for (int i = 0; i < length; i++) {
             float hue = (float) i / length;
             int rgb = Color.HSBtoRGB(hue, saturation, 1f);
-            result.append(slice(runs, i, i + 1).fillStyle(Style.EMPTY.withColor(rgb)));
+            result.append(slice(runs, i, i + 1).withStyle(Style.EMPTY.withColor(rgb)));
         }
         return result;
     }
 
-    public MutableText COLOR_GRADIENT(StyleParameter parameter) {
+    public MutableComponent COLOR_GRADIENT(StyleParameter parameter) {
         Matcher matcher = HEX_CODE.matcher(parameter.getString());
         if (!matcher.find()) {
             return parameter.segment();
@@ -161,11 +171,11 @@ public class StyleRegistry {
         } while (matcher.find());
 
         if (colors.size() < 2 || length < colors.size()) {
-            return parameter.segment().fillStyle(Style.EMPTY.withColor(colors.getFirst().getRGB()));
+            return parameter.segment().withStyle(Style.EMPTY.withColor(colors.getFirst().getRGB()));
         }
 
         Runs runs = flatten(parameter.segment());
-        MutableText result = Text.empty();
+        MutableComponent result = Component.empty();
         int colorCount = colors.size();
 
         for (int i = 0; i < length; i++) {
@@ -180,18 +190,18 @@ public class StyleRegistry {
                     t
             );
 
-            result.append(slice(runs, i, i + 1).fillStyle(Style.EMPTY.withColor(interpolated.getRGB())));
+            result.append(slice(runs, i, i + 1).withStyle(Style.EMPTY.withColor(interpolated.getRGB())));
         }
 
         return result;
     }
 
-    public MutableText COLOR_PRESET(StyleParameter parameter) {
+    public MutableComponent COLOR_PRESET(StyleParameter parameter) {
         Color color = this.color.getOrDefault(parameter.getString(), Color.WHITE);
-        return parameter.segment().fillStyle(Style.EMPTY.withColor(color.getRGB()));
+        return parameter.segment().withStyle(Style.EMPTY.withColor(color.getRGB()));
     }
 
-    public MutableText COLOR_SHADOW(StyleParameter parameter) {
+    public MutableComponent COLOR_SHADOW(StyleParameter parameter) {
         int color = 0xffffff;
 
         try {
@@ -202,91 +212,91 @@ public class StyleRegistry {
             EmbellishChat.LOGGER.warn("The option value you entered is null.");
         }
 
-        return parameter.segment().fillStyle(Style.EMPTY.withShadowColor(color));
+        return parameter.segment().withStyle(Style.EMPTY.withShadowColor(color));
     }
 
-    public MutableText COLOR_TEAM(StyleParameter parameter){
-        ServerPlayerEntity player = parameter.player();
+    public MutableComponent COLOR_TEAM(StyleParameter parameter){
+        ServerPlayer player = parameter.player();
         if (player == null) return parameter.segment();
-        Team team = player.getScoreboardTeam();
+        PlayerTeam team = player.getTeam();
         if (team == null) return parameter.segment();
 
-        Formatting formatting = team.getColor();
+        ChatFormatting formatting = team.getColor();
         if (formatting != null && formatting.isColor()){
-            return parameter.segment().fillStyle(Style.EMPTY.withColor(formatting));
+            return parameter.segment().withStyle(Style.EMPTY.withColor(formatting));
         }
 
         return parameter.segment();
     }
 
-    public MutableText BOLD(StyleParameter parameter) {
-        return parameter.segment().fillStyle(Style.EMPTY.withBold(true));
+    public MutableComponent BOLD(StyleParameter parameter) {
+        return parameter.segment().withStyle(Style.EMPTY.withBold(true));
     }
 
-    public MutableText ITALIC(StyleParameter parameter) {
-        return parameter.segment().fillStyle(Style.EMPTY.withItalic(true));
+    public MutableComponent ITALIC(StyleParameter parameter) {
+        return parameter.segment().withStyle(Style.EMPTY.withItalic(true));
     }
 
-    public MutableText UNDERLINE(StyleParameter parameter) {
-        return parameter.segment().fillStyle(Style.EMPTY.withUnderline(true));
+    public MutableComponent UNDERLINE(StyleParameter parameter) {
+        return parameter.segment().withStyle(Style.EMPTY.withUnderlined(true));
     }
 
-    public MutableText STRIKETHROUGH(StyleParameter parameter) {
-        return parameter.segment().fillStyle(Style.EMPTY.withStrikethrough(true));
+    public MutableComponent STRIKETHROUGH(StyleParameter parameter) {
+        return parameter.segment().withStyle(Style.EMPTY.withStrikethrough(true));
     }
 
-    public MutableText OBFUSCATED(StyleParameter parameter) {
-        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(parameter.segment().getString()));
-        return parameter.segment().fillStyle(Style.EMPTY.withObfuscated(true).withHoverEvent(hoverEvent));
+    public MutableComponent OBFUSCATED(StyleParameter parameter) {
+        HoverEvent hoverEvent = new HoverEvent.ShowText(Component.literal(parameter.segment().getString()));
+        return parameter.segment().withStyle(Style.EMPTY.withObfuscated(true).withHoverEvent(hoverEvent));
     }
 
-    public MutableText FONT(StyleParameter parameter) {
-        StyleSpriteSource font = new StyleSpriteSource.Font(Identifier.tryParse(parameter.getString()));
-        return parameter.segment().fillStyle(Style.EMPTY.withFont(font));
+    public MutableComponent FONT(StyleParameter parameter) {
+        FontDescription font = new FontDescription.Resource(Identifier.tryParse(parameter.getString()));
+        return parameter.segment().withStyle(Style.EMPTY.withFont(font));
     }
 
-    public MutableText CLEAR(StyleParameter parameter) {
-        return Text.literal(parameter.segment().getString());
+    public MutableComponent CLEAR(StyleParameter parameter) {
+        return Component.literal(parameter.segment().getString());
     }
 
-    public MutableText CLICK_COMMAND_RUN(StyleParameter parameter){
+    public MutableComponent CLICK_COMMAND_RUN(StyleParameter parameter){
         ClickEvent clickEvent = new ClickEvent.RunCommand(parameter.getString());
-        return parameter.segment().fillStyle(Style.EMPTY.withClickEvent(clickEvent));
+        return parameter.segment().withStyle(Style.EMPTY.withClickEvent(clickEvent));
     }
 
-    public MutableText CLICK_COMMAND_SUGGEST(StyleParameter parameter){
+    public MutableComponent CLICK_COMMAND_SUGGEST(StyleParameter parameter){
         ClickEvent clickEvent = new ClickEvent.SuggestCommand(parameter.getString());
-        return parameter.segment().fillStyle(Style.EMPTY.withClickEvent(clickEvent));
+        return parameter.segment().withStyle(Style.EMPTY.withClickEvent(clickEvent));
     }
 
-    public MutableText CLICK_COPY(StyleParameter parameter){
+    public MutableComponent CLICK_COPY(StyleParameter parameter){
         ClickEvent clickEvent = new ClickEvent.CopyToClipboard(parameter.getString());
-        return parameter.segment().fillStyle(Style.EMPTY.withClickEvent(clickEvent));
+        return parameter.segment().withStyle(Style.EMPTY.withClickEvent(clickEvent));
     }
 
-    public MutableText HOVER_TEXT(StyleParameter parameter){
+    public MutableComponent HOVER_TEXT(StyleParameter parameter){
         HoverEvent hoverEvent = new HoverEvent.ShowText(parameter.getText());
-        return parameter.segment().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
+        return parameter.segment().withStyle(Style.EMPTY.withHoverEvent(hoverEvent));
     }
 
-    public MutableText HOVER_ITEM(StyleParameter parameter){
+    public MutableComponent HOVER_ITEM(StyleParameter parameter){
         ItemStack item;
-        ServerPlayerEntity player = parameter.player();
+        ServerPlayer player = parameter.player();
         if (player == null) return parameter.segment();
 
         int slot;
         try {slot = Integer.decode(parameter.getString());}
         catch (NumberFormatException e) {slot = -1;}
 
-        if (slot < 0 || 42 < slot) item = player.getMainHandStack();
-        else item = player.getInventory().getStack(slot);
+        if (slot < 0 || 42 < slot) item = player.getMainHandItem();
+        else item = player.getInventory().getItem(slot);
         if (item.isEmpty()) return parameter.segment();
 
         HoverEvent hoverEvent = new HoverEvent.ShowItem(item);
-        return parameter.segment().fillStyle(Style.EMPTY.withHoverEvent(hoverEvent));
+        return parameter.segment().withStyle(Style.EMPTY.withHoverEvent(hoverEvent));
     }
 
-    public MutableText URL(StyleParameter parameter) {
+    public MutableComponent URL(StyleParameter parameter) {
         URI uri;
         try {
             uri = URI.create(parameter.getString());
@@ -306,7 +316,7 @@ public class StyleRegistry {
 
         if (allowed){
             ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
-            return parameter.segment().fillStyle(Style.EMPTY
+            return parameter.segment().withStyle(Style.EMPTY
                     .withClickEvent(clickEvent)
                     .withColor(config.url_color().getRGB()));
         }else {
@@ -314,135 +324,135 @@ public class StyleRegistry {
         }
     }
 
-    public MutableText METADATA(StyleParameter parameter) {
-        MutableText text = parameter.segment();
+    public MutableComponent METADATA(StyleParameter parameter) {
+        MutableComponent text = parameter.segment();
 
         String timestamp = LocalDateTime.now().format(this.timestamp);
-        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(timestamp + "\nClick to copy to clipboard").formatted(Formatting.GRAY));
+        HoverEvent hoverEvent = new HoverEvent.ShowText(Component.literal(timestamp + "\nClick to copy to clipboard").withStyle(ChatFormatting.GRAY));
         ClickEvent clickEvent = new ClickEvent.CopyToClipboard(timestamp + " " + text.getString());
 
-        return text.fillStyle(Style.EMPTY.withHoverEvent(hoverEvent).withClickEvent(clickEvent));
+        return text.withStyle(Style.EMPTY.withHoverEvent(hoverEvent).withClickEvent(clickEvent));
     }
 
-    public MutableText UPPER(StyleParameter parameter) {
+    public MutableComponent UPPER(StyleParameter parameter) {
         String string = parameter.segment().getString();
-        return Text.literal(string.toUpperCase()).fillStyle(parameter.segment().getStyle());
+        return Component.literal(string.toUpperCase()).withStyle(parameter.segment().getStyle());
     }
 
-    public MutableText LOWER(StyleParameter parameter) {
+    public MutableComponent LOWER(StyleParameter parameter) {
         String string = parameter.segment().getString();
-        return Text.literal(string.toLowerCase()).fillStyle(parameter.segment().getStyle());
+        return Component.literal(string.toLowerCase()).withStyle(parameter.segment().getStyle());
     }
 
-    public MutableText CAPITALIZE(StyleParameter parameter){
+    public MutableComponent CAPITALIZE(StyleParameter parameter){
         String string = parameter.segment().getString();
-        return Text.literal(StringUtils.capitalize(string)).fillStyle(parameter.segment().getStyle());
+        return Component.literal(StringUtils.capitalize(string)).withStyle(parameter.segment().getStyle());
     }
 
-    public MutableText REPLACE(StyleParameter parameter) {
-        return parameter.getText().copy().fillStyle(parameter.segment().getStyle());
+    public MutableComponent REPLACE(StyleParameter parameter) {
+        return parameter.getText().copy().withStyle(parameter.segment().getStyle());
     }
 
-    public MutableText MASK(StyleParameter parameter) {
+    public MutableComponent MASK(StyleParameter parameter) {
         int length = parameter.segment().getString().length();
-        return Text.literal(parameter.getString().repeat(length)).fillStyle(parameter.segment().getStyle());
+        return Component.literal(parameter.getString().repeat(length)).withStyle(parameter.segment().getStyle());
     }
 
-    public MutableText PREFIX(StyleParameter parameter){
-        MutableText prefix = parameter.option().copy();
+    public MutableComponent PREFIX(StyleParameter parameter){
+        MutableComponent prefix = parameter.option().copy();
         return prefix.append(parameter.segment());
     }
 
-    public MutableText SUFFIX(StyleParameter parameter){
-        MutableText suffix = parameter.getText().copy();
+    public MutableComponent SUFFIX(StyleParameter parameter){
+        MutableComponent suffix = parameter.getText().copy();
         return parameter.segment().append(suffix);
     }
 
-    public MutableText SHOW_ITEM(StyleParameter parameter){
-        ServerPlayerEntity player = parameter.player();
+    public MutableComponent SHOW_ITEM(StyleParameter parameter){
+        ServerPlayer player = parameter.player();
         if (player == null) return parameter.segment();
-        ItemStack item = player.getMainHandStack();
+        ItemStack item = player.getMainHandItem();
         if (item == null || item.isEmpty()) return parameter.segment();
 
-        AtlasTextObjectContents atlas;
+        AtlasSprite atlas;
         if (!parameter.getString().isBlank()){
             List<String> segments = OptionUtil.split(parameter.getString().trim(),";");
-            atlas = new AtlasTextObjectContents(Identifier.of(segments.getFirst()),Identifier.of(segments.getLast()));
+            atlas = new AtlasSprite(Identifier.parse(segments.getFirst()),Identifier.parse(segments.getLast()));
         }else {
             String type = (item.getItem() instanceof BlockItem) ? "block" : "item";
-            Identifier modelId = item.get(DataComponentTypes.ITEM_MODEL);
+            Identifier modelId = item.get(DataComponents.ITEM_MODEL);
             if (modelId==null) return parameter.segment();
 
-            atlas = new AtlasTextObjectContents(
-                    Identifier.of(modelId.getNamespace(),type+"s"),
-                    Identifier.of(modelId.getNamespace(),"%s/%s".formatted(type,modelId.getPath()))
+            atlas = new AtlasSprite(
+                    Identifier.fromNamespaceAndPath(modelId.getNamespace(),type+"s"),
+                    Identifier.fromNamespaceAndPath(modelId.getNamespace(),"%s/%s".formatted(type,modelId.getPath()))
             );
         }
 
-        MutableText text = Text.object(atlas);
+        MutableComponent text = Component.object(atlas);
         HoverEvent hoverEvent = new HoverEvent.ShowItem(item);
-        ClickEvent clickEvent = new ClickEvent.RunCommand("/embellish-chat open "+player.getUuid());
+        ClickEvent clickEvent = new ClickEvent.RunCommand("/embellish-chat open "+player.getUUID());
         InventoryManager.putItem(player,item);
 
-        return text.fillStyle(Style.EMPTY.withHoverEvent(hoverEvent).withClickEvent(clickEvent));
+        return text.withStyle(Style.EMPTY.withHoverEvent(hoverEvent).withClickEvent(clickEvent));
     }
 
-    public MutableText SHOW_INVENTORY(StyleParameter parameter){
-        ServerPlayerEntity player = parameter.player();
+    public MutableComponent SHOW_INVENTORY(StyleParameter parameter){
+        ServerPlayer player = parameter.player();
         if (player == null) return parameter.segment();
         InventoryManager.putInventory(player);
 
-        ClickEvent clickEvent = new ClickEvent.RunCommand("/embellish-chat open "+player.getUuid());
-        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(player.getName().getString() + "'s inventory"));
-        ProfileComponent component = ProfileComponent.ofStatic(player.getGameProfile());
-        MutableText text = Text.object(new PlayerTextObjectContents(component, true));
+        ClickEvent clickEvent = new ClickEvent.RunCommand("/embellish-chat open "+player.getUUID());
+        HoverEvent hoverEvent = new HoverEvent.ShowText(Component.literal(player.getName().getString() + "'s inventory"));
+        ResolvableProfile component = ResolvableProfile.createResolved(player.getGameProfile());
+        MutableComponent text = Component.object(new PlayerSprite(component, true));
 
-        return text.fillStyle(Style.EMPTY.withClickEvent(clickEvent).withHoverEvent(hoverEvent));
+        return text.withStyle(Style.EMPTY.withClickEvent(clickEvent).withHoverEvent(hoverEvent));
     }
 
-    public MutableText SHOW_ENDER_CHEST(StyleParameter parameter){
-        ServerPlayerEntity player = parameter.player();
+    public MutableComponent SHOW_ENDER_CHEST(StyleParameter parameter){
+        ServerPlayer player = parameter.player();
         if (player == null) return parameter.segment();
         InventoryManager.putEnderChest(player);
 
-        ClickEvent clickEvent = new ClickEvent.RunCommand("/embellish-chat open "+player.getUuid());
-        HoverEvent hoverEvent = new HoverEvent.ShowText(Text.literal(player.getName().getString() + "'s ender chest"));
-        ProfileComponent component = ProfileComponent.ofStatic(player.getGameProfile());
-        MutableText text = Text.object(new PlayerTextObjectContents(component, true));
+        ClickEvent clickEvent = new ClickEvent.RunCommand("/embellish-chat open "+player.getUUID());
+        HoverEvent hoverEvent = new HoverEvent.ShowText(Component.literal(player.getName().getString() + "'s ender chest"));
+        ResolvableProfile component = ResolvableProfile.createResolved(player.getGameProfile());
+        MutableComponent text = Component.object(new PlayerSprite(component, true));
 
-        return text.fillStyle(Style.EMPTY.withClickEvent(clickEvent).withHoverEvent(hoverEvent));
+        return text.withStyle(Style.EMPTY.withClickEvent(clickEvent).withHoverEvent(hoverEvent));
     }
 
-    public MutableText ATLAS_PRESET(StyleParameter parameter) {
-        AtlasTextObjectContents atlas = this.atlas.get(parameter.getString());
-        if (atlas!=null) return Text.object(atlas);
+    public MutableComponent ATLAS_PRESET(StyleParameter parameter) {
+        AtlasSprite atlas = this.atlas.get(parameter.getString());
+        if (atlas!=null) return Component.object(atlas);
         else return parameter.segment();
     }
 
-    public MutableText JSON(StyleParameter parameter){
+    public MutableComponent JSON(StyleParameter parameter){
         JsonElement element = JsonParser.parseString(parameter.getString());
-        Text text = TextCodecs.CODEC.parse(JsonOps.INSTANCE,element).getOrThrow();
+        Component text = ComponentSerialization.CODEC.parse(JsonOps.INSTANCE,element).getOrThrow();
         return text.copy();
     }
 
-    public MutableText DISCORD_JSON(StyleParameter parameter){
+    public MutableComponent DISCORD_JSON(StyleParameter parameter){
         int index = parameter.getString().indexOf(';');
         String option = parameter.getString();
         if (index != -1) messenger.send(URI.create(option.substring(0,index)),option.substring(index+1));
         return parameter.segment();
     }
 
-    public MutableText COMMAND_RUN(StyleParameter parameter){
-        ServerPlayerEntity player = parameter.player();
+    public MutableComponent COMMAND_RUN(StyleParameter parameter){
+        ServerPlayer player = parameter.player();
         if (player == null) return parameter.segment();
-        MinecraftServer server = player.getCommandSource().getServer();
+        MinecraftServer server = player.createCommandSourceStack().getServer();
         String command = parameter.getString();
         if (command.startsWith("/")) command = command.substring(1);
 
         if (server != null) {
-            ServerCommandSource commandSource = player.getCommandSource();
+            CommandSourceStack commandSource = player.createCommandSourceStack();
             try {
-                server.getCommandManager().getDispatcher().execute(command, commandSource);
+                server.getCommands().getDispatcher().execute(command, commandSource);
             } catch (Exception e) {
                 EmbellishChat.LOGGER.error("Failed to execute command: {}", command, e);
             }
@@ -451,17 +461,17 @@ public class StyleRegistry {
         return parameter.segment();
     }
 
-    public MutableText LOG(StyleParameter parameter){
+    public MutableComponent LOG(StyleParameter parameter){
         EmbellishChat.LOGGER.info("Log StyleType segment: {}, open segment:{}, sender: {}",parameter.segment().getString(),parameter.getString(),parameter.player());
         return parameter.segment();
     }
 
-    public MutableText BUBBLE(StyleParameter parameter){
+    public MutableComponent BUBBLE(StyleParameter parameter){
         if (parameter.player() != null) BubbleUtil.spawnDisplayEntity(parameter.player(),parameter.segment());
         return parameter.segment();
     }
 
-    public MutableText BLOCK(StyleParameter parameter) {
+    public MutableComponent BLOCK(StyleParameter parameter) {
         throw new MessageProcessor.MessageBlockedException();
     }
 }

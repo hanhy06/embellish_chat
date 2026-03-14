@@ -1,55 +1,55 @@
 package io.github.hanhy06.embellishchat.inventory;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.network.packet.s2c.play.OpenWrittenBookS2CPacket;
-import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
-import net.minecraft.screen.GenericContainerScreenHandler;
-import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Hand;
+import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
+import net.minecraft.network.protocol.game.ClientboundOpenBookPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
-public class InventoryScreenHandler extends GenericContainerScreenHandler {
-    public InventoryScreenHandler(ScreenHandlerType<?> type,int syncId, PlayerInventory playerInventory, Inventory inventory,int raws) {
+public class InventoryScreenHandler extends ChestMenu {
+    public InventoryScreenHandler(MenuType<?> type,int syncId, Inventory playerInventory, Container inventory,int raws) {
         super(type, syncId, playerInventory, inventory, raws);
     }
 
     @Override
-    public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
-        if (slotIndex >= 0 && slotIndex < 9 * this.getRows()) {
-            ItemStack stack = this.getSlot(slotIndex).getStack();
+    public void clicked(int slotIndex, int button, ClickType actionType, Player player) {
+        if (slotIndex >= 0 && slotIndex < 9 * this.getRowCount()) {
+            ItemStack stack = this.getSlot(slotIndex).getItem();
 
-            if (stack.getItem() == Items.WRITTEN_BOOK && player instanceof ServerPlayerEntity serverPlayer) {
-                ItemStack original = player.getActiveItem();
+            if (stack.getItem() == Items.WRITTEN_BOOK && player instanceof ServerPlayer serverPlayer) {
+                ItemStack original = player.getUseItem();
 
                 int selectSlot = player.getInventory().getSelectedSlot() + 36;
-                serverPlayer.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(
-                        0, this.nextRevision(), selectSlot, stack
+                serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(
+                        0, this.incrementStateId(), selectSlot, stack
                 ));
-                serverPlayer.networkHandler.sendPacket(new OpenWrittenBookS2CPacket(Hand.MAIN_HAND));
-                serverPlayer.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(
-                        0, this.nextRevision(), selectSlot, original
+                serverPlayer.connection.send(new ClientboundOpenBookPacket(InteractionHand.MAIN_HAND));
+                serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(
+                        0, this.incrementStateId(), selectSlot, original
                 ));
             }
 
             return;
         }
-        if (actionType.equals(SlotActionType.PICKUP_ALL)) return;
+        if (actionType.equals(ClickType.PICKUP_ALL)) return;
 
-        super.onSlotClick(slotIndex, button, actionType, player);
+        super.clicked(slotIndex, button, actionType, player);
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int slot) {
+    public ItemStack quickMoveStack(Player player, int slot) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return true;
     }
 }

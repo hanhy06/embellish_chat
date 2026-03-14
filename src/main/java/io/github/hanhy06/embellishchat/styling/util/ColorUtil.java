@@ -1,19 +1,18 @@
 package io.github.hanhy06.embellishchat.styling.util;
 
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.Team;
-import net.minecraft.util.Formatting;
-
 import java.awt.*;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.Scoreboard;
 
 public class ColorUtil {
     public static Integer getTeamColor(Scoreboard scoreboard, String name){
-        Team team = scoreboard.getScoreHolderTeam(name);
+        PlayerTeam team = scoreboard.getPlayersTeam(name);
 
         if (team != null) {
-            Formatting formatting = team.getColor();
+            ChatFormatting formatting = team.getColor();
             if (formatting != null && formatting.isColor()) {
-                return formatting.getColorValue();
+                return formatting.getColor();
             }
         }
 

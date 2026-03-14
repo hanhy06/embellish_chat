@@ -46,7 +46,7 @@ public class EmbellishChat implements ModInitializer {
 
         StyleProcessor styler = new StyleProcessor();
         MentionProcessor mention = new MentionProcessor();
-        MessageProcessor message = new MessageProcessor(mention,styler, server.getPlayerManager());
+        MessageProcessor message = new MessageProcessor(mention,styler, server.getPlayerList());
         CommandHandler command = new CommandHandler();
 
         manager.addListener(styler);

@@ -10,16 +10,15 @@ import io.github.hanhy06.embellishchat.util.LuckPermsUtil;
 import io.github.hanhy06.embellishchat.util.NickNamesUtil;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.command.EntitySelector;
-import net.minecraft.command.EntitySelectorReader;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.Team;
+import net.minecraft.commands.arguments.selector.EntitySelector;
+import net.minecraft.commands.arguments.selector.EntitySelectorParser;
+import net.minecraft.network.chat.Style;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.PlayerManager;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Style;
-
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.PlayerList;
+import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.Scoreboard;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
@@ -29,7 +28,7 @@ import java.util.function.Function;
 import static java.util.Map.entry;
 
 public class MentionRegistry {
-    private final PlayerManager manager;
+    private final PlayerList manager;
     private final Scoreboard scoreboard;
     private final Style colorTeam;
 
@@ -40,7 +39,7 @@ public class MentionRegistry {
 
     public MentionRegistry(Config config) {
         MinecraftServer server = EmbellishChat.SERVER;
-        this.manager = server.getPlayerManager();
+        this.manager = server.getPlayerList();
         this.scoreboard = server.getScoreboard();
 
         if (config.team_color() != null){
@@ -68,7 +67,7 @@ public class MentionRegistry {
     }
 
     private Target EVERYONE(MentionParameter parameter){
-        return Target.of(manager.getPlayerList(),null);
+        return Target.of(manager.getPlayers(),null);
     }
 
     private Target INSIDE(MentionParameter parameter){
@@ -76,9 +75,9 @@ public class MentionRegistry {
         try {round = Float.parseFloat(parameter.option());}
         catch (NumberFormatException e) {round = 64;}
 
-        HashSet<ServerPlayerEntity> players = new HashSet<>(PlayerLookup.around(
-                parameter.player().getEntityWorld(),
-                parameter.player().getEntityPos(),
+        HashSet<ServerPlayer> players = new HashSet<>(PlayerLookup.around(
+                parameter.player().level(),
+                parameter.player().position(),
                 round
         ));
 
@@ -86,19 +85,19 @@ public class MentionRegistry {
     }
 
     private Target TEAM(MentionParameter parameter){
-        HashSet<ServerPlayerEntity> players = new HashSet<>();
-        Team team = scoreboard.getTeam(parameter.option());
+        HashSet<ServerPlayer> players = new HashSet<>();
+        PlayerTeam team = scoreboard.getPlayerTeam(parameter.option());
         Style style = colorTeam;
 
         if (team != null){
-            for (String name:team.getPlayerList()){
-                ServerPlayerEntity player = manager.getPlayer(name);
+            for (String name:team.getPlayers()){
+                ServerPlayer player = manager.getPlayerByName(name);
                 if (player != null) players.add(player);
             }
 
             if (style != null) {
-                Style name = team.getFormattedName().getStyle();
-                style = name.withParent(style);
+                Style name = team.getFormattedDisplayName().getStyle();
+                style = name.applyTo(style);
             }
         }
 
@@ -106,9 +105,9 @@ public class MentionRegistry {
     }
 
     private Target PLAYER(MentionParameter parameter){
-        ServerPlayerEntity target = manager.getPlayer(parameter.option());
+        ServerPlayer target = manager.getPlayerByName(parameter.option());
         Style style = colorTeam;
-        HashSet<ServerPlayerEntity> players = new HashSet<>();
+        HashSet<ServerPlayer> players = new HashSet<>();
 
         if (target == null && isNickName) {
             target = NickNamesUtil.getPlayerByNickName(parameter.option());
@@ -119,7 +118,7 @@ public class MentionRegistry {
 
             if (style != null) {
                 Style name = target.getDisplayName().getStyle();
-                style = name.withParent(style);
+                style = name.applyTo(style);
             }
         }else if(style != null){
             Integer integer = ColorUtil.getTeamColor(scoreboard, parameter.option());
@@ -132,18 +131,18 @@ public class MentionRegistry {
     private Target WORLD(MentionParameter parameter){
         String worldName = parameter.option();
         MinecraftServer server = EmbellishChat.SERVER;
-        ServerWorld targetWorld = null;
+        ServerLevel targetWorld = null;
 
-        for (ServerWorld world : server.getWorlds()) {
-            String id = world.getRegistryKey().getValue().toString();
-            if (id.equals(worldName) || world.getRegistryKey().getValue().getPath().equals(worldName)) {
+        for (ServerLevel world : server.getAllLevels()) {
+            String id = world.dimension().identifier().toString();
+            if (id.equals(worldName) || world.dimension().identifier().getPath().equals(worldName)) {
                 targetWorld = world;
                 break;
             }
         }
 
         if (targetWorld != null) {
-            HashSet<ServerPlayerEntity> players = new HashSet<>(PlayerLookup.world(targetWorld));
+            HashSet<ServerPlayer> players = new HashSet<>(PlayerLookup.world(targetWorld));
             return Target.of(players,null);
         } else {
             EmbellishChat.LOGGER.info("World {} not found. @world mention ignored.", worldName);
@@ -153,7 +152,7 @@ public class MentionRegistry {
 
     private Target LUCK_PERMS_GROUP(MentionParameter parameter){
         if (isLuckPerms) {
-            HashSet<ServerPlayerEntity> players = LuckPermsUtil.getGroupPlayers(parameter.option(),manager.getPlayerList());
+            HashSet<ServerPlayer> players = LuckPermsUtil.getGroupPlayers(parameter.option(),manager.getPlayers());
             return Target.of(players,null);
         }else {
             EmbellishChat.LOGGER.info("LuckPerms not found. @group mentions will be ignored.");
@@ -162,13 +161,13 @@ public class MentionRegistry {
     }
 
     private Target CUSTOM(MentionParameter parameter){
-        ServerPlayerEntity sender = parameter.player();
+        ServerPlayer sender = parameter.player();
         StringReader selector = new StringReader(parameter.option());
 
         try {
-            EntitySelectorReader reader = new EntitySelectorReader(selector, true);
-            EntitySelector entitySelector = reader.read();
-            List<ServerPlayerEntity> players = entitySelector.getPlayers(sender.getCommandSource());
+            EntitySelectorParser reader = new EntitySelectorParser(selector, true);
+            EntitySelector entitySelector = reader.parse();
+            List<ServerPlayer> players = entitySelector.findPlayers(sender.createCommandSourceStack());
             return Target.of(players, null);
         } catch (CommandSyntaxException e) {
             EmbellishChat.LOGGER.warn("Invalid selector: {}", selector);

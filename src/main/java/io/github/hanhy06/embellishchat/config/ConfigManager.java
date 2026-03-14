@@ -3,10 +3,6 @@ package io.github.hanhy06.embellishchat.config;
 import com.google.gson.*;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.adapter.*;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.text.MutableText;
-import net.minecraft.util.Identifier;
-
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.Identifier;
+import net.minecraft.sounds.SoundEvent;
 
 public class ConfigManager {
     public static ConfigManager INSTANCE;
@@ -41,7 +40,7 @@ public class ConfigManager {
             .registerTypeAdapter(SoundEvent.class, new SoundEventTypeAdapter())
             .registerTypeAdapter(Color.class, new ColorTypeAdapter())
             .registerTypeAdapter(Identifier.class, new IdentifierTypeAdapter())
-            .registerTypeAdapter(MutableText.class, new MutableTextAdapter())
+            .registerTypeAdapter(MutableComponent.class, new MutableTextAdapter())
             .setPrettyPrinting()
             .setStrictness(Strictness.LENIENT)
             .disableHtmlEscaping()

@@ -4,9 +4,8 @@ import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ReloadCommand;
-
+import net.minecraft.commands.Commands;
+import net.minecraft.server.commands.ReloadCommand;
 import java.util.List;
 
 public class CommandHandler implements ConfigListener {
@@ -22,12 +21,12 @@ public class CommandHandler implements ConfigListener {
         registeredAlias = alias;
         CommandRegistrationCallback.EVENT.register((dispatcher, access, env) ->
                 dispatcher.register(
-                        CommandManager.literal(alias)
+                        Commands.literal(alias)
                                 .redirect(dispatcher.getRoot().getChild(EmbellishChat.MOD_ID))
                 )
         );
 
-        ReloadCommand.tryReloadDataPacks(List.of(), EmbellishChat.SERVER.getCommandSource());
+        ReloadCommand.reloadPacks(List.of(), EmbellishChat.SERVER.createCommandSourceStack());
     }
 
     public static void registerCommand(){

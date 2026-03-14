@@ -1,16 +1,15 @@
 package io.github.hanhy06.embellishchat.mention.data;
 
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Style;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import net.minecraft.network.chat.Style;
+import net.minecraft.server.level.ServerPlayer;
 
 public record Mention(
         int begin,int end,List<String> options,
-        HashSet<ServerPlayerEntity> targets,
+        HashSet<ServerPlayer> targets,
         Style style,
         MentionRule rule
 ) {
@@ -18,7 +17,7 @@ public record Mention(
         return new Mention(begin,end,options,null,null,rule);
     }
 
-    public static Mention of(int begin,int end,HashSet<ServerPlayerEntity> targets,Style style,MentionRule rule){
+    public static Mention of(int begin,int end,HashSet<ServerPlayer> targets,Style style,MentionRule rule){
         return new Mention(begin,end,null,targets,style,rule);
     }
 

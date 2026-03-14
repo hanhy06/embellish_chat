@@ -6,12 +6,11 @@ import io.github.hanhy06.embellishchat.mention.MentionProcessor;
 import io.github.hanhy06.embellishchat.mention.data.Mention;
 import io.github.hanhy06.embellishchat.styling.StyleProcessor;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
-import net.minecraft.network.message.SignedMessage;
-import net.minecraft.server.PlayerManager;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.MutableText;
-
 import java.util.*;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.PlayerChatMessage;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.PlayerList;
 
 import static io.github.hanhy06.embellishchat.util.PermissionUtil.getPermissions;
 
@@ -20,15 +19,15 @@ public class MessageProcessor implements ConfigListener {
 
     private final MentionProcessor mentionProcessor;
     private final StyleProcessor styleProcessor;
-    private final PlayerManager playerManager;
+    private final PlayerList playerManager;
 
     private Config config;
     private Set<UUID> bannedPlayerList;
-    private LinkedHashMap<String,MutableText> prefix;
+    private LinkedHashMap<String,MutableComponent> prefix;
 
     public static class MessageBlockedException extends RuntimeException {}
 
-    public MessageProcessor(MentionProcessor mentionProcessor, StyleProcessor styleProcessor, PlayerManager playerManager) {
+    public MessageProcessor(MentionProcessor mentionProcessor, StyleProcessor styleProcessor, PlayerList playerManager) {
         INSTANCE = this;
         this.mentionProcessor = mentionProcessor;
         this.styleProcessor = styleProcessor;
@@ -42,18 +41,18 @@ public class MessageProcessor implements ConfigListener {
         this.prefix = config.prefix();
     }
 
-    public SignedMessage handleMessage(SignedMessage message) {
-        ServerPlayerEntity sender = playerManager.getPlayer(message.getSender());
-        if (sender == null || bannedPlayerList.contains(message.getSender())) {
+    public PlayerChatMessage handleMessage(PlayerChatMessage message) {
+        ServerPlayer sender = playerManager.getPlayer(message.sender());
+        if (sender == null || bannedPlayerList.contains(message.sender())) {
             return message;
         }
 
-        MutableText textMessage = message.getContent().copy();
-        String stringMessage = message.getContent().getString();
-        SignedMessage result;
+        MutableComponent textMessage = message.decoratedContent().copy();
+        String stringMessage = message.decoratedContent().getString();
+        PlayerChatMessage result;
 
         try {
-            PlaceHolderUtil.put(message.getSender(),stringMessage);
+            PlaceHolderUtil.put(message.sender(),stringMessage);
             List<Mention> mentions = mentionProcessor.handleMention(stringMessage,getPermissions(sender, config.mention_rules().keySet()),sender);
             mentions.sort(Comparator.comparing(Mention::begin));
 
@@ -62,7 +61,7 @@ public class MessageProcessor implements ConfigListener {
 
             List<String> prefixKeys = getPermissions(sender, prefix.keySet());
             if (!prefixKeys.isEmpty()){
-                MutableText prefix = this.prefix.get(prefixKeys.getLast());
+                MutableComponent prefix = this.prefix.get(prefixKeys.getLast());
                 textMessage = PlaceHolderUtil.parsePlaceholder(prefix,sender).append(textMessage);
             }
 
@@ -72,7 +71,7 @@ public class MessageProcessor implements ConfigListener {
         } catch (MessageBlockedException block){
             return null;
         } finally {
-            PlaceHolderUtil.remove(message.getSender());
+            PlaceHolderUtil.remove(message.sender());
         }
 
         return result;

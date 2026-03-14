@@ -5,20 +5,19 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
-import net.minecraft.server.network.ServerPlayerEntity;
-
+import net.minecraft.server.level.ServerPlayer;
 import java.util.HashSet;
 import java.util.List;
 
 public class LuckPermsUtil {
-    public static HashSet<ServerPlayerEntity> getGroupPlayers(String targetGroup, List<ServerPlayerEntity> players){
-        HashSet<ServerPlayerEntity> result = new HashSet<>();
+    public static HashSet<ServerPlayer> getGroupPlayers(String targetGroup, List<ServerPlayer> players){
+        HashSet<ServerPlayer> result = new HashSet<>();
 
         try {
             LuckPerms luckPerms = LuckPermsProvider.get();
 
-            for (ServerPlayerEntity player : players) {
-                User user = luckPerms.getUserManager().getUser(player.getUuid());
+            for (ServerPlayer player : players) {
+                User user = luckPerms.getUserManager().getUser(player.getUUID());
                 if (user == null) continue;
 
                 for (Group group : user.getInheritedGroups(user.getQueryOptions())) {

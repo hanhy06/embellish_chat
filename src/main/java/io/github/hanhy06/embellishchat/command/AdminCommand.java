@@ -11,17 +11,16 @@ import io.github.hanhy06.embellishchat.message.MessageProcessor;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.network.message.SignedMessage;
-import net.minecraft.server.GameProfileResolver;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.PlayerChatMessage;
+import net.minecraft.network.chat.Style;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.ProfileResolver;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
@@ -52,39 +51,39 @@ public class AdminCommand {
     private static int countPerTick = 0;
     private static String testText = "";
     private static UUID testUuid = null;
-    private static ServerCommandSource testSource = null;
+    private static CommandSourceStack testSource = null;
     private static List<Long> testResults = null;
 
     public static void registerCommand() {
         CommandRegistrationCallback.EVENT.register((commandDispatcher, commandRegistryAccess, registrationEnvironment) -> commandDispatcher.register(
-                CommandManager.literal(EmbellishChat.MOD_ID)
-                        .then(CommandManager.literal("reload")
-                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
+                Commands.literal(EmbellishChat.MOD_ID)
+                        .then(Commands.literal("reload")
+                                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                                 .executes(AdminCommand::executeReloadConfig)
                         )
-                        .then(CommandManager.literal("ban")
-                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
-                                .then(CommandManager.argument("target", EntityArgumentType.players())
+                        .then(Commands.literal("ban")
+                                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                                .then(Commands.argument("target", EntityArgument.players())
                                         .executes(context -> executeBanOrPardon(context, true))
                                 )
                         )
-                        .then(CommandManager.literal("pardon")
-                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
-                                .then(CommandManager.argument("target", EntityArgumentType.players())
+                        .then(Commands.literal("pardon")
+                                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                                .then(Commands.argument("target", EntityArgument.players())
                                         .executes(context -> executeBanOrPardon(context, false))
                                 )
                         )
-                        .then(CommandManager.literal("stress_test")
-                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
-                                .then(CommandManager.argument("ticks", IntegerArgumentType.integer())
-                                        .then(CommandManager.argument("count", IntegerArgumentType.integer())
-                                                .then(CommandManager.argument("text", StringArgumentType.string())
+                        .then(Commands.literal("stress_test")
+                                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                                .then(Commands.argument("ticks", IntegerArgumentType.integer())
+                                        .then(Commands.argument("count", IntegerArgumentType.integer())
+                                                .then(Commands.argument("text", StringArgumentType.string())
                                                         .executes(AdminCommand::executeStressTest)))
                                 )
-                                .then(CommandManager.literal("stop")
+                                .then(Commands.literal("stop")
                                         .executes(source -> {
                                             if (testSource == null || remainingTicks <= 0){
-                                                source.getSource().sendError(Text.literal("Stress test is not running."));
+                                                source.getSource().sendFailure(Component.literal("Stress test is not running."));
                                             }else {
                                                 completeStressTest();
                                             }
@@ -92,10 +91,10 @@ public class AdminCommand {
                                         })
                                 )
                         )
-                        .then(CommandManager.literal("regex_test")
-                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
-                                .then(CommandManager.argument("regex",StringArgumentType.string())
-                                        .then(CommandManager.argument("text",StringArgumentType.string())
+                        .then(Commands.literal("regex_test")
+                                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                                .then(Commands.argument("regex",StringArgumentType.string())
+                                        .then(Commands.argument("text",StringArgumentType.string())
                                                 .executes(AdminCommand::executeRegexTest))
                                 )
                         )
@@ -109,29 +108,29 @@ public class AdminCommand {
         ServerTickEvents.START_SERVER_TICK.register(AdminCommand::onServerTick);
     }
 
-    private static int executeReloadConfig(CommandContext<ServerCommandSource> context) {
-        Text feedback;
+    private static int executeReloadConfig(CommandContext<CommandSourceStack> context) {
+        Component feedback;
         if (ConfigManager.INSTANCE.readConfig()) {
-            feedback = Text.literal("Config reloaded successfully.");
+            feedback = Component.literal("Config reloaded successfully.");
         } else {
-            feedback = Text.literal("Failed to reload config. Please check the log.");
+            feedback = Component.literal("Failed to reload config. Please check the log.");
         }
-        context.getSource().sendFeedback(() -> feedback, true);
+        context.getSource().sendSuccess(() -> feedback, true);
         return 1;
     }
 
-    private static int executeBanOrPardon(CommandContext<ServerCommandSource> context, boolean isBan) {
+    private static int executeBanOrPardon(CommandContext<CommandSourceStack> context, boolean isBan) {
         String action = isBan ? "banned" : "pardoned";
         Set<UUID> uuids;
         String names;
 
         try {
-            names = EntityArgumentType.getPlayers(context, "target").stream()
-                    .map(ServerPlayerEntity::getName)
-                    .map(Text::getString)
+            names = EntityArgument.getPlayers(context, "target").stream()
+                    .map(ServerPlayer::getName)
+                    .map(Component::getString)
                     .collect(Collectors.joining(", "));
-            uuids = EntityArgumentType.getPlayers(context, "target").stream()
-                    .map(ServerPlayerEntity::getUuid)
+            uuids = EntityArgument.getPlayers(context, "target").stream()
+                    .map(ServerPlayer::getUUID)
                     .collect(Collectors.toSet());
         } catch (CommandSyntaxException e) {
             EmbellishChat.LOGGER.error("Unable to perform {} due to an unknown error.", action);
@@ -152,40 +151,40 @@ public class AdminCommand {
 
         String result = String.format("Player(s) %s %s.", names, action);
 
-        context.getSource().sendFeedback(() -> Text.literal(result), true);
+        context.getSource().sendSuccess(() -> Component.literal(result), true);
         return 1;
     }
 
-    private static int executeStressTest(CommandContext<ServerCommandSource> context) {
+    private static int executeStressTest(CommandContext<CommandSourceStack> context) {
         if (remainingTicks > 0) {
-            context.getSource().sendFeedback(() -> Text.literal("Stress test is already running."), false);
+            context.getSource().sendSuccess(() -> Component.literal("Stress test is already running."), false);
             return 0;
         }
 
         int ticks = IntegerArgumentType.getInteger(context, "ticks");
         int count = IntegerArgumentType.getInteger(context, "count");
         String text = StringArgumentType.getString(context, "text");
-        ServerCommandSource source = context.getSource();
-        ServerPlayerEntity player = source.getPlayer();
+        CommandSourceStack source = context.getSource();
+        ServerPlayer player = source.getPlayer();
 
         if (player == null) {
-            source.sendFeedback(() -> Text.literal("Player only command."), false);
+            source.sendSuccess(() -> Component.literal("Player only command."), false);
             return 0;
         }
 
         if (count > 5000) {
-            source.sendFeedback(() -> Text.literal("Count is too large. (Max 5000)"), false);
+            source.sendSuccess(() -> Component.literal("Count is too large. (Max 5000)"), false);
             return 0;
         }
 
         remainingTicks = ticks;
         countPerTick = count;
         testText = text;
-        testUuid = player.getUuid();
+        testUuid = player.getUUID();
         testSource = source;
         testResults = new ArrayList<>();
 
-        source.sendFeedback(() -> Text.literal("Starting stress test..."), true);
+        source.sendSuccess(() -> Component.literal("Starting stress test..."), true);
         return 1;
     }
 
@@ -196,11 +195,11 @@ public class AdminCommand {
 
         long startTime = System.nanoTime();
         for (int i = 0; i < countPerTick; i++) {
-            SignedMessage message = SignedMessage.ofUnsigned(testUuid, testText);
+            PlayerChatMessage message = PlayerChatMessage.unsigned(testUuid, testText);
             MessageProcessor.INSTANCE.handleMessage(message);
         }
         testResults.add((System.nanoTime() - startTime) / 1_000_000L);
-        testSource.getPlayer().sendMessage(Text.literal("Time remaining: %d tick".formatted(remainingTicks)),true);
+        testSource.getPlayer().displayClientMessage(Component.literal("Time remaining: %d tick".formatted(remainingTicks)),true);
         remainingTicks--;
 
         if (remainingTicks <= 0) {
@@ -226,15 +225,15 @@ public class AdminCommand {
         long occupiedTicks = totalProcessing / 50;
         double usagePercentTicks = (occupiedTicks / (double) totalTicks) * 100.0;
 
-        Text message = PlaceHolderUtil.parseTag(String.format(
+        Component message = PlaceHolderUtil.parseTag(String.format(
                 STRESS_TEST_FORMAT,
                 totalTicks+remainingTicks,countPerTick,testText,
                 totalTicks, min, max, average, median, totalProcessing,
                 occupiedTicks, totalTicks, usagePercentTicks
         ));
 
-        testSource.sendFeedback(() -> Text.literal("Stress test completed!"), true);
-        testSource.sendFeedback(() -> message, true);
+        testSource.sendSuccess(() -> Component.literal("Stress test completed!"), true);
+        testSource.sendSuccess(() -> message, true);
         EmbellishChat.LOGGER.info(message.getString());
 
         testSource = null;
@@ -243,48 +242,48 @@ public class AdminCommand {
         remainingTicks = 0;
     }
 
-    private static int executeRegexTest(CommandContext<ServerCommandSource> context){
+    private static int executeRegexTest(CommandContext<CommandSourceStack> context){
         String text = StringArgumentType.getString(context,"text");
         String regex = StringArgumentType.getString(context,"regex");
-        MutableText result = Text.empty();
+        MutableComponent result = Component.empty();
 
         Matcher matcher = Pattern.compile(regex).matcher(text);
         if (matcher.groupCount() < 2) {
-            context.getSource().sendFeedback(() -> Text.literal("Two capture groups are required."), false);
+            context.getSource().sendSuccess(() -> Component.literal("Two capture groups are required."), false);
             return 0;
         }
 
         int lastEnd = 0;
         while (matcher.find()){
             result.append(text.substring(lastEnd,matcher.start(1)));
-            result.append(Text.literal(matcher.group(1)).setStyle(Style.EMPTY.withColor(0xaaffaa)));
+            result.append(Component.literal(matcher.group(1)).setStyle(Style.EMPTY.withColor(0xaaffaa)));
             result.append(text.substring(matcher.end(1),matcher.start(2)));
-            result.append(Text.literal(matcher.group(2)).setStyle(Style.EMPTY.withColor(0xffaaaa)));
+            result.append(Component.literal(matcher.group(2)).setStyle(Style.EMPTY.withColor(0xffaaaa)));
             lastEnd = matcher.end(2);
         }
         result.append(text.substring(lastEnd));
 
-        context.getSource().sendFeedback(() -> result,false);
+        context.getSource().sendSuccess(() -> result,false);
         return 1;
     }
 
-    private static int executeBanlist(CommandContext<ServerCommandSource> context) {
-        ServerCommandSource source = context.getSource();
+    private static int executeBanlist(CommandContext<CommandSourceStack> context) {
+        CommandSourceStack source = context.getSource();
         HashSet<UUID> bannedList = ConfigManager.getConfig().banned_players();
 
-        source.sendMessage(PlaceHolderUtil.parseTag(
+        source.sendSystemMessage(PlaceHolderUtil.parseTag(
                 "<gray>-----</gray> <aqua><b>Banned Player List</b></aqua> <gray>-----</gray>"
         ));
 
-        GameProfileResolver resolver = EmbellishChat.SERVER.getApiServices().profileResolver();
+        ProfileResolver resolver = EmbellishChat.SERVER.services().profileResolver();
         for (UUID uuid : bannedList) {
-            Optional<GameProfile> profile = resolver.getProfileById(uuid);
+            Optional<GameProfile> profile = resolver.fetchById(uuid);
             if (profile.isEmpty()) continue;
             String message = "<red><b>name</b></red>: " + profile.get().name();
-            source.sendMessage(PlaceHolderUtil.parseTag(message));
+            source.sendSystemMessage(PlaceHolderUtil.parseTag(message));
         }
 
-        source.sendMessage(PlaceHolderUtil.parseTag("<gray>------------------------------</gray>"));
+        source.sendSystemMessage(PlaceHolderUtil.parseTag("<gray>------------------------------</gray>"));
         return 1;
     }
 }

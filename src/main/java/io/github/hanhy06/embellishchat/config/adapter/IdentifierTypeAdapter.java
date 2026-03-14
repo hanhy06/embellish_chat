@@ -5,9 +5,8 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import net.minecraft.util.Identifier;
-
 import java.io.IOException;
+import net.minecraft.resources.Identifier;
 
 public class IdentifierTypeAdapter extends TypeAdapter<Identifier> {
     @Override
@@ -33,6 +32,6 @@ public class IdentifierTypeAdapter extends TypeAdapter<Identifier> {
         }
 
         String identifier = jsonReader.nextString();
-        return Identifier.of(identifier);
+        return Identifier.parse(identifier);
     }
 }

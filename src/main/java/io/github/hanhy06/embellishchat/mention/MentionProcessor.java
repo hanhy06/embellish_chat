@@ -14,13 +14,12 @@ import io.github.hanhy06.embellishchat.message.MessageProcessor;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.network.message.MessageType;
-import net.minecraft.network.message.SentMessage;
-import net.minecraft.network.message.SignedMessage;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-
+import net.minecraft.network.chat.ChatType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.OutgoingChatMessage;
+import net.minecraft.network.chat.PlayerChatMessage;
+import net.minecraft.network.chat.Style;
+import net.minecraft.server.level.ServerPlayer;
 import java.time.Instant;
 import java.util.*;
 import java.util.function.Function;
@@ -63,12 +62,12 @@ public class MentionProcessor implements ConfigListener {
         this.notifyMentionEnabled = config.notify_mention_enabled();
     }
 
-    public List<Mention> handleMention(String text, List<String> keys, ServerPlayerEntity player){
+    public List<Mention> handleMention(String text, List<String> keys, ServerPlayer player){
         List<MentionRule> rules = new ArrayList<>();
         keys.forEach(key -> rules.addAll(mentionRules.getOrDefault(key,List.of())));
         if (rules.isEmpty()) return List.of();
 
-        UUID uuid = player.getUuid();
+        UUID uuid = player.getUUID();
         Set<Mention> mentions = new HashSet<>();
         for (MentionRule rule:rules){
             Cooldown cooldown = null;
@@ -89,7 +88,7 @@ public class MentionProcessor implements ConfigListener {
         return new ArrayList<>(mentions);
     }
 
-    private Set<Mention> parseMention(String text,MentionRule rule,ServerPlayerEntity player){
+    private Set<Mention> parseMention(String text,MentionRule rule,ServerPlayer player){
         Set<Mention> mentions = new HashSet<>();
         Matcher matcher = rule.pattern().matcher(text);
 
@@ -106,11 +105,11 @@ public class MentionProcessor implements ConfigListener {
     }
 
 
-    private Mention parseTarget(Mention mention,ServerPlayerEntity player){
+    private Mention parseTarget(Mention mention,ServerPlayer player){
         List<MentionAction> actions = mention.rule().mentions();
         List<String> options = mention.options();
 
-        HashSet<ServerPlayerEntity> targets = null;
+        HashSet<ServerPlayer> targets = null;
         Style style = Style.EMPTY;
 
         for (int i=0;i<actions.size();i++){
@@ -132,27 +131,27 @@ public class MentionProcessor implements ConfigListener {
         return Mention.of(mention.begin(),mention.end(),targets,style,mention.rule());
     }
 
-    private void mentionBroadcast(Set<Mention> mentions,ServerPlayerEntity player){
+    private void mentionBroadcast(Set<Mention> mentions,ServerPlayer player){
         if(!notifyMentionEnabled) return;
 
         for (Mention mention:mentions){
-            Text title = PlaceHolderUtil.parseText(mention.rule().title(),player);
+            Component title = PlaceHolderUtil.parseText(mention.rule().title(),player);
             Sound sound = mention.rule().sound();
 
             mention.targets().forEach(target ->{
-                if (notifyCommandEnabled && notifyOffPlayers.contains(target.getUuid())) {
+                if (notifyCommandEnabled && notifyOffPlayers.contains(target.getUUID())) {
                     return;
                 }
 
                 if (sound != null) sound.playSoundToPlayer(target);
-                target.sendMessage(title, true);
+                target.displayClientMessage(title, true);
             });
         }
     }
 
-    public void targetBroadcast(List<Mention> mentions, SignedMessage message,ServerPlayerEntity player){
+    public void targetBroadcast(List<Mention> mentions, PlayerChatMessage message,ServerPlayer player){
         boolean onlyTarget = false;
-        HashSet<ServerPlayerEntity> targets = new HashSet<>();
+        HashSet<ServerPlayer> targets = new HashSet<>();
 
         for (Mention mention:mentions){
             if (mention.rule().onlyTarget()){
@@ -163,8 +162,8 @@ public class MentionProcessor implements ConfigListener {
 
         if (!onlyTarget) return;
 
-        SentMessage sentMessage = SentMessage.of(message);
-        MessageType.Parameters parameters = MessageType.params(MessageType.CHAT, player);
+        OutgoingChatMessage sentMessage = OutgoingChatMessage.create(message);
+        ChatType.Bound parameters = ChatType.bind(ChatType.CHAT, player);
         targets.forEach(target ->
                 target.sendChatMessage(sentMessage,false, parameters)
         );

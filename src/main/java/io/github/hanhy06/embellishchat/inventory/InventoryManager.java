@@ -2,57 +2,56 @@ package io.github.hanhy06.embellishchat.inventory;
 
 import it.unimi.dsi.fastutil.objects.ReferenceSortedSets;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.TooltipDisplayComponent;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.EnderChestInventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.PlayerEnderChestContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.TooltipDisplay;
 import java.util.HashMap;
 import java.util.UUID;
 
 public class InventoryManager {
     private static final HashMap<UUID, InventoryContext> inventories = new HashMap<>();
 
-    public static void putInventory(ServerPlayerEntity player) {
-        SimpleInventory inventory = createInventoryLayout(player);
-        Text name = Text.literal(player.getName().getString()+"'s inventory");
-        inventories.put(player.getUuid(), new InventoryContext(inventory,name));
+    public static void putInventory(ServerPlayer player) {
+        SimpleContainer inventory = createInventoryLayout(player);
+        Component name = Component.literal(player.getName().getString()+"'s inventory");
+        inventories.put(player.getUUID(), new InventoryContext(inventory,name));
     }
 
-    public static void putItem(ServerPlayerEntity player, ItemStack item){
-        SimpleInventory inventory = createItemLayout(item.copy());
-        Text name = item.getName();
-        inventories.put(player.getUuid(), new InventoryContext(inventory,name));
+    public static void putItem(ServerPlayer player, ItemStack item){
+        SimpleContainer inventory = createItemLayout(item.copy());
+        Component name = item.getHoverName();
+        inventories.put(player.getUUID(), new InventoryContext(inventory,name));
     }
 
-    public static void putEnderChest(ServerPlayerEntity player){
-        SimpleInventory inventory = createEnderChestLayout(player);
-        Text name = Text.literal(player.getName().getString()+"'s ender chest");
-        inventories.put(player.getUuid(), new InventoryContext(inventory,name));
+    public static void putEnderChest(ServerPlayer player){
+        SimpleContainer inventory = createEnderChestLayout(player);
+        Component name = Component.literal(player.getName().getString()+"'s ender chest");
+        inventories.put(player.getUUID(), new InventoryContext(inventory,name));
     }
 
-    public static SimpleNamedScreenHandlerFactory get(UUID uuid){
+    public static SimpleMenuProvider get(UUID uuid){
         InventoryContext context = inventories.get(uuid);
         if (context == null) return null;
 
-        SimpleInventory inventory = context.inventory();
-        SimpleNamedScreenHandlerFactory factory;
+        SimpleContainer inventory = context.inventory();
+        SimpleMenuProvider factory;
 
-        if (inventory.size() == 54) {
-            factory = new SimpleNamedScreenHandlerFactory((id, playerInventory, player) ->
-                    new InventoryScreenHandler(ScreenHandlerType.GENERIC_9X6,id,playerInventory,inventory,6),
+        if (inventory.getContainerSize() == 54) {
+            factory = new SimpleMenuProvider((id, playerInventory, player) ->
+                    new InventoryScreenHandler(MenuType.GENERIC_9x6,id,playerInventory,inventory,6),
                     context.name()
             );
         }else {
-            factory = new SimpleNamedScreenHandlerFactory((id, playerInventory, player) ->
-                    new InventoryScreenHandler(ScreenHandlerType.GENERIC_9X3,id,playerInventory,inventory,3),
+            factory = new SimpleMenuProvider((id, playerInventory, player) ->
+                    new InventoryScreenHandler(MenuType.GENERIC_9x3,id,playerInventory,inventory,3),
                     context.name()
             );
         }
@@ -60,45 +59,45 @@ public class InventoryManager {
         return factory;
     }
 
-    private static SimpleInventory createInventoryLayout(ServerPlayerEntity player){
-        SimpleInventory inventory = new SimpleInventory(54);
-        PlayerInventory playerInventory = player.getInventory();
+    private static SimpleContainer createInventoryLayout(ServerPlayer player){
+        SimpleContainer inventory = new SimpleContainer(54);
+        Inventory playerInventory = player.getInventory();
 
         ItemStack grayPane = new ItemStack(Items.BLACK_STAINED_GLASS_PANE);
-        grayPane.set(DataComponentTypes.TOOLTIP_DISPLAY,new TooltipDisplayComponent(true, ReferenceSortedSets.emptySet()));
+        grayPane.set(DataComponents.TOOLTIP_DISPLAY,new TooltipDisplay(true, ReferenceSortedSets.emptySet()));
         for (int i = 0; i < 54; i++) {
-            inventory.setStack(i, grayPane.copy());
+            inventory.setItem(i, grayPane.copy());
         }
 
-        inventory.setStack(6,player.getOffHandStack().copy());
+        inventory.setItem(6,player.getOffhandItem().copy());
         for (int i = 0; i < 4; i++) {
-            ItemStack item = playerInventory.getStack(39-i).copy();
-            inventory.setStack(i+2, item);
+            ItemStack item = playerInventory.getItem(39-i).copy();
+            inventory.setItem(i+2, item);
         }
         for (int i = 9; i < 36; i++) {
-            ItemStack item = playerInventory.getStack(i).copy();
-            inventory.setStack(i + 9, item);
+            ItemStack item = playerInventory.getItem(i).copy();
+            inventory.setItem(i + 9, item);
         }
         for (int i = 0; i < 9; i++) {
-            ItemStack item = playerInventory.getStack(i).copy();
-            inventory.setStack(i + 45, item);
+            ItemStack item = playerInventory.getItem(i).copy();
+            inventory.setItem(i + 45, item);
         }
 
         return inventory;
     }
 
-    private static SimpleInventory createItemLayout(ItemStack item){
-        SimpleInventory inventory = new SimpleInventory(27);
-        inventory.setStack(13,item);
+    private static SimpleContainer createItemLayout(ItemStack item){
+        SimpleContainer inventory = new SimpleContainer(27);
+        inventory.setItem(13,item);
         return inventory;
     }
 
-    private static SimpleInventory createEnderChestLayout(ServerPlayerEntity player){
-        SimpleInventory inventory = new SimpleInventory(27);
-        EnderChestInventory enderChest = player.getEnderChestInventory();
+    private static SimpleContainer createEnderChestLayout(ServerPlayer player){
+        SimpleContainer inventory = new SimpleContainer(27);
+        PlayerEnderChestContainer enderChest = player.getEnderChestInventory();
 
         for (int i=0;i<27;i++){
-            inventory.setStack(i,enderChest.getStack(i).copy());
+            inventory.setItem(i,enderChest.getItem(i).copy());
         }
 
         return inventory;
@@ -106,7 +105,7 @@ public class InventoryManager {
 
     public static void registerLeaveEvent(){
         ServerPlayerEvents.LEAVE.register(player ->{
-            inventories.remove(player.getUuid());
+            inventories.remove(player.getUUID());
         });
     }
 }
