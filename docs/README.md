@@ -73,7 +73,7 @@ Use the following patterns directly in the chat window to apply styles:
 >
 > * **Behavior:** Successful mentions send a notification sound to the target and automatically tint the text (e.g., to the team color).
 > * **Dependencies:** `@group` requires **LuckPerms**. Without it, the mention will be ignored.
-> * **Colors:** `@team` and `@Player` use their respective team colors. If no team color is set, the `defaultTeamColor` from the config is used.
+> * **Colors:** `@team` and `@Player` use their respective team colors. If no team color is set, the `team_color` value from `config.json` is used.
 > * **Sound:** The notification sound uses the **UI** category (falls back to the **PLAYER** category on Minecraft 1.21.5 and earlier).
 > * **More Info:** For a full list of mention types and advanced usage, refer to [MentionWiki](https://hanhy06.github.io/embellish-chat-wiki/mention/MentionSystem/).
 
@@ -95,7 +95,7 @@ Use the following patterns directly in the chat window to apply styles:
 * **`/embellish-chat open <player>`** Opens the last shared inventory/ender/item of the specified player.
 * **`/embellish-chat help mention`** Displays the mention rules available to you based on your permissions.
 * **`/embellish-chat help style`** Displays the styling rules available to you based on your permissions.
-* **`/embellish-chat notification`** Toggles your personal mention notification preferences. *(Enabled/disabled globally by `notificationCommandEnable` in the config).*
+* **`/embellish-chat notification`** Toggles your personal mention notification preferences. *(Enabled/disabled globally by `notify_command_enabled` in the config).*
 
 ---
 
@@ -110,32 +110,32 @@ The configuration file is located at `config/embellish-chat/config.json`.
 ```
 {
   //version
-  "version": "3.4.0",
+  "version": "current mod version",
   
   //setting
   "delimiter": ",",
   "timestamp": "yyyy-MM-dd HH:mm:ss",
-  "commandAlias": "ec",
-  "urlColor": "#0000EE",
-  "defaultTeamColor": "#FF55FF",
-  "notificationCommandEnable": true,
-  "mentionBroadcast": true,
-  "useClearFormat": false,
+  "command_alias": "ec",
+  "url_color": "#0000EE",
+  "team_color": "#FF55FF",
+  "notify_command_enabled": true,
+  "notify_mention_enabled": true,
+  "disable_vanilla_chat_format": false,
   
   //player list
-  "bannedPlayerList": [],
-  "notificationOffPlayerList": [],
-  
-  //webhook
-  "webhook": ""
+  "banned_players": [],
+  "notify_off_players": []
 }
 ```
 
 * The `version` field must not be modified manually.
-* The core configuration logic is defined in `stylingRules` and `mentionRules`.
+* `ConfigManager` automatically splits the configuration into `config.json`, `styles.json`, `mentions.json`, and `presets.json`.
+* Missing sections are restored from the built-in defaults when the files are loaded.
+* If the stored `version` does not match the running mod version, the mod falls back to the default configuration.
+* The core configuration logic is defined in `style_rules` and `mention_rules`.
 * Rules are processed from top to bottom, so placing a catch-all rule earlier may override more specific rules defined below.
 * The `delimiter` value is internally handled as a regular expression; special characters such as `|` must be properly escaped.
-* If `defaultTeamColor` is missing or set to `null`, automatic coloring will not be applied.
+* If `team_color` is missing or set to `null`, automatic team-color fallback will not be applied.
 * To avoid JSON syntax errors and ensure valid configurations, using the **[Web Config Generator](https://hanhy06.github.io/embellish-chat-wiki/config-generator.html)** is strongly recommended:
 
 ### Styling
@@ -143,7 +143,7 @@ The configuration file is located at `config/embellish-chat/config.json`.
 The configuration file is located at `config/embellish-chat/styles.json`.
 ```
 {
-  "stylingRules": {
+  "style_rules": {
     "embellish-chat.chat": [
       {
         "pattern": " ... ",
@@ -175,7 +175,7 @@ The configuration file is located at `config/embellish-chat/styles.json`.
 The configuration file is located at `config/embellish-chat/mentions.json`.
 ```
 {
-  "mentionRules": {
+  "mention_rules": {
     "embellish-chat.mention": [
       {
         "pattern": " ... ",
@@ -226,7 +226,7 @@ The configuration file is located at `config/embellish-chat/mentions.json`.
 The configuration file is located at `config/embellish-chat/presets.json`.
 ```
 {
-  "colors": {
+  "color": {
     " ... ": " ... ",
   },
   "atlas": {
@@ -238,15 +238,15 @@ The configuration file is located at `config/embellish-chat/presets.json`.
   "whitelist": [
     " ... "
   ],
-  "prefixes": {
+  "prefix": {
     " ... ": " ... "
   }
 }
 ```
-* **`colors`**: This is used in the color presets for styling.
+* **`color`**: This is used in the color presets for styling.
 * **`atlas`**: This is used in the atlas presets for styling.
 * **`whitelist`**: This is used in the `URL` style type. If left empty, all URLs are allowed.
-* **`prefixes`**: stylingRules, like mentionRules, uses permission nodes as its keys. The prefix supports placeholder tags and placeholder functionality.
+* **`prefix`**: Uses permission nodes as its keys, and each value is a string parsed as a text component with placeholder tags.
  
 ---
 
@@ -255,7 +255,7 @@ The configuration file is located at `config/embellish-chat/presets.json`.
 ### ✅ Fully Supported
 
 * **Fabric Permissions API (Embedded)**
-  * The keys defined in `stylingRules` and `mentionRules` directly function as permission nodes.
+  * The keys defined in `style_rules` and `mention_rules` directly function as permission nodes.
   * Rules are evaluated from top to bottom based on the player's permissions.
 * **Placeholder API**
   * Supports dynamic placeholders in mention titles and style presets.
@@ -275,7 +275,7 @@ The configuration file is located at `config/embellish-chat/presets.json`.
 * **Styled Chat**
   * **Styled Chat takes priority.** If installed, Embellish Chat's *styling* features will be overridden.
   * **Mentions still work:** The mention and notification system remains functional.
-  * **Performance Tip:** If you must use both, remove all entries in Embellish Chat's `stylingRules` to prevent unnecessary background processing.
+  * **Performance Tip:** If you must use both, remove all entries in Embellish Chat's `style_rules` to prevent unnecessary background processing.
 
 ---
 

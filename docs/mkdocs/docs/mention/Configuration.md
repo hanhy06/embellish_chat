@@ -1,5 +1,7 @@
 # Configuration
 
+Mention rules are stored in `config/embellish-chat/mentions.json` under the top-level `mention_rules` object.
+
 ## Configuration Structure
 
 ```
@@ -34,7 +36,7 @@
       "preset": "light purple"
     }
   ]
-}}
+}
 ```
 
 * **`pattern`**: This is a regular expression for scanning text. It must have one capture group.
@@ -56,6 +58,50 @@
   * `preset`: This is an optional preset value.
 * **`styles`**: Defines the styles to be applied when the mention is triggered.
   * Works the same way as in the styling rules section.
+
+## File Layout
+
+```json
+{
+  "mention_rules": {
+    "embellish-chat.mention": [
+      {
+        "pattern": "@everyone()",
+        "comment": "<blue><b>Pattern</b></blue>: @everyone\n<dark_aqua><b>Comment</b></dark_aqua>: mention all online players\n",
+        "title": "%player:displayname% mentioned you",
+        "sound": {
+          "id": "minecraft:entity.experience_orb.pickup",
+          "category": "UI",
+          "volume": 1.0,
+          "pitch": 1.75
+        },
+        "cooldown": 0,
+        "onlyTarget": false,
+        "mentions": [
+          {
+            "mentionType": "EVERYONE",
+            "preset": ""
+          }
+        ],
+        "styles": [
+          {
+            "styleType": "BOLD",
+            "preset": ""
+          },
+          {
+            "styleType": "COLOR_PRESET",
+            "preset": "light purple"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+* **`mention_rules`**: Top-level container for all mention rules.
+* **Permission node keys**: Each key such as `embellish-chat.mention` is treated as a permission node.
+* **Rule order matters**: Rules are processed from top to bottom, so a generic player mention rule can hide rules placed below it.
 
 ## Usage Patterns
 

@@ -86,34 +86,32 @@ The configuration file is located at `config/embellish-chat/config.json`.
 ```
 {
   //version
-  "version": "3.3.0",
+  "version": "current mod version",
   
   //setting
   "delimiter": ",",
   "timestamp": "yyyy-MM-dd HH:mm:ss",
-  "commandAlias": "ec"
-  "urlColor": "#0000EE",
-  "defaultTeamColor": "#FF55FF",
-  "notificationCommandEnable": true,
-  "mentionBroadcast": true,
-  "useClearFormat": false,
+  "command_alias": "ec",
+  "url_color": "#0000EE",
+  "team_color": "#FF55FF",
+  "notify_command_enabled": true,
+  "notify_mention_enabled": true,
+  "disable_vanilla_chat_format": false,
   
   //player list
-  "bannedPlayerList": [],
-  "notificationOffPlayerList": [],
-  
-  //webhook
-  "webhook": ""
+  "banned_players": [],
+  "notify_off_players": []
 }
 ```
 
 The configuration file is located at `config/embellish-chat/styles.json`.
 ```
 {
-  "stylingRules": {
+  "style_rules": {
     "embellish-chat.chat": [
       {
         "pattern": " ... ",
+        "comment": " ... ",
         "styles": [
           {
             "styleType": " ... ",
@@ -131,10 +129,11 @@ The configuration file is located at `config/embellish-chat/styles.json`.
 The configuration file is located at `config/embellish-chat/mentions.json`.
 ```
 {
-  "mentionRules": {
+  "mention_rules": {
     "embellish-chat.mention": [
       {
         "pattern": " ... ",
+        "comment": " ... ",
         "title": " ... ",
         "cooldown": 0,
         "onlyTarget": false,
@@ -154,16 +153,19 @@ The configuration file is located at `config/embellish-chat/mentions.json`.
 ```
 
 * The `version` field must not be modified manually.
-* The core configuration logic is defined in `stylingRules` and `mentionRules`.
+* `ConfigManager` automatically splits the configuration into `config.json`, `styles.json`, `mentions.json`, and `presets.json`.
+* Missing sections are restored from the built-in defaults when the files are loaded.
+* If the stored `version` does not match the running mod version, the mod falls back to the default configuration.
+* The core configuration logic is defined in `style_rules` and `mention_rules`.
 * Rules are processed from top to bottom, so placing a catch-all rule earlier may override more specific rules defined below.
 * The `delimiter` value is internally handled as a regular expression; special characters such as `|` must be properly escaped.
-* If `defaultTeamColor` is missing or set to `null`, automatic coloring will not be applied.
+* If `team_color` is missing or set to `null`, automatic team-color fallback will not be applied.
 * To avoid JSON syntax errors and ensure valid configurations, using the **[Web Config Generator](config-generator.html)** is strongly recommended:
 
 The configuration file is located at `config/embellish-chat/presets.json`.
 ```
 {
-  "colors": {
+  "color": {
     " ... ": " ... ",
   },
   "atlas": {
@@ -175,15 +177,15 @@ The configuration file is located at `config/embellish-chat/presets.json`.
   "whitelist": [
     " ... "
   ],
-  "prefixes": {
+  "prefix": {
     " ... ": " ... "
   }
 }
 ```
-* **`colors`**: This is used in the color presets for styling.
+* **`color`**: This is used in the color presets for styling.
 * **`atlas`**: This is used in the atlas presets for styling.
 * **`whitelist`**: This is used in the `URL` style type. If left empty, all URLs are allowed.
-* **`prefixes`**: stylingRules, like mentionRules, uses permission nodes as its keys. The prefix supports placeholder tags and placeholder functionality.
+* **`prefix`**: Uses permission nodes as its keys, and each value is a string parsed as a text component with placeholder tags.
 
 ---
 
@@ -199,7 +201,7 @@ The configuration file is located at `config/embellish-chat/presets.json`.
 
 ### Not Supported / Conflicts
 * **Styled Chat:** Incompatible. If used together, Styled Chat overrides formatting.
-    * *Workaround:* Remove all `stylingRules` in Embellish Chat to use only the Mention features.
+    * *Workaround:* Remove all `style_rules` in Embellish Chat to use only the Mention features.
 
 ---
 
@@ -249,7 +251,7 @@ When notifications are enabled, the server must send additional vanilla packets 
 Therefore, we separated these states to more accurately measure the pure computational performance of the mod itself.
 
 In real-world multiplayer environments, this packet-sending overhead can scale with the number of recipients (online players), so performance may degrade further depending on player count and mention usage patterns.  
-If you want to disable sound/title notifications entirely, set `mentionBroadcast` to `false` in `embellish-chat/config.json`.
+If you want to disable sound/title notifications entirely, set `notify_mention_enabled` to `false` in `config/embellish-chat/config.json`.
 
 ### Reason for Test Configuration Changes
 The previous testing environment assumed extreme conditions and did not perfectly represent a realistic server environment. To derive more practical and meaningful performance metrics, the test conditions were updated as follows:

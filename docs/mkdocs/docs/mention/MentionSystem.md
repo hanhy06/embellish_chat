@@ -17,7 +17,7 @@ This system ensures that critical messages reach the right people without spammi
 This section is divided into three parts to help you configure and use the mention system:
 
 * **[Configuration](Configuration.md)**
-  Explains how to customize the mention behavior in `config.json`. It covers setting up notification sounds, visual formats, and cooldowns.
+  Explains how to customize the mention behavior in `mentions.json`. It covers setting up notification sounds, visual formats, and cooldowns.
 
 * **[Type](MentionType.md)**
   A reference list of all available mention types. It details the logic for each type, such as targeting by team, world, or proximity.

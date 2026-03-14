@@ -2,23 +2,23 @@
 
 ## Text Formatting & Text Placeholder API
 
-<span style="color:red;">Important:</span>This setting must be modified in `embellish-chat/presets.json`, not in `embellish-chat/styles.json`.
+<span style="color:red;">Important:</span> This setting must be modified in `config/embellish-chat/presets.json`, not in `config/embellish-chat/styles.json`.
 
-```
+```json
 {
-  "prefixes": {
+  "prefix": {
     "chat.prefix.default":"<b>[%player:displayname%]</b> "
   }
 }
 ```
 
-![Formatting](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Formatting.png)
+![Formatting](../assets/images/Formatting.png)
 
 You can format the chat by matching all rules from the first English styling set and applying them using the `REPLACE` type.
-When using custom formatting, ensure that `useClearFormat` is enabled.
+When using custom formatting, ensure that `disable_vanilla_chat_format` is enabled in `config.json`.
 
 
-### Bubble Chat
+## Bubble Chat
 
 ```
 {
@@ -36,7 +36,7 @@ When using custom formatting, ensure that `useClearFormat` is enabled.
 }
 ```
 
-![BubbleChat](https://hanhy06.github.io/embellish-chat-wiki/assets/images/BubbleChat.gif)
+![BubbleChat](../assets/images/BubbleChat.gif)
 
 By displaying a speech bubble and preventing the chat message from being sent, 
 you can create a more natural conversational experience.
@@ -64,7 +64,7 @@ you can create a more natural conversational experience.
 ]
 ```
 
-![Command_Run](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Command_Run.gif)
+![Command_Run](../assets/images/Command_Run.gif)
 
 Triggers and the COMMAND_RUN type allow chat to function as a macro.
 The example above demonstrates a showcase datapack that enables expressions like crying or joy through chat.
