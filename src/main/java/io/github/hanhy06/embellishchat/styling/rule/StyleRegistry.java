@@ -287,47 +287,23 @@ public class StyleRegistry {
     }
 
     public MutableText URL(StyleParameter parameter) {
-        if (!whitelist.isEmpty()) {
-            try {
-                URI uri = URI.create(parameter.getString());
-                String host = uri.getHost();
+        URI uri = URI.create(parameter.getString());
+        String host = uri.getHost();
 
-                if (host == null) {
-                    return parameter.segment();
-                }
-
-                boolean allowed = whitelist.isEmpty() || whitelist.contains(host);
-
-                if (!allowed){;
-                    for (String domain : whitelist) {
-                        allowed = host.endsWith("." + domain);
-                        if (allowed) break;
-                    }
-                }
-
-                if (!allowed) {
-                    return parameter.segment();
-                }
-
-                ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
-                return parameter.segment().fillStyle(Style.EMPTY
-                        .withClickEvent(clickEvent)
-                        .withColor(config.url_color().getRGB()));
-
-            } catch (IllegalArgumentException e) {
-                EmbellishChat.LOGGER.warn("Invalid URL provided for segment [{}]: {}", parameter.segment().getString(), parameter.getString());
-                return parameter.segment();
+        boolean allowed = whitelist.isEmpty() || whitelist.contains(host);
+        if (!allowed) {
+            for (String domain : whitelist) {
+                allowed = host.endsWith("." + domain);
+                if (allowed) break;
             }
         }
 
-        try {
-            URI uri = URI.create(parameter.getString());
+        if (allowed){
             ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
             return parameter.segment().fillStyle(Style.EMPTY
                     .withClickEvent(clickEvent)
                     .withColor(config.url_color().getRGB()));
-        } catch (IllegalArgumentException e) {
-            EmbellishChat.LOGGER.warn("Invalid URL provided for segment [{}]: {}", parameter.segment().getString(), parameter.getString());
+        }else {
             return parameter.segment();
         }
     }
