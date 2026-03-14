@@ -248,8 +248,7 @@ public class AdminCommand {
         String regex = StringArgumentType.getString(context,"regex");
         MutableText result = Text.empty();
 
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(text);
+        Matcher matcher = Pattern.compile(regex).matcher(text);
 
         int lastEnd = 0;
         while (matcher.find()){
