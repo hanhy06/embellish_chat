@@ -47,10 +47,10 @@
 
 ![Mention](../assets/images/Mention.gif)
 
-You can put any value accepted as an option into the preset.
-When used this way, you can always trigger an admin mention simply by using `@admin`.
-Additionally, by using `CLICK_COMMAND_RUN` in the styles section, the mentioned administrator can easily teleport to the sender’s location.
-If you also use `DISCORD_JSON`, the administrator will receive a notification in Discord when they are mentioned.
+You can place any valid option value directly in `preset`.
+With this rule, typing `@admin` always notifies the `admin` group.
+The `CLICK_COMMAND_RUN` style lets the notified administrator teleport to the sender's location.
+If you also use `DISCORD_JSON`, the same mention can send a Discord notification.
 
 ## Making an announcement
 
@@ -89,7 +89,7 @@ If you also use `DISCORD_JSON`, the administrator will receive a notification in
 
 ```
 
-Typing `[notification]` will send an alert to everyone.
+Typing `[notification]` sends an alert to everyone.
 
 ## Use as a channel
 
@@ -123,6 +123,6 @@ Typing `[notification]` will send an alert to everyone.
 
 ```
 
-By setting `"onlyTarget": true`, you can use the mention system as a private chat channel.
-In this example, messages starting with #staff will not be broadcast to the global chat.
-Instead, they will be sent exclusively to players in the staff LuckPerms group.
+Setting `"onlyTarget": true` turns the mention rule into a private chat channel.
+In this example, messages starting with `#staff` are not broadcast to global chat.
+Instead, they are delivered only to players in the `staff` LuckPerms group.

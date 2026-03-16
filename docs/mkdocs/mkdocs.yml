@@ -5,7 +5,12 @@ repo_url: https://github.com/hanhy06/embellish-chat
 repo_name: embellish chat
 
 nav:
-  - Introduction: index.md
+  - Embellish Chat:
+      - Introduction: index.md
+      - Commands: embellish-chat/Commands.md
+      - Configuration: embellish-chat/Configuration.md
+      - Compatibility: embellish-chat/Compatibility.md
+      - Performance: embellish-chat/Performance.md
   - Style:
       - Introduction: style/StyleSystem.md
       - Configuration: style/Configuration.md
@@ -26,7 +31,6 @@ theme:
       accent: deep purple
   features:
     - navigation.sections
-    - navigation.expand
     - navigation.top
     - navigation.indexes
     - toc.integrate

@@ -1,26 +1,26 @@
 # Mention System
 
-The Mention system enhances communication on your server by allowing players to notify specific individuals or groups. It goes beyond simple name highlighting by supporting complex targeting rules like teams, radius, and permissions.
+The mention system helps players notify specific people or groups in chat. It goes beyond simple name highlighting by supporting targeting rules based on teams, distance, worlds, and permissions.
 
 ## Mechanism
 
-The mention process operates in three stages:
+The mention process works in three stages:
 
-1. **Detection**: The plugin identifies mention keywords (e.g., `@everyone`, `@player`) within the chat message.
-2. **Targeting**: Based on the **Mention Type**, the plugin calculates the specific recipients (e.g., players within a 50-block radius).
-3. **Notification**: The target players receive a distinct visual cue and an auditory alert to ensure the message is noticed.
+1. **Detection**: The mod finds mention patterns such as `@everyone` or `@player` in the chat message.
+2. **Targeting**: Based on the configured **Mention Type**, it resolves the actual recipients.
+3. **Notification**: The target players receive visual and audio feedback so the message stands out.
 
-This system ensures that critical messages reach the right people without spamming the entire server.
+This makes it easier to deliver important messages to the right players without spamming everyone else.
 
 ## Documentation Structure
 
-This section is divided into three parts to help you configure and use the mention system:
+This section is split into three parts:
 
 * **[Configuration](Configuration.md)**
-  Explains how to customize the mention behavior in `mentions.json`. It covers setting up notification sounds, visual formats, and cooldowns.
+  Explains how to define mention rules in `mentions.json`, including notification sounds, titles, and cooldowns.
 
-* **[Type](MentionType.md)**
-  A reference list of all available mention types. It details the logic for each type, such as targeting by team, world, or proximity.
+* **[Mention Type](MentionType.md)**
+  Lists every available mention type and explains how each one selects its targets.
 
 * **[Application](Application.md)**
-  Provides a guide on how players can use these mentions in-game, including required permissions and syntax examples.
+  Shows practical examples such as admin pings, announcements, and private staff channels.

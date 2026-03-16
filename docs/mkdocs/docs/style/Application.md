@@ -14,9 +14,8 @@
 
 ![Formatting](../assets/images/Formatting.png)
 
-You can format the chat by matching all rules from the first English styling set and applying them using the `REPLACE` type.
-When using custom formatting, ensure that `disable_vanilla_chat_format` is enabled in `config.json`.
-
+You can reformat the full chat message by matching the complete line and applying a `REPLACE` style.
+When using custom chat formatting, enable `disable_vanilla_chat_format` in `config.json`.
 
 ## Bubble Chat
 
@@ -38,8 +37,8 @@ When using custom formatting, ensure that `disable_vanilla_chat_format` is enabl
 
 ![BubbleChat](../assets/images/BubbleChat.gif)
 
-By displaying a speech bubble and preventing the chat message from being sent, 
-you can create a more natural conversational experience.
+This combination displays a speech bubble and blocks the normal chat message.
+It is useful when you want nearby conversation to feel more natural.
 
 ## Using chat as a macro
 
@@ -66,8 +65,8 @@ you can create a more natural conversational experience.
 
 ![Command_Run](../assets/images/Command_Run.gif)
 
-Triggers and the COMMAND_RUN type allow chat to function as a macro.
-The example above demonstrates a showcase datapack that enables expressions like crying or joy through chat.
+Using triggers with `COMMAND_RUN` lets chat act like a lightweight macro system.
+The example above comes from a showcase datapack that maps words to different emotes or reactions.
 
 ## Global Style
 
@@ -83,7 +82,8 @@ The example above demonstrates a showcase datapack that enables expressions like
 }
 ```
 
-In regular expressions, .+ means all characters. Using this method, you can apply a subtle rainbow effect to all text.
+In regular expressions, `.+` matches the full message.
+That makes it easy to apply a subtle rainbow effect to every chat line.
 
 ## Using It Directly as an Option
 
@@ -99,5 +99,5 @@ In regular expressions, .+ means all characters. Using this method, you can appl
 }
 ```
 
-If you write it like ((text)), you can make capture group 1 and 2 have the same content in the regular expression.
-For example, if you put ((red)) in the preset, every red will be displayed in red.
+Writing a pattern like `((red))` makes capture groups 1 and 2 contain the same text.
+For example, this lets `COLOR_PRESET` use `red` as both the matched text and the option value, so every `red` appears in red.

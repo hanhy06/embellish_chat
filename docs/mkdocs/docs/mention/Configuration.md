@@ -39,25 +39,14 @@ Mention rules are stored in `config/embellish-chat/mentions.json` under the top-
 }
 ```
 
-* **`pattern`**: This is a regular expression for scanning text. It must have one capture group.
-  * This is the mention option (e.g. team name, LuckPerms group).
-* **`comment`**: This comment is used in `/embellish-chat help mention`.
-* **`title`**: This is the title shown on the mentioned player's screen.
-  * `%player:displayname%` is the display name of the player who sent the mention.
-* **`sound`**: Defines the notification sound settings.
-  * `id`: Sound identifier.
-  * `category`: Sound category.
-  * `volume`: Sound volume.
-  * `pitch`: Sound pitch.
-* **`cooldown`**: This is the mention cooldown time in seconds.
-  * Set to `0` to disable the cooldown.
-* **`onlyTarget`**:
-  * When set to `true`, prevents the message from being broadcast globally and sends it only to the target.
-* **`mentions`**: Defines the mention actions to be executed.
-  * `mentionType`: This is the mention type. You can use all types listed in the [MentionWiki](https://hanhy06.github.io/embellish-chat-wiki/mention/MentionType/).
-  * `preset`: This is an optional preset value.
-* **`styles`**: Defines the styles to be applied when the mention is triggered.
-  * Works the same way as in the styling rules section.
+* **`pattern`**: A regular expression used to scan chat text. It must contain one capture group, and that capture group becomes the mention option such as a team name or LuckPerms group.
+* **`comment`**: Help text shown in `/embellish-chat help mention`.
+* **`title`**: The title shown to players who are mentioned. `%player:displayname%` resolves to the display name of the player who sent the message.
+* **`sound`**: Notification sound settings including `id`, `category`, `volume`, and `pitch`.
+* **`cooldown`**: Mention cooldown in seconds. Set it to `0` to disable the cooldown.
+* **`onlyTarget`**: When `true`, the message is not broadcast globally and is delivered only to the matched targets.
+* **`mentions`**: The mention actions that run when the rule matches. `mentionType` selects the target rule, and `preset` provides an optional preset value. See [Mention Type](MentionType.md) for the full list.
+* **`styles`**: Styles applied when the mention is triggered. This works the same way as the styling rules in `styles.json`.
 
 ## File Layout
 
@@ -101,7 +90,7 @@ Mention rules are stored in `config/embellish-chat/mentions.json` under the top-
 
 * **`mention_rules`**: Top-level container for all mention rules.
 * **Permission node keys**: Each key such as `embellish-chat.mention` is treated as a permission node.
-* **Rule order matters**: Rules are processed from top to bottom, so a generic player mention rule can hide rules placed below it.
+* **Rule order matters**: Rules are processed from top to bottom, so broad rules should be placed below more specific ones.
 
 ## Usage Patterns
 
@@ -141,7 +130,8 @@ Mention rules are stored in `config/embellish-chat/mentions.json` under the top-
 }
 
 ```
-This is the most basic way to use it.
+
+This is the simplest possible mention rule.
 
 ### Multiple Mention
 
@@ -184,7 +174,7 @@ This is the most basic way to use it.
 
 ```
 
-Mentions any red-team player within a 64-block radius.
+This mentions red-team players within a 64-block radius.
 
 ### Preset
 
@@ -223,4 +213,4 @@ Mentions any red-team player within a 64-block radius.
 
 ```
 
-This way, only the red team will always be in the mention
+This version always targets the red team.

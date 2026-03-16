@@ -17,13 +17,9 @@ Style rules are stored in `config/embellish-chat/styles.json` under the top-leve
 }
 ```
 
-* **`pattern`**: This is a regular expression for scanning text. It must have two capture groups.
-  * `group 1`: This is text to be styled.
-  * `group 2`: This is text passed as an option.
-* **`comment`**: This comment is used in `/embellish-chat help style`.
-* **`styles`**: Defines the styles to be applied to captured group 1.
-  * `styleType`: This is the style type. You can use all types listed in the [StyleWiki](https://hanhy06.github.io/embellish-chat-wiki/style/StyleType/).
-  * `preset`: This is a preset value. If a value is provided, it is always used; if it is empty, the content of the user's captured group 2 is used instead.
+* **`pattern`**: A regular expression used to scan chat text. It must contain two capture groups: `group 1` is the text that will be styled, and `group 2` is the option value passed to the style.
+* **`comment`**: Help text shown in `/embellish-chat help style`.
+* **`styles`**: The styles applied to capture group 1. `styleType` selects the behavior, and `preset` provides a fixed option value. If `preset` is empty, the content of capture group 2 is used instead. See [Style Type](StyleType.md) for the full list.
 
 ## File Layout
 
@@ -66,7 +62,8 @@ Style rules are stored in `config/embellish-chat/styles.json` under the top-leve
   ]
 }
 ```
-This is the most basic way to use it.
+
+This is the simplest style rule.
 
 ### Multiple Style
 
@@ -85,7 +82,8 @@ This is the most basic way to use it.
   ]
 }
 ```
-You can use multiple types in a single rule.
+
+You can combine multiple style types in a single rule.
 
 ### Preset
 
@@ -101,4 +99,4 @@ You can use multiple types in a single rule.
 }
 ```
 
-You can set a preset by specifying it, and if the preset is empty, the option provided by the user will be used.
+You can hard-code a preset value, or leave it empty to use the option captured from the player's message.
