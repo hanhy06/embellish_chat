@@ -7,7 +7,6 @@
 * **Styled Nicknames:** Allows mentions to match player nicknames.
 * **LuckPerms:** Required for `@group` mentions.
 * **Geyser:** Basic support. Mentions work, but click and hover events are limited on Bedrock.
-* **Chat Heads:** Fully compatible.
 
 ## Not Supported / Conflicts
 
