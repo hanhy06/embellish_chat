@@ -54,9 +54,9 @@
 * `SHOW_ITEM`: Displays the description and texture of the item or block held by the player. This style type must be placed at the very bottom. **Option:** `Atlas Path (atlas;sprite)`
 * `SHOW_INVENTORY`: Displays the user's face. Clicking it shows the user's inventory snapshot. This style type must be placed at the very bottom, and the inventory snapshot is cleared when the player leaves the server. **Option:** `None`
 * `SHOW_ENDER_CHEST`: Displays the user's face. Clicking it shows the user's ender chest snapshot. This style type must be placed at the very bottom, and the inventory snapshot is cleared when the player leaves the server. **Option:** `None`
-* `ATLAS_PRESET`: Uses a predefined atlas name from the `presets.json/atlas` section. This style type cannot be used in versions below 1.21.8 and must be placed at the very bottom. **Option:** `None`
+* `ATLAS_PRESET`: Uses a predefined atlas name from the `presets.json/atlas` section. This style type cannot be used in versions below 1.21.8 and must be placed at the very bottom. **Option:** `Preset Name`
 * `JSON`: Parses the provided JSON string and displays it as a text component. **Option:** `JSON Data`
-* `DISCORD_JSON`: Sends the provided JSON options to Discord through a registered webhook. **Option:** `JSON Data`
+* `DISCORD_JSON`: Sends the provided JSON payload to Discord through the specified webhook. **Option**: `webhook;JSON Data`
 * `COMMAND_RUN`: Immediately executes the supplied command when the text is processed. **Option:** `Command`
 * `LOG`: Logs the text and sender information to the server console. **Option:** `None`
 * `BUBBLE`: Displays a speech bubble above the user's head. This type must be placed above `SHOW_ITEM` and `SHOW_INVENTORY`. **Option:** `None`

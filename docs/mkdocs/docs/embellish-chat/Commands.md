@@ -2,6 +2,8 @@
 
 Embellish Chat provides commands for both regular players and administrators.
 
+All commands are available under `/embellish-chat`.
+
 ## User Commands
 
 Available to all players.
