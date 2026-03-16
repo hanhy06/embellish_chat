@@ -57,10 +57,24 @@
         "MASTER", "MUSIC", "RECORDS", "WEATHER", "BLOCKS", "HOSTILE", "NEUTRAL", "PLAYERS", "AMBIENT", "VOICE", "UI"
     ];
 
-    const fieldBaseClass = "w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 shadow-sm outline-none transition duration-200 placeholder:text-slate-500 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20";
-    const sectionCardClass = "relative overflow-hidden rounded-[28px] border border-slate-800/80 bg-slate-900/80 shadow-soft backdrop-blur";
-    const fieldLabelClass = "text-[11px] font-extrabold uppercase tracking-[0.2em] text-slate-200";
-    const sectionLabelClass = "text-[11px] font-extrabold uppercase tracking-[0.22em] text-slate-200";
+    const fieldBaseClass = "w-full rounded-xl border border-slate-600 bg-slate-950 px-4 py-3 text-sm text-slate-50 outline-none transition duration-150 placeholder:text-slate-400 focus:border-slate-300 focus:ring-2 focus:ring-slate-300/20";
+    const sectionCardClass = "rounded-2xl border border-slate-700 bg-slate-900";
+    const fieldLabelClass = "text-[11px] font-bold uppercase tracking-[0.16em] text-slate-200";
+    const sectionLabelClass = "text-[11px] font-bold uppercase tracking-[0.16em] text-slate-300";
+    const panelClass = "rounded-xl border border-slate-700 bg-slate-950 p-4";
+
+    const validateRegexPattern = (pattern) => {
+        if (!pattern || !pattern.trim()) {
+            return { state: "empty", message: "Enter a regex pattern to validate it." };
+        }
+
+        try {
+            new RegExp(pattern);
+            return { state: "valid", message: "Valid regular expression." };
+        } catch (error) {
+            return { state: "invalid", message: error.message || "Invalid regular expression." };
+        }
+    };
 
     const AppLogo = ({ size = 72, className = "" }) => (
         <img
@@ -74,7 +88,6 @@
 
     const Card = ({ children, className = "" }) => (
         <div className={`${sectionCardClass} ${className}`}>
-            <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-slate-700/60 to-transparent" />
             {children}
         </div>
     );
@@ -82,15 +95,15 @@
     const SectionHeading = ({ eyebrow, title, description, icon, badge = null }) => (
         <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
             <div className="space-y-2">
-                {eyebrow && <div className="text-xs font-semibold uppercase tracking-[0.24em] text-indigo-500">{eyebrow}</div>}
+                {eyebrow && <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">{eyebrow}</div>}
                 <div className="flex items-center gap-3">
                     {icon && (
-                        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-glow">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-600 bg-slate-800 text-slate-100">
                             <IconWrapper name={icon} size={18} />
                         </div>
                     )}
                     <div className="flex flex-wrap items-center gap-3">
-                        <h2 className="text-2xl font-black tracking-tight text-white">{title}</h2>
+                        <h2 className="text-2xl font-bold tracking-tight text-white">{title}</h2>
                         {badge}
                     </div>
                 </div>
@@ -100,14 +113,14 @@
 
     const CountBadge = ({ count, label = "items", tone = "indigo" }) => {
         const tones = {
-            indigo: "bg-indigo-500/15 text-indigo-300",
-            amber: "bg-amber-500/15 text-amber-300",
-            emerald: "bg-emerald-500/15 text-emerald-300",
-            slate: "bg-slate-800 text-slate-300"
+            indigo: "border border-slate-600 bg-slate-800 text-slate-100",
+            amber: "border border-slate-600 bg-slate-800 text-slate-100",
+            emerald: "border border-slate-600 bg-slate-800 text-slate-100",
+            slate: "border border-slate-600 bg-slate-800 text-slate-100"
         };
 
         return (
-            <div className={`relative top-0.5 inline-flex items-center rounded-full px-3 py-1 text-xs font-bold ${tones[tone] || tones.indigo}`}>
+            <div className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${tones[tone] || tones.indigo}`}>
                 {count} {label}
             </div>
         );
@@ -115,27 +128,27 @@
 
     const StatPill = ({ label, value, accent = "indigo" }) => {
         const accents = {
-            indigo: "from-indigo-500/15 to-purple-500/15 text-indigo-300",
-            amber: "from-amber-400/20 to-rose-400/15 text-amber-300",
-            emerald: "from-emerald-400/20 to-cyan-400/15 text-emerald-300",
-            slate: "from-slate-800 to-slate-900 text-slate-300"
+            indigo: "text-slate-100",
+            amber: "text-slate-100",
+            emerald: "text-slate-100",
+            slate: "text-slate-100"
         };
 
         return (
-            <div className={`rounded-2xl border border-slate-800 bg-gradient-to-br px-4 py-3 shadow-sm ${accents[accent] || accents.indigo}`}>
-                <div className="text-[11px] font-semibold uppercase tracking-[0.22em] opacity-70">{label}</div>
-                <div className="mt-1 text-lg font-black">{value}</div>
+            <div className={`rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 ${accents[accent] || accents.indigo}`}>
+                <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">{label}</div>
+                <div className="mt-1 text-lg font-bold">{value}</div>
             </div>
         );
     };
 
     const Button = ({ onClick, children, variant = "primary", size = "md", className = "", disabled = false }) => {
-        const baseStyles = "inline-flex items-center justify-center gap-2 rounded-2xl font-semibold transition duration-200 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed";
+        const baseStyles = "inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition duration-150 focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed";
         const variants = {
-            primary: "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-glow hover:brightness-105 focus:ring-indigo-500/25",
-            secondary: "border border-slate-700 bg-slate-900/90 text-slate-200 shadow-sm hover:border-indigo-500/40 hover:bg-slate-800 focus:ring-indigo-500/20",
-            danger: "border border-red-900/50 bg-red-950/40 text-red-300 shadow-sm hover:bg-red-950/60 focus:ring-red-500/20",
-            ghost: "text-slate-400 hover:bg-slate-800 hover:text-slate-100 focus:ring-slate-700"
+            primary: "border border-slate-500 bg-slate-100 text-slate-950 hover:bg-white focus:ring-slate-300",
+            secondary: "border border-slate-600 bg-slate-800 text-slate-100 hover:bg-slate-700 focus:ring-slate-400/30",
+            danger: "border border-red-700 bg-red-950 text-red-200 hover:bg-red-900 focus:ring-red-400/30",
+            ghost: "border border-transparent text-slate-300 hover:border-slate-600 hover:bg-slate-800 hover:text-slate-100 focus:ring-slate-400/30"
         };
         const sizes = {
             sm: "px-3 py-2 text-xs",
@@ -252,18 +265,18 @@
     const ColorPicker = ({ label, value, onChange }) => (
         <div className="flex flex-col gap-2">
             {label && <label className={fieldLabelClass}>{label}</label>}
-            <div className="flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white/85 p-3 shadow-sm dark:border-slate-700 dark:bg-slate-950/80">
+            <div className="flex items-center gap-3 rounded-xl border border-slate-700 bg-slate-900 p-3">
                 <input
                     type="color"
                     value={value || "#000000"}
                     onChange={(e) => onChange(e.target.value)}
-                    className="h-12 w-12 cursor-pointer rounded-2xl border border-slate-200 bg-transparent p-1 dark:border-slate-700"
+                    className="h-12 w-12 cursor-pointer rounded-xl border border-slate-600 bg-transparent p-1"
                 />
                 <input
                     type="text"
                     value={value || ""}
                     onChange={(e) => onChange(e.target.value)}
-                    className="min-w-0 flex-1 border-0 bg-transparent px-1 text-sm font-semibold tracking-wide text-slate-700 outline-none placeholder:text-slate-400 dark:text-slate-100 dark:placeholder:text-slate-500"
+                    className="min-w-0 flex-1 border-0 bg-transparent px-1 text-sm font-semibold tracking-wide text-slate-100 outline-none placeholder:text-slate-400"
                     placeholder="#RRGGBB"
                 />
             </div>
@@ -271,7 +284,7 @@
     );
 
     const ToggleCard = ({ id, label, description, checked, onChange }) => (
-        <label htmlFor={id} className="group flex cursor-pointer items-start gap-4 rounded-3xl border border-slate-200/80 bg-white/80 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-md dark:border-slate-700 dark:bg-slate-950/60 dark:hover:border-indigo-500/30">
+        <label htmlFor={id} className="group flex cursor-pointer items-start gap-4 rounded-xl border border-slate-700 bg-slate-900 p-4 transition hover:border-slate-500">
             <div className="pt-1">
                 <input
                     id={id}
@@ -282,16 +295,16 @@
                 />
             </div>
             <div className="min-w-0 flex-1">
-                <div className="font-semibold text-slate-800 dark:text-slate-100">{label}</div>
+                <div className="font-semibold text-slate-100">{label}</div>
             </div>
-            <div className={`mt-0.5 rounded-full px-3 py-1 text-xs font-bold ${checked ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300' : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'}`}>
+            <div className={`mt-0.5 rounded-full px-3 py-1 text-xs font-semibold ${checked ? 'bg-slate-100 text-slate-950' : 'bg-slate-800 text-slate-300'}`}>
                 {checked ? 'ON' : 'OFF'}
             </div>
         </label>
     );
 
     const InlineCheckbox = ({ id, label, checked, onChange, className = "" }) => (
-        <label htmlFor={id} className={`flex min-h-[48px] w-full cursor-pointer items-center gap-3 rounded-2xl border border-slate-200/80 bg-white/80 px-4 py-3 shadow-sm transition hover:border-indigo-200 dark:border-slate-700 dark:bg-slate-950/60 dark:hover:border-indigo-500/30 ${className}`}>
+        <label htmlFor={id} className={`flex min-h-[48px] w-full cursor-pointer items-center gap-3 rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 transition hover:border-slate-500 ${className}`}>
             <input
                 id={id}
                 type="checkbox"
@@ -299,22 +312,218 @@
                 onChange={(e) => onChange(e.target.checked)}
                 className="h-4 w-4 cursor-pointer rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
             />
-            <span className="text-sm font-semibold text-slate-800 dark:text-slate-100">{label}</span>
-            <span className={`ml-auto rounded-full px-2.5 py-1 text-[11px] font-bold ${checked ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300' : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'}`}>
+            <span className="text-sm font-semibold text-slate-100">{label}</span>
+            <span className={`ml-auto rounded-full px-2.5 py-1 text-[11px] font-semibold ${checked ? 'bg-slate-100 text-slate-950' : 'bg-slate-800 text-slate-300'}`}>
                 {checked ? 'ON' : 'OFF'}
             </span>
         </label>
     );
 
     const EmptyState = ({ icon = "inbox", title, description }) => (
-        <div className="rounded-[28px] border border-dashed border-slate-300/80 bg-slate-50/70 px-6 py-10 text-center dark:border-slate-700 dark:bg-slate-900/40">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-indigo-500 shadow-sm dark:bg-slate-900 dark:text-indigo-300">
+        <div className="rounded-2xl border border-dashed border-slate-600 bg-slate-900 px-6 py-10 text-center">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl border border-slate-700 bg-slate-800 text-slate-100">
                 <IconWrapper name={icon} size={20} />
             </div>
-            <h3 className="mt-4 text-lg font-bold text-slate-800 dark:text-white">{title}</h3>
-            {description && <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{description}</p>}
+            <h3 className="mt-4 text-lg font-bold text-white">{title}</h3>
+            {description && <p className="mt-2 text-sm text-slate-400">{description}</p>}
         </div>
     );
+
+    const RegexValidationHint = ({ pattern }) => {
+        const validation = validateRegexPattern(pattern);
+        const styles = {
+            empty: "border-slate-700 bg-slate-900 text-slate-400",
+            valid: "border-emerald-700 bg-emerald-950 text-emerald-200",
+            invalid: "border-red-700 bg-red-950 text-red-200"
+        };
+
+        return (
+            <div className={`rounded-xl border px-3 py-2 text-sm ${styles[validation.state] || styles.empty}`}>
+                {validation.message}
+            </div>
+        );
+    };
+
+    const RegexTester = ({ pattern, placeholder, defaultValue = "" }) => {
+        const [testInput, setTestInput] = useState(defaultValue);
+        const validation = validateRegexPattern(pattern);
+        const buildMatchSegments = (fullMatch, groupRanges) => {
+            if (!fullMatch) {
+                return [{ text: "", tone: "base" }];
+            }
+
+            const normalizedRanges = (groupRanges || [])
+                .slice(0, 2)
+                .filter((range) => Array.isArray(range) && range[0] !== undefined && range[1] !== undefined && range[1] > range[0])
+                .map((range, index) => ({
+                    start: range[0],
+                    end: range[1],
+                    tone: index === 0 ? "group1" : "group2"
+                }));
+
+            if (normalizedRanges.length === 0) {
+                return [{ text: fullMatch, tone: "base" }];
+            }
+
+            const masks = Array.from({ length: fullMatch.length }, () => ({ group1: false, group2: false }));
+
+            normalizedRanges.forEach((range) => {
+                for (let index = Math.max(0, range.start); index < Math.min(fullMatch.length, range.end); index += 1) {
+                    masks[index][range.tone] = true;
+                }
+            });
+
+            const resolveTone = (mask) => {
+                if (mask.group1 && mask.group2) return "overlap";
+                if (mask.group1) return "group1";
+                if (mask.group2) return "group2";
+                return "base";
+            };
+
+            const segments = [];
+            let currentTone = resolveTone(masks[0] || { group1: false, group2: false });
+            let currentText = "";
+
+            for (let index = 0; index < fullMatch.length; index += 1) {
+                const nextTone = resolveTone(masks[index]);
+                if (nextTone !== currentTone && currentText) {
+                    segments.push({ text: currentText, tone: currentTone });
+                    currentText = "";
+                    currentTone = nextTone;
+                }
+                currentText += fullMatch[index];
+            }
+
+            if (currentText) {
+                segments.push({ text: currentText, tone: currentTone });
+            }
+
+            return segments;
+        };
+
+        let matchResult = null;
+        if (validation.state === "valid" && testInput) {
+            try {
+                let regex;
+                let supportsIndices = true;
+
+                try {
+                    regex = new RegExp(pattern, "d");
+                } catch (error) {
+                    supportsIndices = false;
+                    regex = new RegExp(pattern);
+                }
+
+                const match = regex.exec(testInput);
+                if (match) {
+                    const fullMatchStart = match.index;
+                    const relativeGroupRanges = supportsIndices
+                        ? (match.indices || [])
+                            .slice(1)
+                            .map((range) => {
+                                if (!Array.isArray(range) || range[0] === -1 || range[1] === -1) {
+                                    return null;
+                                }
+                                return [range[0] - fullMatchStart, range[1] - fullMatchStart];
+                            })
+                        : [];
+
+                    matchResult = {
+                        matched: true,
+                        fullMatch: match[0],
+                        beforeMatch: testInput.slice(0, match.index),
+                        afterMatch: testInput.slice(match.index + match[0].length),
+                        groups: match.slice(1),
+                        highlightedSegments: buildMatchSegments(match[0], relativeGroupRanges)
+                    };
+                } else {
+                    matchResult = { matched: false };
+                }
+            } catch (error) {
+                matchResult = { matched: false, error: error.message || "Failed to evaluate regex." };
+            }
+        }
+
+        return (
+            <div className={panelClass}>
+                <div className="mb-4">
+                    <div>
+                        <div className={sectionLabelClass}>Regex Tester</div>
+                        <p className="mt-1 text-sm text-slate-400">Top is input, bottom is output. Matched range and capture groups are color-coded for quick scanning.</p>
+                    </div>
+                </div>
+
+                <div className="space-y-4">
+                    <div>
+                        <div className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Input</div>
+                        <textarea
+                            value={testInput}
+                            onChange={(e) => setTestInput(e.target.value)}
+                            placeholder={placeholder}
+                            className="min-h-[108px] w-full resize-y rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 font-mono text-sm text-slate-100 outline-none transition duration-150 placeholder:text-slate-500 focus:border-slate-300 focus:ring-2 focus:ring-slate-300/20"
+                            spellCheck="false"
+                        />
+                    </div>
+
+                    <div>
+                        <div className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Output</div>
+                        <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-900 p-4">
+                    {!testInput.trim() && (
+                        <div className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-400">
+                            Add sample text to preview how this rule behaves.
+                        </div>
+                    )}
+
+                    {validation.state !== "valid" && testInput.trim() && (
+                        <div className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-400">
+                            Fix the regex pattern first to run the tester.
+                        </div>
+                    )}
+
+                    {validation.state === "valid" && testInput.trim() && matchResult && !matchResult.matched && (
+                        <div className="rounded-lg border border-amber-700 bg-amber-950 px-3 py-2 text-sm text-amber-200">
+                            No match found in this sample input.
+                        </div>
+                    )}
+
+                    {validation.state === "valid" && testInput.trim() && matchResult?.matched && (
+                        <>
+                            <div className="space-y-2">
+                                <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Detected Range</div>
+                                <div className="rounded-lg bg-slate-950 px-3 py-3 font-mono text-sm leading-6">
+                                    {matchResult.beforeMatch && <span className="text-slate-500">{matchResult.beforeMatch}</span>}
+                                    <span className="rounded bg-blue-500 px-1 text-white">
+                                        {(matchResult.highlightedSegments || []).map((segment, segmentIndex) => {
+                                            const segmentClass =
+                                                segment.tone === "group1"
+                                                    ? "bg-lime-400 text-slate-950"
+                                                    : segment.tone === "group2"
+                                                        ? "bg-fuchsia-500 text-white"
+                                                        : segment.tone === "overlap"
+                                                            ? "bg-orange-400 text-slate-950"
+                                                            : "";
+
+                                            return (
+                                                <span
+                                                    key={`${segment.text}-${segmentIndex}`}
+                                                    className={segmentClass ? `rounded px-0.5 ${segmentClass}` : ""}
+                                                >
+                                                    {segment.text}
+                                                </span>
+                                            );
+                                        })}
+                                    </span>
+                                    {matchResult.afterMatch && <span className="text-slate-500">{matchResult.afterMatch}</span>}
+                                </div>
+                            </div>
+                        </>
+                    )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
 
     const StringListCard = ({
         eyebrow,
@@ -387,19 +596,19 @@
                                     return (
                                         <div
                                             key={entry}
-                                            className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm shadow-sm dark:bg-slate-950/60 ${
+                                            className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm ${
                                                 isSelected
-                                                    ? "border-indigo-300 bg-indigo-50 text-indigo-700 dark:border-indigo-500/40 dark:bg-indigo-500/10 dark:text-indigo-200"
-                                                    : "border-slate-200/80 bg-slate-50/90 dark:border-slate-700"
+                                                    ? "border-slate-400 bg-slate-100 text-slate-950"
+                                                    : "border-slate-700 bg-slate-900 text-slate-100"
                                             }`}
                                         >
                                             <button
                                                 type="button"
                                                 onClick={() => handleEntryClick(entry)}
-                                                className={`inline-flex items-center gap-2 rounded-full text-left transition ${enableProfileLookup ? "cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-300" : "cursor-default"}`}
+                                                className={`inline-flex items-center gap-2 rounded-full text-left transition ${enableProfileLookup ? "cursor-pointer hover:text-slate-300" : "cursor-default"}`}
                                             >
                                                 {enableProfileLookup && <IconWrapper name="contact" size={14} />}
-                                                <span className="font-mono text-slate-700 dark:text-slate-200">{entry}</span>
+                                                <span className="font-mono">{entry}</span>
                                             </button>
                                             <button
                                                 type="button"
@@ -414,41 +623,41 @@
                             </div>
 
                             {enableProfileLookup && selectedEntry && (
-                                <div className="rounded-[24px] border border-slate-200/80 bg-slate-50/80 p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/40">
+                                <div className="rounded-2xl border border-slate-700 bg-slate-900 p-4">
                                     <div className="mb-3 flex items-center gap-3">
-                                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-glow">
+                                        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-600 bg-slate-800 text-slate-100">
                                             <IconWrapper name="contact" size={16} />
                                         </div>
                                         <div>
-                                            <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Player Preview</div>
-                                            <div className="text-sm font-semibold text-slate-800 dark:text-slate-100">Click the UUID again to collapse.</div>
+                                            <div className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">Player Preview</div>
+                                            <div className="text-sm font-semibold text-slate-100">Click the UUID again to collapse.</div>
                                         </div>
                                     </div>
 
                                     {previewState.status === "loading" && (
-                                        <div className="flex items-center gap-4 rounded-2xl bg-white/80 p-4 dark:bg-slate-950/50">
-                                            <div className="h-16 w-16 animate-pulse rounded-2xl bg-slate-200 dark:bg-slate-800" />
+                                        <div className="flex items-center gap-4 rounded-xl border border-slate-700 bg-slate-950 p-4">
+                                            <div className="h-16 w-16 animate-pulse rounded-xl bg-slate-800" />
                                             <div className="flex-1 space-y-2">
-                                                <div className="h-4 w-32 animate-pulse rounded bg-slate-200 dark:bg-slate-800" />
-                                                <div className="h-3 w-56 animate-pulse rounded bg-slate-200 dark:bg-slate-800" />
+                                                <div className="h-4 w-32 animate-pulse rounded bg-slate-800" />
+                                                <div className="h-3 w-56 animate-pulse rounded bg-slate-800" />
                                             </div>
                                         </div>
                                     )}
 
                                     {previewState.status !== "loading" && previewState.data && (
-                                        <div className="flex flex-col gap-4 rounded-2xl bg-white/80 p-4 dark:bg-slate-950/50 md:flex-row md:items-center">
+                                        <div className="flex flex-col gap-4 rounded-xl border border-slate-700 bg-slate-950 p-4 md:flex-row md:items-center">
                                             <img
                                                 src={previewState.data.headUrl}
                                                 alt={`${previewState.data.name} head`}
-                                                className="h-20 w-20 rounded-2xl border border-slate-200 object-cover shadow-sm dark:border-slate-700"
+                                                className="h-20 w-20 rounded-xl border border-slate-700 object-cover"
                                             />
                                             <div className="min-w-0 flex-1">
-                                                <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Player Name</div>
-                                                <div className="truncate text-xl font-black text-slate-900 dark:text-white">{previewState.data.name}</div>
-                                                <div className="mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">UUID</div>
-                                                <div className="mt-1 break-all font-mono text-sm text-slate-600 dark:text-slate-300">{previewState.data.uuid}</div>
+                                                <div className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">Player Name</div>
+                                                <div className="truncate text-xl font-bold text-white">{previewState.data.name}</div>
+                                                <div className="mt-3 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">UUID</div>
+                                                <div className="mt-1 break-all font-mono text-sm text-slate-300">{previewState.data.uuid}</div>
                                                 {previewState.status === "error" && (
-                                                    <div className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-700 dark:border-amber-900/40 dark:bg-amber-950/30 dark:text-amber-300">
+                                                    <div className="mt-3 rounded-xl border border-amber-700 bg-amber-950 px-3 py-2 text-sm text-amber-200">
                                                         {previewState.error}
                                                     </div>
                                                 )}
@@ -468,13 +677,13 @@
         <button
             type="button"
             onClick={onClick}
-            className={`group inline-flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition duration-200 whitespace-nowrap ${
+            className={`group inline-flex items-center gap-3 rounded-xl border px-4 py-3 text-sm font-semibold transition duration-150 whitespace-nowrap ${
                 active
-                    ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-glow'
-                    : 'bg-slate-900/70 text-slate-400 hover:bg-slate-800 hover:text-slate-100'
+                    ? 'border-slate-400 bg-slate-100 text-slate-950'
+                    : 'border-slate-700 bg-slate-900 text-slate-300 hover:border-slate-500 hover:text-slate-100'
             }`}
         >
-            <span className={`flex h-8 w-8 items-center justify-center rounded-xl ${active ? 'bg-white/20' : 'bg-slate-800 text-indigo-300'}`}>
+            <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${active ? 'bg-slate-200 text-slate-950' : 'bg-slate-800 text-slate-200'}`}>
                 <IconWrapper name={icon} size={16} />
             </span>
             <span className="hidden sm:inline">{label}</span>
@@ -485,13 +694,13 @@
     const Accordion = ({ title, children, defaultOpen = false, onDelete }) => {
         const [isOpen, setIsOpen] = useState(defaultOpen);
         return (
-            <div className="overflow-hidden rounded-[26px] border border-slate-700 bg-slate-950/40 shadow-sm">
+            <div className="overflow-hidden rounded-2xl border border-slate-700 bg-slate-950">
                 <div
-                    className="flex items-center justify-between gap-3 px-4 py-4 cursor-pointer select-none bg-gradient-to-r from-slate-900/80 to-slate-900/30"
+                    className="flex cursor-pointer select-none items-center justify-between gap-3 border-b border-slate-700 bg-slate-900 px-4 py-4"
                     onClick={() => setIsOpen(!isOpen)}
                 >
                     <div className="flex min-w-0 items-center gap-3 overflow-hidden">
-                        <div className={`flex h-9 w-9 items-center justify-center rounded-xl transition ${isOpen ? 'bg-indigo-500/15 text-indigo-300' : 'bg-slate-800 text-slate-400'}`}>
+                        <div className={`flex h-9 w-9 items-center justify-center rounded-lg transition ${isOpen ? 'bg-slate-100 text-slate-950' : 'bg-slate-800 text-slate-300'}`}>
                             {isOpen ? <IconWrapper name="chevron-down" size={16} className="flex-shrink-0" /> : <IconWrapper name="chevron-right" size={16} className="flex-shrink-0" />}
                         </div>
                         <div className="min-w-0">
@@ -506,7 +715,7 @@
                     )}
                 </div>
                 {isOpen && (
-                    <div className="border-t border-slate-700 bg-slate-950/50 p-5">
+                    <div className="bg-slate-950 p-5">
                         {children}
                     </div>
                 )}
@@ -518,7 +727,7 @@
         <div className="space-y-3 mt-2">
             <label className={fieldLabelClass}>Style Actions</label>
             {actions.map((action, idx) => (
-                <div key={idx} className="grid gap-3 rounded-3xl border border-slate-200/80 bg-slate-50/80 p-3 dark:border-slate-700 dark:bg-slate-900/50 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] md:items-end">
+                <div key={idx} className="grid gap-3 rounded-xl border border-slate-700 bg-slate-900 p-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] md:items-end">
                     <Combobox
                         label={idx === 0 ? "Style Type" : "Action Type"}
                         value={action.styleType}
@@ -567,7 +776,7 @@
         <div className="space-y-3 mt-2">
             <label className={fieldLabelClass}>Mention Actions</label>
             {actions.map((action, idx) => (
-                <div key={idx} className="grid gap-3 rounded-3xl border border-slate-200/80 bg-slate-50/80 p-3 dark:border-slate-700 dark:bg-slate-900/50 md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)_auto] md:items-end">
+                <div key={idx} className="grid gap-3 rounded-xl border border-slate-700 bg-slate-900 p-3 md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)_auto] md:items-end">
                     <Combobox
                         label={idx === 0 ? "Mention Type" : "Action Type"}
                         value={action.mentionType}
@@ -657,8 +866,7 @@
       return (
         <div className="space-y-8">
           <Card className="p-6 md:p-8">
-            <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 blur-3xl opacity-70 dark:from-indigo-900/40 dark:via-purple-900/20 dark:to-pink-900/20" />
-            <div className="relative space-y-8">
+            <div className="space-y-8">
               <SectionHeading
                 eyebrow="Global"
                 title="General Settings"
@@ -694,13 +902,13 @@
               </div>
 
               <div className="grid gap-6 lg:grid-cols-2">
-                <div className="space-y-4 rounded-[28px] border border-slate-200/80 bg-slate-50/80 p-5 dark:border-slate-700 dark:bg-slate-900/50">
+                <div className="space-y-4 rounded-2xl border border-slate-700 bg-slate-900 p-5">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-glow">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-600 bg-slate-800 text-slate-100">
                       <IconWrapper name="palette" size={18} />
                     </div>
                     <div>
-                      <div className="text-sm font-bold text-slate-800 dark:text-white">Colors</div>
+                      <div className="text-sm font-bold text-white">Colors</div>
                     </div>
                   </div>
                   <div className="grid gap-4">
@@ -717,13 +925,13 @@
                   </div>
                 </div>
 
-                <div className="space-y-4 rounded-[28px] border border-slate-200/80 bg-slate-50/80 p-5 dark:border-slate-700 dark:bg-slate-900/50">
+                <div className="space-y-4 rounded-2xl border border-slate-700 bg-slate-900 p-5">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400 to-rose-500 text-white shadow-glow">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-600 bg-slate-800 text-slate-100">
                       <IconWrapper name="toggle-left" size={18} />
                     </div>
                     <div>
-                      <div className="text-sm font-bold text-slate-800 dark:text-white">Toggles</div>
+                      <div className="text-sm font-bold text-white">Toggles</div>
                     </div>
                   </div>
                   <div className="space-y-3">
@@ -978,11 +1186,11 @@
 
             {sortStylingRuleEntries(config.style_rules).map(([permKey, rules]) => (
                 <Card key={permKey} className="p-6">
-                    <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div className="mb-6 flex flex-col gap-4 rounded-xl border border-slate-700 bg-slate-950 p-4 md:flex-row md:items-center md:justify-between">
                         <div>
-                            <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-indigo-500">Permission Group</div>
+                            <div className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">Permission Group</div>
                             <div className="mt-1 flex flex-wrap items-center gap-3">
-                                <h3 className="break-all font-mono text-lg font-black text-slate-900 dark:text-white">{permKey}</h3>
+                                <h3 className="break-all font-mono text-lg font-bold text-white">{permKey}</h3>
                                 <CountBadge count={rules.length} label={rules.length === 1 ? "rule" : "rules"} tone="indigo" />
                             </div>
                         </div>
@@ -1020,6 +1228,7 @@
                                         className="font-mono text-sm"
                                         placeholder="e.g. \*\*([^\*]+)\*\*()"
                                     />
+                                    <RegexValidationHint pattern={rule.pattern} />
                                     <Input
                                         label="Comment (/embellish-chat help style)"
                                         value={rule.comment || ""}
@@ -1030,7 +1239,12 @@
                                         }}
                                         placeholder="<blue><b>Pattern</b></blue>: **Text** ..."
                                     />
-                                    <div className="rounded-[24px] border border-slate-200/80 bg-slate-50/70 p-4 dark:border-slate-700 dark:bg-slate-900/30">
+                                    <RegexTester
+                                        pattern={rule.pattern}
+                                        placeholder="Try a sample chat message here, for example: **Hello world**"
+                                        defaultValue="**Hello world**"
+                                    />
+                                    <div className={panelClass}>
                                         <StyleActionsEditor
                                             actions={rule.styles || []}
                                             onChange={(newActions) => {
@@ -1088,11 +1302,11 @@
 
                 {Object.entries(config.mention_rules).map(([permKey, rules]) => (
                     <Card key={permKey} className="p-6">
-                        <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                        <div className="mb-6 flex flex-col gap-4 rounded-xl border border-slate-700 bg-slate-950 p-4 md:flex-row md:items-center md:justify-between">
                             <div>
-                                <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-indigo-500">Permission Group</div>
+                                <div className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">Permission Group</div>
                                 <div className="mt-1 flex flex-wrap items-center gap-3">
-                                    <h3 className="break-all font-mono text-lg font-black text-slate-900 dark:text-white">{permKey}</h3>
+                                    <h3 className="break-all font-mono text-lg font-bold text-white">{permKey}</h3>
                                     <CountBadge count={rules.length} label={rules.length === 1 ? "rule" : "rules"} tone="amber" />
                                 </div>
                             </div>
@@ -1130,6 +1344,7 @@
                                             className="font-mono"
                                             placeholder="e.g. @everyone()"
                                         />
+                                        <RegexValidationHint pattern={rule.pattern} />
 
                                         <Input
                                             label="Comment (/embellish-chat help mention)"
@@ -1142,7 +1357,13 @@
                                             placeholder="<blue><b>Pattern</b></blue>: @everyone ..."
                                         />
 
-                                        <div className="rounded-[24px] border border-slate-200/80 bg-slate-50/70 p-4 dark:border-slate-700 dark:bg-slate-900/30">
+                                        <RegexTester
+                                            pattern={rule.pattern}
+                                            placeholder="Try a sample message here, for example: @everyone raid starts now"
+                                            defaultValue="@everyone raid starts now"
+                                        />
+
+                                        <div className={panelClass}>
                                             <div className={`${sectionLabelClass} mb-4`}>Core Settings</div>
                                             <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
                                                 <Input
@@ -1182,7 +1403,7 @@
                                             </div>
                                         </div>
 
-                                        <div className="rounded-[24px] border border-slate-200/80 bg-slate-50/80 p-4 dark:border-slate-700 dark:bg-slate-900/30">
+                                        <div className={panelClass}>
                                             <div className={`${sectionLabelClass} mb-4`}>Notification Sound</div>
                                             <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
                                                 <Input
@@ -1231,7 +1452,7 @@
                                         </div>
 
                                         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-                                            <div className="rounded-[24px] border border-slate-200/80 bg-slate-50/80 p-4 dark:border-slate-700 dark:bg-slate-900/30">
+                                            <div className={panelClass}>
                                                 <MentionActionsEditor
                                                     actions={rule.mentions || []}
                                                     onChange={(newActions) => {
@@ -1242,7 +1463,7 @@
                                                 />
                                             </div>
 
-                                            <div className="rounded-[24px] border border-slate-200/80 bg-slate-50/80 p-4 dark:border-slate-700 dark:bg-slate-900/30">
+                                            <div className={panelClass}>
                                                 <StyleActionsEditor
                                                     actions={rule.styles || []}
                                                     onChange={(newActions) => {
@@ -1373,16 +1594,16 @@
                 </Card>
 
                 {error && (
-                    <div className="rounded-[24px] border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700 shadow-sm dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-300">
+                    <div className="rounded-2xl border border-red-700 bg-red-950 px-5 py-4 text-sm font-medium text-red-200">
                         {error}
                     </div>
                 )}
 
                 <Card className="overflow-hidden">
-                    <div className="flex items-center justify-between border-b border-slate-200/80 bg-gradient-to-r from-slate-50 to-white px-6 py-4 dark:border-slate-700 dark:from-slate-900/70 dark:to-slate-900/20">
+                    <div className="flex items-center justify-between border-b border-slate-700 bg-slate-900 px-6 py-4">
                         <div>
-                            <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-indigo-500">Active File</div>
-                            <div className="mt-1 text-sm font-bold text-slate-800 dark:text-white">{activeJsonTab}.json</div>
+                            <div className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">Active File</div>
+                            <div className="mt-1 text-sm font-bold text-white">{activeJsonTab}.json</div>
                         </div>
                     </div>
                     <textarea
@@ -1950,15 +2171,15 @@
 
         if (!defaultData || !config || !styles || !mentions || !presets) {
             return (
-                <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_right,_rgba(99,102,241,0.22),_transparent_24%),radial-gradient(circle_at_top_left,_rgba(244,63,94,0.14),_transparent_20%),linear-gradient(180deg,_#020617_0%,_#0f172a_45%,_#111827_100%)] font-sans text-slate-100">
-                    <div className="relative mx-auto flex min-h-screen max-w-4xl items-center justify-center px-4 py-8">
+                <div className="min-h-screen bg-slate-950 font-sans text-slate-100">
+                    <div className="mx-auto flex min-h-screen max-w-4xl items-center justify-center px-4 py-8">
                         <Card className="w-full max-w-xl p-8">
                             <div className="space-y-3 text-center">
-                                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-[2rem] border border-slate-700 bg-slate-950/80 shadow-glow">
-                                    <AppLogo size={60} className="h-14 w-14 rounded-2xl object-contain" />
+                                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl border border-slate-700 bg-slate-900">
+                                    <AppLogo size={60} className="h-14 w-14 rounded-xl object-contain" />
                                 </div>
-                                <h1 className="text-2xl font-black tracking-tight text-white">Config Generator</h1>
-                                <p className="text-sm text-slate-400">
+                                <h1 className="text-2xl font-bold tracking-tight text-white">Config Generator</h1>
+                                <p className="text-sm text-slate-300">
                                     {error || "Loading default configuration files..."}
                                 </p>
                             </div>
@@ -1974,26 +2195,22 @@
         const activeTabMeta = tabs.find(tab => tab.id === activeTab);
 
         return (
-            <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_right,_rgba(99,102,241,0.22),_transparent_24%),radial-gradient(circle_at_top_left,_rgba(244,63,94,0.14),_transparent_20%),linear-gradient(180deg,_#020617_0%,_#0f172a_45%,_#111827_100%)] font-sans text-slate-100">
-                <div className="pointer-events-none absolute -left-20 top-20 h-72 w-72 rounded-full bg-indigo-500/20 blur-3xl" />
-                <div className="pointer-events-none absolute -right-20 top-40 h-80 w-80 rounded-full bg-fuchsia-500/15 blur-3xl" />
-
-                <div className="relative mx-auto max-w-[92rem] px-4 py-8 md:px-6 md:py-10">
+            <div className="min-h-screen bg-slate-950 font-sans text-slate-100">
+                <div className="mx-auto max-w-[92rem] px-4 py-8 md:px-6 md:py-10">
                     <header className="mb-8 space-y-6">
-                        <Card className="overflow-visible p-6 md:p-8">
-                            <div className="absolute right-0 top-0 h-52 w-52 rounded-full bg-gradient-to-br from-indigo-500/20 via-purple-500/12 to-pink-500/12 blur-3xl opacity-90" />
-                            <div className="relative flex flex-col gap-6">
+                        <Card className="p-6 md:p-8">
+                            <div className="flex flex-col gap-6">
                                 <div className="flex flex-col gap-6 md:flex-row md:items-start">
                                     <div className="flex flex-col gap-6 md:flex-row md:items-center">
-                                        <div className="flex h-24 w-24 items-center justify-center rounded-[2rem] border border-slate-700 bg-slate-950/80 shadow-glow">
-                                            <AppLogo size={72} className="h-16 w-16 rounded-[1.35rem] object-contain" />
+                                        <div className="flex h-24 w-24 items-center justify-center rounded-2xl border border-slate-700 bg-slate-900">
+                                            <AppLogo size={72} className="h-16 w-16 rounded-xl object-contain" />
                                         </div>
                                         <div>
-                                            <p className="text-xs font-semibold uppercase tracking-[0.26em] text-indigo-500">Embellish Chat Toolkit</p>
-                                            <h1 className="mt-2 inline-block pb-2 text-4xl font-black leading-[1.2] tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-500 md:text-5xl">
-                                                config generator
+                                            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Embellish Chat Toolkit</p>
+                                            <h1 className="mt-2 text-4xl font-bold leading-[1.2] tracking-tight text-white md:text-5xl">
+                                                Config Generator
                                             </h1>
-                                            <div className="mt-3 inline-flex items-center rounded-full border border-slate-700 bg-slate-950/80 px-3 py-1 text-xs font-bold text-slate-300 shadow-sm">
+                                            <div className="mt-3 inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-xs font-semibold text-slate-200">
                                                 {activeTabMeta?.label}
                                             </div>
                                         </div>
