@@ -267,8 +267,6 @@ The configuration file is located at `config/embellish-chat/presets.json`.
 * **Geyser (Bedrock Edition)**
   * Mentions between Java and Bedrock editions work seamlessly.
   * *Note:* Advanced styling (hover text, click events) may not fully render on Bedrock clients.
-* **Chat Heads**
-  * Fully compatible.
 
 ### ❗ Known Conflicts
 
