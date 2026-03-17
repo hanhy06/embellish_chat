@@ -1,31 +1,37 @@
 package io.github.hanhy06.embellishchat.command;
 
+import com.mojang.brigadier.CommandDispatcher;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ReloadCommand;
 import net.minecraft.server.command.ServerCommandSource;
-
-import java.util.List;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 public class CommandHandler implements ConfigListener {
+    private static String currentAlias;
+
     @Override
     public void onConfigReload(Config newConfig) {
         String alias = newConfig.commandAlias();
-        if (alias == null || alias.isBlank()) return;
+        if (alias == null || alias.isBlank() || currentAlias != null && currentAlias.equals(alias)) {
+            return;
+        }
+        currentAlias = alias;
 
-        CommandRegistrationCallback.EVENT.register((commandDispatcher, commandRegistryAccess, registrationEnvironment) -> commandDispatcher.register(
-                CommandManager.literal(alias).redirect(
-                        commandDispatcher.getRoot().getChild(EmbellishChat.MOD_ID)
-                )
-        ));
+        EmbellishChat.SERVER.executeSync(() -> {
+            CommandDispatcher<ServerCommandSource> dispatcher = EmbellishChat.SERVER.getCommandManager().getDispatcher();
 
-        ServerCommandSource source = EmbellishChat.SERVER.getCommandSource();
-        ReloadCommand.tryReloadDataPacks(List.of(),source);
+            dispatcher.register(
+                    CommandManager.literal(alias)
+                            .redirect(dispatcher.getRoot().getChild(EmbellishChat.MOD_ID))
+            );
+
+            for (ServerPlayerEntity player : EmbellishChat.SERVER.getPlayerManager().getPlayerList()) {
+                EmbellishChat.SERVER.getCommandManager().sendCommandTree(player);
+            }
+        });
     }
-
     public static void registerCommand(){
         AdminCommand.registerCommand();
         UserCommand.registerCommand();
