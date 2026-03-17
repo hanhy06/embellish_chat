@@ -9,15 +9,12 @@ import net.minecraft.commands.Commands;
 import net.minecraft.server.level.ServerPlayer;
 
 public class CommandHandler implements ConfigListener {
-    private static String currentAlias;
-
     @Override
     public void onConfigReload(Config newConfig) {
         String alias = newConfig.command_alias();
-        if (alias == null || alias.isBlank() || currentAlias != null && currentAlias.equals(alias)) {
+        if (alias == null || alias.isBlank()) {
             return;
         }
-        currentAlias = alias;
 
         EmbellishChat.SERVER.executeIfPossible(() -> {
             CommandDispatcher<CommandSourceStack> dispatcher = EmbellishChat.SERVER.getCommands().getDispatcher();
