@@ -1,33 +1,36 @@
 package io.github.hanhy06.embellishchat.command;
 
+import com.mojang.brigadier.CommandDispatcher;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.server.commands.ReloadCommand;
-
-import java.util.List;
+import net.minecraft.server.level.ServerPlayer;
 
 public class CommandHandler implements ConfigListener {
-    private static String registeredAlias;
+    private static String currentAlias;
 
     @Override
     public void onConfigReload(Config newConfig) {
         String alias = newConfig.command_alias();
-        if (alias == null || alias.isBlank() || alias.equals(registeredAlias)) {
+        if (alias == null || alias.isBlank() || currentAlias != null && currentAlias.equals(alias)) {
             return;
         }
+        currentAlias = alias;
 
-        registeredAlias = alias;
-        CommandRegistrationCallback.EVENT.register((dispatcher, access, env) ->
-                dispatcher.register(
-                        Commands.literal(alias)
-                                .redirect(dispatcher.getRoot().getChild(EmbellishChat.MOD_ID))
-                )
-        );
+        EmbellishChat.SERVER.executeIfPossible(() -> {
+            CommandDispatcher<CommandSourceStack> dispatcher = EmbellishChat.SERVER.getCommands().getDispatcher();
 
-        ReloadCommand.reloadPacks(List.of(), EmbellishChat.SERVER.createCommandSourceStack());
+            dispatcher.register(
+                    Commands.literal(alias)
+                            .redirect(dispatcher.getRoot().getChild(EmbellishChat.MOD_ID))
+            );
+
+            for (ServerPlayer player : EmbellishChat.SERVER.getPlayerList().getPlayers()) {
+                EmbellishChat.SERVER.getCommands().sendCommands(player);
+            }
+        });
     }
 
     public static void registerCommand(){
