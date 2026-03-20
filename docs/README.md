@@ -47,7 +47,7 @@ Use the following patterns directly in the chat window to apply styles:
 | Item             | `[i]`                   | `Look at my [i]`                                              | ![Item](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Item.png)             |
 | Inventory        | `[inv]`                 | `Look at my [inv]`                                            | ![Inventory](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Inventory.png)   |
 | Ender Chest      | `[end]`                 | `Look at my [end]`                                            | ![EnderChest](https://hanhy06.github.io/embellish-chat-wiki/assets/images/EnderChest.png) |
-| Atlas Icon       | `:name:`                | `I :love: you.`                                               | ![AtlasIcon](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Atlas_Icon.png)  |
+| Atlas Icon       | `:name:`                | `I :love: you`                                                | ![AtlasIcon](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Atlas_Icon.png)  |
 | Mention          | `@PlayerName`           | `Hello, @User`                                                | ![Mention](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Mention.png)       |
 
 > **Notes**
