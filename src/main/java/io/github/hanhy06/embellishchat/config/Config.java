@@ -305,6 +305,10 @@ public record Config(
                 Identifier.parse("minecraft:blocks"),
                 Identifier.parse("minecraft:block/campfire_fire"))
         );
+        atlas.put("food", new AtlasSprite(
+                Identifier.parse("minecraft:items"),
+                Identifier.parse("minecraft:item/cooked_beef"))
+        );
         atlas.put("hunger", new AtlasSprite(
                 Identifier.parse("minecraft:gui"),
                 Identifier.parse("minecraft:hud/food_full"))
@@ -312,6 +316,10 @@ public record Config(
         atlas.put("heart", new AtlasSprite(
                 Identifier.parse("minecraft:gui"),
                 Identifier.parse("minecraft:hud/heart/full"))
+        );
+        atlas.put("love", new AtlasSprite(
+                Identifier.parse("minecraft:gui"),
+                Identifier.parse("minecraft:mob_effect/health_boost"))
         );
         atlas.put("yes", new AtlasSprite(
                 Identifier.parse("minecraft:gui"),
@@ -324,6 +332,66 @@ public record Config(
         atlas.put("move", new AtlasSprite(
                 Identifier.parse("minecraft:gui"),
                 Identifier.parse("minecraft:mob_effect/wind_charged"))
+        );
+        atlas.put("emerald", new AtlasSprite(
+                Identifier.parse("minecraft:items"),
+                Identifier.parse("minecraft:item/emerald"))
+        );
+        atlas.put("diamond", new AtlasSprite(
+                Identifier.parse("minecraft:items"),
+                Identifier.parse("minecraft:item/diamond"))
+        );
+        atlas.put("star", new AtlasSprite(
+                Identifier.parse("minecraft:items"),
+                Identifier.parse("minecraft:item/nether_star"))
+        );
+        atlas.put("time", new AtlasSprite(
+                Identifier.parse("minecraft:items"),
+                Identifier.parse("minecraft:item/clock_54"))
+        );
+        atlas.put("note", new AtlasSprite(
+                Identifier.parse("minecraft:items"),
+                Identifier.parse("minecraft:item/paper"))
+        );
+        atlas.put("totem", new AtlasSprite(
+                Identifier.parse("minecraft:items"),
+                Identifier.parse("minecraft:item/totem_of_undying"))
+        );
+        atlas.put("music", new AtlasSprite(
+                Identifier.parse("minecraft:particles"),
+                Identifier.parse("minecraft:note"))
+        );
+        atlas.put("mine", new AtlasSprite(
+                Identifier.parse("minecraft:items"),
+                Identifier.parse("minecraft:item/diamond_pickaxe"))
+        );
+        atlas.put("luck", new AtlasSprite(
+                Identifier.parse("minecraft:gui"),
+                Identifier.parse("minecraft:mob_effect/luck"))
+        );
+        atlas.put("poison", new AtlasSprite(
+                Identifier.parse("minecraft:gui"),
+                Identifier.parse("minecraft:mob_effect/poison"))
+        );
+        atlas.put("fight", new AtlasSprite(
+                Identifier.parse("minecraft:gui"),
+                Identifier.parse("minecraft:mob_effect/raid_omen"))
+        );
+        atlas.put("world", new AtlasSprite(
+                Identifier.parse("minecraft:gui"),
+                Identifier.parse("minecraft:icon/link"))
+        );
+        atlas.put("news", new AtlasSprite(
+                Identifier.parse("minecraft:gui"),
+                Identifier.parse("minecraft:icon/news"))
+        );
+        atlas.put("search", new AtlasSprite(
+                Identifier.parse("minecraft:gui"),
+                Identifier.parse("minecraft:icon/search"))
+        );
+        atlas.put("tv", new AtlasSprite(
+                Identifier.parse("minecraft:gui"),
+                Identifier.parse("minecraft:icon/video_link"))
         );
 
         return atlas;

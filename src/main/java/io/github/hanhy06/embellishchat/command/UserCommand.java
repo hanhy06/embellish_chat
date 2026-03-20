@@ -19,14 +19,12 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.UuidArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.PlayerChatMessage;
+import net.minecraft.network.chat.contents.objects.AtlasSprite;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.ProfileResolver;
 import net.minecraft.world.SimpleMenuProvider;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class UserCommand {
@@ -36,6 +34,7 @@ public class UserCommand {
                         .then(Commands.literal("help")
                                 .then(Commands.literal("mention").executes(UserCommand::executeHelpMention))
                                 .then(Commands.literal("style").executes(UserCommand::executeHelpStyle))
+                                .then(Commands.literal("atlas").executes(UserCommand::executeHelpAtlas))
                         )
                         .then(Commands.literal("notification")
                                 .executes(UserCommand::executeNotification)
@@ -59,7 +58,7 @@ public class UserCommand {
     private static int executeHelpMention(CommandContext<CommandSourceStack> context) {
         ServerPlayer player = context.getSource().getPlayer();
         if (player == null) {
-            return 1;
+            return 0;
         }
 
         player.sendSystemMessage(PlaceHolderUtil.parseTag("<gray>-----</gray> <aqua><b>Available Mentions</b></aqua> <gray>-----</gray>"));
@@ -82,7 +81,7 @@ public class UserCommand {
     private static int executeHelpStyle(CommandContext<CommandSourceStack> context) {
         ServerPlayer player = context.getSource().getPlayer();
         if (player == null) {
-            return 1;
+            return 0;
         }
 
         player.sendSystemMessage(PlaceHolderUtil.parseTag("<gray>-----</gray> <aqua><b>Available Styles</b></aqua> <gray>-----</gray>"));
@@ -102,10 +101,28 @@ public class UserCommand {
         return 1;
     }
 
+    private static int executeHelpAtlas(CommandContext<CommandSourceStack> context){
+        ServerPlayer player = context.getSource().getPlayer();
+        if (player == null) {
+            return 0;
+        }
+
+        player.sendSystemMessage(PlaceHolderUtil.parseTag("<gray>-----</gray> <aqua><b>Available Atlas</b></aqua> <gray>-----</gray>"));
+
+        HashMap<String, AtlasSprite> atlas = ConfigManager.getConfig().atlas();
+        for (String name:atlas.keySet().stream().sorted().toList()){
+            player.sendSystemMessage(PlaceHolderUtil.parseTag("%s - ".formatted(name)).copy().append(Component.object(atlas.get(name))));
+        }
+
+        player.sendSystemMessage(PlaceHolderUtil.parseTag("<gray>--------------------------</gray>"));
+
+        return 1;
+    }
+
     private static int executeNotification(CommandContext<CommandSourceStack> context) {
         ServerPlayer player = context.getSource().getPlayer();
         if (player == null) {
-            return 1;
+            return 0;
         }
 
         if (!ConfigManager.getConfig().notify_command_enabled()) {

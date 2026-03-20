@@ -363,7 +363,7 @@ public class StyleRegistry {
         ServerPlayer player = parameter.player();
         if (player == null) return parameter.segment();
         ItemStack item = player.getMainHandItem();
-        if (item == null || item.isEmpty()) return parameter.segment();
+        if (item.isEmpty()) return parameter.segment();
 
         AtlasSprite atlas;
         if (!parameter.getString().isBlank()){
@@ -440,13 +440,11 @@ public class StyleRegistry {
         String command = parameter.getString();
         if (command.startsWith("/")) command = command.substring(1);
 
-        if (server != null) {
-            CommandSourceStack commandSource = player.createCommandSourceStack();
-            try {
-                server.getCommands().getDispatcher().execute(command, commandSource);
-            } catch (Exception e) {
-                EmbellishChat.LOGGER.error("Failed to execute command: {}", command, e);
-            }
+        CommandSourceStack commandSource = player.createCommandSourceStack();
+        try {
+            server.getCommands().getDispatcher().execute(command, commandSource);
+        } catch (Exception e) {
+            EmbellishChat.LOGGER.error("Failed to execute command: {}", command, e);
         }
 
         return parameter.segment();
