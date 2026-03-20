@@ -135,7 +135,7 @@ public class AdminCommand {
                     .collect(Collectors.toSet());
         } catch (CommandSyntaxException e) {
             EmbellishChat.LOGGER.error("Unable to perform {} due to an unknown error.", action);
-            return 1;
+            return 0;
         }
 
         synchronized (ConfigManager.INSTANCE.LOCK_KEY) {
