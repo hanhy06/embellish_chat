@@ -8,6 +8,7 @@ import io.github.hanhy06.embellishchat.mention.data.Target;
 import io.github.hanhy06.embellishchat.styling.util.ColorUtil;
 import io.github.hanhy06.embellishchat.util.LuckPermsUtil;
 import io.github.hanhy06.embellishchat.util.NickNamesUtil;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.commands.arguments.selector.EntitySelector;
@@ -56,6 +57,7 @@ public class MentionRegistry {
                 entry(MentionType.PLAYER,this::PLAYER),
                 entry(MentionType.WORLD,this::WORLD),
                 entry(MentionType.LUCK_PERMS_GROUP,this::LUCK_PERMS_GROUP),
+                entry(MentionType.PERMISSION,this::PERMISSION),
                 entry(MentionType.CUSTOM,this::CUSTOM)
         ));
 
@@ -159,6 +161,18 @@ public class MentionRegistry {
             EmbellishChat.LOGGER.info("LuckPerms not found. @group mentions will be ignored.");
             return Target.of(new HashSet<>(),null);
         }
+    }
+
+    private Target PERMISSION(MentionParameter parameter){
+        HashSet<ServerPlayer> players = new HashSet<>();
+
+        for (ServerPlayer player:manager.getPlayers()){
+            if (Permissions.check(player,parameter.option())){
+                players.add(player);
+            }
+        }
+
+        return Target.of(players,null);
     }
 
     private Target CUSTOM(MentionParameter parameter){
