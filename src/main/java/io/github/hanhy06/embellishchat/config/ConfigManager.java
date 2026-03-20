@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
@@ -68,64 +68,60 @@ public class ConfigManager {
     }
 
     public boolean readConfig() {
-        JsonObject defaultConfig = gson.toJsonTree(config).getAsJsonObject();
-                
-        JsonObject configJson = readJsonFile(CONFIG_FILE_NAME);
-        JsonObject stylesJson = readJsonFile(STYLE_FILE_NAME);
-        JsonObject mentionsJson = readJsonFile(MENTION_FILE_NAME);
-        JsonObject presetsJson = readJsonFile(PRESET_FILE_NAME);
+        JsonObject mergedConfig = gson.toJsonTree(config).getAsJsonObject().deepCopy();
 
-        JsonObject merged = configJson != null ? configJson : new JsonObject();
+        for (String fileName : List.of(
+                CONFIG_FILE_NAME,
+                STYLE_FILE_NAME,
+                MENTION_FILE_NAME,
+                PRESET_FILE_NAME
+        )) {
+            JsonObject fileJson = readJsonFile(fileName);
 
-        if (stylesJson != null && stylesJson.has("style_rules")) {
-            merged.add("style_rules", stylesJson.get("style_rules"));
-        }else {
-            merged.add("style_rules", defaultConfig.get("style_rules"));
-        }
-        if (mentionsJson != null && mentionsJson.has("mention_rules")) {
-            merged.add("mention_rules", mentionsJson.get("mention_rules"));
-        }else{
-            merged.add("mention_rules", defaultConfig.get("mention_rules"));
-        }
-        if (presetsJson != null) {
-            if (presetsJson.has("color")) {
-                merged.add("color", presetsJson.get("color"));
-            } else {
-                merged.add("color", defaultConfig.get("color"));
+            if (fileJson == null) {
+                continue;
             }
-            if (presetsJson.has("atlas")) {
-                merged.add("atlas", presetsJson.get("atlas"));
-            } else {
-                merged.add("atlas", defaultConfig.get("atlas"));
+
+            Deque<JsonObject[]> stack = new ArrayDeque<>();
+            stack.push(new JsonObject[]{mergedConfig, fileJson});
+
+            while (!stack.isEmpty()) {
+                JsonObject[] current = stack.pop();
+                JsonObject target = current[0];
+                JsonObject source = current[1];
+
+                for (Map.Entry<String, JsonElement> entry : source.entrySet()) {
+                    String key = entry.getKey();
+                    JsonElement sourceValue = entry.getValue();
+
+                    if (target.has(key)) {
+                        JsonElement targetValue = target.get(key);
+
+                        if (targetValue.isJsonObject() && sourceValue.isJsonObject()) {
+                            stack.push(new JsonObject[]{
+                                    targetValue.getAsJsonObject(),
+                                    sourceValue.getAsJsonObject()
+                            });
+                            continue;
+                        }
+                    }
+
+                    target.add(key, sourceValue.deepCopy());
+                }
             }
-            if (presetsJson.has("whitelist")) {
-                merged.add("whitelist", presetsJson.get("whitelist"));
-            } else {
-                merged.add("whitelist", defaultConfig.get("whitelist"));
-            }
-            if (presetsJson.has("prefix")) {
-                merged.add("prefix", presetsJson.get("prefix"));
-            } else {
-                merged.add("prefix", defaultConfig.get("prefix"));
-            }
-        } else {
-            merged.add("color", defaultConfig.get("color"));
-            merged.add("atlas", defaultConfig.get("atlas"));
-            merged.add("whitelist", defaultConfig.get("whitelist"));
-            merged.add("prefix", defaultConfig.get("prefix"));
         }
 
         try {
-            Config loaded = gson.fromJson(merged, Config.class);
+            Config loadedConfig = gson.fromJson(mergedConfig, Config.class);
 
-            if (loaded != null && loaded.version() != null && loaded.version().equals(config.version())) {
-                config = loaded;
+            if (loadedConfig != null && Objects.equals(loadedConfig.version(), config.version())) {
+                config = loadedConfig;
                 broadcastConfig();
                 EmbellishChat.LOGGER.info("Config loaded successfully.");
                 return true;
-            } else {
-                EmbellishChat.LOGGER.warn("Config version mismatch or invalid. Using default config.");
             }
+
+            EmbellishChat.LOGGER.warn("Config version mismatch or invalid. Using default config.");
         } catch (JsonSyntaxException e) {
             EmbellishChat.LOGGER.error("Failed to parse merged config. Using default values.", e);
         }

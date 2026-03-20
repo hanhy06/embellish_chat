@@ -1,11 +1,12 @@
 package io.github.hanhy06.embellishchat.config.adapter;
 
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.TypeAdapter;
+import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import com.mojang.serialization.JsonOps;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.chat.MutableComponent;
 
 import java.io.IOException;
@@ -18,7 +19,12 @@ public class MutableTextAdapter extends TypeAdapter<MutableComponent> {
             return;
         }
 
-        jsonWriter.value(mutableText.getString());
+         String value = ComponentSerialization.CODEC
+                .encodeStart(JsonOps.INSTANCE, mutableText)
+                .getOrThrow()
+                .toString();
+
+        jsonWriter.value(value);
     }
 
     @Override
@@ -34,6 +40,12 @@ public class MutableTextAdapter extends TypeAdapter<MutableComponent> {
             throw new JsonSyntaxException("MutableText value is not a string. Please provide it as a string.");
         }
 
-        return PlaceHolderUtil.parseTag(jsonReader.nextString()).copy();
+        String value = jsonReader.nextString();
+        try {
+            JsonElement element = JsonParser.parseString(value);
+            return ComponentSerialization.CODEC.parse(JsonOps.INSTANCE,element).getOrThrow().copy();
+        }catch (JsonParseException e){
+            return PlaceHolderUtil.parseTag(jsonReader.nextString()).copy();
+        }
     }
 }

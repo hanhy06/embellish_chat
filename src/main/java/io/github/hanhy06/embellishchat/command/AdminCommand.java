@@ -26,6 +26,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
 public class AdminCommand {
@@ -248,7 +249,15 @@ public class AdminCommand {
         String regex = StringArgumentType.getString(context,"regex");
         MutableComponent result = Component.empty();
 
-        Matcher matcher = Pattern.compile(regex).matcher(text);
+        Matcher matcher;
+
+        try {
+            matcher = Pattern.compile(regex).matcher(text);
+        }catch (PatternSyntaxException e){
+            context.getSource().sendFailure(Component.literal("syntax error"));
+            return 0;
+        }
+
         if (matcher.groupCount() < 2) {
             context.getSource().sendSuccess(() -> Component.literal("Two capture groups are required."), false);
             return 0;
