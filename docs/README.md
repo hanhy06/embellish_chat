@@ -47,6 +47,7 @@ Use the following patterns directly in the chat window to apply styles:
 | Item             | `[i]`                   | `Look at my [i]`                                              | ![Item](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Item.png)             |
 | Inventory        | `[inv]`                 | `Look at my [inv]`                                            | ![Inventory](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Inventory.png)   |
 | Ender Chest      | `[end]`                 | `Look at my [end]`                                            | ![EnderChest](https://hanhy06.github.io/embellish-chat-wiki/assets/images/EnderChest.png) |
+| Atlas Icon       | `:name:`                | `I :love: you.`                                               | ![AtlasIcon](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Atlas_Icon.png)  |
 | Mention          | `@PlayerName`           | `Hello, @User`                                                | ![Mention](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Mention.png)       |
 
 > **Notes**
@@ -95,6 +96,7 @@ Use the following patterns directly in the chat window to apply styles:
 * **`/embellish-chat open <player>`** Opens the last shared inventory/ender/item of the specified player.
 * **`/embellish-chat help mention`** Displays the mention rules available to you based on your permissions.
 * **`/embellish-chat help style`** Displays the styling rules available to you based on your permissions.
+* **`/embellish-chat help atlas`** Displays available atlases as name - icon format.
 * **`/embellish-chat notification`** Toggles your personal mention notification preferences. *(Enabled/disabled globally by `notify_command_enabled` in the config).*
 
 ---

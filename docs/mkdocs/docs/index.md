@@ -41,7 +41,7 @@ Use these patterns directly in the chat window.
 | **Inventory**      | `[inv]`                | `Look at my [inv]`               |
 | **Ender Chest**    | `[end]`                | `Look at my [end]`               |
 | **Mention**        | `@Target`              | `@everyone`, `@User`             |
-| **Icon**           | `:Icon:`               | `:yes:`, `:fire:`                |
+| **Icon**           | `:Icon:`               | `I :love: you`                   |
 
 > **Note:**
 >
