@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version "${loom_version}"
+	id 'net.fabricmc.fabric-loom' version "${loom_version}"
 	id 'maven-publish'
 }
 
@@ -46,16 +46,15 @@ dependencies {
 
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings loom.officialMojangMappings()
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
-	include(modImplementation("me.lucko:fabric-permissions-api:${fabric_permissions_api_version}"))
-	include(modImplementation("eu.pb4:placeholder-api:${placeholder_api_version}"))
-	modCompileOnly "maven.modrinth:styled-nicknames:${styled_nicknames_version}"
-	modCompileOnly "net.luckperms:api:${luckperms_version}"
+	include(implementation("me.lucko:fabric-permissions-api:${fabric_permissions_api_version}"))
+	include(implementation("eu.pb4:placeholder-api:${placeholder_api_version}"))
+	compileOnly "maven.modrinth:styled-nicknames:${styled_nicknames_version}"
+	compileOnly "net.luckperms:api:${luckperms_version}"
 }
 
 
