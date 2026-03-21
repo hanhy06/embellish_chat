@@ -3,6 +3,8 @@ package io.github.hanhy06.embellishchat.config;
 import com.google.gson.*;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.adapter.*;
+import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
+import io.github.hanhy06.embellishchat.styling.rule.StyleRule;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
@@ -15,10 +17,13 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class ConfigManager {
     public static ConfigManager INSTANCE;
@@ -68,7 +73,8 @@ public class ConfigManager {
     }
 
     public boolean readConfig() {
-        JsonObject mergedConfig = gson.toJsonTree(config).getAsJsonObject().deepCopy();
+        Config defaultConfig = Config.createDefault();
+        JsonObject mergedConfig = gson.toJsonTree(defaultConfig).getAsJsonObject().deepCopy();
 
         for (String fileName : List.of(
                 CONFIG_FILE_NAME,
@@ -82,52 +88,93 @@ public class ConfigManager {
                 continue;
             }
 
-            Deque<JsonObject[]> stack = new ArrayDeque<>();
-            stack.push(new JsonObject[]{mergedConfig, fileJson});
-
-            while (!stack.isEmpty()) {
-                JsonObject[] current = stack.pop();
-                JsonObject target = current[0];
-                JsonObject source = current[1];
-
-                for (Map.Entry<String, JsonElement> entry : source.entrySet()) {
-                    String key = entry.getKey();
-                    JsonElement sourceValue = entry.getValue();
-
-                    if (target.has(key)) {
-                        JsonElement targetValue = target.get(key);
-
-                        if (targetValue.isJsonObject() && sourceValue.isJsonObject()) {
-                            stack.push(new JsonObject[]{
-                                    targetValue.getAsJsonObject(),
-                                    sourceValue.getAsJsonObject()
-                            });
-                            continue;
-                        }
-                    }
-
-                    target.add(key, sourceValue.deepCopy());
-                }
+            for (Map.Entry<String, JsonElement> entry : fileJson.entrySet()) {
+                mergedConfig.add(entry.getKey(), entry.getValue().deepCopy());
             }
         }
 
         try {
             Config loadedConfig = gson.fromJson(mergedConfig, Config.class);
 
-            if (loadedConfig != null && Objects.equals(loadedConfig.version(), config.version())) {
-                config = loadedConfig;
-                broadcastConfig();
-                EmbellishChat.LOGGER.info("Config loaded successfully.");
-                return true;
-            }
+            if (loadedConfig == null) {
+                EmbellishChat.LOGGER.warn("Config is empty or invalid. Keeping current config.");
+            } else if (!Objects.equals(loadedConfig.version(), defaultConfig.version())) {
+                EmbellishChat.LOGGER.warn("Config version mismatch. Keeping current config.");
+            } else {
+                String validationError = validateConfig(loadedConfig);
+                if (validationError == null) {
+                    config = loadedConfig;
+                    broadcastConfig();
+                    EmbellishChat.LOGGER.info("Config loaded successfully.");
+                    return true;
+                }
 
-            EmbellishChat.LOGGER.warn("Config version mismatch or invalid. Using default config.");
-        } catch (JsonSyntaxException e) {
-            EmbellishChat.LOGGER.error("Failed to parse merged config. Using default values.", e);
+                EmbellishChat.LOGGER.warn("Config validation failed: {}. Keeping current config.", validationError);
+            }
+        } catch (RuntimeException e) {
+            EmbellishChat.LOGGER.error("Failed to parse merged config. Keeping current config.", e);
         }
 
         broadcastConfig();
         return false;
+    }
+
+    private String validateConfig(Config config) {
+        if (config.version() == null) return "version is missing";
+        if (config.style_rules() == null) return "style_rules is missing";
+        if (config.mention_rules() == null) return "mention_rules is missing";
+        if (config.color() == null) return "color is missing";
+        if (config.atlas() == null) return "atlas is missing";
+        if (config.whitelist() == null) return "whitelist is missing";
+        if (config.prefix() == null) return "prefix is missing";
+        if (config.delimiter() == null) return "delimiter is missing";
+        if (config.timestamp() == null) return "timestamp is missing";
+        if (config.url_color() == null) return "url_color is missing";
+        if (config.banned_players() == null) return "banned_players is missing";
+        if (config.notify_off_players() == null) return "notify_off_players is missing";
+
+        try {
+            Pattern.compile(config.delimiter());
+        } catch (PatternSyntaxException e) {
+            return "delimiter is not a valid regex";
+        }
+
+        try {
+            DateTimeFormatter.ofPattern(config.timestamp()).format(LocalDateTime.now());
+        } catch (IllegalArgumentException e) {
+            return "timestamp is not a valid date format";
+        }
+
+        for (Map.Entry<String, List<StyleRule>> entry : config.style_rules().entrySet()) {
+            if (entry.getValue() == null) return "style_rules contains a null list";
+            for (StyleRule rule : entry.getValue()) {
+                if (rule == null) return "style_rules contains a null rule";
+                if (rule.pattern() == null) return "style_rules contains a rule with null pattern";
+                if (rule.pattern().matcher("").groupCount() < 2) {
+                    return "style rule patterns must have at least two capture groups";
+                }
+                if (rule.styles() == null) return "style_rules contains a rule with null styles";
+            }
+        }
+
+        for (Map.Entry<String, List<MentionRule>> entry : config.mention_rules().entrySet()) {
+            if (entry.getValue() == null) return "mention_rules contains a null list";
+            for (MentionRule rule : entry.getValue()) {
+                if (rule == null) return "mention_rules contains a null rule";
+                if (rule.pattern() == null) return "mention_rules contains a rule with null pattern";
+                if (rule.pattern().matcher("").groupCount() < 1) {
+                    return "mention rule patterns must have at least one capture group";
+                }
+                if (rule.mentions() == null) return "mention_rules contains a rule with null mentions";
+                if (rule.styles() == null) return "mention_rules contains a rule with null styles";
+            }
+        }
+
+        for (Map.Entry<String, MutableComponent> entry : config.prefix().entrySet()) {
+            if (entry.getValue() == null) return "prefix contains a null value";
+        }
+
+        return null;
     }
 
     private JsonObject readJsonFile(String file) {
