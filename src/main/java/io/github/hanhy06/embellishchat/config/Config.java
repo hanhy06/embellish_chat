@@ -112,27 +112,27 @@ public record Config(
                         List.of(StyleAction.of(StyleType.COLOR_PRESET, ""))
                 ),
                 StyleRule.of(
-                        "\\*\\*(.+?)\\*\\*()",
+                        "\\*\\*((?=.*[^*]).+?)\\*\\*()",
                         "<blue><b>Pattern</b></blue>: **Text**\n<dark_aqua><b>Comment</b></dark_aqua>: bold formatting\n",
                         List.of(StyleAction.of(StyleType.BOLD, ""))
                 ),
                 StyleRule.of(
-                        "__(.+?)__()",
+                        "__((?=.*[^_]).+?)__()",
                         "<blue><b>Pattern</b></blue>: __Text__\n<dark_aqua><b>Comment</b></dark_aqua>: underline formatting\n",
                         List.of(StyleAction.of(StyleType.UNDERLINE, ""))
                 ),
                 StyleRule.of(
-                        "_(.+?)_()",
+                        "(?<!\\w)_(?!_)(?=\\S)(.+?)(?<=\\S)(?<!_)_(?!\\w)()",
                         "<blue><b>Pattern</b></blue>: _Text_\n<dark_aqua><b>Comment</b></dark_aqua>: italic formatting\n",
                         List.of(StyleAction.of(StyleType.ITALIC, ""))
                 ),
                 StyleRule.of(
-                        "~~(.+?)~~()",
+                        "~~((?=.*[^~]).+?)~~()",
                         "<blue><b>Pattern</b></blue>: ~~Text~~\n<dark_aqua><b>Comment</b></dark_aqua>: strikethrough formatting\n",
                         List.of(StyleAction.of(StyleType.STRIKETHROUGH, ""))
                 ),
                 StyleRule.of(
-                        "\\|\\|(.+?)\\|\\|()",
+                        "\\|\\|((?=.*[^|]).+?)\\|\\|()",
                         "<blue><b>Pattern</b></blue>: ||Text||\n<dark_aqua><b>Comment</b></dark_aqua>: obfuscated text\n",
                         List.of(StyleAction.of(StyleType.OBFUSCATED, ""))
                 ),
