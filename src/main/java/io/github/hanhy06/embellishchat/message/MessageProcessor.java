@@ -20,7 +20,7 @@ public class MessageProcessor implements ConfigListener {
 
     private final MentionProcessor mentionProcessor;
     private final StyleProcessor styleProcessor;
-    private final PlayerList playerManager;
+    private final PlayerList playerList;
 
     private Config config;
     private Set<UUID> bannedPlayerList;
@@ -28,11 +28,11 @@ public class MessageProcessor implements ConfigListener {
 
     public static class MessageBlockedException extends RuntimeException {}
 
-    public MessageProcessor(MentionProcessor mentionProcessor, StyleProcessor styleProcessor, PlayerList playerManager) {
+    public MessageProcessor(MentionProcessor mentionProcessor, StyleProcessor styleProcessor, PlayerList playerList) {
         INSTANCE = this;
         this.mentionProcessor = mentionProcessor;
         this.styleProcessor = styleProcessor;
-        this.playerManager = playerManager;
+        this.playerList = playerList;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class MessageProcessor implements ConfigListener {
     }
 
     public PlayerChatMessage handleMessage(PlayerChatMessage message) {
-        ServerPlayer sender = playerManager.getPlayer(message.sender());
+        ServerPlayer sender = playerList.getPlayer(message.sender());
         if (sender == null || bannedPlayerList.contains(message.sender())) {
             return message;
         }

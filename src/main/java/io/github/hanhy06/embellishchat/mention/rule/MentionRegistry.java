@@ -30,7 +30,7 @@ import java.util.function.Function;
 import static java.util.Map.entry;
 
 public class MentionRegistry {
-    private final PlayerList manager;
+    private final PlayerList playerList;
     private final Scoreboard scoreboard;
     private final Style colorTeam;
 
@@ -41,7 +41,7 @@ public class MentionRegistry {
 
     public MentionRegistry(Config config) {
         MinecraftServer server = EmbellishChat.SERVER;
-        this.manager = server.getPlayerList();
+        this.playerList = server.getPlayerList();
         this.scoreboard = server.getScoreboard();
 
         if (config.team_color() != null){
@@ -70,7 +70,7 @@ public class MentionRegistry {
     }
 
     private Target EVERYONE(MentionParameter parameter){
-        return Target.of(manager.getPlayers(),null);
+        return Target.of(playerList.getPlayers(),null);
     }
 
     private Target INSIDE(MentionParameter parameter){
@@ -94,7 +94,7 @@ public class MentionRegistry {
 
         if (team != null){
             for (String name:team.getPlayers()){
-                ServerPlayer player = manager.getPlayerByName(name);
+                ServerPlayer player = playerList.getPlayerByName(name);
                 if (player != null) players.add(player);
             }
 
@@ -108,7 +108,7 @@ public class MentionRegistry {
     }
 
     private Target PLAYER(MentionParameter parameter){
-        ServerPlayer target = manager.getPlayerByName(parameter.option());
+        ServerPlayer target = playerList.getPlayerByName(parameter.option());
         Style style = colorTeam;
         HashSet<ServerPlayer> players = new HashSet<>();
 
@@ -134,18 +134,18 @@ public class MentionRegistry {
     private Target WORLD(MentionParameter parameter){
         String worldName = parameter.option();
         MinecraftServer server = EmbellishChat.SERVER;
-        ServerLevel targetWorld = null;
+        ServerLevel targetLevel = null;
 
-        for (ServerLevel world : server.getAllLevels()) {
-            String id = world.dimension().identifier().toString();
-            if (id.equals(worldName) || world.dimension().identifier().getPath().equals(worldName)) {
-                targetWorld = world;
+        for (ServerLevel level : server.getAllLevels()) {
+            String dimensionId = level.dimension().identifier().toString();
+            if (dimensionId.equals(worldName) || level.dimension().identifier().getPath().equals(worldName)) {
+                targetLevel = level;
                 break;
             }
         }
 
-        if (targetWorld != null) {
-            HashSet<ServerPlayer> players = new HashSet<>(PlayerLookup.level(targetWorld));
+        if (targetLevel != null) {
+            HashSet<ServerPlayer> players = new HashSet<>(PlayerLookup.level(targetLevel));
             return Target.of(players,null);
         } else {
             EmbellishChat.LOGGER.info("World {} not found. @world mention ignored.", worldName);
@@ -155,7 +155,7 @@ public class MentionRegistry {
 
     private Target LUCK_PERMS_GROUP(MentionParameter parameter){
         if (isLuckPerms) {
-            HashSet<ServerPlayer> players = LuckPermsUtil.getGroupPlayers(parameter.option(),manager.getPlayers());
+            HashSet<ServerPlayer> players = LuckPermsUtil.getGroupPlayers(parameter.option(),playerList.getPlayers());
             return Target.of(players,null);
         }else {
             EmbellishChat.LOGGER.info("LuckPerms not found. @group mentions will be ignored.");
@@ -166,7 +166,7 @@ public class MentionRegistry {
     private Target PERMISSION(MentionParameter parameter){
         HashSet<ServerPlayer> players = new HashSet<>();
 
-        for (ServerPlayer player:manager.getPlayers()){
+        for (ServerPlayer player:playerList.getPlayers()){
             if (Permissions.check(player,parameter.option())){
                 players.add(player);
             }

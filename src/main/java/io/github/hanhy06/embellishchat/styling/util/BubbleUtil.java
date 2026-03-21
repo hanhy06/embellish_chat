@@ -66,10 +66,10 @@ public class BubbleUtil {
     }
 
     public static void spawnDisplayEntity(ServerPlayer owner, Component text) {
-        ServerLevel world = owner.level();
-        Display.TextDisplay entity = new Display.TextDisplay(EntityType.TEXT_DISPLAY, world);
+        ServerLevel level = owner.level();
+        Display.TextDisplay entity = new Display.TextDisplay(EntityType.TEXT_DISPLAY, level);
 
-        world.addFreshEntity(entity);
+        level.addFreshEntity(entity);
 
         entity.setText(preprocessing(text));
         entity.setBillboardConstraints(Display.BillboardConstraints.CENTER);
