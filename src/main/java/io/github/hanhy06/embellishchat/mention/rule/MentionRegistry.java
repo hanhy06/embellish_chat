@@ -145,7 +145,7 @@ public class MentionRegistry {
         }
 
         if (targetWorld != null) {
-            HashSet<ServerPlayer> players = new HashSet<>(PlayerLookup.world(targetWorld));
+            HashSet<ServerPlayer> players = new HashSet<>(PlayerLookup.level(targetWorld));
             return Target.of(players,null);
         } else {
             EmbellishChat.LOGGER.info("World {} not found. @world mention ignored.", worldName);

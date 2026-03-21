@@ -201,7 +201,7 @@ public class AdminCommand {
             MessageProcessor.INSTANCE.handleMessage(message);
         }
         testResults.add((System.nanoTime() - startTime) / 1_000_000L);
-        testSource.getPlayer().displayClientMessage(Component.literal("Time remaining: %d tick".formatted(remainingTicks)),true);
+        testSource.getPlayer().sendOverlayMessage(Component.literal("Time remaining: %d tick".formatted(remainingTicks)));
         remainingTicks--;
 
         if (remainingTicks <= 0) {

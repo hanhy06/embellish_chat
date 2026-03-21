@@ -24,6 +24,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.scores.PlayerTeam;
 import org.apache.commons.lang3.StringUtils;
@@ -283,7 +284,7 @@ public class StyleRegistry {
         else item = player.getInventory().getItem(slot);
         if (item.isEmpty()) return parameter.segment();
 
-        HoverEvent hoverEvent = new HoverEvent.ShowItem(item);
+        HoverEvent hoverEvent = new HoverEvent.ShowItem(ItemStackTemplate.fromNonEmptyStack(item));
         return parameter.segment().withStyle(Style.EMPTY.withHoverEvent(hoverEvent));
     }
 
@@ -381,7 +382,7 @@ public class StyleRegistry {
         }
 
         MutableComponent text = Component.object(atlas);
-        HoverEvent hoverEvent = new HoverEvent.ShowItem(item);
+        HoverEvent hoverEvent = new HoverEvent.ShowItem(ItemStackTemplate.fromNonEmptyStack(item));
         ClickEvent clickEvent = new ClickEvent.RunCommand("/embellish-chat open "+player.getUUID());
         InventoryManager.putItem(player,item);
 
