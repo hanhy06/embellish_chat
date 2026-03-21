@@ -1,46 +1,114 @@
 {
   "color": {
-    "black": "#000000",
-    "dark blue": "#0000AA",
     "dark green": "#00AA00",
-    "dark aqua": "#00AAAA",
+    "green": "#55FF55",
+    "black": "#000000",
+    "yellow": "#FFFF55",
     "dark red": "#AA0000",
     "dark purple": "#AA00AA",
-    "gold": "#FFAA00",
-    "gray": "#AAAAAA",
-    "dark gray": "#555555",
-    "blue": "#5555FF",
-    "green": "#55FF55",
-    "aqua": "#55FFFF",
-    "red": "#FF5555",
     "light purple": "#FF55FF",
-    "yellow": "#FFFF55",
-    "white": "#FFFFFF"
+    "gold": "#FFAA00",
+    "dark gray": "#555555",
+    "red": "#FF5555",
+    "aqua": "#55FFFF",
+    "gray": "#AAAAAA",
+    "blue": "#5555FF",
+    "white": "#FFFFFF",
+    "dark aqua": "#00AAAA",
+    "dark blue": "#0000AA"
   },
   "atlas": {
-    "fire": {
-      "atlas": "minecraft:blocks",
-      "sprite": "minecraft:block/campfire_fire"
-    },
-    "hunger": {
+    "love": {
       "atlas": "minecraft:gui",
-      "sprite": "minecraft:hud/food_full"
+      "sprite": "minecraft:mob_effect/health_boost"
     },
-    "heart": {
-      "atlas": "minecraft:gui",
-      "sprite": "minecraft:hud/heart/full"
+    "mine": {
+      "atlas": "minecraft:items",
+      "sprite": "minecraft:item/diamond_pickaxe"
     },
-    "yes": {
+    "news": {
       "atlas": "minecraft:gui",
-      "sprite": "minecraft:container/beacon/confirm"
+      "sprite": "minecraft:icon/news"
     },
     "no": {
       "atlas": "minecraft:gui",
       "sprite": "minecraft:container/beacon/cancel"
     },
+    "note": {
+      "atlas": "minecraft:items",
+      "sprite": "minecraft:item/paper"
+    },
     "move": {
       "atlas": "minecraft:gui",
       "sprite": "minecraft:mob_effect/wind_charged"
+    },
+    "tv": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:icon/video_link"
+    },
+    "luck": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:mob_effect/luck"
+    },
+    "star": {
+      "atlas": "minecraft:items",
+      "sprite": "minecraft:item/nether_star"
+    },
+    "poison": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:mob_effect/poison"
+    },
+    "yes": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:container/beacon/confirm"
+    },
+    "food": {
+      "atlas": "minecraft:items",
+      "sprite": "minecraft:item/cooked_beef"
+    },
+    "heart": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:hud/heart/full"
+    },
+    "hunger": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:hud/food_full"
+    },
+    "diamond": {
+      "atlas": "minecraft:items",
+      "sprite": "minecraft:item/diamond"
+    },
+    "search": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:icon/search"
+    },
+    "music": {
+      "atlas": "minecraft:particles",
+      "sprite": "minecraft:note"
+    },
+    "world": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:icon/link"
+    },
+    "totem": {
+      "atlas": "minecraft:items",
+      "sprite": "minecraft:item/totem_of_undying"
+    },
+    "fire": {
+      "atlas": "minecraft:blocks",
+      "sprite": "minecraft:block/campfire_fire"
+    },
+    "time": {
+      "atlas": "minecraft:items",
+      "sprite": "minecraft:item/clock_54"
+    },
+    "emerald": {
+      "atlas": "minecraft:items",
+      "sprite": "minecraft:item/emerald"
+    },
+    "fight": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:mob_effect/raid_omen"
     }
   },
   "whitelist": [],

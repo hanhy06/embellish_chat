@@ -62,7 +62,7 @@
         ]
       },
       {
-        "pattern": "\\*\\*(.+?)\\*\\*()",
+        "pattern": "\\*\\*((?=.*[^*]).+?)\\*\\*()",
         "comment": "<blue><b>Pattern</b></blue>: **Text**\n<dark_aqua><b>Comment</b></dark_aqua>: bold formatting\n",
         "styles": [
           {
@@ -72,7 +72,7 @@
         ]
       },
       {
-        "pattern": "__(.+?)__()",
+        "pattern": "__((?=.*[^_]).+?)__()",
         "comment": "<blue><b>Pattern</b></blue>: __Text__\n<dark_aqua><b>Comment</b></dark_aqua>: underline formatting\n",
         "styles": [
           {
@@ -82,7 +82,7 @@
         ]
       },
       {
-        "pattern": "_(.+?)_()",
+        "pattern": "(?<!\\w)_(?!_)(?=\\S)(.+?)(?<=\\S)(?<!_)_(?!\\w)()",
         "comment": "<blue><b>Pattern</b></blue>: _Text_\n<dark_aqua><b>Comment</b></dark_aqua>: italic formatting\n",
         "styles": [
           {
@@ -92,7 +92,7 @@
         ]
       },
       {
-        "pattern": "~~(.+?)~~()",
+        "pattern": "~~((?=.*[^~]).+?)~~()",
         "comment": "<blue><b>Pattern</b></blue>: ~~Text~~\n<dark_aqua><b>Comment</b></dark_aqua>: strikethrough formatting\n",
         "styles": [
           {
@@ -102,7 +102,7 @@
         ]
       },
       {
-        "pattern": "\\|\\|(.+?)\\|\\|()",
+        "pattern": "\\|\\|((?=.*[^|]).+?)\\|\\|()",
         "comment": "<blue><b>Pattern</b></blue>: ||Text||\n<dark_aqua><b>Comment</b></dark_aqua>: obfuscated text\n",
         "styles": [
           {
