@@ -311,7 +311,7 @@ public record Config(
         );
         atlas.put("hunger", new AtlasSprite(
                 Identifier.parse("minecraft:gui"),
-                Identifier.parse("minecraft:hud/food_full"))
+                Identifier.parse("minecraft:hud/food_half"))
         );
         atlas.put("heart", new AtlasSprite(
                 Identifier.parse("minecraft:gui"),
