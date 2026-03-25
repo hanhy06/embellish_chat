@@ -72,7 +72,7 @@
     },
     "hunger": {
       "atlas": "minecraft:gui",
-      "sprite": "minecraft:hud/food_full"
+      "sprite": "minecraft:hud/food_half"
     },
     "diamond": {
       "atlas": "minecraft:items",
