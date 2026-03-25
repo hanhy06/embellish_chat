@@ -82,7 +82,7 @@ public class AdminCommand {
         );
 
         ServerTickEvents.START_SERVER_TICK.register(server -> {
-            if (testService != null && testService.executeTest(server)) testService = null;
+            if (testService != null && testService.executeTest()) testService = null;
         });
     }
 
@@ -152,6 +152,11 @@ public class AdminCommand {
 
         if (count > 5000) {
             source.sendSuccess(() -> Component.literal("Count is too large. (Max 5000)"), false);
+            return 0;
+        }
+
+        if (ticks < 1) {
+            source.sendSuccess(() -> Component.literal("Ticks is too small. (Min 1)"), false);
             return 0;
         }
 

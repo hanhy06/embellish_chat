@@ -48,7 +48,7 @@ public class StressTestService {
         testResults = new ArrayList<>(ticks);
     }
 
-    public boolean executeTest(MinecraftServer server){
+    public boolean executeTest(){
         if (remainingTicks <= 0) {
             return true;
         }
@@ -82,6 +82,11 @@ public class StressTestService {
         long min = testResults.stream().mapToLong(Long::longValue).min().orElse(0);
         long max = testResults.stream().mapToLong(Long::longValue).max().orElse(0);
         double average = totalProcessing / (double) totalTicks;
+
+        if (totalTicks < 1) {
+            testSource.sendFailure(Component.literal("Cannot display statistics. No tests have been executed yet."));
+            return;
+        }
 
         testResults.sort(null);
         double median;
