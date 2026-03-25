@@ -6,7 +6,6 @@ import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.PlayerChatMessage;
-import net.minecraft.server.MinecraftServer;
 
 import java.util.ArrayList;
 import java.util.List;
