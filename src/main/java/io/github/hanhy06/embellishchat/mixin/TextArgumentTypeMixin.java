@@ -14,16 +14,16 @@ import java.util.List;
 
 @Mixin(ComponentArgument.class)
 public class TextArgumentTypeMixin {
-    @Inject(method = "getRawComponent", at = @At("RETURN"), cancellable = true)
-    private static void getTextArgument(
-            CommandContext<CommandSourceStack> context,
-            String name,
-            CallbackInfoReturnable<Component> cir
-    ) {
-        Component text = cir.getReturnValue();
-
-        text = StyleProcessor.INSTANCE.handleStyle(text.copy(), List.of("embellish-chat.command_argument"),context.getSource().getPlayer());
-
-        cir.setReturnValue(text);
-    }
+//    @Inject(method = "getRawComponent", at = @At("RETURN"), cancellable = true)
+//    private static void getTextArgument(
+//            CommandContext<CommandSourceStack> context,
+//            String name,
+//            CallbackInfoReturnable<Component> cir
+//    ) {
+//        Component text = cir.getReturnValue();
+//
+//        text = StyleProcessor.INSTANCE.handleStyle(text.copy(), List.of("embellish-chat.command_argument"),context.getSource().getPlayer());
+//
+//        cir.setReturnValue(text);
+//    }
 }
