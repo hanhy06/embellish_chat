@@ -5,8 +5,7 @@
   "mixins": [
     "MessageCommandMixin",
     "SentMessageMixin",
-    "ServerPlayNetworkHandlerMixin",
-    "TextArgumentTypeMixin"
+    "ServerPlayNetworkHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

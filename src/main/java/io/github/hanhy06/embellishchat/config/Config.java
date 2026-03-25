@@ -168,8 +168,6 @@ public record Config(
                 )
         ));
 
-        styleRules.put("embellish-chat.command_argument", List.of());
-
         return styleRules;
     }
 
