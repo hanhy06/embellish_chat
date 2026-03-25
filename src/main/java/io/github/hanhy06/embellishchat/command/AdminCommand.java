@@ -6,23 +6,23 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.hanhy06.embellishchat.EmbellishChat;
+import io.github.hanhy06.embellishchat.command.util.StressTestService;
 import io.github.hanhy06.embellishchat.config.ConfigManager;
-import io.github.hanhy06.embellishchat.message.MessageProcessor;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.network.chat.Style;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.ProfileResolver;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,31 +30,7 @@ import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
 public class AdminCommand {
-    private static final String STRESS_TEST_FORMAT = """
-        <gray>── Test Configuration ──</gray>
-        • <yellow>Total Ticks</yellow>: %d
-        • <yellow>Count Per Tick</yellow>: %d
-        • <yellow>Test Message</yellow>: %s
-    
-        <gray>── Performance Analysis ──</gray>
-        • <aqua>Ticks</aqua>: %d
-        • <dark_green>Minimum</dark_green>: %dms
-        • <red>Maximum</red>: %dms
-        • <green>Average</green>: %.2fms
-        • <light_purple>Median</light_purple>: %.2fms
-        • <gold>Total Processing Time</gold>: %dms
-    
-        <gray>── Tick Analysis ──</gray>
-        • <blue>Used Ticks</blue>: %d / %d
-        • <blue>Usage</blue>: %.2f%%
-        """;
-
-    private static int remainingTicks = 0;
-    private static int countPerTick = 0;
-    private static String testText = "";
-    private static UUID testUuid = null;
-    private static CommandSourceStack testSource = null;
-    private static List<Long> testResults = null;
+    private static StressTestService testService = null;
 
     public static void registerCommand() {
         CommandRegistrationCallback.EVENT.register((commandDispatcher, commandRegistryAccess, registrationEnvironment) -> commandDispatcher.register(
@@ -84,10 +60,10 @@ public class AdminCommand {
                                 )
                                 .then(Commands.literal("stop")
                                         .executes(source -> {
-                                            if (testSource == null || remainingTicks <= 0){
+                                            if (testService == null){
                                                 source.getSource().sendFailure(Component.literal("Stress test is not running."));
                                             }else {
-                                                completeStressTest();
+                                                testService.completeStressTest();
                                             }
                                             return 1;
                                         })
@@ -100,14 +76,10 @@ public class AdminCommand {
                                                 .executes(AdminCommand::executeRegexTest))
                                 )
                         )
-//                        .then(CommandManager.literal("banlist")
-//                                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
-//                                .executes(AdminCommand::executeBanlist)
-//                        )
                 )
         );
-
-        ServerTickEvents.START_SERVER_TICK.register(AdminCommand::onServerTick);
+//
+//        ServerTickEvents.START_SERVER_TICK.register(AdminCommand::onServerTick);
     }
 
     private static int executeReloadConfig(CommandContext<CommandSourceStack> context) {
@@ -158,7 +130,7 @@ public class AdminCommand {
     }
 
     private static int executeStressTest(CommandContext<CommandSourceStack> context) {
-        if (remainingTicks > 0) {
+        if (testService != null) {
             context.getSource().sendSuccess(() -> Component.literal("Stress test is already running."), false);
             return 0;
         }
@@ -179,69 +151,10 @@ public class AdminCommand {
             return 0;
         }
 
-        remainingTicks = ticks;
-        countPerTick = count;
-        testText = text;
-        testUuid = player.getUUID();
-        testSource = source;
-        testResults = new ArrayList<>();
+        testService = new StressTestService(ticks,count,text,source);
 
         source.sendSuccess(() -> Component.literal("Starting stress test..."), true);
         return 1;
-    }
-
-    private static void onServerTick(MinecraftServer server) {
-        if (remainingTicks <= 0) {
-            return;
-        }
-
-        long startTime = System.nanoTime();
-        for (int i = 0; i < countPerTick; i++) {
-            PlayerChatMessage message = PlayerChatMessage.unsigned(testUuid, testText);
-            MessageProcessor.INSTANCE.handleMessage(message);
-        }
-        testResults.add((System.nanoTime() - startTime) / 1_000_000L);
-        testSource.getPlayer().sendOverlayMessage(Component.literal("Time remaining: %d tick".formatted(remainingTicks)));
-        remainingTicks--;
-
-        if (remainingTicks <= 0) {
-            completeStressTest();
-        }
-    }
-
-    private static void completeStressTest() {
-        int totalTicks = testResults.size();
-        long totalProcessing = testResults.stream().mapToLong(Long::longValue).sum();
-        long min = testResults.stream().mapToLong(Long::longValue).min().orElse(0);
-        long max = testResults.stream().mapToLong(Long::longValue).max().orElse(0);
-        double average = totalProcessing / (double) totalTicks;
-
-        testResults.sort(null);
-        double median;
-        if (totalTicks % 2 == 0) {
-            median = (testResults.get(totalTicks / 2 - 1) + testResults.get(totalTicks / 2)) / 2.0;
-        } else {
-            median = testResults.get(totalTicks / 2);
-        }
-
-        long occupiedTicks = totalProcessing / 50;
-        double usagePercentTicks = (occupiedTicks / (double) totalTicks) * 100.0;
-
-        Component message = PlaceHolderUtil.parseTag(String.format(
-                STRESS_TEST_FORMAT,
-                totalTicks+remainingTicks,countPerTick,testText,
-                totalTicks, min, max, average, median, totalProcessing,
-                occupiedTicks, totalTicks, usagePercentTicks
-        ));
-
-        testSource.sendSuccess(() -> Component.literal("Stress test completed!"), true);
-        testSource.sendSuccess(() -> message, true);
-        EmbellishChat.LOGGER.info(message.getString());
-
-        testSource = null;
-        testUuid = null;
-        testResults = null;
-        remainingTicks = 0;
     }
 
     private static int executeRegexTest(CommandContext<CommandSourceStack> context){
