@@ -23,7 +23,7 @@ Embellish Chat modernizes your Minecraft server’s chat experience with a fully
   * Other players can hover over the link to view detailed item tooltips.
 * **Chat Utilities**
   * **Metadata:** Hover over any message to see the exact timestamp.
-  * **Quick Copy:** Click on any message to instantly copy its content to your clipboard.
+  * **Quick Copy:** Click on any message to copy the timestamp together with the message content to your clipboard.
 
 ---
 
@@ -133,7 +133,7 @@ The configuration file is located at `config/embellish-chat/config.json`.
 * The `version` field must not be modified manually.
 * `ConfigManager` automatically splits the configuration into `config.json`, `styles.json`, `mentions.json`, and `presets.json`.
 * Missing sections are restored from the built-in defaults when the files are loaded.
-* If the stored `version` does not match the running mod version, the mod falls back to the default configuration.
+* If the stored `version` does not match the running mod version, the mod keeps the current in-memory configuration and ignores the mismatched load.
 * The core configuration logic is defined in `style_rules` and `mention_rules`.
 * Rules are processed from top to bottom, so placing a catch-all rule earlier may override more specific rules defined below.
 * The `delimiter` value is internally handled as a regular expression; special characters such as `|` must be properly escaped.

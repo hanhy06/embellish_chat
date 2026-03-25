@@ -6,10 +6,10 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class NickNamesUtil {
     public static ServerPlayer getPlayerByNickName(String name){
-        for (ServerPlayer player : EmbellishChat.SERVER.getPlayerList().getPlayers()){
-            String nickName = NicknameHolder.of(player).styledNicknames$get();
-            if (nickName != null && nickName.equals(name)) return player;
-        }
+//        for (ServerPlayer player : EmbellishChat.SERVER.getPlayerList().getPlayers()){
+//            String nickName = NicknameHolder.of(player).styledNicknames$get();
+//            if (nickName != null && nickName.equals(name)) return player;
+//        }
         return null;
     }
 }

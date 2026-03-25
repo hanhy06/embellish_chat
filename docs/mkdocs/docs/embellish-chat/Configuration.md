@@ -151,5 +151,5 @@ The shared preset file is located at `config/embellish-chat/presets.json`.
 
 * `ConfigManager` automatically separates the configuration into `config.json`, `styles.json`, `mentions.json`, and `presets.json`.
 * Missing sections are restored from the built-in defaults when the files are loaded.
-* If the stored `version` does not match the running mod version, the mod falls back to the default configuration.
+* If the stored `version` does not match the running mod version, the mod keeps the current in-memory configuration and ignores the mismatched load.
 * To avoid JSON syntax errors and to generate valid configs more easily, using the **[Web Config Generator](../config-generator/index.html)** is strongly recommended.

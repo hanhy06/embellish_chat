@@ -14,22 +14,22 @@ public class PermissionUtil {
         List<String> result = new ArrayList<>();
         if (player == null) return result;
 
-        for (String key : permissions){
-            if (Permissions.check(player,key)) result.add(key);
-        }
+//        for (String key : permissions){
+//            if (Permissions.check(player,key)) result.add(key);
+//        }
 
-        return result;
+        return permissions.stream().toList();
     }
 
     public static void registerPermissions(){
-        PermissionCheckEvent.EVENT.register((source, permission) -> {
-            if (permission.equals("embellish-chat.chat")) {
-                return TriState.TRUE;
-            }
-            if (permission.equals("embellish-chat.mention")) {
-                return TriState.TRUE;
-            }
-            return TriState.DEFAULT;
-        });
+//        PermissionCheckEvent.EVENT.register((source, permission) -> {
+//            if (permission.equals("embellish-chat.chat")) {
+//                return TriState.TRUE;
+//            }
+//            if (permission.equals("embellish-chat.mention")) {
+//                return TriState.TRUE;
+//            }
+//            return TriState.DEFAULT;
+//        });
     }
 }
