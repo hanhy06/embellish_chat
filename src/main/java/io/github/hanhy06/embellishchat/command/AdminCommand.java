@@ -10,6 +10,7 @@ import io.github.hanhy06.embellishchat.command.util.StressTestService;
 import io.github.hanhy06.embellishchat.config.ConfigManager;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -64,6 +65,7 @@ public class AdminCommand {
                                                 source.getSource().sendFailure(Component.literal("Stress test is not running."));
                                             }else {
                                                 testService.completeStressTest();
+                                                testService = null;
                                             }
                                             return 1;
                                         })
@@ -78,8 +80,10 @@ public class AdminCommand {
                         )
                 )
         );
-//
-//        ServerTickEvents.START_SERVER_TICK.register(AdminCommand::onServerTick);
+
+        ServerTickEvents.START_SERVER_TICK.register(server -> {
+            if (testService != null && testService.executeTest(server)) testService = null;
+        });
     }
 
     private static int executeReloadConfig(CommandContext<CommandSourceStack> context) {

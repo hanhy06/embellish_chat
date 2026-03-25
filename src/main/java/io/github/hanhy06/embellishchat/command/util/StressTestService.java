@@ -48,14 +48,15 @@ public class StressTestService {
         testResults = new ArrayList<>(ticks);
     }
 
-    public void executeTest(MinecraftServer server){
+    public boolean executeTest(MinecraftServer server){
         if (remainingTicks <= 0) {
-            return;
+            return true;
         }
 
         if (testSource.getPlayer() == null){
             testSource.sendFailure(Component.literal("Unable to retrieve the player for an unknown reason"));
             completeStressTest();
+            return true;
         }
 
         long startTime = System.nanoTime();
@@ -69,7 +70,10 @@ public class StressTestService {
 
         if (remainingTicks <= 0) {
             completeStressTest();
+            return true;
         }
+
+        return false;
     }
 
     public void completeStressTest() {
