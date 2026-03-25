@@ -2,6 +2,7 @@ package io.github.hanhy06.embellishchat.styling.rule;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.JsonOps;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
@@ -104,7 +105,7 @@ public class StyleRegistry {
                 entry(StyleType.BUBBLE, this::BUBBLE),
                 entry(StyleType.BLOCK, this::BLOCK)
         ));
-        this.messenger = new DiscordUtil(config);
+        this.messenger = new DiscordUtil();
     }
 
     public Function<StyleParameter, MutableComponent> get(StyleType styleType) {
@@ -296,7 +297,11 @@ public class StyleRegistry {
             EmbellishChat.LOGGER.warn("Invalid URL provided for segment [{}]: {}", parameter.segment().getString(), parameter.getString());
             return parameter.segment();
         }
+
         String host = uri.getHost();
+        if (host == null){
+            return parameter.segment();
+        }
 
         boolean allowed = whitelist.isEmpty() || whitelist.contains(host);
         if (!allowed) {
@@ -422,15 +427,23 @@ public class StyleRegistry {
     }
 
     public MutableComponent JSON(StyleParameter parameter){
-        JsonElement element = JsonParser.parseString(parameter.getString());
-        Component text = ComponentSerialization.CODEC.parse(JsonOps.INSTANCE,element).getOrThrow();
-        return text.copy();
+        try {
+            JsonElement element = JsonParser.parseString(parameter.getString());
+            Component text = ComponentSerialization.CODEC.parse(JsonOps.INSTANCE,element).getOrThrow();
+            return text.copy();
+        } catch (JsonSyntaxException | IllegalStateException e) {
+            return parameter.segment();
+        }
     }
 
     public MutableComponent DISCORD_JSON(StyleParameter parameter){
         int index = parameter.getString().indexOf(';');
         String option = parameter.getString();
-        if (index != -1) messenger.send(URI.create(option.substring(0,index)),option.substring(index+1));
+        try {
+            if (index != -1) messenger.send(URI.create(option.substring(0,index)),option.substring(index+1));
+        } catch (IllegalArgumentException e){
+            EmbellishChat.LOGGER.error("This webhook is malformed: {}",e.getMessage());
+        }
         return parameter.segment();
     }
 

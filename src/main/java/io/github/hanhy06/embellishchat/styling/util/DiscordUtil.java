@@ -11,7 +11,7 @@ import java.net.http.HttpResponse;
 public class DiscordUtil {
     private final HttpClient client;
 
-    public DiscordUtil(Config config) {
+    public DiscordUtil() {
         this.client = HttpClient.newHttpClient();
     }
 
