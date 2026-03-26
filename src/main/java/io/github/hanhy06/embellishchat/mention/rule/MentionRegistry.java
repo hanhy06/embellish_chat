@@ -166,11 +166,11 @@ public class MentionRegistry {
     private Target PERMISSION(MentionParameter parameter){
         HashSet<ServerPlayer> players = new HashSet<>();
 
-//        for (ServerPlayer player:playerList.getPlayers()){
-//            if (Permissions.check(player,parameter.option())){
-//                players.add(player);
-//            }
-//        }
+        for (ServerPlayer player:playerList.getPlayers()){
+            if (Permissions.check(player,parameter.option())){
+                players.add(player);
+            }
+        }
 
         return Target.of(players,null);
     }

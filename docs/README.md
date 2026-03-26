@@ -158,8 +158,7 @@ The configuration file is located at `config/embellish-chat/styles.json`.
         ]
       }
       ...
-    ],
-    "embellish-chat.command_argument": []
+    ]
   }
 }
 ```

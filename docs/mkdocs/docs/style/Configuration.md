@@ -37,8 +37,7 @@ Style rules are stored in `config/embellish-chat/styles.json` under the top-leve
           }
         ]
       }
-    ],
-    "embellish-chat.command_argument": []
+    ]
   }
 }
 ```

@@ -66,15 +66,13 @@ The style rules file is located at `config/embellish-chat/styles.json`.
         ]
       }
       ...
-    ],
-    "embellish-chat.command_argument": []
+    ]
   }
 }
 ```
 
 * **`style_rules`**: Top-level container for all styling rules.
 * **`embellish-chat.chat`**: Rules applied to normal chat messages.
-* **`embellish-chat.command_argument`**: Rules applied to command arguments, if configured.
 * Each rule includes **`pattern`** for regex matching, **`comment`** for `/embellish-chat help style`, and **`styles`** for the actions to apply.
 * Most custom chat formatting behavior is defined here.
 * Rules are processed from top to bottom, so an early catch-all rule can override more specific rules below it.
