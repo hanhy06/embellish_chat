@@ -25,15 +25,16 @@ public class InventoryScreenHandler extends ChestMenu {
             ItemStack stack = this.getSlot(slotIndex).getItem();
 
             if (stack.getItem() == Items.WRITTEN_BOOK && player instanceof ServerPlayer serverPlayer) {
-                ItemStack original = player.getUseItem();
+                int selectedHotbarSlot = player.getInventory().getSelectedSlot();
+                ItemStack original = player.getInventory().getItem(selectedHotbarSlot).copy();
 
-                int selectSlot = player.getInventory().getSelectedSlot() + 36;
+                int selectSlot = selectedHotbarSlot + 36;
                 serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(
-                        0, this.incrementStateId(), selectSlot, stack
+                        this.containerId , this.incrementStateId(), selectSlot, stack
                 ));
                 serverPlayer.connection.send(new ClientboundOpenBookPacket(InteractionHand.MAIN_HAND));
                 serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(
-                        0, this.incrementStateId(), selectSlot, original
+                        this.containerId, this.incrementStateId(), selectSlot, original
                 ));
             }
 
