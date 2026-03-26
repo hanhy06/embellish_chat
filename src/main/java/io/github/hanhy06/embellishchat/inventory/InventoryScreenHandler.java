@@ -1,7 +1,6 @@
 package io.github.hanhy06.embellishchat.inventory;
 
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
-import net.minecraft.network.protocol.game.ClientboundOpenBookPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
@@ -9,6 +8,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.ContainerInput;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -27,14 +27,23 @@ public class InventoryScreenHandler extends ChestMenu {
             if (stack.getItem() == Items.WRITTEN_BOOK && player instanceof ServerPlayer serverPlayer) {
                 int selectedHotbarSlot = player.getInventory().getSelectedSlot();
                 ItemStack original = player.getInventory().getItem(selectedHotbarSlot).copy();
+                int playerInventorySlot = InventoryMenu.USE_ROW_SLOT_START + selectedHotbarSlot;
+                ItemStack book = stack.copy();
 
-                int selectSlot = selectedHotbarSlot + 36;
+                serverPlayer.closeContainer();
+
                 serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(
-                        this.containerId , this.incrementStateId(), selectSlot, stack
+                        InventoryMenu.CONTAINER_ID,
+                        serverPlayer.inventoryMenu.incrementStateId(),
+                        playerInventorySlot,
+                        book
                 ));
-                serverPlayer.connection.send(new ClientboundOpenBookPacket(InteractionHand.MAIN_HAND));
+                serverPlayer.openItemGui(book, InteractionHand.MAIN_HAND);
                 serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(
-                        this.containerId, this.incrementStateId(), selectSlot, original
+                        InventoryMenu.CONTAINER_ID,
+                        serverPlayer.inventoryMenu.incrementStateId(),
+                        playerInventorySlot,
+                        original
                 ));
             }
 
