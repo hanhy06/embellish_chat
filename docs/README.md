@@ -74,7 +74,7 @@ Use the following patterns directly in the chat window to apply styles:
 >
 > * **Behavior:** Successful mentions send a notification sound to the target and automatically tint the text (e.g., to the team color).
 > * **Dependencies:** `@group` requires **LuckPerms**. Without it, the mention will be ignored.
-> * **Colors:** `@team` and `@Player` use their respective team colors. If no team color is set, the `team_color` value from `config.json` is used.
+> * **Colors:** `@team` and `@Player` mentions start from the `team_color` value in `config.json`, then use the target's team/display styling when available. If `team_color` is `null`, the mention text is left uncolored.
 > * **Sound:** The notification sound uses the **UI** category (falls back to the **PLAYER** category on Minecraft 1.21.5 and earlier).
 > * **More Info:** For a full list of mention types and advanced usage, refer to [MentionWiki](https://hanhy06.github.io/embellish-chat-wiki/mention/MentionSystem/).
 
@@ -137,7 +137,8 @@ The configuration file is located at `config/embellish-chat/config.json`.
 * The core configuration logic is defined in `style_rules` and `mention_rules`.
 * Rules are processed from top to bottom, so placing a catch-all rule earlier may override more specific rules defined below.
 * The `delimiter` value is internally handled as a regular expression; special characters such as `|` must be properly escaped.
-* If `team_color` is missing or set to `null`, automatic team-color fallback will not be applied.
+* `team_color` is the base color used when styling `@team` and `@Player` mentions.
+* If `team_color` is missing or set to `null`, those mentions are left without an automatic color.
 * To avoid JSON syntax errors and ensure valid configurations, using the **[Web Config Generator](https://hanhy06.github.io/embellish-chat-wiki/config-generator/)** is strongly recommended:
 
 ### Styling

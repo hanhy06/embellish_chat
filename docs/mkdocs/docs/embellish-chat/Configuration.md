@@ -40,7 +40,7 @@ The core settings file is located at `config/embellish-chat/config.json`.
 * **`timestamp`**: Date and time format used by timestamp-related output.
 * **`command_alias`**: Short alias for the main command.
 * **`url_color`**: Default color used for URL-style output.
-* **`team_color`**: Fallback color used for team-related formatting. If it is missing or set to `null`, automatic team-color fallback is disabled.
+* **`team_color`**: Base color used when styling `@team` and `@Player` mentions. When the target has team or display styling, that styling is applied on top of this base. If it is missing or set to `null`, those mentions are left without an automatic color.
 * **`notify_command_enabled`**: Enables the notification toggle command.
 * **`notify_mention_enabled`**: Enables mention sound and title notifications.
 * **`disable_vanilla_chat_format`**: Disables the vanilla chat format so Embellish Chat can fully control message formatting.
