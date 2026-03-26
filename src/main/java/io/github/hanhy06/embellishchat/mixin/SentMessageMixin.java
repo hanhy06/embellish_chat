@@ -34,7 +34,7 @@ public class SentMessageMixin {
             ordinal = 0
     )
     private ChatType.Bound modifyParams(ChatType.Bound params) {
-        if (!ConfigManager.getConfig().disable_vanilla_chat_format()) return params;
+        if (!params.chatType().is(ChatType.CHAT) || !ConfigManager.getConfig().disable_vanilla_chat_format()) return params;
 
         Registry<ChatType> registry = EmbellishChat.SERVER.registryAccess().lookupOrThrow(Registries.CHAT_TYPE);
         Optional<Holder.Reference<ChatType>> optional = registry.get(CLEAR.identifier());

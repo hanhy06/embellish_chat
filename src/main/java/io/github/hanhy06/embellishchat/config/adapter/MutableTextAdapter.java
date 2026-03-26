@@ -45,7 +45,7 @@ public class MutableTextAdapter extends TypeAdapter<MutableComponent> {
             JsonElement element = JsonParser.parseString(value);
             return ComponentSerialization.CODEC.parse(JsonOps.INSTANCE,element).getOrThrow().copy();
         }catch (JsonParseException e){
-            return PlaceHolderUtil.parseTag(jsonReader.nextString()).copy();
+            return PlaceHolderUtil.parseTag(value).copy();
         }
     }
 }
