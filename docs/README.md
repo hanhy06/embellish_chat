@@ -62,7 +62,7 @@ Use the following patterns directly in the chat window to apply styles:
 | Item             | `[i]`                   | `Look at my [i]`                                              | ![Item](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Item.png)             |
 | Inventory        | `[inv]`                 | `Look at my [inv]`                                            | ![Inventory](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Inventory.png)   |
 | Ender Chest      | `[end]`                 | `Look at my [end]`                                            | ![EnderChest](https://hanhy06.github.io/embellish-chat-wiki/assets/images/EnderChest.png) |
-| Atlas Icon       | `:name:`                | `I :love: you`                                                | ![AtlasIcon](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Atlas_Icon.png)  |
+| Icon             | `:name:`                | `I :love: you`                                                | ![AtlasIcon](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Atlas_Icon.png)  |
 | Mention          | `@PlayerName`           | `Hello, @User`                                                | ![Mention](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Mention.png)       |
 
 > **Notes**
@@ -70,6 +70,7 @@ Use the following patterns directly in the chat window to apply styles:
 > * **Links:** Only `https://` URLs are supported for security.
 > * **Colors:** Presets (e.g., `pink`) are defined in the mod configuration.
 > * **Fonts:** The `path` requires a namespaced ID (e.g., `minecraft:alt`).
+> * **Icons & Atlas Sprites:** Features that use icons or multiple atlas sprites are not supported on older Minecraft versions.
 > * **More Info:** For advanced syntax, style combinations, and detailed rules, refer to `/embellish-chat help style` or the [StyleWiki](https://hanhy06.github.io/embellish-chat-wiki/style/StyleSystem/).
 
 ---
