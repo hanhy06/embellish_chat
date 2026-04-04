@@ -3,7 +3,6 @@ package io.github.hanhy06.embellishchat.mixin;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.ConfigManager;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.OutgoingChatMessage;
@@ -33,12 +32,18 @@ public class SentMessageMixin {
             argsOnly = true,
             ordinal = 0
     )
-    private ChatType.Bound modifyParams(ChatType.Bound params) {
-        if (!params.chatType().is(ChatType.CHAT) || !ConfigManager.getConfig().disable_vanilla_chat_format()) return params;
+    private ChatType.Bound modifyChatType(ChatType.Bound chatType) {
+        if (!ConfigManager.getConfig().disable_vanilla_chat_format() || !chatType.chatType().is(ChatType.CHAT)) {
+            return chatType;
+        }
 
-        Registry<ChatType> registry = EmbellishChat.SERVER.registryAccess().lookupOrThrow(Registries.CHAT_TYPE);
-        Optional<Holder.Reference<ChatType>> optional = registry.get(CLEAR.identifier());
+        Optional<Holder.Reference<ChatType>> clearChatType = EmbellishChat.SERVER
+                .registryAccess()
+                .lookupOrThrow(Registries.CHAT_TYPE)
+                .get(CLEAR.identifier());
 
-        return optional.map(entry -> new ChatType.Bound(entry, this.message.decoratedContent(), params.targetName())).orElse(params);
+        return clearChatType
+                .map(holder -> new ChatType.Bound(holder, this.message.decoratedContent(), chatType.targetName()))
+                .orElse(chatType);
     }
 }
