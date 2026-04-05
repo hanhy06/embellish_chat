@@ -215,7 +215,7 @@ public class StyleRegistry {
         if (team == null) return parameter.segment();
 
         ChatFormatting formatting = team.getColor();
-        if (formatting != null && formatting.isColor()){
+        if (formatting.isColor()){
             return parameter.segment().withStyle(Style.EMPTY.withColor(formatting));
         }
 

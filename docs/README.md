@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="http://hanhy06.github.io/embellish-chat-wiki/assets/logo.svg" alt="Embellish Chat" width="460">
+  <img src="https://hanhy06.github.io/embellish-chat-wiki/assets/logo.svg" alt="Embellish Chat" width="460">
 </div>
 
 <div align="center">
