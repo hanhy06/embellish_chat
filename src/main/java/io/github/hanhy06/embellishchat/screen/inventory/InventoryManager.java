@@ -1,4 +1,4 @@
-package io.github.hanhy06.embellishchat.inventory;
+package io.github.hanhy06.embellishchat.screen.inventory;
 
 import it.unimi.dsi.fastutil.objects.ReferenceSortedSets;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;

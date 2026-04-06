@@ -1,4 +1,4 @@
-package io.github.hanhy06.embellishchat.inventory;
+package io.github.hanhy06.embellishchat.screen.inventory;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.SimpleContainer;

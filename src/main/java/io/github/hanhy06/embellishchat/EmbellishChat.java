@@ -2,9 +2,9 @@ package io.github.hanhy06.embellishchat;
 
 import io.github.hanhy06.embellishchat.command.CommandHandler;
 import io.github.hanhy06.embellishchat.config.ConfigManager;
-import io.github.hanhy06.embellishchat.inventory.InventoryManager;
 import io.github.hanhy06.embellishchat.mention.MentionProcessor;
 import io.github.hanhy06.embellishchat.message.MessageProcessor;
+import io.github.hanhy06.embellishchat.screen.inventory.InventoryManager;
 import io.github.hanhy06.embellishchat.styling.StyleProcessor;
 import io.github.hanhy06.embellishchat.styling.util.BubbleUtil;
 import io.github.hanhy06.embellishchat.util.PermissionUtil;
