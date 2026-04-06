@@ -45,7 +45,7 @@
 * `LOWER`: Transforms every matched substring into lowercase characters. **Option:** `None`
 * `CAPITALIZE`: Converts only the first character of the string to uppercase. **Option:** `None`
 * `REPLACE`: Replaces the matched text with the provided string while preserving the original style. **Option:** `Text`
-* `MASK`: Replaces the original string with the provided character or string, adjusting to match the original length. **Option:** `Character`
+* `MASK`: Repeats the provided character or string once for each character in the original text. **Option:** `Text`
 * `PREFIX`: Attaches the provided text before the original text. **Option:** `Text`
 * `SUFFIX`: Attaches the provided text after the original text. **Option:** `Text`
 
