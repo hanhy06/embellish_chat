@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -193,6 +194,16 @@ public class ConfigManager {
 
     public void writeConfig() {
         writeConfig(this::writeJsonFile);
+    }
+
+    public void saveAsync() {
+        CompletableFuture.runAsync(() -> {
+            try {
+                writeConfig();
+            } catch (Exception e) {
+                EmbellishChat.LOGGER.error("Failed to save config async", e);
+            }
+        });
     }
 
     private void writeConfig(BiConsumer<String,JsonObject> writer) {

@@ -25,7 +25,6 @@ import net.minecraft.server.players.ProfileResolver;
 import net.minecraft.world.SimpleMenuProvider;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
 public class UserCommand {
     public static void registerCommand() {
@@ -140,16 +139,11 @@ public class UserCommand {
             else players.add(uuid);
         }
 
+        ConfigManager.INSTANCE.saveAsync();
+
         String result = String.format("Mentions set to: %s", (notification ? "<green>ON</green>" : "<gray>OFF</gray>"));
         context.getSource().sendSuccess(() -> PlaceHolderUtil.parseTag(result), false);
 
-        CompletableFuture.runAsync(() -> {
-            try {
-                ConfigManager.INSTANCE.writeConfig();
-            } catch (Exception e) {
-                EmbellishChat.LOGGER.error("Failed to save config async", e);
-            }
-        });
         return 1;
     }
 

@@ -24,7 +24,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -119,13 +118,7 @@ public class AdminCommand {
             if (isBan) ConfigManager.getConfig().banned_players().addAll(uuids);
             else ConfigManager.getConfig().banned_players().removeAll(uuids);
         }
-        CompletableFuture.runAsync(() -> {
-            try {
-                ConfigManager.INSTANCE.writeConfig();
-            } catch (Exception e) {
-                EmbellishChat.LOGGER.error("Failed to save config async", e);
-            }
-        });
+        ConfigManager.INSTANCE.saveAsync();
 
         String result = String.format("Player(s) %s %s.", names, action);
 
