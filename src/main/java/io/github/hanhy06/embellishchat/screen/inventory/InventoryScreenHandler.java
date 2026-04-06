@@ -1,6 +1,6 @@
 package io.github.hanhy06.embellishchat.screen.inventory;
 
-import io.github.hanhy06.embellishchat.screen.util.CartographyTableScreenHandler;
+import io.github.hanhy06.embellishchat.screen.CartographyTableScreenHandler;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;

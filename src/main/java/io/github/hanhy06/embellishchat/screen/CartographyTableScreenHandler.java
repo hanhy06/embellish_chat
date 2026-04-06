@@ -1,4 +1,4 @@
-package io.github.hanhy06.embellishchat.screen.util;
+package io.github.hanhy06.embellishchat.screen;
 
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
