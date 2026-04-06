@@ -168,6 +168,7 @@ public class ConfigManager {
                     return "mention rule patterns must have at least one capture group";
                 }
                 if (rule.mentions() == null) return "mention_rules contains a rule with null mentions";
+                if (rule.mentions().isEmpty()) return "mention_rules contains a rule with empty mentions";
                 if (rule.styles() == null) return "mention_rules contains a rule with null styles";
             }
         }
