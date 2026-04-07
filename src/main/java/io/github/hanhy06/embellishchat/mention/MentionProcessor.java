@@ -19,7 +19,6 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.time.Instant;
 import java.util.*;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 
 public class MentionProcessor implements ConfigListener {
