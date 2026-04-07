@@ -19,26 +19,26 @@
 
 ---
 
-Embellish Chat modernizes your Minecraft server’s chat experience with a fully server-side design. It introduces Markdown-style formatting, interactive message events, and a robust mention system—no client installation required. It also supports integration with LuckPerms, Styled Nickname, and various other mods.
+Embellish Chat enhances Minecraft chat with item and inventory showcases, built-in icons, mentions, and rich formatting. Players can show off gear, open showcased inventories, and use more expressive chat features without requiring the mod on their client.
 
 ---
 
 ## ✨ Key Features
 
-* **Rich Text Formatting**
-  * Express yourself with **bold**, *italic*, __underline__, ~~strikethrough~~, ||obfuscation||, and custom fonts.
-  * Supports advanced color options including Hex codes, Gradients, Presets, and Rainbow patterns.
-  * Works consistently across public chat, private messages (DMs), and commands.
-* **Advanced Mention System**
-  * Ping specific players, teams, `@everyone`, or `@here` with visual and auditory notifications.
-  * Mention text automatically adapts to the target's color (e.g., team color).
-  * Supports detailed targeting like LuckPerms groups (`@group`) and specific worlds (`@world`).
-* **Instantly show off your gear!**
-  * Type `[i]` to display the item you’re holding, or `[inv]` to display your entire inventory.
-  * Other players can hover over the link to view detailed item tooltips.
-* **Chat Utilities**
-  * **Metadata:** Hover over any message to see the exact timestamp.
-  * **Quick Copy:** Click on any message to copy the timestamp together with the message content to your clipboard.
+* **Item and Inventory Showcases**
+  Showcase your held item, inventory, or ender chest directly in chat with `[i]`, `[inv]`, and `[end]`, allowing other players to inspect them interactively.
+
+* **Built-in Chat Icons**
+  Use `:name:` syntax to insert built-in Minecraft-based icons into messages.
+
+* **Rich Chat Formatting**
+  Style messages with bold, italic, underline, strikethrough, custom fonts, hex colors, gradients, presets, and rainbow effects.
+
+* **Smart Mention System**
+  Mention players, `@here`, `@world`, or `@everyone` with clear notifications. LuckPerms group mentions are also supported.
+
+* **Useful Chat Utilities**
+  Hover messages to see exact timestamps and click them to copy their content with the timestamp.
 
 ---
 
@@ -265,7 +265,7 @@ The configuration file is located at `config/embellish-chat/presets.json`.
 * **`atlas`**: This is used in the atlas presets for styling.
 * **`whitelist`**: This is used in the `URL` style type. If left empty, all URLs are allowed.
 * **`prefix`**: Uses permission nodes as its keys, and each value is a string parsed as a text component with placeholder tags.
- 
+
 ---
 
 ## 📜 Compatibility

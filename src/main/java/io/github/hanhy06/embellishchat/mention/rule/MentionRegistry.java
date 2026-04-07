@@ -5,6 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.mention.data.Target;
+import io.github.hanhy06.embellishchat.message.MessageProcessor;
 import io.github.hanhy06.embellishchat.styling.util.ColorUtil;
 import io.github.hanhy06.embellishchat.util.LuckPermsUtil;
 import io.github.hanhy06.embellishchat.util.NickNamesUtil;
@@ -67,6 +68,16 @@ public class MentionRegistry {
 
     public Function<MentionParameter, Target> get(MentionType key){
         return registries.get(key);
+    }
+
+    public Target apply(MentionType mentionType,MentionParameter parameter){
+        Function<MentionParameter, Target> function = registries.get(mentionType);
+        try {
+            return function.apply(parameter);
+        } catch (RuntimeException e) {
+            EmbellishChat.LOGGER.warn("Failed to apply {} mention: {}", mentionType, parameter.option());
+            return Target.of(new HashSet<>(),null);
+        }
     }
 
     private Target EVERYONE(MentionParameter parameter){

@@ -52,7 +52,7 @@ public class StyleRegistry {
     private final HashMap<String, AtlasSprite> atlas;
     private final HashSet<String> whitelist;
 
-    private final EnumMap<StyleType, Function<StyleParameter, MutableComponent>> registers;
+    private final EnumMap<StyleType, Function<StyleParameter, MutableComponent>> registries;
     private final Pattern HEX_CODE = Pattern.compile("#[A-Fa-f0-9]{6}");
     private final DiscordUtil messenger;
 
@@ -62,7 +62,7 @@ public class StyleRegistry {
         this.color = config.color();
         this.atlas = config.atlas();
         this.whitelist = config.whitelist();
-        this.registers = new EnumMap<>(Map.ofEntries(
+        this.registries = new EnumMap<>(Map.ofEntries(
                 entry(StyleType.COLOR_HEX, register(StyleType.COLOR_HEX, this::COLOR_HEX)),
                 entry(StyleType.COLOR_RAINBOW, register(StyleType.COLOR_RAINBOW, this::COLOR_RAINBOW)),
                 entry(StyleType.COLOR_GRADIENT, register(StyleType.COLOR_GRADIENT, this::COLOR_GRADIENT)),
@@ -109,7 +109,7 @@ public class StyleRegistry {
     }
 
     public MutableComponent apply(StyleType styleType,StyleParameter parameter){
-        Function<StyleParameter, MutableComponent> function = registers.get(styleType);
+        Function<StyleParameter, MutableComponent> function = registries.get(styleType);
         try {
             return function.apply(parameter);
         } catch (MessageProcessor.MessageBlockedException block) {
