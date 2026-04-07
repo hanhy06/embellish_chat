@@ -29,7 +29,7 @@ public class InventoryScreenHandler extends ChestMenu {
 
             if (player instanceof ServerPlayer serverPlayer) {
                 if (stack.getItem() == Items.WRITTEN_BOOK) openWrittenBook(stack,serverPlayer);
-                else if (!stack.has(DataComponents.MAP_ID)) openMapImage(stack,serverPlayer);
+                else if (stack.has(DataComponents.MAP_ID)) openMapImage(stack,serverPlayer);
             }
 
             return;

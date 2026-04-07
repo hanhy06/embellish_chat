@@ -3,7 +3,9 @@ package io.github.hanhy06.embellishchat.config;
 import com.google.gson.*;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.adapter.*;
+import io.github.hanhy06.embellishchat.mention.rule.MentionAction;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
+import io.github.hanhy06.embellishchat.styling.rule.StyleAction;
 import io.github.hanhy06.embellishchat.styling.rule.StyleRule;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
@@ -157,6 +159,9 @@ public class ConfigManager {
                     return "style rule patterns must have at least two capture groups";
                 }
                 if (rule.styles() == null) return "style_rules contains a rule with null styles";
+
+                String validation = validateStyleActions(rule.styles(), "style_rules");
+                if (validation != null) return validation;
             }
         }
 
@@ -171,11 +176,37 @@ public class ConfigManager {
                 if (rule.mentions() == null) return "mention_rules contains a rule with null mentions";
                 if (rule.mentions().isEmpty()) return "mention_rules contains a rule with empty mentions";
                 if (rule.styles() == null) return "mention_rules contains a rule with null styles";
+
+                String validation = validateMentionActions(rule.mentions());
+                if (validation != null) return validation;
+
+                validation = validateStyleActions(rule.styles(), "mention_rules");
+                if (validation != null) return validation;
             }
         }
 
         for (Map.Entry<String, MutableComponent> entry : config.prefix().entrySet()) {
             if (entry.getValue() == null) return "prefix contains a null value";
+        }
+
+        return null;
+    }
+
+    private String validateStyleActions(List<StyleAction> actions, String type) {
+        for (StyleAction action : actions) {
+            if (action == null) return type + " contains a null style action";
+            if (action.styleType() == null) return type + " contains a style action with null style type";
+            if (action.preset() == null) return type + " contains a style action with null preset";
+        }
+
+        return null;
+    }
+
+    private String validateMentionActions(List<MentionAction> actions) {
+        for (MentionAction action : actions) {
+            if (action == null) return "mention_rules contains a null mention action";
+            if (action.mentionType() == null) return "mention_rules contains a mention action with null mention type";
+            if (action.preset() == null) return "mention_rules contains a mention action with null preset";
         }
 
         return null;

@@ -10,7 +10,7 @@ public class OptionUtil {
     }
 
     public static List<String> split(String option, String  delimiter){
-        if (option != null) return List.of(option.split(delimiter));
+        if (option != null) return List.of(option.split(delimiter,-1));
         return List.of("");
     }
 }

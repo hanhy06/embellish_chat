@@ -63,53 +63,72 @@ public class StyleRegistry {
         this.atlas = config.atlas();
         this.whitelist = config.whitelist();
         this.registers = new EnumMap<>(Map.ofEntries(
-                entry(StyleType.COLOR_HEX, this::COLOR_HEX),
-                entry(StyleType.COLOR_RAINBOW, this::COLOR_RAINBOW),
-                entry(StyleType.COLOR_GRADIENT, this::COLOR_GRADIENT),
-                entry(StyleType.COLOR_PRESET, this::COLOR_PRESET),
-                entry(StyleType.COLOR_SHADOW, this::COLOR_SHADOW),
-                entry(StyleType.COLOR_TEAM, this::COLOR_TEAM),
+                entry(StyleType.COLOR_HEX, register(StyleType.COLOR_HEX, this::COLOR_HEX)),
+                entry(StyleType.COLOR_RAINBOW, register(StyleType.COLOR_RAINBOW, this::COLOR_RAINBOW)),
+                entry(StyleType.COLOR_GRADIENT, register(StyleType.COLOR_GRADIENT, this::COLOR_GRADIENT)),
+                entry(StyleType.COLOR_PRESET, register(StyleType.COLOR_PRESET, this::COLOR_PRESET)),
+                entry(StyleType.COLOR_SHADOW, register(StyleType.COLOR_SHADOW, this::COLOR_SHADOW)),
+                entry(StyleType.COLOR_TEAM, register(StyleType.COLOR_TEAM, this::COLOR_TEAM)),
 
-                entry(StyleType.BOLD, this::BOLD),
-                entry(StyleType.ITALIC, this::ITALIC),
-                entry(StyleType.UNDERLINE, this::UNDERLINE),
-                entry(StyleType.STRIKETHROUGH, this::STRIKETHROUGH),
-                entry(StyleType.OBFUSCATED, this::OBFUSCATED),
-                entry(StyleType.FONT, this::FONT),
-                entry(StyleType.CLEAR, this::CLEAR),
+                entry(StyleType.BOLD, register(StyleType.BOLD, this::BOLD)),
+                entry(StyleType.ITALIC, register(StyleType.ITALIC, this::ITALIC)),
+                entry(StyleType.UNDERLINE, register(StyleType.UNDERLINE, this::UNDERLINE)),
+                entry(StyleType.STRIKETHROUGH, register(StyleType.STRIKETHROUGH, this::STRIKETHROUGH)),
+                entry(StyleType.OBFUSCATED, register(StyleType.OBFUSCATED, this::OBFUSCATED)),
+                entry(StyleType.FONT, register(StyleType.FONT, this::FONT)),
+                entry(StyleType.CLEAR, register(StyleType.CLEAR, this::CLEAR)),
 
-                entry(StyleType.CLICK_COMMAND_RUN, this::CLICK_COMMAND_RUN),
-                entry(StyleType.CLICK_COMMAND_SUGGEST, this::CLICK_COMMAND_SUGGEST),
-                entry(StyleType.CLICK_COPY, this::CLICK_COPY),
-                entry(StyleType.HOVER_TEXT, this::HOVER_TEXT),
-                entry(StyleType.HOVER_ITEM, this::HOVER_ITEM),
-                entry(StyleType.URL, this::URL),
-                entry(StyleType.METADATA, this::METADATA),
+                entry(StyleType.CLICK_COMMAND_RUN, register(StyleType.CLICK_COMMAND_RUN, this::CLICK_COMMAND_RUN)),
+                entry(StyleType.CLICK_COMMAND_SUGGEST, register(StyleType.CLICK_COMMAND_SUGGEST, this::CLICK_COMMAND_SUGGEST)),
+                entry(StyleType.CLICK_COPY, register(StyleType.CLICK_COPY, this::CLICK_COPY)),
+                entry(StyleType.HOVER_TEXT, register(StyleType.HOVER_TEXT, this::HOVER_TEXT)),
+                entry(StyleType.HOVER_ITEM, register(StyleType.HOVER_ITEM, this::HOVER_ITEM)),
+                entry(StyleType.URL, register(StyleType.URL, this::URL)),
+                entry(StyleType.METADATA, register(StyleType.METADATA, this::METADATA)),
 
-                entry(StyleType.UPPER, this::UPPER),
-                entry(StyleType.LOWER, this::LOWER),
-                entry(StyleType.CAPITALIZE, this::CAPITALIZE),
-                entry(StyleType.REPLACE, this::REPLACE),
-                entry(StyleType.MASK, this::MASK),
-                entry(StyleType.PREFIX, this::PREFIX),
-                entry(StyleType.SUFFIX, this::SUFFIX),
+                entry(StyleType.UPPER, register(StyleType.UPPER, this::UPPER)),
+                entry(StyleType.LOWER, register(StyleType.LOWER, this::LOWER)),
+                entry(StyleType.CAPITALIZE, register(StyleType.CAPITALIZE, this::CAPITALIZE)),
+                entry(StyleType.REPLACE, register(StyleType.REPLACE, this::REPLACE)),
+                entry(StyleType.MASK, register(StyleType.MASK, this::MASK)),
+                entry(StyleType.PREFIX, register(StyleType.PREFIX, this::PREFIX)),
+                entry(StyleType.SUFFIX, register(StyleType.SUFFIX, this::SUFFIX)),
 
-                entry(StyleType.SHOW_ITEM, this::SHOW_ITEM),
-                entry(StyleType.SHOW_INVENTORY, this::SHOW_INVENTORY),
-                entry(StyleType.SHOW_ENDER_CHEST, this::SHOW_ENDER_CHEST),
-                entry(StyleType.ATLAS_PRESET, this::ATLAS_PRESET),
-                entry(StyleType.JSON, this::JSON),
-                entry(StyleType.DISCORD_JSON, this::DISCORD_JSON),
-                entry(StyleType.COMMAND_RUN, this::COMMAND_RUN),
-                entry(StyleType.LOG, this::LOG),
-                entry(StyleType.BUBBLE, this::BUBBLE),
-                entry(StyleType.BLOCK, this::BLOCK)
+                entry(StyleType.SHOW_ITEM, register(StyleType.SHOW_ITEM, this::SHOW_ITEM)),
+                entry(StyleType.SHOW_INVENTORY, register(StyleType.SHOW_INVENTORY, this::SHOW_INVENTORY)),
+                entry(StyleType.SHOW_ENDER_CHEST, register(StyleType.SHOW_ENDER_CHEST, this::SHOW_ENDER_CHEST)),
+                entry(StyleType.ATLAS_PRESET, register(StyleType.ATLAS_PRESET, this::ATLAS_PRESET)),
+                entry(StyleType.JSON, register(StyleType.JSON, this::JSON)),
+                entry(StyleType.DISCORD_JSON, register(StyleType.DISCORD_JSON, this::DISCORD_JSON)),
+                entry(StyleType.COMMAND_RUN, register(StyleType.COMMAND_RUN, this::COMMAND_RUN)),
+                entry(StyleType.LOG, register(StyleType.LOG, this::LOG)),
+                entry(StyleType.BUBBLE, register(StyleType.BUBBLE, this::BUBBLE)),
+                entry(StyleType.BLOCK, register(StyleType.BLOCK, this::BLOCK))
         ));
         this.messenger = new DiscordUtil();
     }
 
     public Function<StyleParameter, MutableComponent> get(StyleType styleType) {
         return registers.get(styleType);
+    }
+
+    private Function<StyleParameter, MutableComponent> register(StyleType styleType, Function<StyleParameter, MutableComponent> function) {
+        return parameter -> {
+            try {
+                return function.apply(parameter);
+            } catch (RuntimeException e) {
+                EmbellishChat.LOGGER.warn("Failed to apply {} style: {}", styleType, parameter.getString());
+                return parameter.segment();
+            }
+        };
+    }
+
+    private Identifier parseIdentifier(String value, String type) {
+        Identifier identifier = Identifier.tryParse(value);
+        if (identifier == null) {
+            EmbellishChat.LOGGER.warn("Invalid {} identifier: {}", type, value);
+        }
+        return identifier;
     }
 
     public MutableComponent COLOR_HEX(StyleParameter parameter) {
@@ -215,7 +234,7 @@ public class StyleRegistry {
         if (team == null) return parameter.segment();
 
         ChatFormatting formatting = team.getColor();
-        if (formatting != null && formatting.isColor()){
+        if (formatting.isColor()){
             return parameter.segment().withStyle(Style.EMPTY.withColor(formatting));
         }
 
@@ -244,7 +263,10 @@ public class StyleRegistry {
     }
 
     public MutableComponent FONT(StyleParameter parameter) {
-        FontDescription font = new FontDescription.Resource(Identifier.tryParse(parameter.getString()));
+        Identifier fontId = parseIdentifier(parameter.getString(), "font");
+        if (fontId == null) return parameter.segment();
+
+        FontDescription font = new FontDescription.Resource(fontId);
         return parameter.segment().withStyle(Style.EMPTY.withFont(font));
     }
 
@@ -371,20 +393,29 @@ public class StyleRegistry {
         ItemStack item = player.getMainHandItem();
         if (item.isEmpty()) return parameter.segment();
 
-        AtlasSprite atlas;
+        String type = (item.getItem() instanceof BlockItem) ? "block" : "item";
+        Identifier modelId = item.get(DataComponents.ITEM_MODEL);
+        if (modelId==null) return parameter.segment();
+
+        Identifier atlasId = Identifier.fromNamespaceAndPath(modelId.getNamespace(),type+"s");
+        Identifier spriteId = Identifier.fromNamespaceAndPath(modelId.getNamespace(),String.format("%s/%s",type,modelId.getPath()));
+
         if (!parameter.getString().isBlank()){
             List<String> segments = OptionUtil.split(parameter.getString().trim(),";");
-            atlas = new AtlasSprite(Identifier.parse(segments.getFirst()),Identifier.parse(segments.getLast()));
-        }else {
-            String type = (item.getItem() instanceof BlockItem) ? "block" : "item";
-            Identifier modelId = item.get(DataComponents.ITEM_MODEL);
-            if (modelId==null) return parameter.segment();
+            String atlasOption = segments.getFirst();
+            String spriteOption = segments.size() > 1 ? segments.get(1) : "";
 
-            atlas = new AtlasSprite(
-                    Identifier.fromNamespaceAndPath(modelId.getNamespace(),type+"s"),
-                    Identifier.fromNamespaceAndPath(modelId.getNamespace(),"%s/%s".formatted(type,modelId.getPath()))
-            );
+            if (!atlasOption.isBlank()) {
+                Identifier atlasIdentifier = parseIdentifier(atlasOption, "atlas");
+                if (atlasIdentifier != null) atlasId = atlasIdentifier;
+            }
+            if (!spriteOption.isBlank()) {
+                Identifier spriteIdentifier = parseIdentifier(spriteOption, "sprite");
+                if (spriteIdentifier != null) spriteId = spriteIdentifier;
+            }
         }
+
+        AtlasSprite atlas = new AtlasSprite(atlasId,spriteId);
 
         MutableComponent text = Component.object(atlas);
         HoverEvent hoverEvent = new HoverEvent.ShowItem(ItemStackTemplate.fromNonEmptyStack(item));
