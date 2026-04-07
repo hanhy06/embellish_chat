@@ -33,6 +33,7 @@ import java.util.regex.PatternSyntaxException;
 public class ConfigManager {
     public static ConfigManager INSTANCE;
     public final Object LOCK_KEY = new Object();
+    private final Object SAVE_LOCK_KEY = new Object();
 
     private static final String CONFIG_FILE_DIR = EmbellishChat.MOD_ID;
 
@@ -43,6 +44,7 @@ public class ConfigManager {
 
     private final Path configDirPath;
     private Config config = Config.createDefault();
+    private CompletableFuture<Void> saveTask = CompletableFuture.completedFuture(null);
 
     private final List<ConfigListener> listeners = new ArrayList<>();
 
@@ -228,13 +230,15 @@ public class ConfigManager {
     }
 
     public void saveAsync() {
-        CompletableFuture.runAsync(() -> {
-            try {
-                writeConfig();
-            } catch (Exception e) {
-                EmbellishChat.LOGGER.error("Failed to save config async", e);
-            }
-        });
+        synchronized (SAVE_LOCK_KEY) {
+            saveTask = saveTask.thenRunAsync(() -> {
+                try {
+                    writeConfig();
+                } catch (Exception e) {
+                    EmbellishChat.LOGGER.error("Failed to save config async", e);
+                }
+            });
+        }
     }
 
     private void writeConfig(BiConsumer<String,JsonObject> writer) {
