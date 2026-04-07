@@ -162,8 +162,11 @@ public class ConfigManager {
                 }
                 if (rule.styles() == null) return "style_rules contains a rule with null styles";
 
-                String validation = validateStyleActions(rule.styles(), "style_rules");
-                if (validation != null) return validation;
+                for (StyleAction action : rule.styles()) {
+                    if (action == null) return "style_rules contains a null style action";
+                    if (action.styleType() == null) return "style_rules contains a style action with null style type";
+                    if (action.preset() == null) return "style_rules contains a style action with null preset";
+                }
             }
         }
 
@@ -179,36 +182,22 @@ public class ConfigManager {
                 if (rule.mentions().isEmpty()) return "mention_rules contains a rule with empty mentions";
                 if (rule.styles() == null) return "mention_rules contains a rule with null styles";
 
-                String validation = validateMentionActions(rule.mentions());
-                if (validation != null) return validation;
+                for (MentionAction action : rule.mentions()) {
+                    if (action == null) return "mention_rules contains a null mention action";
+                    if (action.mentionType() == null) return "mention_rules contains a mention action with null mention type";
+                    if (action.preset() == null) return "mention_rules contains a mention action with null preset";
+                }
 
-                validation = validateStyleActions(rule.styles(), "mention_rules");
-                if (validation != null) return validation;
+                for (StyleAction action : rule.styles()) {
+                    if (action == null) return "mention_rules contains a null style action";
+                    if (action.styleType() == null) return "mention_rules contains a style action with null style type";
+                    if (action.preset() == null) return "mention_rules contains a style action with null preset";
+                }
             }
         }
 
         for (Map.Entry<String, MutableComponent> entry : config.prefix().entrySet()) {
             if (entry.getValue() == null) return "prefix contains a null value";
-        }
-
-        return null;
-    }
-
-    private String validateStyleActions(List<StyleAction> actions, String type) {
-        for (StyleAction action : actions) {
-            if (action == null) return type + " contains a null style action";
-            if (action.styleType() == null) return type + " contains a style action with null style type";
-            if (action.preset() == null) return type + " contains a style action with null preset";
-        }
-
-        return null;
-    }
-
-    private String validateMentionActions(List<MentionAction> actions) {
-        for (MentionAction action : actions) {
-            if (action == null) return "mention_rules contains a null mention action";
-            if (action.mentionType() == null) return "mention_rules contains a mention action with null mention type";
-            if (action.preset() == null) return "mention_rules contains a mention action with null preset";
         }
 
         return null;
