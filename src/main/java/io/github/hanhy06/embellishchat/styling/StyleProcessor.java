@@ -104,14 +104,8 @@ public class StyleProcessor implements ConfigListener {
 
         for (int i=0;i<actions.size();i++){
             StyleAction action = actions.get(i);
-
-            Function<StyleParameter, MutableComponent> function = registry.get(action.styleType());
-            String selectOption = OptionUtil.selectOption(
-                    action.preset(),
-                    options.size() > i ? options.get(i):""
-            );
-
-            result = function.apply(StyleParameter.of(result,selectOption,player));
+            String selectOption = OptionUtil.selectOption(action.preset(), options,i);
+            result = registry.apply(action.styleType(),StyleParameter.of(result,selectOption,player));
         }
 
         return result;

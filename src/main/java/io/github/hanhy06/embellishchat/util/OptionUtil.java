@@ -3,6 +3,12 @@ package io.github.hanhy06.embellishchat.util;
 import java.util.List;
 
 public class OptionUtil {
+    public static String selectOption(String preset,List<String> option,int i){
+        String result = preset;
+        if (result.isEmpty() && option.size() > i) result = option.get(i);
+        return result;
+    }
+
     public static String selectOption(String preset, String option){
         String result = preset;
         if (result.isEmpty()) result = option;

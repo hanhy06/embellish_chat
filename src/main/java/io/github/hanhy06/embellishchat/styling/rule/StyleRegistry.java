@@ -108,19 +108,16 @@ public class StyleRegistry {
         this.messenger = new DiscordUtil();
     }
 
-    public Function<StyleParameter, MutableComponent> get(StyleType styleType) {
-        return registers.get(styleType);
-    }
-
-    private Function<StyleParameter, MutableComponent> register(StyleType styleType, Function<StyleParameter, MutableComponent> function) {
-        return parameter -> {
-            try {
-                return function.apply(parameter);
-            } catch (RuntimeException e) {
-                EmbellishChat.LOGGER.warn("Failed to apply {} style: {}", styleType, parameter.getString());
-                return parameter.segment();
-            }
-        };
+    public MutableComponent apply(StyleType styleType,StyleParameter parameter){
+        Function<StyleParameter, MutableComponent> function = registers.get(styleType);
+        try {
+            return function.apply(parameter);
+        } catch (MessageProcessor.MessageBlockedException block) {
+            throw block;
+        } catch (RuntimeException e) {
+            EmbellishChat.LOGGER.warn("Failed to apply {} style: {}", styleType, parameter.getString());
+            return parameter.segment();
+        }
     }
 
     private Identifier parseIdentifier(String value, String type) {
@@ -507,5 +504,19 @@ public class StyleRegistry {
 
     public MutableComponent BLOCK(StyleParameter parameter) {
         throw new MessageProcessor.MessageBlockedException();
+    }
+
+    private Function<StyleParameter, MutableComponent> register(
+            StyleType styleType,
+            Function<StyleParameter, MutableComponent> function
+    ) {
+        return parameter -> {
+            try {
+                return function.apply(parameter);
+            } catch (RuntimeException e) {
+                EmbellishChat.LOGGER.warn("Failed to apply {} style: {}", styleType, parameter.getString(), e);
+                return parameter.segment();
+            }
+        };
     }
 }
