@@ -28,8 +28,8 @@ public class InventoryScreenHandler extends ChestMenu {
             ItemStack stack = this.getSlot(slotIndex).getItem();
 
             if (player instanceof ServerPlayer serverPlayer) {
-                openWrittenBook(stack,serverPlayer);
-                openMapImage(stack,serverPlayer);
+                if (stack.getItem() == Items.WRITTEN_BOOK) openWrittenBook(stack,serverPlayer);
+                else if (!stack.has(DataComponents.MAP_ID)) openMapImage(stack,serverPlayer);
             }
 
             return;
@@ -39,15 +39,24 @@ public class InventoryScreenHandler extends ChestMenu {
         super.clicked(slotIndex, button, actionType, player);
     }
 
+    @Override
+    public @NonNull ItemStack quickMoveStack(@NonNull Player player, int slot) {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public boolean stillValid(@NonNull Player player) {
+        return true;
+    }
+
+
     private static void openWrittenBook(ItemStack stack,ServerPlayer player){
-        if (stack.getItem() != Items.WRITTEN_BOOK) return;
+        player.closeContainer();
 
         int selectedHotbarSlot = player.getInventory().getSelectedSlot();
         ItemStack original = player.getInventory().getItem(selectedHotbarSlot).copy();
         int playerInventorySlot = InventoryMenu.USE_ROW_SLOT_START + selectedHotbarSlot;
         ItemStack book = stack.copy();
-
-        player.closeContainer();
 
         player.connection.send(new ClientboundContainerSetSlotPacket(
                 InventoryMenu.CONTAINER_ID,
@@ -65,8 +74,6 @@ public class InventoryScreenHandler extends ChestMenu {
     }
 
     private static void openMapImage(ItemStack stack, ServerPlayer player) {
-        if (!stack.has(DataComponents.MAP_ID)) return;
-
         player.closeContainer();
 
         player.openMenu(new SimpleMenuProvider(
@@ -82,16 +89,5 @@ public class InventoryScreenHandler extends ChestMenu {
                 },
                 stack.getDisplayName()
         ));
-    }
-
-
-    @Override
-    public @NonNull ItemStack quickMoveStack(@NonNull Player player, int slot) {
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public boolean stillValid(@NonNull Player player) {
-        return true;
     }
 }
