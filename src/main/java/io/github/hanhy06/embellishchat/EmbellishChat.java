@@ -44,12 +44,12 @@ public class EmbellishChat implements ModInitializer {
 
         PlaceHolderUtil.registerPlaceholder();
 
-        StyleProcessor styler = new StyleProcessor();
+        StyleProcessor style = new StyleProcessor();
         MentionProcessor mention = new MentionProcessor();
-        MessageProcessor message = new MessageProcessor(mention,styler, server.getPlayerList());
+        MessageProcessor message = new MessageProcessor(mention,style,server.getPlayerList());
         CommandHandler command = new CommandHandler();
 
-        manager.addListener(styler);
+        manager.addListener(style);
         manager.addListener(mention);
         manager.addListener(message);
         manager.addListener(command);
