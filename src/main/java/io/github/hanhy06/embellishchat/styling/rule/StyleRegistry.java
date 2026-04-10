@@ -120,14 +120,6 @@ public class StyleRegistry {
         }
     }
 
-    private Identifier parseIdentifier(String value, String type) {
-        Identifier identifier = Identifier.tryParse(value);
-        if (identifier == null) {
-            EmbellishChat.LOGGER.warn("Invalid {} identifier: {}", type, value);
-        }
-        return identifier;
-    }
-
     public MutableComponent COLOR_HEX(StyleParameter parameter) {
         int color = Color.decode(parameter.getString()).getRGB();
         return parameter.segment().withStyle(Style.EMPTY.withColor(color));
@@ -234,7 +226,7 @@ public class StyleRegistry {
     }
 
     public MutableComponent FONT(StyleParameter parameter) {
-        Identifier fontId = parseIdentifier(parameter.getString(), "font");
+        Identifier fontId = Identifier.tryParse(parameter.getString());
         if (fontId == null) return parameter.segment();
 
         FontDescription font = new FontDescription.Resource(fontId);
@@ -373,11 +365,11 @@ public class StyleRegistry {
             String spriteOption = segments.size() > 1 ? segments.get(1) : "";
 
             if (!atlasOption.isBlank()) {
-                Identifier atlasIdentifier = parseIdentifier(atlasOption, "atlas");
+                Identifier atlasIdentifier = Identifier.tryParse(atlasOption);
                 if (atlasIdentifier != null) atlasId = atlasIdentifier;
             }
             if (!spriteOption.isBlank()) {
-                Identifier spriteIdentifier = parseIdentifier(spriteOption, "sprite");
+                Identifier spriteIdentifier = Identifier.tryParse(spriteOption);
                 if (spriteIdentifier != null) spriteId = spriteIdentifier;
             }
         }
