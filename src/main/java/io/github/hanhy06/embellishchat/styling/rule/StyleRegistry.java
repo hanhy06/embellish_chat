@@ -130,7 +130,7 @@ public class StyleRegistry {
         Runs runs = flatten(parameter.segment());
         String string = runs.full();
         int length = string.length();
-        float saturation = Float.parseFloat(parameter.getString());
+        float saturation = NumberUtils.toFloat(parameter.getString(),0.7f);
 
         MutableComponent result = Component.empty();
         for (int i = 0; i < length; i++) {
