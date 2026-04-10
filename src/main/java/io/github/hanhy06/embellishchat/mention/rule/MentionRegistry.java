@@ -13,11 +13,15 @@ import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.commands.arguments.selector.EntitySelectorParser;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -143,15 +147,15 @@ public class MentionRegistry {
     private Target WORLD(MentionParameter parameter){
         String worldName = parameter.option();
         MinecraftServer server = EmbellishChat.SERVER;
-        ServerLevel targetLevel = null;
+        Identifier worldId = Identifier.tryParse(worldName);
 
-        for (ServerLevel level : server.getAllLevels()) {
-            String dimensionId = level.dimension().identifier().toString();
-            if (dimensionId.equals(worldName) || level.dimension().identifier().getPath().equals(worldName)) {
-                targetLevel = level;
-                break;
-            }
+        if (worldId == null) {
+            EmbellishChat.LOGGER.info("World ID {} is invalid. @world mention ignored.", worldName);
+            return Target.of(new HashSet<>(), null);
         }
+
+        ResourceKey<Level> worldKey = ResourceKey.create(Registries.DIMENSION, worldId);
+        ServerLevel targetLevel = server.getLevel(worldKey);
 
         if (targetLevel != null) {
             HashSet<ServerPlayer> players = new HashSet<>(PlayerLookup.level(targetLevel));
