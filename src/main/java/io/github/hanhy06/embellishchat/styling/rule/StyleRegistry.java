@@ -2,7 +2,6 @@ package io.github.hanhy06.embellishchat.styling.rule;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.JsonOps;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
@@ -63,47 +62,47 @@ public class StyleRegistry {
         this.atlas = config.atlas();
         this.whitelist = config.whitelist();
         this.registries = new EnumMap<>(Map.ofEntries(
-                entry(StyleType.COLOR_HEX, register(StyleType.COLOR_HEX, this::COLOR_HEX)),
-                entry(StyleType.COLOR_RAINBOW, register(StyleType.COLOR_RAINBOW, this::COLOR_RAINBOW)),
-                entry(StyleType.COLOR_GRADIENT, register(StyleType.COLOR_GRADIENT, this::COLOR_GRADIENT)),
-                entry(StyleType.COLOR_PRESET, register(StyleType.COLOR_PRESET, this::COLOR_PRESET)),
-                entry(StyleType.COLOR_SHADOW, register(StyleType.COLOR_SHADOW, this::COLOR_SHADOW)),
-                entry(StyleType.COLOR_TEAM, register(StyleType.COLOR_TEAM, this::COLOR_TEAM)),
+                entry(StyleType.COLOR_HEX, this::COLOR_HEX),
+                entry(StyleType.COLOR_RAINBOW, this::COLOR_RAINBOW),
+                entry(StyleType.COLOR_GRADIENT, this::COLOR_GRADIENT),
+                entry(StyleType.COLOR_PRESET, this::COLOR_PRESET),
+                entry(StyleType.COLOR_SHADOW, this::COLOR_SHADOW),
+                entry(StyleType.COLOR_TEAM, this::COLOR_TEAM),
 
-                entry(StyleType.BOLD, register(StyleType.BOLD, this::BOLD)),
-                entry(StyleType.ITALIC, register(StyleType.ITALIC, this::ITALIC)),
-                entry(StyleType.UNDERLINE, register(StyleType.UNDERLINE, this::UNDERLINE)),
-                entry(StyleType.STRIKETHROUGH, register(StyleType.STRIKETHROUGH, this::STRIKETHROUGH)),
-                entry(StyleType.OBFUSCATED, register(StyleType.OBFUSCATED, this::OBFUSCATED)),
-                entry(StyleType.FONT, register(StyleType.FONT, this::FONT)),
-                entry(StyleType.CLEAR, register(StyleType.CLEAR, this::CLEAR)),
+                entry(StyleType.BOLD, this::BOLD),
+                entry(StyleType.ITALIC, this::ITALIC),
+                entry(StyleType.UNDERLINE, this::UNDERLINE),
+                entry(StyleType.STRIKETHROUGH, this::STRIKETHROUGH),
+                entry(StyleType.OBFUSCATED, this::OBFUSCATED),
+                entry(StyleType.FONT, this::FONT),
+                entry(StyleType.CLEAR, this::CLEAR),
 
-                entry(StyleType.CLICK_COMMAND_RUN, register(StyleType.CLICK_COMMAND_RUN, this::CLICK_COMMAND_RUN)),
-                entry(StyleType.CLICK_COMMAND_SUGGEST, register(StyleType.CLICK_COMMAND_SUGGEST, this::CLICK_COMMAND_SUGGEST)),
-                entry(StyleType.CLICK_COPY, register(StyleType.CLICK_COPY, this::CLICK_COPY)),
-                entry(StyleType.HOVER_TEXT, register(StyleType.HOVER_TEXT, this::HOVER_TEXT)),
-                entry(StyleType.HOVER_ITEM, register(StyleType.HOVER_ITEM, this::HOVER_ITEM)),
-                entry(StyleType.URL, register(StyleType.URL, this::URL)),
-                entry(StyleType.METADATA, register(StyleType.METADATA, this::METADATA)),
+                entry(StyleType.CLICK_COMMAND_RUN, this::CLICK_COMMAND_RUN),
+                entry(StyleType.CLICK_COMMAND_SUGGEST, this::CLICK_COMMAND_SUGGEST),
+                entry(StyleType.CLICK_COPY, this::CLICK_COPY),
+                entry(StyleType.HOVER_TEXT, this::HOVER_TEXT),
+                entry(StyleType.HOVER_ITEM, this::HOVER_ITEM),
+                entry(StyleType.URL, this::URL),
+                entry(StyleType.METADATA, this::METADATA),
 
-                entry(StyleType.UPPER, register(StyleType.UPPER, this::UPPER)),
-                entry(StyleType.LOWER, register(StyleType.LOWER, this::LOWER)),
-                entry(StyleType.CAPITALIZE, register(StyleType.CAPITALIZE, this::CAPITALIZE)),
-                entry(StyleType.REPLACE, register(StyleType.REPLACE, this::REPLACE)),
-                entry(StyleType.MASK, register(StyleType.MASK, this::MASK)),
-                entry(StyleType.PREFIX, register(StyleType.PREFIX, this::PREFIX)),
-                entry(StyleType.SUFFIX, register(StyleType.SUFFIX, this::SUFFIX)),
+                entry(StyleType.UPPER, this::UPPER),
+                entry(StyleType.LOWER, this::LOWER),
+                entry(StyleType.CAPITALIZE, this::CAPITALIZE),
+                entry(StyleType.REPLACE, this::REPLACE),
+                entry(StyleType.MASK, this::MASK),
+                entry(StyleType.PREFIX, this::PREFIX),
+                entry(StyleType.SUFFIX, this::SUFFIX),
 
-                entry(StyleType.SHOW_ITEM, register(StyleType.SHOW_ITEM, this::SHOW_ITEM)),
-                entry(StyleType.SHOW_INVENTORY, register(StyleType.SHOW_INVENTORY, this::SHOW_INVENTORY)),
-                entry(StyleType.SHOW_ENDER_CHEST, register(StyleType.SHOW_ENDER_CHEST, this::SHOW_ENDER_CHEST)),
-                entry(StyleType.ATLAS_PRESET, register(StyleType.ATLAS_PRESET, this::ATLAS_PRESET)),
-                entry(StyleType.JSON, register(StyleType.JSON, this::JSON)),
-                entry(StyleType.DISCORD_JSON, register(StyleType.DISCORD_JSON, this::DISCORD_JSON)),
-                entry(StyleType.COMMAND_RUN, register(StyleType.COMMAND_RUN, this::COMMAND_RUN)),
-                entry(StyleType.LOG, register(StyleType.LOG, this::LOG)),
-                entry(StyleType.BUBBLE, register(StyleType.BUBBLE, this::BUBBLE)),
-                entry(StyleType.BLOCK, register(StyleType.BLOCK, this::BLOCK))
+                entry(StyleType.SHOW_ITEM, this::SHOW_ITEM),
+                entry(StyleType.SHOW_INVENTORY, this::SHOW_INVENTORY),
+                entry(StyleType.SHOW_ENDER_CHEST, this::SHOW_ENDER_CHEST),
+                entry(StyleType.ATLAS_PRESET, this::ATLAS_PRESET),
+                entry(StyleType.JSON, this::JSON),
+                entry(StyleType.DISCORD_JSON, this::DISCORD_JSON),
+                entry(StyleType.COMMAND_RUN, this::COMMAND_RUN),
+                entry(StyleType.LOG, this::LOG),
+                entry(StyleType.BUBBLE, this::BUBBLE),
+                entry(StyleType.BLOCK, this::BLOCK)
         ));
         this.messenger = new DiscordUtil();
     }
@@ -115,7 +114,7 @@ public class StyleRegistry {
         } catch (MessageProcessor.MessageBlockedException block) {
             throw block;
         } catch (RuntimeException e) {
-            EmbellishChat.LOGGER.warn("Failed to apply {} style: {}", styleType, parameter.getString());
+            EmbellishChat.LOGGER.warn("Failed to apply style [{}] with option [{}]", styleType, parameter.getString(), e);
             return parameter.segment();
         }
     }
@@ -129,16 +128,7 @@ public class StyleRegistry {
     }
 
     public MutableComponent COLOR_HEX(StyleParameter parameter) {
-        int color = 0xffffff;
-
-        try {
-            color = Color.decode(parameter.getString()).getRGB();
-        } catch (NumberFormatException e) {
-            EmbellishChat.LOGGER.warn("Invalid hex color format: {}", parameter.getString());
-        } catch (NullPointerException e){
-            EmbellishChat.LOGGER.warn("The option value you entered is null.");
-        }
-
+        int color = Color.decode(parameter.getString()).getRGB();
         return parameter.segment().withStyle(Style.EMPTY.withColor(color));
     }
 
@@ -146,15 +136,7 @@ public class StyleRegistry {
         Runs runs = flatten(parameter.segment());
         String string = runs.full();
         int length = string.length();
-        float saturation = 0.7f;
-
-        try {
-            saturation = Float.parseFloat(parameter.getString());
-        } catch (NumberFormatException e) {
-            EmbellishChat.LOGGER.warn("The option value you entered is not a valid number.");
-        } catch (NullPointerException e){
-            EmbellishChat.LOGGER.warn("The option value you entered is null.");
-        }
+        float saturation = Float.parseFloat(parameter.getString());
 
         MutableComponent result = Component.empty();
         for (int i = 0; i < length; i++) {
@@ -211,16 +193,7 @@ public class StyleRegistry {
     }
 
     public MutableComponent COLOR_SHADOW(StyleParameter parameter) {
-        int color = 0xffffff;
-
-        try {
-            color = Color.decode(parameter.getString()).getRGB();
-        } catch (NumberFormatException e) {
-            EmbellishChat.LOGGER.warn("Invalid hex color format: {}", parameter.getString());
-        } catch (NullPointerException e){
-            EmbellishChat.LOGGER.warn("The option value you entered is null.");
-        }
-
+        int color = Color.decode(parameter.getString()).getRGB();
         return parameter.segment().withStyle(Style.EMPTY.withShadowColor(color));
     }
 
@@ -296,9 +269,7 @@ public class StyleRegistry {
         ServerPlayer player = parameter.player();
         if (player == null) return parameter.segment();
 
-        int slot;
-        try {slot = Integer.decode(parameter.getString());}
-        catch (NumberFormatException e) {slot = -1;}
+        int slot = Integer.decode(parameter.getString());
 
         if (slot < 0 || 42 < slot) item = player.getMainHandItem();
         else item = player.getInventory().getItem(slot);
@@ -309,14 +280,7 @@ public class StyleRegistry {
     }
 
     public MutableComponent URL(StyleParameter parameter) {
-        URI uri;
-        try {
-            uri = URI.create(parameter.getString());
-        }catch (IllegalArgumentException e){
-            EmbellishChat.LOGGER.warn("Invalid URL provided for segment [{}]: {}", parameter.segment().getString(), parameter.getString());
-            return parameter.segment();
-        }
-
+        URI uri = URI.create(parameter.getString());
         String host = uri.getHost();
         if (host == null){
             return parameter.segment();
@@ -455,39 +419,25 @@ public class StyleRegistry {
     }
 
     public MutableComponent JSON(StyleParameter parameter){
-        try {
-            JsonElement element = JsonParser.parseString(parameter.getString());
-            Component text = ComponentSerialization.CODEC.parse(JsonOps.INSTANCE,element).getOrThrow();
-            return text.copy();
-        } catch (JsonSyntaxException | IllegalStateException e) {
-            return parameter.segment();
-        }
+        JsonElement element = JsonParser.parseString(parameter.getString());
+        Component text = ComponentSerialization.CODEC.parse(JsonOps.INSTANCE,element).getOrThrow();
+        return text.copy();
     }
 
     public MutableComponent DISCORD_JSON(StyleParameter parameter){
         int index = parameter.getString().indexOf(';');
         String option = parameter.getString();
-        try {
-            if (index != -1) messenger.send(URI.create(option.substring(0,index)),option.substring(index+1));
-        } catch (IllegalArgumentException e){
-            EmbellishChat.LOGGER.error("This webhook is malformed: {}",e.getMessage());
-        }
+        if (index != -1) messenger.send(URI.create(option.substring(0,index)),option.substring(index+1));
         return parameter.segment();
     }
 
     public MutableComponent COMMAND_RUN(StyleParameter parameter){
         ServerPlayer player = parameter.player();
         if (player == null) return parameter.segment();
-        MinecraftServer server = player.createCommandSourceStack().getServer();
-        String command = parameter.getString();
-        if (command.startsWith("/")) command = command.substring(1);
 
+        MinecraftServer server = player.createCommandSourceStack().getServer();
         CommandSourceStack commandSource = player.createCommandSourceStack();
-        try {
-            server.getCommands().getDispatcher().execute(command, commandSource);
-        } catch (Exception e) {
-            EmbellishChat.LOGGER.error("Failed to execute command: {}", command, e);
-        }
+        server.getCommands().performPrefixedCommand(commandSource, parameter.getString());
 
         return parameter.segment();
     }
@@ -504,19 +454,5 @@ public class StyleRegistry {
 
     public MutableComponent BLOCK(StyleParameter parameter) {
         throw new MessageProcessor.MessageBlockedException();
-    }
-
-    private Function<StyleParameter, MutableComponent> register(
-            StyleType styleType,
-            Function<StyleParameter, MutableComponent> function
-    ) {
-        return parameter -> {
-            try {
-                return function.apply(parameter);
-            } catch (RuntimeException e) {
-                EmbellishChat.LOGGER.warn("Failed to apply {} style: {}", styleType, parameter.getString(), e);
-                return parameter.segment();
-            }
-        };
     }
 }

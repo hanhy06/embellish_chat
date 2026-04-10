@@ -20,6 +20,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.EnumMap;
 import java.util.HashSet;
@@ -74,7 +75,7 @@ public class MentionRegistry {
         try {
             return function.apply(parameter);
         } catch (RuntimeException e) {
-            EmbellishChat.LOGGER.warn("Failed to apply {} mention: {}", mentionType, parameter.option());
+            EmbellishChat.LOGGER.warn("Failed to apply mention [{}] with option [{}]", mentionType, parameter.option(), e);
             return Target.of(new HashSet<>(),null);
         }
     }
@@ -84,9 +85,7 @@ public class MentionRegistry {
     }
 
     private Target INSIDE(MentionParameter parameter){
-        float round;
-        try {round = Float.parseFloat(parameter.option());}
-        catch (NumberFormatException e) {round = 64;}
+        float round = NumberUtils.toFloat(parameter.option(), 64);
 
         HashSet<ServerPlayer> players = new HashSet<>(PlayerLookup.around(
                 parameter.player().level(),
@@ -185,18 +184,16 @@ public class MentionRegistry {
         return Target.of(players,null);
     }
 
-    private Target CUSTOM(MentionParameter parameter){
+    private Target CUSTOM(MentionParameter parameter) {
         ServerPlayer sender = parameter.player();
         StringReader selector = new StringReader(parameter.option());
-
         try {
             EntitySelectorParser reader = new EntitySelectorParser(selector, true);
             EntitySelector entitySelector = reader.parse();
             List<ServerPlayer> players = entitySelector.findPlayers(sender.createCommandSourceStack());
             return Target.of(players, null);
         } catch (CommandSyntaxException e) {
-            EmbellishChat.LOGGER.warn("Invalid selector: {}", selector);
-            return Target.of(new HashSet<>(), null);
+            throw new IllegalArgumentException("Invalid selector: " + parameter.option(), e);
         }
     }
 }
