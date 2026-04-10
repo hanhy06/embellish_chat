@@ -26,10 +26,11 @@ public record Config(
         LinkedHashMap<String,List<MentionRule>> mention_rules,
 
         //preset
-        HashMap<String, Color> color,
-        HashMap<String, AtlasSprite> icon,
-        HashSet<String> whitelist,
         LinkedHashMap<String, MutableComponent> prefix,
+        HashSet<String> whitelist,
+        HashMap<String, AtlasSprite> icon,
+        HashMap<String, AtlasSprite> item,
+        HashMap<String, Color> color,
 
         //setting
         String delimiter,
@@ -58,10 +59,11 @@ public record Config(
                 createDefaultStyleRules(),
                 createDefaultMentionRules(),
 
-                createDefaultColors(),
-                createDefaultIcon(),
-                new HashSet<>(),
                 new LinkedHashMap<>(),
+                new HashSet<>(),
+                createDefaultIcon(),
+                createDefaultItem(),
+                createDefaultColors(),
 
                 ",",
                 "yyyy-MM-dd HH:mm:ss",
@@ -393,6 +395,33 @@ public record Config(
         );
 
         return icon;
+    }
+
+    private static HashMap<String, AtlasSprite> createDefaultItem() {
+        HashMap<String, AtlasSprite> item = new HashMap<>();
+
+        item.put("minecraft:clock",new AtlasSprite(
+                Identifier.parse("minecraft:items"),
+                Identifier.parse("minecraft:item/clock_00")
+                )
+        );
+        item.put("minecraft:compass",new AtlasSprite(
+                        Identifier.parse("minecraft:items"),
+                        Identifier.parse("minecraft:item/compass_00")
+                )
+        );
+        item.put("minecraft:crossbow",new AtlasSprite(
+                        Identifier.parse("minecraft:items"),
+                        Identifier.parse("minecraft:item/crossbow_arrow")
+                )
+        );
+        item.put("minecraft:tipped_arrow",new AtlasSprite(
+                        Identifier.parse("minecraft:items"),
+                        Identifier.parse("minecraft:item/arrow")
+                )
+        );
+
+        return item;
     }
 
 }

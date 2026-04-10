@@ -47,8 +47,9 @@ public class StyleRegistry {
     private final Config config;
 
     private final DateTimeFormatter timestamp;
-    private final HashMap<String, Color> color;
     private final HashMap<String, AtlasSprite> icon;
+    private final HashMap<String, AtlasSprite> item;
+    private final HashMap<String, Color> color;
     private final HashSet<String> whitelist;
 
     private final EnumMap<StyleType, Function<StyleParameter, MutableComponent>> registries;
@@ -58,8 +59,9 @@ public class StyleRegistry {
     public StyleRegistry(Config config) {
         this.config = config;
         this.timestamp = DateTimeFormatter.ofPattern(config.timestamp());
-        this.color = config.color();
         this.icon = config.icon();
+        this.item = config.item();
+        this.color = config.color();
         this.whitelist = config.whitelist();
         this.registries = new EnumMap<>(Map.ofEntries(
                 entry(StyleType.COLOR_HEX, this::COLOR_HEX),
@@ -348,26 +350,26 @@ public class StyleRegistry {
     public MutableComponent SHOW_ITEM(StyleParameter parameter){
         ServerPlayer player = parameter.player();
         if (player == null) return parameter.segment();
-        ItemStack item = player.getMainHandItem();
-        if (item.isEmpty()) return parameter.segment();
+        ItemStack stack = player.getMainHandItem();
+        if (stack.isEmpty()) return parameter.segment();
+        Identifier modelId = stack.get(DataComponents.ITEM_MODEL);
 
         MutableComponent result;
-        if (item.getItem() instanceof BlockItem) {
-           result = item.getDisplayName().copy();
-        }else{
-            Identifier modelId = item.get(DataComponents.ITEM_MODEL);
+        if ("show_name".equals(parameter.getString()) || stack.getItem() instanceof BlockItem) {
+           result = stack.getDisplayName().copy();
+        } else{
             if (modelId==null) return parameter.segment();
 
             Identifier atlasId = Identifier.fromNamespaceAndPath(modelId.getNamespace(),"items");
             Identifier spriteId = Identifier.fromNamespaceAndPath(modelId.getNamespace(),String.format("item/%s",modelId.getPath()));
 
-            AtlasSprite atlas = new AtlasSprite(atlasId,spriteId);
+            AtlasSprite atlas = item.getOrDefault(modelId.toString(),new AtlasSprite(atlasId,spriteId));
             result = Component.object(atlas);
         }
 
-        HoverEvent hoverEvent = new HoverEvent.ShowItem(ItemStackTemplate.fromNonEmptyStack(item));
+        HoverEvent hoverEvent = new HoverEvent.ShowItem(ItemStackTemplate.fromNonEmptyStack(stack));
         ClickEvent clickEvent = new ClickEvent.RunCommand("/embellish-chat open "+player.getUUID());
-        InventoryManager.putItem(player,item);
+        InventoryManager.putItem(player,stack);
 
         return result.withStyle(Style.EMPTY.withHoverEvent(hoverEvent).withClickEvent(clickEvent));
     }
