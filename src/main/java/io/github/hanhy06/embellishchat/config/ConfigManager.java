@@ -131,7 +131,7 @@ public class ConfigManager {
         if (config.style_rules() == null) return "style_rules is missing";
         if (config.mention_rules() == null) return "mention_rules is missing";
         if (config.color() == null) return "color is missing";
-        if (config.atlas() == null) return "atlas is missing";
+        if (config.icon() == null) return "icon is missing";
         if (config.whitelist() == null) return "whitelist is missing";
         if (config.prefix() == null) return "prefix is missing";
         if (config.delimiter() == null) return "delimiter is missing";
@@ -251,8 +251,8 @@ public class ConfigManager {
         JsonObject presetsJson = new JsonObject();
         JsonElement colorPreset = fullJson.remove("color");
         if (colorPreset != null) presetsJson.add("color", colorPreset);
-        JsonElement atlasPreset = fullJson.remove("atlas");
-        if (atlasPreset != null) presetsJson.add("atlas", atlasPreset);
+        JsonElement atlasPreset = fullJson.remove("icon");
+        if (atlasPreset != null) presetsJson.add("icon", atlasPreset);
         JsonElement whitelist = fullJson.remove("whitelist");
         if (whitelist != null) presetsJson.add("whitelist", whitelist);
         JsonElement prefixes = fullJson.remove("prefix");

@@ -33,7 +33,7 @@ public class UserCommand {
                         .then(Commands.literal("help")
                                 .then(Commands.literal("mention").executes(UserCommand::executeHelpMention))
                                 .then(Commands.literal("style").executes(UserCommand::executeHelpStyle))
-                                .then(Commands.literal("atlas").executes(UserCommand::executeHelpAtlas))
+                                .then(Commands.literal("icon").executes(UserCommand::executeHelpAtlas))
                         )
                         .then(Commands.literal("notification")
                                 .executes(UserCommand::executeNotification)
@@ -108,7 +108,7 @@ public class UserCommand {
 
         player.sendSystemMessage(PlaceHolderUtil.parseTag("<gray>-----</gray> <aqua><b>Available Atlas</b></aqua> <gray>-----</gray>"));
 
-        HashMap<String, AtlasSprite> atlas = ConfigManager.getConfig().atlas();
+        HashMap<String, AtlasSprite> atlas = ConfigManager.getConfig().icon();
         for (String name:atlas.keySet().stream().sorted().toList()){
             player.sendSystemMessage(PlaceHolderUtil.parseTag("%s - ".formatted(name)).copy().append(Component.object(atlas.get(name))));
         }

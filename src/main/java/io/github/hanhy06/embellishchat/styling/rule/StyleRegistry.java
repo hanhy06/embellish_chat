@@ -11,7 +11,6 @@ import io.github.hanhy06.embellishchat.styling.data.Runs;
 import io.github.hanhy06.embellishchat.styling.util.BubbleUtil;
 import io.github.hanhy06.embellishchat.styling.util.ColorUtil;
 import io.github.hanhy06.embellishchat.styling.util.DiscordUtil;
-import io.github.hanhy06.embellishchat.util.OptionUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.component.DataComponents;
@@ -49,7 +48,7 @@ public class StyleRegistry {
 
     private final DateTimeFormatter timestamp;
     private final HashMap<String, Color> color;
-    private final HashMap<String, AtlasSprite> atlas;
+    private final HashMap<String, AtlasSprite> icon;
     private final HashSet<String> whitelist;
 
     private final EnumMap<StyleType, Function<StyleParameter, MutableComponent>> registries;
@@ -60,7 +59,7 @@ public class StyleRegistry {
         this.config = config;
         this.timestamp = DateTimeFormatter.ofPattern(config.timestamp());
         this.color = config.color();
-        this.atlas = config.atlas();
+        this.icon = config.icon();
         this.whitelist = config.whitelist();
         this.registries = new EnumMap<>(Map.ofEntries(
                 entry(StyleType.COLOR_HEX, this::COLOR_HEX),
@@ -97,7 +96,7 @@ public class StyleRegistry {
                 entry(StyleType.SHOW_ITEM, this::SHOW_ITEM),
                 entry(StyleType.SHOW_INVENTORY, this::SHOW_INVENTORY),
                 entry(StyleType.SHOW_ENDER_CHEST, this::SHOW_ENDER_CHEST),
-                entry(StyleType.ATLAS_PRESET, this::ATLAS_PRESET),
+                entry(StyleType.ICON_PRESET, this::ICON_PRESET),
                 entry(StyleType.JSON, this::JSON),
                 entry(StyleType.DISCORD_JSON, this::DISCORD_JSON),
                 entry(StyleType.COMMAND_RUN, this::COMMAND_RUN),
@@ -352,36 +351,25 @@ public class StyleRegistry {
         ItemStack item = player.getMainHandItem();
         if (item.isEmpty()) return parameter.segment();
 
-        String type = (item.getItem() instanceof BlockItem) ? "block" : "item";
-        Identifier modelId = item.get(DataComponents.ITEM_MODEL);
-        if (modelId==null) return parameter.segment();
+        MutableComponent result;
+        if (item.getItem() instanceof BlockItem) {
+           result = item.getDisplayName().copy();
+        }else{
+            Identifier modelId = item.get(DataComponents.ITEM_MODEL);
+            if (modelId==null) return parameter.segment();
 
-        Identifier atlasId = Identifier.fromNamespaceAndPath(modelId.getNamespace(),type+"s");
-        Identifier spriteId = Identifier.fromNamespaceAndPath(modelId.getNamespace(),String.format("%s/%s",type,modelId.getPath()));
+            Identifier atlasId = Identifier.fromNamespaceAndPath(modelId.getNamespace(),"items");
+            Identifier spriteId = Identifier.fromNamespaceAndPath(modelId.getNamespace(),String.format("item/%s",modelId.getPath()));
 
-        if (!parameter.getString().isBlank()){
-            List<String> segments = OptionUtil.split(parameter.getString().trim(),";");
-            String atlasOption = segments.getFirst();
-            String spriteOption = segments.size() > 1 ? segments.get(1) : "";
-
-            if (!atlasOption.isBlank()) {
-                Identifier atlasIdentifier = Identifier.tryParse(atlasOption);
-                if (atlasIdentifier != null) atlasId = atlasIdentifier;
-            }
-            if (!spriteOption.isBlank()) {
-                Identifier spriteIdentifier = Identifier.tryParse(spriteOption);
-                if (spriteIdentifier != null) spriteId = spriteIdentifier;
-            }
+            AtlasSprite atlas = new AtlasSprite(atlasId,spriteId);
+            result = Component.object(atlas);
         }
 
-        AtlasSprite atlas = new AtlasSprite(atlasId,spriteId);
-
-        MutableComponent text = Component.object(atlas);
         HoverEvent hoverEvent = new HoverEvent.ShowItem(ItemStackTemplate.fromNonEmptyStack(item));
         ClickEvent clickEvent = new ClickEvent.RunCommand("/embellish-chat open "+player.getUUID());
         InventoryManager.putItem(player,item);
 
-        return text.withStyle(Style.EMPTY.withHoverEvent(hoverEvent).withClickEvent(clickEvent));
+        return result.withStyle(Style.EMPTY.withHoverEvent(hoverEvent).withClickEvent(clickEvent));
     }
 
     public MutableComponent SHOW_INVENTORY(StyleParameter parameter){
@@ -410,9 +398,9 @@ public class StyleRegistry {
         return text.withStyle(Style.EMPTY.withClickEvent(clickEvent).withHoverEvent(hoverEvent));
     }
 
-    public MutableComponent ATLAS_PRESET(StyleParameter parameter) {
-        AtlasSprite atlas = this.atlas.get(parameter.getString());
-        if (atlas!=null) return Component.object(atlas);
+    public MutableComponent ICON_PRESET(StyleParameter parameter) {
+        AtlasSprite icon = this.icon.get(parameter.getString());
+        if (icon!=null) return Component.object(icon);
         else return parameter.segment();
     }
 
