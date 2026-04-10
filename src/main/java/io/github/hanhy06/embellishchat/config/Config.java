@@ -305,6 +305,10 @@ public record Config(
                 Identifier.parse("minecraft:blocks"),
                 Identifier.parse("minecraft:block/campfire_fire"))
         );
+        icon.put("lava", new AtlasSprite(
+                Identifier.parse("minecraft:blocks"),
+                Identifier.parse("minecraft:block/lava_still"))
+        );
         icon.put("food", new AtlasSprite(
                 Identifier.parse("minecraft:items"),
                 Identifier.parse("minecraft:item/cooked_beef"))
@@ -320,6 +324,14 @@ public record Config(
         icon.put("love", new AtlasSprite(
                 Identifier.parse("minecraft:gui"),
                 Identifier.parse("minecraft:mob_effect/health_boost"))
+        );
+        icon.put("flower", new AtlasSprite(
+                Identifier.parse("minecraft:blocks"),
+                Identifier.parse("minecraft:block/poppy"))
+        );
+        icon.put("tree", new AtlasSprite(
+                Identifier.parse("minecraft:gui"),
+                Identifier.parse("minecraft:toast/tree"))
         );
         icon.put("yes", new AtlasSprite(
                 Identifier.parse("minecraft:gui"),

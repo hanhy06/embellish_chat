@@ -1,34 +1,10 @@
 {
-  "color": {
-    "dark green": "#00AA00",
-    "green": "#55FF55",
-    "black": "#000000",
-    "yellow": "#FFFF55",
-    "dark red": "#AA0000",
-    "dark purple": "#AA00AA",
-    "light purple": "#FF55FF",
-    "gold": "#FFAA00",
-    "dark gray": "#555555",
-    "red": "#FF5555",
-    "aqua": "#55FFFF",
-    "gray": "#AAAAAA",
-    "blue": "#5555FF",
-    "white": "#FFFFFF",
-    "dark aqua": "#00AAAA",
-    "dark blue": "#0000AA"
-  },
+  "prefix": {},
+  "whitelist": [],
   "icon": {
     "love": {
       "atlas": "minecraft:gui",
       "sprite": "minecraft:mob_effect/health_boost"
-    },
-    "mine": {
-      "atlas": "minecraft:items",
-      "sprite": "minecraft:item/diamond_pickaxe"
-    },
-    "news": {
-      "atlas": "minecraft:gui",
-      "sprite": "minecraft:icon/news"
     },
     "no": {
       "atlas": "minecraft:gui",
@@ -38,10 +14,6 @@
       "atlas": "minecraft:items",
       "sprite": "minecraft:item/paper"
     },
-    "move": {
-      "atlas": "minecraft:gui",
-      "sprite": "minecraft:mob_effect/wind_charged"
-    },
     "tv": {
       "atlas": "minecraft:gui",
       "sprite": "minecraft:icon/video_link"
@@ -50,33 +22,9 @@
       "atlas": "minecraft:gui",
       "sprite": "minecraft:mob_effect/luck"
     },
-    "star": {
-      "atlas": "minecraft:items",
-      "sprite": "minecraft:item/nether_star"
-    },
-    "poison": {
-      "atlas": "minecraft:gui",
-      "sprite": "minecraft:mob_effect/poison"
-    },
-    "yes": {
-      "atlas": "minecraft:gui",
-      "sprite": "minecraft:container/beacon/confirm"
-    },
-    "food": {
-      "atlas": "minecraft:items",
-      "sprite": "minecraft:item/cooked_beef"
-    },
-    "heart": {
-      "atlas": "minecraft:gui",
-      "sprite": "minecraft:hud/heart/full"
-    },
-    "hunger": {
-      "atlas": "minecraft:gui",
-      "sprite": "minecraft:hud/food_half"
-    },
-    "diamond": {
-      "atlas": "minecraft:items",
-      "sprite": "minecraft:item/diamond"
+    "lava": {
+      "atlas": "minecraft:blocks",
+      "sprite": "minecraft:block/lava_still"
     },
     "search": {
       "atlas": "minecraft:gui",
@@ -98,6 +46,58 @@
       "atlas": "minecraft:blocks",
       "sprite": "minecraft:block/campfire_fire"
     },
+    "fight": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:mob_effect/raid_omen"
+    },
+    "mine": {
+      "atlas": "minecraft:items",
+      "sprite": "minecraft:item/diamond_pickaxe"
+    },
+    "news": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:icon/news"
+    },
+    "move": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:mob_effect/wind_charged"
+    },
+    "star": {
+      "atlas": "minecraft:items",
+      "sprite": "minecraft:item/nether_star"
+    },
+    "poison": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:mob_effect/poison"
+    },
+    "yes": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:container/beacon/confirm"
+    },
+    "tree": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:toast/tree"
+    },
+    "food": {
+      "atlas": "minecraft:items",
+      "sprite": "minecraft:item/cooked_beef"
+    },
+    "heart": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:hud/heart/full"
+    },
+    "hunger": {
+      "atlas": "minecraft:gui",
+      "sprite": "minecraft:hud/food_half"
+    },
+    "flower": {
+      "atlas": "minecraft:blocks",
+      "sprite": "minecraft:block/poppy"
+    },
+    "diamond": {
+      "atlas": "minecraft:items",
+      "sprite": "minecraft:item/diamond"
+    },
     "time": {
       "atlas": "minecraft:items",
       "sprite": "minecraft:item/clock_54"
@@ -105,16 +105,16 @@
     "emerald": {
       "atlas": "minecraft:items",
       "sprite": "minecraft:item/emerald"
-    },
-    "fight": {
-      "atlas": "minecraft:gui",
-      "sprite": "minecraft:mob_effect/raid_omen"
     }
   },
   "item": {
     "minecraft:clock": {
       "atlas": "minecraft:items",
       "sprite": "minecraft:item/clock_00"
+    },
+    "minecraft:tipped_arrow": {
+      "atlas": "minecraft:items",
+      "sprite": "minecraft:item/arrow"
     },
     "minecraft:compass": {
       "atlas": "minecraft:items",
@@ -123,12 +123,24 @@
     "minecraft:crossbow": {
       "atlas": "minecraft:items",
       "sprite": "minecraft:item/crossbow_arrow"
-    },
-    "minecraft:tipped_arrow": {
-      "atlas": "minecraft:items",
-      "sprite": "minecraft:item/arrow"
     }
   },
-  "whitelist": [],
-  "prefix": {}
+  "color": {
+    "dark green": "#00AA00",
+    "green": "#55FF55",
+    "black": "#000000",
+    "yellow": "#FFFF55",
+    "dark red": "#AA0000",
+    "dark purple": "#AA00AA",
+    "light purple": "#FF55FF",
+    "gold": "#FFAA00",
+    "dark gray": "#555555",
+    "red": "#FF5555",
+    "aqua": "#55FFFF",
+    "gray": "#AAAAAA",
+    "blue": "#5555FF",
+    "white": "#FFFFFF",
+    "dark aqua": "#00AAAA",
+    "dark blue": "#0000AA"
+  }
 }
