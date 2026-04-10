@@ -8,7 +8,7 @@ The mod configuration is split across four files:
 * `config.json`: Core settings such as delimiters, timestamps, and notification toggles.
 * `styles.json`: Style rules that control formatting and interactions.
 * `mentions.json`: Mention rules that control targeting and notifications.
-* `presets.json`: Shared preset data for colors, atlas entries, URL whitelists, and chat prefixes.
+* `presets.json`: Shared preset data for colors, icon presets, item sprite overrides, URL whitelists, and chat prefixes.
 
 ## config.json
 
@@ -74,6 +74,8 @@ The style rules file is located at `config/embellish-chat/styles.json`.
 * **`style_rules`**: Top-level container for all styling rules.
 * **`embellish-chat.chat`**: Rules applied to normal chat messages.
 * Each rule includes **`pattern`** for regex matching, **`comment`** for `/embellish-chat help style`, and **`styles`** for the actions to apply.
+* Each top-level key such as `embellish-chat.chat` is also treated as a permission node.
+* Each `styleType` must match a handler registered in the runtime `StyleRegistry`.
 * Most custom chat formatting behavior is defined here.
 * Rules are processed from top to bottom, so an early catch-all rule can override more specific rules below it.
 
@@ -125,8 +127,14 @@ The shared preset file is located at `config/embellish-chat/presets.json`.
   "color": {
     " ... ": " ... ",
   },
-  "atlas": {
+  "icon": {
     " ... ": {
+      "atlas": " ... ",
+      "sprite": " ... "
+    }
+  },
+  "item": {
+    "minecraft:clock": {
       "atlas": " ... ",
       "sprite": " ... "
     }
@@ -141,13 +149,15 @@ The shared preset file is located at `config/embellish-chat/presets.json`.
 ```
 
 * **`color`**: Used for named color presets in style rules.
-* **`atlas`**: Used for atlas presets in style rules.
+* **`icon`**: Used by `ICON_PRESET` and `/embellish-chat help atlas`.
+* **`item`**: Used by `SHOW_ITEM` to override atlas sprites for specific item IDs.
 * **`whitelist`**: Used by the `URL` style type. If it is empty, all URLs are allowed.
 * **`prefix`**: Uses permission nodes as keys, and each value is parsed as a text component with placeholder tags.
 
 ## Notes
 
-* `ConfigManager` automatically separates the configuration into `config.json`, `styles.json`, `mentions.json`, and `presets.json`.
-* Missing sections are restored from the built-in defaults when the files are loaded.
+* `ConfigManager` writes `config.json`, `styles.json`, `mentions.json`, and `presets.json` separately, then merges them into one runtime `Config` when loading.
+* Missing sections are restored from the built-in defaults during that merge step.
 * If the stored `version` does not match the running mod version, the mod keeps the current in-memory configuration and ignores the mismatched load.
+* Reloading the config rebuilds the runtime `StyleRegistry`, so style rules immediately see updated `timestamp`, `url_color`, `whitelist`, `color`, `icon`, and `item` values.
 * To avoid JSON syntax errors and to generate valid configs more easily, using the **[Web Config Generator](../config-generator/index.html)** is strongly recommended.

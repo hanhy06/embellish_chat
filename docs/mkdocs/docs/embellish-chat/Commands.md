@@ -12,7 +12,7 @@ Available to all players.
 |---------------------------------|---------------------------------------------------------------------|
 | `/embellish-chat help style`    | Shows the available style syntax and examples.                      |
 | `/embellish-chat help mention`  | Shows the available mention types and targets.                      |
-| `/embellish-chat help atlas`    | Shows the available atlases in name - icon format.                  |
+| `/embellish-chat help atlas`    | Shows the available icon presets from `presets.json/icon` in `name - icon` format. |
 | `/embellish-chat notification`  | Toggles personal mention notifications, if enabled in the config.   |
 | `/embellish-chat open <player>` | Opens the last shared inventory, ender chest, or item for a player. |
 

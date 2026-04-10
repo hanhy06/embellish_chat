@@ -19,7 +19,7 @@ Style rules are stored in `config/embellish-chat/styles.json` under the top-leve
 
 * **`pattern`**: A regular expression used to scan chat text. It must contain two capture groups: `group 1` is the text that will be styled, and `group 2` is the option value passed to the style.
 * **`comment`**: Help text shown in `/embellish-chat help style`.
-* **`styles`**: The styles applied to capture group 1. `styleType` selects the behavior, and `preset` provides a fixed option value. If `preset` is empty, the content of capture group 2 is used instead. See [Style Type](StyleType.md) for the full list.
+* **`styles`**: The styles applied to capture group 1. `styleType` selects the behavior, and `preset` provides a fixed option value. If `preset` is empty, the content of capture group 2 is used instead. Each `styleType` must match a handler registered in `StyleRegistry`. See [Style Type](StyleType.md) for the full list.
 
 ## File Layout
 
@@ -45,6 +45,7 @@ Style rules are stored in `config/embellish-chat/styles.json` under the top-leve
 * **`style_rules`**: Top-level container for all styling rules.
 * **Permission node keys**: Each key such as `embellish-chat.chat` is treated as a permission node.
 * **Rule order matters**: Rules are processed from top to bottom, so broad matches should stay below more specific rules.
+* **Runtime merge matters**: `styles.json` is loaded together with `config.json` and `presets.json`, so `StyleRegistry` can resolve `timestamp`, `url_color`, `whitelist`, `color`, `icon`, and `item` from the merged config.
 
 ## Usage Patterns
 

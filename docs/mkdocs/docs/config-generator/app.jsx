@@ -12,7 +12,7 @@ const STYLE_TYPES = [
   "BOLD", "ITALIC", "UNDERLINE", "STRIKETHROUGH", "OBFUSCATED", "FONT", "CLEAR",
   "CLICK_COMMAND_RUN", "CLICK_COMMAND_SUGGEST", "CLICK_COPY", "HOVER_TEXT", "HOVER_ITEM", "URL", "METADATA",
   "UPPER", "LOWER", "CAPITALIZE", "REPLACE", "MASK", "PREFIX", "SUFFIX",
-  "SHOW_ITEM", "SHOW_INVENTORY", "SHOW_ENDER_CHEST", "ATLAS_PRESET", "JSON", "DISCORD_JSON", "COMMAND_RUN", "LOG", "BUBBLE", "BLOCK"
+  "SHOW_ITEM", "SHOW_INVENTORY", "SHOW_ENDER_CHEST", "ICON_PRESET", "JSON", "DISCORD_JSON", "COMMAND_RUN", "LOG", "BUBBLE", "BLOCK"
 ];
 
 const MENTION_TYPES = [
@@ -74,7 +74,8 @@ const normalizeConfig = (value) => ({
 
 const normalizePresets = (value) => ({
   color: value.color ?? value.colors ?? {},
-  atlas: value.atlas ?? value.atlasPreset ?? {},
+  icon: value.icon ?? {},
+  item: value.item ?? {},
   whitelist: value.whitelist ?? [],
   prefix: value.prefix ?? value.prefixes ?? {}
 });
@@ -385,13 +386,13 @@ function KeyValueEditor({ title, values, onAdd, onRename, onChange, onRemove, ke
   );
 }
 
-function AtlasEditor({ values, onAdd, onRename, onChange, onRemove }) {
+function AtlasEditor({ title, values, onAdd, onRename, onChange, onRemove }) {
   const entries = Object.entries(values);
 
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between gap-3">
-        <div className="text-sm font-medium text-white">Atlas Presets</div>
+        <div className="text-sm font-medium text-white">{title}</div>
         <Button onClick={onAdd}>Add</Button>
       </div>
       {entries.length === 0 && <div className="text-sm text-neutral-500">Empty</div>}
@@ -957,7 +958,7 @@ function ConfigEditor() {
               </div>
             </Section>
 
-            <Section title="Presets" description="color, atlas, whitelist, and prefix">
+            <Section title="Presets" description="color, icon, item, whitelist, and prefix">
               <div className="space-y-5">
                 <ColorPresetEditor
                   values={presets.color}
@@ -971,14 +972,27 @@ function ConfigEditor() {
                   }}
                 />
                 <AtlasEditor
-                  values={presets.atlas}
-                  onAdd={() => setPresets({ ...presets, atlas: { ...presets.atlas, [`atlas-${Object.keys(presets.atlas).length + 1}`]: { atlas: "minecraft:gui", sprite: "" } } })}
-                  onRename={(oldKey, newKey) => setPresets({ ...presets, atlas: renameObjectKey(presets.atlas, oldKey, newKey) })}
-                  onChange={(key, field, value) => setPresets({ ...presets, atlas: { ...presets.atlas, [key]: { ...presets.atlas[key], [field]: value } } })}
+                  title="Icon Presets"
+                  values={presets.icon}
+                  onAdd={() => setPresets({ ...presets, icon: { ...presets.icon, [`icon-${Object.keys(presets.icon).length + 1}`]: { atlas: "minecraft:gui", sprite: "" } } })}
+                  onRename={(oldKey, newKey) => setPresets({ ...presets, icon: renameObjectKey(presets.icon, oldKey, newKey) })}
+                  onChange={(key, field, value) => setPresets({ ...presets, icon: { ...presets.icon, [key]: { ...presets.icon[key], [field]: value } } })}
                   onRemove={(key) => {
-                    const next = { ...presets.atlas };
+                    const next = { ...presets.icon };
                     delete next[key];
-                    setPresets({ ...presets, atlas: next });
+                    setPresets({ ...presets, icon: next });
+                  }}
+                />
+                <AtlasEditor
+                  title="Item Sprite Overrides"
+                  values={presets.item}
+                  onAdd={() => setPresets({ ...presets, item: { ...presets.item, [`minecraft:item_${Object.keys(presets.item).length + 1}`]: { atlas: "minecraft:items", sprite: "" } } })}
+                  onRename={(oldKey, newKey) => setPresets({ ...presets, item: renameObjectKey(presets.item, oldKey, newKey) })}
+                  onChange={(key, field, value) => setPresets({ ...presets, item: { ...presets.item, [key]: { ...presets.item[key], [field]: value } } })}
+                  onRemove={(key) => {
+                    const next = { ...presets.item };
+                    delete next[key];
+                    setPresets({ ...presets, item: next });
                   }}
                 />
                 <ListTextEditor

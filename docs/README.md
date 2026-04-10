@@ -67,10 +67,10 @@ Use the following patterns directly in the chat window to apply styles:
 
 > **Notes**
 >
-> * **Links:** Only `https://` URLs are supported for security.
-> * **Colors:** Presets (e.g., `pink`) are defined in the mod configuration.
+> * **Links:** The built-in default link rules only match `https://` URLs.
+> * **Colors:** Presets (e.g., `pink`) are defined in `presets.json/color`.
 > * **Fonts:** The `path` requires a namespaced ID (e.g., `minecraft:alt`).
-> * **Icons & Atlas Sprites:** Features that use icons or multiple atlas sprites are not supported on older Minecraft versions.
+> * **Icons & Item Sprites:** Icon presets and item sprite rendering use atlas-backed components, so they are not supported on older Minecraft versions.
 > * **More Info:** For advanced syntax, style combinations, and detailed rules, refer to `/embellish-chat help style` or the [StyleWiki](https://hanhy06.github.io/embellish-chat-wiki/style/StyleSystem/).
 
 ---
@@ -112,7 +112,7 @@ Use the following patterns directly in the chat window to apply styles:
 * **`/embellish-chat open <player>`** Opens the last shared inventory/ender/item of the specified player.
 * **`/embellish-chat help mention`** Displays the mention rules available to you based on your permissions.
 * **`/embellish-chat help style`** Displays the styling rules available to you based on your permissions.
-* **`/embellish-chat help atlas`** Displays available atlases as name - icon format.
+* **`/embellish-chat help atlas`** Displays available icon presets from `presets.json/icon` in `name - icon` format.
 * **`/embellish-chat notification`** Toggles your personal mention notification preferences. *(Enabled/disabled globally by `notify_command_enabled` in the config).*
 
 ---
@@ -147,14 +147,15 @@ The configuration file is located at `config/embellish-chat/config.json`.
 ```
 
 * The `version` field must not be modified manually.
-* `ConfigManager` automatically splits the configuration into `config.json`, `styles.json`, `mentions.json`, and `presets.json`.
-* Missing sections are restored from the built-in defaults when the files are loaded.
+* `ConfigManager` writes `config.json`, `styles.json`, `mentions.json`, and `presets.json` separately, then merges them into one runtime `Config` when loading.
+* Missing sections are restored from the built-in defaults during that merge step.
 * If the stored `version` does not match the running mod version, the mod keeps the current in-memory configuration and ignores the mismatched load.
 * The core configuration logic is defined in `style_rules` and `mention_rules`.
 * Rules are processed from top to bottom, so placing a catch-all rule earlier may override more specific rules defined below.
 * The `delimiter` value is internally handled as a regular expression; special characters such as `|` must be properly escaped.
 * `team_color` is the base color used when styling `@team` and `@Player` mentions.
 * If `team_color` is missing or set to `null`, those mentions are left without an automatic color.
+* Reloading the config rebuilds the runtime `StyleRegistry`, so style rules immediately see updated `timestamp`, `url_color`, `whitelist`, `color`, `icon`, and `item` values.
 * To avoid JSON syntax errors and ensure valid configurations, using the **[Web Config Generator](https://hanhy06.github.io/embellish-chat-wiki/config-generator/)** is strongly recommended:
 
 ### Styling
@@ -187,6 +188,8 @@ The configuration file is located at `config/embellish-chat/styles.json`.
 * **`styles`**: Defines the styles to be applied to captured group 1.
   * `styleType`: This is the style type. You can use all types listed in the [StyleWiki](https://hanhy06.github.io/embellish-chat-wiki/style/StyleType/).
   * `preset`: This is a preset value. If a value is provided, it is always used; if it is empty, the content of the user's captured group 2 is used instead.
+* Each top-level key such as `embellish-chat.chat` is also treated as a permission node.
+* Each `styleType` name must match a handler registered in the runtime `StyleRegistry`.
 
 ### Mention
 
@@ -247,8 +250,14 @@ The configuration file is located at `config/embellish-chat/presets.json`.
   "color": {
     " ... ": " ... ",
   },
-  "atlas": {
+  "icon": {
     " ... ": {
+      "atlas": " ... ",
+      "sprite": " ... "
+    }
+  },
+  "item": {
+    "minecraft:clock": {
       "atlas": " ... ",
       "sprite": " ... "
     }
@@ -262,7 +271,8 @@ The configuration file is located at `config/embellish-chat/presets.json`.
 }
 ```
 * **`color`**: This is used in the color presets for styling.
-* **`atlas`**: This is used in the atlas presets for styling.
+* **`icon`**: This is used by `ICON_PRESET` and `/embellish-chat help atlas`.
+* **`item`**: This overrides atlas sprites used by `SHOW_ITEM` for specific item IDs.
 * **`whitelist`**: This is used in the `URL` style type. If left empty, all URLs are allowed.
 * **`prefix`**: Uses permission nodes as its keys, and each value is a string parsed as a text component with placeholder tags.
 

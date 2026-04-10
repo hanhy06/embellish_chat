@@ -17,7 +17,7 @@
     "dark aqua": "#00AAAA",
     "dark blue": "#0000AA"
   },
-  "atlas": {
+  "icon": {
     "love": {
       "atlas": "minecraft:gui",
       "sprite": "minecraft:mob_effect/health_boost"
@@ -109,6 +109,24 @@
     "fight": {
       "atlas": "minecraft:gui",
       "sprite": "minecraft:mob_effect/raid_omen"
+    }
+  },
+  "item": {
+    "minecraft:clock": {
+      "atlas": "minecraft:items",
+      "sprite": "minecraft:item/clock_00"
+    },
+    "minecraft:compass": {
+      "atlas": "minecraft:items",
+      "sprite": "minecraft:item/compass_00"
+    },
+    "minecraft:crossbow": {
+      "atlas": "minecraft:items",
+      "sprite": "minecraft:item/crossbow_arrow"
+    },
+    "minecraft:tipped_arrow": {
+      "atlas": "minecraft:items",
+      "sprite": "minecraft:item/arrow"
     }
   },
   "whitelist": [],

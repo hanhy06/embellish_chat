@@ -163,10 +163,10 @@
       },
       {
         "pattern": "(:(.+?):)",
-        "comment": "<blue><b>Pattern</b></blue>: :icon:\n<dark_aqua><b>Comment</b></dark_aqua>: atlas emoji/icon preset\n",
+        "comment": "<blue><b>Pattern</b></blue>: :icon:\n<dark_aqua><b>Comment</b></dark_aqua>: icon emoji/icon preset\n",
         "styles": [
           {
-            "styleType": "ATLAS_PRESET",
+            "styleType": "ICON_PRESET",
             "preset": ""
           }
         ]
