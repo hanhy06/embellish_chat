@@ -366,7 +366,7 @@ public class StyleRegistry {
             result = stack.getDisplayName().copy();
         } else {
             Identifier atlasId = Identifier.fromNamespaceAndPath(modelId.getNamespace(),"items");
-            Identifier spriteId = Identifier.fromNamespaceAndPath(modelId.getNamespace(),String.format("item/%s",modelId.getPath()));;
+            Identifier spriteId = Identifier.fromNamespaceAndPath(modelId.getNamespace(),String.format("item/%s",modelId.getPath()));
             result = Component.object(new AtlasSprite(atlasId,spriteId));
         }
 

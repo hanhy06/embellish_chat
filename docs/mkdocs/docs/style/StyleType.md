@@ -51,7 +51,7 @@
 
 ## Advanced
 
-* `SHOW_ITEM`: Displays the description and texture of the item or block held by the player. A blank option uses the configured item sprite or the item's default sprite, and `show_name` forces the display name instead of a sprite. This style type must be placed at the very bottom. **Option:** `show_name` or `None`
+* `SHOW_ITEM`: Displays the description and texture of the item or block held by the player. A blank option first checks `presets.json/item`, then falls back to the block name for `BlockItem`, and otherwise uses the item's model sprite. `only_name` forces the display name instead of a sprite. This style type must be placed at the very bottom. **Option:** `only_name` or `None`
 * `SHOW_INVENTORY`: Displays the user's face. Clicking it shows the user's inventory snapshot. This style type must be placed at the very bottom, and the inventory snapshot is cleared when the player leaves the server. **Option:** `None`
 * `SHOW_ENDER_CHEST`: Displays the user's face. Clicking it shows the user's ender chest snapshot. This style type must be placed at the very bottom, and the inventory snapshot is cleared when the player leaves the server. **Option:** `None`
 * `ICON_PRESET`: Uses a predefined icon name from the `presets.json/icon` section. This style type cannot be used in versions below 1.21.8 and must be placed at the very bottom. **Option:** `Preset Name`
