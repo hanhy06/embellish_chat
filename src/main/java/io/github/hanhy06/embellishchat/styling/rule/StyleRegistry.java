@@ -353,18 +353,21 @@ public class StyleRegistry {
         ItemStack stack = player.getMainHandItem();
         if (stack.isEmpty()) return parameter.segment();
         Identifier modelId = stack.get(DataComponents.ITEM_MODEL);
+        if (modelId == null) return parameter.segment();
 
         MutableComponent result;
-        if ("show_name".equals(parameter.getString()) || stack.getItem() instanceof BlockItem) {
-           result = stack.getDisplayName().copy();
-        } else{
-            if (modelId==null) return parameter.segment();
+        AtlasSprite atlas = item.get(modelId.toString());
 
-            Identifier atlasId = Identifier.fromNamespaceAndPath(modelId.getNamespace(),"items");
-            Identifier spriteId = Identifier.fromNamespaceAndPath(modelId.getNamespace(),String.format("item/%s",modelId.getPath()));
-
-            AtlasSprite atlas = item.getOrDefault(modelId.toString(),new AtlasSprite(atlasId,spriteId));
+        if ("only_name".equals(parameter.getString())){
+            result = stack.getDisplayName().copy();
+        } else if (atlas != null) {
             result = Component.object(atlas);
+        } else if (stack.getItem() instanceof BlockItem){
+            result = stack.getDisplayName().copy();
+        } else {
+            Identifier atlasId = Identifier.fromNamespaceAndPath(modelId.getNamespace(),"items");
+            Identifier spriteId = Identifier.fromNamespaceAndPath(modelId.getNamespace(),String.format("item/%s",modelId.getPath()));;
+            result = Component.object(new AtlasSprite(atlasId,spriteId));
         }
 
         HoverEvent hoverEvent = new HoverEvent.ShowItem(ItemStackTemplate.fromNonEmptyStack(stack));
