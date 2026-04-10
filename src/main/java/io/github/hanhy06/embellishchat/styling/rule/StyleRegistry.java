@@ -28,6 +28,7 @@ import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.scores.PlayerTeam;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.awt.*;
 import java.net.URI;
@@ -269,10 +270,15 @@ public class StyleRegistry {
         ServerPlayer player = parameter.player();
         if (player == null) return parameter.segment();
 
-        int slot = Integer.decode(parameter.getString());
+        String option = parameter.getString();
+        if (option.isBlank()) {
+            item = player.getMainHandItem();
+        } else {
+            int slot = NumberUtils.toInt(option, -1);
+            if (slot < 0 || 42 < slot) return parameter.segment();
+            item = player.getInventory().getItem(slot);
+        }
 
-        if (slot < 0 || 42 < slot) item = player.getMainHandItem();
-        else item = player.getInventory().getItem(slot);
         if (item.isEmpty()) return parameter.segment();
 
         HoverEvent hoverEvent = new HoverEvent.ShowItem(ItemStackTemplate.fromNonEmptyStack(item));
