@@ -35,7 +35,7 @@
 * `CLICK_COMMAND_SUGGEST`: Places the supplied command into the chat input field when clicked. **Option:** `Command`
 * `CLICK_COPY`: Copies the supplied text to the clipboard when the text is clicked. **Option:** `Text`
 * `HOVER_TEXT`: Displays the supplied text when the mouse hovers over it. **Option:** `Text`
-* `HOVER_ITEM`: Displays the item description for a specified inventory slot when hovered over. For example, `-1` is the main hand and `40` is the off hand. **Option:** `Slot ID`
+* `HOVER_ITEM`: Displays the item description for a specified inventory slot when hovered over. A blank option uses the main-hand item, and valid slot IDs such as `40` can target other inventory slots. Invalid values are ignored. **Option:** `Slot ID`
 * `URL`: Opens the provided URL in a browser when clicked. The domain or subdomain must be included in `presets.json/whitelist`. If the list is empty, all URLs are allowed. **Option:** `URL`
 * `METADATA`: Displays the server receipt time on hover and copies it to the clipboard on click. **Option:** `None`
 
