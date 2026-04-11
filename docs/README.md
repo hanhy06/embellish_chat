@@ -247,34 +247,35 @@ The configuration file is located at `config/embellish-chat/mentions.json`.
 The configuration file is located at `config/embellish-chat/presets.json`.
 ```
 {
-  "color": {
-    " ... ": " ... ",
-  },
-  "icon": {
+  "prefix": {
+    " ... ": " ... "
+  }.
+  "whitelist": [
+    " ... "
+  ],
+   "icon": {
     " ... ": {
       "atlas": " ... ",
       "sprite": " ... "
     }
   },
   "item": {
-    "minecraft:clock": {
+    " ... ": {
       "atlas": " ... ",
       "sprite": " ... "
     }
   },
-  "whitelist": [
-    " ... "
-  ],
-  "prefix": {
-    " ... ": " ... "
-  }
+  "color": {
+    " ... ": " ... ",
+  },
 }
 ```
-* **`color`**: This is used in the color presets for styling.
+
+* **`prefix`**: Uses permission nodes as its keys, and each value is a string parsed as a text component with placeholder tags.
+* **`whitelist`**: This is used in the `URL` style type. If left empty, all URLs are allowed.
 * **`icon`**: This is used by `ICON_PRESET` and `/embellish-chat help atlas`.
 * **`item`**: This overrides atlas sprites used by `SHOW_ITEM` for specific item IDs.
-* **`whitelist`**: This is used in the `URL` style type. If left empty, all URLs are allowed.
-* **`prefix`**: Uses permission nodes as its keys, and each value is a string parsed as a text component with placeholder tags.
+* **`color`**: This is used in the color presets for styling.
 
 ---
 
