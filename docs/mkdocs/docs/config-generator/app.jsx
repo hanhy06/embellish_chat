@@ -59,7 +59,7 @@ const emptyMentionRule = () => ({
 });
 
 const normalizeConfig = (value) => ({
-  version: value.version ?? "3.5.0",
+  version: value.version ?? "3.5.1",
   delimiter: value.delimiter ?? ",",
   timestamp: value.timestamp ?? "yyyy-MM-dd HH:mm:ss",
   command_alias: value.command_alias ?? "ec",
@@ -73,11 +73,11 @@ const normalizeConfig = (value) => ({
 });
 
 const normalizePresets = (value) => ({
-  color: value.color ?? value.colors ?? {},
+  prefix: value.prefix ?? value.prefixes ?? {},
+  whitelist: value.whitelist ?? [],
   icon: value.icon ?? {},
   item: value.item ?? {},
-  whitelist: value.whitelist ?? [],
-  prefix: value.prefix ?? value.prefixes ?? {}
+  color: value.color ?? value.colors ?? {}
 });
 
 const normalizeStyleRule = (rule) => ({
@@ -958,18 +958,29 @@ function ConfigEditor() {
               </div>
             </Section>
 
-            <Section title="Presets" description="color, icon, item, whitelist, and prefix">
+            <Section title="Presets" description="prefix, whitelist, icon, item, and color">
               <div className="space-y-5">
-                <ColorPresetEditor
-                  values={presets.color}
-                  onAdd={() => setPresets({ ...presets, color: { ...presets.color, [`preset-${Object.keys(presets.color).length + 1}`]: "#FFFFFF" } })}
-                  onRename={(oldKey, newKey) => setPresets({ ...presets, color: renameObjectKey(presets.color, oldKey, newKey) })}
-                  onChange={(key, value) => setPresets({ ...presets, color: { ...presets.color, [key]: value } })}
+                <KeyValueEditor
+                  title="Prefixes"
+                  values={presets.prefix}
+                  keyPlaceholder="key"
+                  valuePlaceholder="value"
+                  onAdd={() => setPresets({ ...presets, prefix: { ...presets.prefix, [`key-${Object.keys(presets.prefix).length + 1}`]: "" } })}
+                  onRename={(oldKey, newKey) => setPresets({ ...presets, prefix: renameObjectKey(presets.prefix, oldKey, newKey) })}
+                  onChange={(key, value) => setPresets({ ...presets, prefix: { ...presets.prefix, [key]: value } })}
                   onRemove={(key) => {
-                    const next = { ...presets.color };
+                    const next = { ...presets.prefix };
                     delete next[key];
-                    setPresets({ ...presets, color: next });
+                    setPresets({ ...presets, prefix: next });
                   }}
+                />
+                <ListTextEditor
+                  title="Whitelist"
+                  values={presets.whitelist}
+                  placeholder="whitelist entry"
+                  onAdd={(value) => setPresets({ ...presets, whitelist: [...presets.whitelist, value] })}
+                  onChange={(index, value) => setPresets({ ...presets, whitelist: presets.whitelist.map((item, current) => current === index ? value : item) })}
+                  onRemove={(index) => setPresets({ ...presets, whitelist: presets.whitelist.filter((_, current) => current !== index) })}
                 />
                 <AtlasEditor
                   title="Icon Presets"
@@ -995,26 +1006,15 @@ function ConfigEditor() {
                     setPresets({ ...presets, item: next });
                   }}
                 />
-                <ListTextEditor
-                  title="Whitelist"
-                  values={presets.whitelist}
-                  placeholder="whitelist entry"
-                  onAdd={(value) => setPresets({ ...presets, whitelist: [...presets.whitelist, value] })}
-                  onChange={(index, value) => setPresets({ ...presets, whitelist: presets.whitelist.map((item, current) => current === index ? value : item) })}
-                  onRemove={(index) => setPresets({ ...presets, whitelist: presets.whitelist.filter((_, current) => current !== index) })}
-                />
-                <KeyValueEditor
-                  title="Prefixes"
-                  values={presets.prefix}
-                  keyPlaceholder="key"
-                  valuePlaceholder="value"
-                  onAdd={() => setPresets({ ...presets, prefix: { ...presets.prefix, [`key-${Object.keys(presets.prefix).length + 1}`]: "" } })}
-                  onRename={(oldKey, newKey) => setPresets({ ...presets, prefix: renameObjectKey(presets.prefix, oldKey, newKey) })}
-                  onChange={(key, value) => setPresets({ ...presets, prefix: { ...presets.prefix, [key]: value } })}
+                <ColorPresetEditor
+                  values={presets.color}
+                  onAdd={() => setPresets({ ...presets, color: { ...presets.color, [`preset-${Object.keys(presets.color).length + 1}`]: "#FFFFFF" } })}
+                  onRename={(oldKey, newKey) => setPresets({ ...presets, color: renameObjectKey(presets.color, oldKey, newKey) })}
+                  onChange={(key, value) => setPresets({ ...presets, color: { ...presets.color, [key]: value } })}
                   onRemove={(key) => {
-                    const next = { ...presets.prefix };
+                    const next = { ...presets.color };
                     delete next[key];
-                    setPresets({ ...presets, prefix: next });
+                    setPresets({ ...presets, color: next });
                   }}
                 />
               </div>
