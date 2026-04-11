@@ -35,7 +35,7 @@ Embellish Chat enhances Minecraft chat with item and inventory showcases, built-
   Style messages with bold, italic, underline, strikethrough, custom fonts, hex colors, gradients, presets, and rainbow effects.
 
 * **Smart Mention System**
-  Mention players, `@here`, `@world`, or `@everyone` with clear notifications. LuckPerms group mentions are also supported.
+  Mention players, `@here`, `@team(name)`, `@world(name)`, or `@everyone` with clear notifications. LuckPerms group mentions are also supported.
 
 * **Useful Chat Utilities**
   Hover messages to see exact timestamps and click them to copy their content with the timestamp.
@@ -112,7 +112,7 @@ Use the following patterns directly in the chat window to apply styles:
 * **`/embellish-chat open <player>`** Opens the last shared inventory/ender/item of the specified player.
 * **`/embellish-chat help mention`** Displays the mention rules available to you based on your permissions.
 * **`/embellish-chat help style`** Displays the styling rules available to you based on your permissions.
-* **`/embellish-chat help atlas`** Displays available icon presets from `presets.json/icon` in `name - icon` format.
+* **`/embellish-chat help icon`** Displays available icon presets from `presets.json/icon` in `name - icon` format.
 * **`/embellish-chat notification`** Toggles your personal mention notification preferences. *(Enabled/disabled globally by `notify_command_enabled` in the config).*
 
 ---
@@ -153,10 +153,11 @@ The configuration file is located at `config/embellish-chat/config.json`.
 * The core configuration logic is defined in `style_rules` and `mention_rules`.
 * Rules are processed from top to bottom, so placing a catch-all rule earlier may override more specific rules defined below.
 * The `delimiter` value is internally handled as a regular expression; special characters such as `|` must be properly escaped.
+* `command_alias` registers an additional root command that redirects to `/embellish-chat` when the config is loaded with a non-blank value.
 * `team_color` is the base color used when styling `@team` and `@Player` mentions.
 * If `team_color` is missing or set to `null`, those mentions are left without an automatic color.
-* Reloading the config rebuilds the runtime `StyleRegistry`, so style rules immediately see updated `timestamp`, `url_color`, `whitelist`, `color`, `icon`, and `item` values.
-* To avoid JSON syntax errors and ensure valid configurations, using the **[Web Config Generator](https://hanhy06.github.io/embellish-chat-wiki/config-generator/)** is strongly recommended:
+* Reloading the config refreshes the runtime style and mention processors, so updated `style_rules`, `mention_rules`, `timestamp`, `url_color`, `whitelist`, `color`, `icon`, and `item` values take effect immediately.
+* To avoid JSON syntax errors and ensure valid configurations, using the **[Web Config Generator](https://hanhy06.github.io/embellish-chat-wiki/config-generator/)** is strongly recommended.
 
 ### Styling
 
@@ -214,7 +215,7 @@ The configuration file is located at `config/embellish-chat/mentions.json`.
             "preset": " ... "
           }
         ],
-        "styles": [ ... ],
+        "styles": [ ... ]
       }
       ...
     ]
@@ -249,11 +250,11 @@ The configuration file is located at `config/embellish-chat/presets.json`.
 {
   "prefix": {
     " ... ": " ... "
-  }.
+  },
   "whitelist": [
     " ... "
   ],
-   "icon": {
+  "icon": {
     " ... ": {
       "atlas": " ... ",
       "sprite": " ... "
@@ -266,14 +267,14 @@ The configuration file is located at `config/embellish-chat/presets.json`.
     }
   },
   "color": {
-    " ... ": " ... ",
-  },
+    " ... ": " ... "
+  }
 }
 ```
 
 * **`prefix`**: Uses permission nodes as its keys, and each value is a string parsed as a text component with placeholder tags.
 * **`whitelist`**: This is used in the `URL` style type. If left empty, all URLs are allowed.
-* **`icon`**: This is used by `ICON_PRESET` and `/embellish-chat help atlas`.
+* **`icon`**: This is used by `ICON_PRESET` and `/embellish-chat help icon`.
 * **`item`**: This overrides atlas sprites used by `SHOW_ITEM` for specific item IDs.
 * **`color`**: This is used in the color presets for styling.
 

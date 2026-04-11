@@ -38,7 +38,7 @@ The core settings file is located at `config/embellish-chat/config.json`.
 * **`version`**: Stores the current mod version. Do not edit this field manually.
 * **`delimiter`**: Separator used when parsing certain options. This value is handled internally as a regular expression, so special characters such as `|` must be escaped.
 * **`timestamp`**: Date and time format used by timestamp-related output.
-* **`command_alias`**: Short alias for the main command.
+* **`command_alias`**: Additional root alias for the main command. When the config is loaded with a non-blank value, it redirects to `/embellish-chat`.
 * **`url_color`**: Default color used for URL-style output.
 * **`team_color`**: Base color used when styling `@team` and `@Player` mentions. When the target has team or display styling, that styling is applied on top of this base. If it is missing or set to `null`, those mentions are left without an automatic color.
 * **`notify_command_enabled`**: Enables the notification toggle command.
@@ -125,7 +125,7 @@ The shared preset file is located at `config/embellish-chat/presets.json`.
 ```
 {
   "color": {
-    " ... ": " ... ",
+    " ... ": " ... "
   },
   "icon": {
     " ... ": {
@@ -149,7 +149,7 @@ The shared preset file is located at `config/embellish-chat/presets.json`.
 ```
 
 * **`color`**: Used for named color presets in style rules.
-* **`icon`**: Used by `ICON_PRESET` and `/embellish-chat help atlas`.
+* **`icon`**: Used by `ICON_PRESET` and `/embellish-chat help icon`.
 * **`item`**: Used by `SHOW_ITEM` to override atlas sprites for specific item IDs.
 * **`whitelist`**: Used by the `URL` style type. If it is empty, all URLs are allowed.
 * **`prefix`**: Uses permission nodes as keys, and each value is parsed as a text component with placeholder tags.
@@ -159,5 +159,5 @@ The shared preset file is located at `config/embellish-chat/presets.json`.
 * `ConfigManager` writes `config.json`, `styles.json`, `mentions.json`, and `presets.json` separately, then merges them into one runtime `Config` when loading.
 * Missing sections are restored from the built-in defaults during that merge step.
 * If the stored `version` does not match the running mod version, the mod keeps the current in-memory configuration and ignores the mismatched load.
-* Reloading the config rebuilds the runtime `StyleRegistry`, so style rules immediately see updated `timestamp`, `url_color`, `whitelist`, `color`, `icon`, and `item` values.
+* Reloading the config refreshes the runtime style and mention processors, so updated `style_rules`, `mention_rules`, `timestamp`, `url_color`, `whitelist`, `color`, `icon`, and `item` values take effect immediately.
 * To avoid JSON syntax errors and to generate valid configs more easily, using the **[Web Config Generator](../config-generator/index.html)** is strongly recommended.
