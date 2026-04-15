@@ -419,7 +419,12 @@ public record Config(
         );
         item.put("minecraft:compass",new AtlasSprite(
                         Identifier.parse("minecraft:items"),
-                        Identifier.parse("minecraft:item/compass_00")
+                        Identifier.parse("minecraft:item/compass_20")
+                )
+        );
+        item.put("minecraft:recovery_compass",new AtlasSprite(
+                        Identifier.parse("minecraft:items"),
+                        Identifier.parse("minecraft:item/recovery_compass_20")
                 )
         );
         item.put("minecraft:crossbow",new AtlasSprite(
