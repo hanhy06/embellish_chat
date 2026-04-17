@@ -112,13 +112,17 @@
       "atlas": "minecraft:items",
       "sprite": "minecraft:item/clock_00"
     },
+    "minecraft:recovery_compass": {
+      "atlas": "minecraft:items",
+      "sprite": "minecraft:item/recovery_compass_20"
+    },
     "minecraft:tipped_arrow": {
       "atlas": "minecraft:items",
       "sprite": "minecraft:item/arrow"
     },
     "minecraft:compass": {
       "atlas": "minecraft:items",
-      "sprite": "minecraft:item/compass_00"
+      "sprite": "minecraft:item/compass_20"
     },
     "minecraft:crossbow": {
       "atlas": "minecraft:items",
