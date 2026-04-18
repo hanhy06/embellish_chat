@@ -5,7 +5,6 @@ import eu.pb4.placeholders.api.PlaceholderResult;
 import eu.pb4.placeholders.api.Placeholders;
 import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import eu.pb4.placeholders.api.node.TextNode;
-import eu.pb4.placeholders.api.parsers.NodeParser;
 import eu.pb4.placeholders.api.parsers.TagParser;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import net.minecraft.network.chat.Component;
@@ -20,10 +19,6 @@ import java.util.UUID;
 
 public class PlaceHolderUtil {
     private static final Map<UUID,String> placeholders = new HashMap<>();
-    private static final NodeParser TAG_AND_PLACEHOLDER_PARSER = NodeParser.merge(
-            TagParser.DEFAULT,
-            Placeholders.SERVER_PLACEHOLDER_PARSER
-    );
 
     public static void put(UUID uuid,String string){
         placeholders.put(uuid,string);
@@ -50,24 +45,36 @@ public class PlaceHolderUtil {
 
     public static Component parseText(String text, ServerPlayer player){
         if (text.isEmpty()) return Component.literal(text);
-        return TAG_AND_PLACEHOLDER_PARSER.parseComponent(text, getContext(player).asParserContext());
+
+        ParserContext context;
+        if (player != null) context = ServerPlaceholderContext.of(player).asParserContext();
+        else context = ServerPlaceholderContext.of(EmbellishChat.SERVER).asParserContext();
+
+        TextNode placeholderText = Placeholders.SERVER_PLACEHOLDER_PARSER.parseNode(text);
+        TextNode taggedText = TagParser.DEFAULT.parseNode(placeholderText);
+
+        return taggedText.toComponent(context);
     }
 
     public static String parsePlaceholder(String text, ServerPlayer player){
         if (text.isEmpty()) return text;
-        return Placeholders.SERVER_PLACEHOLDER_PARSER.parseComponent(text, getContext(player).asParserContext()).getString();
+
+        ParserContext context;
+        if (player != null) context = ServerPlaceholderContext.of(player).asParserContext();
+        else context = ServerPlaceholderContext.of(EmbellishChat.SERVER).asParserContext();
+
+        TextNode placeholderText = Placeholders.SERVER_PLACEHOLDER_PARSER.parseNode(text);
+
+        return placeholderText.toComponent(context).getString();
     }
 
     public static MutableComponent parsePlaceholder(MutableComponent text, ServerPlayer player){
-        TextNode node = TextNode.convert(text);
-        return Placeholders.SERVER_PLACEHOLDER_PARSER.parseComponent(node, getContext(player).asParserContext()).copy();
-    }
+        ParserContext context;
+        if (player != null) context = ServerPlaceholderContext.of(player).asParserContext();
+        else context = ServerPlaceholderContext.of(EmbellishChat.SERVER).asParserContext();
 
-    private static ServerPlaceholderContext getContext(ServerPlayer player) {
-        if (player != null) {
-            return ServerPlaceholderContext.of(player);
-        }
+        TextNode placeholderText = Placeholders.SERVER_PLACEHOLDER_PARSER.parseNode(TextNode.convert(text));
 
-        return ServerPlaceholderContext.of(EmbellishChat.SERVER);
+        return placeholderText.toComponent(context).copy();
     }
 }
