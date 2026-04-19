@@ -40,6 +40,7 @@ public record Config(
         Color team_color,
         boolean notify_command_enabled,
         boolean notify_mention_enabled,
+        boolean require_same_channel,
         boolean disable_vanilla_chat_format,
 
         //player list
@@ -70,6 +71,7 @@ public record Config(
                 "ec",
                 new Color(0x0000EE),
                 new Color(0xFF55FF),
+                true,
                 true,
                 true,
                 false,

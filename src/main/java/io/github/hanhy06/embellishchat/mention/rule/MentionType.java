@@ -7,6 +7,7 @@ public enum MentionType {
     EVERYONE,
     WORLD,
     LUCK_PERMS_GROUP,
+    ADVANCED_CHAT_CHANNEL,
     PERMISSION,
     CUSTOM
 }

@@ -1,0 +1,35 @@
+package io.github.hanhy06.embellishchat.util;
+
+import io.github.hanhy06.embellishchat.config.ConfigManager;
+import me.wesley1808.advancedchat.impl.channels.Channels;
+import me.wesley1808.advancedchat.impl.channels.ChatChannel;
+import me.wesley1808.advancedchat.impl.data.AdvancedChatData;
+import me.wesley1808.advancedchat.impl.data.DataManager;
+import net.minecraft.server.level.ServerPlayer;
+
+import java.util.HashSet;
+import java.util.List;
+
+public class AdvancedChatUtil {
+    public static HashSet<ServerPlayer> getChannelPlayers(String targetChannel, ServerPlayer sender, List<ServerPlayer> players) {
+        HashSet<ServerPlayer> result = new HashSet<>();
+        String normalizedChannel = targetChannel.toLowerCase().replace(" ", "");
+
+        ChatChannel senderChannel = DataManager.get(sender).channel;
+        ChatChannel channel = Channels.get(normalizedChannel);
+        if (channel == null) return result;
+
+        if (ConfigManager.getConfig().require_same_channel() && senderChannel != channel) {
+            return result;
+        }
+
+        for (ServerPlayer player : players) {
+            AdvancedChatData data = DataManager.get(player);
+            if (data.channel == channel) {
+                result.add(player);
+            }
+        }
+
+        return result;
+    }
+}

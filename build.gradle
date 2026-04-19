@@ -53,8 +53,9 @@ dependencies {
 
 	include(implementation("me.lucko:fabric-permissions-api:${fabric_permissions_api_version}"))
 	include(implementation("eu.pb4:placeholder-api:${placeholder_api_version}"))
-	compileOnly "maven.modrinth:styled-nicknames:${styled_nicknames_version}"
 	compileOnly "net.luckperms:api:${luckperms_version}"
+	compileOnly "maven.modrinth:styled-nicknames:${styled_nicknames_version}"
+	compileOnly "maven.modrinth:advanced-chat:${advanced_chat_version}"
 }
 
 
