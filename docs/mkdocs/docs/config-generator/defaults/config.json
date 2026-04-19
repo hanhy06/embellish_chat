@@ -1,5 +1,5 @@
 {
-  "version": "3.5.1",
+  "version": "3.6.0",
   "delimiter": ",",
   "timestamp": "yyyy-MM-dd HH:mm:ss",
   "command_alias": "ec",
@@ -7,6 +7,7 @@
   "team_color": "#FF55FF",
   "notify_command_enabled": true,
   "notify_mention_enabled": true,
+  "require_same_channel": true,
   "disable_vanilla_chat_format": false,
   "banned_players": [],
   "notify_off_players": []

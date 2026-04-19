@@ -6,6 +6,7 @@
 * **Text Placeholder API (Embedded):** Supports placeholders in mention titles and presets.
 * **Styled Nicknames:** Allows mentions to match player nicknames.
 * **LuckPerms:** Required for `@group` mentions.
+* **Advanced Chat:** Enables the `ADVANCED_CHAT_CHANNEL` mention type for channel-based targeting.
 * **Geyser:** Basic support. Mentions work, but click and hover events are limited on Bedrock.
 
 ## Not Supported / Conflicts

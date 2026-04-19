@@ -27,6 +27,7 @@ The core settings file is located at `config/embellish-chat/config.json`.
   "team_color": "#FF55FF",
   "notify_command_enabled": true,
   "notify_mention_enabled": true,
+  "require_same_channel": true,
   "disable_vanilla_chat_format": false,
   
   //player list
@@ -43,6 +44,7 @@ The core settings file is located at `config/embellish-chat/config.json`.
 * **`team_color`**: Base color used when styling `@team` and `@Player` mentions. When the target has team or display styling, that styling is applied on top of this base. If it is missing or set to `null`, those mentions are left without an automatic color.
 * **`notify_command_enabled`**: Enables the notification toggle command.
 * **`notify_mention_enabled`**: Enables mention sound and title notifications.
+* **`require_same_channel`**: When enabled, `ADVANCED_CHAT_CHANNEL` mentions only work if the sender is already inside the target Advanced Chat channel.
 * **`disable_vanilla_chat_format`**: Disables the vanilla chat format so Embellish Chat can fully control message formatting.
 * **`banned_players`**: List of players blocked from using mod features.
 * **`notify_off_players`**: List of players who have mention notifications disabled.
