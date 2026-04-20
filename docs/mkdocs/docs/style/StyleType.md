@@ -2,12 +2,12 @@
 
 ## Type Table
 
-| Category         | Type                                                                                                                               |
-|------------------|------------------------------------------------------------------------------------------------------------------------------------|
-| **Color**        | `COLOR_HEX`, `COLOR_RAINBOW`, `COLOR_GRADIENT`, `COLOR_PRESET`, `COLOR_SHADOW`, `COLOR_TEAM`                                       |
-| **Formatting**   | `BOLD`, `ITALIC`, `UNDERLINE`, `STRIKETHROUGH`, `OBFUSCATED`, `FONT`, `CLEAR`                                                      |
-| **Interaction**  | `CLICK_COMMAND_RUN`, `CLICK_COMMAND_SUGGEST`, `CLICK_COPY`, `HOVER_TEXT`, `HOVER_ITEM`, `URL`, `METADATA`                          |
-| **Modification** | `UPPER`, `LOWER`, `CAPITALIZE`, `REPLACE`, `MASK`, `PREFIX`, `SUFFIX`                                                              |
+| Category         | Type                                                                                                                              |
+|------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| **Color**        | `COLOR_HEX`, `COLOR_RAINBOW`, `COLOR_GRADIENT`, `COLOR_PRESET`, `COLOR_SHADOW`, `COLOR_TEAM`                                      |
+| **Formatting**   | `BOLD`, `ITALIC`, `UNDERLINE`, `STRIKETHROUGH`, `OBFUSCATED`, `FONT`, `CLEAR`                                                     |
+| **Interaction**  | `CLICK_COMMAND_RUN`, `CLICK_COMMAND_SUGGEST`, `CLICK_COPY`, `HOVER_TEXT`, `HOVER_ITEM`, `URL`, `METADATA`                         |
+| **Modification** | `UPPER`, `LOWER`, `CAPITALIZE`, `REPLACE`, `MASK`, `PREFIX`, `SUFFIX`                                                             |
 | **Advanced**     | `SHOW_ITEM`, `SHOW_INVENTORY`, `SHOW_ENDER_CHEST`, `ICON_PRESET`, `JSON`, `DISCORD_JSON`, `COMMAND_RUN`, `LOG`, `BUBBLE`, `BLOCK` |
 
 ## Color Styles
@@ -35,7 +35,7 @@
 * `CLICK_COMMAND_SUGGEST`: Places the supplied command into the chat input field when clicked. **Option:** `Command`
 * `CLICK_COPY`: Copies the supplied text to the clipboard when the text is clicked. **Option:** `Text`
 * `HOVER_TEXT`: Displays the supplied text when the mouse hovers over it. **Option:** `Text`
-* `HOVER_ITEM`: Displays the item description for a specified inventory slot when hovered over. A blank option uses the main-hand item, and valid slot IDs such as `40` can target other inventory slots. Invalid values are ignored. **Option:** `Slot ID`
+* `HOVER_ITEM`: Displays the item tooltip for the selected inventory slot. A blank option uses the main-hand item. **Option:** `Slot ID` / `None`
 * `URL`: Opens the provided URL in a browser when clicked. The domain or subdomain must be included in `presets.json/whitelist`. If the list is empty, all URLs are allowed. **Option:** `URL`
 * `METADATA`: Displays the server receipt time on hover and copies it to the clipboard on click. **Option:** `None`
 
@@ -51,7 +51,7 @@
 
 ## Advanced
 
-* `SHOW_ITEM`: Displays the description and texture of the item or block held by the player. A blank option first checks `presets.json/item`, then falls back to the block name for `BlockItem`, and otherwise uses the item's model sprite. `only_name` forces the display name instead of a sprite. This style type must be placed at the very bottom. **Option:** `only_name` or `None`
+* `SHOW_ITEM`: Displays the held block name, or the item. This style type must be placed at the very bottom. **Option:** `only_name`
 * `SHOW_INVENTORY`: Displays the user's face. Clicking it shows the user's inventory snapshot. This style type must be placed at the very bottom, and the inventory snapshot is cleared when the player leaves the server. **Option:** `None`
 * `SHOW_ENDER_CHEST`: Displays the user's face. Clicking it shows the user's ender chest snapshot. This style type must be placed at the very bottom, and the inventory snapshot is cleared when the player leaves the server. **Option:** `None`
 * `ICON_PRESET`: Uses a predefined icon name from the `presets.json/icon` section. This style type cannot be used in versions below 1.21.8 and must be placed at the very bottom. **Option:** `Preset Name`
@@ -60,4 +60,4 @@
 * `COMMAND_RUN`: Immediately executes the supplied command when the text is processed. **Option:** `Command`
 * `LOG`: Logs the text and sender information to the server console. **Option:** `None`
 * `BUBBLE`: Displays a speech bubble above the user's head. This type must be placed above `SHOW_ITEM` and `SHOW_INVENTORY`. **Option:** `None`
-* `BLOCK`: Stops the message from being sent. **Option:** `None`
+* `BLOCK`: Stops the message from being sent. **Option:** `Text`

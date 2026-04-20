@@ -138,6 +138,7 @@ The configuration file is located at `config/embellish-chat/config.json`.
   "team_color": "#FF55FF",
   "notify_command_enabled": true,
   "notify_mention_enabled": true,
+  "require_same_channel": true,
   "disable_vanilla_chat_format": false,
   
   //player list
@@ -156,6 +157,7 @@ The configuration file is located at `config/embellish-chat/config.json`.
 * `command_alias` registers an additional root command that redirects to `/embellish-chat` when the config is loaded with a non-blank value.
 * `team_color` is the base color used when styling `@team` and `@Player` mentions.
 * If `team_color` is missing or set to `null`, those mentions are left without an automatic color.
+* `require_same_channel` limits `ADVANCED_CHAT_CHANNEL` mentions to the sender's current Advanced Chat channel when enabled.
 * Reloading the config refreshes the runtime style and mention processors, so updated `style_rules`, `mention_rules`, `timestamp`, `url_color`, `whitelist`, `color`, `icon`, and `item` values take effect immediately.
 * To avoid JSON syntax errors and ensure valid configurations, using the **[Web Config Generator](https://hanhy06.github.io/embellish-chat-wiki/config-generator/)** is strongly recommended.
 
@@ -294,6 +296,8 @@ The configuration file is located at `config/embellish-chat/presets.json`.
   * Supports mentioning players by nickname.
 * **LuckPerms**
   * **Required** for the `@group` mention type. Without it, group mentions will be ignored.
+* **Advanced Chat**
+  * **Required** for the `@channel` mention type. Without it, channel mentions will be ignored.
 * **Geyser (Bedrock Edition)**
   * Mentions between Java and Bedrock editions work seamlessly.
   * *Note:* Advanced styling (hover text, click events) may not fully render on Bedrock clients.

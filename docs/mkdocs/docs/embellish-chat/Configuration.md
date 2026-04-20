@@ -1,7 +1,7 @@
 # Configuration
 
-Embellish Chat is powered by regular expressions, which makes it highly flexible but sometimes difficult to configure by hand.
-If you are not comfortable writing regex, using an AI assistant or the web config generator can make rule creation much easier.
+Embellish Chat provides powerful functionality through regular expressions.
+Because regular expressions are inherently difficult, it is recommended to use the web config generator or an AI assistant when creating and refining rules.
 
 The mod configuration is split across four files:
 
@@ -10,15 +10,15 @@ The mod configuration is split across four files:
 * `mentions.json`: Mention rules that control targeting and notifications.
 * `presets.json`: Shared preset data for colors, icon presets, item sprite overrides, URL whitelists, and chat prefixes.
 
-## config.json
+## Config
 
-The core settings file is located at `config/embellish-chat/config.json`.
+The configuration file is located at `config/embellish-chat/config.json`.
 
-```
+```json
 {
   //version
   "version": "current mod version",
-  
+
   //setting
   "delimiter": ",",
   "timestamp": "yyyy-MM-dd HH:mm:ss",
@@ -29,37 +29,38 @@ The core settings file is located at `config/embellish-chat/config.json`.
   "notify_mention_enabled": true,
   "require_same_channel": true,
   "disable_vanilla_chat_format": false,
-  
+
   //player list
   "banned_players": [],
   "notify_off_players": []
 }
 ```
 
-* **`version`**: Stores the current mod version. Do not edit this field manually.
-* **`delimiter`**: Separator used when parsing certain options. This value is handled internally as a regular expression, so special characters such as `|` must be escaped.
-* **`timestamp`**: Date and time format used by timestamp-related output.
-* **`command_alias`**: Additional root alias for the main command. When the config is loaded with a non-blank value, it redirects to `/embellish-chat`.
-* **`url_color`**: Default color used for URL-style output.
-* **`team_color`**: Base color used when styling `@team` and `@Player` mentions. When the target has team or display styling, that styling is applied on top of this base. If it is missing or set to `null`, those mentions are left without an automatic color.
-* **`notify_command_enabled`**: Enables the notification toggle command.
-* **`notify_mention_enabled`**: Enables mention sound and title notifications.
-* **`require_same_channel`**: When enabled, `ADVANCED_CHAT_CHANNEL` mentions only work if the sender is already inside the target Advanced Chat channel.
-* **`disable_vanilla_chat_format`**: Disables the vanilla chat format so Embellish Chat can fully control message formatting.
-* **`banned_players`**: List of players blocked from using mod features.
-* **`notify_off_players`**: List of players who have mention notifications disabled.
+* The `version` field must not be modified manually.
+* `ConfigManager` writes `config.json`, `styles.json`, `mentions.json`, and `presets.json` separately, then merges them into one runtime `Config` when loading.
+* Missing sections are restored from the built-in defaults during that merge step.
+* If the stored `version` does not match the running mod version, the mod keeps the current in-memory configuration and ignores the mismatched load.
+* The core configuration logic is defined in `style_rules` and `mention_rules`.
+* Rules are processed from top to bottom, so placing a catch-all rule earlier may override more specific rules defined below.
+* The `delimiter` value is internally handled as a regular expression, so special characters such as `|` must be escaped properly.
+* `command_alias` registers an additional root command that redirects to `/embellish-chat` when the config is loaded with a non-blank value.
+* `team_color` is the base color used when styling `@team` and `@Player` mentions.
+* If `team_color` is missing or set to `null`, those mentions are left without an automatic color.
+* `require_same_channel` limits `ADVANCED_CHAT_CHANNEL` mentions to the sender's current Advanced Chat channel when enabled.
+* Reloading the config refreshes the runtime style and mention processors, so updated `style_rules`, `mention_rules`, `timestamp`, `url_color`, `whitelist`, `color`, `icon`, and `item` values take effect immediately.
+* To avoid JSON syntax errors and ensure valid configurations, using the **[Web Config Generator](../config-generator/index.html)** is strongly recommended.
 
-## styles.json
+## Styling
 
-The style rules file is located at `config/embellish-chat/styles.json`.
+The configuration file is located at `config/embellish-chat/styles.json`.
 
-```
+```json
 {
   "style_rules": {
     "embellish-chat.chat": [
       {
         "pattern": " ... ",
-        "comment": " ... ",
+        "comment": "...",
         "styles": [
           {
             "styleType": " ... ",
@@ -73,31 +74,36 @@ The style rules file is located at `config/embellish-chat/styles.json`.
 }
 ```
 
-* **`style_rules`**: Top-level container for all styling rules.
-* **`embellish-chat.chat`**: Rules applied to normal chat messages.
-* Each rule includes **`pattern`** for regex matching, **`comment`** for `/embellish-chat help style`, and **`styles`** for the actions to apply.
+* **`pattern`**: A regular expression used to scan chat text. It must contain two capture groups.
+  * `group 1`: Text to be styled.
+  * `group 2`: Text passed as an option.
+* **`comment`**: Help text shown in `/embellish-chat help style`.
+* **`styles`**: Defines the styles applied to capture group 1.
+  * `styleType`: The style type. See **[Style Type](../style/StyleType.md)** for the full list.
+  * `preset`: A fixed option value. If it is empty, the captured content from group 2 is used instead.
 * Each top-level key such as `embellish-chat.chat` is also treated as a permission node.
-* Each `styleType` must match a handler registered in the runtime `StyleRegistry`.
-* Most custom chat formatting behavior is defined here.
-* Rules are processed from top to bottom, so an early catch-all rule can override more specific rules below it.
+* Each `styleType` name must match a handler registered in the runtime `StyleRegistry`.
 
-For the full rule format and every available style type, see **[Style Configuration](../style/Configuration.md)** and **[Style Type](../style/StyleType.md)**.
+For examples and advanced usage, see **[Style System](../style/StyleSystem.md)** and **[Style Configuration](../style/Configuration.md)**.
 
-## mentions.json
+## Mention
 
-The mention rules file is located at `config/embellish-chat/mentions.json`.
+The configuration file is located at `config/embellish-chat/mentions.json`.
 
-```
+```json
 {
   "mention_rules": {
     "embellish-chat.mention": [
       {
         "pattern": " ... ",
-        "comment": " ... ",
+        "comment": "...",
+
         "title": " ... ",
+        "sound": { ... },
+
         "cooldown": 0,
         "onlyTarget": false,
-        "sound": { ... },
+
         "mentions": [
           {
             "mentionType": " ... ",
@@ -112,23 +118,40 @@ The mention rules file is located at `config/embellish-chat/mentions.json`.
 }
 ```
 
-* **`mention_rules`**: Top-level container for all mention rules.
-* **`embellish-chat.mention`**: Rules applied to mention processing.
-* Each rule includes **`pattern`** for matching, **`comment`** for `/embellish-chat help mention`, **`title`**, **`cooldown`**, **`onlyTarget`**, **`sound`**, **`mentions`**, and optional **`styles`**.
-* Mention behavior and recipient targeting are defined here.
-* Rules are processed from top to bottom, so more specific rules should usually be placed first.
+* **`pattern`**: A regular expression used to scan chat text. It must contain one capture group.
+  * The capture group becomes the mention option, such as a team name or LuckPerms group.
+* **`comment`**: Help text shown in `/embellish-chat help mention`.
+* **`title`**: The title shown on the mentioned player's screen.
+  * `%player:displayname%` resolves to the display name of the player who sent the mention.
+* **`sound`**: Defines the notification sound settings.
+  * `id`: Sound identifier.
+  * `category`: Sound category.
+  * `volume`: Sound volume.
+  * `pitch`: Sound pitch.
+* **`cooldown`**: Mention cooldown time in seconds.
+  * Set it to `0` to disable the cooldown.
+* **`onlyTarget`**:
+  * When set to `true`, the message is not broadcast globally and is sent only to the matched targets.
+* **`mentions`**: Defines the mention actions to run.
+  * `mentionType`: The mention type. See **[Mention Type](../mention/MentionType.md)** for the full list.
+  * `preset`: An optional preset value.
+* **`styles`**: Defines the styles applied when the mention is triggered.
+  * This works the same way as the styling rules section.
 
-For the full rule format and every available mention type, see **[Mention Configuration](../mention/Configuration.md)** and **[Mention Type](../mention/MentionType.md)**.
+For examples and advanced usage, see **[Mention System](../mention/MentionSystem.md)** and **[Mention Configuration](../mention/Configuration.md)**.
 
-## presets.json
+## Presets
 
-The shared preset file is located at `config/embellish-chat/presets.json`.
+The configuration file is located at `config/embellish-chat/presets.json`.
 
-```
+```json
 {
-  "color": {
+  "prefix": {
     " ... ": " ... "
   },
+  "whitelist": [
+    " ... "
+  ],
   "icon": {
     " ... ": {
       "atlas": " ... ",
@@ -136,30 +159,19 @@ The shared preset file is located at `config/embellish-chat/presets.json`.
     }
   },
   "item": {
-    "minecraft:clock": {
+    " ... ": {
       "atlas": " ... ",
       "sprite": " ... "
     }
   },
-  "whitelist": [
-    " ... "
-  ],
-  "prefix": {
+  "color": {
     " ... ": " ... "
   }
 }
 ```
 
-* **`color`**: Used for named color presets in style rules.
-* **`icon`**: Used by `ICON_PRESET` and `/embellish-chat help icon`.
-* **`item`**: Used by `SHOW_ITEM` to override atlas sprites for specific item IDs.
+* **`prefix`**: Uses permission nodes as keys, and each value is a string parsed as a text component with placeholder tags.
 * **`whitelist`**: Used by the `URL` style type. If it is empty, all URLs are allowed.
-* **`prefix`**: Uses permission nodes as keys, and each value is parsed as a text component with placeholder tags.
-
-## Notes
-
-* `ConfigManager` writes `config.json`, `styles.json`, `mentions.json`, and `presets.json` separately, then merges them into one runtime `Config` when loading.
-* Missing sections are restored from the built-in defaults during that merge step.
-* If the stored `version` does not match the running mod version, the mod keeps the current in-memory configuration and ignores the mismatched load.
-* Reloading the config refreshes the runtime style and mention processors, so updated `style_rules`, `mention_rules`, `timestamp`, `url_color`, `whitelist`, `color`, `icon`, and `item` values take effect immediately.
-* To avoid JSON syntax errors and to generate valid configs more easily, using the **[Web Config Generator](../config-generator/index.html)** is strongly recommended.
+* **`icon`**: Used by `ICON_PRESET` and `/embellish-chat help icon`.
+* **`item`**: Overrides atlas sprites used by `SHOW_ITEM` for specific item IDs.
+* **`color`**: Used in color presets for styling.

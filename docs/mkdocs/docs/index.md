@@ -17,7 +17,7 @@
   </a>
 </div>
 
-Embellish Chat modernizes your Minecraft server's chat experience with a fully server-side design. It adds Markdown-style formatting, interactive message events, and a flexible mention system without requiring any client installation.
+Embellish Chat enhances Minecraft chat with item and inventory showcases, built-in icons, mentions, and rich formatting. Players can show off gear, open showcased inventories, and use more expressive chat features without requiring the mod on their client.
 
 ---
 
