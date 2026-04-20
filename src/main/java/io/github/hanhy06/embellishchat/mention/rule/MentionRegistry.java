@@ -8,6 +8,7 @@ import io.github.hanhy06.embellishchat.mention.data.Target;
 import io.github.hanhy06.embellishchat.styling.util.ColorUtil;
 import io.github.hanhy06.embellishchat.util.AdvancedChatUtil;
 import io.github.hanhy06.embellishchat.util.LuckPermsUtil;
+import io.github.hanhy06.embellishchat.util.MessageBlockedException;
 import io.github.hanhy06.embellishchat.util.NickNamesUtil;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -82,6 +83,8 @@ public class MentionRegistry {
         Function<MentionParameter, Target> function = registries.get(mentionType);
         try {
             return function.apply(parameter);
+        } catch (MessageBlockedException block){
+            throw block;
         } catch (RuntimeException e) {
             EmbellishChat.LOGGER.warn("Failed to apply mention [{}] with option [{}]", mentionType, parameter.option(), e);
             return Target.of(new HashSet<>(),null);
@@ -154,8 +157,7 @@ public class MentionRegistry {
         Identifier worldId = Identifier.tryParse(worldName);
 
         if (worldId == null) {
-            EmbellishChat.LOGGER.info("World ID {} is invalid. @world mention ignored.", worldName);
-            return Target.of(new HashSet<>(), null);
+            throw new MessageBlockedException("Invalid world ID.");
         }
 
         ResourceKey<Level> worldKey = ResourceKey.create(Registries.DIMENSION, worldId);
@@ -165,8 +167,7 @@ public class MentionRegistry {
             HashSet<ServerPlayer> players = new HashSet<>(PlayerLookup.level(targetLevel));
             return Target.of(players,null);
         } else {
-            EmbellishChat.LOGGER.info("World {} not found. @world mention ignored.", worldName);
-            return Target.of(new HashSet<>(), null);
+            throw new MessageBlockedException("World not found.");
         }
     }
 
@@ -211,7 +212,7 @@ public class MentionRegistry {
             List<ServerPlayer> players = entitySelector.findPlayers(sender.createCommandSourceStack());
             return Target.of(players, null);
         } catch (CommandSyntaxException e) {
-            throw new IllegalArgumentException("Invalid selector: " + parameter.option(), e);
+            throw new MessageBlockedException("Invalid selector.", e);
         }
     }
 }

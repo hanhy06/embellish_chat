@@ -17,10 +17,10 @@ public class AdvancedChatUtil {
 
         ChatChannel senderChannel = DataManager.get(sender).channel;
         ChatChannel channel = Channels.get(normalizedChannel);
-        if (channel == null) return result;
+        if (channel == null) throw new MessageBlockedException("Channel not found.");
 
         if (ConfigManager.getConfig().require_same_channel() && senderChannel != channel) {
-            return result;
+            throw new MessageBlockedException("You must be in the same channel.");
         }
 
         for (ServerPlayer player : players) {

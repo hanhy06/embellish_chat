@@ -5,7 +5,9 @@ import io.github.hanhy06.embellishchat.config.ConfigListener;
 import io.github.hanhy06.embellishchat.mention.MentionProcessor;
 import io.github.hanhy06.embellishchat.mention.data.Mention;
 import io.github.hanhy06.embellishchat.styling.StyleProcessor;
+import io.github.hanhy06.embellishchat.util.MessageBlockedException;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.server.level.ServerPlayer;
@@ -25,8 +27,6 @@ public class MessageProcessor implements ConfigListener {
     private Config config;
     private Set<UUID> bannedPlayerList;
     private LinkedHashMap<String,MutableComponent> prefix;
-
-    public static class MessageBlockedException extends RuntimeException {}
 
     public MessageProcessor(MentionProcessor mentionProcessor, StyleProcessor styleProcessor, PlayerList playerList) {
         INSTANCE = this;
@@ -70,6 +70,12 @@ public class MessageProcessor implements ConfigListener {
 
             mentionProcessor.targetBroadcast(mentions,result,sender);
         } catch (MessageBlockedException block){
+            String blockMessage = block.getMessage();
+
+            if (blockMessage != null && !blockMessage.isBlank()) {
+                sender.sendOverlayMessage(Component.literal(blockMessage));
+            }
+
             return null;
         } finally {
             PlaceHolderUtil.remove(message.sender());

@@ -5,12 +5,12 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
-import io.github.hanhy06.embellishchat.message.MessageProcessor;
 import io.github.hanhy06.embellishchat.screen.inventory.InventoryManager;
 import io.github.hanhy06.embellishchat.styling.data.Runs;
 import io.github.hanhy06.embellishchat.styling.util.BubbleUtil;
 import io.github.hanhy06.embellishchat.styling.util.ColorUtil;
 import io.github.hanhy06.embellishchat.styling.util.DiscordUtil;
+import io.github.hanhy06.embellishchat.util.MessageBlockedException;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.component.DataComponents;
@@ -113,7 +113,7 @@ public class StyleRegistry {
         Function<StyleParameter, MutableComponent> function = registries.get(styleType);
         try {
             return function.apply(parameter);
-        } catch (MessageProcessor.MessageBlockedException block) {
+        } catch (MessageBlockedException block) {
             throw block;
         } catch (RuntimeException e) {
             EmbellishChat.LOGGER.warn("Failed to apply style [{}] with option [{}]", styleType, parameter.getString(), e);
@@ -272,7 +272,7 @@ public class StyleRegistry {
             item = player.getInventory().getItem(slot);
         }
 
-        if (item.isEmpty()) return parameter.segment();
+        if (item.isEmpty()) throw new MessageBlockedException("No item found.");
 
         HoverEvent hoverEvent = new HoverEvent.ShowItem(ItemStackTemplate.fromNonEmptyStack(item));
         return parameter.segment().withStyle(Style.EMPTY.withHoverEvent(hoverEvent));
@@ -351,7 +351,7 @@ public class StyleRegistry {
         ServerPlayer player = parameter.player();
         if (player == null) return parameter.segment();
         ItemStack stack = player.getMainHandItem();
-        if (stack.isEmpty()) return parameter.segment();
+        if (stack.isEmpty()) throw new MessageBlockedException("No item found.");
         Identifier modelId = stack.get(DataComponents.ITEM_MODEL);
         if (modelId == null) return parameter.segment();
 
@@ -444,6 +444,6 @@ public class StyleRegistry {
     }
 
     public MutableComponent BLOCK(StyleParameter parameter) {
-        throw new MessageProcessor.MessageBlockedException();
+        throw new MessageBlockedException(parameter.getString());
     }
 }

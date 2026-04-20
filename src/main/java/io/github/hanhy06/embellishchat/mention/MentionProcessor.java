@@ -10,7 +10,7 @@ import io.github.hanhy06.embellishchat.mention.rule.MentionAction;
 import io.github.hanhy06.embellishchat.mention.rule.MentionParameter;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRegistry;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
-import io.github.hanhy06.embellishchat.message.MessageProcessor;
+import io.github.hanhy06.embellishchat.util.MessageBlockedException;
 import io.github.hanhy06.embellishchat.util.OptionUtil;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -66,15 +66,17 @@ public class MentionProcessor implements ConfigListener {
         UUID uuid = player.getUUID();
         Set<Mention> mentions = new HashSet<>();
         for (MentionRule rule:rules){
+            Matcher matcher = rule.pattern().matcher(text);
+            if (!matcher.find()) continue;
+
             Cooldown cooldown = null;
             Set<Mention> buffer;
-
             if (rule.cooldown() > 0){
                 cooldown = new Cooldown(uuid,Instant.now().plusSeconds(rule.cooldown()),rule);
-                if (cooldowns.contains(cooldown)) continue;
+                if (cooldowns.contains(cooldown)) throw new MessageBlockedException("You are still on cooldown.");
             }
 
-            buffer = parseMention(text,rule,player);
+            buffer = parseMention(matcher,rule,player);
             if (cooldown != null && !buffer.isEmpty()) cooldowns.add(cooldown);
             mentions.addAll(buffer);
         }
@@ -84,18 +86,17 @@ public class MentionProcessor implements ConfigListener {
         return new ArrayList<>(mentions);
     }
 
-    private Set<Mention> parseMention(String text,MentionRule rule,ServerPlayer player){
+    private Set<Mention> parseMention(Matcher matcher,MentionRule rule,ServerPlayer player){
         Set<Mention> mentions = new HashSet<>();
-        Matcher matcher = rule.pattern().matcher(text);
 
-        while (matcher.find()){
+        do {
             int begin = matcher.start();
             int end = matcher.end();
             List<String> options = OptionUtil.split(matcher.group(1),config.delimiter());
 
             Mention mention = Mention.of(begin,end, options,rule);
             mentions.add(parseTarget(mention,player));
-        }
+        } while (matcher.find());
 
         return mentions;
     }
@@ -161,6 +162,6 @@ public class MentionProcessor implements ConfigListener {
                 target.sendChatMessage(sentMessage,false, parameters)
         );
 
-        throw new MessageProcessor.MessageBlockedException();
+        throw new MessageBlockedException();
     }
 }
