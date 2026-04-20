@@ -11,7 +11,7 @@ public class MessageBlockedException extends RuntimeException{
         super(message,cause);
     }
 
-    public MessageBlockedException(String message, Object args){
+    public MessageBlockedException(String message, Object ...args){
         super(String.format(message,args));
     }
 }
