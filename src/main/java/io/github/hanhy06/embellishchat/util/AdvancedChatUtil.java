@@ -13,10 +13,9 @@ import java.util.List;
 public class AdvancedChatUtil {
     public static HashSet<ServerPlayer> getChannelPlayers(String targetChannel, ServerPlayer sender, List<ServerPlayer> players) {
         HashSet<ServerPlayer> result = new HashSet<>();
-        String normalizedChannel = targetChannel.toLowerCase().replace(" ", "");
 
         ChatChannel senderChannel = DataManager.get(sender).channel;
-        ChatChannel channel = Channels.get(normalizedChannel);
+        ChatChannel channel = Channels.get(targetChannel);
         if (channel == null) throw new MessageBlockedException("Channel not found.");
 
         if (ConfigManager.getConfig().require_same_channel() && senderChannel != channel) {
