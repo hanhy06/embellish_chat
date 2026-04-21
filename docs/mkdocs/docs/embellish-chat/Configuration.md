@@ -74,13 +74,9 @@ The configuration file is located at `config/embellish-chat/styles.json`.
 }
 ```
 
-* **`pattern`**: A regular expression used to scan chat text. It must contain two capture groups.
-  * `group 1`: Text to be styled.
-  * `group 2`: Text passed as an option.
+* **`pattern`**: A regular expression used to scan chat text. It must contain two capture groups: `group 1` is the text to be styled, and `group 2` is the text passed as an option.
 * **`comment`**: Help text shown in `/embellish-chat help style`.
-* **`styles`**: Defines the styles applied to capture group 1.
-  * `styleType`: The style type. See **[Style Type](../style/StyleType.md)** for the full list.
-  * `preset`: A fixed option value. If it is empty, the captured content from group 2 is used instead.
+* **`styles`**: Defines the styles applied to capture group 1. `styleType` selects the behavior, and `preset` provides a fixed option value. If it is empty, the captured content from group 2 is used instead. See **[Style Type](../style/StyleType.md)** for the full list.
 * Each top-level key such as `embellish-chat.chat` is also treated as a permission node.
 * Each `styleType` name must match a handler registered in the runtime `StyleRegistry`.
 
@@ -118,25 +114,14 @@ The configuration file is located at `config/embellish-chat/mentions.json`.
 }
 ```
 
-* **`pattern`**: A regular expression used to scan chat text. It must contain one capture group.
-  * The capture group becomes the mention option, such as a team name or LuckPerms group.
+* **`pattern`**: A regular expression used to scan chat text. It must contain one capture group, and that capture group becomes the mention option, such as a team name or LuckPerms group.
 * **`comment`**: Help text shown in `/embellish-chat help mention`.
-* **`title`**: The title shown on the mentioned player's screen.
-  * `%player:displayname%` resolves to the display name of the player who sent the mention.
-* **`sound`**: Defines the notification sound settings.
-  * `id`: Sound identifier.
-  * `category`: Sound category.
-  * `volume`: Sound volume.
-  * `pitch`: Sound pitch.
-* **`cooldown`**: Mention cooldown time in seconds.
-  * Set it to `0` to disable the cooldown.
-* **`onlyTarget`**:
-  * When set to `true`, the message is not broadcast globally and is sent only to the matched targets.
-* **`mentions`**: Defines the mention actions to run.
-  * `mentionType`: The mention type. See **[Mention Type](../mention/MentionType.md)** for the full list.
-  * `preset`: An optional preset value.
-* **`styles`**: Defines the styles applied when the mention is triggered.
-  * This works the same way as the styling rules section.
+* **`title`**: The title shown on the mentioned player's screen. `%player:displayname%` resolves to the display name of the player who sent the mention.
+* **`sound`**: Defines the notification sound settings, including `id`, `category`, `volume`, and `pitch`.
+* **`cooldown`**: Mention cooldown time in seconds. Set it to `0` to disable the cooldown.
+* **`onlyTarget`**: When set to `true`, the message is not broadcast globally and is sent only to the matched targets.
+* **`mentions`**: Defines the mention actions to run. `mentionType` selects the mention type, and `preset` provides an optional preset value. See **[Mention Type](../mention/MentionType.md)** for the full list.
+* **`styles`**: Defines the styles applied when the mention is triggered. This works the same way as the styling rules section.
 
 For examples and advanced usage, see **[Mention System](../mention/MentionSystem.md)** and **[Mention Configuration](../mention/Configuration.md)**.
 

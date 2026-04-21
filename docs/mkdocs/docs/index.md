@@ -58,8 +58,8 @@ Use these patterns directly in the chat window.
 
 > **Note:**
 >
-> * For advanced styling rules and custom patterns, see **[Style System](style/StyleSystem.md)**.
-> * The following icons are available by default: `fire`, `hunger`, `heart`, `yes`, `no`, `move`
+> For advanced styling rules and custom patterns, see **[Style System](style/StyleSystem.md)**.
+
 
 ### Mention Targets
 
