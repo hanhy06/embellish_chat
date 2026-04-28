@@ -144,9 +144,14 @@ public class MentionRegistry {
                 style = name.applyTo(style);
             }
         }else if(style != null){
-            Integer integer = ColorUtil.getTeamColor(scoreboard, parameter.option());
-            if (integer != null) style = Style.EMPTY.withColor(integer);
-            else throw new MessageBlockedException("Player not found.");
+            PlayerTeam team = scoreboard.getPlayersTeam(parameter.option());
+
+            if (team == null) {
+                throw new MessageBlockedException("Player not found.");
+            }
+            if (team.getColor().isColor()) {
+                style = Style.EMPTY.withColor(team.getColor());
+            }
         }
 
         return new Target(players,style);
