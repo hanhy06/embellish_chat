@@ -5,7 +5,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.mention.data.Target;
-import io.github.hanhy06.embellishchat.styling.util.ColorUtil;
 import io.github.hanhy06.embellishchat.util.AdvancedChatUtil;
 import io.github.hanhy06.embellishchat.util.LuckPermsUtil;
 import io.github.hanhy06.embellishchat.util.MessageBlockedException;
@@ -130,32 +129,32 @@ public class MentionRegistry {
     private Target PLAYER(MentionParameter parameter){
         ServerPlayer target = playerList.getPlayerByName(parameter.option());
         Style style = colorTeam;
+        PlayerTeam playerTeam = null;
         HashSet<ServerPlayer> players = new HashSet<>();
 
         if (target == null && isNickName) {
             target = NickNamesUtil.getPlayerByNickName(parameter.option());
         }
 
-        if (target!=null){
+        if (target != null) {
             players.add(target);
+        } else {
+            playerTeam = scoreboard.getPlayersTeam(parameter.option());
+            if (playerTeam == null) throw new MessageBlockedException("Player not found.");
+        }
 
-            if (style != null) {
+        if (style != null) {
+            if (target != null) {
                 Style name = target.getDisplayName().getStyle();
                 style = name.applyTo(style);
-            }
-        }else if(style != null){
-            PlayerTeam team = scoreboard.getPlayersTeam(parameter.option());
-
-            if (team == null) {
-                throw new MessageBlockedException("Player not found.");
-            }
-            if (team.getColor().isColor()) {
-                style = Style.EMPTY.withColor(team.getColor());
+            } else if (playerTeam.getColor().isColor()) {
+                style = Style.EMPTY.withColor(playerTeam.getColor());
             }
         }
 
-        return new Target(players,style);
+        return Target.of(players, style);
     }
+
 
     private Target WORLD(MentionParameter parameter){
         String worldName = parameter.option();
