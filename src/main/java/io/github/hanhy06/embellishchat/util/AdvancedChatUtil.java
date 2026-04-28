@@ -18,7 +18,7 @@ public class AdvancedChatUtil {
         ChatChannel channel = Channels.get(targetChannel);
         if (channel == null) throw new MessageBlockedException("Channel not found.");
 
-        if (ConfigManager.getConfig().require_same_channel() && senderChannel != channel) {
+        if (ConfigManager.getConfig().require_same_channel() && !channel.equals(senderChannel)) {
             throw new MessageBlockedException("You must be in the same channel.");
         }
 

@@ -12,7 +12,7 @@ public class ColorUtil {
 
         if (team != null) {
             ChatFormatting formatting = team.getColor();
-            if (formatting != null && formatting.isColor()) {
+            if (formatting.isColor()) {
                 return formatting.getColor();
             }
         }
@@ -21,7 +21,7 @@ public class ColorUtil {
     }
 
     public static Color lerpColor(Color start, Color end, double rate) {
-        rate = Math.max(0, Math.min(1, rate));
+        rate = Math.clamp(rate, 0, 1);
 
         int r = (int) (start.getRed()   + (end.getRed()   - start.getRed())   * rate);
         int g = (int) (start.getGreen() + (end.getGreen() - start.getGreen()) * rate);

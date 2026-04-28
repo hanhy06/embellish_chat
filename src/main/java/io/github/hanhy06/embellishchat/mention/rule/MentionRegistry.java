@@ -112,16 +112,16 @@ public class MentionRegistry {
         PlayerTeam team = scoreboard.getPlayerTeam(parameter.option());
         Style style = colorTeam;
 
-        if (team != null){
-            for (String name:team.getPlayers()){
-                ServerPlayer player = playerList.getPlayerByName(name);
-                if (player != null) players.add(player);
-            }
+        if (team == null) throw new MessageBlockedException("Team not found.");
 
-            if (style != null) {
-                Style name = team.getFormattedDisplayName().getStyle();
-                style = name.applyTo(style);
-            }
+        for (String name:team.getPlayers()){
+            ServerPlayer player = playerList.getPlayerByName(name);
+            if (player != null) players.add(player);
+        }
+
+        if (style != null) {
+            Style name = team.getFormattedDisplayName().getStyle();
+            style = name.applyTo(style);
         }
 
         return Target.of(players,style);
@@ -146,6 +146,7 @@ public class MentionRegistry {
         }else if(style != null){
             Integer integer = ColorUtil.getTeamColor(scoreboard, parameter.option());
             if (integer != null) style = Style.EMPTY.withColor(integer);
+            else throw new MessageBlockedException("Player not found.");
         }
 
         return new Target(players,style);
