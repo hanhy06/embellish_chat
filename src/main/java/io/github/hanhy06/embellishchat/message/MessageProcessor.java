@@ -73,7 +73,7 @@ public class MessageProcessor implements ConfigListener {
             String blockMessage = block.getMessage();
 
             if (blockMessage != null && !blockMessage.isBlank()) {
-                sender.sendOverlayMessage(Component.literal(blockMessage));
+                sender.sendSystemMessage(Component.literal(blockMessage).withColor(0xff0000));
             }
 
             return null;
