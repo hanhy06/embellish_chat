@@ -16,17 +16,17 @@ chat alerts, or private channels.
 
 ## What Mentions Can Target
 
-| Target                | Example use                                        |
-|-----------------------|----------------------------------------------------|
-| One player            | `@Steve`                                           |
-| Everyone online       | `@everyone`                                        |
-| Nearby players        | `@here`                                            |
-| Scoreboard team       | `@team(red)`                                       |
-| Minecraft world       | `@world(minecraft:overworld)`                      |
-| LuckPerms group       | `@group(admin)`                                    |
-| Advanced Chat channel | `@channel(staff)`                                  |
-| Permission node       | Notify everyone with a specific permission.        |
-| Target selector       | Use vanilla selectors such as `@a[distance=..64]`. |
+| Target                | Example use                                              |
+|-----------------------|----------------------------------------------------------|
+| One player            | `@Steve`                                                 |
+| Everyone online       | `@everyone`                                              |
+| Nearby players        | `@here`                                                  |
+| Scoreboard team       | `@team(red)`                                             |
+| Minecraft world       | `@world(minecraft:overworld)`                            |
+| LuckPerms group       | `@group(admin)`                                          |
+| Advanced Chat channel | `@channel(staff)`                                        |
+| Permission node       | Notify everyone with a specific permission.              |
+| Target selector       | Use vanilla selectors such as `@a[scores={timer=..5}]`.  |
 
 !!! note "A mention rule can combine targets"
     Multiple mention actions in one rule are intersected. For example, `INSIDE` + `TEAM` targets players who are both
