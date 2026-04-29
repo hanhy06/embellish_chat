@@ -5,10 +5,14 @@
 }
 
 .md-header__title {
-    margin-left: 0rem !important;
+    margin-left: 0 !important;
 }
 
 .md-header__button.md-logo {
     padding: 0 0.1rem !important;
 }
 
+.ec-hero-logo,
+.ec-badges {
+    text-align: center;
+}

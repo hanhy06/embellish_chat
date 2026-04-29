@@ -1,63 +1,65 @@
-# Style Type
+# Style Types
 
-## Type Table
+`styleType` selects the action applied to matched text.
 
-| Category         | Type                                                                                                                              |
-|------------------|-----------------------------------------------------------------------------------------------------------------------------------|
-| **Color**        | `COLOR_HEX`, `COLOR_RAINBOW`, `COLOR_GRADIENT`, `COLOR_PRESET`, `COLOR_SHADOW`, `COLOR_TEAM`                                      |
-| **Formatting**   | `BOLD`, `ITALIC`, `UNDERLINE`, `STRIKETHROUGH`, `OBFUSCATED`, `FONT`, `CLEAR`                                                     |
-| **Interaction**  | `CLICK_COMMAND_RUN`, `CLICK_COMMAND_SUGGEST`, `CLICK_COPY`, `HOVER_TEXT`, `HOVER_ITEM`, `URL`, `METADATA`                         |
-| **Modification** | `UPPER`, `LOWER`, `CAPITALIZE`, `REPLACE`, `MASK`, `PREFIX`, `SUFFIX`                                                             |
-| **Advanced**     | `SHOW_ITEM`, `SHOW_INVENTORY`, `SHOW_ENDER_CHEST`, `ICON_PRESET`, `JSON`, `DISCORD_JSON`, `COMMAND_RUN`, `LOG`, `BUBBLE`, `BLOCK` |
+## Color
 
-## Color Styles
+| Type             | Option      | Description                                                  |
+|------------------|-------------|--------------------------------------------------------------|
+| `COLOR_HEX`      | Hex color   | Applies a color such as `#00AAFF`.                           |
+| `COLOR_RAINBOW`  | Saturation  | Applies a rainbow color sequence.                            |
+| `COLOR_GRADIENT` | Hex colors  | Applies a gradient using two or more colors.                 |
+| `COLOR_PRESET`   | Preset name | Uses a named color from `presets.json`.                      |
+| `COLOR_SHADOW`   | Hex color   | Applies a text shadow color on supported Minecraft versions. |
+| `COLOR_TEAM`     | None        | Uses the sender's scoreboard team color.                     |
 
-* `COLOR_HEX`: Applies the color specified by the HEX code. **Option:** `Hex Code`
-* `COLOR_RAINBOW`: Cycles through rainbow colors. **Option:** `Saturation`
-* `COLOR_GRADIENT`: Applies a color gradient using the provided HEX codes. Supports two or more colors. **Option:** `Hex Codes`
-* `COLOR_PRESET`: Uses a predefined color name from the `presets.json/color` section. **Option:** `Preset Name`
-* `COLOR_SHADOW`: Applies the HEX code color provided as an option to the shadow. Available in 1.21.2+. **Option:** `Hex Code`
-* `COLOR_TEAM`: Colors the text using the player's team color. **Option:** `None`
+## Formatting
 
-## Formatting Styles
-
-* `BOLD`: Makes the text bold. **Option:** `None`
-* `ITALIC`: Makes the text italic. **Option:** `None`
-* `UNDERLINE`: Underlines the text. **Option:** `None`
-* `STRIKETHROUGH`: Applies a strikethrough style to the text. **Option:** `None`
-* `OBFUSCATED`: Applies Minecraft-style obfuscation to make the text unreadable. **Option:** `None`
-* `FONT`: Changes the font to the specified font ID. **Option:** `Font ID`
-* `CLEAR`: Removes all currently applied styles. **Option:** `None`
+| Type            | Option  | Description                            |
+|-----------------|---------|----------------------------------------|
+| `BOLD`          | None    | Makes text bold.                       |
+| `ITALIC`        | None    | Makes text italic.                     |
+| `UNDERLINE`     | None    | Underlines text.                       |
+| `STRIKETHROUGH` | None    | Adds strikethrough.                    |
+| `OBFUSCATED`    | None    | Applies Minecraft obfuscated text.     |
+| `FONT`          | Font ID | Uses a font such as `minecraft:alt`.   |
+| `CLEAR`         | None    | Clears currently applied style values. |
 
 ## Interaction
 
-* `CLICK_COMMAND_RUN`: Immediately executes the supplied command when the text is clicked. **Option:** `Command`
-* `CLICK_COMMAND_SUGGEST`: Places the supplied command into the chat input field when clicked. **Option:** `Command`
-* `CLICK_COPY`: Copies the supplied text to the clipboard when the text is clicked. **Option:** `Text`
-* `HOVER_TEXT`: Displays the supplied text when the mouse hovers over it. **Option:** `Text`
-* `HOVER_ITEM`: Displays the item tooltip for the selected inventory slot. A blank option uses the main-hand item. **Option:** `Slot ID` / `None`
-* `URL`: Opens the provided URL in a browser when clicked. The domain or subdomain must be included in `presets.json/whitelist`. If the list is empty, all URLs are allowed. **Option:** `URL`
-* `METADATA`: Displays the server receipt time on hover and copies it to the clipboard on click. **Option:** `None`
+| Type                    | Option           | Description                                                           |
+|-------------------------|------------------|-----------------------------------------------------------------------|
+| `CLICK_COMMAND_RUN`     | Command          | Runs a command when clicked.                                          |
+| `CLICK_COMMAND_SUGGEST` | Command          | Places a command into the chat input when clicked.                    |
+| `CLICK_COPY`            | Text             | Copies text to the clipboard when clicked.                            |
+| `HOVER_TEXT`            | Text             | Shows text on hover.                                                  |
+| `HOVER_ITEM`            | Slot ID or empty | Shows an item tooltip. Empty uses the main-hand item.                 |
+| `URL`                   | URL              | Opens a URL when clicked. The URL must pass the configured whitelist. |
+| `METADATA`              | None             | Adds receipt-time hover text and click-to-copy metadata.              |
 
 ## Modification
 
-* `UPPER`: Transforms every matched substring into uppercase characters. **Option:** `None`
-* `LOWER`: Transforms every matched substring into lowercase characters. **Option:** `None`
-* `CAPITALIZE`: Converts only the first character of the string to uppercase. **Option:** `None`
-* `REPLACE`: Replaces the matched text with the provided string while preserving the original style. **Option:** `Text`
-* `MASK`: Repeats the provided character or string once for each character in the original text. **Option:** `Text`
-* `PREFIX`: Attaches the provided text before the original text. **Option:** `Text`
-* `SUFFIX`: Attaches the provided text after the original text. **Option:** `Text`
+| Type         | Option | Description                                            |
+|--------------|--------|--------------------------------------------------------|
+| `UPPER`      | None   | Converts matched text to uppercase.                    |
+| `LOWER`      | None   | Converts matched text to lowercase.                    |
+| `CAPITALIZE` | None   | Capitalizes the first character.                       |
+| `REPLACE`    | Text   | Replaces the matched text while preserving style flow. |
+| `MASK`       | Text   | Repeats the option once for each original character.   |
+| `PREFIX`     | Text   | Adds text before the match.                            |
+| `SUFFIX`     | Text   | Adds text after the match.                             |
 
 ## Advanced
 
-* `SHOW_ITEM`: Displays the held block name, or the item. This style type must be placed at the very bottom. **Option:** `only_name`
-* `SHOW_INVENTORY`: Displays the user's face. Clicking it shows the user's inventory snapshot. This style type must be placed at the very bottom, and the inventory snapshot is cleared when the player leaves the server. **Option:** `None`
-* `SHOW_ENDER_CHEST`: Displays the user's face. Clicking it shows the user's ender chest snapshot. This style type must be placed at the very bottom, and the inventory snapshot is cleared when the player leaves the server. **Option:** `None`
-* `ICON_PRESET`: Uses a predefined icon name from the `presets.json/icon` section. This style type cannot be used in versions below 1.21.8 and must be placed at the very bottom. **Option:** `Preset Name`
-* `JSON`: Parses the provided JSON string and displays it as a text component. **Option:** `JSON Data`
-* `DISCORD_JSON`: Sends the provided JSON payload to Discord through the specified webhook. **Option**: `webhook;JSON Data`
-* `COMMAND_RUN`: Immediately executes the supplied command when the text is processed. **Option:** `Command`
-* `LOG`: Logs the text and sender information to the server console. **Option:** `None`
-* `BUBBLE`: Displays a speech bubble above the user's head. This type must be placed above `SHOW_ITEM` and `SHOW_INVENTORY`. **Option:** `None`
-* `BLOCK`: Stops the message from being sent. **Option:** `Text`
+| Type               | Option               | Description                                                                |
+|--------------------|----------------------|----------------------------------------------------------------------------|
+| `SHOW_ITEM`        | `only_name` or empty | Opens a view-only item showcase. `only_name` shows just the item name.     |
+| `SHOW_INVENTORY`   | None                 | Opens a view-only inventory showcase when clicked.                         |
+| `SHOW_ENDER_CHEST` | None                 | Opens a view-only ender chest showcase when clicked.                       |
+| `ICON_PRESET`      | Preset name          | Displays a configured icon from `presets.json`.                            |
+| `JSON`             | JSON text component  | Parses a raw Minecraft text component.                                     |
+| `DISCORD_JSON`     | `webhook;JSON`       | Sends a JSON payload to a Discord webhook.                                 |
+| `COMMAND_RUN`      | Command              | Runs a command when the message is processed.                              |
+| `LOG`              | None                 | Logs sender and text information to the server console.                    |
+| `BUBBLE`           | None                 | Displays a speech bubble above the sender.                                 |
+| `BLOCK`            | Text                 | Stops the message from being sent.                                         |

@@ -2,7 +2,7 @@ site_name: Embellish Chat Wiki
 site_url: https://hanhy06.github.io/embellish-chat-wiki
 
 repo_url: https://github.com/hanhy06/embellish-chat
-repo_name: embellish chat
+repo_name: embellish-chat
 
 nav:
   - Embellish Chat:
@@ -14,13 +14,13 @@ nav:
   - Style:
       - Introduction: style/StyleSystem.md
       - Configuration: style/Configuration.md
-      - Style Type: style/StyleType.md
-      - Application: style/Application.md
+      - Style Types: style/StyleType.md
+      - Recipes: style/Application.md
   - Mention:
       - Introduction: mention/MentionSystem.md
       - Configuration: mention/Configuration.md
-      - Mention Type: mention/MentionType.md
-      - Application: mention/Application.md
+      - Mention Types: mention/MentionType.md
+      - Recipes: mention/Application.md
 
 theme:
   name: material
@@ -43,9 +43,22 @@ theme:
     - search.suggest
     - search.share
 
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
 extra_css:
   - stylesheets/extra.css
 
 extra_javascript:
-  - https://cdn.jsdelivr.net/npm/chart.js
   - js/mstp_chart.js

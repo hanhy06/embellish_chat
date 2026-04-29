@@ -1,26 +1,41 @@
 # Commands
 
-Embellish Chat provides commands for both regular players and administrators.
+Embellish Chat registers its commands under `/embellish-chat`. If `command_alias` is set to a non-empty value in
+`config.json`, the same command tree is also available under that alias. The default alias is `/ec`.
 
-All commands are available under `/embellish-chat`.
-If `command_alias` is loaded with a non-blank value, the same command tree is also registered under that alias. The default alias is `ec`.
+!!! note "Examples use the full command name"
+    You can replace `/embellish-chat` with `/ec` when the default alias is enabled.
+
+## Player Commands
+
+| Command                         | Description                                                                                          |
+|---------------------------------|------------------------------------------------------------------------------------------------------|
+| `/embellish-chat help style`    | Shows the style rules available to the player based on permission nodes.                             |
+| `/embellish-chat help mention`  | Shows the mention rules available to the player based on permission nodes.                           |
+| `/embellish-chat help icon`     | Shows configured icon presets from `presets.json`.                                                   |
+| `/embellish-chat notification`  | Toggles the player's personal mention notification setting when `notify_command_enabled` is enabled. |
+| `/embellish-chat open <player>` | Opens the last shared item, inventory, or ender chest showcase from the selected player.             |
 
 ## Admin Commands
 
-> Requires **OP Level 2** or `GAMEMASTERS_CHECK` on Minecraft `1.21.11+`.
+| Command                                              | Description                                                        |
+|------------------------------------------------------|--------------------------------------------------------------------|
+| `/embellish-chat reload`                             | Reloads config files and applies updated settings.                 |
+| `/embellish-chat ban <target>`                       | Blocks selected players from using Embellish Chat features.        |
+| `/embellish-chat pardon <target>`                    | Restores selected players after a mod feature ban.                 |
+| `/embellish-chat regex_test <regex> <text>`          | Tests a style-rule regex with two capture groups.                  |
 
-* **`/embellish-chat reload`** Reloads all configuration files under `config/embellish-chat/` immediately.
-* **`/embellish-chat ban <player>`** Blocks a player's access to all mod features.
-* **`/embellish-chat pardon <player>`** Restores a player's access to all mod features.
-* **`/embellish-chat stress_test <ticks> <count> <text>`** Repeatedly simulates `<count>` messages for `<ticks>` to stress-test the server's message-processing performance.
-* **`/embellish-chat regex_test <regex> <text>`** Tests the provided `<regex>` against `<text>` and highlights capture groups to analyze the match result.
+## Permissions
 
-## User Commands
+Command access is intentionally simple.
 
-> Available to **all players** with no permission requirement.
+| Command Group   | Access                                                |
+|-----------------|-------------------------------------------------------|
+| Player commands | Available to every player.                            |
+| Admin commands  | Requires the server's admin command permission level. |
+| Style rules     | Controlled by the top-level keys in `style_rules`.    |
+| Mention rules   | Controlled by the top-level keys in `mention_rules`.  |
 
-* **`/embellish-chat open <player>`** Opens the last shared inventory, ender chest, or item of the specified player.
-* **`/embellish-chat help mention`** Displays the mention rules available to you based on your permissions.
-* **`/embellish-chat help style`** Displays the styling rules available to you based on your permissions.
-* **`/embellish-chat help icon`** Displays available icon presets from `presets.json/icon` in `name - icon` format.
-* **`/embellish-chat notification`** Toggles your personal mention notification preferences when `notify_command_enabled` is enabled.
+!!! tip "Permission keys are rule groups"
+    A rule group such as `embellish-chat.chat` is both a config key and a permission node. A player only receives rules from
+    groups they are allowed to use.

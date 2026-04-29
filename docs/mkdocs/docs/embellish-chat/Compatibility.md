@@ -1,16 +1,31 @@
 # Compatibility
 
-## Fully Supported
+Embellish Chat is designed to work as a server-side chat enhancement mod. Some integrations add new targeting options or
+placeholder values, while some chat-formatting mods may take priority over its styling pipeline.
 
-* **Fabric Permissions API (Embedded):** The keys defined in `style_rules` and `mention_rules` directly function as permission nodes. Rules are evaluated from top to bottom based on the player's permissions.
-* **Text Placeholder API (Embedded):** Supports dynamic placeholders in mention titles and style presets. Use `%embellish-chat:content%` to access the raw, unparsed chat message.
-* **Styled Nicknames:** Supports mentioning players by nickname.
-* **LuckPerms:** Required for the `@group` mention type. Without it, group mentions are ignored.
-* **Advanced Chat:** Required for the `@channel` mention type. Without it, channel mentions are ignored.
-* **Geyser (Bedrock Edition):** Mentions between Java and Bedrock editions work seamlessly. Advanced styling such as hover text and click events may not fully render on Bedrock clients.
+## Supported Integrations
+
+| Integration            | Support   | Notes                                                                                                                          |
+|------------------------|-----------|--------------------------------------------------------------------------------------------------------------------------------|
+| Fabric Permissions API | Built in  | Rule group keys in `style_rules` and `mention_rules` are used as permission nodes.                                             |
+| Text Placeholder API   | Built in  | Placeholder values can be used in prefixes, mention overlay text, JSON payloads, and other configured text.                    |
+| Styled Nicknames       | Supported | Player mentions can resolve nicknames when the integration is present.                                                         |
+| LuckPerms              | Supported | Required for `LUCK_PERMS_GROUP` mention actions such as `@group(admin)`.                                                       |
+| Advanced Chat          | Supported | Required for `ADVANCED_CHAT_CHANNEL` mention actions such as channel mentions.                                                 |
+| Geyser                 | Supported | Java and Bedrock players can mention each other normally. Hover text and click events may not fully render on Bedrock clients. |
 
 ## Known Conflicts
 
-* **Styled Chat:** Styled Chat takes priority. If installed, Embellish Chat styling features are overridden.
-* **Mentions still work:** The mention and notification system remains functional.
-* **Performance tip:** If both mods must be used together, remove all entries in `style_rules` to prevent unnecessary background processing.
+| Mod         | Behavior                                                                                           | Recommendation                                                                                   |
+|-------------|----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| Styled Chat | Styled Chat takes priority over Embellish Chat's style processing. Mention processing still works. | If both mods are installed, remove entries from `style_rules` to avoid unnecessary style checks. |
+
+## Practical Notes
+
+!!! note "Client rendering can vary"
+    Server-side text components are still interpreted by the client. Java clients usually show hover and click events
+    correctly, while Bedrock clients connected through Geyser may display a simpler version.
+
+!!! tip "Keep only the systems you use"
+    If another mod already owns chat formatting, use Embellish Chat for mentions and showcases only. Keeping unused style
+    rules empty reduces message-processing work.

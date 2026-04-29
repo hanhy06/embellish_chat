@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="http://hanhy06.github.io/embellish-chat-wiki/assets/logo.svg" alt="Embellish Chat" width="460">
+  <img src="https://hanhy06.github.io/embellish-chat-wiki/assets/logo.svg" alt="Embellish Chat" width="460">
 </div>
 
 <div align="center">
@@ -17,75 +17,76 @@
   </a>
 </div>
 
-Embellish Chat enhances Minecraft chat with item and inventory showcases, built-in icons, mentions, and rich formatting. Players can show off gear, open showcased inventories, and use more expressive chat features without requiring the mod on their client.
+# Embellish Chat
 
----
+Embellish Chat expands Minecraft chat with rich formatting, clickable text, hover text, item, inventory, and ender chest
+showcases, icons, and configurable mentions. Most features are server-side, so players can use the enhanced chat
+experience without installing the mod on their client.
 
-## Overview
+!!! tip "Start here"
+    Server owners should begin with [Configuration](embellish-chat/Configuration.md). Players who only need syntax can use
+    the tables below.
 
-Embellish Chat is organized around three main areas:
+## What It Adds
 
-* **General:** Commands, global configuration, compatibility notes, and performance information.
-* **Style:** Markdown-like formatting, clickable text, hover events, macros, and advanced chat presentation.
-* **Mention:** Targeted notifications for players, teams, groups, worlds, and custom selectors.
+| Area        | Description                                                                                                          |
+|-------------|----------------------------------------------------------------------------------------------------------------------|
+| Style       | Markdown-like formatting, colors, gradients, fonts, links, hover text, click actions, and icons.                     |
+| Mention     | Configurable notifications for players, nearby players, teams, groups, worlds, channels, permissions, and selectors. |
+| Showcase    | Share view-only item, inventory, or ender chest screens in chat.                                                     |
+| Admin Tools | Reload configs, test regular expressions, and manage mod feature bans.                                               |
 
-If you are new to the mod, start with **[Configuration](embellish-chat/Configuration.md)**, then move to **[Style System](style/StyleSystem.md)** and **[Mention System](mention/MentionSystem.md)**.
+## Recommended Reading Path
 
-## Quick Reference
+| Goal                                    | Page                                             |
+|-----------------------------------------|--------------------------------------------------|
+| Install and understand the config files | [Configuration](embellish-chat/Configuration.md) |
+| Use player and admin commands           | [Commands](embellish-chat/Commands.md)           |
+| Create or edit chat styles              | [Style System](style/StyleSystem.md)             |
+| Create or edit mentions                 | [Mention System](mention/MentionSystem.md)       |
+| Check mod compatibility                 | [Compatibility](embellish-chat/Compatibility.md) |
+| Build config safely in a browser        | [Config Generator](config-generator/index.html)  |
 
-### Syntax Cheat Sheet
+## Default Chat Syntax
 
-Use these patterns directly in the chat window.
+| Feature       | Syntax             | Example                       |
+|---------------|--------------------|-------------------------------|
+| Bold          | `**Text**`         | `**Important**`               |
+| Italic        | `_Text_`           | `_Whisper_`                   |
+| Underline     | `__Text__`         | `__Title__`                   |
+| Strikethrough | `~~Text~~`         | `~~Canceled~~`                |
+| Obfuscated    | `\|\|Text\|\|`     | `\|\|Secret\|\|`              |
+| Hex color     | `[Text]<#Hex>`     | `[Sky]<#00AAFF>`              |
+| Preset color  | `[Text]<Preset>`   | `[Warning]<red>`              |
+| Gradient      | `[Text]<#Hex#Hex>` | `[Fire]<#FFFF00#FF0000>`      |
+| Rainbow       | `[Text]<RAINBOW>`  | `[Magic]<RAINBOW>`            |
+| Link          | `[Text](URL)`      | `[Docs](https://example.com)` |
+| Font          | `[Text]{Font ID}`  | `[Rune]{minecraft:alt}`       |
+| Item          | `[i]`              | `Look at my [i]`              |
+| Inventory     | `[inv]`            | `Check my [inv]`              |
+| Ender chest   | `[end]`            | `Check my [end]`              |
+| Icon          | `:Icon:`           | `:heart:`                     |
 
-| Feature            | Syntax                 | Example                          |
-|:-------------------|:-----------------------|:---------------------------------|
-| **Bold**           | `**Text**`             | `**Important**`                  |
-| **Italic**         | `_Text_`               | `_Whisper_`                      |
-| **Underline**      | `__Text__`             | `__Title__`                      |
-| **Strikethrough**  | `~~Text~~`             | `~~Deleted~~`                    |
-| **Obfuscated**     | `\|\|Text\|\|`         | `\|\|Secret\|\|`                 |
-| **Color (Hex)**    | `[Text]<#Hex>`         | `[Sky]<#00AAFF>`                 |
-| **Color (Preset)** | `[Text]<Preset>`       | `[Warning]<red>`                 |
-| **Gradient**       | `[Text]<#Hex #Hex...>` | `[Fire]<#ffff00 #ff0000>`        |
-| **Rainbow**        | `[Text]<RAINBOW>`      | `[Magic]<RAINBOW>`               |
-| **Link**           | `[Text](URL)`          | `[Click Me](https://google.com)` |
-| **Font**           | `[Text]{Font ID}`      | `[Rune]{minecraft:alt}`          |
-| **Item**           | `[i]`                  | `Look at my [i]`                 |
-| **Inventory**      | `[inv]`                | `Look at my [inv]`               |
-| **Ender Chest**    | `[end]`                | `Look at my [end]`               |
-| **Mention**        | `@Target`              | `@everyone`, `@User`             |
-| **Icon**           | `:Icon:`               | `I :love: you`                   |
+## Default Mention Syntax
 
-> **Note:**
->
-> For advanced styling rules and custom patterns, see **[Style System](style/StyleSystem.md)**.
+| Target          | Example                       | Result                                                 |
+|-----------------|-------------------------------|--------------------------------------------------------|
+| Player          | `@Steve`                      | Mentions one player by name or supported nickname.     |
+| Everyone        | `@everyone`                   | Mentions all online players.                           |
+| Nearby players  | `@here`                       | Mentions players near the sender.                      |
+| Team            | `@team(red)`                  | Mentions players in the scoreboard team named `red`.   |
+| LuckPerms group | `@group(admin)`               | Mentions players in the LuckPerms group named `admin`. |
+| World           | `@world(minecraft:overworld)` | Mentions players in the selected world.                |
 
-
-### Mention Targets
-
-| Target         | Description                                                     |
-|:---------------|:----------------------------------------------------------------|
-| `@Player`      | Mentions a specific player.                                     |
-| `@everyone`    | Mentions **all players** on the server.                         |
-| `@here`        | Mentions players within a specific radius (Default: 64 blocks). |
-| `@team(name)`  | Mentions members of a specific scoreboard team.                 |
-| `@group(name)` | Mentions members of a specific LuckPerms group.                 |
-| `@world(name)` | Mentions all players in a specific world.                       |
-
-> **Note:** For advanced mention targeting and custom rules, see **[Mention System](mention/MentionSystem.md)**.
-
-## More Documentation
-
-* **[Commands](embellish-chat/Commands.md)** for player and admin command references.
-* **[Configuration](embellish-chat/Configuration.md)** for config file structure and setup notes.
-* **[Compatibility](embellish-chat/Compatibility.md)** for supported mods and known conflicts.
-* **[Performance](embellish-chat/Performance.md)** for benchmark details and analysis.
-* **[Config Generator](config-generator/index.html)** for building valid config files more easily.
-
----
+!!! note "Configuration decides the final behavior"
+    The tables show the built-in defaults. Server owners can change patterns, permissions, colors, sounds, cooldowns, and
+    targeting rules in the config files.
 
 ## Links
 
-* **Download:** [Modrinth](https://modrinth.com/mod/embellish-chat)
-* **Source Code:** [GitHub](https://github.com/hanhy06/embellish-chat)
-* **Issues:** [Bug Tracker](https://github.com/hanhy06/embellish-chat/issues)
+| Resource    | Link                                                                      |
+|-------------|---------------------------------------------------------------------------|
+| Download    | [Modrinth](https://modrinth.com/mod/embellish-chat)                       |
+| CurseForge  | [CurseForge](https://www.curseforge.com/minecraft/mc-mods/embellish-chat) |
+| Source Code | [GitHub](https://github.com/hanhy06/embellish-chat)                       |
+| Issues      | [Bug Tracker](https://github.com/hanhy06/embellish-chat/issues)           |

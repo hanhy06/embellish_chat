@@ -1,10 +1,11 @@
-# Configuration
+# Style Configuration
 
-Style rules are stored in `config/embellish-chat/styles.json` under the top-level `style_rules` object.
+Style rules live in `config/embellish-chat/styles.json` under `style_rules`. Each top-level key is both a rule group and
+a permission node.
 
-## Configuration Structure
+## Rule Shape
 
-```
+```json
 {
   "pattern": "\\*\\*(.+?)\\*\\*()",
   "comment": "<blue><b>Pattern</b></blue>: **Text**\n<dark_aqua><b>Comment</b></dark_aqua>: bold formatting\n",
@@ -17,15 +18,35 @@ Style rules are stored in `config/embellish-chat/styles.json` under the top-leve
 }
 ```
 
-* **`pattern`**: A regular expression used to scan chat text. It must contain two capture groups: `group 1` is the text that will be styled, and `group 2` is the option value passed to the style.
-* **`comment`**: Help text shown in `/embellish-chat help style`.
-* **`styles`**: The styles applied to capture group 1. `styleType` selects the behavior, and `preset` provides a fixed option value. If `preset` is empty, the content of capture group 2 is used instead. Each `styleType` must match a handler registered in `StyleRegistry`. See [Style Type](StyleType.md) for the full list.
+| Field       | Required | Description                                                 |
+|-------------|----------|-------------------------------------------------------------|
+| `pattern`   | Yes      | Regular expression with two capture groups.                 |
+| `comment`   | No       | Help text shown in `/embellish-chat help style`.            |
+| `styles`    | Yes      | Ordered list of style actions.                              |
+| `styleType` | Yes      | A value from [Style Types](StyleType.md).                   |
+| `preset`    | Yes      | Fixed option value. If empty, capture group 2 is used.      |
 
-## Usage Patterns
+## Permission Groups
 
-### Single Style
-
+```json
+{
+  "style_rules": {
+    "embellish-chat.chat": [],
+    "embellish-chat.admin-style": []
+  }
+}
 ```
+
+Players only receive rules from groups they can use. This lets you give different style rules to different permission
+groups.
+
+!!! warning "Do not leave preset empty for command-like styles"
+    For `COMMAND_RUN`, `DISCORD_JSON`, `JSON`, and `BLOCK`, put the intended value in `preset` instead of taking it from
+    player-written capture groups.
+
+## Single Style
+
+```json
 {
   "pattern": "__(.+?)__()",
   "styles": [
@@ -37,11 +58,12 @@ Style rules are stored in `config/embellish-chat/styles.json` under the top-leve
 }
 ```
 
-This is the simplest style rule.
+This matches `__Text__` and underlines `Text`. The second capture group is empty because `UNDERLINE` does not need an
+option.
 
-### Multiple Style
+## Multiple Styles
 
-```
+```json
 {
   "pattern": "_\\*(.+?)\\*_()",
   "styles": [
@@ -57,13 +79,29 @@ This is the simplest style rule.
 }
 ```
 
-You can combine multiple style types in a single rule.
+Style actions run in order. This example makes the captured text both underlined and bold.
 
-### Preset
+## Captured Option
 
-```
+```json
 {
-  "pattern": "\\[([^\\]]+?)]<(RAINBOW)>",
+  "pattern": "\\[([^\\]]+?)]<(#[0-9a-fA-F]{6})>",
+  "styles": [
+    {
+      "styleType": "COLOR_HEX",
+      "preset": ""
+    }
+  ]
+}
+```
+
+The player writes `[Sky]<#00AAFF>`. Group 1 is `Sky`, and group 2 is `#00AAFF`.
+
+## Fixed Preset
+
+```json
+{
+  "pattern": "\\[([^\\]]+?)]<RAINBOW>",
   "styles": [
     {
       "styleType": "COLOR_RAINBOW",
@@ -73,4 +111,18 @@ You can combine multiple style types in a single rule.
 }
 ```
 
-You can hard-code a preset value, or leave it empty to use the option captured from the player's message.
+This rule always uses `0.7` as the rainbow saturation. The player only controls the displayed text.
+
+## Ordering Guidelines
+
+| Rule type                                                 | Place                                          |
+|-----------------------------------------------------------|------------------------------------------------|
+| Simple formatting rules                                   | Near the top.                                  |
+| URL and click interaction rules                           | After basic formatting.                        |
+| Full-message rules like `(.+)`                            | Test with nearby matching rules.               |
+| Showcase rules such as `[i]`, `[inv]`, and `[end]`        | At the bottom.                                 |
+| `BLOCK` rules                                             | Last among rules that should cancel a message. |
+
+!!! warning "Place showcase rules last"
+    Put `SHOW_ITEM`, `SHOW_INVENTORY`, and `SHOW_ENDER_CHEST` below rules that may modify the same text. Minecraft may
+    crash if another style tries to modify text after one of these showcase types has already been applied.

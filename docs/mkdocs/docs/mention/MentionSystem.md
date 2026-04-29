@@ -1,26 +1,41 @@
 # Mention System
 
-The mention system helps players notify specific people or groups in chat. It goes beyond simple name highlighting by supporting targeting rules based on teams, distance, worlds, and permissions.
+The mention system finds configured patterns in chat, resolves the players who should receive the alert, and optionally
+sends overlay text or sound feedback. It can behave like familiar `@player` mentions, server-wide announcements, local
+chat alerts, or private channels.
 
-## Mechanism
+## Mental Model
 
-The mention process works in three stages:
+| Step                | What happens                                                                                            |
+|---------------------|---------------------------------------------------------------------------------------------------------|
+| 1. Permission check | The player receives mention rule groups they are allowed to use.                                        |
+| 2. Detection        | Each mention rule scans the message with its regular expression.                                        |
+| 3. Targeting        | Mention actions resolve players from names, teams, groups, worlds, channels, permissions, or selectors. |
+| 4. Styling          | The matched mention text is styled in the final chat message.                                           |
+| 5. Notification     | Target players receive overlay text and sound feedback when notifications are enabled.                  |
 
-1. **Detection**: The mod finds mention patterns such as `@everyone` or `@player` in the chat message.
-2. **Targeting**: Based on the configured **Mention Type**, it resolves the actual recipients.
-3. **Notification**: The target players receive visual and audio feedback so the message stands out.
+## What Mentions Can Target
 
-This makes it easier to deliver important messages to the right players without spamming everyone else.
+| Target                | Example use                                        |
+|-----------------------|----------------------------------------------------|
+| One player            | `@Steve`                                           |
+| Everyone online       | `@everyone`                                        |
+| Nearby players        | `@here`                                            |
+| Scoreboard team       | `@team(red)`                                       |
+| Minecraft world       | `@world(minecraft:overworld)`                      |
+| LuckPerms group       | `@group(admin)`                                    |
+| Advanced Chat channel | `@channel(staff)`                                  |
+| Permission node       | Notify everyone with a specific permission.        |
+| Target selector       | Use vanilla selectors such as `@a[distance=..64]`. |
 
-## Documentation Structure
+!!! note "A mention rule can combine targets"
+    Multiple mention actions in one rule are intersected. For example, `INSIDE` + `TEAM` targets players who are both
+    inside the radius and in the selected team.
 
-This section is split into three parts:
+## Reading Path
 
-* **[Configuration](Configuration.md)**
-  Explains how to define mention rules in `mentions.json`, including notification sounds, titles, and cooldowns.
-
-* **[Mention Type](MentionType.md)**
-  Lists every available mention type and explains how each one selects its targets.
-
-* **[Application](Application.md)**
-  Shows practical examples such as admin pings, announcements, and private staff channels.
+| Page                              | Use it for                                                                     |
+|-----------------------------------|--------------------------------------------------------------------------------|
+| [Configuration](Configuration.md) | Learn the exact JSON shape for mention rules.                                  |
+| [Mention Types](MentionType.md)   | Look up every available `mentionType`.                                         |
+| [Recipes](Application.md)         | Copy practical examples for admin alerts, announcements, and private channels. |

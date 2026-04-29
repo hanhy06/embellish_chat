@@ -1,25 +1,33 @@
-# Application
+# Style Recipes
 
-## Text Formatting & Text Placeholder API
+This page collects practical style recipes. Use them as starting points, then adjust permission groups, patterns, and
+presets for your server.
 
-<span style="color:red;">Important:</span> This setting must be modified in `config/embellish-chat/presets.json`, not in `config/embellish-chat/styles.json`.
+## Chat Prefix
+
+Goal: Add a formatted prefix before chat messages.
+
+Edit `config/embellish-chat/presets.json`.
 
 ```json
 {
   "prefix": {
-    "chat.prefix.default":"<b>[%player:displayname%]</b> "
+    "chat.prefix.default": "<b>[%player:displayname%]</b> "
   }
 }
 ```
 
 ![Formatting](../assets/images/Formatting.png)
 
-You can reformat the full chat message by matching the complete line and applying a `REPLACE` style.
-When using custom chat formatting, enable `disable_vanilla_chat_format` in `config.json`.
+!!! note "This belongs in presets.json"
+    Prefix values are shared presets, not style rules. When you fully replace vanilla chat formatting, enable
+    `disable_vanilla_chat_format` in `config.json`.
 
 ## Bubble Chat
 
-```
+Goal: Show messages above the player's head instead of sending normal chat.
+
+```json
 {
   "pattern": "(.+)()",
   "styles": [
@@ -37,40 +45,42 @@ When using custom chat formatting, enable `disable_vanilla_chat_format` in `conf
 
 ![BubbleChat](../assets/images/BubbleChat.gif)
 
-This combination displays a speech bubble and blocks the normal chat message.
-It is useful when you want nearby conversation to feel more natural.
+`BUBBLE` creates the speech bubble. `BLOCK` prevents the original message from also appearing in normal chat.
 
-## Using chat as a macro
+## Chat Macro
 
-```
+Goal: Run fixed commands when selected chat words appear.
+
+```json
 [
   {
     "pattern": "(sad)()",
-    "styles": [{ "styleType": "COMMAND_RUN", "preset": "/trigger ec.flag set 100" }]
+    "styles": [
+      {
+        "styleType": "COMMAND_RUN",
+        "preset": "/trigger ec.flag set 100"
+      }
+    ]
   },
   {
     "pattern": "(like|love)()",
-    "styles": [{ "styleType": "COMMAND_RUN", "preset": "/trigger ec.flag set 200" }]
-  },
-  {
-    "pattern": "(hate)()",
-    "styles": [{ "styleType": "COMMAND_RUN", "preset": "/trigger ec.flag set 300" }]
-  },
-  {
-    "pattern": "(oh|ah)()",
-    "styles": [{ "styleType": "COMMAND_RUN", "preset": "/trigger ec.flag set 400" }]
+    "styles": [
+      {
+        "styleType": "COMMAND_RUN",
+        "preset": "/trigger ec.flag set 200"
+      }
+    ]
   }
 ]
 ```
 
 ![Command_Run](../assets/images/Command_Run.gif)
 
-Using triggers with `COMMAND_RUN` lets chat act like a lightweight macro system.
-The example above comes from a showcase datapack that maps words to different emotes or reactions.
-
 ## Global Style
 
-```
+Goal: Apply one effect to every chat message.
+
+```json
 {
   "pattern": "(.+)()",
   "styles": [
@@ -82,12 +92,13 @@ The example above comes from a showcase datapack that maps words to different em
 }
 ```
 
-In regular expressions, `.+` matches the full message.
-That makes it easy to apply a subtle rainbow effect to every chat line.
+Rule order matters when a full-message pattern can match the same text as other style rules.
 
-## Using It Directly as an Option
+## Direct Option
 
-```
+Goal: Use the matched word as both the displayed text and the style option.
+
+```json
 {
   "pattern": "((red))",
   "styles": [
@@ -99,5 +110,31 @@ That makes it easy to apply a subtle rainbow effect to every chat line.
 }
 ```
 
-Writing a pattern like `((red))` makes capture groups 1 and 2 contain the same text.
-For example, this lets `COLOR_PRESET` use `red` as both the matched text and the option value, so every `red` appears in red.
+Both capture groups contain `red`, so `COLOR_PRESET` receives `red` as the option and colors the matched word with the
+`red` preset.
+
+## Item Showcase
+
+Goal: Let players share a view-only showcase of the item they are holding.
+
+```json
+{
+  "pattern": "\\[i]()",
+  "styles": [
+    {
+      "styleType": "SHOW_ITEM",
+      "preset": ""
+    }
+  ]
+}
+```
+
+![Show_Item](../assets/images/Show_Item.gif)
+
+Clicking the rendered showcase opens an inventory-style screen with the item placed in the center. Other players can
+inspect it, but they cannot take it.
+
+!!! note "Modded item sprites"
+    Item showcase rendering uses inferred sprite information instead of reading every item's full client resource model.
+    Vanilla items are expected to work well, but some modded items may render incorrectly. Use `presets.json` item
+    overrides when a specific item needs a fixed atlas sprite.

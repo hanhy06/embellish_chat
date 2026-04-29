@@ -1,25 +1,36 @@
 # Style System
 
-The style system is the core feature of Embellish Chat. It lets you match chat text with regular expressions and apply visual or interactive effects to the result.
+The style system turns matched chat text into richer Minecraft text components. A rule finds text with a regular
+expression, then applies one or more style actions to the matched part.
 
-## Mechanism
+## Mental Model
 
-The styling process has two steps:
+| Step                | What happens                                                             |
+|---------------------|--------------------------------------------------------------------------|
+| 1. Permission check | The player receives style rule groups they are allowed to use.           |
+| 2. Pattern match    | Each rule scans the chat message with its configured regular expression. |
+| 3. Select text      | The rule selects the matched text that will be styled.                   |
+| 4. Resolve option   | The rule chooses the configured option for each style action.            |
+| 5. Apply styles     | Style actions run in order and produce the final chat component.         |
 
-1. **Pattern Matching**: The mod scans chat messages with regular expressions.
-2. **Style Application**: When a rule matches, the configured styles are applied to the captured text.
+!!! note "Rule order matters"
+    Rules are evaluated from top to bottom inside each rule group. Test rule order when multiple rules can match the same
+    text.
 
-This structure supports everything from simple keyword highlighting to advanced interactive chat behavior.
+## What Styles Can Do
 
-## Documentation Structure
+| Area         | Examples                                                                                                                     |
+|--------------|------------------------------------------------------------------------------------------------------------------------------|
+| Color        | Hex colors, gradients, rainbow colors, preset colors, team colors, and text shadow colors.                                   |
+| Formatting   | Bold, italic, underline, strikethrough, obfuscated text, custom fonts, and clearing style.                                   |
+| Interaction  | Click to run commands, suggest commands, copy text, open URLs, or show hover text.                                           |
+| Modification | Replace, mask, prefix, suffix, uppercase, lowercase, and capitalize text.                                                    |
+| Advanced     | Item, inventory, and ender chest showcases, icons, JSON components, Discord webhooks, speech bubbles, logs, and blocking. |
 
-This section is split into three parts:
+## Reading Path
 
-* **[Configuration](Configuration.md)**
-  Explains the JSON structure used to define style rules, including `pattern`, `comment`, and `styles`.
-
-* **[Style Type](StyleType.md)**
-  Lists every available style type, including colors, formatting, hover effects, click actions, and advanced behaviors.
-
-* **[Application](Application.md)**
-  Shows practical examples such as custom chat formatting, bubble chat, macros, and global effects.
+| Page                              | Use it for                                        |
+|-----------------------------------|---------------------------------------------------|
+| [Configuration](Configuration.md) | Learn the exact JSON shape for style rules.       |
+| [Style Types](StyleType.md)       | Look up every available `styleType`.              |
+| [Recipes](Application.md)         | Copy practical examples for common server setups. |
