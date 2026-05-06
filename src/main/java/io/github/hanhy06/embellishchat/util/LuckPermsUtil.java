@@ -29,7 +29,7 @@ public class LuckPermsUtil {
                 }
             }
         } catch (IllegalStateException exception) {
-            EmbellishChat.LOGGER.warn("LuckPerms API is not ready. Failed to process @group mention.", exception);
+            EmbellishChat.LOGGER.warn("[embellish-chat/integration] LuckPerms API is not ready. Failed to process @group mention.", exception);
         }
 
         return result;

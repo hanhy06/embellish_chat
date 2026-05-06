@@ -161,7 +161,7 @@ public class UserCommand {
                 profile= resolver.fetchById(uuid).orElse(new GameProfile(uuid,"None"));
             }
         } catch (CommandSyntaxException e) {
-            EmbellishChat.LOGGER.warn("The specified player is invalid.");
+            EmbellishChat.LOGGER.warn("[embellish-chat/command] The specified player is invalid.");
             context.getSource().sendFailure(Component.literal("The specified player is invalid."));
             return 0;
         }

@@ -16,7 +16,7 @@ public class DiscordUtil {
 
     public void send(URI uri,String content){
         if (uri.toString().isBlank()) {
-            EmbellishChat.LOGGER.warn("The registered Discord DISCORD_WEBHOOK does not exist");
+            EmbellishChat.LOGGER.warn("[embellish-chat/integration] The registered Discord DISCORD_WEBHOOK does not exist");
             return;
         }
 
@@ -29,11 +29,11 @@ public class DiscordUtil {
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenAccept(response -> {
                     if (response.statusCode() != 204) {
-                        EmbellishChat.LOGGER.error("Failed to send a message to Discord: {}", response.statusCode());
+                        EmbellishChat.LOGGER.error("[embellish-chat/integration] Failed to send a message to Discord: {}", response.statusCode());
                     }
                 })
                 .exceptionally(exception -> {
-                    EmbellishChat.LOGGER.error("Failed due to an error: {}", exception.getMessage());
+                    EmbellishChat.LOGGER.error("[embellish-chat/integration] Failed due to an error: {}", exception.getMessage());
                     return null;
                 });
     }

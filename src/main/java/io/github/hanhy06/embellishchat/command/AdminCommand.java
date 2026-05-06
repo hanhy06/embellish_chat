@@ -110,7 +110,7 @@ public class AdminCommand {
                     .map(ServerPlayer::getUUID)
                     .collect(Collectors.toSet());
         } catch (CommandSyntaxException e) {
-            EmbellishChat.LOGGER.error("Unable to perform {} due to an unknown error.", action);
+            EmbellishChat.LOGGER.error("[embellish-chat/command] Unable to perform {} due to an unknown error.", action);
             return 0;
         }
 

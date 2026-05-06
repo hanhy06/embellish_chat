@@ -79,7 +79,7 @@ public class MessageProcessor implements ConfigListener {
 
             return null;
         } catch (Exception e){
-            EmbellishChat.LOGGER.warn("Failed to apply message [{}]", message, e);
+            EmbellishChat.LOGGER.warn("[embellish-chat/message] Failed to apply message [{}]", message, e);
             return message;
         } finally {
             PlaceHolderUtil.remove(message.sender());

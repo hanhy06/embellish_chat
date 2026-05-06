@@ -85,7 +85,7 @@ public class MentionRegistry {
         } catch (MessageBlockedException block){
             throw block;
         } catch (Exception e) {
-            EmbellishChat.LOGGER.warn("Failed to apply mention [{}] with option [{}]", mentionType, parameter.option(), e);
+            EmbellishChat.LOGGER.warn("[embellish-chat/mention] Failed to apply mention [{}] with option [{}]", mentionType, parameter.option(), e);
             return Target.of(new HashSet<>(),null);
         }
     }
@@ -181,7 +181,7 @@ public class MentionRegistry {
             HashSet<ServerPlayer> players = LuckPermsUtil.getGroupPlayers(parameter.option(),playerList.getPlayers());
             return Target.of(players,null);
         }else {
-            EmbellishChat.LOGGER.info("LuckPerms not found. @group mentions will be ignored.");
+            EmbellishChat.LOGGER.info("[embellish-chat/integration] LuckPerms not found. @group mentions will be ignored.");
             return Target.of(new HashSet<>(),null);
         }
     }
@@ -191,7 +191,7 @@ public class MentionRegistry {
             HashSet<ServerPlayer> players = AdvancedChatUtil.getChannelPlayers(parameter.option(),parameter.player(),playerList.getPlayers());
             return Target.of(players,null);
         }else {
-            EmbellishChat.LOGGER.info("Advanced Chat not found. @channel mentions will be ignored.");
+            EmbellishChat.LOGGER.info("[embellish-chat/integration] Advanced Chat not found. @channel mentions will be ignored.");
             return Target.of(new HashSet<>(),null);
         }
     }

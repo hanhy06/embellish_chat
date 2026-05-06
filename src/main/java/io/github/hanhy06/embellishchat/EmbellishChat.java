@@ -25,7 +25,7 @@ public class EmbellishChat implements ModInitializer {
 
     @Override
 	public void onInitialize() {
-        LOGGER.info("[{}] Initializing.", MOD_ID);
+        LOGGER.info("[embellish-chat/lifecycle] Initializing.");
 
 		ServerLifecycleEvents.SERVER_STARTED.register(EmbellishChat::handleServerStart);
 
@@ -55,6 +55,6 @@ public class EmbellishChat implements ModInitializer {
         manager.addListener(command);
 		manager.readConfig();
 
-		LOGGER.info("[{}] initialized successfully.", MOD_ID);
+		LOGGER.info("[embellish-chat/lifecycle] initialized successfully.");
 	}
 }

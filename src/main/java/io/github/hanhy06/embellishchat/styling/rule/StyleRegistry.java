@@ -116,7 +116,7 @@ public class StyleRegistry {
         } catch (MessageBlockedException block) {
             throw block;
         } catch (Exception e) {
-            EmbellishChat.LOGGER.warn("Failed to apply style [{}] with option [{}]", styleType, parameter.getString(), e);
+            EmbellishChat.LOGGER.warn("[embellish-chat/style] Failed to apply style [{}] with option [{}]", styleType, parameter.getString(), e);
             return parameter.segment();
         }
     }
@@ -434,7 +434,7 @@ public class StyleRegistry {
     }
 
     public MutableComponent LOG(StyleParameter parameter){
-        EmbellishChat.LOGGER.info("Log StyleType segment: {}, open segment:{}, sender: {}",parameter.segment().getString(),parameter.getString(),parameter.player());
+        EmbellishChat.LOGGER.info("[embellish-chat/chat-log] segment: {}, option: {}, sender: {}",parameter.segment().getString(),parameter.getString(),parameter.player());
         return parameter.segment();
     }
 

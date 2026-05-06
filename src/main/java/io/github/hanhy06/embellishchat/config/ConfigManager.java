@@ -75,7 +75,7 @@ public class ConfigManager {
                 writeConfig(this::writeIfAbsent);
             }
         } catch (IOException e) {
-            EmbellishChat.LOGGER.warn("Failed to create config files. Using default settings.", e);
+            EmbellishChat.LOGGER.warn("[embellish-chat/config] Failed to create config files. Using default settings.", e);
         }
     }
 
@@ -104,22 +104,22 @@ public class ConfigManager {
             Config loadedConfig = gson.fromJson(mergedConfig, Config.class);
 
             if (loadedConfig == null) {
-                EmbellishChat.LOGGER.warn("Config is empty or invalid. Keeping current config.");
+                EmbellishChat.LOGGER.warn("[embellish-chat/config] Config is empty or invalid. Keeping current config.");
             } else if (!Objects.equals(loadedConfig.version(), defaultConfig.version())) {
-                EmbellishChat.LOGGER.warn("Config version mismatch. Keeping current config.");
+                EmbellishChat.LOGGER.warn("[embellish-chat/config] Config version mismatch. Keeping current config.");
             } else {
                 String validationError = validateConfig(loadedConfig);
                 if (validationError == null) {
                     config = loadedConfig;
                     broadcastConfig();
-                    EmbellishChat.LOGGER.info("Config loaded successfully.");
+                    EmbellishChat.LOGGER.info("[embellish-chat/config] Config loaded successfully.");
                     return true;
                 }
 
-                EmbellishChat.LOGGER.warn("Config validation failed: {}. Keeping current config.", validationError);
+                EmbellishChat.LOGGER.warn("[embellish-chat/config] Config validation failed: {}. Keeping current config.", validationError);
             }
         } catch (RuntimeException e) {
-            EmbellishChat.LOGGER.error("Failed to parse merged config. Keeping current config.", e);
+            EmbellishChat.LOGGER.error("[embellish-chat/config] Failed to parse merged config. Keeping current config.", e);
         }
 
         broadcastConfig();
@@ -210,7 +210,7 @@ public class ConfigManager {
             JsonElement element = JsonParser.parseReader(reader);
             return element.isJsonObject() ? element.getAsJsonObject() : null;
         } catch (IOException | JsonSyntaxException e) {
-            EmbellishChat.LOGGER.warn("Failed to read {}: {}", file, e.getMessage());
+            EmbellishChat.LOGGER.warn("[embellish-chat/config] Failed to read {}: {}", file, e.getMessage());
             return null;
         }
     }
@@ -225,7 +225,7 @@ public class ConfigManager {
                 try {
                     writeConfig();
                 } catch (Exception e) {
-                    EmbellishChat.LOGGER.error("Failed to save config async", e);
+                    EmbellishChat.LOGGER.error("[embellish-chat/config] Failed to save config async", e);
                 }
             });
         }
@@ -277,9 +277,9 @@ public class ConfigManager {
                 StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING
         )) {
             gson.toJson(json, writer);
-            EmbellishChat.LOGGER.info("Saved {}", file);
+            EmbellishChat.LOGGER.info("[embellish-chat/config] Saved {}", file);
         } catch (IOException e) {
-            EmbellishChat.LOGGER.error("Failed to write {}: {}", file, e.getMessage());
+            EmbellishChat.LOGGER.error("[embellish-chat/config] Failed to write {}: {}", file, e.getMessage());
         }
     }
 
@@ -290,9 +290,9 @@ public class ConfigManager {
                 StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING
         )) {
             gson.toJson(json, writer);
-            EmbellishChat.LOGGER.info("Saved {}", file);
+            EmbellishChat.LOGGER.info("[embellish-chat/config] Saved {}", file);
         } catch (IOException e) {
-            EmbellishChat.LOGGER.error("Failed to write {}: {}", file, e.getMessage());
+            EmbellishChat.LOGGER.error("[embellish-chat/config] Failed to write {}: {}", file, e.getMessage());
         }
     }
 

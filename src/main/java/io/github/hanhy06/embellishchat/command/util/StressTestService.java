@@ -107,6 +107,6 @@ public class StressTestService {
 
         testSource.sendSuccess(() -> Component.literal("Stress test completed!"), true);
         testSource.sendSuccess(() -> message, true);
-        EmbellishChat.LOGGER.info(message.getString());
+        EmbellishChat.LOGGER.info("[embellish-chat/stress-test] {}", message.getString());
     }
 }
