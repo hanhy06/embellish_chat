@@ -22,6 +22,7 @@ const MENTION_TYPES = [
   "EVERYONE",
   "WORLD",
   "LUCK_PERMS_GROUP",
+  "ADVANCED_CHAT_CHANNEL",
   "PERMISSION",
   "CUSTOM"
 ];
@@ -59,7 +60,7 @@ const emptyMentionRule = () => ({
 });
 
 const normalizeConfig = (value) => ({
-  version: value.version ?? "3.5.1",
+  version: value.version ?? "3.6.0",
   delimiter: value.delimiter ?? ",",
   timestamp: value.timestamp ?? "yyyy-MM-dd HH:mm:ss",
   command_alias: value.command_alias ?? "ec",
@@ -67,6 +68,7 @@ const normalizeConfig = (value) => ({
   team_color: value.team_color ?? "#FF55FF",
   notify_command_enabled: value.notify_command_enabled ?? true,
   notify_mention_enabled: value.notify_mention_enabled ?? true,
+  require_same_channel: value.require_same_channel ?? true,
   disable_vanilla_chat_format: value.disable_vanilla_chat_format ?? false,
   banned_players: value.banned_players ?? [],
   notify_off_players: value.notify_off_players ?? []
@@ -951,9 +953,10 @@ function ConfigEditor() {
                 <Field label="URL Color"><ColorInput value={config.url_color} onChange={(value) => setConfig({ ...config, url_color: value })} /></Field>
                 <Field label="Team Color"><ColorInput value={config.team_color} onChange={(value) => setConfig({ ...config, team_color: value })} /></Field>
               </div>
-              <div className="grid gap-3 md:grid-cols-3">
+              <div className="grid gap-3 md:grid-cols-4">
                 <Toggle label="Notify command enabled" checked={config.notify_command_enabled} onChange={(value) => setConfig({ ...config, notify_command_enabled: value })} />
                 <Toggle label="Notify mention enabled" checked={config.notify_mention_enabled} onChange={(value) => setConfig({ ...config, notify_mention_enabled: value })} />
+                <Toggle label="Require same channel" checked={config.require_same_channel} onChange={(value) => setConfig({ ...config, require_same_channel: value })} />
                 <Toggle label="Disable vanilla chat format" checked={config.disable_vanilla_chat_format} onChange={(value) => setConfig({ ...config, disable_vanilla_chat_format: value })} />
               </div>
             </Section>
@@ -1059,7 +1062,7 @@ function ConfigEditor() {
         {tab === "mentions" && (
           <PermissionRuleEditor
             title="Mention Rules"
-            description="Mention targets now include the PERMISSION type."
+            description="Mention targets include Advanced Chat channels and permissions."
             groups={mentions.mention_rules}
             onChange={(mention_rules) => setMentions({ ...mentions, mention_rules })}
             createRule={emptyMentionRule}
