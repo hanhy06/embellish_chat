@@ -84,7 +84,7 @@ public class MentionRegistry {
             return function.apply(parameter);
         } catch (MessageBlockedException block){
             throw block;
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             EmbellishChat.LOGGER.warn("Failed to apply mention [{}] with option [{}]", mentionType, parameter.option(), e);
             return Target.of(new HashSet<>(),null);
         }

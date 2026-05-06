@@ -1,5 +1,6 @@
 package io.github.hanhy06.embellishchat.message;
 
+import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
 import io.github.hanhy06.embellishchat.mention.MentionProcessor;
@@ -77,6 +78,9 @@ public class MessageProcessor implements ConfigListener {
             }
 
             return null;
+        } catch (Exception e){
+            EmbellishChat.LOGGER.warn("Failed to apply message [{}]", message, e);
+            return message;
         } finally {
             PlaceHolderUtil.remove(message.sender());
         }

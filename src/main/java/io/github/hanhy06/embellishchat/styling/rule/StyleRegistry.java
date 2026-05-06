@@ -115,7 +115,7 @@ public class StyleRegistry {
             return function.apply(parameter);
         } catch (MessageBlockedException block) {
             throw block;
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             EmbellishChat.LOGGER.warn("Failed to apply style [{}] with option [{}]", styleType, parameter.getString(), e);
             return parameter.segment();
         }
