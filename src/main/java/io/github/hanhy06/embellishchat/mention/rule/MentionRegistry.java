@@ -147,8 +147,10 @@ public class MentionRegistry {
             if (target != null) {
                 Style name = target.getDisplayName().getStyle();
                 style = name.applyTo(style);
-            } else if (playerTeam.getColor().isColor()) {
-                style = Style.EMPTY.withColor(playerTeam.getColor());
+            } else {
+                style = playerTeam.getColor()
+                        .map(teamColor -> Style.EMPTY.withColor(teamColor.rgb()))
+                        .orElse(style);
             }
         }
 

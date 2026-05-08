@@ -198,12 +198,10 @@ public class StyleRegistry {
         PlayerTeam team = player.getTeam();
         if (team == null) return parameter.segment();
 
-        ChatFormatting formatting = team.getColor();
-        if (formatting.isColor()){
-            return parameter.segment().withStyle(Style.EMPTY.withColor(formatting));
-        }
-
-        return parameter.segment();
+        Optional<TeamColor> color = team.getColor();
+        return color
+                .map(teamColor -> parameter.segment().withStyle(Style.EMPTY.withColor(teamColor.rgb())))
+                .orElseGet(parameter::segment);
     }
 
     public MutableComponent BOLD(StyleParameter parameter) {
