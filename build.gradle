@@ -1,3 +1,5 @@
+import net.fabricmc.loom.task.prod.ClientProductionRunTask
+
 plugins {
 	id 'net.fabricmc.fabric-loom' version "${loom_version}"
 	id 'maven-publish'
@@ -100,3 +102,5 @@ publishing {
         mavenCentral()
 	}
 }
+
+tasks.register("prodClient", ClientProductionRunTask)
