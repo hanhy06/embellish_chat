@@ -42,6 +42,7 @@ theme:
     - search.highlight
     - search.suggest
     - search.share
+  custom_dir: overrides
 
 markdown_extensions:
   - admonition
