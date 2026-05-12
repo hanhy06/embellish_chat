@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+{{ super() }}
+
+<meta name="application-name" content="Embellish Chat Wiki">
+<meta property="og:site_name" content="Embellish Chat Wiki">
+<meta property="og:title" content="Introduction - Embellish Chat Wiki">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hanhy06.github.io/embellish-chat-wiki/">
+
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Embellish Chat Wiki",
+        "alternateName": "Embellish Chat Docs",
+        "url": "https://hanhy06.github.io/embellish-chat-wiki/"
+    }
+</script>
+{% endblock %}
