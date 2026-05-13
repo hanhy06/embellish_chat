@@ -104,5 +104,3 @@ publishing {
         mavenCentral()
 	}
 }
-
-tasks.register("prodClient", ClientProductionRunTask)
