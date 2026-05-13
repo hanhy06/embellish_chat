@@ -219,7 +219,8 @@ public class MentionRegistry {
             List<ServerPlayer> players = entitySelector.findPlayers(sender.createCommandSourceStack());
             return Target.of(players, null);
         } catch (CommandSyntaxException e) {
-            throw new MessageBlockedException("Invalid selector.", e);
+            EmbellishChat.LOGGER.warn("Invalid selector.", e);
+            throw new MessageBlockedException("Invalid selector.");
         }
     }
 }
