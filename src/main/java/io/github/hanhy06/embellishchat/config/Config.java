@@ -439,6 +439,11 @@ public record Config(
                         Identifier.parse("minecraft:item/arrow")
                 )
         );
+        item.put("minecraft:enchanted_golden_apple",new AtlasSprite(
+                        Identifier.parse("minecraft:items"),
+                        Identifier.parse("minecraft:item/golden_apple")
+                )
+        );
 
         return item;
     }
