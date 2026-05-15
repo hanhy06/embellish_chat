@@ -17,14 +17,17 @@
 	"entrypoints": {
 		"main": [
           "io.github.hanhy06.embellishchat.EmbellishChat"
-		]
+		],
+        "client": [
+          "io.github.hanhy06.embellishchat.EmbellishChatClient"
+        ]
 	},
 	"mixins": [
       "embellish-chat.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.17.2",
-		"minecraft": ">1.21.11",
+		"minecraft": ">26.1",
 		"java": ">=21",
 		"fabric-api": "*",
         "fabric-permissions-api-v0": "*",

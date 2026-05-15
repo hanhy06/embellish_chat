@@ -1,17 +1,8 @@
 package io.github.hanhy06.embellishchat.util;
 
-import eu.pb4.placeholders.api.ParserContext;
-import eu.pb4.placeholders.api.PlaceholderResult;
-import eu.pb4.placeholders.api.Placeholders;
-import eu.pb4.placeholders.api.ServerPlaceholderContext;
-import eu.pb4.placeholders.api.node.TextNode;
-import eu.pb4.placeholders.api.parsers.TagParser;
-import io.github.hanhy06.embellishchat.EmbellishChat;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -159,7 +159,7 @@ public class ConfigManager {
                 if (rule == null) return "style_rules contains a null rule";
                 if (rule.pattern() == null) return "style_rules contains a rule with null pattern";
                 if (rule.pattern().matcher("").groupCount() < 2) {
-                    return "style rule patterns must have at least two capture groups";
+                    return "style rule candidates must have at least two capture groups";
                 }
                 if (rule.styles() == null) return "style_rules contains a rule with null styles";
 
@@ -177,7 +177,7 @@ public class ConfigManager {
                 if (rule == null) return "mention_rules contains a null rule";
                 if (rule.pattern() == null) return "mention_rules contains a rule with null pattern";
                 if (rule.pattern().matcher("").groupCount() < 1) {
-                    return "mention rule patterns must have at least one capture group";
+                    return "mention rule candidates must have at least one capture group";
                 }
                 if (rule.mentions() == null) return "mention_rules contains a rule with null mentions";
                 if (rule.mentions().isEmpty()) return "mention_rules contains a rule with empty mentions";
