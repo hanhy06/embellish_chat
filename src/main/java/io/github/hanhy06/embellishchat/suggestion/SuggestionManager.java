@@ -1,12 +1,15 @@
 package io.github.hanhy06.embellishchat.suggestion;
 
+import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ChatScreen;
 
 import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.util.Mth;
 import org.lwjgl.glfw.GLFW;
 
@@ -21,6 +24,7 @@ public class SuggestionManager {
     private static final int TEXT_COLOR = 0xFFE0E0E0;
 
     private static List<String> candidates = new ArrayList<>();
+    private static boolean hasPlayer = false;
 
     private final EditBox editBox;
     private final ChatScreen chatScreen;
@@ -40,6 +44,8 @@ public class SuggestionManager {
                     .map(str -> str.replace("()",""))
                     .map(str -> str.replace("(.+?)",""))
                     .toList();
+
+            hasPlayer = payload.hasPlayer();
         });
     }
 
@@ -76,6 +82,21 @@ public class SuggestionManager {
         for (String candidate:candidates){
             if (token.length() <= candidate.length() && candidate.regionMatches(true, 0, token,0,token.length()))
                 activeCandidate.add(candidate);
+        }
+
+        if (hasPlayer) {
+            Minecraft minecraft = Minecraft.getInstance();
+
+            if (minecraft.getConnection() != null) {
+                activeCandidate.addAll(
+                        minecraft.getConnection().getOnlinePlayers().stream()
+                                .map(PlayerInfo::getProfile)
+                                .map(GameProfile::name)
+                                .map(name -> "@"+name)
+                                .filter(name -> token.length() <= name.length() && name.regionMatches(true, 0, token, 0, token.length()))
+                                .toList()
+                );
+            }
         }
 
         open = !activeCandidate.isEmpty();

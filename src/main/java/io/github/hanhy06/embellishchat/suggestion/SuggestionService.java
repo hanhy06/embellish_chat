@@ -2,6 +2,7 @@ package io.github.hanhy06.embellishchat.suggestion;
 
 import io.github.hanhy06.embellishchat.config.ConfigManager;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
+import io.github.hanhy06.embellishchat.mention.rule.MentionType;
 import io.github.hanhy06.embellishchat.util.PermissionUtil;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -29,13 +30,21 @@ public class SuggestionService {
         List<String> patterns = new ArrayList<>();
 
         List<String> permissions = PermissionUtil.getPermissions(player, mentionRules.keySet());
+        boolean hasPlayerMention = false;
         for (String permission:permissions){
             patterns.addAll(mentionRules.get(permission).stream()
                     .map(MentionRule::pattern)
                     .map(Pattern::pattern)
                     .toList());
+
+            if (!hasPlayerMention) {
+                hasPlayerMention = mentionRules.get(permission).stream()
+                        .flatMap(rule -> rule.mentions().stream())
+                        .anyMatch(action -> action.mentionType() == MentionType.PLAYER);
+            }
         }
 
-        return new SuggestionCandidatePayload(patterns,List.of(),false);
+
+        return new SuggestionCandidatePayload(patterns,List.of(),hasPlayerMention);
     }
 }
