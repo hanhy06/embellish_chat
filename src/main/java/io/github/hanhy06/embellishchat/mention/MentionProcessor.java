@@ -65,6 +65,7 @@ public class MentionProcessor implements ConfigListener {
 
         UUID uuid = player.getUUID();
         Set<Mention> mentions = new HashSet<>();
+        Set<Integer> mentionBegins = new HashSet<>();
         for (MentionRule rule:rules){
             Matcher matcher = rule.pattern().matcher(text);
             if (!matcher.find()) continue;
@@ -76,7 +77,7 @@ public class MentionProcessor implements ConfigListener {
                 if (cooldowns.contains(cooldown)) throw new MessageBlockedException("You are still on cooldown.");
             }
 
-            buffer = parseMention(matcher,rule,player);
+            buffer = parseMention(matcher,rule,player,mentionBegins);
             if (cooldown != null && !buffer.isEmpty()) cooldowns.add(cooldown);
             mentions.addAll(buffer);
         }
@@ -86,11 +87,13 @@ public class MentionProcessor implements ConfigListener {
         return new ArrayList<>(mentions);
     }
 
-    private Set<Mention> parseMention(Matcher matcher,MentionRule rule,ServerPlayer player){
+    private Set<Mention> parseMention(Matcher matcher,MentionRule rule,ServerPlayer player,Set<Integer> mentionBegins){
         Set<Mention> mentions = new HashSet<>();
 
         do {
             int begin = matcher.start();
+            if (!mentionBegins.add(begin)) continue;
+
             int end = matcher.end();
             List<String> options = OptionUtil.split(matcher.group(1),config.delimiter());
 
