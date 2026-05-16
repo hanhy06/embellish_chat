@@ -34,6 +34,7 @@ public class SuggestionManager {
     private boolean applyingSuggestion;
     private int tokenStart;
     private int tokenEnd;
+    private int firstIndex;
     private int selectedIndex;
 
     public static void registerReceive(){
@@ -63,6 +64,7 @@ public class SuggestionManager {
 
         activeCandidate.clear();
         open = false;
+        firstIndex = 0;
         selectedIndex = -1;
 
         int cursor = editBox.getCursorPosition();
@@ -106,10 +108,10 @@ public class SuggestionManager {
         if (!open) return;
 
         Font font = chatScreen.getFont();
-        int size = Math.min(activeCandidate.size(), MAX_VISIBLE);
+        int size = Math.min(activeCandidate.size() - firstIndex, MAX_VISIBLE);
         int width = 0;
         for (int i = 0;i < size;i++) {
-            width = Math.max(width,font.width(activeCandidate.get(i)));
+            width = Math.max(width,font.width(activeCandidate.get(firstIndex + i)));
         }
 
         int left = Mth.clamp(
@@ -117,18 +119,19 @@ public class SuggestionManager {
                 editBox.getScreenX(0),
                 editBox.getScreenX(0) + editBox.getInnerWidth() - width - 8
         );
-        int top = Math.max(4, editBox.getY() - (size * LINE_HEIGHT) - 3);
+        int top = Math.max(4, editBox.getY() - (size * LINE_HEIGHT) - 7);
         int right = left + width + 8;
         int bottom = top + (size * LINE_HEIGHT) + 2;
 
         graphics.fill(left,top,right,bottom,FILL_COLOR);
         for (int i = 0;i < size;i++) {
+            int index = firstIndex + i;
             int y = top + 2 + (i * LINE_HEIGHT);
-            if (i == selectedIndex) {
+            if (index == selectedIndex) {
                 graphics.fill(left + 1,y - 1,right - 1,y + LINE_HEIGHT - 1,SELECTED_FILL_COLOR);
             }
 
-            graphics.text(font,activeCandidate.get(i),left + 4,y,TEXT_COLOR);
+            graphics.text(font,activeCandidate.get(index),left + 4,y,TEXT_COLOR);
         }
     }
 
@@ -136,7 +139,7 @@ public class SuggestionManager {
         if (!open) return false;
 
         if (event.key() == GLFW.GLFW_KEY_TAB){
-            selectedIndex = (selectedIndex + 1) % activeCandidate.size();
+            select(selectedIndex + 1);
             String candidate = activeCandidate.get(selectedIndex);
 
             String value = editBox.getValue();
@@ -157,12 +160,12 @@ public class SuggestionManager {
 
 
         if (event.key() == GLFW.GLFW_KEY_DOWN) {
-            selectedIndex = Math.min(selectedIndex + 1, activeCandidate.size() - 1);
+            select(selectedIndex + 1);
             return true;
         }
 
         if (event.key() == GLFW.GLFW_KEY_UP) {
-            selectedIndex = Math.max(selectedIndex - 1, 0);
+            select(selectedIndex - 1);
             return true;
         }
 
@@ -173,16 +176,37 @@ public class SuggestionManager {
         if (!open) return false;
 
         if (scrollY < 0) {
-            selectedIndex = Math.min(selectedIndex + 1, activeCandidate.size() - 1);
+            select(selectedIndex + 1);
             return true;
         }
 
         if (scrollY > 0) {
-            selectedIndex = Math.max(selectedIndex - 1, 0);
+            select(selectedIndex - 1);
             return true;
         }
 
         return false;
+    }
+
+    private void select(int index) {
+        if (activeCandidate.isEmpty()) return;
+
+        selectedIndex = index;
+        if (selectedIndex >= activeCandidate.size()) {
+            selectedIndex = 0;
+        }
+
+        if (selectedIndex < 0) {
+            selectedIndex = activeCandidate.size() - 1;
+        }
+
+        if (selectedIndex < firstIndex) {
+            firstIndex = selectedIndex;
+        }
+
+        if (selectedIndex >= firstIndex + MAX_VISIBLE) {
+            firstIndex = selectedIndex - MAX_VISIBLE + 1;
+        }
     }
 
 }
