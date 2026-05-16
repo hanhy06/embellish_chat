@@ -74,10 +74,6 @@ public class MentionRegistry {
         this.isAdvancedChat = FabricLoader.getInstance().isModLoaded("advanced-chat");
     }
 
-    public Function<MentionParameter, Target> get(MentionType key){
-        return registries.get(key);
-    }
-
     public Target apply(MentionType mentionType,MentionParameter parameter){
         Function<MentionParameter, Target> function = registries.get(mentionType);
         try {

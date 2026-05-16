@@ -14,7 +14,7 @@ public record SuggestionCandidatePayload(
         List<String> candidates,
         boolean hasPlayer
 ) implements CustomPacketPayload {
-    public static final Identifier SUGGESTION_CANDIDATES_ID = Identifier.fromNamespaceAndPath(EmbellishChat.MOD_ID, "mention_pattern");
+    public static final Identifier SUGGESTION_CANDIDATES_ID = Identifier.fromNamespaceAndPath(EmbellishChat.MOD_ID, "suggestion_candidates");
     public static final CustomPacketPayload.Type<SuggestionCandidatePayload> TYPE = new CustomPacketPayload.Type<>(SUGGESTION_CANDIDATES_ID);
 
     public static final StreamCodec<RegistryFriendlyByteBuf, SuggestionCandidatePayload> CODEC = StreamCodec.composite(
