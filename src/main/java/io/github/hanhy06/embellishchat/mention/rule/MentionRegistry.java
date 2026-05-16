@@ -144,9 +144,7 @@ public class MentionRegistry {
                 Style name = target.getDisplayName().getStyle();
                 style = name.applyTo(style);
             } else {
-                style = playerTeam.getColor()
-                        .map(teamColor -> Style.EMPTY.withColor(teamColor.rgb()))
-                        .orElse(style);
+                style = Style.EMPTY.withColor(playerTeam.getColor());
             }
         }
 

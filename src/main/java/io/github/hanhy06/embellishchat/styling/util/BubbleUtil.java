@@ -10,7 +10,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Display;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.scores.DisplaySlot;
 import net.minecraft.world.scores.Objective;
 import org.joml.Vector3f;
@@ -67,7 +67,7 @@ public class BubbleUtil {
 
     public static void spawnDisplayEntity(ServerPlayer owner, Component text) {
         ServerLevel level = owner.level();
-        Display.TextDisplay entity = new Display.TextDisplay(EntityTypes.TEXT_DISPLAY, level);
+        Display.TextDisplay entity = new Display.TextDisplay(EntityType.TEXT_DISPLAY,level);
 
         level.addFreshEntity(entity);
 

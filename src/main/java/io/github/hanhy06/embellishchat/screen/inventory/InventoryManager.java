@@ -64,7 +64,7 @@ public class InventoryManager {
         SimpleContainer inventory = new SimpleContainer(54);
         Inventory playerInventory = player.getInventory();
 
-        ItemStack grayPane = new ItemStack(Items.STAINED_GLASS_PANE.black());
+        ItemStack grayPane = new ItemStack(Items.BLACK_STAINED_GLASS);
         grayPane.set(DataComponents.TOOLTIP_DISPLAY,new TooltipDisplay(true, ReferenceSortedSets.emptySet()));
         for (int i = 0; i < 54; i++) {
             inventory.setItem(i, grayPane.copy());

@@ -26,7 +26,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.scores.PlayerTeam;
-import net.minecraft.world.scores.TeamColor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -198,10 +197,12 @@ public class StyleRegistry {
         PlayerTeam team = player.getTeam();
         if (team == null) return parameter.segment();
 
-        Optional<TeamColor> color = team.getColor();
-        return color
-                .map(teamColor -> parameter.segment().withStyle(Style.EMPTY.withColor(teamColor.rgb())))
-                .orElseGet(parameter::segment);
+        ChatFormatting formatting = team.getColor();
+        if (formatting.isColor()){
+            return parameter.segment().withStyle(Style.EMPTY.withColor(formatting));
+        }
+
+        return parameter.segment();
     }
 
     public MutableComponent BOLD(StyleParameter parameter) {
