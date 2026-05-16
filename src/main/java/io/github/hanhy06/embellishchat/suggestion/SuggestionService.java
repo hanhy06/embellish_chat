@@ -30,21 +30,20 @@ public class SuggestionService {
         List<String> patterns = new ArrayList<>();
 
         List<String> permissions = PermissionUtil.getPermissions(player, mentionRules.keySet());
-        boolean hasPlayerMention = false;
+        boolean hasPlayer = false;
         for (String permission:permissions){
             patterns.addAll(mentionRules.get(permission).stream()
                     .map(MentionRule::pattern)
                     .map(Pattern::pattern)
                     .toList());
 
-            if (!hasPlayerMention) {
-                hasPlayerMention = mentionRules.get(permission).stream()
+            if (!hasPlayer) {
+                hasPlayer = mentionRules.get(permission).stream()
                         .flatMap(rule -> rule.mentions().stream())
                         .anyMatch(action -> action.mentionType() == MentionType.PLAYER);
             }
         }
 
-
-        return new SuggestionCandidatePayload(patterns,List.of(),hasPlayerMention);
+        return new SuggestionCandidatePayload(patterns,hasPlayer);
     }
 }
