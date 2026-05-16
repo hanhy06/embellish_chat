@@ -119,7 +119,7 @@ public class SuggestionManager {
                 editBox.getScreenX(0),
                 editBox.getScreenX(0) + editBox.getInnerWidth() - width - 8
         );
-        int top = Math.max(4, editBox.getY() - (size * LINE_HEIGHT) - 7);
+        int top = Math.max(4, editBox.getY() - (size * LINE_HEIGHT) - 6);
         int right = left + width + 8;
         int bottom = top + (size * LINE_HEIGHT) + 2;
 
