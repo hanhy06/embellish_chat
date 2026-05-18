@@ -50,11 +50,13 @@ public class EmbellishChat implements ModInitializer {
         MentionProcessor mention = new MentionProcessor();
         MessageProcessor message = new MessageProcessor(mention,style,server.getPlayerList());
         CommandHandler command = new CommandHandler();
+        SuggestionService suggestion = new SuggestionService();
 
         manager.addListener(style);
         manager.addListener(mention);
         manager.addListener(message);
         manager.addListener(command);
+        manager.addListener(suggestion);
 		manager.readConfig();
 
 		LOGGER.info("[embellish-chat/lifecycle] initialized successfully.");

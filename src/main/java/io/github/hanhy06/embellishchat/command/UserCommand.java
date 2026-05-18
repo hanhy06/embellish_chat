@@ -134,9 +134,8 @@ public class UserCommand {
         boolean notification;
 
         synchronized (ConfigManager.INSTANCE.LOCK_KEY) {
-            notification = players.contains(uuid);
-            if (notification) players.remove(uuid);
-            else players.add(uuid);
+            notification = players.remove(uuid);
+            if (!notification) players.add(uuid);
         }
 
         ConfigManager.INSTANCE.saveAsync();

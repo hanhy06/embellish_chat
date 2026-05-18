@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -68,12 +67,8 @@ public class ConfigManager {
         this.configDirPath = configBasePath.resolve(CONFIG_FILE_DIR);
 
         try {
-            if (!Files.exists(configDirPath)) {
-                Files.createDirectories(configDirPath);
-                writeConfig(this::writeJsonFile);
-            }else {
-                writeConfig(this::writeIfAbsent);
-            }
+            Files.createDirectories(configDirPath);
+            writeConfig(false);
         } catch (IOException e) {
             EmbellishChat.LOGGER.warn("[embellish-chat/config] Failed to create config files. Using default settings.", e);
         }
@@ -216,7 +211,7 @@ public class ConfigManager {
     }
 
     public void writeConfig() {
-        writeConfig(this::writeJsonFile);
+        writeConfig(true);
     }
 
     public void saveAsync() {
@@ -231,9 +226,9 @@ public class ConfigManager {
         }
     }
 
-    private void writeConfig(BiConsumer<String,JsonObject> writer) {
+    private void writeConfig(boolean overwrite) {
         JsonObject fullJson;
-        synchronized (LOCK_KEY){
+        synchronized (LOCK_KEY) {
             fullJson = gson.toJsonTree(config).getAsJsonObject();
         }
 
@@ -262,29 +257,16 @@ public class ConfigManager {
         if (colorPreset != null) presetsJson.add("color", colorPreset);
 
 
-        if (writer == null) writer = this::writeJsonFile;
-        writer.accept(CONFIG_FILE_NAME,fullJson);
-        writer.accept(STYLE_FILE_NAME, stylesJson);
-        writer.accept(MENTION_FILE_NAME, mentionsJson);
-        writer.accept(PRESET_FILE_NAME, presetsJson);
+        writeJsonFile(CONFIG_FILE_NAME, fullJson, overwrite);
+        writeJsonFile(STYLE_FILE_NAME, stylesJson, overwrite);
+        writeJsonFile(MENTION_FILE_NAME, mentionsJson, overwrite);
+        writeJsonFile(PRESET_FILE_NAME, presetsJson, overwrite);
     }
 
-    private  void writeIfAbsent(String file, JsonObject json) {
+    private void writeJsonFile(String file, JsonObject json, boolean overwrite) {
         Path path = configDirPath.resolve(file);
-        if (Files.exists(path)) return;
-        try (BufferedWriter writer = Files.newBufferedWriter(
-                path, StandardCharsets.UTF_8,
-                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING
-        )) {
-            gson.toJson(json, writer);
-            EmbellishChat.LOGGER.info("[embellish-chat/config] Saved {}", file);
-        } catch (IOException e) {
-            EmbellishChat.LOGGER.error("[embellish-chat/config] Failed to write {}: {}", file, e.getMessage());
-        }
-    }
+        if (!overwrite && Files.exists(path)) return;
 
-    private void writeJsonFile(String file, JsonObject json) {
-        Path path = configDirPath.resolve(file);
         try (BufferedWriter writer = Files.newBufferedWriter(
                 path, StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING
