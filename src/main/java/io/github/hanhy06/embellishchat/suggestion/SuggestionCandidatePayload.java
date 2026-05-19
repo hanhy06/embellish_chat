@@ -12,7 +12,7 @@ import java.util.List;
 
 public record SuggestionCandidatePayload(
         List<String> candidates,
-        boolean hasPlayer
+        boolean playerSuggestion
 ) implements CustomPacketPayload {
     public static final Identifier SUGGESTION_CANDIDATES_ID = Identifier.fromNamespaceAndPath(EmbellishChat.MOD_ID, "suggestion_candidates");
     public static final CustomPacketPayload.Type<SuggestionCandidatePayload> TYPE = new CustomPacketPayload.Type<>(SUGGESTION_CANDIDATES_ID);
@@ -21,7 +21,7 @@ public record SuggestionCandidatePayload(
             ByteBufCodecs.stringUtf8(512).apply(ByteBufCodecs.list(128)),
             SuggestionCandidatePayload::candidates,
             ByteBufCodecs.BOOL,
-            SuggestionCandidatePayload::hasPlayer,
+            SuggestionCandidatePayload::playerSuggestion,
             SuggestionCandidatePayload::new
     );
 

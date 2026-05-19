@@ -9,27 +9,28 @@ import net.minecraft.network.chat.PlayerChatMessage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.LongSummaryStatistics;
 import java.util.UUID;
 
 public class StressTestService {
     private static final String STRESS_TEST_FORMAT = """
-        <gray>── Test Configuration ──</gray>
-        • <yellow>Total Ticks</yellow>: %d
-        • <yellow>Count Per Tick</yellow>: %d
-        • <yellow>Test Message</yellow>: %s
-    
-        <gray>── Performance Analysis ──</gray>
-        • <aqua>Ticks</aqua>: %d
-        • <dark_green>Minimum</dark_green>: %dms
-        • <red>Maximum</red>: %dms
-        • <green>Average</green>: %.2fms
-        • <light_purple>Median</light_purple>: %.2fms
-        • <gold>Total Processing Time</gold>: %dms
-    
-        <gray>── Tick Analysis ──</gray>
-        • <blue>Used Ticks</blue>: %d / %d
-        • <blue>Usage</blue>: %.2f%%
-        """;
+            <gray>── Test Configuration ──</gray>
+            • <yellow>Total Ticks</yellow>: %d
+            • <yellow>Count Per Tick</yellow>: %d
+            • <yellow>Test Message</yellow>: %s
+
+            <gray>── Performance Analysis ──</gray>
+            • <aqua>Ticks</aqua>: %d
+            • <dark_green>Minimum</dark_green>: %dms
+            • <red>Maximum</red>: %dms
+            • <green>Average</green>: %.2fms
+            • <light_purple>Median</light_purple>: %.2fms
+            • <gold>Total Processing Time</gold>: %dms
+
+            <gray>── Tick Analysis ──</gray>
+            • <blue>Used Ticks</blue>: %d / %d
+            • <blue>Usage</blue>: %.2f%%
+            """;
 
     private int remainingTicks;
     private final int countPerTick;
@@ -47,7 +48,7 @@ public class StressTestService {
         testResults = new ArrayList<>(ticks);
     }
 
-    public boolean executeTest(){
+    public boolean executeTest() {
         if (remainingTicks <= 0) {
             return true;
         }
@@ -58,12 +59,7 @@ public class StressTestService {
             return true;
         }
 
-        long startTime = System.nanoTime();
-        for (int i = 0; i < countPerTick; i++) {
-            PlayerChatMessage message = PlayerChatMessage.unsigned(testUuid, testText);
-            MessageProcessor.INSTANCE.handleMessage(message);
-        }
-        testResults.add((System.nanoTime() - startTime) / 1_000_000L);
+        testResults.add(runTestBatch());
         testSource.getPlayer().sendOverlayMessage(Component.literal("Time remaining: %d tick".formatted(remainingTicks)));
         remainingTicks--;
 
@@ -77,30 +73,29 @@ public class StressTestService {
 
     public void completeStressTest() {
         int totalTicks = testResults.size();
-        long totalProcessing = testResults.stream().mapToLong(Long::longValue).sum();
-        long min = testResults.stream().mapToLong(Long::longValue).min().orElse(0);
-        long max = testResults.stream().mapToLong(Long::longValue).max().orElse(0);
-        double average = totalProcessing / (double) totalTicks;
-
         if (totalTicks < 1) {
             testSource.sendFailure(Component.literal("Cannot display statistics. No tests have been executed yet."));
             return;
         }
 
-        testResults.sort(null);
-        double median;
-        if (totalTicks % 2 == 0) {
-            median = (testResults.get(totalTicks / 2 - 1) + testResults.get(totalTicks / 2)) / 2.0;
-        } else {
-            median = testResults.get(totalTicks / 2);
+        LongSummaryStatistics statistics = new LongSummaryStatistics();
+        for (long result : testResults) {
+            statistics.accept(result);
         }
+
+        long totalProcessing = statistics.getSum();
+        long min = statistics.getMin();
+        long max = statistics.getMax();
+        double average = statistics.getAverage();
+
+        double median = calculateMedian(totalTicks);
 
         long occupiedTicks = totalProcessing / 50;
         double usagePercentTicks = (occupiedTicks / (double) totalTicks) * 100.0;
 
         Component message = PlaceHolderUtil.parseTag(String.format(
                 STRESS_TEST_FORMAT,
-                totalTicks+remainingTicks,countPerTick,testText,
+                totalTicks + remainingTicks, countPerTick, testText,
                 totalTicks, min, max, average, median, totalProcessing,
                 occupiedTicks, totalTicks, usagePercentTicks
         ));
@@ -108,5 +103,22 @@ public class StressTestService {
         testSource.sendSuccess(() -> Component.literal("Stress test completed!"), true);
         testSource.sendSuccess(() -> message, true);
         EmbellishChat.LOGGER.info("[embellish-chat/stress-test] {}", message.getString());
+    }
+
+    private long runTestBatch() {
+        long startTime = System.nanoTime();
+        for (int i = 0; i < countPerTick; i++) {
+            PlayerChatMessage message = PlayerChatMessage.unsigned(testUuid, testText);
+            MessageProcessor.INSTANCE.handleMessage(message);
+        }
+        return (System.nanoTime() - startTime) / 1_000_000L;
+    }
+
+    private double calculateMedian(int totalTicks) {
+        testResults.sort(null);
+        if (totalTicks % 2 == 0) {
+            return (testResults.get(totalTicks / 2 - 1) + testResults.get(totalTicks / 2)) / 2.0;
+        }
+        return testResults.get(totalTicks / 2);
     }
 }

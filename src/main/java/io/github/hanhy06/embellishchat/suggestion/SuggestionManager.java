@@ -24,7 +24,7 @@ public class SuggestionManager {
     private static final int TEXT_COLOR = 0xFFE0E0E0;
 
     private static List<String> candidates = new ArrayList<>();
-    private static boolean hasPlayer = false;
+    private static boolean playerSuggestion = false;
 
     private final EditBox editBox;
     private final ChatScreen chatScreen;
@@ -46,7 +46,7 @@ public class SuggestionManager {
                     .map(str -> str.replace("(.+?)",""))
                     .toList();
 
-            hasPlayer = payload.hasPlayer();
+            playerSuggestion = payload.playerSuggestion();
         });
     }
 
@@ -86,7 +86,7 @@ public class SuggestionManager {
                 activeCandidate.add(candidate);
         }
 
-        if (hasPlayer) {
+        if (playerSuggestion) {
             Minecraft minecraft = Minecraft.getInstance();
 
             if (minecraft.getConnection() != null) {
@@ -119,7 +119,7 @@ public class SuggestionManager {
                 editBox.getScreenX(0),
                 editBox.getScreenX(0) + editBox.getInnerWidth() - width - 8
         );
-        int top = Math.max(4, editBox.getY() - (size * LINE_HEIGHT) - 7);
+        int top = Math.max(4, editBox.getY() - (size * LINE_HEIGHT) - 6);
         int right = left + width + 8;
         int bottom = top + (size * LINE_HEIGHT) + 2;
 
