@@ -40,6 +40,10 @@ Embellish Chat enhances Minecraft chat with item and inventory showcases, built-
 * **Useful Chat Utilities**
   Hover messages to see exact timestamps and click them to copy their content with the timestamp.
 
+* **Server-side mod with optional client features**
+  Embellish Chat works fully server-side for all core chat features. Players do not need to install the mod on their client.
+  It is marked as **Server & Client** only because an optional client-side mention autocomplete feature is available when the mod is installed on the client.
+
 ---
 
 ## 🛠️ Styling System
