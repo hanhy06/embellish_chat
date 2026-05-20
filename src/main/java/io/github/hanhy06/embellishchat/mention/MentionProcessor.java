@@ -125,7 +125,7 @@ public class MentionProcessor implements ConfigListener {
             }
         }
 
-        return Mention.of(mention.begin(),mention.end(),targets,style,mention.rule());
+        return mention.with(targets,style);
     }
 
     private void mentionBroadcast(Set<Mention> mentions,ServerPlayer player){
