@@ -1,5 +1,6 @@
 package io.github.hanhy06.embellishchat.suggestion;
 
+import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.config.ConfigListener;
 import io.github.hanhy06.embellishchat.mention.rule.MentionAction;
@@ -66,6 +67,12 @@ public class SuggestionService implements ConfigListener {
 
             CANDIDATES_BY_PERMISSION.put(entry.getKey(), candidates);
             PLAYER_HINT_BY_PERMISSION.put(entry.getKey(), playerSuggestion);
+
+            EmbellishChat.SERVER.getPlayerList().getPlayers().forEach(player -> {
+                if (ServerPlayNetworking.canSend(player, SuggestionCandidatePayload.TYPE)) {
+                    ServerPlayNetworking.send(player, createCandidates(player));
+                }
+            });
         }
     }
 }
