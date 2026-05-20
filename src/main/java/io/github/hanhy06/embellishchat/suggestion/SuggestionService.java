@@ -68,11 +68,11 @@ public class SuggestionService implements ConfigListener {
             CANDIDATES_BY_PERMISSION.put(entry.getKey(), candidates);
             PLAYER_HINT_BY_PERMISSION.put(entry.getKey(), playerSuggestion);
 
-            EmbellishChat.SERVER.getPlayerList().getPlayers().forEach(player -> {
+            for (ServerPlayer player:EmbellishChat.SERVER.getPlayerList().getPlayers()){
                 if (ServerPlayNetworking.canSend(player, SuggestionCandidatePayload.TYPE)) {
                     ServerPlayNetworking.send(player, createCandidates(player));
                 }
-            });
+            }
         }
     }
 }
