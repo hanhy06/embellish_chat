@@ -1,6 +1,7 @@
 package io.github.hanhy06.embellishchat.suggestion;
 
 import com.mojang.authlib.GameProfile;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -47,6 +48,11 @@ public class SuggestionManager {
                     .toList();
 
             playerSuggestion = payload.playerSuggestion();
+        });
+
+        ClientPlayConnectionEvents.DISCONNECT.register((listener, client) -> {
+            candidates.clear();
+            playerSuggestion = false;
         });
     }
 
