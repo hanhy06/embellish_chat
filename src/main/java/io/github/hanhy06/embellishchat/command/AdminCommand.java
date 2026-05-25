@@ -18,10 +18,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.players.ProfileResolver;
+import net.minecraft.server.players.GameProfileCache;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -195,20 +194,22 @@ public class AdminCommand {
     private static int executeBanlist(CommandContext<CommandSourceStack> context) {
         CommandSourceStack source = context.getSource();
         HashSet<UUID> bannedList = ConfigManager.getConfig().banned_players();
+        GameProfileCache profileCache = EmbellishChat.SERVER.getProfileCache();
 
         source.sendSystemMessage(PlaceHolderUtil.parseTag(
                 "<gray>-----</gray> <aqua><b>Banned Player List</b></aqua> <gray>-----</gray>"
         ));
 
-        ProfileResolver resolver = EmbellishChat.SERVER.services().profileResolver();
         for (UUID uuid : bannedList) {
-            Optional<GameProfile> profile = resolver.fetchById(uuid);
-            if (profile.isEmpty()) continue;
-            String message = "<red><b>name</b></red>: " + profile.get().name();
+            if (profileCache == null) continue;
+            GameProfile profile = profileCache.get(uuid).orElse(null);
+            if (profile == null) continue;
+            String message = "<red><b>name</b></red>: " + profile.getName();
             source.sendSystemMessage(PlaceHolderUtil.parseTag(message));
         }
 
         source.sendSystemMessage(PlaceHolderUtil.parseTag("<gray>------------------------------</gray>"));
         return 1;
     }
+
 }

@@ -10,8 +10,6 @@ import io.github.hanhy06.embellishchat.styling.rule.StyleRule;
 import io.github.hanhy06.embellishchat.styling.rule.StyleType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.objects.AtlasSprite;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 
 import java.awt.*;
@@ -28,8 +26,6 @@ public record Config(
         //preset
         LinkedHashMap<String, MutableComponent> prefix,
         HashSet<String> whitelist,
-        HashMap<String, AtlasSprite> icon,
-        HashMap<String, AtlasSprite> item,
         HashMap<String, Color> color,
 
         //setting
@@ -62,8 +58,6 @@ public record Config(
 
                 new LinkedHashMap<>(),
                 new HashSet<>(),
-                createDefaultIcon(),
-                createDefaultItem(),
                 createDefaultColors(),
 
                 ",",
@@ -164,11 +158,6 @@ public record Config(
                         "(\\[end\\])()",
                         "<blue><b>Pattern</b></blue>: [end]\n<dark_aqua><b>Comment</b></dark_aqua>: show ender chest contents\n",
                         List.of(StyleAction.of(StyleType.SHOW_ENDER_CHEST, ""))
-                ),
-                StyleRule.of(
-                        "(:(.+?):)",
-                        "<blue><b>Pattern</b></blue>: :icon:\n<dark_aqua><b>Comment</b></dark_aqua>: icon emoji/icon preset\n",
-                        List.of(StyleAction.of(StyleType.ICON_PRESET, ""))
                 )
         ));
 
@@ -298,154 +287,6 @@ public record Config(
         colors.put("white", new Color(0xFFFFFF));
 
         return colors;
-    }
-
-    private static HashMap<String, AtlasSprite> createDefaultIcon() {
-        HashMap<String, AtlasSprite> icon = new HashMap<>();
-
-        icon.put("fire", new AtlasSprite(
-                ResourceLocation.parse("minecraft:blocks"),
-                ResourceLocation.parse("minecraft:block/campfire_fire"))
-        );
-        icon.put("lava", new AtlasSprite(
-                ResourceLocation.parse("minecraft:blocks"),
-                ResourceLocation.parse("minecraft:block/lava_still"))
-        );
-        icon.put("food", new AtlasSprite(
-                ResourceLocation.parse("minecraft:items"),
-                ResourceLocation.parse("minecraft:item/cooked_beef"))
-        );
-        icon.put("hunger", new AtlasSprite(
-                ResourceLocation.parse("minecraft:gui"),
-                ResourceLocation.parse("minecraft:hud/food_half"))
-        );
-        icon.put("heart", new AtlasSprite(
-                ResourceLocation.parse("minecraft:gui"),
-                ResourceLocation.parse("minecraft:hud/heart/full"))
-        );
-        icon.put("love", new AtlasSprite(
-                ResourceLocation.parse("minecraft:gui"),
-                ResourceLocation.parse("minecraft:mob_effect/health_boost"))
-        );
-        icon.put("flower", new AtlasSprite(
-                ResourceLocation.parse("minecraft:blocks"),
-                ResourceLocation.parse("minecraft:block/poppy"))
-        );
-        icon.put("tree", new AtlasSprite(
-                ResourceLocation.parse("minecraft:gui"),
-                ResourceLocation.parse("minecraft:toast/tree"))
-        );
-        icon.put("yes", new AtlasSprite(
-                ResourceLocation.parse("minecraft:gui"),
-                ResourceLocation.parse("minecraft:container/beacon/confirm"))
-        );
-        icon.put("no", new AtlasSprite(
-                ResourceLocation.parse("minecraft:gui"),
-                ResourceLocation.parse("minecraft:container/beacon/cancel"))
-        );
-        icon.put("move", new AtlasSprite(
-                ResourceLocation.parse("minecraft:gui"),
-                ResourceLocation.parse("minecraft:mob_effect/wind_charged"))
-        );
-        icon.put("emerald", new AtlasSprite(
-                ResourceLocation.parse("minecraft:items"),
-                ResourceLocation.parse("minecraft:item/emerald"))
-        );
-        icon.put("diamond", new AtlasSprite(
-                ResourceLocation.parse("minecraft:items"),
-                ResourceLocation.parse("minecraft:item/diamond"))
-        );
-        icon.put("star", new AtlasSprite(
-                ResourceLocation.parse("minecraft:items"),
-                ResourceLocation.parse("minecraft:item/nether_star"))
-        );
-        icon.put("time", new AtlasSprite(
-                ResourceLocation.parse("minecraft:items"),
-                ResourceLocation.parse("minecraft:item/clock_54"))
-        );
-        icon.put("note", new AtlasSprite(
-                ResourceLocation.parse("minecraft:items"),
-                ResourceLocation.parse("minecraft:item/paper"))
-        );
-        icon.put("totem", new AtlasSprite(
-                ResourceLocation.parse("minecraft:items"),
-                ResourceLocation.parse("minecraft:item/totem_of_undying"))
-        );
-        icon.put("music", new AtlasSprite(
-                ResourceLocation.parse("minecraft:particles"),
-                ResourceLocation.parse("minecraft:note"))
-        );
-        icon.put("mine", new AtlasSprite(
-                ResourceLocation.parse("minecraft:items"),
-                ResourceLocation.parse("minecraft:item/diamond_pickaxe"))
-        );
-        icon.put("luck", new AtlasSprite(
-                ResourceLocation.parse("minecraft:gui"),
-                ResourceLocation.parse("minecraft:mob_effect/luck"))
-        );
-        icon.put("poison", new AtlasSprite(
-                ResourceLocation.parse("minecraft:gui"),
-                ResourceLocation.parse("minecraft:mob_effect/poison"))
-        );
-        icon.put("fight", new AtlasSprite(
-                ResourceLocation.parse("minecraft:gui"),
-                ResourceLocation.parse("minecraft:mob_effect/raid_omen"))
-        );
-        icon.put("world", new AtlasSprite(
-                ResourceLocation.parse("minecraft:gui"),
-                ResourceLocation.parse("minecraft:icon/link"))
-        );
-        icon.put("news", new AtlasSprite(
-                ResourceLocation.parse("minecraft:gui"),
-                ResourceLocation.parse("minecraft:icon/news"))
-        );
-        icon.put("search", new AtlasSprite(
-                ResourceLocation.parse("minecraft:gui"),
-                ResourceLocation.parse("minecraft:icon/search"))
-        );
-        icon.put("tv", new AtlasSprite(
-                ResourceLocation.parse("minecraft:gui"),
-                ResourceLocation.parse("minecraft:icon/video_link"))
-        );
-
-        return icon;
-    }
-
-    private static HashMap<String, AtlasSprite> createDefaultItem() {
-        HashMap<String, AtlasSprite> item = new HashMap<>();
-
-        item.put("minecraft:clock",new AtlasSprite(
-                ResourceLocation.parse("minecraft:items"),
-                ResourceLocation.parse("minecraft:item/clock_00")
-                )
-        );
-        item.put("minecraft:compass",new AtlasSprite(
-                        ResourceLocation.parse("minecraft:items"),
-                        ResourceLocation.parse("minecraft:item/compass_20")
-                )
-        );
-        item.put("minecraft:recovery_compass",new AtlasSprite(
-                        ResourceLocation.parse("minecraft:items"),
-                        ResourceLocation.parse("minecraft:item/recovery_compass_20")
-                )
-        );
-        item.put("minecraft:crossbow",new AtlasSprite(
-                        ResourceLocation.parse("minecraft:items"),
-                        ResourceLocation.parse("minecraft:item/crossbow_arrow")
-                )
-        );
-        item.put("minecraft:tipped_arrow",new AtlasSprite(
-                        ResourceLocation.parse("minecraft:items"),
-                        ResourceLocation.parse("minecraft:item/arrow")
-                )
-        );
-        item.put("minecraft:enchanted_golden_apple",new AtlasSprite(
-                        ResourceLocation.parse("minecraft:items"),
-                        ResourceLocation.parse("minecraft:item/golden_apple")
-                )
-        );
-
-        return item;
     }
 
 }

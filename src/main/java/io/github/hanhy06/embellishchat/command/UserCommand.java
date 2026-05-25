@@ -19,9 +19,8 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.UuidArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.PlayerChatMessage;
-import net.minecraft.network.chat.contents.objects.AtlasSprite;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.players.ProfileResolver;
+import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.world.SimpleMenuProvider;
 
 import java.util.*;
@@ -33,7 +32,6 @@ public class UserCommand {
                         .then(Commands.literal("help")
                                 .then(Commands.literal("mention").executes(UserCommand::executeHelpMention))
                                 .then(Commands.literal("style").executes(UserCommand::executeHelpStyle))
-                                .then(Commands.literal("icon").executes(UserCommand::executeHelpAtlas))
                         )
                         .then(Commands.literal("notification")
                                 .executes(UserCommand::executeNotification)
@@ -100,24 +98,6 @@ public class UserCommand {
         return 1;
     }
 
-    private static int executeHelpAtlas(CommandContext<CommandSourceStack> context){
-        ServerPlayer player = context.getSource().getPlayer();
-        if (player == null) {
-            return 0;
-        }
-
-        player.sendSystemMessage(PlaceHolderUtil.parseTag("<gray>-----</gray> <aqua><b>Available Atlas</b></aqua> <gray>-----</gray>"));
-
-        HashMap<String, AtlasSprite> atlas = ConfigManager.getConfig().icon();
-        for (String name:atlas.keySet().stream().sorted().toList()){
-            player.sendSystemMessage(PlaceHolderUtil.parseTag("%s - ".formatted(name)).copy().append(Component.object(atlas.get(name))));
-        }
-
-        player.sendSystemMessage(PlaceHolderUtil.parseTag("<gray>--------------------------</gray>"));
-
-        return 1;
-    }
-
     private static int executeNotification(CommandContext<CommandSourceStack> context) {
         ServerPlayer player = context.getSource().getPlayer();
         if (player == null) {
@@ -148,7 +128,7 @@ public class UserCommand {
 
     private static int executeOpenInventory(CommandContext<CommandSourceStack> context,boolean isPlayer){
         ServerPlayer player = context.getSource().getPlayer();
-        GameProfile profile = null;
+        GameProfile profile;
 
         try {
             if (isPlayer) {
@@ -156,8 +136,12 @@ public class UserCommand {
             }
             else {
                 UUID uuid = UuidArgument.getUuid(context, "uuid");
-                ProfileResolver resolver = EmbellishChat.SERVER.services().profileResolver();
-                profile= resolver.fetchById(uuid).orElse(new GameProfile(uuid,"None"));
+                GameProfileCache profileCache = EmbellishChat.SERVER.getProfileCache();
+                if (profileCache == null) {
+                    context.getSource().sendFailure(Component.literal("Profile cache not found."));
+                    return 0;
+                }
+                profile = profileCache.get(uuid).orElse(new GameProfile(uuid, "None"));
             }
         } catch (CommandSyntaxException e) {
             EmbellishChat.LOGGER.warn("[embellish-chat/command] The specified player is invalid.");
@@ -165,7 +149,7 @@ public class UserCommand {
             return 0;
         }
 
-        SimpleMenuProvider factory= InventoryManager.get(profile.id());
+        SimpleMenuProvider factory= InventoryManager.get(profile.getId());
 
         if (player == null){
             context.getSource().sendFailure(Component.literal("Player not found."));

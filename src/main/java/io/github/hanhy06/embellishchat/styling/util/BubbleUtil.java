@@ -3,7 +3,6 @@ package io.github.hanhy06.embellishchat.styling.util;
 import com.mojang.math.Transformation;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FontDescription;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.MinecraftServer;
@@ -93,9 +92,6 @@ public class BubbleUtil {
 
         text.visit((style, content) -> {
             Style newStyle = style.withBold(true);
-            if (style.getFont() instanceof FontDescription.AtlasSprite || style.getFont() instanceof FontDescription.PlayerSprite) {
-                newStyle = newStyle.withFont(null);
-            }
             result.append(Component.literal(content).setStyle(newStyle));
             return Optional.empty();
         }, Style.EMPTY);

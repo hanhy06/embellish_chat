@@ -9,7 +9,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ChatScreen;
 
-import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.util.Mth;
 import org.lwjgl.glfw.GLFW;
@@ -99,7 +98,7 @@ public class SuggestionManager {
                 activeCandidate.addAll(
                         minecraft.getConnection().getOnlinePlayers().stream()
                                 .map(PlayerInfo::getProfile)
-                                .map(GameProfile::name)
+                                .map(GameProfile::getName)
                                 .map(name -> "@"+name)
                                 .filter(name -> token.length() <= name.length() && name.regionMatches(true, 0, token, 0, token.length()))
                                 .toList()
@@ -141,10 +140,10 @@ public class SuggestionManager {
         }
     }
 
-    public boolean keyPressed(KeyEvent event){
+    public boolean keyPressed(int keyCode){
         if (!open) return false;
 
-        if (event.key() == GLFW.GLFW_KEY_TAB){
+        if (keyCode == GLFW.GLFW_KEY_TAB){
             select(selectedIndex + 1);
             String candidate = activeCandidate.get(selectedIndex);
 
@@ -165,12 +164,12 @@ public class SuggestionManager {
         }
 
 
-        if (event.key() == GLFW.GLFW_KEY_DOWN) {
+        if (keyCode == GLFW.GLFW_KEY_DOWN) {
             select(selectedIndex + 1);
             return true;
         }
 
-        if (event.key() == GLFW.GLFW_KEY_UP) {
+        if (keyCode == GLFW.GLFW_KEY_UP) {
             select(selectedIndex - 1);
             return true;
         }
