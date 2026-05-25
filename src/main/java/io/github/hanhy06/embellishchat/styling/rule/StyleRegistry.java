@@ -7,7 +7,6 @@ import io.github.hanhy06.embellishchat.EmbellishChat;
 import io.github.hanhy06.embellishchat.config.Config;
 import io.github.hanhy06.embellishchat.screen.inventory.InventoryManager;
 import io.github.hanhy06.embellishchat.styling.data.Runs;
-import io.github.hanhy06.embellishchat.styling.util.BubbleUtil;
 import io.github.hanhy06.embellishchat.styling.util.ColorUtil;
 import io.github.hanhy06.embellishchat.styling.util.DiscordUtil;
 import io.github.hanhy06.embellishchat.util.MessageBlockedException;
@@ -59,7 +58,6 @@ public class StyleRegistry {
                 entry(StyleType.COLOR_RAINBOW, this::COLOR_RAINBOW),
                 entry(StyleType.COLOR_GRADIENT, this::COLOR_GRADIENT),
                 entry(StyleType.COLOR_PRESET, this::COLOR_PRESET),
-                entry(StyleType.COLOR_SHADOW, this::COLOR_SHADOW),
                 entry(StyleType.COLOR_TEAM, this::COLOR_TEAM),
 
                 entry(StyleType.BOLD, this::BOLD),
@@ -93,7 +91,6 @@ public class StyleRegistry {
                 entry(StyleType.DISCORD_JSON, this::DISCORD_JSON),
                 entry(StyleType.COMMAND_RUN, this::COMMAND_RUN),
                 entry(StyleType.LOG, this::LOG),
-                entry(StyleType.BUBBLE, this::BUBBLE),
                 entry(StyleType.BLOCK, this::BLOCK)
         ));
         this.messenger = new DiscordUtil();
@@ -176,11 +173,6 @@ public class StyleRegistry {
         return parameter.segment().withStyle(Style.EMPTY.withColor(color.getRGB()));
     }
 
-    public MutableComponent COLOR_SHADOW(StyleParameter parameter) {
-        int color = Color.decode(parameter.getString()).getRGB();
-        return parameter.segment().withStyle(Style.EMPTY.withShadowColor(color));
-    }
-
     public MutableComponent COLOR_TEAM(StyleParameter parameter){
         ServerPlayer player = parameter.player();
         if (player == null) return parameter.segment();
@@ -212,7 +204,7 @@ public class StyleRegistry {
     }
 
     public MutableComponent OBFUSCATED(StyleParameter parameter) {
-        HoverEvent hoverEvent = new HoverEvent.ShowText(Component.literal(parameter.segment().getString()));
+        HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal(parameter.segment().getString()));
         return parameter.segment().withStyle(Style.EMPTY.withObfuscated(true).withHoverEvent(hoverEvent));
     }
 
@@ -228,22 +220,22 @@ public class StyleRegistry {
     }
 
     public MutableComponent CLICK_COMMAND_RUN(StyleParameter parameter){
-        ClickEvent clickEvent = new ClickEvent.RunCommand(parameter.getString());
+        ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.RUN_COMMAND, parameter.getString());
         return parameter.segment().withStyle(Style.EMPTY.withClickEvent(clickEvent));
     }
 
     public MutableComponent CLICK_COMMAND_SUGGEST(StyleParameter parameter){
-        ClickEvent clickEvent = new ClickEvent.SuggestCommand(parameter.getString());
+        ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, parameter.getString());
         return parameter.segment().withStyle(Style.EMPTY.withClickEvent(clickEvent));
     }
 
     public MutableComponent CLICK_COPY(StyleParameter parameter){
-        ClickEvent clickEvent = new ClickEvent.CopyToClipboard(parameter.getString());
+        ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, parameter.getString());
         return parameter.segment().withStyle(Style.EMPTY.withClickEvent(clickEvent));
     }
 
     public MutableComponent HOVER_TEXT(StyleParameter parameter){
-        HoverEvent hoverEvent = new HoverEvent.ShowText(parameter.getText());
+        HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, parameter.getText());
         return parameter.segment().withStyle(Style.EMPTY.withHoverEvent(hoverEvent));
     }
 
@@ -263,7 +255,7 @@ public class StyleRegistry {
 
         if (item.isEmpty()) throw new MessageBlockedException("No item found.");
 
-        HoverEvent hoverEvent = new HoverEvent.ShowItem(item);
+        HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_ITEM, new HoverEvent.ItemStackInfo(item));
         return parameter.segment().withStyle(Style.EMPTY.withHoverEvent(hoverEvent));
     }
 
@@ -283,7 +275,7 @@ public class StyleRegistry {
         }
 
         if (allowed){
-            ClickEvent clickEvent = new ClickEvent.OpenUrl(uri);
+            ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.OPEN_URL, uri.toString());
             return parameter.segment().withStyle(Style.EMPTY
                     .withClickEvent(clickEvent)
                     .withColor(config.url_color().getRGB()));
@@ -296,8 +288,8 @@ public class StyleRegistry {
         MutableComponent text = parameter.segment();
 
         String timestamp = LocalDateTime.now().format(this.timestamp);
-        HoverEvent hoverEvent = new HoverEvent.ShowText(Component.literal(timestamp + "\nClick to copy to clipboard").withStyle(ChatFormatting.GRAY));
-        ClickEvent clickEvent = new ClickEvent.CopyToClipboard(timestamp + " " + text.getString());
+        HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal(timestamp + "\nClick to copy to clipboard").withStyle(ChatFormatting.GRAY));
+        ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, timestamp + " " + text.getString());
 
         return text.withStyle(Style.EMPTY.withHoverEvent(hoverEvent).withClickEvent(clickEvent));
     }
@@ -342,8 +334,8 @@ public class StyleRegistry {
         ItemStack item = player.getMainHandItem();
         if (item.isEmpty()) throw new MessageBlockedException("No item found.");
 
-        HoverEvent hoverEvent = new HoverEvent.ShowItem(item);
-        ClickEvent clickEvent = new ClickEvent.RunCommand("/embellish-chat open "+player.getUUID());
+        HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_ITEM, new HoverEvent.ItemStackInfo(item));
+        ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/embellish-chat open "+player.getUUID());
         InventoryManager.putItem(player,item);
         MutableComponent name = item.getHoverName().copy().withStyle(style -> style
                 .withHoverEvent(hoverEvent)
@@ -360,9 +352,9 @@ public class StyleRegistry {
         if (player == null) return parameter.segment();
         InventoryManager.putInventory(player);
 
-        ClickEvent clickEvent = new ClickEvent.RunCommand("/embellish-chat open "+player.getUUID());
+        ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/embellish-chat open "+player.getUUID());
         Component text = PlaceHolderUtil.parseText("[%player:displayname%'s inventory]",player);
-        HoverEvent hoverEvent = new HoverEvent.ShowText(text);
+        HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, text);
 
         return text.copy().withStyle(Style.EMPTY.withClickEvent(clickEvent).withHoverEvent(hoverEvent));
     }
@@ -372,9 +364,9 @@ public class StyleRegistry {
         if (player == null) return parameter.segment();
         InventoryManager.putEnderChest(player);
 
-        ClickEvent clickEvent = new ClickEvent.RunCommand("/embellish-chat open "+player.getUUID());
+        ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/embellish-chat open "+player.getUUID());
         Component text = PlaceHolderUtil.parseText("[%player:displayname%'s ender chest]",player);
-        HoverEvent hoverEvent = new HoverEvent.ShowText(text);
+        HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, text);
 
         return text.copy().withStyle(Style.EMPTY.withClickEvent(clickEvent).withHoverEvent(hoverEvent));
     }
@@ -405,11 +397,6 @@ public class StyleRegistry {
 
     public MutableComponent LOG(StyleParameter parameter){
         EmbellishChat.LOGGER.info("[embellish-chat/chat-log] segment: {}, option: {}, sender: {}",parameter.segment().getString(),parameter.getString(),parameter.player());
-        return parameter.segment();
-    }
-
-    public MutableComponent BUBBLE(StyleParameter parameter){
-        if (parameter.player() != null) BubbleUtil.spawnDisplayEntity(parameter.player(),parameter.segment());
         return parameter.segment();
     }
 

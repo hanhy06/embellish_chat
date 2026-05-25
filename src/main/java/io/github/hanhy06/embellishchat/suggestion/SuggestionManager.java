@@ -7,7 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.screens.ChatScreen;
 
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.util.Mth;
@@ -27,7 +26,6 @@ public class SuggestionManager {
     private static boolean playerSuggestion = false;
 
     private final EditBox editBox;
-    private final ChatScreen chatScreen;
     private final List<String> activeCandidate;
 
     private boolean open;
@@ -55,9 +53,8 @@ public class SuggestionManager {
         });
     }
 
-    public SuggestionManager(EditBox editBox, ChatScreen chatScreen) {
+    public SuggestionManager(EditBox editBox) {
         this.editBox = editBox;
-        this.chatScreen = chatScreen;
         this.activeCandidate = new ArrayList<>();
     }
 
@@ -112,7 +109,7 @@ public class SuggestionManager {
     public void render(GuiGraphics graphics) {
         if (!open) return;
 
-        Font font = chatScreen.getFont();
+        Font font = Minecraft.getInstance().font;
         int size = Math.min(activeCandidate.size() - firstIndex, MAX_VISIBLE);
         int width = 0;
         for (int i = 0;i < size;i++) {

@@ -5,7 +5,6 @@ public enum StyleType {
     COLOR_RAINBOW,
     COLOR_GRADIENT,
     COLOR_PRESET,
-    COLOR_SHADOW,
     COLOR_TEAM,
 
     BOLD,
@@ -39,6 +38,5 @@ public enum StyleType {
     DISCORD_JSON,
     COMMAND_RUN,
     LOG,
-    BUBBLE,
     BLOCK
 }

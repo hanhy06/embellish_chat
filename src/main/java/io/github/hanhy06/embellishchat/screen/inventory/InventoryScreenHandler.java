@@ -52,7 +52,7 @@ public class InventoryScreenHandler extends ChestMenu {
     private static void openWrittenBook(ItemStack stack,ServerPlayer player){
         player.closeContainer();
 
-        int selectedHotbarSlot = player.getInventory().getSelectedSlot();
+        int selectedHotbarSlot = player.getInventory().selected;
         ItemStack original = player.getInventory().getItem(selectedHotbarSlot).copy();
         int playerInventorySlot = InventoryMenu.USE_ROW_SLOT_START + selectedHotbarSlot;
         ItemStack book = stack.copy();

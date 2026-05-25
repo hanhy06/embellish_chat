@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class ColorUtil {
     public static Color lerpColor(Color start, Color end, double rate) {
-        rate = Math.clamp(rate, 0, 1);
+        rate = Math.max(0, Math.min(1, rate));
 
         int r = (int) (start.getRed()   + (end.getRed()   - start.getRed())   * rate);
         int g = (int) (start.getGreen() + (end.getGreen() - start.getGreen()) * rate);

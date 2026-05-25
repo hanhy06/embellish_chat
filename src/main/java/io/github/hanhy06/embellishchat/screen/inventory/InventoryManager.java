@@ -1,10 +1,10 @@
 package io.github.hanhy06.embellishchat.screen.inventory;
 
-import it.unimi.dsi.fastutil.objects.ReferenceSortedSets;
-import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Unit;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -12,7 +12,6 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.PlayerEnderChestContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.TooltipDisplay;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -65,7 +64,7 @@ public class InventoryManager {
         Inventory playerInventory = player.getInventory();
 
         ItemStack grayPane = new ItemStack(Items.BLACK_STAINED_GLASS_PANE);
-        grayPane.set(DataComponents.TOOLTIP_DISPLAY,new TooltipDisplay(true, ReferenceSortedSets.emptySet()));
+        grayPane.set(DataComponents.HIDE_TOOLTIP, Unit.INSTANCE);
         for (int i = 0; i < 54; i++) {
             inventory.setItem(i, grayPane.copy());
         }
@@ -105,8 +104,8 @@ public class InventoryManager {
     }
 
     public static void registerLeaveEvent(){
-        ServerPlayerEvents.LEAVE.register(player ->{
-            inventories.remove(player.getUUID());
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
+            inventories.remove(handler.player.getUUID());
         });
     }
 }

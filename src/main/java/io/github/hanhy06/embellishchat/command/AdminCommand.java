@@ -31,27 +31,31 @@ import java.util.stream.Collectors;
 public class AdminCommand {
     private static StressTestService testService = null;
 
+    private static java.util.function.Predicate<CommandSourceStack> requiresGamemaster() {
+        return source -> source.hasPermission(Commands.LEVEL_GAMEMASTERS);
+    }
+
     public static void registerCommand() {
         CommandRegistrationCallback.EVENT.register((commandDispatcher, commandRegistryAccess, registrationEnvironment) -> commandDispatcher.register(
                 Commands.literal(EmbellishChat.MOD_ID)
                         .then(Commands.literal("reload")
-                                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                                .requires(requiresGamemaster())
                                 .executes(AdminCommand::executeReloadConfig)
                         )
                         .then(Commands.literal("ban")
-                                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                                .requires(requiresGamemaster())
                                 .then(Commands.argument("target", EntityArgument.players())
                                         .executes(context -> executeBanOrPardon(context, true))
                                 )
                         )
                         .then(Commands.literal("pardon")
-                                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                                .requires(requiresGamemaster())
                                 .then(Commands.argument("target", EntityArgument.players())
                                         .executes(context -> executeBanOrPardon(context, false))
                                 )
                         )
                         .then(Commands.literal("stress_test")
-                                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                                .requires(requiresGamemaster())
                                 .then(Commands.argument("ticks", IntegerArgumentType.integer())
                                         .then(Commands.argument("count", IntegerArgumentType.integer())
                                                 .then(Commands.argument("text", StringArgumentType.string())
@@ -70,7 +74,7 @@ public class AdminCommand {
                                 )
                         )
                         .then(Commands.literal("regex_test")
-                                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                                .requires(requiresGamemaster())
                                 .then(Commands.argument("regex",StringArgumentType.string())
                                         .then(Commands.argument("text",StringArgumentType.string())
                                                 .executes(AdminCommand::executeRegexTest))

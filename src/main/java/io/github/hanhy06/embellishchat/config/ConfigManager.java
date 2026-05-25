@@ -54,7 +54,7 @@ public class ConfigManager {
             .registerTypeAdapter(ResourceLocation.class, new ResourceLocationTypeAdapter())
             .registerTypeAdapter(MutableComponent.class, new MutableTextAdapter())
             .setPrettyPrinting()
-            .setStrictness(Strictness.LENIENT)
+            .setLenient()
             .disableHtmlEscaping()
             .create();
 

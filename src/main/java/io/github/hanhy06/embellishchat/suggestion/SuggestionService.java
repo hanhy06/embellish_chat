@@ -7,8 +7,8 @@ import io.github.hanhy06.embellishchat.mention.rule.MentionAction;
 import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
 import io.github.hanhy06.embellishchat.mention.rule.MentionType;
 import io.github.hanhy06.embellishchat.util.PermissionUtil;
-import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -24,7 +24,8 @@ public class SuggestionService implements ConfigListener {
     public static void registerPayload() {
         PayloadTypeRegistry.playS2C().register(SuggestionCandidatePayload.TYPE, SuggestionCandidatePayload.CODEC);
 
-        ServerPlayerEvents.JOIN.register(player -> {
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+            ServerPlayer player = handler.player;
             if (ServerPlayNetworking.canSend(player, SuggestionCandidatePayload.TYPE)) {
                 ServerPlayNetworking.send(player, createCandidates(player));
             }

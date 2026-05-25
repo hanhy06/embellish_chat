@@ -19,7 +19,7 @@ public class ChatScreenMixin {
 
     @Inject(method = "init",at = @At("TAIL"))
     protected void init(CallbackInfo ci) {
-        this.suggestions = new SuggestionManager(input,(ChatScreen)(Object) this);
+        this.suggestions = new SuggestionManager(input);
     }
 
     @Inject(method = "onEdited", at = @At("TAIL"))

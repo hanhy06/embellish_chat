@@ -18,7 +18,7 @@ public class SoundEventTypeAdapter extends TypeAdapter<SoundEvent> {
             return;
         }
         
-        jsonWriter.value(event.location().toString());
+        jsonWriter.value(event.getLocation().toString());
     }
 
     @Override

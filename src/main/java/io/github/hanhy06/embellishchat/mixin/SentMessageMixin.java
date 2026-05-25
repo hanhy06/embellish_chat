@@ -40,7 +40,7 @@ public class SentMessageMixin {
         Optional<Holder.Reference<ChatType>> clearChatType = EmbellishChat.SERVER
                 .registryAccess()
                 .lookupOrThrow(Registries.CHAT_TYPE)
-                .get(CLEAR.location());
+                .get(CLEAR);
 
         return clearChatType
                 .map(holder -> new ChatType.Bound(holder, this.message.decoratedContent(), chatType.targetName()))

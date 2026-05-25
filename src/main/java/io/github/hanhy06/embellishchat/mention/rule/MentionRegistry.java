@@ -94,7 +94,7 @@ public class MentionRegistry {
         float round = NumberUtils.toFloat(parameter.option(), 64);
 
         HashSet<ServerPlayer> players = new HashSet<>(PlayerLookup.around(
-                parameter.player().level(),
+                parameter.player().serverLevel(),
                 parameter.player().position(),
                 round
         ));
