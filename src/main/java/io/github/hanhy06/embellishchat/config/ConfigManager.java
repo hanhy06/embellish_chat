@@ -8,7 +8,7 @@ import io.github.hanhy06.embellishchat.mention.rule.MentionRule;
 import io.github.hanhy06.embellishchat.styling.rule.StyleAction;
 import io.github.hanhy06.embellishchat.styling.rule.StyleRule;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
 import java.awt.*;
@@ -51,7 +51,7 @@ public class ConfigManager {
             .registerTypeAdapter(Pattern.class, new PatternTypeAdapter())
             .registerTypeAdapter(SoundEvent.class, new SoundEventTypeAdapter())
             .registerTypeAdapter(Color.class, new ColorTypeAdapter())
-            .registerTypeAdapter(Identifier.class, new IdentifierTypeAdapter())
+            .registerTypeAdapter(ResourceLocation.class, new ResourceLocationTypeAdapter())
             .registerTypeAdapter(MutableComponent.class, new MutableTextAdapter())
             .setPrettyPrinting()
             .setStrictness(Strictness.LENIENT)

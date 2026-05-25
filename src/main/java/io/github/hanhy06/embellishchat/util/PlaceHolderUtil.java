@@ -9,7 +9,7 @@ import eu.pb4.placeholders.api.parsers.TagParser;
 import io.github.hanhy06.embellishchat.EmbellishChat;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
@@ -31,7 +31,7 @@ public class PlaceHolderUtil {
     public static void registerPlaceholder(){
         placeholders.clear();
 
-        Placeholders.register(Identifier.fromNamespaceAndPath(EmbellishChat.MOD_ID,"content"),(context, string) -> {
+        Placeholders.register(ResourceLocation.fromNamespaceAndPath(EmbellishChat.MOD_ID,"content"),(context, string) -> {
             Player player = context.player();
             if (player == null) return PlaceholderResult.invalid("no player");
             return PlaceholderResult.value(placeholders.get(player.getUUID()));

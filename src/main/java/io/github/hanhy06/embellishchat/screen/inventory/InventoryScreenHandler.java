@@ -15,7 +15,6 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import org.jspecify.annotations.NonNull;
 
 public class InventoryScreenHandler extends ChestMenu {
     public InventoryScreenHandler(MenuType<?> type,int syncId, Inventory playerInventory, Container inventory,int rows) {
@@ -23,7 +22,7 @@ public class InventoryScreenHandler extends ChestMenu {
     }
 
     @Override
-    public void clicked(int slotIndex, int button, @NonNull ClickType actionType, @NonNull Player player) {
+    public void clicked(int slotIndex, int button, ClickType actionType, Player player) {
         if (slotIndex >= 0 && slotIndex < 9 * this.getRowCount()) {
             ItemStack stack = this.getSlot(slotIndex).getItem();
 
@@ -40,12 +39,12 @@ public class InventoryScreenHandler extends ChestMenu {
     }
 
     @Override
-    public @NonNull ItemStack quickMoveStack(@NonNull Player player, int slot) {
+    public ItemStack quickMoveStack(Player player, int slot) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean stillValid(@NonNull Player player) {
+    public boolean stillValid(Player player) {
         return true;
     }
 

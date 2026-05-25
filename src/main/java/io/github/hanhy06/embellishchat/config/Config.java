@@ -11,7 +11,7 @@ import io.github.hanhy06.embellishchat.styling.rule.StyleType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.objects.AtlasSprite;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 
 import java.awt.*;
@@ -304,108 +304,108 @@ public record Config(
         HashMap<String, AtlasSprite> icon = new HashMap<>();
 
         icon.put("fire", new AtlasSprite(
-                Identifier.parse("minecraft:blocks"),
-                Identifier.parse("minecraft:block/campfire_fire"))
+                ResourceLocation.parse("minecraft:blocks"),
+                ResourceLocation.parse("minecraft:block/campfire_fire"))
         );
         icon.put("lava", new AtlasSprite(
-                Identifier.parse("minecraft:blocks"),
-                Identifier.parse("minecraft:block/lava_still"))
+                ResourceLocation.parse("minecraft:blocks"),
+                ResourceLocation.parse("minecraft:block/lava_still"))
         );
         icon.put("food", new AtlasSprite(
-                Identifier.parse("minecraft:items"),
-                Identifier.parse("minecraft:item/cooked_beef"))
+                ResourceLocation.parse("minecraft:items"),
+                ResourceLocation.parse("minecraft:item/cooked_beef"))
         );
         icon.put("hunger", new AtlasSprite(
-                Identifier.parse("minecraft:gui"),
-                Identifier.parse("minecraft:hud/food_half"))
+                ResourceLocation.parse("minecraft:gui"),
+                ResourceLocation.parse("minecraft:hud/food_half"))
         );
         icon.put("heart", new AtlasSprite(
-                Identifier.parse("minecraft:gui"),
-                Identifier.parse("minecraft:hud/heart/full"))
+                ResourceLocation.parse("minecraft:gui"),
+                ResourceLocation.parse("minecraft:hud/heart/full"))
         );
         icon.put("love", new AtlasSprite(
-                Identifier.parse("minecraft:gui"),
-                Identifier.parse("minecraft:mob_effect/health_boost"))
+                ResourceLocation.parse("minecraft:gui"),
+                ResourceLocation.parse("minecraft:mob_effect/health_boost"))
         );
         icon.put("flower", new AtlasSprite(
-                Identifier.parse("minecraft:blocks"),
-                Identifier.parse("minecraft:block/poppy"))
+                ResourceLocation.parse("minecraft:blocks"),
+                ResourceLocation.parse("minecraft:block/poppy"))
         );
         icon.put("tree", new AtlasSprite(
-                Identifier.parse("minecraft:gui"),
-                Identifier.parse("minecraft:toast/tree"))
+                ResourceLocation.parse("minecraft:gui"),
+                ResourceLocation.parse("minecraft:toast/tree"))
         );
         icon.put("yes", new AtlasSprite(
-                Identifier.parse("minecraft:gui"),
-                Identifier.parse("minecraft:container/beacon/confirm"))
+                ResourceLocation.parse("minecraft:gui"),
+                ResourceLocation.parse("minecraft:container/beacon/confirm"))
         );
         icon.put("no", new AtlasSprite(
-                Identifier.parse("minecraft:gui"),
-                Identifier.parse("minecraft:container/beacon/cancel"))
+                ResourceLocation.parse("minecraft:gui"),
+                ResourceLocation.parse("minecraft:container/beacon/cancel"))
         );
         icon.put("move", new AtlasSprite(
-                Identifier.parse("minecraft:gui"),
-                Identifier.parse("minecraft:mob_effect/wind_charged"))
+                ResourceLocation.parse("minecraft:gui"),
+                ResourceLocation.parse("minecraft:mob_effect/wind_charged"))
         );
         icon.put("emerald", new AtlasSprite(
-                Identifier.parse("minecraft:items"),
-                Identifier.parse("minecraft:item/emerald"))
+                ResourceLocation.parse("minecraft:items"),
+                ResourceLocation.parse("minecraft:item/emerald"))
         );
         icon.put("diamond", new AtlasSprite(
-                Identifier.parse("minecraft:items"),
-                Identifier.parse("minecraft:item/diamond"))
+                ResourceLocation.parse("minecraft:items"),
+                ResourceLocation.parse("minecraft:item/diamond"))
         );
         icon.put("star", new AtlasSprite(
-                Identifier.parse("minecraft:items"),
-                Identifier.parse("minecraft:item/nether_star"))
+                ResourceLocation.parse("minecraft:items"),
+                ResourceLocation.parse("minecraft:item/nether_star"))
         );
         icon.put("time", new AtlasSprite(
-                Identifier.parse("minecraft:items"),
-                Identifier.parse("minecraft:item/clock_54"))
+                ResourceLocation.parse("minecraft:items"),
+                ResourceLocation.parse("minecraft:item/clock_54"))
         );
         icon.put("note", new AtlasSprite(
-                Identifier.parse("minecraft:items"),
-                Identifier.parse("minecraft:item/paper"))
+                ResourceLocation.parse("minecraft:items"),
+                ResourceLocation.parse("minecraft:item/paper"))
         );
         icon.put("totem", new AtlasSprite(
-                Identifier.parse("minecraft:items"),
-                Identifier.parse("minecraft:item/totem_of_undying"))
+                ResourceLocation.parse("minecraft:items"),
+                ResourceLocation.parse("minecraft:item/totem_of_undying"))
         );
         icon.put("music", new AtlasSprite(
-                Identifier.parse("minecraft:particles"),
-                Identifier.parse("minecraft:note"))
+                ResourceLocation.parse("minecraft:particles"),
+                ResourceLocation.parse("minecraft:note"))
         );
         icon.put("mine", new AtlasSprite(
-                Identifier.parse("minecraft:items"),
-                Identifier.parse("minecraft:item/diamond_pickaxe"))
+                ResourceLocation.parse("minecraft:items"),
+                ResourceLocation.parse("minecraft:item/diamond_pickaxe"))
         );
         icon.put("luck", new AtlasSprite(
-                Identifier.parse("minecraft:gui"),
-                Identifier.parse("minecraft:mob_effect/luck"))
+                ResourceLocation.parse("minecraft:gui"),
+                ResourceLocation.parse("minecraft:mob_effect/luck"))
         );
         icon.put("poison", new AtlasSprite(
-                Identifier.parse("minecraft:gui"),
-                Identifier.parse("minecraft:mob_effect/poison"))
+                ResourceLocation.parse("minecraft:gui"),
+                ResourceLocation.parse("minecraft:mob_effect/poison"))
         );
         icon.put("fight", new AtlasSprite(
-                Identifier.parse("minecraft:gui"),
-                Identifier.parse("minecraft:mob_effect/raid_omen"))
+                ResourceLocation.parse("minecraft:gui"),
+                ResourceLocation.parse("minecraft:mob_effect/raid_omen"))
         );
         icon.put("world", new AtlasSprite(
-                Identifier.parse("minecraft:gui"),
-                Identifier.parse("minecraft:icon/link"))
+                ResourceLocation.parse("minecraft:gui"),
+                ResourceLocation.parse("minecraft:icon/link"))
         );
         icon.put("news", new AtlasSprite(
-                Identifier.parse("minecraft:gui"),
-                Identifier.parse("minecraft:icon/news"))
+                ResourceLocation.parse("minecraft:gui"),
+                ResourceLocation.parse("minecraft:icon/news"))
         );
         icon.put("search", new AtlasSprite(
-                Identifier.parse("minecraft:gui"),
-                Identifier.parse("minecraft:icon/search"))
+                ResourceLocation.parse("minecraft:gui"),
+                ResourceLocation.parse("minecraft:icon/search"))
         );
         icon.put("tv", new AtlasSprite(
-                Identifier.parse("minecraft:gui"),
-                Identifier.parse("minecraft:icon/video_link"))
+                ResourceLocation.parse("minecraft:gui"),
+                ResourceLocation.parse("minecraft:icon/video_link"))
         );
 
         return icon;
@@ -415,33 +415,33 @@ public record Config(
         HashMap<String, AtlasSprite> item = new HashMap<>();
 
         item.put("minecraft:clock",new AtlasSprite(
-                Identifier.parse("minecraft:items"),
-                Identifier.parse("minecraft:item/clock_00")
+                ResourceLocation.parse("minecraft:items"),
+                ResourceLocation.parse("minecraft:item/clock_00")
                 )
         );
         item.put("minecraft:compass",new AtlasSprite(
-                        Identifier.parse("minecraft:items"),
-                        Identifier.parse("minecraft:item/compass_20")
+                        ResourceLocation.parse("minecraft:items"),
+                        ResourceLocation.parse("minecraft:item/compass_20")
                 )
         );
         item.put("minecraft:recovery_compass",new AtlasSprite(
-                        Identifier.parse("minecraft:items"),
-                        Identifier.parse("minecraft:item/recovery_compass_20")
+                        ResourceLocation.parse("minecraft:items"),
+                        ResourceLocation.parse("minecraft:item/recovery_compass_20")
                 )
         );
         item.put("minecraft:crossbow",new AtlasSprite(
-                        Identifier.parse("minecraft:items"),
-                        Identifier.parse("minecraft:item/crossbow_arrow")
+                        ResourceLocation.parse("minecraft:items"),
+                        ResourceLocation.parse("minecraft:item/crossbow_arrow")
                 )
         );
         item.put("minecraft:tipped_arrow",new AtlasSprite(
-                        Identifier.parse("minecraft:items"),
-                        Identifier.parse("minecraft:item/arrow")
+                        ResourceLocation.parse("minecraft:items"),
+                        ResourceLocation.parse("minecraft:item/arrow")
                 )
         );
         item.put("minecraft:enchanted_golden_apple",new AtlasSprite(
-                        Identifier.parse("minecraft:items"),
-                        Identifier.parse("minecraft:item/golden_apple")
+                        ResourceLocation.parse("minecraft:items"),
+                        ResourceLocation.parse("minecraft:item/golden_apple")
                 )
         );
 

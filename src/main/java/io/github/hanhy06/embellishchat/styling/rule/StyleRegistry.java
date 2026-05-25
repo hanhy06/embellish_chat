@@ -18,7 +18,7 @@ import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.objects.AtlasSprite;
 import net.minecraft.network.chat.contents.objects.PlayerSprite;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.BlockItem;
@@ -226,7 +226,7 @@ public class StyleRegistry {
     }
 
     public MutableComponent FONT(StyleParameter parameter) {
-        Identifier fontId = Identifier.tryParse(parameter.getString());
+        ResourceLocation fontId = ResourceLocation.tryParse(parameter.getString());
         if (fontId == null) return parameter.segment();
 
         FontDescription font = new FontDescription.Resource(fontId);
@@ -351,7 +351,7 @@ public class StyleRegistry {
         if (player == null) return parameter.segment();
         ItemStack stack = player.getMainHandItem();
         if (stack.isEmpty()) throw new MessageBlockedException("No item found.");
-        Identifier modelId = stack.get(DataComponents.ITEM_MODEL);
+        ResourceLocation modelId = stack.get(DataComponents.ITEM_MODEL);
         if (modelId == null) return parameter.segment();
 
         MutableComponent result;
@@ -364,8 +364,8 @@ public class StyleRegistry {
         } else if (stack.getItem() instanceof BlockItem){
             result = stack.getDisplayName().copy();
         } else {
-            Identifier atlasId = Identifier.fromNamespaceAndPath(modelId.getNamespace(),"items");
-            Identifier spriteId = Identifier.fromNamespaceAndPath(modelId.getNamespace(),String.format("item/%s",modelId.getPath()));
+            ResourceLocation atlasId = ResourceLocation.fromNamespaceAndPath(modelId.getNamespace(),"items");
+            ResourceLocation spriteId = ResourceLocation.fromNamespaceAndPath(modelId.getNamespace(),String.format("item/%s",modelId.getPath()));
             result = Component.object(new AtlasSprite(atlasId,spriteId));
         }
 

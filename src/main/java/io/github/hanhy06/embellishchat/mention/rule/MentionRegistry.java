@@ -16,7 +16,7 @@ import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.commands.arguments.selector.EntitySelectorParser;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -155,7 +155,7 @@ public class MentionRegistry {
     private Target WORLD(MentionParameter parameter){
         String worldName = parameter.option();
         MinecraftServer server = EmbellishChat.SERVER;
-        Identifier worldId = Identifier.tryParse(worldName);
+        ResourceLocation worldId = ResourceLocation.tryParse(worldName);
 
         if (worldId == null) {
             throw new MessageBlockedException("Invalid world ID.");

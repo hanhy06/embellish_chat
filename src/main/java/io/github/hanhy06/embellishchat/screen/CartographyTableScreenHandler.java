@@ -5,7 +5,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.CartographyTableMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.item.ItemStack;
-import org.jspecify.annotations.NonNull;
 
 public class CartographyTableScreenHandler extends CartographyTableMenu {
     public CartographyTableScreenHandler(int containerId, Inventory inventory) {
@@ -13,7 +12,7 @@ public class CartographyTableScreenHandler extends CartographyTableMenu {
     }
 
     @Override
-    public void clicked(int slotIndex, int buttonNum, @NonNull ClickType clickType, @NonNull Player player) {
+    public void clicked(int slotIndex, int buttonNum, ClickType clickType, Player player) {
         if (slotIndex >= 0 && slotIndex < 3) return;
         if (clickType == ClickType.PICKUP_ALL) return;
 
@@ -21,17 +20,17 @@ public class CartographyTableScreenHandler extends CartographyTableMenu {
     }
 
     @Override
-    public @NonNull ItemStack quickMoveStack(@NonNull Player player, int slotIndex) {
+    public ItemStack quickMoveStack(Player player, int slotIndex) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean stillValid(@NonNull Player player) {
+    public boolean stillValid(Player player) {
         return true;
     }
 
     @Override
-    public void removed(@NonNull Player player) {
+    public void removed(Player player) {
         this.container.clearContent();
         super.removed(player);
     }

@@ -7,7 +7,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.OutgoingChatMessage;
 import net.minecraft.network.chat.PlayerChatMessage;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,7 +24,7 @@ public class SentMessageMixin {
     @Final
     private PlayerChatMessage message;
     @Unique
-    private static final ResourceKey<ChatType> CLEAR = ResourceKey.create(Registries.CHAT_TYPE, Identifier.fromNamespaceAndPath(EmbellishChat.MOD_ID,"clear"));
+    private static final ResourceKey<ChatType> CLEAR = ResourceKey.create(Registries.CHAT_TYPE, ResourceLocation.fromNamespaceAndPath(EmbellishChat.MOD_ID,"clear"));
 
     @ModifyVariable(
             method = "sendToPlayer",
@@ -40,7 +40,7 @@ public class SentMessageMixin {
         Optional<Holder.Reference<ChatType>> clearChatType = EmbellishChat.SERVER
                 .registryAccess()
                 .lookupOrThrow(Registries.CHAT_TYPE)
-                .get(CLEAR.identifier());
+                .get(CLEAR.location());
 
         return clearChatType
                 .map(holder -> new ChatType.Bound(holder, this.message.decoratedContent(), chatType.targetName()))

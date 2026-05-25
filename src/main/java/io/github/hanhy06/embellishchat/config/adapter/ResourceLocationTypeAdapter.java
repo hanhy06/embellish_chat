@@ -5,13 +5,13 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 import java.io.IOException;
 
-public class IdentifierTypeAdapter extends TypeAdapter<Identifier> {
+public class ResourceLocationTypeAdapter extends TypeAdapter<ResourceLocation> {
     @Override
-    public void write(JsonWriter jsonWriter, Identifier identifier) throws IOException {
+    public void write(JsonWriter jsonWriter, ResourceLocation identifier) throws IOException {
         if (identifier == null){
             jsonWriter.nullValue();
             return;
@@ -20,19 +20,19 @@ public class IdentifierTypeAdapter extends TypeAdapter<Identifier> {
     }
 
     @Override
-    public Identifier read(JsonReader jsonReader) throws IOException {
+    public ResourceLocation read(JsonReader jsonReader) throws IOException {
         JsonToken token = jsonReader.peek();
 
         if (token == JsonToken.NULL) {
             jsonReader.nextNull();
-            throw new JsonSyntaxException("Cannot parse JSON null as a Identifier.");
+            throw new JsonSyntaxException("Cannot parse JSON null as a ResourceLocation.");
         }
 
         if (token != JsonToken.STRING) {
-            throw new JsonSyntaxException("Expected a string for an Identifier, but found " + token + ".");
+            throw new JsonSyntaxException("Expected a string for a ResourceLocation, but found " + token + ".");
         }
 
         String identifier = jsonReader.nextString();
-        return Identifier.parse(identifier);
+        return ResourceLocation.parse(identifier);
     }
 }

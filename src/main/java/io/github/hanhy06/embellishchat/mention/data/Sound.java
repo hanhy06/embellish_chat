@@ -3,7 +3,7 @@ package io.github.hanhy06.embellishchat.mention.data;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -16,7 +16,7 @@ public record Sound(
         float pitch
 ) {
     public static Sound of(String id, SoundSource category, float volume, float pitch){
-        return new Sound(SoundEvent.createVariableRangeEvent(Identifier.parse(id)),category,volume,pitch);
+        return new Sound(SoundEvent.createVariableRangeEvent(ResourceLocation.parse(id)),category,volume,pitch);
     }
 
     public void playSoundToPlayer(ServerPlayer player) {

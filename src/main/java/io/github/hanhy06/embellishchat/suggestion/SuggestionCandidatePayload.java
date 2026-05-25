@@ -5,8 +5,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.Identifier;
-import org.jspecify.annotations.NonNull;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ public record SuggestionCandidatePayload(
         List<String> candidates,
         boolean playerSuggestion
 ) implements CustomPacketPayload {
-    public static final Identifier SUGGESTION_CANDIDATES_ID = Identifier.fromNamespaceAndPath(EmbellishChat.MOD_ID, "suggestion_candidates");
+    public static final ResourceLocation SUGGESTION_CANDIDATES_ID = ResourceLocation.fromNamespaceAndPath(EmbellishChat.MOD_ID, "suggestion_candidates");
     public static final CustomPacketPayload.Type<SuggestionCandidatePayload> TYPE = new CustomPacketPayload.Type<>(SUGGESTION_CANDIDATES_ID);
 
     public static final StreamCodec<RegistryFriendlyByteBuf, SuggestionCandidatePayload> CODEC = StreamCodec.composite(
@@ -26,7 +25,7 @@ public record SuggestionCandidatePayload(
     );
 
     @Override
-    public @NonNull Type<? extends CustomPacketPayload> type() {
+    public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
 }
