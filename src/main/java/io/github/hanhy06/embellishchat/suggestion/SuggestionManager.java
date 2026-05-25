@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ChatScreen;
 
@@ -110,7 +110,7 @@ public class SuggestionManager {
         open = !activeCandidate.isEmpty();
     }
 
-    public void render(GuiGraphicsExtractor graphics) {
+    public void render(GuiGraphics graphics) {
         if (!open) return;
 
         Font font = chatScreen.getFont();
@@ -137,7 +137,7 @@ public class SuggestionManager {
                 graphics.fill(left + 1,y - 1,right - 1,y + LINE_HEIGHT - 1,SELECTED_FILL_COLOR);
             }
 
-            graphics.text(font,activeCandidate.get(index),left + 4,y,TEXT_COLOR);
+            graphics.drawString(font,activeCandidate.get(index),left + 4,y,TEXT_COLOR);
         }
     }
 

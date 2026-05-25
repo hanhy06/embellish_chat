@@ -141,7 +141,7 @@ public class MentionProcessor implements ConfigListener {
                 }
 
                 if (sound != null) sound.playSoundToPlayer(target);
-                target.sendOverlayMessage(title);
+                target.displayClientMessage(title, true);
             });
         }
     }

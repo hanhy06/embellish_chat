@@ -60,7 +60,7 @@ public class StressTestService {
         }
 
         testResults.add(runTestBatch());
-        testSource.getPlayer().sendOverlayMessage(Component.literal("Time remaining: %d tick".formatted(remainingTicks)));
+        testSource.getPlayer().displayClientMessage(Component.literal("Time remaining: %d tick".formatted(remainingTicks)), true);
         remainingTicks--;
 
         if (remainingTicks <= 0) {

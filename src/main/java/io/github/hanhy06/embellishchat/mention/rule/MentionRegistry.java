@@ -165,7 +165,7 @@ public class MentionRegistry {
         ServerLevel targetLevel = server.getLevel(worldKey);
 
         if (targetLevel != null) {
-            HashSet<ServerPlayer> players = new HashSet<>(PlayerLookup.level(targetLevel));
+            HashSet<ServerPlayer> players = new HashSet<>(PlayerLookup.world(targetLevel));
             return Target.of(players,null);
         } else {
             throw new MessageBlockedException("World not found.");

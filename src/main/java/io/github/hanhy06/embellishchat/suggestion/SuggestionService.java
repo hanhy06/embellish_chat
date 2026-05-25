@@ -22,7 +22,7 @@ public class SuggestionService implements ConfigListener {
     private static final Map<String, Boolean> PLAYER_HINT_BY_PERMISSION = new HashMap<>();
 
     public static void registerPayload() {
-        PayloadTypeRegistry.clientboundPlay().register(SuggestionCandidatePayload.TYPE, SuggestionCandidatePayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(SuggestionCandidatePayload.TYPE, SuggestionCandidatePayload.CODEC);
 
         ServerPlayerEvents.JOIN.register(player -> {
             if (ServerPlayNetworking.canSend(player, SuggestionCandidatePayload.TYPE)) {

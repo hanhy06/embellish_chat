@@ -10,7 +10,7 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ChestMenu;
-import net.minecraft.world.inventory.ContainerInput;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
@@ -23,7 +23,7 @@ public class InventoryScreenHandler extends ChestMenu {
     }
 
     @Override
-    public void clicked(int slotIndex, int button, @NonNull ContainerInput actionType, @NonNull Player player) {
+    public void clicked(int slotIndex, int button, @NonNull ClickType actionType, @NonNull Player player) {
         if (slotIndex >= 0 && slotIndex < 9 * this.getRowCount()) {
             ItemStack stack = this.getSlot(slotIndex).getItem();
 
@@ -34,7 +34,7 @@ public class InventoryScreenHandler extends ChestMenu {
 
             return;
         }
-        if (actionType == ContainerInput.PICKUP_ALL) return;
+        if (actionType == ClickType.PICKUP_ALL) return;
 
         super.clicked(slotIndex, button, actionType, player);
     }

@@ -1,7 +1,7 @@
 package io.github.hanhy06.embellishchat.mixin;
 
 import io.github.hanhy06.embellishchat.suggestion.SuggestionManager;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.input.KeyEvent;
@@ -40,8 +40,8 @@ public class ChatScreenMixin {
         }
     }
 
-    @Inject(method = "extractRenderState", at = @At("TAIL"))
-    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta, CallbackInfo ci){
+    @Inject(method = "render", at = @At("TAIL"))
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta, CallbackInfo ci){
         suggestions.render(graphics);
     }
 }

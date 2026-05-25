@@ -3,7 +3,7 @@ package io.github.hanhy06.embellishchat.screen;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.CartographyTableMenu;
-import net.minecraft.world.inventory.ContainerInput;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.item.ItemStack;
 import org.jspecify.annotations.NonNull;
 
@@ -13,11 +13,11 @@ public class CartographyTableScreenHandler extends CartographyTableMenu {
     }
 
     @Override
-    public void clicked(int slotIndex, int buttonNum, @NonNull ContainerInput containerInput, @NonNull Player player) {
+    public void clicked(int slotIndex, int buttonNum, @NonNull ClickType clickType, @NonNull Player player) {
         if (slotIndex >= 0 && slotIndex < 3) return;
-        if (containerInput == ContainerInput.PICKUP_ALL) return;
+        if (clickType == ClickType.PICKUP_ALL) return;
 
-        super.clicked(slotIndex, buttonNum, containerInput, player);
+        super.clicked(slotIndex, buttonNum, clickType, player);
     }
 
     @Override
