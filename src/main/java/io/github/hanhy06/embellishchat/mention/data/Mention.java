@@ -18,7 +18,7 @@ public record Mention(
         return new Mention(begin,end,options,null,null,rule);
     }
 
-    public static Mention of(int begin,int end,HashSet<ServerPlayer> targets,Style style,MentionRule rule){
+    public Mention with(HashSet<ServerPlayer> targets, Style style){
         return new Mention(begin,end,null,targets,style,rule);
     }
 
