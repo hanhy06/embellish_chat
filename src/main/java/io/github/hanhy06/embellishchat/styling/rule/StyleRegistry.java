@@ -11,6 +11,7 @@ import io.github.hanhy06.embellishchat.styling.util.BubbleUtil;
 import io.github.hanhy06.embellishchat.styling.util.ColorUtil;
 import io.github.hanhy06.embellishchat.styling.util.DiscordUtil;
 import io.github.hanhy06.embellishchat.util.MessageBlockedException;
+import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.*;
@@ -338,16 +339,20 @@ public class StyleRegistry {
     public MutableComponent SHOW_ITEM(StyleParameter parameter){
         ServerPlayer player = parameter.player();
         if (player == null) return parameter.segment();
-        ItemStack stack = player.getMainHandItem();
-        if (stack.isEmpty()) throw new MessageBlockedException("No item found.");
+        ItemStack item = player.getMainHandItem();
+        if (item.isEmpty()) throw new MessageBlockedException("No item found.");
 
-        MutableComponent result = stack.getDisplayName().copy();
-
-        HoverEvent hoverEvent = new HoverEvent.ShowItem(stack);
+        HoverEvent hoverEvent = new HoverEvent.ShowItem(item);
         ClickEvent clickEvent = new ClickEvent.RunCommand("/embellish-chat open "+player.getUUID());
-        InventoryManager.putItem(player,stack);
+        InventoryManager.putItem(player,item);
+        MutableComponent name = item.getHoverName().copy().withStyle(style -> style
+                .withHoverEvent(hoverEvent)
+                .withClickEvent(clickEvent)
+                .withBold(true)
+        );
+        Component text = Component.literal("[").append(name).append("]");
 
-        return result.withStyle(Style.EMPTY.withHoverEvent(hoverEvent).withClickEvent(clickEvent));
+        return text.copy();
     }
 
     public MutableComponent SHOW_INVENTORY(StyleParameter parameter){
@@ -356,10 +361,10 @@ public class StyleRegistry {
         InventoryManager.putInventory(player);
 
         ClickEvent clickEvent = new ClickEvent.RunCommand("/embellish-chat open "+player.getUUID());
-        HoverEvent hoverEvent = new HoverEvent.ShowText(Component.literal(player.getName().getString() + "'s inventory"));
-        MutableComponent text = player.getName().copy();
+        Component text = PlaceHolderUtil.parseText("[%player:displayname%'s inventory]",player);
+        HoverEvent hoverEvent = new HoverEvent.ShowText(text);
 
-        return text.withStyle(Style.EMPTY.withClickEvent(clickEvent).withHoverEvent(hoverEvent));
+        return text.copy().withStyle(Style.EMPTY.withClickEvent(clickEvent).withHoverEvent(hoverEvent));
     }
 
     public MutableComponent SHOW_ENDER_CHEST(StyleParameter parameter){
@@ -368,10 +373,10 @@ public class StyleRegistry {
         InventoryManager.putEnderChest(player);
 
         ClickEvent clickEvent = new ClickEvent.RunCommand("/embellish-chat open "+player.getUUID());
-        HoverEvent hoverEvent = new HoverEvent.ShowText(Component.literal(player.getName().getString() + "'s ender chest"));
-        MutableComponent text = player.getName().copy();
+        Component text = PlaceHolderUtil.parseText("[%player:displayname%'s ender chest]",player);
+        HoverEvent hoverEvent = new HoverEvent.ShowText(text);
 
-        return text.withStyle(Style.EMPTY.withClickEvent(clickEvent).withHoverEvent(hoverEvent));
+        return text.copy().withStyle(Style.EMPTY.withClickEvent(clickEvent).withHoverEvent(hoverEvent));
     }
 
     public MutableComponent JSON(StyleParameter parameter){
