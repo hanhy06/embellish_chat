@@ -305,9 +305,8 @@ The configuration file is located at `config/embellish-chat/presets.json`.
 * **Geyser (Bedrock Edition)**
   * Mentions between Java and Bedrock editions work seamlessly.
   * *Note:* Advanced styling (hover text, click events) may not fully render on Bedrock clients.
-* **Minecraft P2P Play**
-  * Compatible with Minecraft P2P play, including 26.2 Snapshot 7+.
-  * Since Embellish Chat is server-side, players can use its chat features without installing the mod on their client.
+* **Minecraft LAN Play**
+  * Tested in standard LAN worlds.
 
 ### ❗ Known Conflicts
 
