@@ -34,4 +34,20 @@ public class LuckPermsUtil {
 
         return result;
     }
+
+    public static String getPrefix(ServerPlayer player){
+        LuckPerms luckPerms = LuckPermsProvider.get();
+        User user = luckPerms.getUserManager().getUser(player.getUUID());
+        if (user == null) return "";
+        String prefix = user.getCachedData().getMetaData().getPrefix();
+        return prefix != null ? prefix : "";
+    }
+
+    public static String getSuffix(ServerPlayer player){
+        LuckPerms luckPerms = LuckPermsProvider.get();
+        User user = luckPerms.getUserManager().getUser(player.getUUID());
+        if (user == null) return "";
+        String suffix = user.getCachedData().getMetaData().getSuffix();
+        return suffix != null ? suffix : "";
+    }
 }

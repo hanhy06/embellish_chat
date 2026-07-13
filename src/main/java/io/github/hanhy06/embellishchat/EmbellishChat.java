@@ -8,6 +8,7 @@ import io.github.hanhy06.embellishchat.screen.inventory.InventoryManager;
 import io.github.hanhy06.embellishchat.styling.StyleProcessor;
 import io.github.hanhy06.embellishchat.styling.util.BubbleUtil;
 import io.github.hanhy06.embellishchat.suggestion.SuggestionService;
+import io.github.hanhy06.embellishchat.util.FabricUtil;
 import io.github.hanhy06.embellishchat.util.PermissionUtil;
 import io.github.hanhy06.embellishchat.util.PlaceHolderUtil;
 import net.fabricmc.api.ModInitializer;
@@ -34,6 +35,7 @@ public class EmbellishChat implements ModInitializer {
         InventoryManager.registerLeaveEvent();
         BubbleUtil.registerTickEvent();
         SuggestionService.registerPayload();
+        FabricUtil.registerStatus();
 
         CommandHandler.registerCommand();
 	}
