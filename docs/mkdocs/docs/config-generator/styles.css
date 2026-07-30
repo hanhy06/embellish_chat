@@ -1,0 +1,553 @@
+:root {
+  color-scheme: light;
+  font-family: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+  --win-blue: #0067c0;
+  --win-blue-hover: #005a9e;
+  --win-canvas: #f3f3f3;
+  --win-surface: #ffffff;
+  --win-surface-alt: #fafafa;
+  --win-border: #d6d6d6;
+  --win-border-strong: #b8b8b8;
+  --win-text: #1b1b1b;
+  --win-muted: #616161;
+  --win-danger: #c42b1c;
+  --win-success: #107c10;
+  --win-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+* {
+  box-sizing: border-box;
+  scrollbar-color: #b8b8b8 transparent;
+  scrollbar-width: thin;
+}
+
+html {
+  background: var(--win-canvas);
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  background:
+    radial-gradient(circle at 88% 2%, rgba(0, 103, 192, 0.08), transparent 22rem),
+    var(--win-canvas);
+  color: var(--win-text);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+select,
+input[type="checkbox"],
+input[type="color"] {
+  cursor: pointer;
+}
+
+::selection {
+  background: #99c9ef;
+  color: #111;
+}
+
+.config-app {
+  min-height: 100vh;
+}
+
+.config-layout {
+  display: grid;
+  grid-template-columns: 288px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.config-sidebar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  border-right: 1px solid var(--win-border);
+  background: rgba(248, 248, 248, 0.94);
+  padding: 30px 18px 20px;
+  backdrop-filter: blur(18px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 0 12px 28px;
+}
+
+.brand-mark {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  place-items: center;
+  background: var(--win-blue);
+  color: #fff;
+  font-size: 19px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 103, 192, 0.22);
+}
+
+.brand-kicker {
+  color: var(--win-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.brand-title {
+  margin-top: 2px;
+  color: var(--win-text);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.config-nav {
+  display: grid;
+  gap: 4px;
+}
+
+.nav-button {
+  position: relative;
+  display: grid;
+  width: 100%;
+  grid-template-columns: 28px 1fr;
+  align-items: center;
+  border: 0;
+  background: transparent;
+  padding: 11px 12px;
+  color: #333;
+  text-align: left;
+  transition: background 120ms ease;
+}
+
+.nav-button:hover {
+  background: rgba(0, 0, 0, 0.055);
+}
+
+.nav-button.is-active {
+  background: rgba(0, 0, 0, 0.075);
+  font-weight: 600;
+}
+
+.nav-button.is-active::before {
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 0;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--win-blue);
+  content: "";
+}
+
+.nav-icon {
+  color: var(--win-blue);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.sidebar-note {
+  margin-top: auto;
+  border-top: 1px solid var(--win-border);
+  padding: 18px 12px 0;
+  color: var(--win-muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.config-main {
+  min-width: 0;
+  padding: 42px clamp(24px, 4vw, 72px) 70px;
+}
+
+.page-heading {
+  margin: 0 auto 26px;
+  max-width: 1380px;
+}
+
+.page-eyebrow {
+  margin-bottom: 5px;
+  color: var(--win-blue);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.page-title {
+  margin: 0;
+  color: var(--win-text);
+  font-size: clamp(28px, 3vw, 38px);
+  font-weight: 300;
+  letter-spacing: -0.025em;
+}
+
+.page-description {
+  max-width: 680px;
+  margin: 8px 0 0;
+  color: var(--win-muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.config-content {
+  max-width: 1380px;
+  margin: 0 auto;
+}
+
+.config-app .bg-black,
+.config-app .bg-neutral-950,
+.config-app .bg-neutral-950\/80,
+.config-app .bg-neutral-900\/80,
+.config-app .bg-black\/30 {
+  background: var(--win-surface);
+}
+
+.config-app .border-neutral-800,
+.config-app .border-neutral-700,
+.config-app .border-neutral-600 {
+  border-color: var(--win-border);
+}
+
+.config-app .text-white,
+.config-app .text-neutral-100,
+.config-app .text-neutral-200 {
+  color: var(--win-text);
+}
+
+.config-app .text-neutral-300,
+.config-app .text-neutral-400,
+.config-app .text-neutral-500 {
+  color: var(--win-muted);
+}
+
+.config-app .rounded-xl,
+.config-app .rounded-lg {
+  border-radius: 2px;
+}
+
+.settings-section {
+  overflow: hidden;
+  border: 1px solid var(--win-border);
+  background: var(--win-surface);
+  box-shadow: var(--win-shadow);
+}
+
+.settings-section > .section-header {
+  margin: 0;
+  border-bottom: 1px solid #e7e7e7;
+  background: var(--win-surface-alt);
+  padding: 20px 22px;
+}
+
+.settings-section > .section-body {
+  padding: 22px;
+}
+
+.settings-section h2 {
+  color: var(--win-text);
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.subsection-panel {
+  border: 1px solid #e2e2e2;
+  border-left: 3px solid #d0d0d0;
+  background: var(--win-surface-alt);
+  padding: 16px;
+}
+
+.config-app input:not([type="checkbox"]):not([type="color"]),
+.config-app select,
+.config-app textarea {
+  border: 1px solid var(--win-border-strong);
+  border-bottom-color: #8d8d8d;
+  border-radius: 2px;
+  background: #fff;
+  color: var(--win-text);
+  box-shadow: none;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.config-app input:not([type="checkbox"]):not([type="color"]),
+.config-app select {
+  height: 40px;
+}
+
+.config-app input:not([type="checkbox"]):not([type="color"]):hover,
+.config-app select:hover,
+.config-app textarea:hover {
+  border-color: #8f8f8f;
+}
+
+.config-app input:not([type="checkbox"]):not([type="color"]):focus,
+.config-app select:focus,
+.config-app textarea:focus {
+  border-color: var(--win-blue);
+  border-bottom-width: 2px;
+  box-shadow: 0 0 0 1px rgba(0, 103, 192, 0.08);
+}
+
+.win-button {
+  display: inline-flex;
+  height: 40px;
+  min-width: max-content;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--win-border-strong);
+  border-radius: 2px;
+  background: #fff;
+  padding: 8px 14px;
+  color: var(--win-text);
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+  transition: background 100ms ease, border-color 100ms ease, color 100ms ease;
+}
+
+.win-button:hover {
+  border-color: #8c8c8c;
+  background: #f4f4f4;
+}
+
+.win-button:active {
+  background: #e8e8e8;
+}
+
+.win-button.is-primary {
+  border-color: var(--win-blue);
+  background: var(--win-blue);
+  color: #fff;
+}
+
+.win-button.is-primary:hover {
+  border-color: var(--win-blue-hover);
+  background: var(--win-blue-hover);
+}
+
+.config-app .border-red-900 {
+  border-color: #e5a9a2;
+}
+
+.config-app .bg-red-950\/40,
+.config-app .hover\:bg-red-950:hover {
+  background: #fff4f2;
+}
+
+.config-app .text-red-200,
+.config-app .text-red-300 {
+  color: var(--win-danger);
+}
+
+.config-app .border-emerald-900 {
+  border-color: #9bc89b;
+}
+
+.config-app .bg-emerald-950\/40 {
+  background: #f1faf1;
+}
+
+.config-app .text-emerald-300 {
+  color: var(--win-success);
+}
+
+.config-app .text-amber-300 {
+  color: #8a5500;
+}
+
+.toggle-row {
+  min-height: 54px;
+  border: 1px solid var(--win-border);
+  background: var(--win-surface-alt);
+}
+
+.toggle-row input[type="checkbox"] {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  flex: 0 0 auto;
+  appearance: none;
+  border: 1px solid #777;
+  border-radius: 10px;
+  background: #777;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+.toggle-row input[type="checkbox"]::after {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  content: "";
+  transition: transform 120ms ease;
+}
+
+.toggle-row input[type="checkbox"]:checked {
+  border-color: var(--win-blue);
+  background: var(--win-blue);
+}
+
+.toggle-row input[type="checkbox"]:checked::after {
+  transform: translateX(20px);
+}
+
+.config-app input[type="color"] {
+  border-radius: 1px;
+}
+
+.color-input {
+  height: 40px;
+  overflow: hidden;
+  padding: 4px 8px;
+  border-color: var(--win-border-strong);
+  border-bottom-color: #8d8d8d;
+  background: #fff;
+}
+
+.color-input:focus-within {
+  border-color: var(--win-blue);
+  border-bottom-width: 2px;
+  box-shadow: 0 0 0 1px rgba(0, 103, 192, 0.08);
+}
+
+.config-app .color-input input[type="color"] {
+  width: 42px;
+  height: 30px;
+  padding: 2px;
+}
+
+.config-app .color-input input[type="text"],
+.config-app .color-input input[type="text"]:hover,
+.config-app .color-input input[type="text"]:focus {
+  height: 30px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.config-app .control-color-swatch {
+  width: 56px;
+  height: 40px;
+  padding: 4px;
+  border-radius: 2px;
+}
+
+.permission-group-create {
+  display: grid;
+  width: min(100%, 500px);
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.rule-count {
+  display: inline-flex;
+  height: 40px;
+  min-width: max-content;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.validation-status {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  border-radius: 2px;
+  line-height: 1.25;
+}
+
+.config-app textarea {
+  line-height: 1.55;
+}
+
+.config-app .font-mono {
+  font-family: "Cascadia Mono", Consolas, monospace;
+}
+
+.config-app .shadow-\[0_0_0_1px_rgba\(255\,255\,255\,0\.02\)\] {
+  box-shadow: var(--win-shadow);
+}
+
+@media (max-width: 860px) {
+  .config-layout {
+    display: block;
+  }
+
+  .config-sidebar {
+    position: relative;
+    height: auto;
+    padding: 18px 16px 12px;
+    border-right: 0;
+    border-bottom: 1px solid var(--win-border);
+  }
+
+  .brand {
+    padding: 0 4px 16px;
+  }
+
+  .config-nav {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 3px;
+  }
+
+  .nav-button {
+    width: auto;
+    min-width: max-content;
+    grid-template-columns: 23px 1fr;
+  }
+
+  .nav-button.is-active::before {
+    top: auto;
+    right: 8px;
+    bottom: 0;
+    left: 8px;
+    width: auto;
+    height: 3px;
+  }
+
+  .sidebar-note {
+    display: none;
+  }
+
+  .config-main {
+    padding: 28px 16px 48px;
+  }
+}
+
+@media (max-width: 520px) {
+  .brand-mark {
+    width: 36px;
+    height: 36px;
+  }
+
+  .settings-section > .section-header,
+  .settings-section > .section-body {
+    padding: 16px;
+  }
+
+  .permission-group-create {
+    grid-template-columns: 1fr;
+  }
+
+  .permission-group-create .win-button {
+    width: 100%;
+  }
+}
