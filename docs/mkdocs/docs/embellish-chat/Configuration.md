@@ -14,7 +14,7 @@ owners can edit general settings, style rules, mention rules, and shared presets
 | `config.json`   | General settings, command alias, notification toggles, and saved player lists. |
 | `styles.json`   | Style rules that transform chat text.                                          |
 | `mentions.json` | Mention rules that resolve targets and notify players.                         |
-| `presets.json`  | Shared prefixes, URL whitelist, icons, item sprites, and named colors.         |
+| `presets.json`  | Shared message headers, URL whitelist, icons, item sprites, and named colors.  |
 
 When the server loads, Embellish Chat reads these files together. Missing sections are restored from built-in defaults.
 
@@ -72,8 +72,8 @@ Use the reference pages for exact pattern shape, action order, and rule examples
 
 ```json
 {
-  "prefix": {
-    "chat.prefix.default": "<b>[%player:displayname%]</b> "
+  "message_header": {
+    "chat.header.default": "<b>[%player:displayname%]</b> "
   },
   "whitelist": [],
   "icon": {},
@@ -84,13 +84,13 @@ Use the reference pages for exact pattern shape, action order, and rule examples
 }
 ```
 
-| Section     | Used by                                                     |
-|-------------|-------------------------------------------------------------|
-| `prefix`    | Permission-based chat prefixes and full-message formatting. |
-| `whitelist` | URL validation. Empty means every URL is allowed.           |
-| `icon`      | `ICON_PRESET` and `/embellish-chat help icon`.              |
-| `item`      | Sprite overrides used by `SHOW_ITEM`.                       |
-| `color`     | Named colors used by `COLOR_PRESET`.                        |
+| Section          | Used by                                                    |
+|------------------|------------------------------------------------------------|
+| `message_header` | Permission-based message headers and chat formatting.      |
+| `whitelist`      | URL validation. Empty means every URL is allowed.          |
+| `icon`           | `ICON_PRESET` and `/embellish-chat help icon`.             |
+| `item`           | Sprite overrides used by `SHOW_ITEM`.                      |
+| `color`          | Named colors used by `COLOR_PRESET`.                       |
 
 ## Reload Behavior
 

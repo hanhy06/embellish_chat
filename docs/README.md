@@ -254,7 +254,7 @@ The configuration file is located at `config/embellish-chat/mentions.json`.
 The configuration file is located at `config/embellish-chat/presets.json`.
 ```
 {
-  "prefix": {
+  "message_header": {
     " ... ": " ... "
   },
   "whitelist": [
@@ -278,7 +278,7 @@ The configuration file is located at `config/embellish-chat/presets.json`.
 }
 ```
 
-* **`prefix`**: Uses permission nodes as its keys, and each value is a string parsed as a text component with placeholder tags.
+* **`message_header`**: Uses permission nodes as its keys, and each value is a message header parsed as a text component with placeholder tags.
 * **`whitelist`**: This is used in the `URL` style type. If left empty, all URLs are allowed.
 * **`icon`**: This is used by `ICON_PRESET` and `/embellish-chat help icon`.
 * **`item`**: This overrides atlas sprites used by `SHOW_ITEM` for specific item IDs.
