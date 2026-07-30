@@ -125,7 +125,7 @@ public class ConfigManager {
         if (config.version() == null) return "version is missing";
         if (config.style_rules() == null) return "style_rules is missing";
         if (config.mention_rules() == null) return "mention_rules is missing";
-        if (config.prefix() == null) return "prefix is missing";
+        if (config.message_header() == null) return "message_header is missing";
         if (config.whitelist() == null) return "whitelist is missing";
         if (config.icon() == null) return "icon is missing";
         if (config.item() == null) return "item is missing";
@@ -192,8 +192,8 @@ public class ConfigManager {
             }
         }
 
-        for (Map.Entry<String, MutableComponent> entry : config.prefix().entrySet()) {
-            if (entry.getValue() == null) return "prefix contains a null value";
+        for (Map.Entry<String, MutableComponent> entry : config.message_header().entrySet()) {
+            if (entry.getValue() == null) return "message_header contains a null value";
         }
 
         return null;
@@ -245,8 +245,8 @@ public class ConfigManager {
         }
 
         JsonObject presetsJson = new JsonObject();
-        JsonElement prefixes = fullJson.remove("prefix");
-        if (prefixes != null) presetsJson.add("prefix", prefixes);
+        JsonElement messageHeader = fullJson.remove("message_header");
+        if (messageHeader != null) presetsJson.add("message_header", messageHeader);
         JsonElement whitelist = fullJson.remove("whitelist");
         if (whitelist != null) presetsJson.add("whitelist", whitelist);
         JsonElement icon = fullJson.remove("icon");

@@ -26,7 +26,7 @@ public record Config(
         LinkedHashMap<String,List<MentionRule>> mention_rules,
 
         //preset
-        LinkedHashMap<String, MutableComponent> prefix,
+        LinkedHashMap<String, MutableComponent> message_header,
         HashSet<String> whitelist,
         HashMap<String, AtlasSprite> icon,
         HashMap<String, AtlasSprite> item,

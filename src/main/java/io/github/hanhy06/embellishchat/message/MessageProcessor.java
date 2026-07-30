@@ -27,7 +27,7 @@ public class MessageProcessor implements ConfigListener {
 
     private Config config;
     private Set<UUID> bannedPlayerList;
-    private LinkedHashMap<String,MutableComponent> prefix;
+    private LinkedHashMap<String,MutableComponent> messageHeader;
 
     public MessageProcessor(MentionProcessor mentionProcessor, StyleProcessor styleProcessor, PlayerList playerList) {
         INSTANCE = this;
@@ -40,7 +40,7 @@ public class MessageProcessor implements ConfigListener {
     public void onConfigReload(Config newConfig) {
         this.config = newConfig;
         this.bannedPlayerList = config.banned_players();
-        this.prefix = config.prefix();
+        this.messageHeader = config.message_header();
     }
 
     public PlayerChatMessage handleMessage(PlayerChatMessage message) {
@@ -61,10 +61,10 @@ public class MessageProcessor implements ConfigListener {
             textMessage = styleProcessor.applyMention(textMessage,mentions,sender);
             textMessage = styleProcessor.handleStyle(textMessage,getPermissions(sender, config.style_rules().keySet()),sender);
 
-            List<String> prefixKeys = getPermissions(sender, prefix.keySet());
-            if (!prefixKeys.isEmpty()){
-                MutableComponent prefix = this.prefix.get(prefixKeys.getLast());
-                textMessage = PlaceHolderUtil.parsePlaceholder(prefix,sender).append(textMessage);
+            List<String> headerKeys = getPermissions(sender, messageHeader.keySet());
+            if (!headerKeys.isEmpty()){
+                MutableComponent header = this.messageHeader.get(headerKeys.getLast());
+                textMessage = PlaceHolderUtil.parsePlaceholder(header,sender).append(textMessage);
             }
 
             result = message.withUnsignedContent(textMessage);
