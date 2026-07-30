@@ -1,5 +1,5 @@
 {
-  "prefix": {},
+  "message_header": {},
   "whitelist": [],
   "icon": {
     "love": {
@@ -123,6 +123,10 @@
     "minecraft:compass": {
       "atlas": "minecraft:items",
       "sprite": "minecraft:item/compass_20"
+    },
+    "minecraft:enchanted_golden_apple": {
+      "atlas": "minecraft:items",
+      "sprite": "minecraft:item/golden_apple"
     },
     "minecraft:crossbow": {
       "atlas": "minecraft:items",
