@@ -1,6 +1,7 @@
 package io.github.hanhy06.embellishchat.suggestion;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
@@ -12,7 +13,6 @@ import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.util.Mth;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,7 +144,7 @@ public class SuggestionManager {
     public boolean keyPressed(KeyEvent event){
         if (!open) return false;
 
-        if (event.key() == GLFW.GLFW_KEY_TAB){
+        if (event.key() == InputConstants.KEY_TAB){
             select(selectedIndex + 1);
             String candidate = activeCandidate.get(selectedIndex);
 
@@ -165,12 +165,12 @@ public class SuggestionManager {
         }
 
 
-        if (event.key() == GLFW.GLFW_KEY_DOWN) {
+        if (event.key() == InputConstants.KEY_DOWN) {
             select(selectedIndex + 1);
             return true;
         }
 
-        if (event.key() == GLFW.GLFW_KEY_UP) {
+        if (event.key() == InputConstants.KEY_UP) {
             select(selectedIndex - 1);
             return true;
         }
