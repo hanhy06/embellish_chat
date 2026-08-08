@@ -45,11 +45,17 @@ public class MessageProcessor implements ConfigListener {
 
     public PlayerChatMessage handleMessage(PlayerChatMessage message) {
         ServerPlayer sender = playerList.getPlayer(message.sender());
-        if (sender == null || bannedPlayerList.contains(message.sender())) {
-            return message;
-        }
+        if (sender == null) return message;
 
         MutableComponent textMessage = message.decoratedContent().copy();
+        List<String> headerKeys = getPermissions(sender, messageHeader.keySet());
+        MutableComponent header = headerKeys.isEmpty() ? Component.empty() : this.messageHeader.get(headerKeys.getLast());
+        header = PlaceHolderUtil.parsePlaceholder(header,sender);
+
+        if (bannedPlayerList.contains(message.sender())) {
+            return message.withUnsignedContent(header.append(textMessage));
+        }
+
         String stringMessage = message.decoratedContent().getString();
         PlayerChatMessage result;
 
@@ -60,12 +66,7 @@ public class MessageProcessor implements ConfigListener {
 
             textMessage = styleProcessor.applyMention(textMessage,mentions,sender);
             textMessage = styleProcessor.handleStyle(textMessage,getPermissions(sender, config.style_rules().keySet()),sender);
-
-            List<String> headerKeys = getPermissions(sender, messageHeader.keySet());
-            if (!headerKeys.isEmpty()){
-                MutableComponent header = this.messageHeader.get(headerKeys.getLast());
-                textMessage = PlaceHolderUtil.parsePlaceholder(header,sender).append(textMessage);
-            }
+            textMessage = header.append(textMessage);
 
             result = message.withUnsignedContent(textMessage);
 
