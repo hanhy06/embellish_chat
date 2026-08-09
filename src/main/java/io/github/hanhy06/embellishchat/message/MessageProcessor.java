@@ -48,18 +48,18 @@ public class MessageProcessor implements ConfigListener {
         if (sender == null) return message;
 
         MutableComponent textMessage = message.decoratedContent().copy();
-        List<String> headerKeys = getPermissions(sender, messageHeader.keySet());
-        MutableComponent header = headerKeys.isEmpty() ? Component.empty() : this.messageHeader.get(headerKeys.getLast());
-        header = PlaceHolderUtil.parsePlaceholder(header,sender);
-
-        if (bannedPlayerList.contains(message.sender())) {
-            return message.withUnsignedContent(header.append(textMessage));
-        }
-
         String stringMessage = message.decoratedContent().getString();
         PlayerChatMessage result;
 
         try {
+            List<String> headerKeys = getPermissions(sender, messageHeader.keySet());
+            MutableComponent header = headerKeys.isEmpty() ? Component.empty() : this.messageHeader.get(headerKeys.getLast());
+            header = PlaceHolderUtil.parsePlaceholder(header,sender);
+
+            if (bannedPlayerList.contains(message.sender())) {
+                return message.withUnsignedContent(header.append(textMessage));
+            }
+
             PlaceHolderUtil.put(message.sender(),stringMessage);
             List<Mention> mentions = mentionProcessor.handleMention(stringMessage,getPermissions(sender, config.mention_rules().keySet()),sender);
             mentions.sort(Comparator.comparing(Mention::begin));
