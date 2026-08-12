@@ -8,7 +8,7 @@ placeholder values, while some chat-formatting mods may take priority over its s
 | Integration            | Support   | Notes                                                                                                                          |
 |------------------------|-----------|--------------------------------------------------------------------------------------------------------------------------------|
 | Fabric Permissions API | Built in  | Rule group keys in `style_rules` and `mention_rules` are used as permission nodes.                                             |
-| Text Placeholder API   | Built in  | Placeholder values can be used in prefixes, mention overlay text, JSON payloads, and other configured text.                    |
+| Text Placeholder API   | Built in  | Placeholder values can be used in message headers, mention overlay text, JSON payloads, and other configured text.             |
 | Styled Nicknames       | Supported | Player mentions can resolve nicknames when the integration is present.                                                         |
 | LuckPerms              | Supported | Required for `LUCK_PERMS_GROUP` mention actions such as `@group(admin)`.                                                       |
 | Advanced Chat          | Supported | Required for `ADVANCED_CHAT_CHANNEL` mention actions such as channel mentions.                                                 |

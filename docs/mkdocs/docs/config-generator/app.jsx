@@ -65,7 +65,7 @@ const normalizeConfig = (value) => ({
   timestamp: value.timestamp ?? "yyyy-MM-dd HH:mm:ss",
   command_alias: value.command_alias ?? "ec",
   url_color: value.url_color ?? "#0000EE",
-  team_color: value.team_color ?? "#FF55FF",
+  team_color: value.team_color === null ? null : value.team_color ?? "#FF55FF",
   notify_command_enabled: value.notify_command_enabled ?? true,
   notify_mention_enabled: value.notify_mention_enabled ?? true,
   require_same_channel: value.require_same_channel ?? true,
@@ -103,7 +103,7 @@ const normalizeMentionRule = (rule) => ({
   title: rule.title ?? "%player:displayname% mentioned you",
   cooldown: rule.cooldown ?? 0,
   onlyTarget: rule.onlyTarget ?? false,
-  sound: {
+  sound: rule.sound === null ? null : {
     ...emptySound(),
     ...(rule.sound ?? {})
   },
@@ -605,20 +605,23 @@ function MentionRuleCard({ rule, onChange, onRemove, index }) {
       </Subsection>
 
       <Subsection title="Sound" description="Notification sound for matched mentions">
-        <div className="grid gap-3 md:grid-cols-4">
-          <Field label="Sound Id">
-            <Input value={rule.sound.id} onChange={(event) => onChange({ ...rule, sound: { ...rule.sound, id: event.target.value } })} />
-          </Field>
-          <Field label="Category">
-            <Select options={SOUND_CATEGORIES} value={rule.sound.category} onChange={(event) => onChange({ ...rule, sound: { ...rule.sound, category: event.target.value } })} />
-          </Field>
-          <Field label="Volume">
-            <Input type="number" step="0.1" value={rule.sound.volume} onChange={(event) => onChange({ ...rule, sound: { ...rule.sound, volume: Number(event.target.value) || 0 } })} />
-          </Field>
-          <Field label="Pitch">
-            <Input type="number" step="0.1" value={rule.sound.pitch} onChange={(event) => onChange({ ...rule, sound: { ...rule.sound, pitch: Number(event.target.value) || 0 } })} />
-          </Field>
-        </div>
+        <Toggle label="Sound enabled" checked={rule.sound !== null} onChange={(enabled) => onChange({ ...rule, sound: enabled ? emptySound() : null })} />
+        {rule.sound !== null && (
+          <div className="mt-3 grid gap-3 md:grid-cols-4">
+            <Field label="Sound Id">
+              <Input value={rule.sound.id} onChange={(event) => onChange({ ...rule, sound: { ...rule.sound, id: event.target.value } })} />
+            </Field>
+            <Field label="Category">
+              <Select options={SOUND_CATEGORIES} value={rule.sound.category} onChange={(event) => onChange({ ...rule, sound: { ...rule.sound, category: event.target.value } })} />
+            </Field>
+            <Field label="Volume">
+              <Input type="number" step="0.1" value={rule.sound.volume} onChange={(event) => onChange({ ...rule, sound: { ...rule.sound, volume: Number(event.target.value) || 0 } })} />
+            </Field>
+            <Field label="Pitch">
+              <Input type="number" step="0.1" value={rule.sound.pitch} onChange={(event) => onChange({ ...rule, sound: { ...rule.sound, pitch: Number(event.target.value) || 0 } })} />
+            </Field>
+          </div>
+        )}
       </Subsection>
 
       <Subsection
@@ -962,7 +965,12 @@ function ConfigEditor() {
                 <Field label="Timestamp"><Input value={config.timestamp} onChange={(event) => setConfig({ ...config, timestamp: event.target.value })} /></Field>
                 <Field label="Command Alias"><Input value={config.command_alias} onChange={(event) => setConfig({ ...config, command_alias: event.target.value })} /></Field>
                 <Field label="URL Color"><ColorInput value={config.url_color} onChange={(value) => setConfig({ ...config, url_color: value })} /></Field>
-                <Field label="Team Color"><ColorInput value={config.team_color} onChange={(value) => setConfig({ ...config, team_color: value })} /></Field>
+                <Field label="Team Color">
+                  <div className="space-y-2">
+                    <Toggle label="Automatic color enabled" checked={config.team_color !== null} onChange={(enabled) => setConfig({ ...config, team_color: enabled ? "#FF55FF" : null })} />
+                    {config.team_color !== null && <ColorInput value={config.team_color} onChange={(value) => setConfig({ ...config, team_color: value })} />}
+                  </div>
+                </Field>
               </div>
               <div className="grid gap-3 md:grid-cols-4">
                 <Toggle label="Notify command enabled" checked={config.notify_command_enabled} onChange={(value) => setConfig({ ...config, notify_command_enabled: value })} />
