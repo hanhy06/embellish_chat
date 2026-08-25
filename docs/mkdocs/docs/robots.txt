@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://hanhy06.github.io/embellish-chat-wiki/sitemap.xml
+Sitemap: https://hanhy06.github.io/embellish-chat/sitemap.xml

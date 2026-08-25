@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://hanhy06.github.io/embellish-chat-wiki/assets/logo.svg" alt="Embellish Chat" width="460">
+  <img src="https://hanhy06.github.io/embellish-chat/assets/logo.svg" alt="Embellish Chat" width="460">
 </div>
 
 <div align="center">
@@ -9,10 +9,10 @@
   <a href="https://www.curseforge.com/minecraft/mc-mods/embellish-chat">
     <img alt="CurseForge Downloads" src="https://img.shields.io/curseforge/dt/1415027?label=CurseForge&logo=curseforge&color=F16436">
   </a>
-  <a href="https://hanhy06.github.io/embellish-chat-wiki/">
+  <a href="https://hanhy06.github.io/embellish-chat/">
     <img alt="Wiki" src="https://img.shields.io/badge/wiki-pages-blueviolet?logo=github">
   </a>
-  <a href="https://hanhy06.github.io/embellish-chat-wiki/config-generator">
+  <a href="https://hanhy06.github.io/embellish-chat/config-generator">
     <img alt="Config Generator" src="https://img.shields.io/badge/config-generator-teal?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii00IC00IDMyIDMyIiB3aWR0aD0iMTYwIiBoZWlnaHQ9IjE2MCIgZmlsbD0ibm9uZSIgY2xhc3M9Im92ZXJmbG93LXZpc2libGUiPgo8ZGVmcz4KPGxpbmVhckdyYWRpZW50IGlkPSJidWJibGVHcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzRGNDZFNSIvPgo8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM5MzMzRUEiLz4KPC9saW5lYXJHcmFkaWVudD4KPGxpbmVhckdyYWRpZW50IGlkPSJzcGFya2xlR3JhZCIgeDE9IjAlIiB5MT0iMTAwJSIgeDI9IjEwMCUiIHkyPSIwJSI+CjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNGNTlFMEIiLz4KPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjRjQzRjVFIi8+CjwvbGluZWFyR3JhZGllbnQ+CjxmaWx0ZXIgaWQ9Imdsb3ciIHg9Ii01MCUiIHk9Ii01MCUiIHdpZHRoPSIyMDAlIiBoZWlnaHQ9IjIwMCUiPgo8ZmVEcm9wU2hhZG93IGR4PSIwIiBkeT0iMCIgc3RkRGV2aWF0aW9uPSIyLjUiIGZsb29kLWNvbG9yPSIjRjQzRjVFIiBmbG9vZC1vcGFjaXR5PSIwLjQiLz4KPC9maWx0ZXI+CjwvZGVmcz4KPHBhdGggZD0iTTggOGgxMmEyIDIgMCAwIDEgMiAydjdhMiAyIDAgMCAxLTIgMmgtMS41bC0zLjUgM3YtM0g4YTIgMiAwIDAgMS0yLTJ2LTdhMiAyIDAgMCAxIDItMnoiIHN0cm9rZT0iI0U1RTdFQiIgc3Ryb2tlLXdpZHRoPSIxLjUiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPHBhdGggZD0iTTE2IDRINGEyIDIgMCAwIDAtMiAydjhhMiAyIDAgMCAwIDIgMmgxLjV2My41TDkgMTZoN2EyIDIgMCAwIDAgMi0yVjZhMiAyIDAgMCAwLTItMnoiIHN0cm9rZT0idXJsKCNidWJibGVHcmFkKSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPHBhdGggZD0iTTYgOWg3IiBzdHJva2U9InVybCgjYnViYmxlR3JhZCkiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik02IDEzaDQiIHN0cm9rZT0idXJsKCNidWJibGVHcmFkKSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPHBhdGggZD0iTTE5IDFsMS41IDMuNUwyNCA2bC0zLjUgMS41TDE5IDExbC0xLjUtMy41TDE0IDZsMy41LTEuNXoiIHN0cm9rZT0idXJsKCNzcGFya2xlR3JhZCkiIHN0cm9rZS13aWR0aD0iMS44IiBmaWxsPSJ1cmwoI3NwYXJrbGVHcmFkKSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgZmlsdGVyPSJ1cmwoI2dsb3cpIi8+CjxwYXRoIGQ9Ik00IDFsLjcgMS44TDYuNSAzLjUgNC43IDQuMiA0IDZsLS43LTEuOEwxLjUgMy41bDEuOC0uN3oiIHN0cm9rZT0idXJsKCNzcGFya2xlR3JhZCkiIHN0cm9rZS13aWR0aD0iMS41IiBmaWxsPSJ1cmwoI3NwYXJrbGVHcmFkKSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8cGF0aCBkPSJNMjIgMTNsLjUgMS41IDEuNS41LTEuNS41LS41IDEuNS0uNS0xLjUtMS41LS41IDEuNS0uNXoiIHN0cm9rZT0idXJsKCNzcGFya2xlR3JhZCkiIHN0cm9rZS13aWR0aD0iMS41IiBmaWxsPSJ1cmwoI3NwYXJrbGVHcmFkKSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4=">
   </a>
 </div>
@@ -52,22 +52,22 @@ Use the following patterns directly in the chat window to apply styles:
 
 | Feature          | Syntax                  | Example                                                       | Showcase                                                                                  |
 |:-----------------|:------------------------|:--------------------------------------------------------------|:------------------------------------------------------------------------------------------|
-| Bold             | `**Text**`              | `**You really need to read this!**`                           | ![Bold](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Bold.png)             |
-| Italic           | `_Text_`                | `_This is top secret..._`                                     | ![Italic](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Italic.png)         |
-| Underline        | `__Text__`              | `__Check this out__`                                          | ![Underline](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Underline.png)   |
-| Strikethrough    | `~~Text~~`              | `~~We don’t talk about this anymore~~`                        | ![Strike](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Strikethrough.png)  |
-| Obfuscated       | `\|\|Text\|\|`          | `\|\|Unreadable text\|\|`                                     | ![Obfuscated](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Obfuscated.gif) |
-| Color (Hex)      | `[Text]<#RRGGBB>`       | `[Blue]<#0000FF> like the deep ocean`                         | ![Color](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Color_Hex.png)       |
-| Color (Gradient) | `[Text]<#RRGGBB #R...>` | `[Grraaaaaaadieeeeent]<#ffaaaa #aaaaff #aaffaa>`              | ![Color](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Color_Gradient.png)  |
-| Color (Preset)   | `[Text]<preset>`        | `[pink]<pink> pig`                                            | ![Color](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Color_Preset.png)    |
-| Color (Rainbow)  | `[Text]<RAINBOW>`       | `look at this [rainbow]<RAINBOW>`                             | ![Color](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Color_Rainbow.png)   |
-| Link             | `[Text](URL)`           | `Download it [here](https://modrinth.com/mod/embellish-chat)` | ![Link](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Link.gif)             |
-| Font             | `[Text]{path}`          | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Font.png)             |
-| Item             | `[i]`                   | `Look at my [i]`                                              | ![Item](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Item.png)             |
-| Inventory        | `[inv]`                 | `Look at my [inv]`                                            | ![Inventory](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Inventory.png)   |
-| Ender Chest      | `[end]`                 | `Look at my [end]`                                            | ![EnderChest](https://hanhy06.github.io/embellish-chat-wiki/assets/images/EnderChest.png) |
-| Icon             | `:name:`                | `I :love: you`                                                | ![AtlasIcon](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Atlas_Icon.png)  |
-| Mention          | `@PlayerName`           | `Hello, @User`                                                | ![Mention](https://hanhy06.github.io/embellish-chat-wiki/assets/images/Mention.png)       |
+| Bold             | `**Text**`              | `**You really need to read this!**`                           | ![Bold](https://hanhy06.github.io/embellish-chat/assets/images/Bold.png)             |
+| Italic           | `_Text_`                | `_This is top secret..._`                                     | ![Italic](https://hanhy06.github.io/embellish-chat/assets/images/Italic.png)         |
+| Underline        | `__Text__`              | `__Check this out__`                                          | ![Underline](https://hanhy06.github.io/embellish-chat/assets/images/Underline.png)   |
+| Strikethrough    | `~~Text~~`              | `~~We don’t talk about this anymore~~`                        | ![Strike](https://hanhy06.github.io/embellish-chat/assets/images/Strikethrough.png)  |
+| Obfuscated       | `\|\|Text\|\|`          | `\|\|Unreadable text\|\|`                                     | ![Obfuscated](https://hanhy06.github.io/embellish-chat/assets/images/Obfuscated.gif) |
+| Color (Hex)      | `[Text]<#RRGGBB>`       | `[Blue]<#0000FF> like the deep ocean`                         | ![Color](https://hanhy06.github.io/embellish-chat/assets/images/Color_Hex.png)       |
+| Color (Gradient) | `[Text]<#RRGGBB #R...>` | `[Grraaaaaaadieeeeent]<#ffaaaa #aaaaff #aaffaa>`              | ![Color](https://hanhy06.github.io/embellish-chat/assets/images/Color_Gradient.png)  |
+| Color (Preset)   | `[Text]<preset>`        | `[pink]<pink> pig`                                            | ![Color](https://hanhy06.github.io/embellish-chat/assets/images/Color_Preset.png)    |
+| Color (Rainbow)  | `[Text]<RAINBOW>`       | `look at this [rainbow]<RAINBOW>`                             | ![Color](https://hanhy06.github.io/embellish-chat/assets/images/Color_Rainbow.png)   |
+| Link             | `[Text](URL)`           | `Download it [here](https://modrinth.com/mod/embellish-chat)` | ![Link](https://hanhy06.github.io/embellish-chat/assets/images/Link.gif)             |
+| Font             | `[Text]{path}`          | `[Blorp Zorp]{minecraft:alt}`                                 | ![Font](https://hanhy06.github.io/embellish-chat/assets/images/Font.png)             |
+| Item             | `[i]`                   | `Look at my [i]`                                              | ![Item](https://hanhy06.github.io/embellish-chat/assets/images/Item.png)             |
+| Inventory        | `[inv]`                 | `Look at my [inv]`                                            | ![Inventory](https://hanhy06.github.io/embellish-chat/assets/images/Inventory.png)   |
+| Ender Chest      | `[end]`                 | `Look at my [end]`                                            | ![EnderChest](https://hanhy06.github.io/embellish-chat/assets/images/EnderChest.png) |
+| Icon             | `:name:`                | `I :love: you`                                                | ![AtlasIcon](https://hanhy06.github.io/embellish-chat/assets/images/Atlas_Icon.png)  |
+| Mention          | `@PlayerName`           | `Hello, @User`                                                | ![Mention](https://hanhy06.github.io/embellish-chat/assets/images/Mention.png)       |
 
 > **Notes**
 >
@@ -75,7 +75,7 @@ Use the following patterns directly in the chat window to apply styles:
 > * **Colors:** Presets (e.g., `pink`) are defined in `presets.json/color`.
 > * **Fonts:** The `path` requires a namespaced ID (e.g., `minecraft:alt`).
 > * **Icons & Item Sprites:** Icon presets and item sprite rendering use atlas-backed components, so they are not supported on older Minecraft versions.
-> * **More Info:** For advanced syntax, style combinations, and detailed rules, refer to `/embellish-chat help style` or the [StyleWiki](https://hanhy06.github.io/embellish-chat-wiki/style/StyleSystem/).
+> * **More Info:** For advanced syntax, style combinations, and detailed rules, refer to `/embellish-chat help style` or the [StyleWiki](https://hanhy06.github.io/embellish-chat/style/StyleSystem/).
 
 ---
 
@@ -96,7 +96,7 @@ Use the following patterns directly in the chat window to apply styles:
 > * **Dependencies:** `@group` requires **LuckPerms**. Without it, the mention will be ignored.
 > * **Colors:** `@team` and `@Player` mentions start from the `team_color` value in `config.json`, then use the target's team/display styling when available. If `team_color` is `null`, the mention text is left uncolored.
 > * **Sound:** The notification sound uses the **UI** category (falls back to the **PLAYER** category on Minecraft 1.21.5 and earlier).
-> * **More Info:** For a full list of mention types and advanced usage, refer to [MentionWiki](https://hanhy06.github.io/embellish-chat-wiki/mention/MentionSystem/).
+> * **More Info:** For a full list of mention types and advanced usage, refer to [MentionWiki](https://hanhy06.github.io/embellish-chat/mention/MentionSystem/).
 
 ---
 
@@ -163,7 +163,7 @@ The configuration file is located at `config/embellish-chat/config.json`.
 * If `team_color` is missing or set to `null`, those mentions are left without an automatic color.
 * `require_same_channel` limits `ADVANCED_CHAT_CHANNEL` mentions to the sender's current Advanced Chat channel when enabled.
 * Reloading the config refreshes the runtime style and mention processors, so updated `style_rules`, `mention_rules`, `timestamp`, `url_color`, `whitelist`, `color`, `icon`, and `item` values take effect immediately.
-* To avoid JSON syntax errors and ensure valid configurations, using the **[Web Config Generator](https://hanhy06.github.io/embellish-chat-wiki/config-generator/)** is strongly recommended.
+* To avoid JSON syntax errors and ensure valid configurations, using the **[Web Config Generator](https://hanhy06.github.io/embellish-chat/config-generator/)** is strongly recommended.
 
 ### Styling
 
@@ -193,7 +193,7 @@ The configuration file is located at `config/embellish-chat/styles.json`.
   * `group 2`: This is text passed as an option.
 * **`comment`**: This comment is used in `/embellish-chat help style`.
 * **`styles`**: Defines the styles to be applied to captured group 1.
-  * `styleType`: This is the style type. You can use all types listed in the [StyleWiki](https://hanhy06.github.io/embellish-chat-wiki/style/StyleType/).
+  * `styleType`: This is the style type. You can use all types listed in the [StyleWiki](https://hanhy06.github.io/embellish-chat/style/StyleType/).
   * `preset`: This is a preset value. If a value is provided, it is always used; if it is empty, the content of the user's captured group 2 is used instead.
 * Each top-level key such as `embellish-chat.chat` is also treated as a permission node.
 * Each `styleType` name must match a handler registered in the runtime `StyleRegistry`.
@@ -244,7 +244,7 @@ The configuration file is located at `config/embellish-chat/mentions.json`.
 * **`onlyTarget`**:
   * When set to `true`, prevents the message from being broadcast globally and sends it only to the target.
 * **`mentions`**: Defines the mention actions to be executed.
-  * `mentionType`: This is the mention type. You can use all types listed in the [MentionWiki](https://hanhy06.github.io/embellish-chat-wiki/mention/MentionType/).
+  * `mentionType`: This is the mention type. You can use all types listed in the [MentionWiki](https://hanhy06.github.io/embellish-chat/mention/MentionType/).
   * `preset`: This is an optional preset value.
 * **`styles`**: Defines the styles to be applied when the mention is triggered.
   * Works the same way as in the styling rules section.
